@@ -21,6 +21,7 @@
 #include "hPrint.h"
 #include "jsHelper.h"
 #include "obscure.h"
+#include "hgConfig.h"
 
 #define hgHub             "hgHub_"  /* prefix for all control variables */
 #define hgHubDo            hgHub   "do_"    /* prefix for all commands */
@@ -32,7 +33,7 @@ struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
 static char *destUrl = "../cgi-bin/hgTracks";
-static char *pageTitle = "Import Tracks from Data Hubs";
+static char *pageTitle = "Track Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
@@ -75,7 +76,7 @@ int count = 0;
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCartAll(cart);
 for(hub = hubList; hub; hub = hub->next)
     {
-    if (isHubUnlisted(hub))
+    if (isHubUnlisted(hub) && hubHasDatabase(hub, database) )
 	count++;
     }
 
@@ -106,7 +107,7 @@ count = 0;
 for(hub = hubList; hub; hub = hub->next)
     {
     /* if the hub is public, then don't list it here */
-    if (!isHubUnlisted(hub))
+    if (!(isHubUnlisted(hub) && hubHasDatabase(hub, database) ))
 	continue;
 
     if (count)
@@ -138,7 +139,9 @@ for(hub = hubList; hub; hub = hub->next)
     if (isEmpty(hub->errorMessage))
 	ourPrintCell(hub->longLabel);
     else
-	printf("<TD>ERROR: %s</TD>", hub->errorMessage);
+	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+	    hub->errorMessage);
 
     ourPrintCell(hub->hubUrl);
 
@@ -257,12 +260,34 @@ printf("</div>");
 hDisconnectCentral(&conn);
 }
 
+static void tryHubOpen(unsigned id)
+/* try to open hub, leaks trackHub structure */
+{
+/* try opening this again to reset error */
+struct errCatch *errCatch = errCatchNew();
+struct trackHub *tHub;
+if (errCatchStart(errCatch))
+    tHub = trackHubFromId(id);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    hubSetErrorMessage( errCatch->message->string, id);
+else
+    hubSetErrorMessage(NULL, id);
+errCatchFree(&errCatch);
+
+tHub = NULL;
+}
+
+
 static void doResetHub(struct cart *theCart)
 {
 char *url = cartOptionalString(cart, hgHubDataText);
 
 if (url != NULL)
-    hubResetError(url);
+    {
+    unsigned id = hubResetError(url);
+    tryHubOpen(id);
+    }
 else
     errAbort("must specify url in %s\n", hgHubDataText);
 }
@@ -328,6 +353,7 @@ webIncludeResourceFile("jquery-ui.css");
 
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
+jsIncludeFile("jquery.cookie.js", NULL);
 webIncludeResourceFile("hgHubConnect.css");
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
@@ -340,6 +366,8 @@ printf(
    "configure page. For more information, see the "
    "<A HREF=\"../goldenPath/help/hgTrackHubHelp.html\" TARGET=_blank>"
    "User's Guide</A>.</P>\n"
+   "<P><B>NOTE: Because Track Hubs are created and maintained by external sources,"
+   " UCSC cannot be held responsible for their content.</B></P>"
    );
 printf("</div>\n");
 
@@ -347,7 +375,10 @@ printf("</div>\n");
 makeGenomePrint();
 
 // check to see if we have any new hubs
-boolean gotNew = hubCheckForNew(database, cart);
+unsigned newId = hubCheckForNew(database, cart);
+
+if (newId)
+    tryHubOpen(newId);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
@@ -388,16 +419,12 @@ printf("</div>");
 
 printf("<div class=\"tabFooter\">");
 cgiMakeButton("Submit", "Load Selected Hubs");
-printf("<span class=\"small\">Contact <A HREF=\"mailto:genome@soe.ucsc.edu\">genome@soe.ucsc.edu</A> to add a public hub.</span>\n");
-printf("</div>");
 
-if (gotNew || gotDisconnect) // make MyHubs the default tab
-    {
-    printf("<script type='text/javascript'>\n ");
-    printf("var $tabs = $('#tabs').tabs();\n");
-    printf(" $tabs.tabs('select',1);\n");
-    printf("</script>\n");
-    }
+char *emailAddress = cfgOptionDefault("hub.emailAddress","genome@soe.ucsc.edu");
+printf("<span class=\"small\">"
+    "Contact <A HREF=\"mailto:%s\">%s</A> to add a public hub."
+    "</span>\n", emailAddress,emailAddress);
+printf("</div>");
 
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 

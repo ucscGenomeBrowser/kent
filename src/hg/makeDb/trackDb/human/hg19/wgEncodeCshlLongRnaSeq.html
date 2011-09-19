@@ -19,6 +19,12 @@ Singapore</A>) datasets available from the same biological replicates.
 
 
 <h2>Display Conventions and Configuration</h2>
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are
+<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.</P>
 
 <p>To show only selected subtracks, uncheck the boxes next to the tracks that
 you wish to hide.</p>
@@ -35,11 +41,7 @@ distinguishing between the different cell types and compartments.</p>
 </dd>
 <dt><i>Alignments</i>
 </dt><dd>The Alignments view shows individual reads mapped from pooled biological replicates to the genome and indicates where
-bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The track may be set so that the color of each alignment denotes the mapping frequency of the corresponding read:</br>
-<font color="#FF00FF">pink</font> for reads mapping to a single genomic location, </br>
-<font color="#CC00FF"> pinkish-purple</font> for reads mapping to exactly two genomic locations and </br>
-<font color="#800080">purple</font> for reads mapping to more than two possible locations.</br>
-  The alignment file follows the standard SAM format of Bowtie output. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
+bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The alignment file follows the standard SAM format of Bowtie output. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format. 
 </dd>
 <dt><i>Splice Junctions</i>
 </dt><dd>Subset of aligned reads that cross splice junctions.
@@ -109,7 +111,7 @@ for annotated Gencode exons and Spearman values are compared.
 In general, we find Rho values &#62; .90 between biological replicates.   
 Additional quality control metrics for the samples can be found 
 <A TARGET=_BLANK
-HREF="http://sites.google.com/site/rnajunkies/">Transcriptome Data Portal</A>.
+HREF="http://genome.crg.es/~jlagarde/encode_RNA_dashboard/">Transcriptome Data Portal</A>.
 </P>
 
 <H2>Release Notes</H2>
@@ -128,12 +130,8 @@ and production data availabel for downloads only.
 <P>These data were generated and analyzed by the transcriptome group at
 Cold Spring Harbor Laboratories, and the Center for Genomic
 Regulation (CRG in Barcelona), who are participants in the ENCODE Transcriptome Group.
-<br/>
-Carrie A. Davis, Alex Dobin, Felix Schlesinger, Wei Lin, Chris Zaleski, Sonali Jha, Jorg
-Drenkow, Huaien Wang, Kim Bell, Lei-Hoon See, Megan Fastuca and Tom Gingeras
 </P>
-
-<H2>Contacts</H2>
+Contacts:
 <A HREF="mailto:&#100;a&#118;&#105;s&#99;&#64;&#99;sh&#108;.&#101;&#100;&#117;">Carrie Davis</A> (experimental)
 <!-- above address is davisc at cshl.edu -->
 <A HREF="mailto:&#100;&#111;&#98;i&#110;&#64;&#99;&#115;&#104;l.&#101;d&#117;">Alex Dobin</A> (computational)
@@ -151,6 +149,16 @@ HREF="http://pasteur.crg.es/portal/page/portal/Internet/">CRG</A>.
 </P>
 
 <H2>References</H2>
+
+<P>Jiang L, Schlesinger F, Davis CA, Zhang Y, Li R, Salit M, Gingeras TR, Oliver B. 
+<A target="_BLANK" href= "http://www.ncbi.nlm.nih.gov/pubmed/21816910"> Synthetic spike-in standards for RNA-seq experiments</A>.
+<EM>Genome Res.</EM> 2011 Aug 4.
+</P>
+
+<P>Parkhomchuk D, Borodina T, Amstislavskiy V, Banaru M, Hallen L, Krobitsch S, Lehrach H, Soldatov A. 
+<A target="_BLANK" href= "http://www.ncbi.nlm.nih.gov/pubmed?term=19620212">Transcriptome analysis by strand-specific sequencing of complementary DNA</A>. 
+<EM>Nucleic Acids Res</EM>. 2009 Oct; 37(18):e123.
+</P>
 
 <H2> Data Release Policy </H2>
 

@@ -97,7 +97,8 @@ enum cvSearchable
     cvNotSearchable        =0,  // Txt is default
     cvSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
     cvSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
-    cvSearchByFreeText     =3,  // Search by free text field (NOT YET IMPLEMENTED)
+    cvSearchByFreeText     =3,  // Search by free text field
+    cvSearchByWildList     =4,  // Search by comma delimited list (accepts '%' wildcard)
     cvSearchByDateRange    =4,  // Search by discovered date range (NOT YET IMPLEMENTED)
     cvSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
     };
@@ -124,14 +125,19 @@ enum cvDataType cvDataType(const char *term);
 boolean cvValidateTerm(const char *term,const char *val,char *reason,int len);
 // returns TRUE if term is valid.  Can pass in a reason buffer of len to get reason.
 
-const char *cvLabel(const char *term);
+const char *cvLabel(const char *type,const char *term);
 // returns cv label if term found or else just term
+// If type not supplied, must be a typeOfTerm definition
 
 const char *cvTag(const char *type,const char *term);
 // returns cv Tag if term found or else NULL
 
 boolean cvTermIsHidden(const char *term);
 // returns TRUE if term is defined as hidden in cv.ra
+
+boolean cvTermIsCvDefined(const char *term);
+// returns TRUE if the terms values are defined in the cv.ra
+// For example anitobody is cv defined but expId isn't
 
 boolean cvTermIsEmpty(const char *term,const char *val);
 // returns TRUE if term has validation of "cv or None" and the val is None

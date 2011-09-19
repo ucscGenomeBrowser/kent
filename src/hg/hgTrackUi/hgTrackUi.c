@@ -3067,7 +3067,7 @@ else if (isCustomTrack(track))
     }
 else if (isHubTrack(track))
     {
-    tdb = hubConnectAddHubForTrackAndFindTdb(cart, database, track, &tdbList, trackHash);
+    tdb = hubConnectAddHubForTrackAndFindTdb(database, track, &tdbList, trackHash);
     }
 else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();

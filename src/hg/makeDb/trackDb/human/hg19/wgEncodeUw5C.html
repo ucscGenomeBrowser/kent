@@ -28,7 +28,7 @@ Genome wide association studies have identified SNPs linked to prostate, colon, 
 breast cancer in the gene desert region upstream of the <I>myc</I> gene.
 5C of HindIII fragments interacting with those containing refSeq txStarts in 
 this region were performed in 5 cell types: GM12878 (B-lymphocyte), 
-CaCo2 (colon cancer cell line), LNCaP (prostate cancer cell ine), MCF7
+CaCo2 (colon cancer cell line), LNCaP (prostate cancer cell line), MCF7
 (breast cancer cell line), and K562 (erythroleukemia cell line).
 </P>
 <H2>File Conventions</H2>
@@ -37,23 +37,29 @@ The following types of data are available for download:
 <DL>
 <DT><I>Matrix</I></DT>
 <DD>
-Interaction files are in a matrix 
-format indicating interaction strength,
+Interaction files are in a matrix format indicating interaction strength,
 with "reverse primer name  | genome version | reverse HindIII fragment coordinates" in
 the top row and "forward primer name | genome version | forward primer fragment coordinates"
 in the first column.  The number of sequences mapped to each interaction fills the matrix.
 </DD></DL>
-<P>
+<p>
+<dt><i>Primer</i></dt>
 Primer data files include the sequences of the primers used in the experiments and
 sequences for control sites in the ENCODE pilot ENr313 gene desert region on chr16.
+</p>
+<p>
+<dt><i>Raw Data</i></dt>
 Sequencing files are provided in fastQ format.
-
-<B>In order to understand the Matrix data, you must download the associated primer data file.
+</p>
+<p>
+<B>
+In order to understand the Matrix data, you must download the associated primer data file.
 </B>
 </P>
+</p>
 <H2>Methods</H2>
 <P>
-Cells were grown according to the approved ENCODE cell culture protocols. The isolated nuclei were formaldehyde crosslinked.  The DNA isolated from the nuclei was cleaved with restriction enzyme, ligated, and crosslinks removed to create a 3C library (Dekker et al., 2002). Primers complementary to the TSS and feature were added, annealed and ligated to produce a 5C library (Dostie et al., 2006).  The DNA fragments generated in the ligation mediated-reactions were partially digested with DNaseI, end-repaired and ligated to adapters, before sequencing.  
+Cells were grown according to the approved ENCODE cell culture protocols. The isolated nuclei were formaldehyde cross-linked.  The DNA isolated from the nuclei was cleaved with restriction enzyme, ligated, and cross-links removed to create a 3C library (Dekker et al., 2002). Primers complementary to the TSS and feature were added, annealed and ligated to produce a 5C library (Dostie et al., 2006).  The DNA fragments generated in the ligation mediated-reactions were partially digested with DNaseI, end-repaired and ligated to adapters, before sequencing.  
 The sequencing reads generated were mapped to the predicted ligation products.  
 The number of sequences mapping to predicted junction fragments were tabulated from sequencing runs. The number of times a sequence was detected for a given interaction between a TSS and feature was to indicate the relative strength of the interaction. 
 <P>
@@ -75,7 +81,7 @@ The interaction files provided map all the reads in the output sequence without 
 Forward primers were designed
 to HindIII fragments of 4.29 Mb section of human chromosome 8 centered on the gene desert 5~R of the
 myc gene.  Reverse primers were designed to all HindIII fragments containing refseq txStarts in a 7.6 Mb
-region extending > 2 Mb on either side of the forward primer set.   
+region extending &gt;2 Mb on either side of the forward primer set.   
 High-throughput sequencing was performed on an ABI SOLiD instrument collecting 50 bp reads.
 The interaction files provided map all the reads in the output sequence without a mismatch threshold. 
 </P>
@@ -97,16 +103,24 @@ Contact: <A HREF="mailto:&#115;&#117;l&#108;&#64;&#117;.w&#97;&#115;h&#105;&#110
 <!-- above address is sull at u.washington.edu -->
 </P>
 <H2>References</H2>
-<P>
-Dekker J, Rippe K, Dekker M, Kleckner N. 
-Capturing Chromosome Conformation. 
-Science 2002; 295:1306-1311.
-</P>
-<P>
-Dostie J, Richmond TA, Arnaout, RA, Selzer, RR, Lee WL, Honan TA, Rubio, ED, Krumm A, Lamb J, Nusbaum, C, Green, RD, Dekker, J. 
-Chromosome Conformation Capture Carbon Copy (5C): a massively parallel solution for mapping interactions between genomic elements. 
-Genome Res 2006; 10:1299-1309.
-</P>
+
+<p>
+Dekker J, Rippe K, Dekker M, Kleckner N
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/11847345"
+ rel="nofollow" target="_blank">
+Capturing chromosome conformation</a>.
+<em>Science</em> 2002 Feb 15;295(5558):1306-11.
+</p>
+
+<p>
+Dostie J, Richmond TA, Arnaout RA, Selzer RR, Lee WL, Honan TA, Rubio ED, Krumm A <em>et al.</em>
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16954542"
+ rel="nofollow" target="_blank">
+Chromosome Conformation Capture Carbon Copy (5C): a massively parallel solution for mapping interactions between genomic elements</a>.
+<em>Genome Res</em> 2006 Oct;16(10):1299-309.
+</p>
+
+
 <H2> Data Release Policy </H2>
 <P>Data users may freely use ENCODE data, but may not, without prior
 consent, submit publications that use an unpublished ENCODE dataset until

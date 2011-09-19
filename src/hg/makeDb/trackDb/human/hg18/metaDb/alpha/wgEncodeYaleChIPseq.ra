@@ -2417,7 +2417,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bInputV2
 objType file
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -2441,7 +2441,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1Hepg2bTr4V2
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -3623,10 +3623,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bE2f4V2
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3650,10 +3650,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bE2f6V2
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3677,10 +3677,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bGata1
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
@@ -3701,10 +3701,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bGata2V2
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3728,10 +3728,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bInputV2
 objType file
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3752,10 +3752,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1Mnase
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -3776,10 +3776,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bSetdb1V2
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3803,10 +3803,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bTr4V2
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3830,10 +3830,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bYy1V2
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3857,10 +3857,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bZnf263V2
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -3884,10 +3884,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep1K562bZnf274
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -6282,7 +6282,7 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2Hepg2bTr4V2
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -7364,10 +7364,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bE2f4V2
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -7391,10 +7391,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bE2f6V2
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -7418,10 +7418,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bGata1
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
@@ -7442,10 +7442,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bGata2V2
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -7469,10 +7469,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1Mnase
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -7493,10 +7493,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bSetdb1V2
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -7520,10 +7520,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bTr4V2
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -7547,10 +7547,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bYy1V2
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -7574,10 +7574,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bZnf263V2
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-22
@@ -7601,10 +7601,10 @@ view Alignments
 metaObject wgEncodeYaleChIPseqAlignmentsRep2K562bZnf274
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -10889,7 +10889,7 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksHepg2bTr4
 objType table
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -11881,10 +11881,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bE2f4
 objType table
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-20
@@ -11906,10 +11906,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bE2f6
 objType table
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -11930,10 +11930,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bGata1V2
 objType table
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-06-30
@@ -11956,10 +11956,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bGata2
 objType table
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
@@ -11980,10 +11980,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bSetdb1
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -12004,10 +12004,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bSetdb1Mnase
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -12028,10 +12028,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bTr4
 objType table
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
@@ -12052,10 +12052,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bYy1
 objType table
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
@@ -12076,10 +12076,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bZnf263V2
 objType table
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-06-30
@@ -12102,10 +12102,10 @@ view Peaks
 metaObject wgEncodeYaleChIPseqPeaksK562bZnf274
 objType table
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -12330,7 +12330,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataHepg2bInput
 objType file
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -12456,10 +12456,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataK562bInput
 objType file
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -14763,7 +14763,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1Hepg2bTr4
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -15776,10 +15776,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bE2f4
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -15799,10 +15799,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bE2f6
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -15822,10 +15822,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bGata1
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
@@ -15846,10 +15846,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bGata2
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
@@ -15870,10 +15870,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bSetdb1
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -15894,10 +15894,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bSetdb1Mnase
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -15918,10 +15918,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bTr4
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
@@ -15942,10 +15942,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bYy1
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
@@ -15966,10 +15966,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bZnf263
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
@@ -15990,10 +15990,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep1K562bZnf274
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -18329,7 +18329,7 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2Hepg2bTr4
 objType file
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -19338,10 +19338,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bE2f4
 objType file
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -19361,10 +19361,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bE2f6
 objType file
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -19385,10 +19385,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bGata1
 objType file
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
@@ -19409,10 +19409,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bGata2
 objType file
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
@@ -19433,10 +19433,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bSetdb1
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -19457,10 +19457,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bSetdb1Mnase
 objType file
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -19481,10 +19481,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bTr4
 objType file
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
@@ -19505,10 +19505,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bYy1
 objType file
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
@@ -19529,10 +19529,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bZnf263
 objType file
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
@@ -19553,10 +19553,10 @@ view RawData
 metaObject wgEncodeYaleChIPseqRawDataRep2K562bZnf274
 objType file
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -21492,10 +21492,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqRel2SignalK562bGata1
 objType table
 antibody GATA-1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-05-02
@@ -21518,10 +21518,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqRel2SignalK562bZnf263
 objType table
 antibody ZNF263
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-05-02
@@ -23794,7 +23794,7 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalHepg2bInput
 objType table
 antibody Input
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -23817,7 +23817,7 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalHepg2bTr4
 objType table
 antibody TR4
-cell HepG2b
+cell HepG2
 composite wgEncodeYaleChIPseq
 control UCDavis
 controlId HepG2b/None/Input/UCDavis
@@ -24766,10 +24766,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bE2f4
 objType table
 antibody E2F4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -24790,10 +24790,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bE2f6
 objType table
 antibody E2F6
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -24814,10 +24814,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bGata2
 objType table
 antibody GATA-2
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-02
@@ -24838,10 +24838,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bInput
 objType table
 antibody Input
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-11
@@ -24861,10 +24861,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bSetdb1
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-15
@@ -24885,10 +24885,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bSetdb1Mnase
 objType table
 antibody SETDB1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-16
@@ -24909,10 +24909,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bTr4
 objType table
 antibody TR4
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-22
@@ -24933,10 +24933,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bYy1
 objType table
 antibody YY1
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-03
@@ -24957,10 +24957,10 @@ view Signal
 metaObject wgEncodeYaleChIPseqSignalK562bZnf274
 objType table
 antibody ZNF274
-cell K562b
+cell K562
 composite wgEncodeYaleChIPseq
 control UCDavis
-controlId K562b/None/Input/UCDavis
+controlId K562/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-05
@@ -25122,4 +25122,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1141466152
+# MAGIC: 1139598526

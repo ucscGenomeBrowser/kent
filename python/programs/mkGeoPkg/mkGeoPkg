@@ -1,8 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
-import sys, os, shutil, stat
-from rafile.RaFile import *
-from softfile.SoftFile import *
-from cvfile.CvFile import *
+import sys, os, shutil, stat, argparse, datetime
+from ucscgenomics import track, ra, soft, cv
 
 class DataType(object):
 
@@ -14,22 +12,22 @@ class DataType(object):
 		self.soft = soft
 
 datatypes = {
-	'Cage': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'CAGE', HighThroughputSoftFile),
-	'ChipSeq': DataType('genomic DNA', 'ChIP-Seq', 'genomic', 'ChIP', HighThroughputSoftFile),
-	'DnaPet': DataType('genomic DNA', 'OTHER', 'genomic', 'size fractionation', HighThroughputSoftFile),
-	'DnaseDgf': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', HighThroughputSoftFile),
-	'DnaseSeq': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', HighThroughputSoftFile),
-	'FaireSeq': DataType('genomic DNA', 'OTHER', 'genomic', 'other', HighThroughputSoftFile),
-	'MethylSeq': DataType('genomic DNA', 'MRE-Seq', 'genomic', 'Restriction Digest', HighThroughputSoftFile),
-	'MethylRrbs': DataType('genomic DNA', 'Bisulfite-Seq', 'genomic', 'Reduced Representation', HighThroughputSoftFile),
-	'Orchid': DataType('genomic DNA', 'OTHER', 'genomic', 'other', HighThroughputSoftFile),
-	'Proteogenomics': DataType('protein', 'mass spectrometry-based proteogenomic mapping', 'protein', 'chromatographically fractionated peptides', HighThroughputSoftFile),
-	'RnaPet': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'other', HighThroughputSoftFile),
-	'RnaSeq': DataType('OVERRIDE RNA', 'RNA-Seq', 'transcriptomic', 'cDNA', HighThroughputSoftFile),
+	'Cage': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'CAGE', soft.HighThroughputSoftFile),
+	'ChipSeq': DataType('genomic DNA', 'ChIP-Seq', 'genomic', 'ChIP', soft.HighThroughputSoftFile),
+	'DnaPet': DataType('genomic DNA', 'OTHER', 'genomic', 'size fractionation', soft.HighThroughputSoftFile),
+	'DnaseDgf': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', soft.HighThroughputSoftFile),
+	'DnaseSeq': DataType('genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', soft.HighThroughputSoftFile),
+	'FaireSeq': DataType('genomic DNA', 'OTHER', 'genomic', 'other', soft.HighThroughputSoftFile),
+	'MethylSeq': DataType('genomic DNA', 'MRE-Seq', 'genomic', 'Restriction Digest', soft.HighThroughputSoftFile),
+	'MethylRrbs': DataType('genomic DNA', 'Bisulfite-Seq', 'genomic', 'Reduced Representation', soft.HighThroughputSoftFile),
+	'Orchid': DataType('genomic DNA', 'OTHER', 'genomic', 'other', soft.HighThroughputSoftFile),
+	'Proteogenomics': DataType('protein', 'mass spectrometry-based proteogenomic mapping', 'protein', 'chromatographically fractionated peptides', soft.HighThroughputSoftFile),
+	'RnaPet': DataType('OVERRIDE RNA', 'OTHER', 'transcriptomic', 'other', soft.HighThroughputSoftFile),
+	'RnaSeq': DataType('OVERRIDE RNA', 'RNA-Seq', 'transcriptomic', 'cDNA', soft.HighThroughputSoftFile),
 	
 	#these need to be curated
 	'5C': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-	'AffyExonArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
+	'AffyExonArray': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', soft.MicroArraySoftFile),
 	'Bip': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
 	'Cluster': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
 	'Cnv': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
@@ -49,6 +47,18 @@ datatypes = {
 	'Switchgear': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
 	'TfbsValid': DataType('REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None)
 }
+
+#compare this to the source in datatype, give GP ids depending on the type
+gpIds = {
+	'human genomic': '63443',
+	'human transcriptomic': '30709',
+	'human protein': '63447',
+	
+	'mouse genomic': '63471',
+	'mouse transcriptomic': '66167',
+	'mouse protein': '63475'
+}
+
 cvDetails = {
 	'cell':	[ 'organism', 'description', 'karyotype', 'lineage', 'sex' ],
 	'antibody': [ 'antibodyDescription', 'targetDescription', 'vendorName', 'vendorId' ]
@@ -108,36 +118,26 @@ localizationMapping = {
 
 # map our instrument names to GEO's names
 instrumentModels = {
-	'Illumina_GA2x': 'Illumina Genome Analyzer II'
+	'Illumina_GA2x': 'Illumina Genome Analyzer II',
+	'Illumina_GA2': 'Illumina Genome Analyzer II',
+	'Illumina_HiSeq_2000': 'Illumina HiSeq 2000'
 }
 
-organisms = {
-	'hg19': 'human',
-	'hg18': 'human',
-	'mm9': 'mouse'
-}
-
-
-def getFileType(filename):
-	filename.replace('.gz', '')
-	return filename.rsplit('.')[1]
 	
-def isRawFile(filename):
-	return (getFileType(filename) == 'fastq' or getFileType(filename) == 'fasta')
+def isRawFile(file):
+	return (file.extension == 'fastq' or file.extension == 'fasta')
 	
-def isSupplimentaryFile(filename):
-	return not isRawFile(filename)
-
-
-def readMd5sums(filename):
-	if os.path.isfile(filename):
-		md5sums = dict()
-		md5file = open(filename, 'r')
-		for line in md5file:
-			val, key = map(str.strip, line.split('  ', 1))
-			md5sums[key] = val
-	else:
-		return None
+def isSupplimentaryFile(file):
+	return not isRawFile(file)
+	
+def sampleTitle(stanza, expVars, warn=False):
+	concat = stanza[expVars[0]].replace('-m', '')
+	for expVar in expVars[1:len(expVars)]:
+		if expVar in stanza and stanza[expVar] != 'None':
+			concat += '_' + stanza[expVar]
+		elif warn:
+			print 'warning: %s is None or not in %s' % (expVar, stanza.name)
+	return concat
 	
 def createMappings(mdb):
 	expIds = dict()
@@ -177,14 +177,12 @@ def createMappings(mdb):
 		elif datatype != None and 'dataType' in stanza and datatype != stanza['dataType']:
 			raise KeyError(stanza.name + ': inconsistent data type') 
 
-		
-	
 	datatype = datatypes[datatype]
 	
 	return expIds, expVars, geoMapping, series, datatype
 	
 	
-def createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, series):
+def createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, datatype, replace, audit):
 	
 	if 'geoSeriesAccession' in series:
 		print 'Existing series ' + series['composite'] + ' using geoSeriesAccession ' + series['geoSeriesAccession']
@@ -192,20 +190,38 @@ def createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, s
 		
 	print 'Writing series ' + series['composite']
 	
-	seriesStanza = SeriesStanza()
+	seriesStanza = soft.SeriesStanza()
 	seriesStanza['^SERIES'] = series['composite']
-	seriesStanza['!Series_title'] = track[composite]['longLabel'] #STILL INCORRECT
-	seriesStanza['!Series_summary'] = '[REPLACE]'
-	seriesStanza['!Series_overall_design'] = '[REPLACE]'
-	seriesStanza['!Series_web_link'] = [ compositeUrl, 'http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html' ]
-	seriesStanza['!Series_contributor'] = '[REPLACE]'
-	seriesStanza['!Series_gp_id'] = '[REPLACE]'
+	seriesStanza['!Series_title'] = compositeTrack.trackDb[compositeTrack.name]['longLabel'] #STILL INCORRECT
 	
-	#stanza['!Series_variable_1'] = 'var1' #dont use for now, follow up for later
-	#stanza['!Series_variable_description_1'] = 'desc1' # ^
-	#stanza['!Series_variable_sample_list_1'] = 'list1' # ^
-	#stanza['!Series_repeats_1'] = 'rep1' #WILL USE BUT DONT KNOW YET
-	#stanza['!Series_repeats_sample_list_1'] = 'replist1' # ^
+	if '!Series_summary' in replace:
+		seriesStanza['!Series_summary'] = replace['!Series_summary']
+	else:
+		print 'warning: no series summary found. Please include in replace file.'
+		seriesStanza['!Series_summary'] = '[REPLACE]'
+		if audit:
+			print seriesStanza.name + ': no summary'
+		
+	if '!Series_overall_design' in replace:
+		seriesStanza['!Series_overall_design'] = replace['!Series_overall_design']
+	else:
+		print 'no series overall design found. Please include in replace file.'
+		seriesStanza['!Series_overall_design'] = '[REPLACE]'
+		if audit:
+			print seriesStanza.name + ': no overall design'
+			
+	seriesStanza['!Series_web_link'] = [ compositeTrack.url, 'http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html' ]
+	
+	if '!Series_contributor' in replace:
+		seriesStanza['!Series_contributor'] = replace['!Series_contributor']
+	else:
+		seriesStanza['!Series_contributor'] = '[REPLACE]'
+		if audit:
+			print seriesStanza.name + ': no contributor'
+		
+	seriesStanza['!Series_gp_id'] = gpIds[compositeTrack.organism + ' ' + datatype.source]
+	
+	# could use !Series_variable_* and !Series_repeats_*
 	
 	seriesStanza['!Series_sample_id'] = list()
 	
@@ -213,74 +229,87 @@ def createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, s
 		if idNum in geoMapping and geoMapping[idNum] != 'Inconsistent':
 			seriesStanza['!Series_sample_id'].append(geoMapping[idNum])
 		else:
-			seriesStanza['!Series_sample_id'].append(expIds[idNum][0]['metaObject'])
-	
-	if 'geoAccession' in series:
-		seriesStanza['!Series_geo_accession'] = series['geoAccession']
+			seriesStanza['!Series_sample_id'].append(sampleTitle(expIds[idNum][0], expVars))
 	
 	softfile[series['composite']] = seriesStanza
 	
-def createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype, copyDirectory):
+def createHighThroughputSoftFile(compositeTrack, cv, expIds, expVars, geoMapping, series, datatype, replace, audit):
 	
 	print 'Creating HighThroughput soft file'
 
-	softfile = SoftFile()
+	softfile = soft.HighThroughputSoftFile()
 	fileList = list()
 	
-	createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, series)
+	createSeries(softfile, compositeTrack, expIds, expVars, geoMapping, series, datatype, replace, audit)
 		
 	for idNum in expIds.iterkeys():
 		
 		expId = expIds[idNum]
 		firstStanza = expId[0]
 		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
-		sample = HighThroughputSampleStanza()
-		sample['^SAMPLE'] = firstStanza['metaObject']
+		sample = soft.HighThroughputSampleStanza()
+
+		sample['^SAMPLE'] = sampleTitle(firstStanza, expVars, 1)
 		sample['!Sample_type'] = 'SRA'
-		
-		concat = expVars[0]
-		for expVar in expVars[1:len(expVars)]:
-			concat += '_' + firstStanza[expVar]
-		sample['!Sample_title'] = concat
+		sample['!Sample_title'] = sample['^SAMPLE']
 		
 		if 'geoSeriesAccession' in series:
 			sample['!Sample_series_id'] = series['geoSeriesAccession']
 			
 		count = 1
 		
+		#figure out if the instrument model is consistent across the entire sample
+		instrumentModel = None
+		for stanza in expId:	
+			if 'seqPlatform' in stanza:
+				if instrumentModel == None:
+					instrumentModel = stanza['seqPlatform']
+				else:
+					if instrumentModel != stanza['seqPlatform']:
+						instrumentModel = None
+						if audit:
+							print 'expId' + str(expId) + ': inconsistent instrument model'
+						break
+		
 		for stanza in expId:
 		
-			if isRawFile(stanza['fileName']):
-				sample['!Sample_raw_file_' + str(count)] = stanza['fileName']
-				sample['!Sample_raw_file_type_' + str(count)] = getFileType(stanza['fileName'])
+			file = compositeTrack.files[stanza['fileName']]
+			
+			if isRawFile(file):
+				sample['!Sample_raw_file_' + str(count)] = file.name
+				sample['!Sample_raw_file_type_' + str(count)] = file.extension
 				
-				if 'checksum' in stanza:
-					sample['!Sample_raw_file_checksum_' + str(count)] = stanza['checksum']
-				elif md5sums != None and stanza['fileName'] in md5sums:
-					sample['!Sample_raw_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+				if file.md5sum != None:
+					sample['!Sample_raw_file_checksum_' + str(count)] = file.md5sum
 
-				fileList.append(stanza['fileName'])	
+				if instrumentModel == None and 'seqPlatform' in stanza:
+					sample['!Sample_raw_file_instrument_model_' + str(count)] = stanza['seqPlatform']
+					
+				fileList.append(file)	
 				count = count + 1
 			
 		count = 1
 			
 		for stanza in expId:
 		
-			if isSupplimentaryFile(stanza['fileName']):
-				sample['!Sample_supplementary_file_' + str(count)] = stanza['fileName']
+			file = compositeTrack.files[stanza['fileName']]
+		
+			if isSupplimentaryFile(file):
+				sample['!Sample_supplementary_file_' + str(count)] = file.name
 				
-				if 'checksum' in stanza:
-					sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
-				elif md5sums != None and stanza['fileName'] in md5sums:
-					sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+				if file.md5sum != None:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = file.md5sum
 				
-				sample['!Sample_supplementary_file_build_' + str(count)] = database
+				sample['!Sample_supplementary_file_build_' + str(count)] = compositeTrack.database
 				
-				fileList.append(stanza['fileName'])
+				if instrumentModel == None and 'seqPlatform' in stanza:
+					sample['!Sample_supplementary_file_instrument_model_' + str(count)] = stanza['seqPlatform']
+				
+				fileList.append(file)
 				count = count + 1
 			
 		sample['!Sample_source_name'] = firstStanza['cell']
-		sample['!Sample_organism'] = organism
+		sample['!Sample_organism'] = compositeTrack.organism
 		
 		sample['!Sample_characteristics'] = list()
 		allVars = expVars + mdbWhitelist
@@ -323,18 +352,31 @@ def createHighThroughputSoftFile(database, composite, organism, compositeUrl, md
 		else:
 			sample['!Sample_molecule'] = datatype.molecule
 			
-		sample['!Sample_extract_protocol'] = compositeUrl
+		sample['!Sample_extract_protocol'] = compositeTrack.url
 		sample['!Sample_library_strategy'] = datatype.strategy
 		sample['!Sample_library_source'] = datatype.source
 		sample['!Sample_library_selection'] = datatype.selection
 		
-		# set to replace for if nothing has a seqPlatform
-		sample['!Sample_instrument_model'] = '[REPLACE]'
-		for stanza in expId:	
-			if 'seqPlatform' in stanza:
-				sample['!Sample_instrument_model'] = instrumentModels[stanza['seqPlatform']]
-			
-		sample['!Sample_data_processing'] = compositeUrl
+		# if the instrumentModel is consistent, just use that
+		# otherwise take the first seqPlatform value from metadata
+		# if that still fails, check the replacement file
+		# finally just make it say [REPLACE]
+		if instrumentModel != None:
+			sample['!Sample_instrument_model'] = instrumentModel
+		else:
+			for stanza in expId:	
+				if 'seqPlatform' in stanza:
+					sample['!Sample_instrument_model'] = instrumentModels[stanza['seqPlatform']]
+					break
+			if '!Sample_instrument_model' not in sample:
+				if '!Sample_instrument_model' in replace:
+					sample['!Sample_instrument_model'] = instrumentModels[replace['!Sample_instrument_model'][0]]
+			if '!Sample_instrument_model' not in sample:
+				sample['!Sample_instrument_model'] = '[REPLACE]'
+				if audit:
+					print stanza.name + ': no instrument'
+				
+		sample['!Sample_data_processing'] = compositeTrack.url
 
 		if idNum in geoMapping and geoMapping[idNum] != 'Inconsistent':
 			sample['!Sample_geo_accession'] = geoMapping[idNum]
@@ -344,7 +386,9 @@ def createHighThroughputSoftFile(database, composite, organism, compositeUrl, md
 	return softfile, fileList
 		
 		
-def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype, copyDirectory):
+def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype):
+	
+	raise KeyError('microarray')
 	
 	print 'Creating MicroArray soft file'
 
@@ -359,11 +403,12 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 		firstStanza = expId[0]
 		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
 		sample = MicroArraySampleStanza()
-		sample['^SAMPLE'] = firstStanza['metaObject']
-
-		concat = expVars[0]
-		for expVar in expVars[1:len(expVars)]:
-			concat += '_' + firstStanza[expVar]
+			
+		sample['^SAMPLE'] = sampleTitle(firstStanza, expVars)
+		
+		if 'geoSeriesAccession' in series:
+			sample['!Sample_series_id'] = series['geoSeriesAccession']	
+			
 		sample['!Sample_title'] = concat
 		
 		count = 1
@@ -373,129 +418,202 @@ def createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, c
 			if isSupplimentaryFile(stanza['fileName']):
 				sample['!Sample_supplementary_file_' + str(count)] = stanza['fileName']
 				
-				# if 'checksum' in stanza:
-					# sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
-				# elif md5sums != None and stanza['fileName'] in md5sums:
-					# sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
-				
-				# sample['!Sample_supplementary_file_build_' + str(count)] = database
+				if 'checksum' in stanza:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
+				elif md5sums != None and stanza['fileName'] in md5sums:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
 				
 				fileList.append(stanza['fileName'])
 				count = count + 1
 
 		# sample['!Sample_table'] = KeyOptional # CEL file
-		# sample['!Sample_source_name_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_organism_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_characteristics_ch'] = KeyOnePlusNumbered
+		sample['!Sample_source_name_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_organism_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_characteristics_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
 		# sample['!Sample_biomaterial_provider_ch'] = KeyZeroPlusNumbered
 		# sample['!Sample_treatment_protocol_ch'] = KeyZeroPlusNumbered
 		# sample['!Sample_growth_protocol_ch'] = KeyZeroPlusNumbered
-		# sample['!Sample_molecule_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_extract_protocol_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_label_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_label_protocol_ch'] = KeyOnePlusNumbered
-		# sample['!Sample_hyb_protocol'] = KeyOnePlus
-		# sample['!Sample_scan_protocol'] = KeyOnePlus
-		# sample['!Sample_data_processing'] = KeyOnePlus
-		# sample['!Sample_description'] = KeyZeroPlus
-		# sample['!Sample_platform_id'] = KeyRequired
+		sample['!Sample_molecule_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_extract_protocol_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_label_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_label_protocol_ch_1'] = '[REPLACE]' #KeyOnePlusNumbered
+		sample['!Sample_hyb_protocol'] = '[REPLACE]' #KeyOnePlus
+		sample['!Sample_scan_protocol'] = '[REPLACE]' #KeyOnePlus
+		sample['!Sample_data_processing'] = '[REPLACE]' #KeyOnePlus
+		sample['!Sample_description'] = '[REPLACE]' #KeyZeroPlus
+		sample['!Sample_platform_id'] = '[REPLACE]'
 		# sample['!Sample_geo_accession'] = KeyOptional
-		# sample['!Sample_anchor'] = KeyRequired
-		# sample['!Sample_type'] = KeyRequired
-		# sample['!Sample_tag_count'] = KeyRequired
-		# sample['!Sample_tag_length'] = KeyRequired
-		# sample['!Sample_table_begin'] = KeyRequired
-		# sample['!Sample_table_end'] = KeyRequired
+		# sample['!Sample_anchor'] = KeyRequired SAGE ONLY
+		# sample['!Sample_type'] = KeyRequired SAGE ONLY
+		# sample['!Sample_tag_count'] = KeyRequired SAGE ONLY
+		# sample['!Sample_tag_length'] = KeyRequired SAGE ONLY
+		sample['!Sample_table_begin'] = ''
+		sample['!Sample_table_end'] = ''
 	
-	# for idk:
-	
-		# platform = PlatformStanza()
+		softfile[firstStanza['accession']] = sample
 		
-		# platform['^PLATFORM'] = KeyRequired
-		# platform['!Platform_title'] = KeyRequired
-		# platform['!Platform_distribution'] = KeyRequired
-		# platform['!Platform_technology'] = KeyRequired
-		# platform['!Platform_organism'] = KeyOnePlus
-		# platform['!Platform_manufacturer'] = KeyRequired
-		# platform['!Platform_manufacture_protocol'] = KeyOnePlus
-		# platform['!Platform_catalog_number'] = KeyZeroPlus
-		# platform['!Platform_web_link'] = KeyZeroPlus
-		# platform['!Platform_support'] = KeyOptional
-		# platform['!Platform_coating'] = KeyOptional
-		# platform['!Platform_description'] = KeyZeroPlus
-		# platform['!Platform_contributor'] = KeyZeroPlus
-		# platform['!Platform_pubmed_id'] = KeyZeroPlus
-		# platform['!Platform_geo_accession'] = KeyOptional
-		# platform['!Platform_table_begin'] = KeyRequired
-		# platform['!Platform_table_end'] = KeyRequired
+	return softfile, fileList
 	
+	
+def createSpecialSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, expIds, expVars, geoMapping, series, datatype):
+	softfile = SoftFile()
+	fileList = list()
+	
+	createSeries(softfile, composite, compositeUrl, track, expIds, geoMapping, series)
+	
+	for idNum in expIds.iterkeys():
+		
+		expId = expIds[idNum]
+		firstStanza = expId[0]
+		print 'Writing sample ' + firstStanza['metaObject'] + ' (' + idNum + ')'
+		sample = HighThroughputSampleStanza()
+		
+		hasbigwig = 0
+		for stanza in expId:
+		
+			if getFileType(stanza['fileName']) == 'bigWig':
+				hasbigwig = 1
+				
+		if hasbigwig == 0:
+			continue
+		
+		sample['^SAMPLE'] = firstStanza['geoSampleAccession']
+		
+		if 'geoSeriesAccession' in series:
+			sample['!Sample_series_id'] = series['geoSeriesAccession']
+			
+		sample['!Sample_geo_accession'] = firstStanza['geoSampleAccession']
+		
+		count = 1
+			
+		for stanza in expId:
+		
+			if getFileType(stanza['fileName']) == 'bigWig':
+				sample['!Sample_supplementary_file_' + str(count)] = stanza['fileName']
+				
+				if 'checksum' in stanza:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = stanza['checksum']
+				elif md5sums != None and stanza['fileName'] in md5sums:
+					sample['!Sample_supplementary_file_checksum_' + str(count)] = md5sums[stanza['fileName']]
+				
+				# sample['!Sample_supplementary_file_build_' + str(count)] = database
+				
+				fileList.append(stanza['fileName'])
+				count = count + 1
+				
+		softfile[firstStanza['geoSampleAccession']] = sample
+		
+	return softfile, fileList
 		
 def main():
-	database = sys.argv[1]
-	composite = sys.argv[2]
-	submitStart = sys.argv[3]
-	submitSize = int(sys.argv[4])
-	organism = organisms[database]
 
-	mdbPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/' + organism + '/' + database + '/metaDb/alpha/' + composite + '.ra' #CHANGE
-	cvPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/cv/alpha/cv.ra' #CHANGE
-	trackPath = '/cluster/home/mmaddren/kent/src/hg/makeDb/trackDb/' + organism + '/' + database + '/' + composite + '.ra'
-	md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/md5sum.txt'
+	parser = argparse.ArgumentParser(description = 'Prepares a submission to GEO. Creates a soft file and shell script with the correct call to aspera.')
+	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
+	parser.add_argument('-r', '--replace', help='Give the name of a file that has contents to be used to replace unspecified tags in metadata (description, contributers, etc) and instrument model')
+	parser.add_argument('-a', '--audit', action='store_true', default=False, help='Instead of building the files, will just give you a list of errors')
+	parser.add_argument('database', help='The database, typically hg19 or mm9')
+	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
+	parser.add_argument('expIds', nargs='*', help='Any number of expIds separated by spaces, you can also specify a range by using a hyphen, "140 150 160-170" for instance, or leave blank to specify the entire file')
+	
+	if len(sys.argv) == 1:
+		parser.print_usage()
+		return
+	
+	args = parser.parse_args(sys.argv[1:])
+		
+	compositeTrack = track.CompositeTrack(args.database, args.composite, args.trackPath)
 
-	downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + composite + '/'
-	copyDirectory = '/cluster/home/mmaddren/kent/python/ucscgenomics/mkGeoPkg/' + composite
+	cvPath = compositeTrack.trackPath + 'cv/alpha/cv.ra'
+	controlledVocab = cv.CvFile(cvPath)
 	
-	compositeUrl = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + composite
+	replace = dict()
+	if args.replace != None:
+		for line in open(args.replace):
+			if line == '':
+				continue
+			key, val = map(str.strip, line.split('=', 1))
+			if key not in replace:
+				replace[key] = list()
+			replace[key].append(val)
+		
 	
-	mdb = RaFile(mdbPath)
-	cv = CvFile(cvPath)
-	track = RaFile(trackPath)
-	md5sums = readMd5sums(md5path)
-	expIds, expVars, geoMapping, series, datatype = createMappings(mdb)
+	ids = list()
+	
+	for id in args.expIds:
+		if '-' in id:
+			start, end = id.split('-', 1)
+			ids.extend(range(int(start), int(end) + 1))
+		else:
+			ids.append(int(id))
+	
+	expIds, expVars, geoMapping, series, datatype = createMappings(compositeTrack.alphaMetaDb)
 	
 	submission = dict()
-	sortedIds = expIds.keys()
-	sortedIds.sort()
-	sortedIds = sortedIds[sortedIds.index(submitStart):sortedIds.index(submitStart) + submitSize]
-	minId = min(sortedIds)
-	maxId = max(sortedIds)
-	print 'Generating soft using expIds ' + minId + ' to ' + maxId
-	for expId in sortedIds:
-		submission[expId] = expIds[expId]
-
-	if datatype.soft == HighThroughputSoftFile:
-		softfile, fileList = createHighThroughputSoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype, copyDirectory)
-	elif datatype.soft == MicroArraySoftFile:
-		softfile, fileList = createMicroArraySoftFile(database, composite, organism, compositeUrl, mdb, cv, track, md5sums, submission, expVars, geoMapping, series, datatype, copyDirectory)
+	if len(ids) == 0:
+		submission = expIds
 	else:
-		raise Error('unsupported type')
-		
-	print 'Writing soft file'
-	outfileName = os.path.dirname(sys.argv[0]) + composite + '.soft'
-	outfile = open(outfileName, 'w')
-	outfile.write(str(softfile))
+		for expId in ids:
+			submission[str(expId)] = expIds[str(expId)]
 	
-	fileString = outfileName
+	expIdStr = ' '
+	for id in args.expIds:
+		expIdStr = expIdStr + id + ',' 
+	expIdStr = expIdStr[:len(expIdStr) - 1]
+	print 'Generating soft using expIds ' + expIdStr
+	
+	if datatype.soft == soft.HighThroughputSoftFile:
+		softfile, fileList = createHighThroughputSoftFile(compositeTrack, controlledVocab, submission, expVars, geoMapping, series, datatype, replace, args.audit)
+	elif datatype.soft == soft.MicroArraySoftFile:
+		softfile, fileList = createMicroArraySoftFile(compositeTrack, controlledVocab, submission, expVars, geoMapping, series, datatype)
+	else:
+		raise KeyError('unsupported type')
+	
+	if not args.audit:
+		print 'Creating directory'
+	
+		d = datetime.datetime.today()
+		datestring = '%4d-%02d-%02d' % (d.year, d.month, d.day)
+		
+		dirname = '%s_%s_%s/' % (compositeTrack.database, compositeTrack.name, datestring)
+		asperadirname = '%s_%s/' % (compositeTrack.database, compositeTrack.name)
+		linkdirname = '%s_%s/' % (compositeTrack.database, compositeTrack.name)
+	
+		os.mkdir(dirname)
+		os.mkdir(dirname + linkdirname)
+	
+		print 'Writing file'
+		
+		outfileName = '%s%s_%s.soft' % (dirname, compositeTrack.database, compositeTrack.name)
+		outfile = open(outfileName, 'w')
+		outfile.write(str(softfile))
+		fileslistname = '%sfiles.txt' % dirname
+		fileslist = open(fileslistname, 'w')
+		scriptname = '%supload.sh' % dirname
+		outscript = open(scriptname, 'w')
+		
+		outscript.write('#!/bin/sh\n\n')
+		outscript.write('/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk --symbolic-links=follow -QTdr -l300m %s asp-geo@upload.ncbi.nlm.nih.gov:ENCODE\n' % linkdirname)
+		outscript.close()
+		
 	for file in fileList:
-		fileString = fileString + ' ' + downloadsDirectory + file
+		if not os.path.exists(file.path):
+			print IOError(file.path + ' does not exist')
+		elif not args.audit:
+			linkname = '%s_%s' % (compositeTrack.database, file.name)
+			linkpath = linkdirname + linkname
+			os.symlink(file.fullname, dirname + linkpath)
 		
-	fileString.strip()
-	callString = '/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m ' + fileString + ' asp-geo@upload.ncbi.nlm.nih.gov:ENCODE/' + composite
-	outscript = open(composite + minId + '-' + maxId + '.sh', 'w')
-	outscript.write('#!/bin/sh\n\n')
-	outscript.write('/opt/aspera/connect/bin/ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m \\\n')
+			#outscript.write(linkpath + ' \\\n')
+			fileslist.write(linkname + '\n')
 	
-	outscript.write(os.path.dirname(sys.argv[0]) + composite + '.soft' + ' \\\n')
-	
-	for file in fileList:
-		outscript.write(downloadsDirectory + file + ' \\\n')
+	if not args.audit:
+		#outscript.write()
 		
-	outscript.write('asp-geo@upload.ncbi.nlm.nih.gov:ENCODE\n')
-	outscript.close()
+		fileslist.close()
 
-	os.system('chmod +x ' + composite + minId + '-' + maxId + '.sh')
+		os.system('chmod +x ' + scriptname)
 		
-	print 'Finished!'
+		print 'Finished!'
 	
 if __name__ == '__main__':
 	main()

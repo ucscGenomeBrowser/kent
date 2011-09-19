@@ -29,7 +29,7 @@ html wgEncodeMapability.new
     #configurable on
     viewLimits 0:1
     autoScale off
-    windowingFunction mean
+    windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
 
         track wgEncodeDukeMapabilityUniqueness20bp
@@ -53,6 +53,7 @@ html wgEncodeMapability.new
     view XR
     visibility hide
     subTrack wgEncodeMapability
+    noScoreFilter on
 
         track wgEncodeDukeMapabilityRegionsExcludable
         parent wgEncodeMapabilityViewXR off
@@ -60,11 +61,10 @@ html wgEncodeMapability.new
         longLabel Duke Excluded Regions from ENCODE/OpenChrom(Duke)
         subGroups view=XR win=zNA lab=DUKE
         type bed 6
-        noScoreFilter on
         # subId=3840 dateSubmitted=2011-03-28
 
         track wgEncodeDacMapabilityConsensusExcludable
-        parent wgEncodeMapabilityViewXR off
+        parent wgEncodeMapabilityViewXR
         shortLabel DAC Blacklist
         longLabel DAC Blacklisted Regions from ENCODE/DAC(Kundaje)
         subGroups view=XR win=zNA lab=DAC
@@ -79,11 +79,11 @@ html wgEncodeMapability.new
     viewLimits 0:1
     autoScale off
     canPack  On
-    windowingFunction mean
+    windowingFunction mean+whiskers
     maxHeightPixels 100:32:16
 
         track wgEncodeCrgMapabilityAlign24mer
-        subTrack wgEncodeMapabilityViewCRGMAP
+        subTrack wgEncodeMapabilityViewCRGMAP off
         shortLabel CRG Align 24
         longLabel Alignability of 24mers by GEM from ENCODE/CRG(Guigo)
         subGroups view=CRGMAP win=w024 lab=CRG
@@ -101,7 +101,7 @@ html wgEncodeMapability.new
         origAssembly hg19
 
         track wgEncodeCrgMapabilityAlign40mer
-        subTrack wgEncodeMapabilityViewCRGMAP
+        subTrack wgEncodeMapabilityViewCRGMAP off
         shortLabel CRG Align 40
         longLabel Alignability of 40mers by GEM from ENCODE/CRG(Guigo)
         subGroups view=CRGMAP win=w040 lab=CRG
@@ -110,7 +110,7 @@ html wgEncodeMapability.new
         origAssembly hg19
 
         track wgEncodeCrgMapabilityAlign50mer
-        subTrack wgEncodeMapabilityViewCRGMAP
+        subTrack wgEncodeMapabilityViewCRGMAP off
         shortLabel CRG Align 50
         longLabel Alignability of 50mers by GEM from ENCODE/CRG(Guigo)
         subGroups view=CRGMAP win=w050 lab=CRG
@@ -119,7 +119,7 @@ html wgEncodeMapability.new
         origAssembly hg19
 
         track wgEncodeCrgMapabilityAlign75mer
-        subTrack wgEncodeMapabilityViewCRGMAP
+        subTrack wgEncodeMapabilityViewCRGMAP off
         shortLabel CRG Align 75
         longLabel Alignability of 75mers by GEM from ENCODE/CRG(Guigo)
         subGroups view=CRGMAP win=w075 lab=CRG
@@ -128,7 +128,7 @@ html wgEncodeMapability.new
         origAssembly hg19
 
         track wgEncodeCrgMapabilityAlign100mer
-        subTrack wgEncodeMapabilityViewCRGMAP
+        subTrack wgEncodeMapabilityViewCRGMAP off
         shortLabel CRG Align 100
         longLabel Alignability of 100mers by GEM from ENCODE/CRG(Guigo)
         subGroups view=CRGMAP win=w100 lab=CRG

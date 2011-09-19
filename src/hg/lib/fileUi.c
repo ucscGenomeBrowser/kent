@@ -184,7 +184,7 @@ else
                 {
                 if (mdbObjsHasCommonVar(mdbObjs, var->var,TRUE)) // Don't bother if all the vals are the same (missing okay)
                     continue;
-                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(var->var)),' ','_'));
+                dyStringPrintf(dySortFields,"%s=%s ",var->var,strSwapChar(cloneString(cvLabel(NULL,var->var)),' ','_'));
                 }
             }
         if (dyStringLen(dySortFields))
@@ -397,7 +397,7 @@ if (sortOrder != NULL)
             char *tag = (char *)cvTag(var,term->name);
             if (tag == NULL)
                 tag = term->name;
-            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(term->name)));
+            slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(var,term->name)));
             slNameFree(&term);
             }
 
@@ -486,8 +486,8 @@ if (oneFile != NULL)
           server,db,ENCODE_DCC_DOWNLOADS, tdb->track, subDir);
     }
 if (hIsPreviewHost())
-    printf("<BR><b>WARNING</b>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Genome Browser</a>.",
-        "genome.ucsc.edu", db, tdb->track);
+    printf("<BR><b>WARNING</b>: This data is provided for early access via the Preview Browser -- it is unreviewed and subject to change. For high quality reviewed annotations, see the <a target=_blank href='http://%s/cgi-bin/hgTracks?db=%s'>Genome Browser</a>.",
+        "genome.ucsc.edu", db);
 else
     printf("<BR><b>NOTE</b>: Early access to additional track data may be available on the <a target=_blank href='http://%s/cgi-bin/hgFileUi?db=%s&g=%s'>Preview Browser</A>.",
         "genome-preview.ucsc.edu", db, tdb->track);
@@ -625,7 +625,12 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
                     printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
+                    {
+                    // use label
+                    if (!isFieldEmpty && cvTermIsCvDefined(sortOrder->column[ix]))
+                        field = (char *)cvLabel(sortOrder->column[ix],field);
                     printf("<TD%s nowrap%s>%s</td>",align,class,isFieldEmpty?" &nbsp;":field);
+                    }
                 if (!sameString("fileType",sortOrder->column[ix]))
                     mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
                 }
@@ -644,7 +649,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
     mdbObjRemoveVars(oneFile->mdb,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT); // Remove this from mdb now so that it isn't displayed in "extras'
-    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);
+    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE,FALSE);
     printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
 
     printf("</TR>\n");
@@ -704,37 +709,19 @@ while (mdbList && (limit == 0 || fileCount < limit))
         continue;
         }
 
-//#define NO_FILENAME_LISTS
-#ifdef NO_FILENAME_LISTS
-    oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, composite, fileName);
-    if (oneFile == NULL)
-        {
-        mdbObjsFree(&mdbFile);
-        continue;
-        }
-
-    //warn("%s == %s",fileType,oneFile->fileType);
-    if (isEmpty(fileType) || sameWord(fileType,"Any")
-    || (oneFile->fileType && sameWord(fileType,oneFile->fileType)))
-        {
-        slAddHead(&fileList,oneFile);
-        oneFile->mdb = mdbFile;
-        slAddHead(&mdbFiles,oneFile->mdb);
-        found = TRUE;
-        fileCount++;
-        if (limit > 0 && fileCount >= limit)
-            break;
-        }
-    else
-        fileDbFree(&oneFile);
-
-#else///ifndef NO_FILENAME_LISTS
-
     struct slName *fileSet = slNameListFromComma(fileName);
     struct slName *md5Set = NULL;
     char *md5sums = mdbObjFindValue(mdbFile,MDB_VAR_MD5SUM);
     if (md5sums != NULL)
         md5Set = slNameListFromComma(md5sums);
+
+    // Could be that "bai" is implicit with "bam"
+    if ((slCount(fileSet) == 1) && endsWith(fileSet->name,".bam"))
+    {
+    char buf[512];
+    safef(buf,sizeof(buf),"%s.bai",fileSet->name);
+    slNameAddTail(&fileSet, buf);
+    }
     while (fileSet != NULL)
         {
         struct slName *file = slPopHead(&fileSet);
@@ -781,31 +768,20 @@ while (mdbList && (limit == 0 || fileCount < limit))
         if (md5)
             slNameFree(&md5);
         }
-#endif///ndef NO_FILENAME_LISTS
 
-    // FIXME: This support of fileIndex and implicit bam.bai's should be removed when mdb is cleaned up.
+    // FIXME: This support of fileIndex should be removed when mdb is cleaned up.
     // Now for FileIndexes
     if (limit == 0 || fileCount < limit)
         {
-        char buf[512];
-        if (strchr(fileName,',') == NULL && endsWith(fileName,".bam")) // Special to fill in missing .bam.bai's
-            {
-            safef(buf,sizeof(buf),"%s.bai",fileName);
-            fileName = buf;
-            }
-        else
-            {
-            fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILEINDEX);   // This mdb var should be going away.
-            if (fileName == NULL)
-                continue;
-            }
+        fileName = mdbObjFindValue(mdbFile,MDB_VAR_FILEINDEX);   // This mdb var should be going away.
+        if (fileName == NULL)
+            continue;
 
         // Verify existance first
         oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, composite, fileName);  // NOTE: won't be found if already found in comma delimited fileName!
         if (oneFile == NULL)
             continue;
 
-        //warn("%s == %s",fileType,oneFile->fileType);
         if (isEmpty(fileType) || sameWord(fileType,"Any")
         || (oneFile->fileType && sameWord(fileType,oneFile->fileType))
         || (oneFile->fileType && sameWord(fileType,"bam") && sameWord("bam.bai",oneFile->fileType))) // TODO: put fileType matching into search.c lib code to segregate index logic.
@@ -824,6 +800,7 @@ while (mdbList && (limit == 0 || fileCount < limit))
         else
             fileDbFree(&oneFile);
         }
+    // FIXME: This support of fileIndex should be removed when mdb is cleaned up.
 
     if (!found)
         mdbObjsFree(&mdbFile);
@@ -866,6 +843,9 @@ mdbVars = mdbByVarsLineParse(buf);
 mdbList = slCat(mdbList, mdbObjsQueryByVars(conn,mdbTable,mdbVars));
 mdbObjRemoveHiddenVars(mdbList);
 hFreeConn(&conn);
+
+if (mdbList)
+    (void)mdbObjsFilter(&mdbList,"objStatus","re*",TRUE); // revoked, replaced, renamed
 
 if (slCount(mdbList) == 0)
     {
@@ -933,6 +913,10 @@ if (conn == NULL)
 struct mdbObj *mdbList = mdbObjRepeatedSearch(connLocal,varValPairs,FALSE,TRUE);
 if (conn == NULL)
     hFreeConn(&connLocal);
+
+if (mdbList)
+    (void)mdbObjsFilter(&mdbList,"objStatus","re*",TRUE); // revoked, replaced, renamed
+
 if (slCount(mdbList) == 0)
     {
     printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");

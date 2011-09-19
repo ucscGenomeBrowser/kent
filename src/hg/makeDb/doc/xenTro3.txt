@@ -1,0 +1,768 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Xenopus tropicalis
+# ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/
+#	Xenopus_tropicalis/v4.2/
+#
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAMC01
+#	WGS: AAMC01000001:AAMC01190823
+
+##########################################################################
+# Download sequence (DONE - 2011-09-07 - Hiram)
+    mkdir -p /hive/data/genomes/xenTro3/genbank
+    cd /hive/data/genomes/xenTro3/genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Xenopus_tropicalis/v4.2/*"
+
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz 
+1511717716 bases (153400444 N's 1358317272 real 1358317272 upper 0 lower) in 19549 sequences in 1 files
+
+###########################################################################
+# fixup contig names a little bit (DONE - 2011-09-07 - Hiram)
+    cd /hive/data/genomes/xenTro3/genbank
+
+    # removing the .1 from all the GL names
+    
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+	| sed -e "s/^>gi.[0-9][0-9]*.gb.GL/>GL/; s/\.1| .*//;" \
+	| gzip -c > xenTro3.fa.gz
+    #	real    6m24.993s
+
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+	| sed -e "s/^GL1\([0-9]*\)\.1/GL1\1/" | gzip -c > xenTro3.agp.gz
+
+###########################################################################
+#  Initial database build (DONE - 2011-09-08 - Hiram)
+
+    cd /hive/data/genomes/xenTro3/genbank
+    cat << '_EOF_' > xenTro3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db xenTro3
+clade vertebrate
+genomeCladePriority 80
+scientificName Xenopus (Silurana) tropicalis
+commonName western clawed frog
+assemblyDate Nov. 2009
+assemblyLabel US DOE Joint Genome Institute (JGI-PGF) (GCA_000004195.1)
+assemblyShortLabel X. tropicalis v4.2
+orderKey 444
+mitoAcc NC_006839
+fastaFiles /cluster/data/xenTro3/genbank/xenTro3.fa.gz
+agpFiles /cluster/data/xenTro3/genbank/xenTro3.agp.gz
+dbDbSpeciesDir xenTro
+taxId 8364
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and agp are OK
+    makeGenomeDb.pl -stop=agp xenTro3.config.ra > agp.log 2>&1
+
+    time makeGenomeDb.pl -continue=db xenTro3.config.ra > db.log 2>&1
+    #	real    12m7.144s
+
+##########################################################################
+# running repeat masker (DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/repeatMasker
+    cd /hive/data/genomes/xenTro3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-species "Xenopus tropicalis" \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk xenTro3 > do.log 2>&1 &
+    #	real    35m31.331s
+    cat faSize.rmsk.txt
+    #	1511735326 bases (153400444 N's 1358334882 real 1025832944 upper
+    #	332501938 lower) in 19550 sequences in 1 files
+    #	%21.99 masked total, %24.48 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp $
+#    June 30 2010 (open-3-2-9) version of RepeatMasker
+    featureBits -countGaps xenTro3 rmsk
+    #	333219656 bases of 1511735326 (22.042%) in intersection
+    # why is it different than the faSize above ?
+
+##########################################################################
+# running simple repeat (DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/simpleRepeat
+    cd /hive/data/genomes/xenTro3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	xenTro3 > do.log 2>&1 &
+    # about 1 hour 3 minutes
+    #	real    23m18.960s
+
+    #	real    198m33.953s
+    cat fb.simpleRepeat 
+    #	103101528 bases of 1358346944 (7.590%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/xenTro3
+    twoBitMask xenTro3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed xenTro3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa xenTro3.2bit stdout | faSize stdin > faSize.xenTro3.2bit.txt
+    cat faSize.xenTro3.2bit.txt
+    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
+    #	333510395 lower) in 19550 sequences in 1 files
+    #	%22.06 masked total, %24.55 masked real
+
+    rm /gbdb/xenTro3/xenTro3.2bit
+    ln -s `pwd`/xenTro3.2bit /gbdb/xenTro3/xenTro3.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/gap
+    cd /hive/data/genomes/xenTro3/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../xenTro3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m15.269s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits xenTro3 -not gap -bed=notGap.bed
+    #	1358346944 bases of 1358346944 (100.000%) in intersection
+    featureBits xenTro3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	12062 bases of 1358346944 (0.001%) in intersection
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" xenTro3 | sort -n | tail -1
+    #	1466
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" xenTro3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps xenTro3 other.bed
+    #	12062 bases of 1511735326 (0.001%) in intersection
+    wc -l other.bed
+    #	11242
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad xenTro3 otherGap other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" xenTro3
+    #	171274
+    hgsql xenTro3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" xenTro3
+    #	182516
+    # == 171274 + 11242
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 xenTro3 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+    # there are no non-bridged gaps here:
+    hgsql -N -e "select bridge from gap;" xenTro3 | sort | uniq -c
+    #	182516 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/windowMasker
+    cd /hive/data/genomes/xenTro3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev xenTro3 > do.log 2>&1 &
+    #	about 1h 52m
+
+    # Masking statistics
+    twoBitToFa xenTro3.wmsk.2bit stdout | faSize stdin
+    #	1511735326 bases (153400444 N's 1358334882 real 845383044 upper
+    #	512951838 lower) in 19550 sequences in 1 files
+    #	%33.93 masked total, %37.76 masked real
+
+    twoBitToFa xenTro3.wmsk.sdust.2bit stdout | faSize stdin
+    #	1511735326 bases (153400444 N's 1358334882 real 835449906 upper
+    #	522884976 lower) in 19550 sequences in 1 files
+    #	%34.59 masked total, %38.49 masked real
+
+    hgLoadBed xenTro3 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 7010382 elements of size 3
+
+    featureBits -countGaps xenTro3 windowmaskerSdust
+    #	811865302 bases of 1799143587 (45.125%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits xenTro3 -not gap -bed=notGap.bed
+    #	1701353770 bases of 1701353770 (100.000%) in intersection
+    time nice -n +19 featureBits xenTro3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	714075485 bases of 1701353770 (41.971%) in intersection
+    #	reload track to get it clean
+    hgLoadBed xenTro3 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 8199653 elements of size 4
+    featureBits -countGaps xenTro3 windowmaskerSdust
+    #	714075485 bases of 1799143587 (39.690%) in intersection
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../xenTro3.unmasked.2bit stdin \
+	    -type=.bed xenTro3.cleanWMSdust.2bit
+    twoBitToFa xenTro3.cleanWMSdust.2bit stdout | faSize stdin \
+        > xenTro3.cleanWMSdust.faSize.txt
+    cat xenTro3.cleanWMSdust.faSize.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
+    #	714075485 lower) in 6457 sequences in 1 files
+    #	%39.69 masked total, %41.97 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps xenTro3 rmsk windowmaskerSdust
+    #	280229203 bases of 1511735326 (18.537%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-09-09 - Hiram)
+    cd /hive/data/genomes/xenTro3
+    twoBitMask -add bed/windowMasker/xenTro3.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed xenTro3.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa xenTro3.2bit stdout | faSize stdin > faSize.xenTro3.txt
+    cat faSize.xenTro3.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987044085 upper
+    #	714309682 lower) in 6457 sequences in 1 files
+    #	%39.70 masked total, %41.98 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/xenTro3/xenTro3.2bit
+    ln -s `pwd`/xenTro3.2bit /gbdb/xenTro3/xenTro3.2bit
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-09-09 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 1358317272 / 2897316137 \) \* 1024
+    #	( 1358317272 / 2897316137 ) * 1024 = 480.070804
+    # round up to 500
+
+    cd /hive/data/genomes/xenTro3
+    blat xenTro3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/xenTro3.11.ooc -repMatch=500
+    #	Wrote 29991 overused 11-mers to jkStuff/xenTro3.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    # there are no non-bridged gaps
+    hgsql -N -e "select bridge from gap;" xenTro3 | sort | uniq -c
+    #	182516 yes
+    #	cd /hive/data/genomes/xenTro3/jkStuff
+    #	gapToLift xenTro3 nonBridged.lift -bedFile=nonBridged.bed
+    cd /hive/data/genomes/xenTro3
+    mkdir /hive/data/staging/data/xenTro3
+    cp -p jkStuff/xenTro3.11.ooc chrom.sizes \
+	xenTro3.2bit /hive/data/staging/data/xenTro3
+    # request rsync copy from cluster admin
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2011-09-11 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Xenopus (Silurana) tropicalis   18786   1271379 8783
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that xenTro3 has plenty of native est's
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add xenTro3 before anoCar1 and commit to GIT
+# xenTro3 (X. tropicalis) 19550 scaffolds
+xenTro3.serverGenome = /hive/data/genomes/xenTro3/xenTro3.2bit
+xenTro3.clusterGenome = /scratch/data/xenTro3/xenTro3.2bit
+xenTro3.ooc = /scratch/data/xenTro3/xenTro3.11.ooc
+xenTro3.lift = no
+xenTro3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+xenTro3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+xenTro3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+xenTro3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+xenTro3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+xenTro3.refseq.mrna.native.load = yes
+xenTro3.genbank.est.native.load = yes
+xenTro3.refseq.mrna.xeno.load = no
+xenTro3.genbank.mrna.xeno.load = no
+xenTro3.downloadDir = xenTro3
+xenTro3.perChromTables = no
+xenTro3.mgc = yes
+# xenTro3.upstreamGeneTbl = mgcGenes
+# xenTro3.upstreamMaf = multiz7way
+# /hive/data/genomes/xenTro3/bed/multiz7way/species.lst
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding xenTro3 frog" genbank.conf
+    git push
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # anoCar genome information, if this is a new species, need to add stuff
+    # there
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial xenTro3 &
+    #	var/build/logs/2011.09.12-09:03:09.xenTro3.initalign.log
+    #	real    360m20.657s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad xenTro3 &
+    #	logFile: var/dbload/hgwdev/logs/2011.09.12-20:47:05.dbload.log
+    #	real    118m27.671s
+
+    # enable daily alignment and update of hgwdev (DONE - 2011-09-13 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add xenTro3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added xenTro3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# construct ctgPos2 table (DONE - 2011-09-12 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/ctgPos2
+    cd /hive/data/genomes/xenTro3/bed/ctgPos2
+    cat << '_EOF_' > chromSizesToCtgPos.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chromSizes;
+open (FH, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($contig, $size) = split('\s', $line);
+    $chromSizes{$contig} = $size;
+}
+close (FH);
+
+open (FH, "<../../genbank/Primary_Assembly/localID2acc") or
+        die "can not read ../../genbank/Primary_Assembly/localID2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($scaffold, $contig) = split('\s', $line);
+    $scaffold =~ s/XENTR//;
+    $contig =~ s/.1$//;
+    my $size = $chromSizes{$contig};
+    printf "%s\t%d\t%s\t0\t%d\tW\n", $scaffold, $size, $contig, $size;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x chromSizesToCtgPos.pl
+    ./chromSizesToCtgPos.pl > xenTro3.ctgPos2.tab
+    echo -e "AY789013\t17610\tchrM\t0\t17610\tF" >> xenTro3.ctgPos2.tab
+    # check how big are the names:
+    awk '{print length($1)}' xenTro3.ctgPos2.tab | sort -rn | head -1
+    # 14
+    awk '{print length($3)}' xenTro3.ctgPos2.tab | sort -rn | head
+    # 8
+    sed -e "s/20/14/; s/16/8/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+    hgLoadSqlTab xenTro3 ctgPos2 ctgPos2.sql xenTro3.ctgPos2.tab
+
+############################################################################
+# running cpgIsland business (DONE - 2011-09-13 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/cpgIsland
+    cd /hive/data/genomes/xenTro3/bed/cpgIsland
+    # use a previous binary for this program
+    ln -s ../../../xenTro2/bed/cpgIsland/cpglh.exe .
+
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../xenTro3.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/xenTro3/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck.
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | egrep -v "^#seq|^total" | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+# Completed: 1133 of 1133 jobs
+# CPU time in finished jobs:        102s       1.70m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                  4469s      74.49m     1.24h    0.05d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:           485s       8.08m     0.13h    0.01d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    # verify longest unique chrom name:
+    cut -f1 cpgIsland.bed | awk '{print length($0)}' | sort -rn | head -1
+    #	8
+    # update the length 14 in the template to be 16:
+    sed -e "s/14/8/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
+
+    cd /hive/data/genomes/xenTro3/bed/cpgIsland
+    hgLoadBed xenTro3 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
+# Loaded 15341 elements of size 10
+
+    featureBits xenTro3 cpgIslandExt
+    #	9355659 bases of 1358334882 (0.689%) in intersection
+
+    # there should be no output from checkTableCoords:
+    checkTableCoords -verboseBlocks -table=cpgIslandExt xenTro3
+
+    #	cleanup
+    rm -fr hardMaskedFa
+
+#########################################################################
+# GENSCAN GENE PREDICTIONS (DONE - 2011-09-13 - Hiram)
+    mkdir /hive/data/genomes/xenTro3/bed/genscan
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    # use a previously existing genscan binary
+    ln -s ../../../xenTro2/bed/genscan/hg3rdParty .
+
+    # create hard masked .fa files
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../xenTro3.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    # Generate a list file, genome.list, of all the hard-masked contig chunks:
+    find ./hardMaskedFa/ -type f | sed -e 's#^./##' > genome.list
+
+    wc -l genome.list
+    #	19550 genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh swarm
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, template, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in exists+ $(path1)} {check out exists gtf/$(root1).gtf} -trans={check out exists pep/$(root1).pep} -subopt={check out exists subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try
+    para check ... etc...
+    para time
+# Completed: 19550 of 19550 jobs
+# CPU time in finished jobs:      25171s     419.52m     6.99h    0.29d  0.001 y
+# IO & Wait Time:                 51770s     862.83m    14.38h    0.60d  0.002 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:             176s       2.93m     0.05h    0.00d
+# Submission to last job:           336s       5.60m     0.09h    0.00d
+
+    # this did not work, runs out of file handles ?
+    find ./gtf -type f | xargs -n 256 endsInLf -zeroOk
+
+    # Concatenate results:
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    find ./gtf -type f | xargs cat > genscan.gtf
+    find ./pep -type f | xargs cat > genscan.pep
+    find ./subopt -type f | xargs cat > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame info):
+    # Don't load the Pep anymore -- redundant since it's from genomic.
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro3/bed/genscan
+    # to construct a local file with the genePred business:
+    gtfToGenePred genscan.gtf genscan.gp
+    # this produces exactly the same thing and loads the table:
+    ldHgGene -gtf xenTro3 genscan genscan.gtf
+    #	Read 47412 transcripts in 293762 lines in 1 files
+    #	47412 groups 9702 seqs 1 sources 1 feature types
+    #	47412 gene predictions
+    hgLoadBed xenTro3 genscanSubopt genscanSubopt.bed
+    #	Loaded 369728 elements of size 6
+    featureBits xenTro3 genscan
+    #	62125158 bases of 1358334882 (4.574%) in intersection
+    # previously:
+    featureBits xenTro2 genscan
+    #	62149060 bases of 1359412157 (4.572%) in intersection
+    featureBits xenTro1 genscan
+    #	63766483 bases of 1381238994 (4.617%) in intersection
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2011-09-15 - Hiram
+     ssh hgwdev
+     mkdir /cluster/data/xenTro3/bed/microsat
+     cd /cluster/data/xenTro3/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed 
+    hgLoadBed xenTro3 microsat microsat.bed
+    #	Loaded 13365 elements of size 4
+
+#########################################################################
+# create ucscToEnsembl scaffold name mapping (DONE - 2011-09-15 - Hiram)
+    # this allows the "ensembl" blue bar button to appear
+    mkdir /hive/data/genomes/xenTro3/bed/ucscToEnsembl
+    cd /hive/data/genomes/xenTro3/bed/ucscToEnsembl
+    awk '{printf "%s\t%s.1\n", $1, $1}' ../../chrom.sizes > ucscToEnsembl.tab
+
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(8))
+);
+'_EOF_'
+
+    hgsql xenTro3 < ucscToEnsembl.sql
+    hgsql xenTro3 \
+-e 'LOAD DATA LOCAL INFILE "ucscToEnsembl.tab" INTO TABLE ucscToEnsembl'
+
+    # verify the blue bar "ensembl" link is now available
+#########################################################################
+# constructing downloads (DONE - 2011-09-16 - Hiram)
+    cd /hive/data/genomes/xenTro3
+    time makeDownloads.pl -workhorse=hgwdev xenTro3
+    #	real    14m44.729s
+    # edit the README files in goldenPath/*/README.txt
+
+#########################################################################
+# create pushQ entry (DONE - 2011-09-16 - Hiram)
+    # first make sure all.joiner is up to date and has this new organism
+    # a keys check should be clean:
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -database=xenTro3 -keys all.joiner
+
+    mkdir /hive/data/genomes/xenTro3/pushQ
+    cd /hive/data/genomes/xenTro3/pushQ
+    makePushQSql.pl xenTro3 > xenTro3.sql 2> stderr.out
+    # check stderr.out for no significant problems, it is common to see:
+# WARNING: hgwdev does not have /gbdb/xenTro3/wib/gc5Base.wib
+# WARNING: hgwdev does not have /gbdb/xenTro3/wib/quality.wib
+# WARNING: hgwdev does not have /gbdb/xenTro3/bbi/quality.bw
+# WARNING: xenTro3 does not have seq
+# WARNING: xenTro3 does not have extFile
+    # which are no real problem
+    # if some tables are not identified:
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#	ensGtp
+#	ensPep
+#	ensemblSource
+#	ensemblToGeneName
+#	ucscToEnsembl
+    # put them in manually after loading the pushQ entry
+    scp -p xenTro3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < xenTro3.sql
+
+#########################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE 2011-09-17 braney )
+    # bash  if not using bash shell already
+    cd /cluster/data/xenTro3
+    mkdir /cluster/data/xenTro3/blastDb
+
+    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  xenTro3.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+# 1353 pieces of 1353 written
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  xenTro3.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+    rm temp.fa less1meg.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 1808
+
+    mkdir -p /cluster/data/xenTro3/bed/tblastn.hg18KG
+    cd /cluster/data/xenTro3/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 1808 query.lst
+
+   # we want around 250000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(250000/`wc query.lst | awk '{print $1}'`\)
+# 36727/(250000/1808) = 265.609664
+
+   mkdir -p kgfa
+   split -l 266 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   wc kg.lst
+#  139  139 1807 kg.lst
+
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/xenTro3/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/xenTro3/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/xenTro3/bed/tblastn.hg18KG
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 251312 of 251312 jobs
+# CPU time in finished jobs:    8416814s  140280.23m  2338.00h   97.42d  0.267 y
+# IO & Wait Time:               1310570s   21842.83m   364.05h   15.17d  0.042 y
+# Average job time:                  39s       0.65m     0.01h    0.00d
+# Longest finished job:             237s       3.95m     0.07h    0.00d
+# Submission to last job:         19145s     319.08m     5.32h    0.22d
+
+    cd /cluster/data/xenTro3/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 139 of 139 jobs
+# CPU time in finished jobs:        562s       9.37m     0.16h    0.01d  0.000 y
+# IO & Wait Time:                 30974s     516.23m     8.60h    0.36d  0.001 y
+# Average job time:                 227s       3.78m     0.06h    0.00d
+# Longest finished job:             299s       4.98m     0.08h    0.00d
+# Submission to last job:           310s       5.17m     0.09h    0.00d
+
+    cd /cluster/data/xenTro3/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+# checked: 41882 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/xenTro3/bed/tblastn.hg18KG
+    hgLoadPsl xenTro3 blastHg18KG.psl
+
+    # check coverage
+    featureBits xenTro3 blastHg18KG 
+# 20459423 bases of 1358334882 (1.506%) in intersection
+
+    featureBits xenTro3 blastHg18KG ensGene  -enrichment
+# blastHg18KG 1.506%, ensGene 2.717%, both 1.337%, cover 88.77%, enrich 32.67x
+
+    rm -rf blastOut
+#end tblastn

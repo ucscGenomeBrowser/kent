@@ -290,7 +290,7 @@ gbCdsGeneField = c2;
 c2 = newField("/locus_tag", "lot", GBF_TRACK_VALS, 21, 128);
 slAddTail(&c1->children, c2);
 
-c2 = newField("/product", "pro", GBF_NONE, 21, 128);
+c2 = newField("/product", "pro", GBF_MULTI_LINE, 21, 128);
 slAddTail(&c1->children, c2);
 
 gbProteinIdField = newField("/protein_id", "prt", GBF_NONE, 21, 32);

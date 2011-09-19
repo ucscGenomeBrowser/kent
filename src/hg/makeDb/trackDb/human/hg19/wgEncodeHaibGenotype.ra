@@ -3,25 +3,21 @@ compositeTrack on
 shortLabel HAIB Genotype
 longLabel Genotype (CNV and SNP) by Illumina 1MDuo and CBS from ENCODE/HudsonAlpha
 group varRep
-#subGroup1 view View Regions=Regions
 subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM HSMMt=HSMM_tube GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MCF10AESTAM=MCF10A-Er-Src_(<i>Tamoxifen<\i>) MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N 
 subGroup2 treatment Treatment None=None TAM=Tamoxifen
 subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
 dimensions dimY=cellType dimX=rep
+fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By dccRep=UCSC<BR>Rep replicate=Lab<BR>Rep dccAccession=UCSC_Accession fileSize=Size
 sortOrder cellType=+ rep=+
-fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By dccRep=UCSC<BR>Rep replicate=Lab<BR>Rep view=View origAssembly=Original<BR>Assembly dccAccession=UCSC_Accession fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
 priority 0
 wgEncode 1
 type bed 9 + 
 itemRgb on
-visibility hide
-canPack On
+visibility hide 
 extraFields logR=[f]LogR_Value
-scoreFilter 0
-scoreFilterLimits 0:1000
-
+noScoreFilter .
 
         track wgEncodeHaibGenotypeGm12878RegionsRep1
         parent wgEncodeHaibGenotype on
@@ -29,7 +25,6 @@ scoreFilterLimits 0:1000
         longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=1GM12878 treatment=None rep=rep1
         type bed 9 +
-        origAssembly hg18
         # subId=4057 dateSubmitted=2011-05-09
 
         track wgEncodeHaibGenotypeA549RegionsRep1
@@ -717,7 +712,6 @@ scoreFilterLimits 0:1000
         shortLabel GM12878 2
         longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=1GM12878 treatment=None rep=rep2
-        origAssembly hg18
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 
@@ -726,7 +720,6 @@ scoreFilterLimits 0:1000
         shortLabel HepG2 1
         longLabel HepG2 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=2HepG2 treatment=None rep=rep1
-        origAssembly hg18
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 
@@ -735,7 +728,6 @@ scoreFilterLimits 0:1000
         shortLabel K562 1
         longLabel K562 Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=1K562 treatment=None rep=rep1
-        origAssembly hg18
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 

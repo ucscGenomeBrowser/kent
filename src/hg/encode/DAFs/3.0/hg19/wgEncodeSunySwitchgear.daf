@@ -1,0 +1,34 @@
+# Data Agreement File for Switchgear project $Revision: 1.1 $
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the associated .ddf file should look like this:
+# files   view    cell  ripTgtProtein  labVersion 
+
+#
+#files          a list of files that correspond to the metadata in this line
+#view           the view of the data as described below
+#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#ripTgtProtein  The target protien used.  In our database these are mixed with antibodies, found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Antibodies
+#labVersion     free text for the lab to specify metadata (possibly 'These files produced for use with GENCODE V3c' or something of the like) (OPTIONAL)
+#softwareVersion free text for the lab to specify Cufflinks V??? You can also clarify your mapAlgorithm here (OPTIONAL)
+
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Tenenbaum
+lab               SunyAlbany
+dataType          Switchgear
+compositeSuffix   SunySwitchgear
+group             regulation
+variables         cell, ripTgtProtein 
+assembly          hg19
+
+validationSettings validateFiles.broadPeak:mmCheckOneInN=1000
+
+# Track/view definition
+view             RbpAssocRna
+type             broadPeak
+required         no
+hasReplicates    no

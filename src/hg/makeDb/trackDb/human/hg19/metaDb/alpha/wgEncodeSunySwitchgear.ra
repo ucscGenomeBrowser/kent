@@ -17,8 +17,8 @@ expId 609
 fileName wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
+md5sum b58b4847e8d71d95471c4c017b4a5dc7
 project wgEncode
-ripTgtProtein ELAVL1
 subId 3086
 tableName wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
 view RbpAssocRna
@@ -37,10 +37,10 @@ expId 610
 fileName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
+md5sum c5889dbbe88f8b4d27f25bb83bdd3326
 project wgEncode
-ripTgtProtein IGF2BP1
 subId 3086
 tableName wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 1022710344
+# MAGIC: -1926852765

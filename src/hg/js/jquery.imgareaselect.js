@@ -327,7 +327,7 @@ jQuery.imgAreaSelect.init = function (img, options) {
                     }
                 }
             }
-            found = found || event.shiftKey || event.ctrlKey;
+            found = found || event.shiftKey;
             if(!found) {
                 return false;
             }
@@ -337,6 +337,8 @@ jQuery.imgAreaSelect.init = function (img, options) {
 
         update();
         $a.add($o).show();
+        $o.css('cursor', "crosshair"); // Outside of borders (needed for dragging right)
+        $a.css('cursor', "crosshair"); // Inside borders (needed for dragging left)
 
         jQuery(document).unbind('mouseup', cancelSelection)
             .mousemove(selectingMouseMove);
@@ -350,6 +352,9 @@ jQuery.imgAreaSelect.init = function (img, options) {
                 $a.add($o).hide();
 
             options.onSelectEnd(img, selection);
+
+            //$o.css('cursor', ""); // Not even necessary
+            //$a.css('cursor', "");
 
             jQuery(document).unbind('mousemove', selectingMouseMove);
             $border2.mousemove(areaMouseMove);

@@ -1,12 +1,13 @@
-track wgEncodeSangerGencode
+track wgEncodeGencodeV3
 compositeTrack on
-shortLabel Gencode Genes V3
-longLabel ENCODE Gencode Gene Annotations
+shortLabel GENCODE Genes V3
+longLabel ENCODE GENCODE V3 Gene Annotations
 group genes
 visibilityViewDefaults GencodeManual=pack GencodeAuto=pack
+fileSortOrder tableName=Contents dccAccession=UCSC_Accession
 dragAndDrop subTracks
 priority 34.3
-#visibility pack
+visibility hide
 color 12,12,120
 type genePred
 hgGene on
@@ -42,7 +43,7 @@ gClass_2way_consensus_pseudogene 85,34,170
 filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Class=Validated_coding,Validated_processed,Validated_processed_pseudogene,Validated_unprocessed_pseudogene,Validated_pseudogene,Havana_coding,Havana_non_coding,Havana_nonsense,Havana_polyA,Havana_processed_pseudogene,Havana_unprocessed_pseudogene,Havana_pseudogene,Havana_TEC,Ensembl_coding,Ensembl_non_coding,Ensembl_processed_pseudogene,Ensembl_unprocessed_pseudogene,Ensembl_pseudogene,Ensembl_RNA,2way_consensus_pseudogene transcriptType:Transcript_Type=ambiguous_orf,antisense,artifact,IG_C_gene,IG_D_gene,IG_J_gene,IG_pseudogene,IG_V_gene,miRNA,miRNA_pseudogene,misc_RNA,misc_RNA_pseudogene,Mt_rRNA,Mt_tRNA,Mt_tRNA_pseudogene,nonsense_mediated_decay,non_coding,polyA_signal,polyA_site,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,pseudo_polyA,retained_intron,retrotransposed,rRNA,rRNA_pseudogene,scRNA_pseudogene,snoRNA,snoRNA_pseudogene,snRNA,snRNA_pseudogene,TEC,transcribed_processed_pseudogene,transcribed_unprocessed_pseudogene,tRNAscan,tRNA_pseudogene,TR_pseudogene,unitary_pseudogene,unprocessed_pseudogene
 
     track wgEncodeGencodeManualV3
-    subTrack wgEncodeSangerGencode
+    parent wgEncodeGencodeV3
     shortLabel Gencode Manual
     longLabel ENCODE Gencode Manual Gene Annotations (level 1+2) (Oct 2009)
     type genePred
@@ -50,10 +51,9 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
     idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"
-    #metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
 
     track wgEncodeGencodeAutoV3
-    subTrack wgEncodeSangerGencode
+    parent wgEncodeGencodeV3
     shortLabel Gencode Auto
     longLabel ENCODE Gencode Automated Gene Annotations (level 3) (Oct 2009)
     type genePred
@@ -61,15 +61,13 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     #urlLabel Vega Transcript:
     #idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"     ### there are not OTT ids for level 3
-    #metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
 
     track wgEncodeGencodePolyaV3
-    subTrack wgEncodeSangerGencode off
+    parent wgEncodeGencodeV3 off
     shortLabel Gencode PolyA
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Oct 2009)
     type genePred
     priority 4
-    #metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3  dataVersion="ENCODE September 2009 Freeze" subId=453 labExpId=V3c dateSubmitted=2009-10-27  composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV3 fileName=wgEncodeGencodePolyaV3.gtf.gz
 
 searchName wgEncodeGencodeManualV3
 searchTable wgEncodeGencodeManualV3

@@ -2,14 +2,15 @@
 
 include wgEncodeSuper.ra
 
-# GENCODE genes (wrangler: braney )
-include wgEncodeGencodeV3.ra
+# GENCODE genes (wrangler: braney,cricket)
+include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
 
 # UNC/BSU Proteogenomics (wrangler: cline)
-include wgEncodeUncBsuProt.ra alpha
+#include wgEncodeUncBsuProt.ra beta,public
+include wgEncodeUncBsuProt.ra
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra
@@ -98,11 +99,11 @@ include wgEncodeCaltechRnaSeq.ra beta,public
 include wgEncodeCaltechRnaSeq.new.ra alpha
 
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.ra alpha
+include wgEncodeCshlLongRnaSeq.ra
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.ra alpha
+include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
@@ -158,10 +159,11 @@ include wgEncodeOpenChromChip.new.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra 
-
+include wgEncodeHaibTfbs.ra beta,public
+include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.ra alpha
+include wgEncodeSydhTfbs.ra
+#include wgEncodeSydhTfbs.ra beta,public
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra 
@@ -170,7 +172,8 @@ include wgEncodeUchicagoTfbs.ra
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra
+include wgEncodeSunyAlbanyGeneSt.ra beta,public
+include wgEncodeSunyAlbanyGeneSt.new.ra alpha
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra
@@ -180,8 +183,7 @@ include wgEncodeSunyAlbanyTiling.ra
 include wgEncodeSunySwitchgear.ra
 
 # SUNY Rip-seq (wrangler: cricket)
-include wgEncodeSunyRipSeq.ra alpha
-
+include wgEncodeSunyRipSeq.ra 
 
 # Other miscellany ------------------------------------
 

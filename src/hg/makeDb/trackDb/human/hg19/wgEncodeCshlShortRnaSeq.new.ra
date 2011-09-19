@@ -1,7 +1,7 @@
 track wgEncodeCshlShortRnaSeq
 compositeTrack on
 shortLabel CSHL Sm RNA-seq
-	longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
+longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
 subGroup1 view Views Contigs=Contigs Transfrags=TransFrags PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments 
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2Huvec=HUVEC&nbsp;(Tier_2) AG04450=AG04450 A549=A549 BJ=BJ MCF7=MCF-7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
@@ -40,7 +40,7 @@ html wgEncodeCshlShortRnaSeq.new
     maxWindowToDraw 10000000
 
         track wgEncodeCshlShortRnaSeqK562PolysomeShortAln
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 psom sm A 1
         longLabel K562 polysome small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=polysome rnaExtract=SHORTTOTAL rep=rep1
@@ -58,7 +58,7 @@ html wgEncodeCshlShortRnaSeq.new
 
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562ChromatinShortAln
-        #subTrack wgEncodeCshlShortRnaSeqViewAlignments on
+        #subTrack wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 chrm sm A 1
         #longLabel K562 chromatin small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=rep1
@@ -68,8 +68,8 @@ html wgEncodeCshlShortRnaSeq.new
 
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleolusShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
-        #shortLabel K562 nlos sm A 1
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
+        #shortLabel K562 nlus sm A 1
         #longLabel K562 nucleolus small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         #type bam
@@ -78,7 +78,7 @@ html wgEncodeCshlShortRnaSeq.new
 
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 nplm sm A 1
         #longLabel K562 nucleoplasm small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=rep1
@@ -108,7 +108,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562CytosolShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 cyto sm A 1
         #longLabel K562 cytosol small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=rep1
@@ -118,7 +118,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleusShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 nucl sm A 1
         #longLabel K562 nucleus small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
@@ -129,7 +129,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562CellShortAln
-        #parent wgEncodeCshlShortRnaSeqViewAlignments on
+        #parent wgEncodeCshlShortRnaSeqViewAlignments off
         #shortLabel K562 cell sm A 1
         #longLabel K562 whole cell small RNA-seq Alignments Generation 0 from ENCODE/CSHL
         #subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=rep1
@@ -167,7 +167,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3294 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cell sm A 2
         longLabel K562 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=rep2
@@ -187,7 +187,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3338 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cyto sm A 2
         longLabel K562 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
@@ -247,7 +247,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3302 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucl sm A 2
         longLabel K562 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
@@ -257,7 +257,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3301 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucl sm A 1
         longLabel K562 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
@@ -267,7 +267,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3299 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cyto sm A 1
         longLabel K562 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=rep1
@@ -277,7 +277,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3297 dateSubmitted=2011-01-18
 
         track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cell sm A 1
         longLabel K562 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=rep1
@@ -383,7 +383,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3370 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nplm sm A 2
         longLabel K562 nucleoplasm small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=rep2
@@ -393,7 +393,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3369 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nplm sm A 1
         longLabel K562 nucleoplasm small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=rep1
@@ -403,8 +403,8 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3368 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
-        shortLabel K562 nlos sm A 2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nlus sm A 2
         longLabel K562 nucleolus small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep2
         type bam
@@ -413,8 +413,8 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3367 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
-        shortLabel K562 nlos sm A 1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nlus sm A 1
         longLabel K562 nucleolus small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         type bam
@@ -423,7 +423,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3366 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chrm sm A 2
         longLabel K562 chromatin small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=rep2
@@ -433,7 +433,7 @@ html wgEncodeCshlShortRnaSeq.new
         # subId=3365 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3
-        parent wgEncodeCshlShortRnaSeqViewAlignments on
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chrm sm A 1
         longLabel K562 chromatin small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=Alignments cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=rep1
@@ -622,16 +622,16 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell shortTotal Aln 2
-	longLabel A549 whole cell small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        shortLabel A549 cell sm A 2
+	longLabel A549 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bam
         # subId=4059 dateSubmitted=2011-05-11
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel A549 cell shortTotal Aln 1
-	longLabel A549 whole cell small RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        shortLabel A549 cell sm A 1
+	longLabel A549 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bam
         # subId=4058 dateSubmitted=2011-05-09
@@ -639,7 +639,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
     	parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG nucl sm A 1
-        longLabel HepG2 nucleus small RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
         type bam
         color 189,0,157
@@ -647,8 +647,8 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG2 cell shortTotal Aln 1
-	longLabel HepG2 whole cell small RNA-seq Alignments Rep 1 from ENCODE/Caltech
+        shortLabel HepG cell sm A 1
+	longLabel HepG2 whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bam
         color 189,0,157
@@ -656,8 +656,8 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HepG2 cell shortTotal Aln 2
-	longLabel HepG2 whole cell small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        shortLabel HepG cell sm A 2
+	longLabel HepG2 whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bam
         color 189,0,157
@@ -666,7 +666,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG nucl sm A 2
-        longLabel HepG2 nucleus small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
         type bam
         color 189,0,157
@@ -675,7 +675,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cyto sm A 2
-        longLabel HepG2 cytosol small RNA-seq Alignments Rep 2 from ENCODE/Caltech
+        longLabel HepG2 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
         type bam
         color 189,0,157
@@ -724,7 +724,7 @@ html wgEncodeCshlShortRnaSeq.new
 	#ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
         #parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
-        #shortLabel K562 nlos sm - 1
+        #shortLabel K562 nlus sm - 1
         #longLabel K562 nucleolus small RNA-seq Minus signal Generation 0 from ENCODE/CSHL
         #subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         #type bigWig 1.000000 1097360.000000
@@ -1057,7 +1057,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
-        shortLabel K562 nlos sm - 2
+        shortLabel K562 nlus sm - 2
         longLabel K562 nucleolus small RNA-seq Minus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 941876.000000
@@ -1067,7 +1067,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
-        shortLabel K562 nlos sm - 1
+        shortLabel K562 nlus sm - 1
         longLabel K562 nucleolus small RNA-seq Minus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 939926.000000
@@ -1275,16 +1275,16 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel A549 cell shortTotal MinusRaw 2
-	longLabel A549 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+        shortLabel A549 cell sm - 2
+	longLabel A549 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 1785277.000000
         # subId=4059 dateSubmitted=2011-05-11
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel A549 cell shortTotal MinusRaw 1
-	longLabel A549 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/Caltech
+        shortLabel A549 cell sm - 1
+	longLabel A549 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 2036805.000000
         # subId=4058 dateSubmitted=2011-05-09
@@ -1292,7 +1292,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG nucl sm - 1
-        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 1 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 2034826.000000
         color 189,0,157
@@ -1300,8 +1300,8 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel HepG2 cell shortTotal MinusRaw 1
-	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/Caltech
+        shortLabel HepG cell sm - 1
+	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 3566535.000000
         color 189,0,157
@@ -1309,8 +1309,8 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel HepG2 cell shortTotal MinusRaw 2
-	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+        shortLabel HepG cell sm - 2
+	longLabel HepG2 whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 3191993.000000
         color 189,0,157
@@ -1319,7 +1319,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG nucl sm - 2
-        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 1892864.000000
         color 189,0,157
@@ -1328,7 +1328,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cyto sm - 2
-        longLabel HepG2 cytosol small RNA-seq Minus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 cytosol small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 756377.000000
         color 189,0,157
@@ -1377,7 +1377,7 @@ html wgEncodeCshlShortRnaSeq.new
         #ATTIC
         #track wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
         #parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
-        #shortLabel K562 nlos sm + 1
+        #shortLabel K562 nlus sm + 1
         #longLabel K562 nucleolus small RNA-seq Plus signal Generation 0 from ENCODE/CSHL
         #subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         #type bigWig 1.000000 901616.000000
@@ -1710,7 +1710,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
-        shortLabel K562 nlos sm + 2
+        shortLabel K562 nlus sm + 2
         longLabel K562 nucleolus small RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 1283816.000000
@@ -1720,7 +1720,7 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
-        shortLabel K562 nlos sm + 1
+        shortLabel K562 nlus sm + 1
         longLabel K562 nucleolus small RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 1901395.000000
@@ -1928,16 +1928,16 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel A549 cell shortTotal PlusRaw 2
-	longLabel A549 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+        shortLabel A549 cell sm + 2
+	longLabel A549 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 10013224.000000
         # subId=4059 dateSubmitted=2011-05-11
 
         track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel A549 cell shortTotal PlusRaw 1
-	longLabel A549 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/Caltech
+        shortLabel A549 cell sm + 1
+	longLabel A549 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 7091328.000000
         # subId=4058 dateSubmitted=2011-05-09
@@ -1945,7 +1945,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG nucl sm + 1
-        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 1 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 2592219.000000
         color 189,0,157
@@ -1953,8 +1953,8 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel HepG2 cell shortTotal PlusRaw 1
-	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/Caltech
+        shortLabel HepG cell sm + 1
+	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep1
         type bigWig 1.000000 4470346.000000
         color 189,0,157
@@ -1962,8 +1962,8 @@ html wgEncodeCshlShortRnaSeq.new
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel HepG2 cell shortTotal PlusRaw 2
-	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+        shortLabel HepG cell sm + 2
+	longLabel HepG2 whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 3841099.000000
         color 189,0,157
@@ -1972,7 +1972,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG nucl sm + 2
-        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 nucleus small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 2960901.000000
         color 189,0,157
@@ -1981,7 +1981,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cyto sm + 2
-        longLabel HepG2 cytosol small RNA-seq Plus signal Rep 2 from ENCODE/Caltech
+        longLabel HepG2 cytosol small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
         type bigWig 1.000000 2648832.000000
         color 189,0,157
@@ -1999,7 +1999,7 @@ html wgEncodeCshlShortRnaSeq.new
     track wgEncodeCshlShortRnaSeqViewContigs
     shortLabel Contigs
     view Contigs
-    visibility hide
+    visibility full 
     subTrack wgEncodeCshlShortRnaSeq
 
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalContigs
@@ -2014,7 +2014,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel H1ES cyto sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in H1-hESC cytosol)
+        longLabel H1-hESC cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1H1hESC localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 0,107,27
@@ -2023,7 +2023,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 nplm sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleoplasm)
+        longLabel K562 nucleoplasm small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1K562 localization=nucleoplasm rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 46,0,184
@@ -2032,7 +2032,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 cyto sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 cytosol)
+        longLabel K562 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1K562 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 46,0,184
@@ -2041,7 +2041,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel NHEK nucl sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK nucleus)
+        longLabel NHEK nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=NHEK localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 179,0,134
@@ -2050,7 +2050,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel MCF7 cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in MCF-7 cell)
+        longLabel MCF-7 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=MCF7 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         # subId=4491 dateSubmitted=2011-07-12
@@ -2058,7 +2058,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 nucl sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleus)
+        longLabel K562 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1K562 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 46,0,184
@@ -2067,7 +2067,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel GM78 cyto sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 cytosol)
+        longLabel GM12878 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1GM12878 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 153,38,0
@@ -2076,7 +2076,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel AG50 cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in AG04450 cell)
+        longLabel AG04450 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=AG04450 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         # subId=4488 dateSubmitted=2011-07-12
@@ -2084,7 +2084,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HeLa cyto sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 cytosol)
+        longLabel HeLa-S3 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=2HeLaS3 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 0,119,158
@@ -2093,7 +2093,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HeLa cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 cell)
+        longLabel HeLa-S3 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=2HeLaS3 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 0,119,158
@@ -2102,7 +2102,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel H1ES cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in H1-hESC cell)
+        longLabel H1-hESC whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1H1hESC localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 0,107,27
@@ -2111,7 +2111,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HepG cyto sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HepG2 cytosol)
+        longLabel HepG2 cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=2HepG2 localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 189,0,157
@@ -2120,7 +2120,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel GM78 cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 cell)
+        longLabel GM12878 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1GM12878 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 153,38,0
@@ -2129,7 +2129,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 nlus sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 nucleolus)
+        longLabel K562 nucleolus small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1K562 localization=nucleolus rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 46,0,184
@@ -2138,7 +2138,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HepG nucl sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HepG2 nucleus)
+        longLabel HepG2 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 189,0,157
@@ -2147,7 +2147,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HepG cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HepG2 cell)
+        longLabel HepG2 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=2HepG2 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 189,0,157
@@ -2156,7 +2156,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqA549CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel A549 cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in A549 cell)
+        longLabel A549 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=A549 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         # subId=4478 dateSubmitted=2011-07-12
@@ -2164,7 +2164,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel GM78 nucl sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in GM12878 nucleus)
+        longLabel GM12878 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1GM12878 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 153,38,0
@@ -2173,7 +2173,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 chrm sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 chromatin)
+        longLabel K562 chromatin small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1K562 localization=chromatin rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 46,0,184
@@ -2182,7 +2182,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HUVE nucl sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HUVEC nucleus)
+        longLabel HUVEC nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=2Huvec localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 224,75,0
@@ -2191,7 +2191,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqBjCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel BJ cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in BJ cell)
+        longLabel BJ whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=BJ localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         # subId=4474 dateSubmitted=2011-07-12
@@ -2199,7 +2199,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel NHEK cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK cell)
+        longLabel NHEK whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=NHEK localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 179,0,134
@@ -2208,7 +2208,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel SKRA cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in SK-N-SH_RA cell)
+        longLabel SK-N-SH RA whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=SKNSHRA localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         # subId=4471 dateSubmitted=2011-07-12
@@ -2216,7 +2216,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel HeLa nucl sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in HeLa-S3 nucleus)
+        longLabel HeLa-S3 nucleus small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=2HeLaS3 localization=nucleus rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 0,119,158
@@ -2225,7 +2225,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs off
         shortLabel NHEK cyto sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in NHEK cytosol)
+        longLabel NHEK cytosol small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=NHEK localization=cytosol rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 179,0,134
@@ -2234,7 +2234,7 @@ html wgEncodeCshlShortRnaSeq.new
         track wgEncodeCshlShortRnaSeqK562CellShorttotalContigs
         parent wgEncodeCshlShortRnaSeqViewContigs on
         shortLabel K562 cell sm C 
-        longLabel ENCODE CSHL RNA-seq Contigs (shortTotal in K562 cell)
+        longLabel K562 whole cell small RNA-seq Contigs pooled from ENCODE/CSHL
         subGroups view=Contigs cellType=1K562 localization=cell rnaExtract=SHORTTOTAL rep=Pooled
         type bed 6
         color 46,0,184

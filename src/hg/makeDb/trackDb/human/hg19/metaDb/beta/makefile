@@ -32,7 +32,11 @@ wgEncodeHaibTfbs.ra \
 wgEncodeSydhNsome.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeHaibGenotype.ra \
-
+wgEncodeSunyRipSeq.ra \
+wgEncodeUncBsuProt.ra \
+wgEncodeSydhRnaSeq.ra \
+wgEncodeSydhTfbs.ra \
+wgEncodeCshlLongRnaSeq.ra \
 
 include ../../../../makefile.metaDb
 

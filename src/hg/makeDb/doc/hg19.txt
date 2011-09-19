@@ -8408,20 +8408,11 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 8/1/11 angie)
-# Updated 6/9/11
-# Updated 4/1/11 (last one to use snp131)
-# Updated 3/1/11
-# Updated 2/1/11
-# Updated 12/7/10
-# Updated 11/1/10
-# Updated 10/6/10
-# Updated 9/1/10
-# Updated 8/2/10
-# Updated 6/2/10
-# Updated 5/12/10 (last one to use snp130)
-# Updated 4/1/10
-# Updated 3/1/10
+# NHGRI GWAS CATALOG (DONE 9/2/11 angie)
+# NEXT TIME: use snp134 and squelch multiple-mappers!
+# Updated 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
+# Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
+# Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
@@ -8440,7 +8431,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 6717 elements of size 22
+#Loaded 7096 elements of size 22
 
 
 ######################################################################## 
@@ -16420,3 +16411,463 @@ hgLoadBed -allowStartEqualEnd  hg19 cosmic cosmic.bed
 #Loaded 30671 elements of size 3
 
 ############################################################################
+# adding new decode data (DONE - 2011-08-18 - Hiram)
+# liftOver from hg18 tracks:
+    mkdir /hive/data/outside/decode/hg19
+    cd /hive/data/outside/decode/hg19
+# some of the items end up overlapping as result of liftOver,
+# this filters them out:
+export OVERLAPS="9202536|9235404|9225403|9215395|9192536|9182536|9172536|110561813|110582154|110572154|110552191|110542194|110532192|110522233|110512223|110502226|110492220|110482221|110472216|36283195|36273203|36252392|81325902|36262322"
+
+for T in female female_carrier female_noncarrier male male_carrier \
+        male_noncarrier sex-averaged sex-averaged_carrier \
+        sex-averaged_noncarrier maleFemale
+do
+liftOver ../hg18/${T}.bedGraph \
+        /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+        ${T}.hg19.txt ${T}.unMapped.bedGraph
+wc -l ${T}.hg19.txt ${T}.unMapped.bedGraph
+awk '$3-$2 > 8000 && $3-$2 < 12000' ${T}.hg19.txt | sort -k1,1 -k2,2n \
+	| egrep -v "${OVERLAPS}" > ${T}.hg19.bedGraph
+awk '$3-$2 < 8001 || $3-$2 > 11999' ${T}.hg19.txt >> ${T}.unMapped.bedGraph
+awk '$3-$2 > 8000 && $3-$2 < 12000' ${T}.hg19.txt | sort -k1,1 -k2,2n \
+    | egrep "${OVERLAPS}" >> ${T}.unMapped.bedGraph
+bedGraphToBigWig ${T}.hg19.bedGraph /hive/data/genomes/hg19/chrom.sizes ${T}.bw
+wc -l ${T}.hg19.txt ${T}.hg19.bedGraph ${T}.unMapped.bedGraph
+done
+
+    # load the bigWig files into SQL table name friendly tables:
+    mkdir /gbdb/hg19/decode
+for C in female female_carrier female_noncarrier \
+	male male_carrier male_noncarrier \
+	sex-averaged sex-averaged_carrier sex-averaged_noncarrier
+do
+    N=${C}
+    case ${C} in
+        female) N="Female" ;;
+        female_carrier) N="FemaleCarrier" ;;
+        female_noncarrier) N="FemaleNonCarrier" ;;
+        male) N="Male" ;;
+        male_carrier) N="MaleCarrier" ;;
+        male_noncarrier) N="MaleNonCarrier" ;;
+        sex-averaged) N="SexAveraged" ;;
+        sex-averaged_carrier) N="SexAveragedCarrier" ;;
+        sex-averaged_noncarrier) N="SexAveragedNonCarrier" ;;
+    esac
+    echo $C $N
+    rm -f /gbdb/hg19/decode/${C}.bw /gbdb/hg19/decode/${N}.bw
+    ln -s `pwd`/${C}.bw /gbdb/hg19/decode/${N}.bw
+    hgsql -e "drop table decode${N};" hg19
+    hgBbiDbLink hg19 decode${N} /gbdb/hg19/decode/${N}.bw
+done
+
+    # compute male - female difference
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' male.hg19.bedGraph \
+	| sort > ordered.male.txt
+    awk '{printf "%s_%d_%d\t%s\n", $1, $2, $3, $4}' female.hg19.bedGraph \
+	| sort > ordered.female.txt
+    join ordered.male.txt ordered.female.txt > maleFemale.txt
+
+    awk '{printf "%s\t%.6f\n", $1, $2-$3}' maleFemale.txt \
+	| sed -e "s/_/\t/g" | sort -k1,1 -k2,2n > maleFemale.bedGraph
+    # same result as what was lifted:
+    sum maleFemale.hg19.bedGraph maleFemale.bedGraph
+    #	14015  7950 maleFemale.hg19.bedGraph
+    #	14015  7950 maleFemale.bedGraph
+
+
+    # and hot spots
+    awk '$4 > 9.99' female.hg19.bedGraph > hotSpotFemale.bed
+    awk '$4 > 9.99' male.hg19.bedGraph > hotSpotMale.bed
+
+    hgLoadBed hg19 decodeHotSpotFemale hotSpotFemale.bed
+    #	Loaded 4135 elements of size 4
+    hgLoadBed hg19 decodeHotSpotMale hotSpotMale.bed
+    #	Loaded 4771 elements of size 4
+
+    bedGraphToBigWig maleFemale.bedGraph /hive/data/genomes/hg19/chrom.sizes \
+        MaleFemaleDifference.bw
+    ln -s `pwd`/MaleFemaleDifference.bw /gbdb/hg19/decode/
+    hgsql -e "drop table decodeMaleFemaleDifference;" hg19
+    hgBbiDbLink hg19 decodeMaleFemaleDifference /gbdb/hg19/decode/MaleFemaleDifference.bw
+
+
+#############################################################################
+# DBSNP B134 / SNP134 (DONE 9/1/11)
+# Redmine #5133
+# Originally run 8/30/11; re-run 9/1/11 to incorporate 1000 Genomes frequency data
+# that dbSNP had moved out to a new database table, SNPAlleleFreq_TGP.
+    mkdir -p /hive/data/outside/dbSNP/134/human
+    cd /hive/data/outside/dbSNP/134/human
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (human_9606 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly.
+    # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
+    #
+    # Some trial and error was required to get the config.ra just right -- assembly
+    # label now has ".p2" at end, and GRCh37 patch contigs needed to be filtered out:
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606
+build 134
+buildAssembly 37_2
+liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
+refAssemblyLabel GRCh37.p2
+ignoreDbSnpContigs NW_0033159[0-9][0-9]
+EOF
+    # << emacs
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+
+
+#############################################################################
+# FILTER SNP134 (DONE 9/2/11 angie)
+    # Redmine #5133
+    # Make several tracks that are filtered subsets of snp134:
+    # First, filter out the multiply-aligned and/or weight >1 SNPs -> snp134Mult
+    # Second, siphon off the common variants -> snp134Common
+    # Third, take the (uniquely mapped, not known to be common) variants
+    # w/dbSNP's "clinically-assoc" flag -> snp134Flagged
+    cd /hive/data/outside/dbSNP/134/human
+    zcat snp134.bed.gz \
+    | perl -we \
+      '$minTotal2N = 10; \
+       ($multCount, $comCount, $flagCount, $miscCount) = (0,0,0,0); \
+       open($mult, "| gzip -c > snp134Mult.bed.gz") || die; \
+       open($common,    "| gzip -c > snp134Common.bed.gz") || die; \
+       open($flagged,   "| gzip -c > snp134Flagged.bed.gz") || die; \
+       open($misc,      "| gzip -c > snp134Misc.bed.gz") || die; \
+       while (<>) { \
+         @w = split("\t"); \
+         if ($w[16] > 1 || $w[17] =~ /MultipleAlignments/) { \
+           print $mult $_; \
+           $multCount++; \
+         } else { \
+           my ($alleleFreqCount, $nStr, $freqStr) = ($w[20], $w[22], $w[23]); \
+           my @alNs = split(",", $nStr);      die unless scalar(@alNs) == $alleleFreqCount; \
+           my @freqs = split(",", $freqStr);  die unless scalar(@freqs) == $alleleFreqCount; \
+           my ($total2N, $maxAlleleFreq) = (0, 0); \
+           for (my $i = 0;  $i < $alleleFreqCount;  $i++) { \
+             $total2N += $alNs[$i]; \
+             $maxAlleleFreq = $freqs[$i] if ($freqs[$i] > $maxAlleleFreq); \
+           } \
+           if ($alleleFreqCount >= 2 && $total2N >= $minTotal2N && $maxAlleleFreq <= 0.99) { \
+             print $common $_; \
+             $comCount++; \
+           } elsif($w[24] =~ /clinically-assoc/)  { \
+             print $flagged $_; \
+             $flagCount++; \
+           } else { \
+             print $misc $_; \
+             $miscCount++; \
+           } \
+         } \
+       } \
+       close($mult);  close($common); close($flagged);  close($misc); \
+       print "snp134Mult:    $multCount\nsnp134Common:  $comCount\nsnp134Flagged: $flagCount\n" . \
+             "leftover:      $miscCount\n";'
+#snp134Mult:    3603177
+#snp134Common:  13413905
+#snp134Flagged: 26496
+#leftover:      26910747
+
+    # Load tables
+    foreach subset (Mult Common Flagged)
+      hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+        hg19 snp134$subset -sqlTable=snp134.sql snp134$subset.bed.gz
+    end
+
+
+#############################################################################
+# SNP134 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 9/2/11 angie)
+    mkdir /hive/data/genomes/hg19/bed/snp134Ortho
+    cd /hive/data/genomes/hg19/bed/snp134Ortho
+    # Filter snp134 to to keep only uniquely mapped biallelic SNVs (class=single, length=1);
+    zcat /hive/data/outside/dbSNP/134/human/snp134.bed.gz \
+    | awk '$18 ~ /^MultipleAlignments|SingleClassTriAllelic|SingleClassQuadAllelic/ {print $4;}' \
+    | sort -u \
+      > snp134ExcludeIds.txt
+    wc -l snp134ExcludeIds.txt
+#1178007 snp134ExcludeIds.txt
+    zcat /hive/data/outside/dbSNP/134/human/snp134.bed.gz \
+    | awk '$3-$2 == 1 && $11 == "single" {print;}' \
+    | grep -vFwf snp134ExcludeIds.txt \
+      > snp134Simple.bed
+    wc -l snp134Simple.bed
+#32818637 snp134Simple.bed
+
+    # Glom all human info that we need for the final table onto the
+    # name, to sneak it through liftOver: rsId|chr|start|end|obs|ref|strand
+    awk 'BEGIN{OFS="\t";} \
+        {print $1, $2, $3, \
+               $4 "|" $1 "|" $2 "|" $3 "|" $9 "|" $8 "|" $6, \
+               0, $6;}' \
+      snp134Simple.bed > snp134ForLiftOver.bed
+
+    # Map coords to chimp using liftOver.
+    mkdir run.liftOChimp
+    cd run.liftOChimp
+    mkdir split out
+    splitFile ../snp134ForLiftOver.bed 10000 split/chunk
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg19/bed/liftOver/hg19ToPanTro3.over.chain.gz \
+        \{check out exists out/panTro3.$f:t.bed\} out/hg19.$f:t.unmapped \
+        >> jobList
+    end
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/snp134Ortho/run.liftOChimp
+    para make jobList
+#Completed: 3282 of 3282 jobs
+#CPU time in finished jobs:     314951s    5249.18m    87.49h    3.65d  0.010 y
+#IO & Wait Time:                 32669s     544.49m     9.07h    0.38d  0.001 y
+#Average job time:                 106s       1.77m     0.03h    0.00d
+#Longest finished job:             268s       4.47m     0.07h    0.00d
+#Submission to last job:           444s       7.40m     0.12h    0.01d
+
+    # Map coords to orangutan using liftOver.
+    mkdir ../run.liftOPon
+    cd ../run.liftOPon
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg19/bed/liftOver/hg19ToPonAbe2.over.chain.gz \
+        \{check out exists out/ponAbe2.$f:t.bed\} out/hg19.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 3282 of 3282 jobs
+#CPU time in finished jobs:     681601s   11360.02m   189.33h    7.89d  0.022 y
+#IO & Wait Time:                 57733s     962.21m    16.04h    0.67d  0.002 y
+#Average job time:                 225s       3.75m     0.06h    0.00d
+#Longest finished job:             586s       9.77m     0.16h    0.01d
+#Submission to last job:          1598s      26.63m     0.44h    0.02d
+
+    # Map coords to macaque using liftOver.
+    mkdir ../run.liftOMac
+    cd ../run.liftOMac
+    mkdir out
+    ln -s ../run.liftOChimp/split .
+    cp /dev/null jobList
+    foreach f (split/chunk*)
+      echo liftOver $f \
+        /hive/data/genomes/hg19/bed/liftOver/hg19ToRheMac2.over.chain.gz \
+        \{check out exists out/rheMac2.$f:t.bed\} out/hg19.$f:t.unmapped \
+        >> jobList
+    end
+    para make jobList
+#Completed: 3282 of 3282 jobs
+#CPU time in finished jobs:     826108s   13768.47m   229.47h    9.56d  0.026 y
+#IO & Wait Time:                 68165s    1136.08m    18.93h    0.79d  0.002 y
+#Average job time:                 272s       4.54m     0.08h    0.00d
+#Longest finished job:             679s      11.32m     0.19h    0.01d
+#Submission to last job:          1775s      29.58m     0.49h    0.02d
+
+    cd /hive/data/genomes/hg19/bed/snp134Ortho
+    # Concatenate the chimp results, sorting by chimp pos in order to
+    # efficiently access 2bit sequence in getOrthoSeq.  The output of
+    # that is then sorted by the glommed human info field, so that we
+    # can use join to combine chimp and macaque results in the next step.
+    # Ditto for macaque and orangutan.  Each command pipe takes ~6 minutes:
+    sort -k1,1 -k2n,2n run.liftOChimp/out/panTro3.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/panTro3/panTro3.2bit \
+    | sort > panTro3.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOPon/out/ponAbe2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/ponAbe2/ponAbe2.2bit \
+    | sort > ponAbe2.orthoGlom.txt
+    sort -k1,1 -k2n,2n run.liftOMac/out/rheMac2.chunk*.bed \
+    | ~/kent/src/hg/snp/snpLoad/getOrthoSeq.pl /cluster/data/rheMac2/rheMac2.2bit \
+    | sort > rheMac2.orthoGlom.txt
+    wc -l panTro3.orthoGlom.txt ponAbe2.orthoGlom.txt rheMac2.orthoGlom.txt
+#30880910 panTro3.orthoGlom.txt
+#29376791 ponAbe2.orthoGlom.txt
+#26505681 rheMac2.orthoGlom.txt
+
+    # Use the glommed name field as a key to join up chimp and macaque
+    # allele data.  Include glommed name from both files because if only
+    # file 2 has a line for the key in 2.1, then 1.1 is empty.  Then plop
+    # in the orthoGlom fields from each file, which are in the same order
+    # as the chimp and macaque columns of snp134OrthoPanTro2RheMac2.
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      panTro3.orthoGlom.txt ponAbe2.orthoGlom.txt \
+    | awk '{if ($1 != "?") { print $1, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; } \
+            else           { print $2, $3,$4,$5,$6,$7,$8,$9,$10,$11,$12; }}' \
+      > tmp.txt
+    join -o '1.1 2.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.2 2.3 2.4 2.5 2.6' \
+      -a 1 -a 2 -e '?' \
+      tmp.txt rheMac2.orthoGlom.txt \
+    | perl -wpe 'chomp; \
+        ($glom12, $glom3, $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) = split; \
+        $glomKey = ($glom12 ne "?") ? $glom12 : $glom3; \
+        ($rsId, $hChr, $hStart, $hEnd, $hObs, $hAl, $hStrand) = \
+          split(/\|/, $glomKey); \
+        $o1Start =~ s/^\?$/0/;  $o2Start =~ s/^\?$/0/;  $o3Start =~ s/^\?$/0/; \
+        $o1End   =~ s/^\?$/0/;  $o2End   =~ s/^\?$/0/;  $o3End   =~ s/^\?$/0/; \
+        print join("\t", $hChr, $hStart, $hEnd, $rsId, $hObs, $hAl, $hStrand, \
+                         $o1Chr, $o1Start, $o1End, $o1Al, $o1Strand, \
+                         $o2Chr, $o2Start, $o2End, $o2Al, $o2Strand, \
+                         $o3Chr, $o3Start, $o3End, $o3Al, $o3Strand) . "\n"; \
+        s/^.*$//;' \
+    | sort -k1,1 -k2n,2n > snp134OrthoPt3Pa2Rm2.bed
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -renameSqlTable \
+      -sqlTable=$HOME/kent/src/hg/lib/snpOrthoPanPonRhe.sql \
+      hg19 snp134OrthoPt3Pa2Rm2 snp134OrthoPt3Pa2Rm2.bed
+#Loaded 31924973 elements of size 22
+    # Cleanup:
+    rm -r run*/split tmp.txt *.orthoGlom.txt bed.tab
+    gzip snp134Simple.bed snp134ExcludeIds.txt snp134ForLiftOver.bed &
+
+
+############################################################################
+# DBSNP CODING ANNOTATIONS (134) (DONE 8/30/11 angie)
+# It wasn't necessary to redo this following the 9/1 re-run of doDbSnp.pl because
+# that simply picked up new allele frequency info, no change to exceptions etc.
+    cd /hive/data/outside/dbSNP/134/human
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+    # For anything except an insertion (0 bases between flanks),
+    # we need to add 1 to the end coord.  For an insertion, we need
+    # to add 1 to the start coord.  Make a hash of the insertion IDs,
+    # then look up each ID in ncbiFuncAnnotations.txt to tell which
+    # transform to apply.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    zcat ncbiFuncAnnotations.txt.gz \
+    | perl -we 'open($IDS, "zcat ncbiFuncInsertions.ctg.bed.gz |") || die "ids: $!"; \
+              while (<$IDS>) { chomp; $ids{$_} = 1; } \
+              close($IDS); \
+              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 44=>1, 45=>1); \
+              while (<>) { \
+                chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+                next unless $coding{$w[5]}; \
+                $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+                if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                  $w[2]++; # 2-base insertions: increment start coord \
+                } else { \
+                  $w[3]++; # increment end coord to get half-open \
+                } \
+                print join("\t", @w) . "\n"; \
+              }' \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiCodingAnnotations.txt
+    wc -l ncbiCodingAnnotations.txt
+#2510704 ncbiCodingAnnotations.txt
+    # How many & what kinds of function types?
+    cut -f 6 ncbiCodingAnnotations.txt \
+    | sort -n | uniq -c
+# 461567 3   (coding-synon)
+#1244159 8   (cds-reference -- ignored)
+#  21296 41  (nonsense)
+# 729942 42  (missense)
+#  52778 44  (frameshift)
+#    962 45  (cds-indel)
+    # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+    perl -e  'while (<>) { chomp; \
+                my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
+                if (defined $lastRs && \
+                    ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s || \
+                     $lastTx ne $txId || $lastFrm ne $frm)) { \
+                  if (defined $refRow) { \
+                    $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+                    $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+                  } \
+                  print "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                        "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+                  $refRow = undef;  @rows = ();  ($count, $fxns, $nts, $codons, $aas) = (); \
+                } \
+                ($lastRs, $lastCtg, $lastS, $lastE, $lastTx, $lastFrm) = \
+                    ($rsId, $ctg, $s, $e, $txId, $frm); \
+                $count++; \
+                if ($fxn == 8) { \
+                  $refRow = [$fxn, $nt, $aa, $codon]; \
+                } else { \
+                 $fxns .= "$fxn,";  $nts .= "$nt,";  $aas .= "$aa,";  $codons .= "$codon,"; \
+                } \
+              } \
+              if (defined $refRow) { \
+                $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+                $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+              } \
+              print "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                    "$count\t$fxns\t$nts\t$codons\t$aas\n";' \
+      ncbiCodingAnnotations.txt \
+    | liftUp snp134CodingDbSnp.bed /hive/data/genomes/hg19/jkStuff/liftContigs.lft warn stdin
+    hgLoadBed hg19 snp134CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
+      snp134CodingDbSnp.bed
+#Loaded 1244179 elements of size 11
+
+
+############################################################################
+# SNPMASKED SEQUENCE FOR SNP134 (DONE 8/30/11 angie)
+# It wasn't necessary to redo this following the 9/1 re-run of doDbSnp.pl because
+# that simply picked up new allele frequency info, no change to exceptions etc.
+    mkdir /hive/data/genomes/hg19/snp134Mask
+    cd /hive/data/genomes/hg19/snp134Mask
+    # Identify rsIds with various problems -- we will exclude those.
+    zcat /hive/data/outside/dbSNP/134/human/snp134.bed.gz \
+    | awk '$18 ~ /MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved/ {print $4;}' \
+      | sort -u \
+      > snp134ExcludeRsIds.txt
+    zcat /hive/data/outside/dbSNP/134/human/snp134.bed.gz \
+    | grep -vFwf snp134ExcludeRsIds.txt \
+      > snp134Cleaned.bed
+    wc -l snp134Cleaned.bed
+#37853186 snp134Cleaned.bed
+
+    # Substitutions:
+    mkdir substitutions
+    snpMaskSingle snp134Cleaned.bed /hive/data/genomes/hg19/hg19.2bit stdout diffObserved.txt \
+    | faSplit byname stdin substitutions/
+#Masked 32668329 snps in 32666100 out of 3131050506 genomic bases
+#/hive/data/genomes/hg19/hg19.2bit has 3137161264 total bases, but the total number of bases in sequences for which we masked snps is 3131050506 (difference is 6110758)
+    # warnings about differing observed strings at same base position:
+    wc -l diffObserved.txt
+#2545 diffObserved.txt
+#TODO: send list to dbSNP.
+    # Check that 6110758 is the total #bases in sequences with nothing in snp134Cleaned:
+    grep -Fw single snp134Cleaned.bed | cut -f 1 | uniq > /data/tmp/1
+    grep -vwf /data/tmp/1 ../chrom.sizes \
+    | awk 'BEGIN {TOTAL = 0;}  {TOTAL += $2;}  END {printf "%d\n", TOTAL;}'
+#6110758
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      faCmp -softMask $f ../[1-9UMXY]*/$f:t |& grep -v "that differ"
+    end
+#chr1 in substitutions/chr1.fa differs from chr1 at ../1/chr1.fa at base 10233 (y != c)
+#chr10 in substitutions/chr10.fa differs from chr10 at ../10/chr10.fa at base 60522 (K != T)
+#...
+#(output OK -- ambiguous bases replacing [agct] at SNP positions)
+    foreach f (substitutions/chr*.fa)
+      echo $f:t:r
+      mv $f $f:r.subst.fa
+      gzip $f:r.subst.fa &
+    end
+
+    # Insertions & deletions not done.  To date we have only offered substs for download.
+    # If there is user demand, use template from snp131 above.
+
+    # Clean up and prepare for download:
+    gzip snp134Cleaned.bed &
+    foreach d (substitutions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+        cp /hive/data/genomes/hg19/snp132Mask/$d/README.txt .
+      popd
+    end
+    # Edit the README.txt.
+
+    # Create download links on hgwdev.
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp134Mask
+    ln -s /hive/data/genomes/hg19/snp134Mask/substitutions/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp134Mask/
+
+
+#############################################################################

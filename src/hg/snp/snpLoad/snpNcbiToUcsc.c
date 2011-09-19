@@ -1402,13 +1402,13 @@ const char *observedIndelFormat =
 const char *observedHetFormat =
     "^\\(HETEROZYGOUS\\)(\\/[ACGT])*$";
 const char *observedMicrosatFormat =
-    "^(\\/?\\(["IUPAC"]+\\)[0-9]*)+(\\/[0-9]+)*(\\/-)?(\\/[ACGT]+)*$";
+    "^(\\/?\\(["IUPAC"]+\\)[0-9]*)+(\\/[0-9]+)*(\\/-)?(\\/[ACGTN]+)*$";
 const char *observedNamedFormat =
     "^\\((LARGE(INSERTION|DELETION))|"
     "[0-9]+ ?BP ((INDEL|INSERTION|DELETED))?\\)"
     "\\/-(\\/[ACGT]+)*$";
 const char *observedNamedOddballFormat =
-    "^\\([A-Z0-9 .:=-]+\\)?(\\/\\([A-Z0-9 ]+\\))*" /* there's all sorts of stuff in there now */
+    "^\\([A-Z0-9_ .:=-]+\\)?(\\/\\([A-Z0-9_ ]+\\))*" /* there's all sorts of stuff in there now */
     "(\\/-)?(\\/\\(?[A-Z0-9 ]+)*\\)*$";
 /* class=no-var (6): no SNPs use this class (intended for null results). */
 const char *observedMixedFormat =
@@ -1809,7 +1809,8 @@ lineFileClose(&lf);
 /* Hashing might be slightly more memory efficient, but this is easier and it still works. */
 /* SNP130: now 18M items, max ID 74315166. */
 /* SNP132: 30M items, max ID 121909398 */
-#define MAX_SNPID 120 * 1024 * 1024
+/* SNP134: 62M items, max ID 179363897 */
+#define MAX_SNPID 180 * 1024 * 1024
 struct coords
     {
     struct coords *next;
@@ -2216,6 +2217,7 @@ lineFileClose(&lf);
 twoBitClose(&twoBit);
 finishErrException(outRoot);
 
+int parWeightTweakCount = 0;
 if (snp132Ext)
     {
     // Second pass to fill in the empty exceptions column:
@@ -2230,6 +2232,19 @@ if (snp132Ext)
 	chrEnd = atoi(row[2]);
 	rsId = atoi(row[3]+2);
 	row[17] = makeExceptionColVal();
+	// also, if we find PAR SNPs that don't have MultipleAlignments but have
+	// weight > 1, tweak their weight to 1 because mapping uniquely to both PARs
+	// counts as a unique mapping.
+	if (parList != NULL)
+	    {
+	    struct coords *map = mustGetMapping(chr, chrStart, chrEnd, rsId);
+	    boolean hasMult = (map->exceptions & (1 << MultipleAlignments));
+	    if (parName(map) != NULL &&	!hasMult && atoi(row[16]) > 1)
+		{
+		row[16] = "1";
+		parWeightTweakCount++;
+		}
+	    }
 	fputs(row[0], f);
 	for (i = 1;  i < outputColumnCount;  i++)
 	    fprintf(f, "\t%s", row[i]);
@@ -2239,7 +2254,9 @@ if (snp132Ext)
     lineFileClose(&lf);
     unlink(tmpFileName);
     }
-
+if (parWeightTweakCount > 0)
+    verbose(1, "%d uniquely mapped PAR SNPs with weight > 1 were tweaked to weight=1\n",
+	    parWeightTweakCount);
 writeSnpSql(outRoot);
 }
 

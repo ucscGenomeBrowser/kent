@@ -1,0 +1,178 @@
+/* Style for ENCODE Project */
+
+/* mostly re-using GB styles */
+/* over-riding alignment so we don't have to nest in a table */
+.topBlueBar {
+    text-align: left;
+}
+
+body {
+    font-family: arial,Geneva,Helvetica,sans-serif;
+}
+
+.encodeHeader {
+    color: #004D99;
+    font-size: 30px;
+    margin-top: 15px;
+    height: 70px;
+}
+
+.encodeHeader img {
+    float: left;
+    height: 70px;
+    line-height:  70px;
+}
+
+.encodeHeader span {
+    vertical-align: middle;
+}
+
+a {
+	color: #003366;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 2px solid black;
+}
+
+.wrapper {
+	border: 1px solid gray;
+	padding:0px;
+	margin: 7px 0px 20px 0px;
+}
+
+.content {
+    margin: 0px;
+    padding: 0px 15px;
+}
+
+h4.title {
+    text-align: left;
+    margin: 0px;
+    padding: 3px 0px 0px 7px;
+}
+
+.bar {
+    background-color: #dae5f7;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    height: 27px;
+}
+    
+dt {
+	padding-bottom: 12px;
+}
+
+dd {
+	padding-bottom: 10px;
+}
+
+.date {
+	font-size: 10pt;
+}
+
+/*General styles*/
+.thick {
+    font-weight:bold;
+}
+
+.under {
+    text-decoration:underline
+}
+
+.big {
+	font-size: 16pt;
+}
+
+#referenceGenome td+td {
+    background-color: #DDD;
+}
+
+.foo:hover {
+    color: white;
+    background-color: black;
+    border: 2px gray inset;
+}
+
+
+.summaryTable {
+    float: left;
+    width: 30%;
+    border-spacing: 5px;
+    margin-top: 3em;
+    margin-left: 3%;
+}
+
+.summaryTable th {
+    padding: 3px;
+    background-color: #DC7;
+    text-align: left;
+    padding-left: 2em;
+}
+
+.summaryTable td {
+    text-align: left;
+    padding-left: 1em;
+}
+
+.summaryTable td+td {
+    text-align: right;
+    padding-right: 1em;
+}
+
+.matrixButton {
+    float: right;
+    margin-right: 1em;
+}
+
+#searchButtons {
+    float: right;
+    margin-right: 1em;
+}
+
+.selectable:hover
+{
+    background-color: black;
+    color: white;
+}
+
+.selected
+{
+    background-color: #FFAB66;
+    color: white;
+}
+
+.odd
+{
+    background-color: #F6F3DF;
+}
+
+.selectable {
+    color: #004D99;
+}
+
+/* colored bullets on cell types based on karyotype CV field */
+
+.cancer {
+    color: red;
+    font-size: large;
+    text-align: right;
+    float: right;
+}
+
+.normal {
+    color: green;
+    font-size: large;
+    text-align: right;
+    float: right;
+}
+
+.unknown {
+    color: lightgrey;
+}
+

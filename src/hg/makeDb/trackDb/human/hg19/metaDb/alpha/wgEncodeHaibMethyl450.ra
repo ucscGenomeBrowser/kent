@@ -16,6 +16,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum a54272add0e0e2eac8b0e065401be79c
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -38,12 +39,123 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum 71094e82c9f8fc578a146551d12992bd
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 4444
 tableName wgEncodeHaibMethyl450Ecc1SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450Gm12878SitesRep1
+objType table
+cell GM12878
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450Gm12878SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450Gm12878SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450Gm12891SitesRep1
+objType table
+cell GM12891
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450Gm12891SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450Gm12891SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450Gm12892SitesRep1
+objType table
+cell GM12892
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450Gm12892SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450Gm12892SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450H1hescSitesRep1
+objType table
+cell H1-hESC
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450H1hescSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450H1hescSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450HeeSitesRep1
+objType table
+cell HEEpiC
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450HeeSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450HeeSitesRep1
 treatment None
 view Sites
 
@@ -60,12 +172,101 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum b196109676da1a9b9138cb3adb11cba9
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 4444
 tableName wgEncodeHaibMethyl450Hek293SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450Helas3SitesRep1
+objType table
+cell HeLa-S3
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450Helas3SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450Helas3SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450HepatoSitesRep1
+objType table
+cell Hepatocytes
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450HepatoSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450HepatoSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450Hepg2SitesRep1
+objType table
+cell HepG2
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450Hepg2SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450Hepg2SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450HipeSitesRep1
+objType table
+cell HIPEpiC
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450HipeSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450HipeSitesRep1
 treatment None
 view Sites
 
@@ -82,12 +283,35 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum 1923410b7bab249f66540290f469a62e
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 4444
 tableName wgEncodeHaibMethyl450HuvecSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450Imr90SitesRep1
+objType table
+cell IMR90
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450Imr90SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450Imr90SitesRep1
 treatment None
 view Sites
 
@@ -104,12 +328,35 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum c9f2ee6fc5714ab52554ee34a0e6a636
 obtainedBy UW
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 4444
 tableName wgEncodeHaibMethyl450JurkatSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450K562SitesRep1
+objType table
+cell K562
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450K562SitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450K562SitesRep1
 treatment None
 view Sites
 
@@ -126,6 +373,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum 8ba5f73844d33b37409232e36a27aad2
 obtainedBy UW
 origAssembly hg19
 project wgEncode
@@ -148,6 +396,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum ba49046c29fe9e8c07891562a856e10b
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -170,6 +419,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum b4a81e12b69bd92f7fc9ca186d3f4c26
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
@@ -192,12 +442,57 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum ba7bcf2fe207a26877c0c10e98f10131
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 4444
 tableName wgEncodeHaibMethyl450Pfsk1SitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450ProgfibSitesRep1
+objType table
+cell ProgFib
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450ProgfibSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450ProgfibSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethyl450RptecSitesRep1
+objType table
+cell RPTEC
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-29
+dateUnrestricted 2012-05-29
+fileName wgEncodeHaibMethyl450RptecSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labExpId Methyl450K
+labVersion Methyl450K
+obtainedBy UW
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 4802
+tableName wgEncodeHaibMethyl450RptecSitesRep1
 treatment None
 view Sites
 
@@ -214,6 +509,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum e55fa2e794b08752837610b44b5ee25c
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -236,6 +532,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Methyl450K
 labVersion Methyl450K
+md5sum e8f7ab46cfc1387b5ebd052f73ebe653
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -245,4 +542,4 @@ tableName wgEncodeHaibMethyl450T47dDm002p24hSitesRep1
 treatment DMSO_0.02pct_24hr
 view Sites
 
-# MAGIC: 1982965270
+# MAGIC: -518572567

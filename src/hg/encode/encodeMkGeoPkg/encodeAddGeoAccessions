@@ -60,7 +60,7 @@ def main(argv=None):
     composite_name_re = re.compile("ucsc_encode_dcc_(.*)\.soft")
     series_accession_re = re.compile("GSE\d+")    
     sample_accession_re = re.compile("GSM\d+")    
-    sample_line_re      = re.compile("\^SAMPLE=(.*)")
+    sample_line_re      = re.compile("\^SAMPLE = (.*)")
     file_line_re        = re.compile("!Sample_(raw|supplementary)_file_\d+ = (.*)")
 
     # get the composite name

@@ -749,14 +749,10 @@ if (x < xEnd)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
         // Add map item to currnent map (TODO: pass in map)
         #ifdef IMAGEv2_SHORT_MAPITEMS
-            if(x < insideX && xEnd > insideX)
-                {
-                if((insideX - x) < (xEnd - insideX))
+            if(!revCmplDisp && x < insideX && xEnd > insideX)  // Why does insideX=118 in reverse complement??
                     x = insideX;
-                else
-                    xEnd = insideX-1;
-                //warn("mapBoxHgcOrHgGene(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  insideX:%d  link:[%s]",track,x, y, xEnd, yEnd, insideX, link);
-                }
+            else if (revCmplDisp && x < insideWidth && xEnd > insideWidth)
+                    xEnd = insideWidth - 1;
         #endif//def IMAGEv2_SHORT_MAPITEMS
         imgTrackAddMapItem(curImgTrack,link,(char *)(statusLine!=NULL?statusLine:NULL),x, y, xEnd, yEnd, track);
         }
@@ -2864,7 +2860,6 @@ void genericDrawNextItemStuff(struct track *tg, struct hvGfx *hvg, enum trackVis
 /* After the item is drawn in genericDrawItems, draw next/prev item related */
 /* buttons and the corresponding mapboxes. */
 {
-int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
 int s = tg->itemStart(tg, item);
 int e = tg->itemEnd(tg, item);
@@ -2926,6 +2921,8 @@ else if (vis == tvFull)
     int geneMapBoxX = insideX;
     int geneMapBoxW = insideWidth;
     /* Draw the first gene mapbox, in the left margin. */
+#ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+    int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 #ifdef IMAGEv2_SHORT_MAPITEMS
     char *name = tg->itemName(tg, item);
     if (*name != '\0')
@@ -2935,6 +2932,7 @@ else if (vis == tvFull)
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
         s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer);
 #endif///ndef IMAGEv2_SHORT_MAPITEMS
+#endif///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     /* Make the button mapboxes. */
     if (lButton)
         tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
@@ -2958,6 +2956,11 @@ else if (vis == tvFull)
         {
         geneMapBoxX = textX;
         geneMapBoxW = x2-geneMapBoxX;
+        if (geneMapBoxW < 5) // Full with short labels but don't make tiny map items
+            {
+            geneMapBoxX -= (5 - geneMapBoxW)/2;
+            geneMapBoxW = 5;
+            }
         }
 #endif//def IMAGEv2_SHORT_MAPITEMS
     tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
@@ -3050,11 +3053,11 @@ if (withLabels)
     /* Special tweak for expRatio in pack mode: force all labels
      * left to prevent only a subset from being placed right: */
     snapLeft |= (startsWith("expRatio", tg->tdb->type));
-#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
     if (theImgBox == NULL && snapLeft)
-#else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+#else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
     if (snapLeft)        /* Snap label to the left. */
-#endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+#endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         {
         textX = leftLabelX;
         assert(hvgSide != NULL);
@@ -3164,7 +3167,7 @@ for (item = tg->items; item != NULL; item = item->next)
             int eClp = (e > winEnd)   ? winEnd   : e;
             int x1 = round((sClp - winStart)*scale) + xOff;
             int x2 = round((eClp - winStart)*scale) + xOff;
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox != NULL && vis == tvFull)  // dragScroll >1x has no bed full leftlabels,
                 {                                    // but in image labels like pack.
                 char *name = tg->itemName(tg, item);
@@ -3178,7 +3181,7 @@ for (item = tg->items; item != NULL; item = item->next)
                     hvGfxTextRight(hvg,textX,y,nameWidth,tg->heightPer,itemNameColor,font,name);
                     }
                 }
-        #endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
             genericDrawNextItemStuff(tg, hvg, vis, item, x2, x1, y, tg->heightPer, FALSE,color);
             }
 #else//ifndef IMAGEv2_SHORT_MAPITEMS
@@ -5099,8 +5102,10 @@ if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	safef(query, sizeof(query), "select mean_ratio > 0 from decipherRaw where id = '%s'", decipherId);
-    	sr = sqlGetResult(conn, query);
+    	safef(query, sizeof(query), 
+	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d", 
+	      decipherId, bed->chromStart+1, bed->chromEnd);
+	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
             {
 	    if (sameWord(row[0], "1"))
@@ -12664,15 +12669,14 @@ registerTrackHandler("snp128", snp125Methods);
 registerTrackHandler("snp129", snp125Methods);
 registerTrackHandler("snp130", snp125Methods);
 registerTrackHandler("snp131", snp125Methods);
-registerTrackHandler("snp131Composite", snp125Methods);
-registerTrackHandler("snp131Clinical", snp125Methods);
-registerTrackHandler("snp131NonClinical", snp125Methods);
 registerTrackHandler("snp132", snp125Methods);
 registerTrackHandler("snp132Common", snp125Methods);
 registerTrackHandler("snp132Flagged", snp125Methods);
 registerTrackHandler("snp132Mult", snp125Methods);
-registerTrackHandler("snp132Patient", snp125Methods);
-registerTrackHandler("snp132NonUnique", snp125Methods);
+registerTrackHandler("snp134", snp125Methods);
+registerTrackHandler("snp134Common", snp125Methods);
+registerTrackHandler("snp134Flagged", snp125Methods);
+registerTrackHandler("snp134Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
@@ -12874,12 +12878,6 @@ if (wikiTrackEnabled(database, NULL))
 
 /*Test for my own MA data
 registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
-/* MGC related */
-registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
-registerTrackHandler("mgcFailedEst", estMethods);
-registerTrackHandler("mgcPickedEst", estMethods);
-registerTrackHandler("mgcUnpickedEst", estMethods);
-
 registerTrackHandler("HMRConservation", humMusLMethods);
 registerTrackHandler("humMusL", humMusLMethods);
 registerTrackHandler("regpotent", humMusLMethods);
@@ -12921,12 +12919,9 @@ registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeBasicV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodeCompV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePseudoGeneV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencode2wayConsPseudoV7", gencodeGeneMethods);
-registerTrackHandler("wgEncodeGencodePolyaV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);

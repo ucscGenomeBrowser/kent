@@ -18,8 +18,8 @@ fileName wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
+md5sum 4879396a79012fa61b282761d9c931b9
 project wgEncode
-ripTgtProtein ELAVL1
 subId 1245
 tableName wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
 view RbpAssocRna
@@ -39,8 +39,8 @@ fileName wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
+md5sum 23cb003b8c3062b7e8f089a41679a27d
 project wgEncode
-ripTgtProtein PABPC1
 subId 1245
 tableName wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna
 view RbpAssocRna
@@ -60,8 +60,8 @@ fileName wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
+md5sum 0d8e29a7378083fb30ba2e40f4251c2f
 project wgEncode
-ripTgtProtein ripInput
 subId 1245
 tableName wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
 view RbpAssocRna
@@ -81,8 +81,8 @@ fileName wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
+md5sum 18de662ab49a307fc35a05224606af6b
 project wgEncode
-ripTgtProtein T7Tag
 subId 1245
 tableName wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
 view RbpAssocRna
@@ -102,8 +102,8 @@ fileName wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
+md5sum 8e42e4ac5dcde8540c89d217c1bc3f6b
 project wgEncode
-ripTgtProtein ELAVL1
 subId 1245
 tableName wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna
 view RbpAssocRna
@@ -123,8 +123,8 @@ fileName wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
+md5sum ec7a0639d1420ff39481f4615d44fb2d
 project wgEncode
-ripTgtProtein PABPC1
 subId 1245
 tableName wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna
 view RbpAssocRna
@@ -144,8 +144,8 @@ fileName wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
+md5sum c5db4d4041def0d85e729af9ddf083dd
 project wgEncode
-ripTgtProtein ripInput
 subId 1245
 tableName wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
 view RbpAssocRna
@@ -165,10 +165,10 @@ fileName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
+md5sum 7075b2c33bc39cdb461a11d610538d2a
 project wgEncode
-ripTgtProtein T7Tag
 subId 1245
 tableName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: -354198167
+# MAGIC: -1610544112

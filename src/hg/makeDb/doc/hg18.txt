@@ -29796,20 +29796,10 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 8/1/11 angie)
-# Updated 6/9/11
-# Updated 4/1/11
-# Updated 3/1/11
-# Updated 2/1/11
-# Updated 12/7/10
-# Updated 11/1/10
-# Updated 10/6/10
-# Updated 9/1/10
-# Updated 8/2/10
-# Updated 6/2/10
-# Updated 5/12/10
-# Updated 4/1/10
-# Updated 3/1/10
+# NHGRI GWAS CATALOG (DONE 9/2/11 angie)
+# NEXT TIME: squelch multiple-mappers!
+# Updated 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
+# Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10, 4/1/10, 3/1/10
 # Originally done 1/19/10
 # Area of possible future improvement: for SNPs that can't be mapped via our SNP track,
 # could some of them be obsolete IDs that have been merged into current IDs?
@@ -29895,7 +29885,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 6156 elements of size 22
+#Loaded 6419 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29909,7 +29899,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#342 ambigStrand.txt
+#356 ambigStrand.txt
 
 
 #############################################################################
@@ -31224,20 +31214,20 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# ISCA RETROSPECTIVE FROM DBVAR (DONE 4/19/11 angie)
+# ISCA RETROSPECTIVE FROM DBVAR (DONE 9/14/11 angie)
 # Reloaded 4/19/11 to drop the boring aggregate variants (sv; keep ssv).
 # Originally done 1/31/11
     # Redmine: Track #34 (dbVar for human)
-    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_01_31
-    cd /hive/data/genomes/hg18/bed/isca/2011_01_31
+    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_09_14
+    cd /hive/data/genomes/hg18/bed/isca/2011_09_14
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_-_Retrospective/gvf/nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz
     # See notes on data contents: http://redmine.soe.ucsc.edu/issues/34#note-34
     # and notes on data format plan: http://redmine.soe.ucsc.edu/issues/34#note-36
     zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
     | perl -wne 'next if (/^(#|browser|track)/); chomp; \
-        ($c, undef, undef, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
+        ($c, undef, $varType, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
         ($thickS, $thickE) = ($s, $e); \
-        ($attrCount, $attrTags, $attrVals) = (0, "", ""); \
+        ($attrCount, $attrTags, $attrVals, $gotVarTypeAttr) = (0, "", "", 0); \
         foreach my $tagVal (split(";", $attrs)) { \
           ($tag, $val) = split("=", $tagVal); \
           if ($tag eq "ID") {$name = $val;} \
@@ -31249,20 +31239,38 @@ TMPDIR=/scratch/tmp
             ($innerEnd, $outerEnd) = split(",", $val); \
             $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
             $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
+          } elsif ($tag eq "var_type") { \
+            $gotVarTypeAttr = 1; \
           } \
           # Escape commas so the val list parses correctly in autoSql: \
           $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
           $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
         } \
         next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
-        %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
+        if (! $gotVarTypeAttr) { \
+          $varType =~ s/%/%25/g;   $varType =~ s/,/%2C/g; \
+          $attrTags .= "var_type,";  $attrVals .= "$varType,";  $attrCount++; \
+        } \
         @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
                       $attrCount, $attrTags, $attrVals); \
         print join("\t", @bed8Attrs) . "\n";' \
       > iscaRetrospective.bed
-    hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-      -allowStartEqualEnd hg18 iscaRetrospective iscaRetrospective.bed
-#Loaded 11312 elements of size 11
+    wc -l iscaRetrospective.bed
+#6387 iscaRetrospective.bed
+    # 9/14/11: Split into subtracks by clinical_int value.
+    zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
+    | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
+#   1067 Benign
+#   3281 Pathogenic
+#   2039 Uncertain Significance
+    foreach subtrack (Benign Pathogenic Uncertain)
+      grep -w  $subtrack iscaRetrospective.bed > iscaRetrospective$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg18 iscaRetrospective$subtrack iscaRetrospective$subtrack.bed
+    end
+#Loaded 1067 elements of size 11
+#Loaded 3281 elements of size 11
+#Loaded 2039 elements of size 11
 
 
 #############################################################################
@@ -31651,6 +31659,74 @@ done
     ln -s `pwd`/MaleFemaleDifference.bw /gbdb/hg18/decode/
     hgsql -e "drop table decodeMaleFemaleDifference;" hg18
     hgBbiDbLink hg18 decodeMaleFemaleDifference /gbdb/hg18/decode/MaleFemaleDifference.bw
+
+#############################################################################
+# HapMap recombination maps added to deCODE track (DONE - 2011-08-30 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/hapmap/release24
+    cd /hive/data/genomes/hg18/bed/hapmap/release24
+    wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_CEU.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_YRI.tgz
+
+wget --timestamping \
+https://mathgen.stats.ox.ac.uk/wtccc-software/recombination_rates/genetic_map_b36_combined.tgz
+
+    mkdir CEU
+    cd CEU
+    tar xvzf ../genetic_map_b36_CEU.tgz
+    cd ..
+    mkdir YRI
+    cd YRI
+    tar xvzf ../genetic_map_b36_YRI.tgz
+    cd ..
+    mkdir combined
+    cd combined
+    tar xvzf ../genetic_map_b36_combined.tgz
+
+for F in CEU/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_CEU_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CEURecombMap.bedGraph
+
+for F in YRI/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_YRI_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24YRIRecombMap.bedGraph
+
+for F in combined/genetic_map_*.txt
+do
+    C=`basename $F | sed -e "s/genetic_map_chr//; s/_combined_b36.txt//"`
+    grep -v "^position" ${F} | awk -v chr="chr${C}" '
+BEGIN {prev = 0}
+{ printf "%s\t%d\t%d\t%s\n", chr, prev, $1, $2; prev = $1 }
+'
+done | sort -k1,1 -k2,2n > hapMapRelease24CombinedRecombMap.bedGraph
+
+for F in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+bedGraphToBigWig -verbose=2 ${F}.bedGraph \
+        /hive/data/genomes/hg18/chrom.sizes ${F}.bw > ${F}.log 2>&1
+done
+
+for T in hapMapRelease24CEURecombMap hapMapRelease24CombinedRecombMap \
+        hapMapRelease24YRIRecombMap
+do
+    rm -f /gbdb/hg18/decode/${T}.bw
+    ln -s `pwd`/${T}.bw /gbdb/hg18/decode/${T}.bw
+    hgsql -e "drop table ${T};" hg18
+    hgBbiDbLink hg18 ${T} /gbdb/hg18/decode/${T}.bw
+done
 
 #############################################################################
 # HI SEQ DEPTH (DONE 7/15/11 angie)

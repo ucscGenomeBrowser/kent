@@ -13,23 +13,27 @@ fed into a tandem mass spectrometer (MS/MS). The series of fragment
 masses produced in MS/MS create a signature that can then be used to
 identify the peptide from a protein or DNA sequence database. For
 proteogenomic mapping, this identifying spectrum is mapped directly
-back to its most likely encoding locus on a genome sequence[1]. This
+back to its most likely encoding locus on a genome sequence (Giddings, et al. 2003). This
 allows the direct verification of protein-encoding transcripts.</p>
 
-<p>The proteogenomic track displays mass spectrometry data that has
+<p>The proteogenomic track displays mass spectrometry data that have
 been matched to the genomic sequence for selected cell lines, using a
 workflow and software specifically designed for this purpose. </p>
 <p>The proteogenomic tracks can be used to identify which parts of the
 genome are translated into proteins, to verify which transcripts
 discovered by ENCODE are protein-encoding, and can also reveal new
 genes and/or splice variants of genes. Of particular interest may be
-its ability to reveal the translation of small ORFs, antisense
+its ability to reveal the translation of small open reading frames (ORFs), antisense
 transcripts, or sites annotated as introns that encode proteins.
 </p>
 <h2>Display Conventions and Configuration</h2>
-<p>The display for this track shows peptide mappings as
-grayscale-colored items where higher scores correspond to
-darker-colored blocks.<br>
+<p>The display for this track shows peptide mappings as contiguous,
+rectangular items.  These items are rendered in grayscale according to the
+score, with darker items representing higher-confidence peptide mappings.  
+The name of each item is the amino acid
+sequence of the peptide.  If a period (.) appears at the end of a
+name, it signifies a stop codon.  
+<br>
 </p>
 <p>In addition to the displayed genomic coordinates, several additional
 fields are available for each track item.<br>
@@ -40,7 +44,7 @@ the strength of the peptide mapping, in contrast to
 the <span style="font-style: italic;">Score</span> field which
 reflects the confidence of the mapping. The <span style="font-style:
 italic;">Score</span> field is computed as <span style="font-style:
-italic;">-100*log10(E-Value) </span>for the peptide mapping, and
+italic;">-100&times;log<sub>10</sub>(E-Value)</span> for the peptide mapping, and
 scores of 200 or greater have an estimated 5% false discovery rate
 (FDR) while scores of 230 or greater have an estimated 1%
 FDR. The <span style="font-style: italic;"> Raw Score </span> offers
@@ -53,69 +57,99 @@ Consequently, short mappings might have a
 strong <span style="font-style: italic;"> Raw Score </span> but a
 weaker
 <span style="font-style: italic;"> Score. </span></li>
-  <li>The <span style="font-style: italic;">Repeat Count</span>
-indicates the number of places in the genome that match the peptide
-sequence. This reflects the uniqueness of the peptide mapping in the
-genome. Any mappings to highly-duplicated regions will have
-high <span style="font-style: italic;"> Repeat Counts </span> and
-peptides which are repeated more than 10 times in the genome are
-deleted from the track.<br>
+  <li>The <span style="font-style: italic;">Spectrum ID</span> is a
+semi-unique identifier of the spectrum associated with the peptide
+mapping, and can be used to track the origins of the mapping.<br>
   </li>
   <li>The <span style="font-style: italic;">Peptide Rank </span>
 indicates the rank of each peptide/spectrum mapping.  A spectrum can
 be chimeric, containing more than one peptide, and the spectrum can be
 mapped with confidence to two or more distinct peptides.  Peptides
 with ranks greater than 3 are deleted from the track.</li>
-  <li>The <span style="font-style: italic;">Spectrum ID</span> is a
-semi-unique identifier of the spectrum associated with the peptide
-mapping, and can be used to track the origins of the mapping.<br>
+  <li>The <span style="font-style: italic;">Peptide Repeat Count</span>
+indicates the number of places in the genome that match the peptide
+sequence. This reflects the uniqueness of the peptide mapping in the
+genome. Any mappings to highly-duplicated regions will have a
+high <span style="font-style: italic;"> Peptide Repeat Count </span> and
+peptides which were repeated more than 10 times in the genome were
+deleted from the track.<br>
   </li>
 </ul>
 <h2>Methods</h2>
 <p>ENCODE cell lines K562 and GM12878 were used for large scale
 proteomic analysis. Cell lines were cultured according to standard
-ENCODE cell culture protocols
+<A HREF="http://genome.ucsc.edu/ENCODE/protocols/cell" target="_blank">ENCODE cell culture protocols</A>
 and in-gel digestion was completed according to the standard
-protocol[3]. </p>
+protocol (Jaffe, et al. 2004). </p>
 The proteolytic enzyme trypsin was used to digest the proteins
 in order to produce short, MS/MS analyzable peptides. Trypsin is a
-common protease that typically cleaves proteins after R or K. The
+common protease that typically cleaves proteins after Arginine or Lysine. The
 metadata parameter <i>enzyme</i> specifies the restriction enzyme used
 for digestion. Tandem mass spectrometry (RPLC-MS/MS) analysis was then
 performed on an Eksigent Ultra-LTQ Orbitrap system. However, due
-to enzyme inefficiency, it does not always cleave at R or K, so there
-may be peptides that include an uncleaved R/K site. The number of such
+to enzyme inefficiency, it does not always cleave at Arginine or Lysine, so there
+may be peptides that include an uncleaved Arg/Lys site. The number of such
 missed cleavages allowed in the search is described by the metadata
 parameter <i>miscleavages</i>.
 <p>We performed proteogenomic mapping with two missed cleavages
 allowed and using the whole human genomic sequence (UCSC hg19) via the
-genome fingerprint scanning (GFS) program [2] and newly developed
-Peppy [to appear]. We used HMM_Score [4] to accurately match MS/MS
+genome fingerprint scanning (GFS) program (Khatun, et al. 2008)  and newly 
+developed Peppy 
+(<a href="http://www.peppyresearch.com/">http://www.peppyresearch.com</a>/). 
+We used HMM_Score (Shevchenko, et al. 2007) to accurately match MS/MS
 spectra to their corresponding genome sequences.  E-values are
 calculated, which estimate the number of results at the given score
 level which would be expected by random chance. We then empirically
 derived the false discovery rate for a given E-Value using a decoy
 database search and only those matches falling within the specified 5%
-FDR rate (E-Value <0.01) are included in the track. The results with
-10% FDR (E-Value <0.05) are available under the Downloads page as Raw Signal.</a> </p>
+FDR rate (E-Value &lt;0.01) are included in the track. The results with
+10% FDR (E-Value &lt;0.05) are available under the Downloads page as Raw Signal.</a> </p>
 <h2>Credits</h2>
 <p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
-Ahamed, Christopher Maier, Dr. John Wrobel and Dennis Crenshaw (Giddings Lab). </p>
-<p>Proteomic analysis: Drs. Yanbao Yu and Ling Xie (Xian Lab).</p>
+Ahamed, Christopher Maier, Dr. John Wrobel and Dennis Crenshaw (<A HREF=http://giddingslab.org/>Giddings Lab</A>). </p>
+<p>Proteomic analysis: Drs. Yanbao Yu and Ling Xie (<A HREF=http://www.med.unc.edu/biochem/chenlab/chen-research-lab>Chen Lab</A>).</p>
+Main Contact:
+<A HREF="mailto:&#107;ha&#116;&#117;&#110;&#64;&#101;&#109;&#97;&#105;&#108;.
+&#117;n&#99;.
+&#101;&#100;&#117;">
+Jainab Khatun</A>
+<!-- above address is khatun at email.unc.edu -->
 <h2>References</h2>
-<p>1. Proteogenomic mapping as a complementary method to perform genome
-annotation. Jaffe, J. D., Berg, H. C., &amp; Church, G. M. (2004).
-Proteomics 2004 4(1):59-77.</p>
-<p>2. Genome-based peptide fingerprint scanning. Giddings MC, Shah AA,
-Gesteland RF, Moore MB. Proceedings of the National Academy of Sciences
-of the United States of America 100(1):20-25. </p>
-<p>3. In-gel digestion for mass spectrometric characterization of
-proteins and proteomes. Andrej Shevchenko, Henrik Tomas, Jan Havli ,
-Jesper V Olsen &amp; Matthias Mann. Nature Protocols 1, 2856 - 2860
-(2007).</p>
-<p>4. Incorporating Sequence Information into the Scoring Function: A
-Hidden Markov Model for Improved Peptide Identification . Khatun J,
-Hamlett ED and Giddings, MC. Bioinformatics 2008 24(5):674-681.</p>
+
+<P>
+Giddings MC, Shah AA, Gesteland RF, Moore MB. 
+<A HREF="http://www.pnas.org/content/100/1/20.full.pdf+html"
+  class="external text"
+  title="http://mcb.asm.org/cgi/content/abstract/24/9/3804"
+  rel="nofollow" TARGET = _BLANK>Genome-based peptide fingerprint scanning</A>. 
+<em>Proceedings of the National Academy of Sciences of the United States of America.</em> 2003; 100(1):20-25.
+</P>
+<P>
+Jaffe JD, Berg HC, Church GM.
+<A HREF="http://onlinelibrary.wiley.com/doi/10.1002/pmic.200300511/pdf"
+class="external text"
+  title="http://mcb.asm.org/cgi/content/abstract/24/9/3804"
+  rel="nofollow" TARGET = _BLANK>Proteogenomic mapping as a complementary method to perform genome annotation</A>. 
+<em>Proteomics.</em> 2004; 4(1):59-77.
+</P>
+<P>
+Khatun J, Hamlett ED, Giddings MC.
+<A HREF="http://bioinformatics.oxfordjournals.org/content/24/5/674.full.pdf+html"
+<A HREF="http://www.pnas.org/content/100/1/20.full.pdf+html"
+  class="external text"
+  title="http://mcb.asm.org/cgi/content/abstract/24/9/3804"
+  rel="nofollow" TARGET = _BLANK>Incorporating Sequence Information into the Scoring Function: A Hidden Markov Model for Improved Peptide Identification</A>.
+<em>Bioinformatics.</em> 2008; 24(5):674-681.
+</P>
+<P>
+Shevchenko A, Tomas, Havli J, Olsen JV, Mann M.
+<A HREF="http://www.nature.com/nprot/journal/v1/n6/pdf/nprot.2006.468.pdf"
+  class="external text"
+  title="http://mcb.asm.org/cgi/content/abstract/24/9/3804"
+  rel="nofollow" TARGET = _BLANK>In-gel digestion for mass spectrometric characterization of proteins and proteomes</A>.
+<em>Nature Protocols.</em> 2007; 1, 2856-2860.
+</P>
+ 
 <h2> Data Release Policy </h2>
 <p>Data users may freely use ENCODE data, but may not, without prior
 consent, submit publications that use an unpublished ENCODE dataset

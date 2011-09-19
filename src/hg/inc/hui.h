@@ -34,9 +34,10 @@ char *wrapWhiteFont(char *s);
  */
 
 #define ENCODE_DATA_RELEASE_POLICY "/ENCODE/terms.html"
-char *encodeRestrictionDateDisplay(char *db,struct trackDb *trackDb);
+char *encodeRestrictionDate(char *db,struct trackDb *trackDb,boolean excludePast);
 /* Create a string for ENCODE restriction date of this track
    if return is not null, then free it after use */
+#define encodeRestrictionDateDisplay(db,tdb) encodeRestrictionDate(db,tdb,TRUE)
 
 char *hDocumentRoot();
 /* get the path to the DocumentRoot, or the default */

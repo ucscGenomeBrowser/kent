@@ -15,6 +15,7 @@ subGroup6 readType ReadType r1x25=1x25 r1x36=1x36
 subGroup7 treatment Treatment EtOH02=EtOH_0.02pct DEXa=DEX_100nM None=None
 subGroup8 rep Replicate rep1=1 rep2=2 
 #dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
+#fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ rep=+ view=+ treatment=+ 
 dimensionZchecked rep1,rep2
 dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep

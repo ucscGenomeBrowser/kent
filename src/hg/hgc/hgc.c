@@ -2371,6 +2371,7 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
+
 hFindSplitTable(database, seqName, rootTable, table, &hasBin);
 safef(query, sizeof(query), "name = \"%s\"", name);
 gpList = genePredReaderLoadQuery(conn, table, query);
@@ -2400,13 +2401,31 @@ for (gp = gpList; gp != NULL; gp = gp->next)
         else
            printf("</b> %s<br>\n",gp->name2);
         }
+    char *ensemblSource = NULL;
+    if (sameString("ensGene", table))
+	{
+	if (hTableExists(database, "ensemblSource"))
+	    {
+	    safef(query, sizeof(query),
+		"select source from ensemblSource where name='%s'", name);
+	    ensemblSource = sqlQuickString(conn, query);
+	    }
+	}
     if ((gp->exonFrames != NULL) && (!genbankIsRefSeqNonCodingMRnaAcc(gp->name)))
-        {
-        printf("<b>CDS Start: </b>");
-        printCdsStatus((gp->strand[0] == '+') ? gp->cdsStartStat : gp->cdsEndStat);
-        printf("<b>CDS End: </b>");
-        printCdsStatus((gp->strand[0] == '+') ? gp->cdsEndStat : gp->cdsStartStat);
-        }
+	{
+	if (ensemblSource && differentString("protein_coding",ensemblSource))
+	    {
+	    printf("<b>CDS Start: </b> none (non-coding)<BR>\n");
+	    printf("<b>CDS End: </b> none (non-coding)<BR>\n");
+	    }
+	else
+	    {
+	    printf("<b>CDS Start: </b>");
+	    printCdsStatus((gp->strand[0] == '+') ? gp->cdsStartStat : gp->cdsEndStat);
+	    printf("<b>CDS End: </b>");
+	    printCdsStatus((gp->strand[0] == '+') ? gp->cdsEndStat : gp->cdsStartStat);
+	    }
+	}
     /* if a gene class table exists, get gene class and print */
     if (classTable != NULL)
         {
@@ -8249,8 +8268,21 @@ if (archive != NULL)
 else
     safef(ensUrl, sizeof(ensUrl), "http://www.ensembl.org/%s", genomeStrEnsembl);
 
-boolean nonCoding = FALSE;
 char query[512];
+char *geneName = NULL;
+if (hTableExists(database, "ensemblToGeneName"))
+    {
+    safef(query, sizeof(query), "select value from ensemblToGeneName where name='%s'", itemName);
+    geneName = sqlQuickString(conn, query);
+    }
+char *ensemblSource = NULL;
+if (hTableExists(database, "ensemblSource"))
+    {
+    safef(query, sizeof(query), "select source from ensemblSource where name='%s'", itemName);
+    ensemblSource = sqlQuickString(conn, query);
+    }
+
+boolean nonCoding = FALSE;
 safef(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
 if (gpList && gpList->name2)
@@ -8369,24 +8401,31 @@ if (hTableExists(database, "superfamily"))
     }
 if (hTableExists(database, "ensGtp") && (proteinID == NULL))
     {
-    if (nonCoding)
+    /* shortItemName removes version number but sometimes the ensGtp */
+    /* table has a transcript with version number so exact match not used */
+    safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
+    proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
+    if (proteinID != NULL)
 	{
-	printf("<B>Ensembl Protein: </B>none (non-coding)<BR>\n");
+	printf("<B>Ensembl Protein: </B>");
+	printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
+	    ensUrl,proteinID);
+	printf("%s</A><BR>\n", proteinID);
 	}
     else
 	{
-	/* shortItemName removes version number but sometimes the ensGtp */
-	/* table has a transcript with version number so exact match not used */
-	safef(cond_str2, sizeof(cond_str2), "transcript like '%s%%'", shortItemName);
-	proteinID=sqlGetField(database, "ensGtp","protein",cond_str2);
-	if (proteinID != NULL)
-	    {
-	    printf("<B>Ensembl Protein: </B>");
-	    printf("<A HREF=\"%s/protview?peptide=%s\" target=_blank>",
-		ensUrl,proteinID);
-	    printf("%s</A><BR>\n", proteinID);
-	    }
+	printf("<B>Ensembl Protein: </B>none (non-coding)<BR>\n");
 	}
+    }
+if (geneName)
+    {
+    printf("<B>Gene Name: </B>%s<BR>\n", geneName);
+    freeMem(geneName);
+    }
+if (ensemblSource)
+    {
+    printf("<B>Ensembl Type: </B>%s<BR>\n", ensemblSource);
+    freeMem(ensemblSource);
     }
 freeMem(shortItemName);
 }
@@ -9586,7 +9625,7 @@ chromEnd   = cartOptionalString(cart, "t");
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM page at omim.org: ");fflush(stdout);
+    printf("<B>OMIM: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -9608,10 +9647,13 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
+    // disable NCBI link until they work it out with OMIM
+    /*
     printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
-    printf("%s</A></B><BR>", itemName);
+    printf("%s</A></B>", itemName);
+    */
 
     safef(query, sizeof(query),
     	  "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
@@ -9628,7 +9670,7 @@ if (url != NULL && url[0] != 0)
 	boolean disorderShown;
 	char *phenotypeClass, *phenotypeId, *disorder;
 
-	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
+	printf("<BR><B>Gene symbol(s):</B> %s", geneSymbol);
 	printf("<BR>\n");
 
 	/* display disorder(s) */
@@ -9673,30 +9715,45 @@ if (url != NULL && url[0] != 0)
 
     // show RefSeq Gene link(s)
     safef(query, sizeof(query),
-          "select distinct r.name from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+          "select distinct locusLinkId from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
 	  itemName, chrom, chromStart, chromEnd);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
-	{
-	int printedCnt;
-	printedCnt = 0;
-	while ((row = sqlNextRow(sr)) != NULL)
+    	{
+    	char *geneId;
+    	row = sqlNextRow(sr);
+    	geneId = strdup(row[0]);
+    	sqlFreeResult(&sr);
+
+    	safef(query, sizeof(query),
+              "select distinct l.mrnaAcc from refLink l where locusLinkId = '%s' order by mrnaAcc asc", geneId);
+    	sr = sqlMustGetResult(conn, query);
+    	if (sr != NULL)
 	    {
-	    if (printedCnt < 1)
-		printf("<B>RefSeq Gene(s): </B>");
-	    else
-		printf(", ");
-    	    printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=", row[0], chromStart, chromEnd);
-    	    printf("%s</A></B>", row[0]);
-	    printedCnt++;
+	    int printedCnt;
+	    printedCnt = 0;
+	    while ((row = sqlNextRow(sr)) != NULL)
+	    	{
+	    	if (printedCnt < 1)
+		    printf("<B>RefSeq Gene(s): </B>");
+	    	else
+		    printf(", ");
+    	        printf("<A HREF=\"%s%s&o=%s&t=%s\">", "../cgi-bin/hgc?g=refGene&i=", row[0], chromStart, chromEnd);
+    	        printf("%s</A></B>", row[0]);
+	        printedCnt++;
+	        }
+            if (printedCnt >= 1) printf("<BR>\n");
 	    }
-        if (printedCnt >= 1) printf("<BR>\n");
-	}
-    sqlFreeResult(&sr);
+        }
+    else
+    	{
+	// skip if no RefSeq found
+    	sqlFreeResult(&sr);
+    	}
 
     // show Related UCSC Gene links
     safef(query, sizeof(query),
-          "select distinct kgId from kgXref x, refLink l, mim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
+          "select distinct kgId from kgXref x, refLink l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
 	  itemName);
     sr = sqlMustGetResult(conn, query);
     if (sr != NULL)
@@ -9748,7 +9805,7 @@ omimId = itemName;
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM page at omim.org: ");fflush(stdout);
+    printf("<B>OMIM: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -9769,11 +9826,14 @@ if (url != NULL && url[0] != 0)
 	    }
 	}
     sqlFreeResult(&sr);
+    printf("<BR>");
 
-    printf("<BR>\n");
+    // disable NCBI link until they work it out with OMIM
+    /*
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
     printf("%s</A></B><BR>", itemName);
+    */
 
     printf("<B>Location: </B>");
     safef(query, sizeof(query),
@@ -10004,16 +10064,19 @@ if (url != NULL && url[0] != 0)
     printf("%s</A></B>", avId);
     printf(" %s", avDesc);
 
-    printf("<BR><B>OMIM page at omim.org: ");
+    printf("<BR><B>OMIM: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     if (title1 != NULL) printf(": %s", title1);
     if (title2 != NULL) printf(" %s ", title2);
 
+    // disable NCBI link until they work it out with OMIM
+    /*
     printf("<BR>\n");
     printf("<B>OMIM page at NCBI: ");
     printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
     printf("%s</A></B><BR>", itemName);
+    */
 
     safef(query, sizeof(query),
     	  "select replStr from omimAvRepl where avId=%s;", avId);
@@ -10024,8 +10087,14 @@ if (url != NULL && url[0] != 0)
 	if (row[0] != NULL)
 	    {
 	    char *replStr;
+	    char *chp;
 	    replStr= cloneString(row[0]);
-    	    printf("<BR><B>Amino Acid Replacement:</B> %s\n", replStr);
+
+    	    // just take the first AA replacement if there are multiple
+	    chp = strstr(replStr, ",");
+	    if (chp != NULL) *chp = '\0';
+	    
+	    printf("<BR><B>Amino Acid Replacement:</B> %s\n", replStr);
 	    }
 	}
     sqlFreeResult(&sr);
@@ -18424,7 +18493,7 @@ if (cgiVarExists("o"))
     while ((row = sqlNextRow(sr)))
 	{
 	genomicSuperDupsStaticLoad(row+rowOffset, &dup);
-	bedPrintPos((struct bed *)(&dup), 6, tdb);
+	bedPrintPos((struct bed *)(&dup), 4, tdb);
 	printf("<B>Other Position:</B> "
 	       "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">"
 	       "%s:%d-%d</A> &nbsp;&nbsp;&nbsp;\n",
@@ -23066,7 +23135,7 @@ if (gotExtra)
 		chp--;
 		chp--;
 		*chp = '\0';
-		printf(" (<A HREF=\"http://www.komp.org/geneinfo.php?project=%s\" target=_blank>",
+		printf(" (<A HREF=\"http://www.knockoutmouse.org/search_results?criteria=%s\" target=_blank>",
 		       ++ptr);
 		printf("order %s)", productStr);fflush(stdout);
 		}
@@ -23821,7 +23890,7 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (isHubTrack(track))
 	{
-	hubConnectAddHubForTrackAndFindTdb(cart, database, track, NULL, trackHash);
+	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
 	}
     if (parentWigMaf)
         {

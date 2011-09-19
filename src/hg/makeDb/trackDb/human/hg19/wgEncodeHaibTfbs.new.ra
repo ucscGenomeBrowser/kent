@@ -7,7 +7,7 @@ longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/HAIB
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HCT116=HCT-116 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87
-subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6SC22823=E2F6_(SC-22823) EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERaa=ERalpha_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HEY1=HEY1 HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) NANOGSC33759=NANOG_(SC-33759) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SRF=SRF TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF12=TCF12 THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388)  zRXLCH=RevXlinkChromatin
+subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERaa=ERalpha_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HEY1=HEY1 HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) NANOGSC33759=NANOG_(SC-33759) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SRF=SRF TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF12=TCF12 THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388)  zRXLCH=RevXlinkChromatin
 subGroup4 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x V0416101=v041610.1 V0416102=v041610.2 V0422111=v042211.1
 subGroup5 treatment Treatment DEX500PM=DEX_500pM DEX5NM=DEX_5nM DEX50NM=DEX_50nM DEX100NM=DEX_100nM DM002P1H=DMSO_0.02pct EST10NM1H=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1H=Genistein_100nM None=None
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
@@ -1419,22 +1419,22 @@ noInherit on
         color 46,0,184
         # subId=2214 dateSubmitted=2010-09-16
 
-        track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 BCL3 PCR1 2
-        longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep2
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 BCL3 PCR1 2
+        #longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep2
+        #type broadPeak
+        #color 46,0,184
         # subId=2213 dateSubmitted=2010-09-21
 
-        track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 BCL3 PCR1 1
-        longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep1
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 BCL3 PCR1 1
+        #longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep1
+        #type broadPeak
+        #color 46,0,184
         # subId=2213 dateSubmitted=2010-09-21
 
         track wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep2
@@ -1772,21 +1772,23 @@ noInherit on
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6 V102 2
         longLabel K562 E2F6 V0416102 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=E2F6SC22823 cellType=1K562 protocol=V0416102 treatment=None rep=rep2
+        subGroups view=Peaks factor=E2F6 cellType=1K562 protocol=V0416102 treatment=None rep=rep2
         type broadPeak
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep2 cricket Tue Apr 19 10:32:38 2011
+	# sas wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
 
         track wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6 V102 1
         longLabel K562 E2F6 V0416102 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=E2F6SC22823 cellType=1K562 protocol=V0416102 treatment=None rep=rep1
+        subGroups view=Peaks factor=E2F6 cellType=1K562 protocol=V0416102 treatment=None rep=rep1
         type broadPeak
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep1 cricket Tue Apr 19 10:32:37 2011
+	# was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -3446,13 +3448,13 @@ noInherit on
         color 0,107,27
         # subId=3021 dateSubmitted=2010-11-29
 
-        track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 BCL3 PCR1 1
-        longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep1
-        type bigWig 0.304919 197.054001
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 BCL3 PCR1 1
+        #longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep1
+        #type bigWig 0.304919 197.054001
+        #color 46,0,184
         # subId=3021 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsK562Bclaf101388Pcr1xRawRep1
@@ -3989,13 +3991,13 @@ noInherit on
         color 0,107,27
         # subId=3026 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 BCL3 PCR1 2
-        longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep2
-        type bigWig 0.279744 115.044998
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 BCL3 PCR1 2
+        #longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1X treatment=None rep=rep2
+        #type bigWig 0.279744 115.044998
+        #color 46,0,184
         # subId=3026 dateSubmitted=2011-01-21
 
 
@@ -4107,7 +4109,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PANC Cont PCR2 1
         longLabel PANC-1 Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=PCR2x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=PCR2X treatment=None rep=rep1
         type bigWig 0.268720 169.091995
         # subId=3026 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsPanc1ControlPcr2xRawRep1 vsmalladi Wed Jul  6 14:19:18 2011
@@ -4116,7 +4118,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SKN Cont PCR2 1
         longLabel SK-N-SH Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=PCR2x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=PCR2X treatment=None rep=rep1
         type bigWig 0.254775 82.865700
         # subId=3026 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsHtb11ControlPcr2xRawRep1 wong Fri Jun  3 11:47:43 2011
@@ -4126,7 +4128,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PFSK Cont PCR2 1
         longLabel PFSK-1 Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=PCR2x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=PCR2X treatment=None rep=rep1
         type bigWig 0.124462 260.653992
         # subId=3026 dateSubmitted=2011-01-21
         # was wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep1 vsmalladi Wed Jul  6 14:19:19 2011
@@ -4136,7 +4138,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HESC Cont PCR1 1
         longLabel H1-hESC Control PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1H1hESC protocol=PCR1x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=1H1hESC protocol=PCR1X treatment=None rep=rep1
         type bigWig 0.322043 111.587997
         color 0,107,27
         # subId=3026 dateSubmitted=2011-01-21
@@ -4147,7 +4149,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 Cont PCR1 2
         longLabel GM12878 Control PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1X treatment=None rep=rep2
         type bigWig 0.091415 152.707993
         color 153,38,0
         # subId=3035 dateSubmitted=2011-01-20
@@ -4194,7 +4196,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 Cont PCR1 1
         longLabel K562 Control PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1X treatment=None rep=rep1
         type bigWig 0.070242 198.557007
         color 46,0,184
         # subId=3035 dateSubmitted=2011-01-20
@@ -4204,7 +4206,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG Cont PCR1 1
         longLabel HepG2 Control PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1X treatment=None rep=rep1
         type bigWig 0.149944 122.167000
         color 189,0,157
         # subId=3036 dateSubmitted=2011-01-06
@@ -4214,7 +4216,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 Cont PCR1 2
         longLabel K562 Control PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1X treatment=None rep=rep2
         type bigWig 0.123206 238.250000
         color 46,0,184
         # subId=3035 dateSubmitted=2011-01-20
@@ -4224,7 +4226,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 Cont PCR1 1
         longLabel GM12878 Control PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1X treatment=None rep=rep1
         type bigWig 0.074945 141.964996
         color 153,38,0
         # subId=3035 dateSubmitted=2011-01-20
@@ -4244,7 +4246,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 Cont PCR2 2
         longLabel GM12878 Control PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR2x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR2X treatment=None rep=rep2
         type bigWig 0.709333 100.193001
         color 153,38,0
         # subId=3027 dateSubmitted=2010-11-29
@@ -4254,7 +4256,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 Cont PCR2 1
         longLabel GM12878 Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR2x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR2X treatment=None rep=rep1
         type bigWig 0.602447 112.959000
         color 153,38,0
         # subId=3027 dateSubmitted=2010-11-29
@@ -4412,7 +4414,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG Cont PCR2 1
         longLabel HepG2 Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR2x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR2X treatment=None rep=rep1
         type bigWig 0.135909 68.022697
         color 189,0,157
         # subId=3028 dateSubmitted=2010-11-29
@@ -4574,7 +4576,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG Cont PCR2 2
         longLabel HepG2 Control PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR2x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR2X treatment=None rep=rep2
         type bigWig 0.121756 77.375702
         color 189,0,157
         # subId=3029 dateSubmitted=2010-11-29
@@ -4584,7 +4586,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 Cont EtOH 1
         longLabel A549 Control EtOH 0.02 pct PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR2x treatment=ETOH02 rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR2X treatment=ETOH02 rep=rep1
         type bigWig 0.125563 135.167999
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsA549ControlPcr2xEtoh02RawRep1 vsmalladi Wed Jul  6 14:19:00 2011
@@ -4593,7 +4595,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 Cont Dx100 1
         longLabel A549 Control Dex 100 nM PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR2x treatment=DEX100NM rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR2X treatment=DEX100NM rep=rep1
         type bigWig 0.145188 133.645004
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1 wong Tue Jun  7 11:53:55 2011
@@ -4603,11 +4605,12 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6 V102 2
         longLabel K562 E2F6 V0416102 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=E2F6SC22823 cellType=1K562 protocol=V0416102 treatment=None rep=rep2
+        subGroups view=RawSignal factor=E2F6 cellType=1K562 protocol=V0416102 treatment=None rep=rep2
         type bigWig 0.209743 292.433990
         color 46,0,184
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep2 cricket Tue Apr 19 10:32:38 2011
+	# was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
 
         track wgEncodeHaibTfbsK562Ets1V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5141,11 +5144,12 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6 V102 1
         longLabel K562 E2F6 V0416102 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=E2F6SC22823 cellType=1K562 protocol=V0416102 treatment=None rep=rep1
+        subGroups view=RawSignal factor=E2F6 cellType=1K562 protocol=V0416102 treatment=None rep=rep1
         type bigWig 0.297230 676.867004
         color 46,0,184
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep1 cricket Tue Apr 19 10:32:38 2011
+	#was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5693,7 +5697,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 Cont PCR1 3
         longLabel GM12878 Control PCR1x ChIP-seq Raw Signal Rep 3 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1x treatment=None rep=rep3
+        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1X treatment=None rep=rep3
         type bigWig 0.182357 147.481995
         color 153,38,0
         # subId=3036 dateSubmitted=2011-01-06
@@ -5703,7 +5707,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HELA Cont PCR1 1
         longLabel HeLa-S3 Control PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=2HELA protocol=PCR1x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=2HELA protocol=PCR1X treatment=None rep=rep1
         type bigWig 0.097920 281.152008
         color 0,119,158
         # subId=3036 dateSubmitted=2011-01-06
@@ -6176,7 +6180,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 Cont PCR1 5
         longLabel GM12878 Control PCR1x ChIP-seq Raw Signal Rep 5 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1x treatment=None rep=rep5
+        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1X treatment=None rep=rep5
         type bigWig 0.201412 94.764297
         color 153,38,0
         # subId=3026 dateSubmitted=2011-01-21
@@ -6186,7 +6190,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM78 Cont PCR1 4
         longLabel GM12878 Control PCR1x ChIP-seq Raw Signal Rep 4 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1x treatment=None rep=rep4
+        subGroups view=RawSignal factor=zRXLCH cellType=1GM12878 protocol=PCR1X treatment=None rep=rep4
         type bigWig 0.275165 78.490799
         color 153,38,0
         # subId=3026 dateSubmitted=2011-01-21
@@ -6196,7 +6200,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG Cont PCR1 4
         longLabel HepG2 Control PCR1x ChIP-seq Raw Signal Rep 4 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1x treatment=None rep=rep4
+        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1X treatment=None rep=rep4
         type bigWig 0.261423 98.883301
         color 189,0,157
         # subId=3026 dateSubmitted=2011-01-21
@@ -6206,7 +6210,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG Cont PCR1 3
         longLabel HepG2 Control PCR1x ChIP-seq Raw Signal Rep 3 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1x treatment=None rep=rep3
+        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1X treatment=None rep=rep3
         type bigWig 0.209759 74.936302
         color 189,0,157
         # subId=3026 dateSubmitted=2011-01-21
@@ -6216,7 +6220,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 Cont PCR1 3
         longLabel K562 Control PCR1x ChIP-seq Raw Signal Rep 3 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1x treatment=None rep=rep3
+        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1X treatment=None rep=rep3
         type bigWig 0.236072 121.872002
         color 46,0,184
         # subId=3026 dateSubmitted=2011-01-21
@@ -6226,7 +6230,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 Cont PCR1 4
         longLabel K562 Control PCR1x ChIP-seq Raw Signal Rep 4 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1x treatment=None rep=rep4
+        subGroups view=RawSignal factor=zRXLCH cellType=1K562 protocol=PCR1X treatment=None rep=rep4
         type bigWig 0.413974 163.623001
         color 46,0,184
         # subId=3026 dateSubmitted=2011-01-21
@@ -6323,7 +6327,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 Cont EtOH 1
         longLabel A549 Control EtOH 0.02 pct PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR1x treatment=ETOH02 rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR1X treatment=ETOH02 rep=rep1
         type bigWig 0.153953 179.701996
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsA549ControlPcr1xEtoh02RawRep1 vsmalladi Wed Jul  6 14:18:59 2011
@@ -6332,7 +6336,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 Cont Dx100 1
         longLabel A549 Control Dex 100 nM PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR1x treatment=DEX100NM rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=PCR1X treatment=DEX100NM rep=rep1
         type bigWig 0.216637 169.572006
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsA549ControlPcr1xDex100nmRawRep1 vsmalladi Wed Jul  6 14:08:30 2011
@@ -6341,7 +6345,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PANC Cont PCR2 2
         longLabel PANC-1 Control PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=PCR2x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=PCR2X treatment=None rep=rep2
         type bigWig 0.096728 549.244995
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsPanc1ControlPcr2xRawRep2 vsmalladi Wed Jul  6 14:19:18 2011
@@ -6350,7 +6354,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel U87 Cont PCR2 2
         longLabel U87 Control PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=PCR2x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=PCR2X treatment=None rep=rep2
         type bigWig 0.127206 192.716003
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsU87ControlPcr2xRawRep2 vsmalladi Wed Jul  6 14:19:24 2011
@@ -6359,7 +6363,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PFSK Cont PCR2 2
         longLabel PFSK-1 Control PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=PCR2x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=PCR2X treatment=None rep=rep2
         type bigWig 0.107553 131.511002
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep2 vsmalladi Wed Jul  6 14:19:20 2011
@@ -6368,7 +6372,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SKN Cont PCR2 2
         longLabel SK-N-SH Control PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=PCR2x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=PCR2X treatment=None rep=rep2
         type bigWig 0.162516 577.216003
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsHtb11ControlPcr2xRawRep2 wong Fri Jun  3 11:47:44 2011
@@ -6425,7 +6429,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel U87 Cont PCR2 1
         longLabel U87 Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=PCR2x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=PCR2X treatment=None rep=rep1
         type bigWig 0.278714 218.371994
         # subId=3810 dateSubmitted=2011-03-08
         # was wgEncodeHaibTfbsU87ControlPcr2xRawRep1 vsmalladi Wed Jul  6 14:19:24 2011
@@ -6556,7 +6560,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM91 Cont PCR1 1
         longLabel GM12891 Control PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=GM12891 protocol=PCR1x treatment=None rep=rep1
+        subGroups view=RawSignal factor=zRXLCH cellType=GM12891 protocol=PCR1X treatment=None rep=rep1
         type bigWig 0.159233 195.537994
         # subId=3753 dateSubmitted=2011-03-04
         # was wgEncodeHaibTfbsGm12891ControlPcr1xRawRep1 vsmalladi Wed Jul  6 14:19:05 2011
@@ -6565,7 +6569,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG Cont PCR1 2
         longLabel HepG2 Control PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1x treatment=None rep=rep2
+        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=PCR1X treatment=None rep=rep2
         type bigWig 0.104589 143.966995
         color 189,0,157
         # subId=3753 dateSubmitted=2011-03-04
@@ -7048,7 +7052,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PFSK Cont PCR2 3
         longLabel PFSK-1 Control PCR2x ChIP-seq Raw Signal Rep 3 from ENCODE/HAIB
-    subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=PCR2x treatment=None rep=rep3
+    subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=PCR2X treatment=None rep=rep3
         type bigWig 0.124458 13642.700195
         # subId=4064 dateSubmitted=2011-05-20
         # was wgEncodeHaibTfbsPfsk1ControlPcr2xRawRep3 vsmalladi Wed Jul  6 14:19:20 2011
@@ -7066,7 +7070,7 @@ noInherit on
         #parent wgEncodeHaibTfbsViewRawSignal off
         #shortLabel HUVEC Cont PCR1 1
         #longLabel HUVEC Control PCR1x  ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-    #subGroups view=RawSignal factor=zRXLCH cellType=2HUVEC protocol=PCR1x treatment=None rep=rep1
+    #subGroups view=RawSignal factor=zRXLCH cellType=2HUVEC protocol=PCR1X treatment=None rep=rep1
         #type bigWig 0.279927 170.895004
         #color 224,75,0
         # subId=4160 dateSubmitted=2011-05-23
@@ -7093,7 +7097,7 @@ noInherit on
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SKMC Cont PCR2 1
         longLabel SK-N-MC Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-    subGroups view=RawSignal factor=zRXLCH cellType=SKNMC protocol=PCR2x treatment=None rep=rep1
+    subGroups view=RawSignal factor=zRXLCH cellType=SKNMC protocol=PCR2X treatment=None rep=rep1
         type bigWig 0.494867 124.830002
         # subId=4163 dateSubmitted=2011-06-02
         # was wgEncodeHaibTfbsSknmcControlPcr2xRawRep1 vsmalladi Wed Jul  6 14:19:20 2011

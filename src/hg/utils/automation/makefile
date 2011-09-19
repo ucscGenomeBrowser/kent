@@ -19,6 +19,7 @@ SCRIPT_FILES = \
 	doBlastzChainNet.pl \
 	doEnsGeneUpdate.pl \
 	doHgNearBlastp.pl \
+	ensemblInfo.pl \
 	synBlastp.csh \
 	doRecipBest.pl \
 	doRepeatMasker.pl \
@@ -35,7 +36,8 @@ SCRIPT_FILES = \
 	monthlyUpdateIgtc.csh \
 	simplePartition.pl \
 	partitionSequence.pl \
-	updateIgtc.pl
+	updateIgtc.pl \
+	unigene.csh
 
 all: mkDir libFiles $(SCRIPT_FILES:%=%.all)
 

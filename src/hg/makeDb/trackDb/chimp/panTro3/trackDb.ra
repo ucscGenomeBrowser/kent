@@ -52,7 +52,8 @@ priority 103.29
 	speciesCodonDefault panTro3
 	speciesGroups primate vertebrate
 	sGroup_primate hg19 ponAbe2 rheMac2 calJac3
-	sGroup_vertebrate equCab2 canFam2 mm9 rn4 monDom5 galGal3 danRer7
+	sGroup_vertebrate mm9 rn4 equCab2 canFam2 monDom5 galGal3 danRer7
+	speciesDefaultOff rn4 equCab2 danRer7
         itemFirstCharCase noChange
 	treeImage phylo/panTro3_12way.png
         priority 100

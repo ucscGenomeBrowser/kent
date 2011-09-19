@@ -741,6 +741,24 @@ for (i = 0;  i < rec->infoCount;  i++)
 	}
 if (gotTotalCount && !gotAltCounts)
     dyStringPrintf(dy, "%d", alCounts[0]);
+else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
+    {
+    vcfParseGenotypes(rec);
+    for (i = 0;  i < alDescCount;  i++)
+	alCounts[i] = 0;
+    for (i = 0;  i < rec->file->genotypeCount;  i++)
+	{
+	struct vcfGenotype *gt = &(rec->genotypes[i]);
+	if (gt == NULL)
+	    uglyf("i=%d gt=NULL wtf?\n", i);
+	alCounts[gt->hapIxA]++;
+	if (! gt->isHaploid)
+	    alCounts[gt->hapIxB]++;
+	}
+    dyStringPrintf(dy, "%d", alCounts[0]);
+    for (i = 1;  i < alDescCount;  i++)
+	dyStringPrintf(dy, ",%d", alCounts[i]);
+    }
 return cloneStringZ(dy->string, dy->stringSize+1);
 }
 
