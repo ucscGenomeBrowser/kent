@@ -174,9 +174,9 @@ for my $file (@ARGV)
                 if($update) {
                     # delete obsolete files
                     for my $f (@destFiles) {
-                        if($f =~ /^$prefix-v\d+\.$suffix$/) {
+                        if(-e $f && $f =~ /^$prefix-v\d+\.$suffix$/) {
                             if($f ne $destFile) {
-                                print STDERR "Deleting old version of file $file\n" if($debug);
+                                print STDERR "Deleting old version of file $file: '$f'\n" if($debug);
                                 unlink($f) || die "Couldn't unlink obsolete versioned file '$f'; err: $!";
                             }
                         }
