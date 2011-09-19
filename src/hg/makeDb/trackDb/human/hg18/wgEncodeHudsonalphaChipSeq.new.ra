@@ -25,8 +25,9 @@ dimensionCchecked aNONE
 #dimensionAchecked 1GM,1K5
 #dimensionBchecked CTCF,FOXP2
 #filterComposite dimD=one dimE=one
+#fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ factor=+ treat=+ prot=+ rep=+ view=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target protocol=Protocol treatment=Treatment replicate=Rep  view=View labExpId=Lab_ID controlId=Control_ID setType=Type fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+#fileSortOrder cell=Cell_Line view=View labExpId=Lab_ID controlId=Control_ID fileType=File_Type fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody prot=protocol treat=treatment
 noInherit on
