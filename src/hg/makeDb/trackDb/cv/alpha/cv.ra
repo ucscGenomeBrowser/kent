@@ -11014,7 +11014,7 @@ description The status of the file or table object (revoked, replaced, etc)
 searchable no
 hidden no
 cvDefined yes
-validate cv
+validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
 
 term obtainedBy
