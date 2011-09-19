@@ -1443,6 +1443,28 @@ function postToSaveSettings(obj)
     return true;
 }
 
+function loadRemoteTracks()
+{
+    if(typeof(hgTracks.trackDb) != "undefined" && hgTracks.trackDb != null) {
+        for (var id in hgTracks.trackDb) {
+            var rec = hgTracks.trackDb[id];
+            if(rec.type == "remote") {
+                if($("#img_data_" + id).length > 0) {
+                    // load the remote track renderer via jsonp
+                    rec.loadingId = showLoadingImage("tr_" + id);
+                    var script = document.createElement('script');
+                    var pos = parsePosition(getPosition());
+                    var name = rec.remoteTrack || id;
+                    script.setAttribute('src', rec.url + "?track=" + name + "&jsonp=remoteTrackCallback&position=" +
+                                        encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end) +
+                                        "&pix=" + $('#imgTbl').width());
+                    document.getElementsByTagName('head')[0].appendChild(script);
+                }
+            }
+        }
+    }
+}
+
 $(document).ready(function()
 {
     // The page may be reached via browser history (back button)
@@ -1593,6 +1615,7 @@ $(document).ready(function()
                 updateTrackImg(trackName,"","");
             });
         }
+        loadRemoteTracks();
     }
     if($('img#chrom').length == 1) {
         if($('area.cytoBand').length > 1) {
@@ -1620,23 +1643,6 @@ $(document).ready(function()
         $('.submitOnEnter').keydown(searchKeydown);
         findTracksNormalize();
         updateMetaDataHelpLinks(0);
-    }
-
-    if(typeof(hgTracks.trackDb) != "undefined" && hgTracks.trackDb != null) {
-        for (var id in hgTracks.trackDb) {
-            var rec = hgTracks.trackDb[id];
-            if(rec.type == "remote") {
-                if($("#img_data_" + id).length > 0) {
-                    // load the remote track renderer via jsonp
-                    var script = document.createElement('script');
-                    // XXXX add current image width
-                    var pos = parsePosition(getPosition());
-                    script.setAttribute('src', rec.url + "?track=" + id + "&jsonp=remoteTrackCallback&c=" + pos.chrom +
-                                        "&s=" + pos.start + "&e=" + pos.end);
-                    document.getElementsByTagName('head')[0].appendChild(script);
-                }
-            }
-        }
     }
 });
 
@@ -1953,13 +1959,18 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                });
     } else if (cmd == 'openLink' || cmd == 'followLink') {
         var href = selectedMenuItem.href;
-        var vars = new Array("c", "l", "r");
+        var vars = new Array("c", "l", "r", "db");
         var valNames = new Array("chromName", "winStart", "winEnd");
         for (i in vars) {
             // make sure the link contains chrom and window width info (necessary b/c we are stripping hgsid and/or the cart may be empty);
             // but don't add chrom to wikiTrack links (see redmine #2476).
-            var val = hgTracks[valNames[i]];
             var v = vars[i];
+            var val;
+            if(v == "db") {
+                val = getDb();
+            } else {
+                val = hgTracks[valNames[i]];
+            }
             if(val && id != "wikiTrack" && (href.indexOf("?" + v + "=") == -1) && (href.indexOf("&" + v + "=") == -1)) {
                 href = href + "&" + v + "=" + val;
             }
@@ -2651,6 +2662,7 @@ function afterImgTblReload()
     if(hgTracks.imgBoxPortal) {
         $("div.scroller").panImages();
     }
+    loadRemoteTracks();
     markAsDirtyPage();
 }
 
@@ -2759,7 +2771,7 @@ function handleUpdateTrackMap(response, status)
             } else {
                 // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
                 for (id in hgTracks.trackDb) {
-                    if(!updateTrackImgForId(response, id)) {
+                    if(hgTracks.trackDb[id].type != "remote" && !updateTrackImgForId(response, id)) {
                         showWarning("Couldn't parse out new image for id: " + id);
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
@@ -2886,21 +2898,30 @@ function remoteTrackCallback(rec)
     if(rec.error) {
         alert("retrieval from remote site failed with error: " + rec.error)
     } else {
-        var track = rec.track;
-        $('#img_data_' + track).attr('style', '');
-        $('#img_data_' + track).attr('height', rec.height);
-        $('#img_data_' + track).attr('width', rec.width);
-        $('#img_data_' + track).attr('src', rec.img);
-        $('#td_data_' + track + ' > div').each(function(index) {
-                                                   if(index == 1) {
-                                                       var style = $(this).attr('style');
-                                                       style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
-                                                       $(this).attr('style', style);
-                                                   }
-                                               });
-        var style = $('#p_btn_' + track).attr('style');
-        style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
-        $('#p_btn_' + track).attr('style', style);
+        var remoteTrack = rec.track;
+        for (var track in hgTracks.trackDb) {
+            if(hgTracks.trackDb[track].remoteTrack == remoteTrack) {
+                $('#img_data_' + track).attr('style', "left:-116px; top: -23px;");
+                $('#img_data_' + track).attr('height', rec.height);
+                // XXXX use width in some way?
+//        $('#img_data_' + track).attr('width', rec.width);
+                $('#img_data_' + track).attr('width', $('#img_data_ruler').width());
+                $('#img_data_' + track).attr('src', rec.img);
+                $('#td_data_' + track + ' > div').each(function(index) {
+                                                           if(index == 1) {
+                                                               var style = $(this).attr('style');
+                                                               style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
+                                                               $(this).attr('style', style);
+                                                           }
+                                                       });
+                var style = $('#p_btn_' + track).attr('style');
+                style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
+                $('#p_btn_' + track).attr('style', style);
+                if(hgTracks.trackDb[track].loadingId) {
+                    hideLoadingImage(hgTracks.trackDb[track].loadingId);
+                }
+            }
+        }
     }
 }
 
@@ -2988,7 +3009,7 @@ function navigateButtonClick(ele)
 {
 // code to update just the imgTbl in response to navigation buttons (zoom-out etc.).
 // This is currently experimental code (controlled by IN_PLACE_UPDATE in imageV2.h).
-    if(mapIsUpdateable) {
+    if(inPlaceUpdate) {
         var params = ele.name + "=" + ele.value;
         $(ele).attr('disabled', 'disabled');
         // dinking navigation needs additional data

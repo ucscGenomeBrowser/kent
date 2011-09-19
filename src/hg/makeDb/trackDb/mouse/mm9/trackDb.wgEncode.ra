@@ -3,8 +3,7 @@
 #Encode Composite tracks (main wrangler:Venkat)
 
 # Stan/Yale TFBS (wrangler: Venkat) 
-include wgEncodeSydhTfbs.ra beta,public
-include wgEncodeSydhTfbs.newR2.ra alpha
+include wgEncodeSydhTfbs.ra 
 
 # Stan/Yale Histone (wrangler: Venkat)
 include wgEncodeSydhHist.ra

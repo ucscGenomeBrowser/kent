@@ -1,0 +1,39 @@
+# Data Agreement File $Revision: 1.0 $
+#
+# This file specifies the data agreement between your lab and
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files view replicate  cell    labExpId    labVersion      softwareVersion origAssembly
+#
+#files          a list of files that correspond to the metadata in this line
+#view           the view of the data as described below
+#replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
+#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#labExpId	for the lab to specify any internal experimental ID
+#labVersion     free text for the lab to specify metadata (possibly 'These files produced for use with GENCODE V3c' or something of the like) (OPTIONAL)
+#softwareVersion free text for the lab to specify Cufflinks V??? You can also clarify your mapAlgorithm here (OPTIONAL)
+#origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)  (OPTIONAL) 
+#
+#NOTE:  The optional columns do not have to be in the DDF for validation.  They do not show up in the file names, just the metadata.
+
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Giddings
+lab               UNC/BSU
+dataType          Proteogenomics
+compositeSuffix   UncBsuProt
+group             expression
+variables         cell, localization
+assembly          hg19
+
+
+validationSettings allowReloads
+
+# Track/view definition
+view             Signal
+type             peptideMapping
+hasReplicates    no
+required         yes

@@ -1,7 +1,7 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys
 import argparse
-from ucscgenomics.cvfile.CvFile import *
+from ucscgenomics import cv
 
 class validate(object):
 	"""validation script that calls cv.validate and then puts all its errors into a list"""
@@ -16,7 +16,7 @@ class validate(object):
 		args = parser.parse_args(sys.argv[1:])
 	
 		self.errors = list()
-		self.cv = CvFile(args.trackPath, self.addtoerrs, args.protocolPath)	
+		self.cv = cv.CvFile(args.trackPath, self.addtoerrs, args.protocolPath)	
 		self.cv.validate()
 		
 		for err in self.errors:
