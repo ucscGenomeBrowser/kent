@@ -25,6 +25,7 @@ visibilityViewDefaults  Peaks=dense Signal=full
 priority 0
 type bed 3
 wgEncode 1
+noInherit on
 
 	#####Peak Tracks###########
 	track wgEncodeCaltechTfbsViewPeaks
