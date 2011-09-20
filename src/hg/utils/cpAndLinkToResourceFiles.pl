@@ -157,40 +157,42 @@ for my $file (@ARGV)
             }
         } else {
             # On production machines, we make a copy of git file with the CGI version burned in (see redmine #5104).
-
-            my $destFile = $file;
-            $destFile =~ s/\.$suffix$/-v$cgiVersion.$suffix/;
-            my $update = 0;
-            my $exists = 0;
-            if(-e $destFile) {
-                my @destStat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
-                $update = ($destStat[9] < $mtime);
-                $exists = 1;
-            } else {
-                $update = 1;
-            }
-            $update = $update || $force;
-            if($update) {
-                # delete obsolete files
-                for my $f (@destFiles) {
-                    if($f =~ /^$prefix-v\d+\.$suffix$/) {
-                        if($f ne $destFile) {
-                            print STDERR "Deleting old version of file $file\n" if($debug);
-                            unlink($f) || die "Couldn't unlink obsolete versioned file '$f'; err: $!";
+            # We also copy over a non-versioned copy for use by static files.
+            my $versionedFile = $file;
+            $versionedFile =~ s/\.$suffix$/-v$cgiVersion.$suffix/;
+            for my $destFile ($file, $versionedFile) {
+                my $update = 0;
+                my $exists = 0;
+                if(-e $destFile) {
+                    my @destStat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
+                    $update = ($destStat[9] < $mtime);
+                    $exists = 1;
+                } else {
+                    $update = 1;
+                }
+                $update = $update || $force;
+                if($update) {
+                    # delete obsolete files
+                    for my $f (@destFiles) {
+                        if(-e $f && $f =~ /^$prefix-v\d+\.$suffix$/) {
+                            if($f ne $destFile) {
+                                print STDERR "Deleting old version of file $file: '$f'\n" if($debug);
+                                unlink($f) || die "Couldn't unlink obsolete versioned file '$f'; err: $!";
+                            }
                         }
                     }
-                }
-                if($exists) {
-                    unlink($destFile) || die "Couldn't unlink '$destFile'";
-                }
-                if($minify && $suffix eq 'js') {
-                    my $cmd = "/usr/bin/java -jar $minifyJar $srcFile -o $destFile";
-                    print STDERR "cmd: $cmd\n" if($debug);
-                    !system($cmd) || die "Couldn't run cmd '$cmd': err: $!";
-                } else {
-                    my $cmd = "cp -p $srcFile $destFile";
-                    print STDERR "cmd: $cmd\n" if($debug);
-                    !system($cmd) || die "Couldn't $cmd; err: $!";
+                    if($exists) {
+                        unlink($destFile) || die "Couldn't unlink '$destFile'";
+                    }
+                    if($minify && $suffix eq 'js') {
+                        my $cmd = "/usr/bin/java -jar $minifyJar $srcFile -o $destFile";
+                        print STDERR "cmd: $cmd\n" if($debug);
+                        !system($cmd) || die "Couldn't run cmd '$cmd': err: $!";
+                    } else {
+                        my $cmd = "cp -p $srcFile $destFile";
+                        print STDERR "cmd: $cmd\n" if($debug);
+                        !system($cmd) || die "Couldn't $cmd; err: $!";
+                    }
                 }
             }
         }
