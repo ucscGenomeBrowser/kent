@@ -14,6 +14,7 @@ CREATE TABLE kgXref (
     protAcc varchar(255) not null,	# NCBI protein Accession number
     description longblob not null,	# Description
     rfamAcc varchar(255) not null,	# Rfam accession number
+    tRnaName varchar(255) not null,	# Name from the tRNA track
               #Indices
     PRIMARY KEY(kgID)
 );

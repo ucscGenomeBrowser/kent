@@ -10,4 +10,5 @@ table kgXref
     string protAcc;     "NCBI protein Accession number"
     lstring description; "Description"
     string rfamAcc;     "Rfam accession number"
+    string tRnaName;    "Name from the tRNA track"
     )
