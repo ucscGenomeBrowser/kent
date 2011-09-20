@@ -33663,7 +33663,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1196
 md5sum bam=d488027087a7c3922b6869403be22f0d,bai=6f5e1b9d45cee3a859e1cfe3b433acb8
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -33689,7 +33689,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum bam=50880a93051766c219a91708626d5857,bai=e30ebd50584c8613cf413abd4ec148fb
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -33715,7 +33715,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1196
 md5sum c841588b5a3124ee661390b9d5ad74af
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -33743,7 +33743,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 08ae3a5f7d3a3632df386628087d0e95
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -33771,7 +33771,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1196
 md5sum 36bbd2adca766875f6bd3c806cb3ae10
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -33797,7 +33797,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 4ff5736682fcda748d29c31ef122b3a3
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -33823,7 +33823,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1196
 md5sum 1c7823028ebbfdd72c204f4f31095787
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -33850,7 +33850,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1511
 md5sum 3031bfe034d268676a087bfd5507b24c
-objStatus revoked
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
