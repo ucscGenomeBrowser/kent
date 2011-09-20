@@ -5,7 +5,7 @@
 #ifndef KGXREF_H
 #define KGXREF_H
 
-#define KGXREF_NUM_COLS 8
+#define KGXREF_NUM_COLS 10
 
 struct kgXref
 /* Link together a Known Gene ID and a gene alias */
@@ -19,6 +19,8 @@ struct kgXref
     char *refseq;	/* RefSeq ID */
     char *protAcc;	/* NCBI protein Accession number */
     char *description;	/* Description */
+    char *rfamAcc;	/* Rfam accession number */
+    char *tRnaName;	/* Name from the tRNA track */
     };
 
 void kgXrefStaticLoad(char **row, struct kgXref *ret);
