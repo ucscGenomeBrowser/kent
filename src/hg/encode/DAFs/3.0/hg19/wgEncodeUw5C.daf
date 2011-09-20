@@ -1,0 +1,28 @@
+# Data Agreement File for UW 5C
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Stam
+lab               UW
+dataType          5C
+compositeSuffix   Uw5C
+variables         cell, labVersion
+assembly          hg19
+
+validationSettings skipValidateFiles
+
+# Track/view definition
+view             Matrix
+type             matrix
+downloadOnly     yes
+required         yes
+hasReplicates    yes
+
+view            RawData
+type            fastq
+required        no
+hasReplicates   yes

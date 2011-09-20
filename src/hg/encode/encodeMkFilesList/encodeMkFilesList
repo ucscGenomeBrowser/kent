@@ -56,12 +56,14 @@ my %opt;
 #options handling
 my $goodopts = GetOptions(\%opt,
 					"md5",
-                    "filemask=s",
-                    "table=s",
-                    "verbose=i",
-                    "cv=s",
-                    "directory=s"
-                    );
+					"filemask=s",
+					"table=s",
+					"verbose=i",
+					"cv=s",
+					"directory=s",
+					"history=s",
+					"noupdate"
+);
 
 #make sure that GetOptions returns 1 and every option is good
 unless ($goodopts){
@@ -91,6 +93,9 @@ if ($opt{'table'}){
 		$writedb = 0;
 	}
 }
+if ($opt{'noupdate'}){
+	$writedb = 0;
+}
 
 #working directory
 my $workdir = getcwd();
@@ -105,10 +110,15 @@ unless ($opt{'verbose'}){$opt{'verbose'} = 0}
 if ($opt{'verbose'} >= 1){
 	print STDERR "using dir: $workdir\n";
 }
+my $composite = "";
 #this restricts the program to wonly work if the working directory matches wgEncode*
 unless ($workdir =~ m/wgEncode/){
 	print STDERR "Directory is not an encode directory: $workdir. Must match wgEncode*\n"; 
 	usage()
+}
+else {
+	$workdir =~ m/(wgEncode\S+)/;
+	$composite = $1;
 }
 #change to working directory
 my $err = chdir($workdir);
@@ -346,6 +356,9 @@ if ($opt{'md5'}){
 	
 	#this part checks the history file for md5sum and last modification date
 	my $md5hist = "md5sum.history";
+	if ($opt{'history'}){
+		$md5hist = $opt{'history'};
+	}
 	#last modify has
 	my %lastmod;
 	#temporary storage hash for files list
@@ -583,7 +596,7 @@ if ($opt{'verbose'} >= 3){
 	}
 }
 
-
+my $updated = 0;
 #go through each file and grab metadata, and dump to array convert to hash
 my %seentables;
 foreach my $file (@filemask){
@@ -703,14 +716,15 @@ foreach my $file (@filemask){
 			print STDERR "$file is an orphaned file, it has no metadata\n";
 		}
 		if (exists $md5sums{$file} && $type ne "bai" && $writedb == 1 && exists($filehash{'fileName'})){
-                	#there does not exist a metaDb md5sum value, do this
+
+			#there does not exist a metaDb md5sum value, do this
 			unless (exists $filehash{'md5sum'}){
-                        	$filehash{'md5sum'} = $md5sums{$file};
+				$filehash{'md5sum'} = $md5sums{$file};
 				my $baisum;
 				#column names to be used for metaDb
 				my @into = ('obj', 'var', 'val');
 				#values to be INSERTED
-                                my @values;
+				my @values;
 				#if type is bam, assume there is a bai, warn if not
 				if ($type eq "bam"){
 					$baisum = $md5sums{"$file.bai"};
@@ -719,7 +733,7 @@ foreach my $file (@filemask){
 				#if it's not a bam, or it's a bam with no associated bai
 				unless ($type eq "bam" || $baisum){
 					@values = ($tablename, 'md5sum', $md5sums{$file});
-                        	}
+				}
 				else {
 					#for bam's with bai's the md5sum line in meta db goes like
 					#bam=4b23bd3187as78ce,bai=234123bd2d887ece97
@@ -727,7 +741,8 @@ foreach my $file (@filemask){
 				}
 				#strangely, the insert command for Hgdb takes in references, while the update and execute ones don't
 				$db->insert($metadb, \@into, \@values);
-                		if ($opt{'verbose'} >= 2){
+				$updated = 1;
+				if ($opt{'verbose'} >= 2){
 					print STDERR "Inserted md5sum for $file into metaDb\n";
 				}
 			}
@@ -743,6 +758,7 @@ foreach my $file (@filemask){
 				#md5sum goes in straight up
 				my @values = ($md5sums{$file}, $tablename, 'md5sum');
 				$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+				$updated = 1;
 				if ($opt{'verbose'} >=2){
 					print STDERR "Updated md5sum for $file into metaDb\n";
 				}
@@ -763,12 +779,12 @@ foreach my $file (@filemask){
 					#constructed
 					my $filesum = "bam=$md5sums{$file},bai=$baisum";
 					my @values = ($filesum, $tablename, 'md5sum');
-                                	$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+					$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+					$updated = 1;
 					$filehash{'md5sum'} = $filesum;
 					if ($opt{'verbose'} >= 2){
 						print STDERR "Updated md5sum for $file and $file.bai\n";
 					}
-				
 				}
 				#if the line does match bam=,bai= and split properly
 				else {
@@ -799,14 +815,15 @@ foreach my $file (@filemask){
 						my $filesum = "bam=$md5sums{$file},bai=$baisum";
 						my @values = ($filesum, $tablename, 'md5sum');
 						$filehash{'md5sum'} = $filesum;
-                                        	$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+						$db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+						$updated = 1;
 						if ($opt{'verbose'} >= 2){
 							print STDERR "Updated md5sum for $file and $file.bai\n";
 						}
 					}
 				}
 			}
-        	}
+		}
 		elsif (exists $md5sums{$file}){
 			$filehash{'md5sum'} = $md5sums{$file};
 		}
@@ -817,6 +834,40 @@ foreach my $file (@filemask){
 	#put hash into fileinfo container
 	$fileinfo{$file} = \%filehash;
 }
+
+#if the metaDb was updated, and the species is matching either mm or hg
+if ($updated && (($assm =~ m/hg/) || ($assm =~ m/mm/))) {
+
+	#determine species
+	my $species = "";
+	if ($assm =~ m/hg/){
+		$species = "human"
+	}
+	elsif ($assm =~ m/mm/){
+		$species = "mouse"
+	}
+	if ($species) {
+
+		#assume kent src, if not found, warn user to maunally update
+		my $kentsrc = "$ENV{'HOME'}/kent/src/hg/makeDb/trackDb/$species/$assm/metaDb/alpha";
+		my $rafile = "$kentsrc/$composite.ra";
+		#print STDERR "rafile = $rafile\n";
+		if (-e $rafile){
+			`mdbPrint $assm -composite=$composite 1> $rafile 2>/dev/null`;
+			print STDERR "Update .ra file, please commit and push out md5sum changes\n"
+		}
+		else {
+			print STDERR "Couldn't find composite .ra file, please manually update the .ra file and push out md5sum changes\n";
+		}
+	}
+}
+
+elsif ($updated == 0) {}
+#dunno if this will ever be hit, but just in case
+else{
+	print STDERR "Could not determine species, please manually update metaDb\n";
+}
+
 
 open FILE, ">files.txt" or die "die: can't open files.txt to write\n";
 if ($opt{'verbose'} >= 2){
@@ -854,7 +905,7 @@ options:
 	-md5			md5 sums the files in the directory
 	-table			selects which metadata table to use
 	-verbose		verbose output (levels 1 - 3)
-	-cv			custom cv directory (default is /data/apache/cgi-bin/encode)
+	-cv 			custom cv directory (default is /data/apache/cgi-bin/encode)
 	-directory		custom download directory (default is working directory)
 	-filemask		only allows selected pattern matches (must be in quotes)
 				E.g. -filemask "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb" (default)
