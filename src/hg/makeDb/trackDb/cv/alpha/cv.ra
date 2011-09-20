@@ -3112,7 +3112,7 @@ tier 3
 termId BTO:0000847
 protocol Crawford:Melano_Crawford_protocol.pdf
 
-term Monocytes-CD14+
+term Monocytes-CD14+_RO01746
 tag MONOCD14
 type Cell Line
 #tier 2
