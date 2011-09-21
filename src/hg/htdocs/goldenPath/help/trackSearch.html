@@ -59,10 +59,23 @@
 				metadata. By default, there are two rows of ENCODE metadata
 				search criteria, but more can be added by clicking the "+" button.
 				To remove an added metadata search row, click the "-" button. Each
-				row is comprised of two drop-down menus, the first contains the
-				metadata categories available, and the second contains the possible
-				metadata terms in that category. Because these metadata drop-downs
-				are assembly dependent, the options may vary from assembly to
+				row is comprised of a drop-down menu followed by either a second
+                                drop-down menu or a text field. The first drop-down menu contains the
+				searchable metadata categories available. The type of metadata term
+                                selected in the first drop-down determines the type of search
+				available. Some metadata will have a second drop-down containing the
+                                possible metadata terms in that category available to search on.
+                                Most of these drop downs are multi-select lists, so users can select
+                                one or multiple terms. Other metadata types will have a text field
+                                for users to enter specific search terms. There are two types of
+                                text fields. If the phrase preceding the text field is "contains,"
+                                then the field is a free text field, with the option of using the
+                                percent sign (%) as a wildcard. If the phrase "is among" precedes
+                                the text field, then it is possible to enter a comma-separated list
+                                to find all tracks with any of the values in the list in that
+                                metadata category. This comma-separated list also accepts the percent
+                                sign (%) as a wildcard. Because these metadata drop-downs are
+                                assembly dependent, the options available may vary from assembly to
 				assembly. Some categories have a link to the far right of the row if
 				there is more information available about the terms.</p></li>
 				</ul>
