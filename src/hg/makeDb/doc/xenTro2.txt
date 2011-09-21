@@ -1692,3 +1692,21 @@ see doc/builds.txt for specific details.
     #	91934327 bases of 1359412157 (6.763%) in intersection
 
 ##############################################################################
+# construct liftOver to xenTro3 (DONE - 2011-09-19 - Hiram) 
+    screen	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/xenTro2/bed/blat.xenTro3.2011-09-19
+    cd /hive/data/genomes/xenTro2/bed/blat.xenTro3.2011-09-19
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/xenTro2/11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev xenTro2 xenTro3 > do.log 2>&1
+    # if that is OK, then run it:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-ooc=/scratch/data/xenTro2/11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev xenTro2 xenTro3 > do.log 2>&1
+    #	real    597m54.341s
+
+    # verify this file exists:
+    #	/gbdb/xenTro2/liftOver/xenTro2ToAnoCar2.over.chain.gz
+    # and try out the conversion on genome-test from xenTro2 to xenTro3 
+############################################################################
