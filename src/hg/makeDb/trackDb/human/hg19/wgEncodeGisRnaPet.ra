@@ -1,7 +1,7 @@
 track wgEncodeGisRnaPet
 compositeTrack on
 shortLabel GIS RNA PET
-longLabel Subcellular clone-free RNA Localization by Paired End diTag Sequencing from ENCODE/GIS
+longLabel RNA Subcellular Localization by Paired End diTag Sequencing from ENCODE/GIS
 group expression
 subGroup1 view Views Clusters=Clusters PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLaS3<BR>&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) MCF7=MCF7 NHEK=NHEK prostate=Prostate
@@ -65,7 +65,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapClustersRep1
         parent wgEncodeGisRnaPetViewClusters on
-        shortLabel GM12 cyto pA+ bs
+        shortLabel GM12 cyto pA+ b
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=1GM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1
         type bed 12
@@ -74,7 +74,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapClustersFree
         parent wgEncodeGisRnaPetViewClusters on
-        shortLabel GM12 cyto pA+ fr
+        shortLabel GM12 cyto pA+ f
         longLabel GM12878 cytosol polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
         subGroups view=Clusters cellType=1GM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1
         type bed 12
@@ -272,7 +272,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel GM12 cyto pA+ A bs
+        shortLabel GM12 cyto pA+ A b
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Alignments Rep 1 from ENCODE/GIS
         subGroups view=Alignments cellType=1GM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1
         type bam
@@ -281,7 +281,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapAlnFree
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel GM12 cyto pA+ A fr
+        shortLabel GM12 cyto pA+ A f
         longLabel GM12878 cytosol polyA+ clone-free RNA PET Alignments Rep 1 from ENCODE/GIS
         subGroups view=Alignments cellType=1GM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1
         type bam
@@ -484,7 +484,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
         parent wgEncodeGisRnaPetViewMinusRawSig on
-        shortLabel GM12 cyto pA+ - bs 
+        shortLabel GM12 cyto pA+ - b 
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Minus signal Rep 1 from ENCODE/GIS
         subGroups view=MinusRawSignal cellType=1GM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1
         type bigWig 1.000000 822224.000000
@@ -493,7 +493,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree
         parent wgEncodeGisRnaPetViewMinusRawSig on
-        shortLabel GM12 cyto pA+ - fr
+        shortLabel GM12 cyto pA+ - f
         longLabel GM12878 cytosol polyA+ clone-free RNA PET Minus signal Rep 1 from ENCODE/GIS
         subGroups view=MinusRawSignal cellType=1GM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1
         type bigWig 1.000000 13358.000000
@@ -690,7 +690,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
         parent wgEncodeGisRnaPetViewPlusRawSig on
-        shortLabel GM12 cyto pA+ + bs
+        shortLabel GM12 cyto pA+ + b
         longLabel GM12878 cytosol polyA+ clone-based RNA PET Plus signal Rep 1 from ENCODE/GIS
         subGroups view=PlusRawSignal cellType=1GM12878 cloned=Based localization=cytosol rnaExtract=PAP rep=rep1
         type bigWig 1.000000 341723.000000
@@ -699,7 +699,7 @@ wgEncode 1
 
         track wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree
         parent wgEncodeGisRnaPetViewPlusRawSig on
-        shortLabel GM12 cyto pA+ + fr
+        shortLabel GM12 cyto pA+ + f
         longLabel GM12878 cytosol polyA+ clone-free RNA PET Plus signal Rep 1 from ENCODE/GIS
         subGroups view=PlusRawSignal cellType=1GM12878 cloned=Free localization=cytosol rnaExtract=PAP rep=rep1
         type bigWig 1.000000 81924.000000
