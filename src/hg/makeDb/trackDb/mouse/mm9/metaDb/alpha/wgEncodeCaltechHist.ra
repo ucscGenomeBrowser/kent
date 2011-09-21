@@ -15,7 +15,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11907
 labVersion 11907
-md5sum bam=7a2a9aa268469d39b47c87beb1230e0e,bai=b4208a80985178c07cf699d49bfeed4f
+md5sum 7a2a9aa268469d39b47c87beb1230e0e,b4208a80985178c07cf699d49bfeed4f
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -129,7 +129,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11832
 labVersion 11832
-md5sum bam=ffb91abfd472a70d4a8b8fa4b1e1b498,bai=02b94a62390cad9b9e0e1f7f161cd85d
+md5sum ffb91abfd472a70d4a8b8fa4b1e1b498,02b94a62390cad9b9e0e1f7f161cd85d
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -243,7 +243,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11906
 labVersion 11906
-md5sum bam=bc13ba05f20b270d6031d6c0b77db31f,bai=c68c2cf57e6b3abdaa04941ef08dc187
+md5sum bc13ba05f20b270d6031d6c0b77db31f,c68c2cf57e6b3abdaa04941ef08dc187
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -357,7 +357,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11669
 labVersion 11669
-md5sum bam=24ed0fdcad9e43fb178ca19ef6942e96,bai=99d746869a94945ce558ee8430155c25
+md5sum 24ed0fdcad9e43fb178ca19ef6942e96,99d746869a94945ce558ee8430155c25
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -471,7 +471,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10331
 labVersion 10331
-md5sum bam=46eef22327a3c2f63bb1b71b9f85b625,bai=a4b4e4f2f2554ad1cd82e8de7a07e586
+md5sum 46eef22327a3c2f63bb1b71b9f85b625,a4b4e4f2f2554ad1cd82e8de7a07e586
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -585,7 +585,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10330
 labVersion 10330
-md5sum bam=424b9a2f7419f23314b40faabdeb204c,bai=a7de0bbf98bd587b5115189b110cb6e2
+md5sum 424b9a2f7419f23314b40faabdeb204c,a7de0bbf98bd587b5115189b110cb6e2
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -699,7 +699,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11956
 labVersion 11956
-md5sum bam=769a835cd9ddb56f4ee73f5ca908df7e,bai=3cc6745661321b568fe109c8551cd35f
+md5sum 769a835cd9ddb56f4ee73f5ca908df7e,3cc6745661321b568fe109c8551cd35f
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -813,7 +813,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11957
 labVersion 11957
-md5sum bam=12f631c0b1f6fb27210173ad086c76cc,bai=13d9b4858370a10ed9c7cf5f6d3a013d
+md5sum 12f631c0b1f6fb27210173ad086c76cc,13d9b4858370a10ed9c7cf5f6d3a013d
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -927,7 +927,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10502
 labVersion 10502
-md5sum bam=5a9c9c051e3c8e8cfe036344b8af2188,bai=6e656ffafe99a01c6cf02f3b0efbd7eb
+md5sum 5a9c9c051e3c8e8cfe036344b8af2188,6e656ffafe99a01c6cf02f3b0efbd7eb
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1041,7 +1041,7 @@ grant Hardison
 lab Caltech-m
 labExpId 10536
 labVersion 10536
-md5sum bam=62ba5579213e7facba61e88c6721c76d,bai=f15a68cada3ae56f884b38164c6a32fb
+md5sum 62ba5579213e7facba61e88c6721c76d,f15a68cada3ae56f884b38164c6a32fb
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1155,7 +1155,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11905
 labVersion 11905
-md5sum bam=a02b1919cf7de939dc43b8bc7cd8055e,bai=f7addbdff22618c6497f97743d0490aa
+md5sum a02b1919cf7de939dc43b8bc7cd8055e,f7addbdff22618c6497f97743d0490aa
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1269,7 +1269,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11697
 labVersion 11697
-md5sum bam=e843725934bb8ca41e24b4d6afbc9c07,bai=f3ba5ace18b9ed27b5af1d1d7b0f002c
+md5sum e843725934bb8ca41e24b4d6afbc9c07,f3ba5ace18b9ed27b5af1d1d7b0f002c
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1366,4 +1366,4 @@ tableName wgEncodeCaltechHistC2c12H3k36me3FCntrl50bMyc60hPcr1xSigRep1
 treatment Myocyte_60h
 view Signal
 
-# MAGIC: 1008239451
+# MAGIC: 1008230739
