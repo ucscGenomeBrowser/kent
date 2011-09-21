@@ -23,7 +23,7 @@ geoSampleAccession GSM733742
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=da2d9af67e6ac5f46ec0563c66ef2c6d,bai=927f57f960c37b6fa4e71ff10b440b2e
+md5sum da2d9af67e6ac5f46ec0563c66ef2c6d,927f57f960c37b6fa4e71ff10b440b2e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -50,7 +50,7 @@ geoSampleAccession GSM733742
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=cdf5d411bc6815302724609d066f8333,bai=074f40e2218610a50748047aa02e8778
+md5sum cdf5d411bc6815302724609d066f8333,074f40e2218610a50748047aa02e8778
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -155,7 +155,7 @@ geoSampleAccession GSM733752
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=881c311f387465059bace19e517bf47c,bai=810324d0e9b97160992f3fd67b8a438b
+md5sum 881c311f387465059bace19e517bf47c,810324d0e9b97160992f3fd67b8a438b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -182,7 +182,7 @@ geoSampleAccession GSM733752
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d53da79ce1f1927b77a938288b758180,bai=04885fae3cf8fb1c6205248a0092202d
+md5sum d53da79ce1f1927b77a938288b758180,04885fae3cf8fb1c6205248a0092202d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -311,7 +311,7 @@ fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep1.bam
 geoSampleAccession GSM733767
 grant Bernstein
 lab Broad
-md5sum bam=682fb3ab3a3721f8f6589791159f119e,bai=6b54dc6868faf4b26e3795c84bb00d92
+md5sum 682fb3ab3a3721f8f6589791159f119e,6b54dc6868faf4b26e3795c84bb00d92
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -336,7 +336,7 @@ fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep2.bam
 geoSampleAccession GSM733767
 grant Bernstein
 lab Broad
-md5sum bam=371bb53d4468fed58efe0af367c344ff,bai=6eceba803342b80ac8eeff9b429ed8dc
+md5sum 371bb53d4468fed58efe0af367c344ff,6eceba803342b80ac8eeff9b429ed8dc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -463,7 +463,7 @@ expId 33
 fileName wgEncodeBroadHistoneGm12878H3k04me1StdAlnRep1V2.bam
 grant Bernstein
 lab Broad
-md5sum bam=643b2e292c47652540947eb980a2d434,bai=e119865d3f09402299d960afb3bfdc62
+md5sum 643b2e292c47652540947eb980a2d434,e119865d3f09402299d960afb3bfdc62
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -565,7 +565,7 @@ expId 28
 fileName wgEncodeBroadHistoneGm12878H3k04me3StdAlnRep2V2.bam
 grant Bernstein
 lab Broad
-md5sum bam=feff6d4ef1504ac76f754c515ba44bc1,bai=1bbb2d3986545f79fadcd4c5c7784e46
+md5sum feff6d4ef1504ac76f754c515ba44bc1,1bbb2d3986545f79fadcd4c5c7784e46
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -670,7 +670,7 @@ geoSampleAccession GSM733771
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=89ce74342e28239b732aa7639044509b,bai=361970372529270584f5c84547fe434d
+md5sum 89ce74342e28239b732aa7639044509b,361970372529270584f5c84547fe434d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -697,7 +697,7 @@ geoSampleAccession GSM733771
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=aeb9ded9b366bc49038af4d450581099,bai=dd1762254e2046b54c1f23b4766bd30d
+md5sum aeb9ded9b366bc49038af4d450581099,dd1762254e2046b54c1f23b4766bd30d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -829,7 +829,7 @@ geoSampleAccession GSM733758
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=c45ee3a167fde18edf39f15d59501aa8,bai=18d7419d41b1f6bd5fd7d7a4350253f2
+md5sum c45ee3a167fde18edf39f15d59501aa8,18d7419d41b1f6bd5fd7d7a4350253f2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -856,7 +856,7 @@ geoSampleAccession GSM733758
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=4275a24c8469a7a2ea0ab6c608a718cb,bai=7626d34052d7d709dfddb8f4a0b6673e
+md5sum 4275a24c8469a7a2ea0ab6c608a718cb,7626d34052d7d709dfddb8f4a0b6673e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -880,7 +880,7 @@ expId 31
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep3V2.bam
 grant Bernstein
 lab Broad
-md5sum bam=eef6496540ccee3f6c9459cf3584e02c,bai=45466328e1212a5d9766e868d6dfc0f6
+md5sum eef6496540ccee3f6c9459cf3584e02c,45466328e1212a5d9766e868d6dfc0f6
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1037,7 +1037,7 @@ geoSampleAccession GSM733679
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=8288d7ef96112a59d1396790b8c4ed19,bai=0d0b5ded6df7fd605569d001c13c2859
+md5sum 8288d7ef96112a59d1396790b8c4ed19,0d0b5ded6df7fd605569d001c13c2859
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1064,7 +1064,7 @@ geoSampleAccession GSM733679
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=967598e81a27223078010de54b2ec6fe,bai=75dc912ea198ef77f026784b539a93fe
+md5sum 967598e81a27223078010de54b2ec6fe,75dc912ea198ef77f026784b539a93fe
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1196,7 +1196,7 @@ geoSampleAccession GSM733772
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=dfa727df060e2ecf2d05703a95b5152f,bai=44c6420f7948bdc09632b96d75f142ac
+md5sum dfa727df060e2ecf2d05703a95b5152f,44c6420f7948bdc09632b96d75f142ac
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1249,7 +1249,7 @@ geoSampleAccession GSM733769
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=9e37a988a31a85f50a70f97ab511bc7c,bai=866e1a68706470ed74556d8cf29c1f64
+md5sum 9e37a988a31a85f50a70f97ab511bc7c,866e1a68706470ed74556d8cf29c1f64
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1276,7 +1276,7 @@ geoSampleAccession GSM733769
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=04812f3752c00f4d2b033abcf1dc9080,bai=1e065325c853286f0841ea7865812308
+md5sum 04812f3752c00f4d2b033abcf1dc9080,1e065325c853286f0841ea7865812308
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1408,7 +1408,7 @@ geoSampleAccession GSM733708
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=1abf5ea115118f57b4411f5945cea42a,bai=49887074162e1f8683d3f37e067354fd
+md5sum 1abf5ea115118f57b4411f5945cea42a,49887074162e1f8683d3f37e067354fd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1459,7 +1459,7 @@ fileName wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep1.bam
 geoSampleAccession GSM733736
 grant Bernstein
 lab Broad
-md5sum bam=f084b978269665a5e41db6e947e4edc5,bai=f62a5d2903101dc3d702e4e6c5726111
+md5sum f084b978269665a5e41db6e947e4edc5,f62a5d2903101dc3d702e4e6c5726111
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1484,7 +1484,7 @@ fileName wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep2.bam
 geoSampleAccession GSM733736
 grant Bernstein
 lab Broad
-md5sum bam=0b4dedd28987807e756aafe5755a1350,bai=ac386bb6a02efaf9c19111aeb1aad7dc
+md5sum 0b4dedd28987807e756aafe5755a1350,ac386bb6a02efaf9c19111aeb1aad7dc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1614,7 +1614,7 @@ geoSampleAccession GSM733677
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=46ab19e4f70695b8f78e8f3163273322,bai=0a0066ab342f2d5194a3d106ec56e902
+md5sum 46ab19e4f70695b8f78e8f3163273322,0a0066ab342f2d5194a3d106ec56e902
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1641,7 +1641,7 @@ geoSampleAccession GSM733677
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=df33e1749467906316bb2a168d96c281,bai=ea7f51b22b5e204a22276655bd148d99
+md5sum df33e1749467906316bb2a168d96c281,ea7f51b22b5e204a22276655bd148d99
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1771,7 +1771,7 @@ fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep1.bam
 geoSampleAccession GSM733664
 grant Bernstein
 lab Broad
-md5sum bam=ea6e13fe7b539e2c5ae9c90be82187a3,bai=dd23242b23b46294c59223549d3a4d12
+md5sum ea6e13fe7b539e2c5ae9c90be82187a3,dd23242b23b46294c59223549d3a4d12
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1796,7 +1796,7 @@ fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep2.bam
 geoSampleAccession GSM733664
 grant Bernstein
 lab Broad
-md5sum bam=1ba455342f8f709ed05451911670b222,bai=aad4784bad943241c3a21c44ab5d5f8c
+md5sum 1ba455342f8f709ed05451911670b222,aad4784bad943241c3a21c44ab5d5f8c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1821,7 +1821,7 @@ fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep3.bam
 geoSampleAccession GSM733664
 grant Bernstein
 lab Broad
-md5sum bam=c6b3f1e9cf80624d98af423a6481da73,bai=cea33c1c82ad7fb3d384dc7d03918c66
+md5sum c6b3f1e9cf80624d98af423a6481da73,cea33c1c82ad7fb3d384dc7d03918c66
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -1977,7 +1977,7 @@ geoSampleAccession GSM733642
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=2aec140d26a96cda9c79ddc4bbc518e2,bai=56f72fe10196fb0247472b099fa5ec4f
+md5sum 2aec140d26a96cda9c79ddc4bbc518e2,56f72fe10196fb0247472b099fa5ec4f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2004,7 +2004,7 @@ geoSampleAccession GSM733642
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=a41aab03b2f6e3472e3e20d99b79b210,bai=26cc98e2e848dabd3e3fcccdea14300a
+md5sum a41aab03b2f6e3472e3e20d99b79b210,26cc98e2e848dabd3e3fcccdea14300a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2136,7 +2136,7 @@ geoSampleAccession GSM733770
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0b2c021897371bd7dd2478727ec18e3b,bai=82d400413e529621ed3e65355c878ab5
+md5sum 0b2c021897371bd7dd2478727ec18e3b,82d400413e529621ed3e65355c878ab5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2163,7 +2163,7 @@ geoSampleAccession GSM733770
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=336934546a9180d2abb1afb14bc1f6ad,bai=0d10169bb66c9c3463901c965139ce49
+md5sum 336934546a9180d2abb1afb14bc1f6ad,0d10169bb66c9c3463901c965139ce49
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2268,7 +2268,7 @@ geoSampleAccession GSM733672
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=16fe2d5dbea1b6c98eda3faeeee23827,bai=6a105cabf61878223882b46875c89511
+md5sum 16fe2d5dbea1b6c98eda3faeeee23827,6a105cabf61878223882b46875c89511
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2295,7 +2295,7 @@ geoSampleAccession GSM733672
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=39b52588e5ec6c83f73ce0cc4c9123c0,bai=912631b26dfa020c3700e9ee6ce8a800
+md5sum 39b52588e5ec6c83f73ce0cc4c9123c0,912631b26dfa020c3700e9ee6ce8a800
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2685,7 +2685,7 @@ geoSampleAccession GSM733718
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=5d3aec9ad329b40eeaf5f8215a8f61cf,bai=d3e1e106dfb5c1722c9956fefb6492d9
+md5sum 5d3aec9ad329b40eeaf5f8215a8f61cf,d3e1e106dfb5c1722c9956fefb6492d9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2712,7 +2712,7 @@ geoSampleAccession GSM733718
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=69ab345f5eecb3c3c0eff9be4b03347c,bai=ccd20a657505724b6f9162231070b853
+md5sum 69ab345f5eecb3c3c0eff9be4b03347c,ccd20a657505724b6f9162231070b853
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2844,7 +2844,7 @@ geoSampleAccession GSM733748
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=300f3a35bf615a5aed103c3ff513d457,bai=539c1270386678e3062a8bdb732489ee
+md5sum 300f3a35bf615a5aed103c3ff513d457,539c1270386678e3062a8bdb732489ee
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2871,7 +2871,7 @@ geoSampleAccession GSM733748
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d22b3acf59331f592b6c694e4bb00aaf,bai=131df9d4dbdfa2500c0375fcdff738da
+md5sum d22b3acf59331f592b6c694e4bb00aaf,131df9d4dbdfa2500c0375fcdff738da
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3003,7 +3003,7 @@ geoSampleAccession GSM733725
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=6bd00d47cfe1f0a2d649c9ecdcbaa19a,bai=ef5fd6327a33ca3d32a322c34fa7e50b
+md5sum 6bd00d47cfe1f0a2d649c9ecdcbaa19a,ef5fd6327a33ca3d32a322c34fa7e50b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3030,7 +3030,7 @@ geoSampleAccession GSM733725
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=06ebfb8f25f96c1ccad705d61dc2431e,bai=10a7dfa1b9fade22ca43cc132f579480
+md5sum 06ebfb8f25f96c1ccad705d61dc2431e,10a7dfa1b9fade22ca43cc132f579480
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3162,7 +3162,7 @@ geoSampleAccession GSM733782
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=312d1cb89623c397501524d0b645eaa3,bai=f1b2b401a04a8ffdbb8bf7b5963af206
+md5sum 312d1cb89623c397501524d0b645eaa3,f1b2b401a04a8ffdbb8bf7b5963af206
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3189,7 +3189,7 @@ geoSampleAccession GSM733782
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=f4cfb183437c711647d53205cf2e6353,bai=87b8aa06673b581fb0037c1da6762a43
+md5sum f4cfb183437c711647d53205cf2e6353,87b8aa06673b581fb0037c1da6762a43
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3321,7 +3321,7 @@ geoSampleAccession GSM733670
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=6fa8a05a6a8d2c95f29cbd967cee8ca7,bai=381a6766e6be37cb6110c45741870c7e
+md5sum 6fa8a05a6a8d2c95f29cbd967cee8ca7,381a6766e6be37cb6110c45741870c7e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3348,7 +3348,7 @@ geoSampleAccession GSM733670
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=e1e04c31635d7e02a7dfb833a9a0b3bf,bai=caaef028c24b741abf44a037da82f9c5
+md5sum e1e04c31635d7e02a7dfb833a9a0b3bf,caaef028c24b741abf44a037da82f9c5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3480,7 +3480,7 @@ geoSampleAccession GSM733657
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=3ec7b74d15dd630378dd12bf904b0ae2,bai=d38365b0a5acf2b5645170d075b5ce37
+md5sum 3ec7b74d15dd630378dd12bf904b0ae2,d38365b0a5acf2b5645170d075b5ce37
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3507,7 +3507,7 @@ geoSampleAccession GSM733657
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=b0879a08ce00c9bd23d22046ab2671e6,bai=2c7025907a30f9a198367ae074326d02
+md5sum b0879a08ce00c9bd23d22046ab2671e6,2c7025907a30f9a198367ae074326d02
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3768,7 +3768,7 @@ geoSampleAccession GSM733773
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=7da88eefb54b5bcf831afc104c2e692a,bai=d4e25ebce857974bbbd5c46d440adb89
+md5sum 7da88eefb54b5bcf831afc104c2e692a,d4e25ebce857974bbbd5c46d440adb89
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3795,7 +3795,7 @@ geoSampleAccession GSM733773
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=8ce474b8600f3344d166ed09e1ddad8d,bai=cae001ddad498547fad46dd5d85b9bf9
+md5sum 8ce474b8600f3344d166ed09e1ddad8d,cae001ddad498547fad46dd5d85b9bf9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3927,7 +3927,7 @@ geoSampleAccession GSM733687
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=871c05eb7e8600c249551076337f4fa4,bai=85f06f02764ff223e7ef424199a24c14
+md5sum 871c05eb7e8600c249551076337f4fa4,85f06f02764ff223e7ef424199a24c14
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3954,7 +3954,7 @@ geoSampleAccession GSM733687
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=af47ed2eb974890cda8c03ca21509d12,bai=9f9f01ea0c67c61c8e3a86c9617020a8
+md5sum af47ed2eb974890cda8c03ca21509d12,9f9f01ea0c67c61c8e3a86c9617020a8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4086,7 +4086,7 @@ geoSampleAccession GSM733659
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=91c9d8b8d79ff22d5110b8c7c117d29b,bai=173fa5e327b4c84154723708f13d0650
+md5sum 91c9d8b8d79ff22d5110b8c7c117d29b,173fa5e327b4c84154723708f13d0650
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4113,7 +4113,7 @@ geoSampleAccession GSM733659
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=a31d2cb1b20211bef2a834b65c68dfdb,bai=3cda220d85b545fb49e3ae3a2bc3ada7
+md5sum a31d2cb1b20211bef2a834b65c68dfdb,3cda220d85b545fb49e3ae3a2bc3ada7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4218,7 +4218,7 @@ geoSampleAccession GSM733785
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=64aa1f9e9dff974229dd2c8b9e1910d4,bai=64f8c2c5d8b9373a9136f2bb29d07c04
+md5sum 64aa1f9e9dff974229dd2c8b9e1910d4,64f8c2c5d8b9373a9136f2bb29d07c04
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4245,7 +4245,7 @@ geoSampleAccession GSM733785
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=bfad1089c59230bdb69e9edc727f1c1c,bai=aeda1a41535fbc479fff7eb7a368a1c6
+md5sum bfad1089c59230bdb69e9edc727f1c1c,aeda1a41535fbc479fff7eb7a368a1c6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4374,7 +4374,7 @@ expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
-md5sum bam=2cbf5aba58a3a25621e88c0bbb3e951c,bai=dbfe678feb24137f68ab82b43546ff65
+md5sum 2cbf5aba58a3a25621e88c0bbb3e951c,dbfe678feb24137f68ab82b43546ff65
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4398,7 +4398,7 @@ expId 1750
 fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
-md5sum bam=5047977b1b2a4817d2032596b31f25fc,bai=1733fd6e936a0fa84dcf2861abee6457
+md5sum 5047977b1b2a4817d2032596b31f25fc,1733fd6e936a0fa84dcf2861abee6457
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4524,7 +4524,7 @@ geoSampleAccession GSM733684
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=bdd50d9e77fbfadb6de88e8aadc249ac,bai=9411ca94cb8674c7dfde262bba4a8117
+md5sum bdd50d9e77fbfadb6de88e8aadc249ac,9411ca94cb8674c7dfde262bba4a8117
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4551,7 +4551,7 @@ geoSampleAccession GSM733684
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=d236817fb6cc3d0ad7f43e0110bd5c72,bai=0c45391c4a6d7fd70afad88307442afa
+md5sum d236817fb6cc3d0ad7f43e0110bd5c72,0c45391c4a6d7fd70afad88307442afa
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4681,7 +4681,7 @@ fileName wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep1.bam
 geoSampleAccession GSM733696
 grant Bernstein
 lab Broad
-md5sum bam=e6e6f1c8de9a31c2f67d0c00c571fcd4,bai=d33e9137c968726309db1ad6f92303fe
+md5sum e6e6f1c8de9a31c2f67d0c00c571fcd4,d33e9137c968726309db1ad6f92303fe
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4706,7 +4706,7 @@ fileName wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep2.bam
 geoSampleAccession GSM733696
 grant Bernstein
 lab Broad
-md5sum bam=1ef4f6f8183c7c01594ba45c7c662640,bai=4f187c81b3a5c446226266d4ce24aac9
+md5sum 1ef4f6f8183c7c01594ba45c7c662640,4f187c81b3a5c446226266d4ce24aac9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4836,7 +4836,7 @@ geoSampleAccession GSM733711
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=dfb61c5873ac31dcf71d87e214f53e20,bai=24eb2e8a19a12cd54f5328e11afb33bf
+md5sum dfb61c5873ac31dcf71d87e214f53e20,24eb2e8a19a12cd54f5328e11afb33bf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4863,7 +4863,7 @@ geoSampleAccession GSM733711
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=1ef937c6b06cecc5a8aeb2ad66470034,bai=a34d07e07c88251a19174401e18a3d44
+md5sum 1ef937c6b06cecc5a8aeb2ad66470034,a34d07e07c88251a19174401e18a3d44
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4995,7 +4995,7 @@ geoSampleAccession GSM733734
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=e8c08de911b8ede5c60fbf68c20b429a,bai=68758eee01bbd1c19c5239f4780edd4b
+md5sum e8c08de911b8ede5c60fbf68c20b429a,68758eee01bbd1c19c5239f4780edd4b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5022,7 +5022,7 @@ geoSampleAccession GSM733734
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=f8b265cf1e140f9c68bc2608e25126e1,bai=d5e12a98e19ad2b08dab39d71584b33b
+md5sum f8b265cf1e140f9c68bc2608e25126e1,d5e12a98e19ad2b08dab39d71584b33b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5154,7 +5154,7 @@ geoSampleAccession GSM733682
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=ed0392ee932fd8e8e83b5901564aa85e,bai=5678be2c7c4706e6c28e88b969c99ed1
+md5sum ed0392ee932fd8e8e83b5901564aa85e,5678be2c7c4706e6c28e88b969c99ed1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5181,7 +5181,7 @@ geoSampleAccession GSM733682
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=16a56e25b2dfb98b6b9b2f60756cfdac,bai=8ed3936bf1ef175a99bc747910609ed2
+md5sum 16a56e25b2dfb98b6b9b2f60756cfdac,8ed3936bf1ef175a99bc747910609ed2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5313,7 +5313,7 @@ geoSampleAccession GSM733669
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=41360f2839ed873522fbb3244dfc52b5,bai=5b22aaec279c662455feff63424438dd
+md5sum 41360f2839ed873522fbb3244dfc52b5,5b22aaec279c662455feff63424438dd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5340,7 +5340,7 @@ geoSampleAccession GSM733669
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=e11b21b6f526c296007999c83b08c4eb,bai=d2d34be713dce5708b2e523e0aaab601
+md5sum e11b21b6f526c296007999c83b08c4eb,d2d34be713dce5708b2e523e0aaab601
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5472,7 +5472,7 @@ geoSampleAccession GSM733756
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=c20bcb6e5c6a23fb5ba8e202430a9b04,bai=5b2c15414123ba5a5a3f7763fa6a6554
+md5sum c20bcb6e5c6a23fb5ba8e202430a9b04,5b2c15414123ba5a5a3f7763fa6a6554
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5499,7 +5499,7 @@ geoSampleAccession GSM733756
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=b8511662dfe291c20c2cc7230176d575,bai=8398e807a2c1b0e6722afaf645a56303
+md5sum b8511662dfe291c20c2cc7230176d575,8398e807a2c1b0e6722afaf645a56303
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5631,7 +5631,7 @@ geoSampleAccession GSM733689
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=1e45911c931efa7e0129f54f6c58e6df,bai=c604cbca146fe5a96320d3d4a98967b4
+md5sum 1e45911c931efa7e0129f54f6c58e6df,c604cbca146fe5a96320d3d4a98967b4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5658,7 +5658,7 @@ geoSampleAccession GSM733689
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=4aaa9730f63685de08bd1ad568872756,bai=cf177193481d484f02e03fc19218027d
+md5sum 4aaa9730f63685de08bd1ad568872756,cf177193481d484f02e03fc19218027d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5790,7 +5790,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=f020973769ac85f2fc16afa68c8bbdd4,bai=b984920aad29f2566b19010e3d6e8214
+md5sum f020973769ac85f2fc16afa68c8bbdd4,b984920aad29f2566b19010e3d6e8214
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5817,7 +5817,7 @@ geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=fd2d0b75e8f0d70ef2207bbae551fd04,bai=0c927727d915035b00998a0e10f5bc2b
+md5sum fd2d0b75e8f0d70ef2207bbae551fd04,0c927727d915035b00998a0e10f5bc2b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5949,7 +5949,7 @@ geoSampleAccession GSM733732
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=68e7eb7329d8860abf1c73903f0af4ac,bai=5c7c7f1aed168ed7c681039692073946
+md5sum 68e7eb7329d8860abf1c73903f0af4ac,5c7c7f1aed168ed7c681039692073946
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5976,7 +5976,7 @@ geoSampleAccession GSM733732
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=41aec515c0618204280d1c722fa3629b,bai=f07d0321843c66b0bbb0ae7095053e17
+md5sum 41aec515c0618204280d1c722fa3629b,f07d0321843c66b0bbb0ae7095053e17
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6081,7 +6081,7 @@ geoSampleAccession GSM733645
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=84ea4c1b44cf42bbc2c1cf496a707549,bai=492215a72b6f7a02ea0113487151574e
+md5sum 84ea4c1b44cf42bbc2c1cf496a707549,492215a72b6f7a02ea0113487151574e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6108,7 +6108,7 @@ geoSampleAccession GSM733645
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=119d5f0c9c9080654ddb211e7bfde7ab,bai=3938df4a8bf281d49089122f71428fd4
+md5sum 119d5f0c9c9080654ddb211e7bfde7ab,3938df4a8bf281d49089122f71428fd4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6240,7 +6240,7 @@ geoSampleAccession GSM733774
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=c5762ad2e06a72f28724ecd3e75a9fee,bai=adcf752d2828b0fd1949848083051e68
+md5sum c5762ad2e06a72f28724ecd3e75a9fee,adcf752d2828b0fd1949848083051e68
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6267,7 +6267,7 @@ geoSampleAccession GSM733774
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=9bbbd80698db2735610583a09461cb2f,bai=b944579a5676d2fa577282c7d50e201f
+md5sum 9bbbd80698db2735610583a09461cb2f,b944579a5676d2fa577282c7d50e201f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6396,7 +6396,7 @@ expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
-md5sum bam=bdeabafdedd09747e8104ec103631c65,bai=e1bb1ca9d37fcd95d72e86d3f33197ca
+md5sum bdeabafdedd09747e8104ec103631c65,e1bb1ca9d37fcd95d72e86d3f33197ca
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6420,7 +6420,7 @@ expId 1749
 fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
-md5sum bam=17847371fcf423c9473d5ea4b54c51f9,bai=8b1f3e3be71b1e8d121d27310021757a
+md5sum 17847371fcf423c9473d5ea4b54c51f9,8b1f3e3be71b1e8d121d27310021757a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6546,7 +6546,7 @@ geoSampleAccession GSM733743
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d30bd5ba725ca789ae4b1b86d58c3373,bai=3d73f55fcb62655c419a1eba8bd33f8e
+md5sum d30bd5ba725ca789ae4b1b86d58c3373,3d73f55fcb62655c419a1eba8bd33f8e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6573,7 +6573,7 @@ geoSampleAccession GSM733743
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=3870747e4834285e85ae02e9fd7ff1e6,bai=7ee6c4897d4243a2095e6f48944b77f2
+md5sum 3870747e4834285e85ae02e9fd7ff1e6,7ee6c4897d4243a2095e6f48944b77f2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6705,7 +6705,7 @@ geoSampleAccession GSM733754
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=15a5ff5c6433cce233a01bc2a729122c,bai=816afcd856db9ead04b95c4467eb7aca
+md5sum 15a5ff5c6433cce233a01bc2a729122c,816afcd856db9ead04b95c4467eb7aca
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6732,7 +6732,7 @@ geoSampleAccession GSM733754
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=25d0e68411784d6087b35ff491638e7c,bai=0a28620b00dbb7f109a6c22cd12e144e
+md5sum 25d0e68411784d6087b35ff491638e7c,0a28620b00dbb7f109a6c22cd12e144e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6864,7 +6864,7 @@ geoSampleAccession GSM733685
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=4e4b3f660e7bd230e20fe41caa4a3b45,bai=02e9cc755c74cd0fd1e7767dc52b2d5e
+md5sum 4e4b3f660e7bd230e20fe41caa4a3b45,02e9cc755c74cd0fd1e7767dc52b2d5e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6891,7 +6891,7 @@ geoSampleAccession GSM733685
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=03618eb7a572ac7b2a1fa772b65c725f,bai=7fd28e538f69f6d09871b329ff3b69e1
+md5sum 03618eb7a572ac7b2a1fa772b65c725f,7fd28e538f69f6d09871b329ff3b69e1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7023,7 +7023,7 @@ geoSampleAccession GSM733693
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=62cea5dfc2b299efd5cbb6fa5ec86c10,bai=83eb6696377dfc7e6c6b46ed2334179b
+md5sum 62cea5dfc2b299efd5cbb6fa5ec86c10,83eb6696377dfc7e6c6b46ed2334179b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7050,7 +7050,7 @@ geoSampleAccession GSM733693
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=67c4cc7729ef3eb900c2a16c7428ee11,bai=f6f848d53f3be608dfb144282feb3ddb
+md5sum 67c4cc7729ef3eb900c2a16c7428ee11,f6f848d53f3be608dfb144282feb3ddb
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7182,7 +7182,7 @@ geoSampleAccession GSM733737
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=9193868fa83b7c1ff8ee9fed42749305,bai=514b207a90c874017d593b33de583f99
+md5sum 9193868fa83b7c1ff8ee9fed42749305,514b207a90c874017d593b33de583f99
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7209,7 +7209,7 @@ geoSampleAccession GSM733737
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=5aa2a720d19a76f6f49fa534e1f0de9f,bai=99a0f8fb875d767ace606f3eade919e0
+md5sum 5aa2a720d19a76f6f49fa534e1f0de9f,99a0f8fb875d767ace606f3eade919e0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7341,7 +7341,7 @@ geoSampleAccession GSM733641
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=595880c33e77673ddd9f5e9a2d27562e,bai=5248b44635f68e9940fa5b88c1e28ec2
+md5sum 595880c33e77673ddd9f5e9a2d27562e,5248b44635f68e9940fa5b88c1e28ec2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7368,7 +7368,7 @@ geoSampleAccession GSM733641
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=33284d52bc5345691cc7a4562149d4c4,bai=ba7c00cec408f35185889ffd0b7f52ed
+md5sum 33284d52bc5345691cc7a4562149d4c4,ba7c00cec408f35185889ffd0b7f52ed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7500,7 +7500,7 @@ geoSampleAccession GSM733638
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=94e62d61a59f2d3ce37b34c8f323e62c,bai=d337917fb25a241d346fccf7dbdb136d
+md5sum 94e62d61a59f2d3ce37b34c8f323e62c,d337917fb25a241d346fccf7dbdb136d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7527,7 +7527,7 @@ geoSampleAccession GSM733638
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=406d76576172afd82f7a4bd273d25aa2,bai=051df1b94794013219f97b378e5e22f5
+md5sum 406d76576172afd82f7a4bd273d25aa2,051df1b94794013219f97b378e5e22f5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7659,7 +7659,7 @@ geoSampleAccession GSM733694
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=b2f9af3c6825b90301faee7d6ef8e896,bai=fd7ab63e023a61bb10c773ccaa4c2a9b
+md5sum b2f9af3c6825b90301faee7d6ef8e896,fd7ab63e023a61bb10c773ccaa4c2a9b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7686,7 +7686,7 @@ geoSampleAccession GSM733694
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=2865f779a911ef9f5895f7f7ec621610,bai=84a040f24416acff45196767bf71186b
+md5sum 2865f779a911ef9f5895f7f7ec621610,84a040f24416acff45196767bf71186b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7818,7 +7818,7 @@ geoSampleAccession GSM733668
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=ba1848e80e53576a31852561f680ecd3,bai=8442cde1199003f6754e4d8d3a609dbf
+md5sum ba1848e80e53576a31852561f680ecd3,8442cde1199003f6754e4d8d3a609dbf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7845,7 +7845,7 @@ geoSampleAccession GSM733668
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=c6da6f2b59a149883b0bd936a4fcfe54,bai=68c916b6d9bf37d53fb4c840349db650
+md5sum c6da6f2b59a149883b0bd936a4fcfe54,68c916b6d9bf37d53fb4c840349db650
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7949,7 +7949,7 @@ geoSampleAccession GSM733724
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=e3d2d8ebc1b2fc3cf134da51960ebc5e,bai=2198f8c10ba952bfcad708cb9c961a5c
+md5sum e3d2d8ebc1b2fc3cf134da51960ebc5e,2198f8c10ba952bfcad708cb9c961a5c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7976,7 +7976,7 @@ geoSampleAccession GSM733724
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=68e8aa9dd0a8d2fe204f85a9d583e6a5,bai=ec4f33471f656785290c973f157b4456
+md5sum 68e8aa9dd0a8d2fe204f85a9d583e6a5,ec4f33471f656785290c973f157b4456
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8108,7 +8108,7 @@ geoSampleAccession GSM733660
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=ccee651a5c6ef89d24f5da047401f64b,bai=eb65dd7c75bd3d989ff3843ccb6d4114
+md5sum ccee651a5c6ef89d24f5da047401f64b,eb65dd7c75bd3d989ff3843ccb6d4114
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8135,7 +8135,7 @@ geoSampleAccession GSM733660
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=4a0fdb69d2bc213d6535615d4fbc061b,bai=fd21ed0c3a49e5f46db8be3524666eaf
+md5sum 4a0fdb69d2bc213d6535615d4fbc061b,fd21ed0c3a49e5f46db8be3524666eaf
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8267,7 +8267,7 @@ geoSampleAccession GSM733722
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=812347e176d57dab4bd026678fc160aa,bai=dc30730f58518e73f1bbc313241ae840
+md5sum 812347e176d57dab4bd026678fc160aa,dc30730f58518e73f1bbc313241ae840
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8294,7 +8294,7 @@ geoSampleAccession GSM733722
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=c004457f917276390049a291102f9d54,bai=65a7f6ec59da114238e72f7d39782f73
+md5sum c004457f917276390049a291102f9d54,65a7f6ec59da114238e72f7d39782f73
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8426,7 +8426,7 @@ geoSampleAccession GSM733707
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=8d3af9ce0d73aa5aebf87a1cd139228e,bai=c33394822fc4581b5ef0024dce9f39e4
+md5sum 8d3af9ce0d73aa5aebf87a1cd139228e,c33394822fc4581b5ef0024dce9f39e4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8453,7 +8453,7 @@ geoSampleAccession GSM733707
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=724b2b7143928561d56bb1ab59a4db1e,bai=c0c94c57134f3294525c2295c7ad6cdc
+md5sum 724b2b7143928561d56bb1ab59a4db1e,c0c94c57134f3294525c2295c7ad6cdc
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8585,7 +8585,7 @@ geoSampleAccession GSM733705
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=a043bfb5b0bf394aa2be259d1d11d379,bai=fe94a53094fffdacfb4aa0738c99909b
+md5sum a043bfb5b0bf394aa2be259d1d11d379,fe94a53094fffdacfb4aa0738c99909b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8612,7 +8612,7 @@ geoSampleAccession GSM733705
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=1f7b213b63f6631573523942f9ccb2a5,bai=7128fce7bcfa987b61b4123c13fe6241
+md5sum 1f7b213b63f6631573523942f9ccb2a5,7128fce7bcfa987b61b4123c13fe6241
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8744,7 +8744,7 @@ geoSampleAccession GSM733654
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=b4dd2c0a62ab6bb82740f84dd2436812,bai=4b97408f0bb23d362cd9c5eea72deaee
+md5sum b4dd2c0a62ab6bb82740f84dd2436812,4b97408f0bb23d362cd9c5eea72deaee
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8771,7 +8771,7 @@ geoSampleAccession GSM733654
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=14d6a73d43df1c00dd9cbf3216bef766,bai=42f819c999b7e67c459cac7fb3ac2657
+md5sum 14d6a73d43df1c00dd9cbf3216bef766,42f819c999b7e67c459cac7fb3ac2657
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8903,7 +8903,7 @@ geoSampleAccession GSM733712
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=41af41fc386f25a4c22fc682c833977e,bai=b0ec391f75e70118598c478fd48e52f5
+md5sum 41af41fc386f25a4c22fc682c833977e,b0ec391f75e70118598c478fd48e52f5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8930,7 +8930,7 @@ geoSampleAccession GSM733712
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=f905ec4a7ef81fc70ce075dd3b9a0947,bai=4c4e91568f49cf20966ed913fcb3fe2a
+md5sum f905ec4a7ef81fc70ce075dd3b9a0947,4c4e91568f49cf20966ed913fcb3fe2a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9062,7 +9062,7 @@ geoSampleAccession GSM733713
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=23aef7c139a2c5feb8ca539d8de4065a,bai=d37c32abdd15b7210ba9ff726cd25308
+md5sum 23aef7c139a2c5feb8ca539d8de4065a,d37c32abdd15b7210ba9ff726cd25308
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -9089,7 +9089,7 @@ geoSampleAccession GSM733713
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=2852945ed20e06a8a628201f0037a11f,bai=5c60fe18935d14a86fdf386c4ae4ef0a
+md5sum 2852945ed20e06a8a628201f0037a11f,5c60fe18935d14a86fdf386c4ae4ef0a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9220,7 +9220,7 @@ geoSampleAccession GSM733647
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=69da367ae59074e96232c2371f640029,bai=4d0dff608e0ea3513a5d531ff5bc1d57
+md5sum 69da367ae59074e96232c2371f640029,4d0dff608e0ea3513a5d531ff5bc1d57
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -9247,7 +9247,7 @@ geoSampleAccession GSM733647
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=fe73229cff1bae696ccbc8503aca9b32,bai=89a428843240f6ff39308bf27c54e582
+md5sum fe73229cff1bae696ccbc8503aca9b32,89a428843240f6ff39308bf27c54e582
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9378,7 +9378,7 @@ geoSampleAccession GSM733663
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=3878724135522f926fbe4b3e685522ec,bai=3986ce04a5e4d1f18af8a6fd15b316f5
+md5sum 3878724135522f926fbe4b3e685522ec,3986ce04a5e4d1f18af8a6fd15b316f5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -9405,7 +9405,7 @@ geoSampleAccession GSM733663
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=c1f66c9e9b719ac6fdb80864e7234c5d,bai=151f06dd42cdf8e36502dcf417c535c2
+md5sum c1f66c9e9b719ac6fdb80864e7234c5d,151f06dd42cdf8e36502dcf417c535c2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9510,7 +9510,7 @@ geoSampleAccession GSM733762
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=a54a09c58df4b424998f47f1ab3078fb,bai=bc07491cf42a226a68098b310bbd6fce
+md5sum a54a09c58df4b424998f47f1ab3078fb,bc07491cf42a226a68098b310bbd6fce
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -9537,7 +9537,7 @@ geoSampleAccession GSM733762
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=baea24a7612b5fdca92fb885f1c4004f,bai=a3fc9bc58c3c3f73aadceb90fa196d08
+md5sum baea24a7612b5fdca92fb885f1c4004f,a3fc9bc58c3c3f73aadceb90fa196d08
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9667,7 +9667,7 @@ fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep1.bam
 geoSampleAccession GSM733760
 grant Bernstein
 lab Broad
-md5sum bam=275311bae6f598def7d4dcd0a068053f,bai=cb19c24245235307cc91012577448135
+md5sum 275311bae6f598def7d4dcd0a068053f,cb19c24245235307cc91012577448135
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9692,7 +9692,7 @@ fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep2.bam
 geoSampleAccession GSM733760
 grant Bernstein
 lab Broad
-md5sum bam=f6b1a28056cf27928f4dcb1d4baa134b,bai=c54e1c2c626d84f2e60c34af627f0e62
+md5sum f6b1a28056cf27928f4dcb1d4baa134b,c54e1c2c626d84f2e60c34af627f0e62
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9822,7 +9822,7 @@ geoSampleAccession GSM733755
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0aed206ed6671f155faf2fa11be00588,bai=4efdd240423cb125dc1fd93a30b25436
+md5sum 0aed206ed6671f155faf2fa11be00588,4efdd240423cb125dc1fd93a30b25436
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -9849,7 +9849,7 @@ geoSampleAccession GSM733755
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=47ccf871cc66993e914e488281eb4ada,bai=917ff0d559d4b444c825967413aadddd
+md5sum 47ccf871cc66993e914e488281eb4ada,917ff0d559d4b444c825967413aadddd
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -9981,7 +9981,7 @@ geoSampleAccession GSM733667
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d496c465fe54fc9a7b172e7d9882f217,bai=f3f5dcdc75a29735b9da2215ab630ed2
+md5sum d496c465fe54fc9a7b172e7d9882f217,f3f5dcdc75a29735b9da2215ab630ed2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10008,7 +10008,7 @@ geoSampleAccession GSM733667
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=d6f9cfa1a665e79a4f434d485552b9f5,bai=331b98a797433198508ac7d3e68883dd
+md5sum d6f9cfa1a665e79a4f434d485552b9f5,331b98a797433198508ac7d3e68883dd
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10140,7 +10140,7 @@ geoSampleAccession GSM733702
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=01b310a8a865335c4e6542d0ead757e6,bai=0f5f22a9f83b78f83611629a0ff21120
+md5sum 01b310a8a865335c4e6542d0ead757e6,0f5f22a9f83b78f83611629a0ff21120
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10167,7 +10167,7 @@ geoSampleAccession GSM733702
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=897fdac34c5a51b28a8591fbf0654787,bai=06204832411b358c25fe4e43fbffacbe
+md5sum 897fdac34c5a51b28a8591fbf0654787,06204832411b358c25fe4e43fbffacbe
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10299,7 +10299,7 @@ geoSampleAccession GSM733761
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=747be1f83f7aa27782834a7b83e71f3f,bai=6daf8a650325c99e9dee078ef8ae8846
+md5sum 747be1f83f7aa27782834a7b83e71f3f,6daf8a650325c99e9dee078ef8ae8846
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10326,7 +10326,7 @@ geoSampleAccession GSM733761
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=249ee4b91bfb7145c4adb3f6953d8921,bai=d8c3981ee4c726d414041149c605c7c0
+md5sum 249ee4b91bfb7145c4adb3f6953d8921,d8c3981ee4c726d414041149c605c7c0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10458,7 +10458,7 @@ geoSampleAccession GSM733768
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=1d34f6bffadd465a7d2c0617dac9a9f8,bai=bdabe7f8b11747d06fe906a152267dc2
+md5sum 1d34f6bffadd465a7d2c0617dac9a9f8,bdabe7f8b11747d06fe906a152267dc2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10485,7 +10485,7 @@ geoSampleAccession GSM733768
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=872dc92d6351fe8eeb7e81176ea17a63,bai=9397926cd0f7cc8ed300136e98b40def
+md5sum 872dc92d6351fe8eeb7e81176ea17a63,9397926cd0f7cc8ed300136e98b40def
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10617,7 +10617,7 @@ geoSampleAccession GSM733637
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=a15f3318f6307143bde8f5c1c6b75e61,bai=62849d879fd67280f8c8183f67d1d605
+md5sum a15f3318f6307143bde8f5c1c6b75e61,62849d879fd67280f8c8183f67d1d605
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10644,7 +10644,7 @@ geoSampleAccession GSM733637
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=bd461e0ed6241b3e257e8163b7e91e9b,bai=77d9d95cf203ac05221761f2a1e2ce62
+md5sum bd461e0ed6241b3e257e8163b7e91e9b,77d9d95cf203ac05221761f2a1e2ce62
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10776,7 +10776,7 @@ geoSampleAccession GSM733741
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=2eea1dde9b1a042c5f442f93ea0e847f,bai=537ed8e370e41faf8b91ae27463b4d06
+md5sum 2eea1dde9b1a042c5f442f93ea0e847f,537ed8e370e41faf8b91ae27463b4d06
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10803,7 +10803,7 @@ geoSampleAccession GSM733741
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=c1f2c0a7f22d1e68a745945e27455cf0,bai=92093df068d74bfc2cc5e73bbf226591
+md5sum c1f2c0a7f22d1e68a745945e27455cf0,92093df068d74bfc2cc5e73bbf226591
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10935,7 +10935,7 @@ geoSampleAccession GSM733775
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=49a124f75140f132f5fb351b912e0603,bai=5fdfd3fbc25f8ae143fae9af1423acfc
+md5sum 49a124f75140f132f5fb351b912e0603,5fdfd3fbc25f8ae143fae9af1423acfc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10962,7 +10962,7 @@ geoSampleAccession GSM733775
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=85760dc072b3aa3ddd5756c1ce971384,bai=c07bae64bd0f569f7badb3190f9d30ac
+md5sum 85760dc072b3aa3ddd5756c1ce971384,c07bae64bd0f569f7badb3190f9d30ac
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11094,7 +11094,7 @@ geoSampleAccession GSM733730
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=0e8bf31b337e0473289f967695569a24,bai=3d072a5e898f00dc423f6f6c8fa19a76
+md5sum 0e8bf31b337e0473289f967695569a24,3d072a5e898f00dc423f6f6c8fa19a76
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11121,7 +11121,7 @@ geoSampleAccession GSM733730
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=5689c8f67c2e08cc91756b2333f8ad56,bai=c7bed2783b8b89ce876e1bc45ba78b75
+md5sum 5689c8f67c2e08cc91756b2333f8ad56,c7bed2783b8b89ce876e1bc45ba78b75
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11253,7 +11253,7 @@ geoSampleAccession GSM733676
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=8a6401f2fbb0b9135d6234cb563c9030,bai=231f1d9cf7e54daf85a94f343502d94c
+md5sum 8a6401f2fbb0b9135d6234cb563c9030,231f1d9cf7e54daf85a94f343502d94c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11280,7 +11280,7 @@ geoSampleAccession GSM733676
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=357aadc3f70f22842bbfc5c0faec6734,bai=4df55228234c13d3b4ee49b0e1629306
+md5sum 357aadc3f70f22842bbfc5c0faec6734,4df55228234c13d3b4ee49b0e1629306
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11412,7 +11412,7 @@ geoSampleAccession GSM733648
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=868f22f3a31ffa77ce9165f17a8d8dc7,bai=e1fb4ff21d99b352af584cea124bcdb8
+md5sum 868f22f3a31ffa77ce9165f17a8d8dc7,e1fb4ff21d99b352af584cea124bcdb8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11439,7 +11439,7 @@ geoSampleAccession GSM733648
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=b797d0bf051a4af7d028073424e15f78,bai=7d821d75bab8a242e55ea05d1f70e945
+md5sum b797d0bf051a4af7d028073424e15f78,7d821d75bab8a242e55ea05d1f70e945
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11544,7 +11544,7 @@ geoSampleAccession GSM733783
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=841b09258565ecd1debda504ee0e63a3,bai=6ca5839e71f5639db048c6f1c5f0562e
+md5sum 841b09258565ecd1debda504ee0e63a3,6ca5839e71f5639db048c6f1c5f0562e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11571,7 +11571,7 @@ geoSampleAccession GSM733783
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=edb675957cb2734593dae744a707f0f2,bai=15b5f63c3637961f07ae7bde5d20a5f2
+md5sum edb675957cb2734593dae744a707f0f2,15b5f63c3637961f07ae7bde5d20a5f2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11703,7 +11703,7 @@ geoSampleAccession GSM733746
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=ad727c1fdd9777c6fe026bc78cc4dcfe,bai=556d83313535df10c20f3d8abea92883
+md5sum ad727c1fdd9777c6fe026bc78cc4dcfe,556d83313535df10c20f3d8abea92883
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11730,7 +11730,7 @@ geoSampleAccession GSM733746
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=4ed7b57da182698befcb4e901d2f1bf3,bai=d28073c834b5cfab0fd2174de44539db
+md5sum 4ed7b57da182698befcb4e901d2f1bf3,d28073c834b5cfab0fd2174de44539db
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11862,7 +11862,7 @@ geoSampleAccession GSM733666
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d02ac087af813fe7dde7730ceae832c9,bai=68d623b0852b4b3792753a106543dd46
+md5sum d02ac087af813fe7dde7730ceae832c9,68d623b0852b4b3792753a106543dd46
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11889,7 +11889,7 @@ geoSampleAccession GSM733666
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=830d30669fdcac5afbed04054dd81b24,bai=60a6e80e72846735dafe7f37621abfde
+md5sum 830d30669fdcac5afbed04054dd81b24,60a6e80e72846735dafe7f37621abfde
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12021,7 +12021,7 @@ geoSampleAccession GSM733717
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=8a6b891d96ceed30d77af0cb00468b55,bai=b530b7fe335cd12cd5add4ea263e4273
+md5sum 8a6b891d96ceed30d77af0cb00468b55,b530b7fe335cd12cd5add4ea263e4273
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12048,7 +12048,7 @@ geoSampleAccession GSM733717
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=a9196b3e1f6777b69b140aebe0601497,bai=b11d85e5a4cc7f99ef2660a2c871c6c7
+md5sum a9196b3e1f6777b69b140aebe0601497,b11d85e5a4cc7f99ef2660a2c871c6c7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12180,7 +12180,7 @@ geoSampleAccession GSM733661
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=fac60a7058d21937fc33d051e95af615,bai=4feecdd308035fe5c650f64c4c321c14
+md5sum fac60a7058d21937fc33d051e95af615,4feecdd308035fe5c650f64c4c321c14
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12207,7 +12207,7 @@ geoSampleAccession GSM733661
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=eb392454c764ef54b874d7f298c9f763,bai=f56b1236589491f58fe65f5636817ef3
+md5sum eb392454c764ef54b874d7f298c9f763,f56b1236589491f58fe65f5636817ef3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12339,7 +12339,7 @@ geoSampleAccession GSM733700
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=bf034702f20b1cddedf2388cd26ad60a,bai=2f390c1a9bf46d41b1bc80dd9e1443aa
+md5sum bf034702f20b1cddedf2388cd26ad60a,2f390c1a9bf46d41b1bc80dd9e1443aa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12366,7 +12366,7 @@ geoSampleAccession GSM733700
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=2e2ce91509601828b13a9e0b2548e979,bai=fc9a4687031f52008df362781b70731a
+md5sum 2e2ce91509601828b13a9e0b2548e979,fc9a4687031f52008df362781b70731a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12498,7 +12498,7 @@ geoSampleAccession GSM733738
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=dfc9260648e5f2d786f02e3b8fc61bf5,bai=934f64f87ee14d64750b1b6241a05c50
+md5sum dfc9260648e5f2d786f02e3b8fc61bf5,934f64f87ee14d64750b1b6241a05c50
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12525,7 +12525,7 @@ geoSampleAccession GSM733738
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=f4cd6a883ff409a37bc1a294453fd1ae,bai=2f9dbdcfa5485ff8d60590b737a4336c
+md5sum f4cd6a883ff409a37bc1a294453fd1ae,2f9dbdcfa5485ff8d60590b737a4336c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12657,7 +12657,7 @@ geoSampleAccession GSM733727
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=4890662644a6aa0ab246d31272a55db5,bai=2c9f96a51050de4837bd7ff8db8ed903
+md5sum 4890662644a6aa0ab246d31272a55db5,2c9f96a51050de4837bd7ff8db8ed903
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12684,7 +12684,7 @@ geoSampleAccession GSM733727
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=8d76c07d86c81a130a76bb33c812c985,bai=67b94018cec048b4b8ca60ff1c2970d0
+md5sum 8d76c07d86c81a130a76bb33c812c985,67b94018cec048b4b8ca60ff1c2970d0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12816,7 +12816,7 @@ geoSampleAccession GSM733639
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=24fac1e95c83f804b16d0d73dd9c88dd,bai=c848d0bd6f0e8dad4725b52b835fcd56
+md5sum 24fac1e95c83f804b16d0d73dd9c88dd,c848d0bd6f0e8dad4725b52b835fcd56
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12843,7 +12843,7 @@ geoSampleAccession GSM733639
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=412a16a4fd93b394d95f792ae9ab43d2,bai=28ee9cb20b003d8956771659bf2dea45
+md5sum 412a16a4fd93b394d95f792ae9ab43d2,28ee9cb20b003d8956771659bf2dea45
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12975,7 +12975,7 @@ geoSampleAccession GSM733644
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=35cf9058e68c5fcc92d51df387fbc371,bai=b023ed24bcc91f0f2a71244a3eb1af72
+md5sum 35cf9058e68c5fcc92d51df387fbc371,b023ed24bcc91f0f2a71244a3eb1af72
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13002,7 +13002,7 @@ geoSampleAccession GSM733644
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=5da978048da6c37985b78e06d4b3abba,bai=f03f5faacbf26c62c0eeb662c0799667
+md5sum 5da978048da6c37985b78e06d4b3abba,f03f5faacbf26c62c0eeb662c0799667
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13134,7 +13134,7 @@ geoSampleAccession GSM733715
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=32f19c2cd5bf7648484d09a218eafc9f,bai=3e70edcd283d15c669fc825d21c363aa
+md5sum 32f19c2cd5bf7648484d09a218eafc9f,3e70edcd283d15c669fc825d21c363aa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13161,7 +13161,7 @@ geoSampleAccession GSM733715
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=ea135c3a1ec8c1e568e76202bf41dfb0,bai=aa9a95d69ba871e3654e0b74cae5aedb
+md5sum ea135c3a1ec8c1e568e76202bf41dfb0,aa9a95d69ba871e3654e0b74cae5aedb
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13188,7 +13188,7 @@ geoSampleAccession GSM733715
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0f25a46e74dea0065de85a33f81e6f8a,bai=5351e7b22125b2a4ae31521440e7702d
+md5sum 0f25a46e74dea0065de85a33f81e6f8a,5351e7b22125b2a4ae31521440e7702d
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -13319,7 +13319,7 @@ geoSampleAccession GSM733716
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=6f6eea2a6690bcf21e84f15b75ec72e7,bai=fdd9d0b0d7016c40088c0c962721ffa7
+md5sum 6f6eea2a6690bcf21e84f15b75ec72e7,fdd9d0b0d7016c40088c0c962721ffa7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13346,7 +13346,7 @@ geoSampleAccession GSM733716
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=98e4648ff91866f5b8e8373903469617,bai=c68d920c1a6dc44e9159c1ca1fdc475c
+md5sum 98e4648ff91866f5b8e8373903469617,c68d920c1a6dc44e9159c1ca1fdc475c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13373,7 +13373,7 @@ geoSampleAccession GSM733716
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=167cc1b230786ed74aa509ef6df3c992,bai=7413d5bd5f303d5d6bfd9c7d65bd14ef
+md5sum 167cc1b230786ed74aa509ef6df3c992,7413d5bd5f303d5d6bfd9c7d65bd14ef
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -13531,7 +13531,7 @@ geoSampleAccession GSM733691
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=f6f63ad2c8cadab849fe2d2344a509a3,bai=f9193f15cc3a793e5862d9526bd31cb6
+md5sum f6f63ad2c8cadab849fe2d2344a509a3,f9193f15cc3a793e5862d9526bd31cb6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13558,7 +13558,7 @@ geoSampleAccession GSM733691
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=8d276011141f6eb9716edd163514801f,bai=5b374cf7e3ec03a6301e495256b462ba
+md5sum 8d276011141f6eb9716edd163514801f,5b374cf7e3ec03a6301e495256b462ba
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13585,7 +13585,7 @@ geoSampleAccession GSM733691
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=86d4189ac211a3e7b747e8e887a03e56,bai=ff48d34d23863f95f71226fc008cbba1
+md5sum 86d4189ac211a3e7b747e8e887a03e56,ff48d34d23863f95f71226fc008cbba1
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -13743,7 +13743,7 @@ geoSampleAccession GSM733688
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=8d4b150b5a83c9eba83b94292c77431a,bai=179053a45b86635af05304bc7c5976c2
+md5sum 8d4b150b5a83c9eba83b94292c77431a,179053a45b86635af05304bc7c5976c2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13770,7 +13770,7 @@ geoSampleAccession GSM733688
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=2303e157fc3c3195b9143514886d1da1,bai=483e86e203d02994c9357ddd9af1e24e
+md5sum 2303e157fc3c3195b9143514886d1da1,483e86e203d02994c9357ddd9af1e24e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13902,7 +13902,7 @@ geoSampleAccession GSM733757
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=e4f19c5d8a3c2fdd6ab153d9b8db9723,bai=137573c41cfb7dc9a5e1cd0adf7dfea5
+md5sum e4f19c5d8a3c2fdd6ab153d9b8db9723,137573c41cfb7dc9a5e1cd0adf7dfea5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13929,7 +13929,7 @@ geoSampleAccession GSM733757
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=50619f14469e026afa5538e269dc4975,bai=54c3733411864e9d966e8a665d0e8c06
+md5sum 50619f14469e026afa5538e269dc4975,54c3733411864e9d966e8a665d0e8c06
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13956,7 +13956,7 @@ geoSampleAccession GSM733757
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=3c02ea5636921850262285023d2818ca,bai=cc745a9836161a828db0b588eb8d1a26
+md5sum 3c02ea5636921850262285023d2818ca,cc745a9836161a828db0b588eb8d1a26
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -14113,7 +14113,7 @@ geoSampleAccession GSM733690
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=8579e9bac9b285718a1a9111258b6c16,bai=6901cfaa632a502598fde5716dcc1b54
+md5sum 8579e9bac9b285718a1a9111258b6c16,6901cfaa632a502598fde5716dcc1b54
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14140,7 +14140,7 @@ geoSampleAccession GSM733690
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=dc62f9f268a9bbb5064c83afac02f511,bai=273895fd240cd19a2a95ad2627995356
+md5sum dc62f9f268a9bbb5064c83afac02f511,273895fd240cd19a2a95ad2627995356
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14167,7 +14167,7 @@ geoSampleAccession GSM733690
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=bb280c6df93903a5a686327124e40c12,bai=b37d2dfc67992f5befefb92a90faf9f5
+md5sum bb280c6df93903a5a686327124e40c12,b37d2dfc67992f5befefb92a90faf9f5
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -14325,7 +14325,7 @@ geoSampleAccession GSM733683
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=daf1daf854f752a343fbceaad78fe629,bai=503e3f9d99e292078c0084d2d518a130
+md5sum daf1daf854f752a343fbceaad78fe629,503e3f9d99e292078c0084d2d518a130
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14352,7 +14352,7 @@ geoSampleAccession GSM733683
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=d636f7311e09b389bafb2c048293101f,bai=5984921bc94cd691fac09e43a2b08ced
+md5sum d636f7311e09b389bafb2c048293101f,5984921bc94cd691fac09e43a2b08ced
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14484,7 +14484,7 @@ geoSampleAccession GSM733673
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=9681b6e5f9ed39c5f82678d416bb683f,bai=d2c87763251388a7746105082d8b7d07
+md5sum 9681b6e5f9ed39c5f82678d416bb683f,d2c87763251388a7746105082d8b7d07
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14511,7 +14511,7 @@ geoSampleAccession GSM733673
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=fa4d936288cbc21f108304cbdcfdfa0c,bai=6575a7b9ca9021e1b3f4ae3aecfb8fae
+md5sum fa4d936288cbc21f108304cbdcfdfa0c,6575a7b9ca9021e1b3f4ae3aecfb8fae
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14538,7 +14538,7 @@ geoSampleAccession GSM733673
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=0706a8d1f88b2342af07e0e047e5f9c8,bai=14ca8660e7792ee986e7b90b7b69f42d
+md5sum 0706a8d1f88b2342af07e0e047e5f9c8,14ca8660e7792ee986e7b90b7b69f42d
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -14696,7 +14696,7 @@ geoSampleAccession GSM733735
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=b41da612384f6c7cb14f6675120d9179,bai=11292a2339a424909364c172727c7338
+md5sum b41da612384f6c7cb14f6675120d9179,11292a2339a424909364c172727c7338
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14723,7 +14723,7 @@ geoSampleAccession GSM733735
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=8c27545dca8bf8e628b1961a03363dcc,bai=3bb58a9c7d8b62c06c02e308e519dcf3
+md5sum 8c27545dca8bf8e628b1961a03363dcc,3bb58a9c7d8b62c06c02e308e519dcf3
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14750,7 +14750,7 @@ geoSampleAccession GSM733735
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=a6abe23e3c2c82da978b7db47b953f9f,bai=9a123fe805832a43f70c81267c7768f3
+md5sum a6abe23e3c2c82da978b7db47b953f9f,9a123fe805832a43f70c81267c7768f3
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -14908,7 +14908,7 @@ geoSampleAccession GSM733703
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=65fac67152b7cda63e3c7b027dee4f0f,bai=e6280ba45fb7ee36ebfa2ca2b080f8fe
+md5sum 65fac67152b7cda63e3c7b027dee4f0f,e6280ba45fb7ee36ebfa2ca2b080f8fe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14935,7 +14935,7 @@ geoSampleAccession GSM733703
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=2706f8e0c9954307003d891e7cda19c5,bai=91970247cfb89c40339f301acb738475
+md5sum 2706f8e0c9954307003d891e7cda19c5,91970247cfb89c40339f301acb738475
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14962,7 +14962,7 @@ geoSampleAccession GSM733703
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=8a0c9cde133fa4515690fb1fd5432d40,bai=40a31fa45ca1ab11e0246c62f23684cd
+md5sum 8a0c9cde133fa4515690fb1fd5432d40,40a31fa45ca1ab11e0246c62f23684cd
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -15120,7 +15120,7 @@ geoSampleAccession GSM733640
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=d85c27ec41e6ed6177077e1f9511a388,bai=99e11cdac18098a6e3e063bcffb98b33
+md5sum d85c27ec41e6ed6177077e1f9511a388,99e11cdac18098a6e3e063bcffb98b33
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15147,7 +15147,7 @@ geoSampleAccession GSM733640
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=e93614c67b51458d7f7ac94f0665fe86,bai=a549ad6e7fcf7973dbf5824a1a6b22ce
+md5sum e93614c67b51458d7f7ac94f0665fe86,a549ad6e7fcf7973dbf5824a1a6b22ce
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15174,7 +15174,7 @@ geoSampleAccession GSM733640
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=8584486dfcb199df821ceb1f558cfd3d,bai=671748fa8d000e4cadb89286f9764f1a
+md5sum 8584486dfcb199df821ceb1f558cfd3d,671748fa8d000e4cadb89286f9764f1a
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -15332,7 +15332,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=b54acd646e027020fa9867c58af53400,bai=4913368fcf37eafd3066610dcd34f2ca
+md5sum b54acd646e027020fa9867c58af53400,4913368fcf37eafd3066610dcd34f2ca
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15359,7 +15359,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=4bf0b5a4855ccec331eaf0d0beb966eb,bai=e0def25d583179c8be6f37ac534b5fdc
+md5sum 4bf0b5a4855ccec331eaf0d0beb966eb,e0def25d583179c8be6f37ac534b5fdc
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15386,7 +15386,7 @@ geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=ee28e5187702d8254bb46bb36b0cc3f6,bai=cb5c9fcf871fc616be4640f54a5695a4
+md5sum ee28e5187702d8254bb46bb36b0cc3f6,cb5c9fcf871fc616be4640f54a5695a4
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -15544,7 +15544,7 @@ geoSampleAccession GSM733780
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=f03cbc4333e2bbc46172c86bc97bb4b8,bai=2da42957abf6635034ce5b08b7a19dab
+md5sum f03cbc4333e2bbc46172c86bc97bb4b8,2da42957abf6635034ce5b08b7a19dab
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15623,7 +15623,7 @@ geoSampleAccession GSM733719
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=cb5a5fc42a0d976476272e7062e6ba19,bai=18691cbf88e32a6c41e2a0b58402e2fd
+md5sum cb5a5fc42a0d976476272e7062e6ba19,18691cbf88e32a6c41e2a0b58402e2fd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15650,7 +15650,7 @@ geoSampleAccession GSM733719
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d611d261ac269a700cc6fc069af1ad6d,bai=eef7f798d14ac625fbc9e5eeed2c20a1
+md5sum d611d261ac269a700cc6fc069af1ad6d,eef7f798d14ac625fbc9e5eeed2c20a1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15779,7 +15779,7 @@ fileName wgEncodeBroadHistoneK562H2azStdAlnRep1.bam
 geoSampleAccession GSM733786
 grant Bernstein
 lab Broad
-md5sum bam=eb10c05d6c04efec7f3746ca80239ab2,bai=68040be986411e294dca02c1a4c41c37
+md5sum eb10c05d6c04efec7f3746ca80239ab2,68040be986411e294dca02c1a4c41c37
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15804,7 +15804,7 @@ fileName wgEncodeBroadHistoneK562H2azStdAlnRep2.bam
 geoSampleAccession GSM733786
 grant Bernstein
 lab Broad
-md5sum bam=b25d79c4de0ddec0f136065b7403070d,bai=700e0b0da5b72a73d31510e2b1df05fc
+md5sum b25d79c4de0ddec0f136065b7403070d,700e0b0da5b72a73d31510e2b1df05fc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15934,7 +15934,7 @@ geoSampleAccession GSM733656
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=13b1cd435e0f1719646d4311d036afbb,bai=db85b1296ecfa7153f7266b17713b00d
+md5sum 13b1cd435e0f1719646d4311d036afbb,db85b1296ecfa7153f7266b17713b00d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15961,7 +15961,7 @@ geoSampleAccession GSM733656
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=6f13ea930320f9a249e2c39fd9e45b40,bai=3fec90e8c5e6e702937de1cd9f94b420
+md5sum 6f13ea930320f9a249e2c39fd9e45b40,3fec90e8c5e6e702937de1cd9f94b420
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16092,7 +16092,7 @@ geoSampleAccession GSM733658
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=775e55d486d20632183c5d5e0a5f40b9,bai=435f04dc7699f3f3452f246af76eedd9
+md5sum 775e55d486d20632183c5d5e0a5f40b9,435f04dc7699f3f3452f246af76eedd9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16119,7 +16119,7 @@ geoSampleAccession GSM733658
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=167e3f8c499be273c0e585c456026678,bai=12cf95cf23b65390e3d2e42a8586687b
+md5sum 167e3f8c499be273c0e585c456026678,12cf95cf23b65390e3d2e42a8586687b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16251,7 +16251,7 @@ geoSampleAccession GSM733714
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=74f475184ed87a1b471c36ae0d0000de,bai=0a7c537bc5782f5cce80428e9a8bed63
+md5sum 74f475184ed87a1b471c36ae0d0000de,0a7c537bc5782f5cce80428e9a8bed63
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16278,7 +16278,7 @@ geoSampleAccession GSM733714
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=78772ccbb66d6056c4a68ae319d612b6,bai=3e3b27221c785854db2c6a714459405d
+md5sum 78772ccbb66d6056c4a68ae319d612b6,3e3b27221c785854db2c6a714459405d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16409,7 +16409,7 @@ geoSampleAccession GSM733692
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=7b9f8ccd15fea0bda867e042db2b6f5a,bai=fc375af78384013b0e68f065bfec5fb3
+md5sum 7b9f8ccd15fea0bda867e042db2b6f5a,fc375af78384013b0e68f065bfec5fb3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16436,7 +16436,7 @@ geoSampleAccession GSM733692
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=abe5c163690b729543bdaf028e468cd9,bai=d48d7438049014a1a0a2b665f8c33b9d
+md5sum abe5c163690b729543bdaf028e468cd9,d48d7438049014a1a0a2b665f8c33b9d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16567,7 +16567,7 @@ geoSampleAccession GSM733651
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=a5c32a6b6713b10ecc6f7931b45b60a6,bai=b607a249562092d4aba82166368694fa
+md5sum a5c32a6b6713b10ecc6f7931b45b60a6,b607a249562092d4aba82166368694fa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16594,7 +16594,7 @@ geoSampleAccession GSM733651
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=2412be32cb17a832103b3f030a66de8b,bai=3cb71fe22a68ed1c0c62fcd106aad547
+md5sum 2412be32cb17a832103b3f030a66de8b,3cb71fe22a68ed1c0c62fcd106aad547
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16725,7 +16725,7 @@ geoSampleAccession GSM733680
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=5cd9daebeb17823df3e774b9c99bc52a,bai=04e0bf84cc8a1d167412caf274fd614f
+md5sum 5cd9daebeb17823df3e774b9c99bc52a,04e0bf84cc8a1d167412caf274fd614f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16752,7 +16752,7 @@ geoSampleAccession GSM733680
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=bee30b71328ddf1eed45c665044b1d80,bai=9b6516e0d29336654f519817bcf6d54e
+md5sum bee30b71328ddf1eed45c665044b1d80,9b6516e0d29336654f519817bcf6d54e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16882,7 +16882,7 @@ fileName wgEncodeBroadHistoneK562H3k79me2StdAlnRep1.bam
 geoSampleAccession GSM733653
 grant Bernstein
 lab Broad
-md5sum bam=9bda7d488fb95aaa4553de87ea4427d2,bai=bd4cdd24d71e16274a54da3c8100882b
+md5sum 9bda7d488fb95aaa4553de87ea4427d2,bd4cdd24d71e16274a54da3c8100882b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16907,7 +16907,7 @@ fileName wgEncodeBroadHistoneK562H3k79me2StdAlnRep2.bam
 geoSampleAccession GSM733653
 grant Bernstein
 lab Broad
-md5sum bam=7c2e4fb9fb2275411becfb75e9cff1dc,bai=0293edf35843ccf8bea2a0e4b5a28e3b
+md5sum 7c2e4fb9fb2275411becfb75e9cff1dc,0293edf35843ccf8bea2a0e4b5a28e3b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17037,7 +17037,7 @@ geoSampleAccession GSM733778
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=37f8b5b37e23878257c970a7306eb37b,bai=49968cbae754c9fafad3c23592582893
+md5sum 37f8b5b37e23878257c970a7306eb37b,49968cbae754c9fafad3c23592582893
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17064,7 +17064,7 @@ geoSampleAccession GSM733778
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=92e31480eb7657ff5aaf58c62c1184c5,bai=e981b3f94edfb1eda151294c54e99646
+md5sum 92e31480eb7657ff5aaf58c62c1184c5,e981b3f94edfb1eda151294c54e99646
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17196,7 +17196,7 @@ geoSampleAccession GSM733777
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=34fb19bedf8994c3689f397023e5858d,bai=06e77a99614508e382342d63ad0ebdb2
+md5sum 34fb19bedf8994c3689f397023e5858d,06e77a99614508e382342d63ad0ebdb2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17300,7 +17300,7 @@ fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep1.bam
 geoSampleAccession GSM733776
 grant Bernstein
 lab Broad
-md5sum bam=61c4309775ab1f82da328d5115e69a7d,bai=7ca2bdd946a3c351982affebe8a36f27
+md5sum 61c4309775ab1f82da328d5115e69a7d,7ca2bdd946a3c351982affebe8a36f27
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17325,7 +17325,7 @@ fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep2.bam
 geoSampleAccession GSM733776
 grant Bernstein
 lab Broad
-md5sum bam=28aca7a0b0cfd582247c225e3f4cbf61,bai=1a20b4b3ec0a673e64b3f57ef8af0fa9
+md5sum 28aca7a0b0cfd582247c225e3f4cbf61,1a20b4b3ec0a673e64b3f57ef8af0fa9
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17455,7 +17455,7 @@ geoSampleAccession GSM733675
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=c30c7a88b426afe31af852ca4d0e9e48,bai=99d2c5b044a96700ef50205f928a1280
+md5sum c30c7a88b426afe31af852ca4d0e9e48,99d2c5b044a96700ef50205f928a1280
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17482,7 +17482,7 @@ geoSampleAccession GSM733675
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d82ea70de606abe19a502fdef7b1e81d,bai=55095af08fd402b7fac8d5871c024e87
+md5sum d82ea70de606abe19a502fdef7b1e81d,55095af08fd402b7fac8d5871c024e87
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17742,7 +17742,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=fc0222786ecc2349bbdfd9ed9fb304af,bai=fb99fe5425a2c7ba2f497887cbf4c3aa
+md5sum fc0222786ecc2349bbdfd9ed9fb304af,fb99fe5425a2c7ba2f497887cbf4c3aa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17769,7 +17769,7 @@ geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=bb060e3e3cec69779ea046eab3e1ab3f,bai=6ea1b750bf738e79fb19d4b45d7edda6
+md5sum bb060e3e3cec69779ea046eab3e1ab3f,6ea1b750bf738e79fb19d4b45d7edda6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17900,7 +17900,7 @@ geoSampleAccession GSM733678
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=ad7ffabc42e8da918732649098e9ec82,bai=ec579f46d8a554635814eef7d2295f82
+md5sum ad7ffabc42e8da918732649098e9ec82,ec579f46d8a554635814eef7d2295f82
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17927,7 +17927,7 @@ geoSampleAccession GSM733678
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=3f067fe5f12d8a535b53958f726725bf,bai=735a7e981a6e8e8915272b05318b0354
+md5sum 3f067fe5f12d8a535b53958f726725bf,735a7e981a6e8e8915272b05318b0354
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18032,7 +18032,7 @@ geoSampleAccession GSM733765
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=9af696e33786c7329f4e9d60c58d91bf,bai=19c352288cdf4b49ed2fd0e5935da8ed
+md5sum 9af696e33786c7329f4e9d60c58d91bf,19c352288cdf4b49ed2fd0e5935da8ed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18059,7 +18059,7 @@ geoSampleAccession GSM733765
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=b988108ba72840108da6f78d6aed6aa5,bai=911c85b8c87e4750f82ead2eddc21e21
+md5sum b988108ba72840108da6f78d6aed6aa5,911c85b8c87e4750f82ead2eddc21e21
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18191,7 +18191,7 @@ geoSampleAccession GSM733763
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=fa595d17d01f4de8e3bd39ea1aae457b,bai=8850901935e97c7778e09fa2efda9a11
+md5sum fa595d17d01f4de8e3bd39ea1aae457b,8850901935e97c7778e09fa2efda9a11
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18218,7 +18218,7 @@ geoSampleAccession GSM733763
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=d990b579829d1d01ce432a80f1f6898a,bai=0363d2c48f7097881eea3ba0b404c82d
+md5sum d990b579829d1d01ce432a80f1f6898a,0363d2c48f7097881eea3ba0b404c82d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18350,7 +18350,7 @@ geoSampleAccession GSM733729
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=f8c1a47cba6c726ed1fad3f07eb2ae2a,bai=6b270628436e6ae87c943a69fb6b00cd
+md5sum f8c1a47cba6c726ed1fad3f07eb2ae2a,6b270628436e6ae87c943a69fb6b00cd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18377,7 +18377,7 @@ geoSampleAccession GSM733729
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=6e98aafb040cb4df8008833c1ac2f1c1,bai=374f239c3a74d88c743250515b413a88
+md5sum 6e98aafb040cb4df8008833c1ac2f1c1,374f239c3a74d88c743250515b413a88
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18509,7 +18509,7 @@ geoSampleAccession GSM733751
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0b63d8f330c3d6eb9f99504cfc0a6eb2,bai=fae89299a711367e27012040af2ebeb4
+md5sum 0b63d8f330c3d6eb9f99504cfc0a6eb2,fae89299a711367e27012040af2ebeb4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18536,7 +18536,7 @@ geoSampleAccession GSM733751
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=f8cd70d3342c7072d0735a25d4655e48,bai=29eb15f1ea91a6cb91f4557f1446d6a6
+md5sum f8cd70d3342c7072d0735a25d4655e48,29eb15f1ea91a6cb91f4557f1446d6a6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18670,7 +18670,7 @@ geoSampleAccession GSM733710
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=a233923154d7f870523ca1251ac94607,bai=2b352e7d9ca6d62cdab4125499264ca0
+md5sum a233923154d7f870523ca1251ac94607,2b352e7d9ca6d62cdab4125499264ca0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18697,7 +18697,7 @@ geoSampleAccession GSM733710
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=4e2e710c3db29ec7b46e57067fbe3bf4,bai=6f2c27781de7fcc62750729c9e2cb7e1
+md5sum 4e2e710c3db29ec7b46e57067fbe3bf4,6f2c27781de7fcc62750729c9e2cb7e1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18829,7 +18829,7 @@ geoSampleAccession GSM733747
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=03eb1d9a66f543d606076797f39fe23b,bai=b7567b196458186214fb715f429f5ed2
+md5sum 03eb1d9a66f543d606076797f39fe23b,b7567b196458186214fb715f429f5ed2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18856,7 +18856,7 @@ geoSampleAccession GSM733747
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=30e44784b6a58d08dcf9da6c73d78df1,bai=9d04d065aa4954100a409a9df7b8cca8
+md5sum 30e44784b6a58d08dcf9da6c73d78df1,9d04d065aa4954100a409a9df7b8cca8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18986,7 +18986,7 @@ fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam
 geoSampleAccession GSM733750
 grant Bernstein
 lab Broad
-md5sum bam=4183abc98bc327e7a8ab7fe78c0df906,bai=74f4eda8871e935a6f25297d2eb51504
+md5sum 4183abc98bc327e7a8ab7fe78c0df906,74f4eda8871e935a6f25297d2eb51504
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19011,7 +19011,7 @@ fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam
 geoSampleAccession GSM733750
 grant Bernstein
 lab Broad
-md5sum bam=b52e99ffa157b5048fb7e5f6530bc9a6,bai=153e21c975b1cae7c2e9075bbe9fcfff
+md5sum b52e99ffa157b5048fb7e5f6530bc9a6,153e21c975b1cae7c2e9075bbe9fcfff
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19113,7 +19113,7 @@ fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep1.bam
 geoSampleAccession GSM733744
 grant Bernstein
 lab Broad
-md5sum bam=9a9aadb920b4784b8b8a23d2746ca93c,bai=ac6b12102c88b1b34908303081a417ed
+md5sum 9a9aadb920b4784b8b8a23d2746ca93c,ac6b12102c88b1b34908303081a417ed
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19138,7 +19138,7 @@ fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep2.bam
 geoSampleAccession GSM733744
 grant Bernstein
 lab Broad
-md5sum bam=7cddb176bdaa26ab0e5d7af50da4e468,bai=561670ddddf6f2437b376e140fb1dfae
+md5sum 7cddb176bdaa26ab0e5d7af50da4e468,561670ddddf6f2437b376e140fb1dfae
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19266,7 +19266,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep1.bam
 geoSampleAccession GSM733662
 grant Bernstein
 lab Broad
-md5sum bam=413cff746455ea6bc327db15cba2529f,bai=7f98c82a58cf23b949332f76aa6d12ee
+md5sum 413cff746455ea6bc327db15cba2529f,7f98c82a58cf23b949332f76aa6d12ee
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19291,7 +19291,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep2.bam
 geoSampleAccession GSM733662
 grant Bernstein
 lab Broad
-md5sum bam=a836d3a9ec23ab54cb6e1e4e1333277e,bai=bcf69081ea68a4e3ebeae7cb6494cb7a
+md5sum a836d3a9ec23ab54cb6e1e4e1333277e,bcf69081ea68a4e3ebeae7cb6494cb7a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19419,7 +19419,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep1.bam
 geoSampleAccession GSM733745
 grant Bernstein
 lab Broad
-md5sum bam=02e2b91d429b3c8b46f6b08e145dbb66,bai=6e3e6e5c33d836961a8eb4e4a6f7085e
+md5sum 02e2b91d429b3c8b46f6b08e145dbb66,6e3e6e5c33d836961a8eb4e4a6f7085e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19444,7 +19444,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep2.bam
 geoSampleAccession GSM733745
 grant Bernstein
 lab Broad
-md5sum bam=f45fca23df69feb78199657d575eaeea,bai=50b896e9dc851ed996fd90ffba389a48
+md5sum f45fca23df69feb78199657d575eaeea,50b896e9dc851ed996fd90ffba389a48
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19572,7 +19572,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep1.bam
 geoSampleAccession GSM733733
 grant Bernstein
 lab Broad
-md5sum bam=bdb2fa18b9e51c7f2aed116b6cccfd40,bai=9c86156c2f7b3c615ce3c4d53967c02d
+md5sum bdb2fa18b9e51c7f2aed116b6cccfd40,9c86156c2f7b3c615ce3c4d53967c02d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19597,7 +19597,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep2.bam
 geoSampleAccession GSM733733
 grant Bernstein
 lab Broad
-md5sum bam=631752e2551b4e3b2f3d3e2c692c5cb3,bai=55199e79d2ba452dc0f2dc5148df8aed
+md5sum 631752e2551b4e3b2f3d3e2c692c5cb3,55199e79d2ba452dc0f2dc5148df8aed
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19725,7 +19725,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep1.bam
 geoSampleAccession GSM733753
 grant Bernstein
 lab Broad
-md5sum bam=d2c0d399a674747ffda93debf85d7f3e,bai=cd3af9897d37c14cc2f0a5ae1b4acac6
+md5sum d2c0d399a674747ffda93debf85d7f3e,cd3af9897d37c14cc2f0a5ae1b4acac6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19750,7 +19750,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep2.bam
 geoSampleAccession GSM733753
 grant Bernstein
 lab Broad
-md5sum bam=cbd94899f632877397aff6a4d841991f,bai=3014c67b1224ec90ddef6949dad92b0a
+md5sum cbd94899f632877397aff6a4d841991f,3014c67b1224ec90ddef6949dad92b0a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19878,7 +19878,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep1.bam
 geoSampleAccession GSM733650
 grant Bernstein
 lab Broad
-md5sum bam=33343971042faf2a59cf07a4b0ee450d,bai=49ac601c7e1ef5e35b202d49262942f7
+md5sum 33343971042faf2a59cf07a4b0ee450d,49ac601c7e1ef5e35b202d49262942f7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19903,7 +19903,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep2.bam
 geoSampleAccession GSM733650
 grant Bernstein
 lab Broad
-md5sum bam=e64809bdfc1f7f746f3995f9bc1d1fa0,bai=5fca7fae590cbc275d473bbf26f60396
+md5sum e64809bdfc1f7f746f3995f9bc1d1fa0,5fca7fae590cbc275d473bbf26f60396
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20031,7 +20031,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep1.bam
 geoSampleAccession GSM733709
 grant Bernstein
 lab Broad
-md5sum bam=b0b812414078ef4d0cf982314aaaab04,bai=7738945442de6fc1edfd2a77eaa08c82
+md5sum b0b812414078ef4d0cf982314aaaab04,7738945442de6fc1edfd2a77eaa08c82
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20056,7 +20056,7 @@ fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep2.bam
 geoSampleAccession GSM733709
 grant Bernstein
 lab Broad
-md5sum bam=008bc9f30488ebc4616717944d2a7098,bai=7e18d9300aaf152046f7edb3c5f07e65
+md5sum 008bc9f30488ebc4616717944d2a7098,7e18d9300aaf152046f7edb3c5f07e65
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20186,7 +20186,7 @@ geoSampleAccession GSM733740
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=ccf2c3a2329158a8992043aca96bd863,bai=40c0b5280cbd50b6845be4061a466429
+md5sum ccf2c3a2329158a8992043aca96bd863,40c0b5280cbd50b6845be4061a466429
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -20213,7 +20213,7 @@ geoSampleAccession GSM733740
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=abfce110cda82e966c43407ed7208fa4,bai=2b6ded8e74f107150a90275a08867ad0
+md5sum abfce110cda82e966c43407ed7208fa4,2b6ded8e74f107150a90275a08867ad0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -20318,7 +20318,7 @@ geoSampleAccession GSM733636
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=440bbb2791c691183123dd88b57941cf,bai=365d310efb0e1cc5a277dd39dc0a5f56
+md5sum 440bbb2791c691183123dd88b57941cf,365d310efb0e1cc5a277dd39dc0a5f56
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -20345,7 +20345,7 @@ geoSampleAccession GSM733636
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=78891c7bcf5a530073ebe1c78cdce53c,bai=5e361c4ba1b8abf6935a2d349f0f4eb0
+md5sum 78891c7bcf5a530073ebe1c78cdce53c,5e361c4ba1b8abf6935a2d349f0f4eb0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -20372,7 +20372,7 @@ geoSampleAccession GSM733636
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=7eaa3c92588a99ec424b8c620534be8e,bai=066b2f16f32dd8361713b1bebfb46bdb
+md5sum 7eaa3c92588a99ec424b8c620534be8e,066b2f16f32dd8361713b1bebfb46bdb
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -20530,7 +20530,7 @@ geoSampleAccession GSM733674
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=6bb5cfdf0bda3643a38278b8bb3b37d7,bai=c0b9dd6526336abb22d86cf4efc06c17
+md5sum 6bb5cfdf0bda3643a38278b8bb3b37d7,c0b9dd6526336abb22d86cf4efc06c17
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -20557,7 +20557,7 @@ geoSampleAccession GSM733674
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=38dfb5621c581eadf845668ee2513ae8,bai=ae6d6f0183eb34b96620a2728fadaaf7
+md5sum 38dfb5621c581eadf845668ee2513ae8,ae6d6f0183eb34b96620a2728fadaaf7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -20584,7 +20584,7 @@ geoSampleAccession GSM733674
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0941e2af2ccbb95f25f86ff3c3b99616,bai=6aa9cd75765d389600a1374f3883f943
+md5sum 0941e2af2ccbb95f25f86ff3c3b99616,6aa9cd75765d389600a1374f3883f943
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -20742,7 +20742,7 @@ geoSampleAccession GSM733701
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=43e9b1defd429845f4008a5a3d1389cd,bai=8c9f070004dd70a74b6b37c26a17fffe
+md5sum 43e9b1defd429845f4008a5a3d1389cd,8c9f070004dd70a74b6b37c26a17fffe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -20769,7 +20769,7 @@ geoSampleAccession GSM733701
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=214ae3fc0d27030c5984d41cc4658fd5,bai=fe391ce6a94c54d885229c5a6fa978d8
+md5sum 214ae3fc0d27030c5984d41cc4658fd5,fe391ce6a94c54d885229c5a6fa978d8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -20796,7 +20796,7 @@ geoSampleAccession GSM733701
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=ea6ebaf4499b07035f772594901c5d19,bai=b5cfec2634ac57bf5fb91cb0e0e0fcfd
+md5sum ea6ebaf4499b07035f772594901c5d19,b5cfec2634ac57bf5fb91cb0e0e0fcfd
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -20954,7 +20954,7 @@ geoSampleAccession GSM733726
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=9d490fd376f7c3313dc622e6236f0a1c,bai=b0425878dd6eb6ce776de0725d0f666a
+md5sum 9d490fd376f7c3313dc622e6236f0a1c,b0425878dd6eb6ce776de0725d0f666a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -20981,7 +20981,7 @@ geoSampleAccession GSM733726
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=006262a09bc1856b919044826f0630f2,bai=00dd8a10954a37ba59b4042e870c9241
+md5sum 006262a09bc1856b919044826f0630f2,00dd8a10954a37ba59b4042e870c9241
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21008,7 +21008,7 @@ geoSampleAccession GSM733726
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=c20e3285b36c2d4772c3c9ecf2fa089c,bai=06d442fd9bb03cecd6a30a0552a47165
+md5sum c20e3285b36c2d4772c3c9ecf2fa089c,06d442fd9bb03cecd6a30a0552a47165
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -21166,7 +21166,7 @@ geoSampleAccession GSM733698
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=d1444b30fc3df4193ba94d3cab9f43a8,bai=9b781afe8592790a09dab7c2c1d3ddd2
+md5sum d1444b30fc3df4193ba94d3cab9f43a8,9b781afe8592790a09dab7c2c1d3ddd2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21193,7 +21193,7 @@ geoSampleAccession GSM733698
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=85626b19ad913707d60513f81f4af929,bai=0e698cc920f5fcd278b2b15fcbe0a1d3
+md5sum 85626b19ad913707d60513f81f4af929,0e698cc920f5fcd278b2b15fcbe0a1d3
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21220,7 +21220,7 @@ geoSampleAccession GSM733698
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d9983f98678f87bb80ac37345e3e2f50,bai=034c95b6b2bcac32239e0b47a3895f8c
+md5sum d9983f98678f87bb80ac37345e3e2f50,034c95b6b2bcac32239e0b47a3895f8c
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -21378,7 +21378,7 @@ geoSampleAccession GSM733686
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=71ff80da8af71060541517257b3c2b9c,bai=0efbfa16b44088955131a43bd57eb9bd
+md5sum 71ff80da8af71060541517257b3c2b9c,0efbfa16b44088955131a43bd57eb9bd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21405,7 +21405,7 @@ geoSampleAccession GSM733686
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=c0ef0fdf5d3432fe3c916bfc42bcf755,bai=0cbcb07910b947034366963382df4d0c
+md5sum c0ef0fdf5d3432fe3c916bfc42bcf755,0cbcb07910b947034366963382df4d0c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21432,7 +21432,7 @@ geoSampleAccession GSM733686
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=d42e836334ea7faf51f7cb05cfc991ff,bai=41d6ad2f3a26504247d69f474e4314d3
+md5sum d42e836334ea7faf51f7cb05cfc991ff,41d6ad2f3a26504247d69f474e4314d3
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -21590,7 +21590,7 @@ geoSampleAccession GSM733720
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=0c0bd97aae3a89a8d9892337755e63d9,bai=5d108391f76c7c1dfb581c5b7fb21954
+md5sum 0c0bd97aae3a89a8d9892337755e63d9,5d108391f76c7c1dfb581c5b7fb21954
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21617,7 +21617,7 @@ geoSampleAccession GSM733720
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=285e74b879f6b9cbf304d328e8708f8b,bai=f37df006b27091f17d3b3d1c687c47cc
+md5sum 285e74b879f6b9cbf304d328e8708f8b,f37df006b27091f17d3b3d1c687c47cc
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21644,7 +21644,7 @@ geoSampleAccession GSM733720
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0157997a2374ebe04ef87bf42f02359f,bai=eb00d3a7f4788b5a0d8ae09358229380
+md5sum 0157997a2374ebe04ef87bf42f02359f,eb00d3a7f4788b5a0d8ae09358229380
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -21802,7 +21802,7 @@ geoSampleAccession GSM733665
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=4335990bf276e65278e14dfcd643dee8,bai=c6ba3223d44251d923a15a131212182d
+md5sum 4335990bf276e65278e14dfcd643dee8,c6ba3223d44251d923a15a131212182d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21829,7 +21829,7 @@ geoSampleAccession GSM733665
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=38d10a31458b2e883c7a7aec15ecbe08,bai=0c35ad1bbcf4439d2d1a57beea30f4d2
+md5sum 38d10a31458b2e883c7a7aec15ecbe08,0c35ad1bbcf4439d2d1a57beea30f4d2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21856,7 +21856,7 @@ geoSampleAccession GSM733665
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=a2c75ab3cc7dd11e7796f350035e5ca0,bai=b7fd133ece6d514b93c561b9c3b63b50
+md5sum a2c75ab3cc7dd11e7796f350035e5ca0,b7fd133ece6d514b93c561b9c3b63b50
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -22014,7 +22014,7 @@ geoSampleAccession GSM733655
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=c7f6afdf54b7a7dee9f0e771890db53e,bai=8000dbbdf8bc0a5e3f9bdf49a795543e
+md5sum c7f6afdf54b7a7dee9f0e771890db53e,8000dbbdf8bc0a5e3f9bdf49a795543e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22041,7 +22041,7 @@ geoSampleAccession GSM733655
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=7f64103dd262e15093c8aef7434654b9,bai=35252f9146005abfd9fc4d9187af0af1
+md5sum 7f64103dd262e15093c8aef7434654b9,35252f9146005abfd9fc4d9187af0af1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -22068,7 +22068,7 @@ geoSampleAccession GSM733655
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=7d3c2e216bbb7743d961153c833236da,bai=4eb099682ead0a54d5c8cd72a5f27480
+md5sum 7d3c2e216bbb7743d961153c833236da,4eb099682ead0a54d5c8cd72a5f27480
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -22226,7 +22226,7 @@ geoSampleAccession GSM733728
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=43ffd19e20c0e5e44b0c9121c2116b4d,bai=c22bbeb2be0df7cba951fa4baee61606
+md5sum 43ffd19e20c0e5e44b0c9121c2116b4d,c22bbeb2be0df7cba951fa4baee61606
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22253,7 +22253,7 @@ geoSampleAccession GSM733728
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=01fac229d903f5ad7596a3c9a81c597d,bai=3a725f6c8a8805a1abd06407349157b0
+md5sum 01fac229d903f5ad7596a3c9a81c597d,3a725f6c8a8805a1abd06407349157b0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -22280,7 +22280,7 @@ geoSampleAccession GSM733728
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=bb3a0e4310af4b132c4acf5e37da5bfa,bai=fdd3f7f0fa46716378588ebcb7d081d4
+md5sum bb3a0e4310af4b132c4acf5e37da5bfa,fdd3f7f0fa46716378588ebcb7d081d4
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -22438,7 +22438,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=8d8f9c2a8fbae12c6a50e32d0c47a577,bai=75928c11b910256bc037cdfdf26d4568
+md5sum 8d8f9c2a8fbae12c6a50e32d0c47a577,75928c11b910256bc037cdfdf26d4568
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22465,7 +22465,7 @@ geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=82e92d8ef7e66d4db6aa28cbff7478ce,bai=cce669c9b082ba378a75fb44295d8408
+md5sum 82e92d8ef7e66d4db6aa28cbff7478ce,cce669c9b082ba378a75fb44295d8408
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -22597,7 +22597,7 @@ geoSampleAccession GSM733731
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=e9e18f955050bb23f9b2669c8af1ffd8,bai=62341523553ea2840aaa957f03b6999f
+md5sum e9e18f955050bb23f9b2669c8af1ffd8,62341523553ea2840aaa957f03b6999f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22624,7 +22624,7 @@ geoSampleAccession GSM733731
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0f5fc4384e462861f1d954fa465156ef,bai=3ad2c18868c03077c757b54996e7fb65
+md5sum 0f5fc4384e462861f1d954fa465156ef,3ad2c18868c03077c757b54996e7fb65
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -22729,7 +22729,7 @@ geoSampleAccession GSM733695
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=e63d700226ad6113d709aa27b4c09b67,bai=b7d03fbe9863dbf2b618ced40083a82c
+md5sum e63d700226ad6113d709aa27b4c09b67,b7d03fbe9863dbf2b618ced40083a82c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22756,7 +22756,7 @@ geoSampleAccession GSM733695
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=563f19abee2b870764d387010fc6004d,bai=a71fb6c98caea23580ea7172613e3a43
+md5sum 563f19abee2b870764d387010fc6004d,a71fb6c98caea23580ea7172613e3a43
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -22888,7 +22888,7 @@ geoSampleAccession GSM733646
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=e77126efeb04b18f1f40e66cb9a3b9b9,bai=964b6823a9674dc5ebe794aeab475963
+md5sum e77126efeb04b18f1f40e66cb9a3b9b9,964b6823a9674dc5ebe794aeab475963
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22915,7 +22915,7 @@ geoSampleAccession GSM733646
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=ae4157fb722b6ea5c7a308367528f6b1,bai=e27fc088e0baa4ce62930f644c3d945c
+md5sum ae4157fb722b6ea5c7a308367528f6b1,e27fc088e0baa4ce62930f644c3d945c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23047,7 +23047,7 @@ geoSampleAccession GSM733764
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=6b98716df88b20e05f4c13c1c0d7b5a4,bai=a899e42b88f589f997e229b36a629da9
+md5sum 6b98716df88b20e05f4c13c1c0d7b5a4,a899e42b88f589f997e229b36a629da9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23074,7 +23074,7 @@ geoSampleAccession GSM733764
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=9a4b806a61b7830539654256adf1174b,bai=76e1169765c808a2d96fc407a5c3fd7d
+md5sum 9a4b806a61b7830539654256adf1174b,76e1169765c808a2d96fc407a5c3fd7d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23206,7 +23206,7 @@ geoSampleAccession GSM733699
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=808e519c4ccaeafae6643876b77ffdd5,bai=dd30347974821c373d1a0044274c4492
+md5sum 808e519c4ccaeafae6643876b77ffdd5,dd30347974821c373d1a0044274c4492
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23233,7 +23233,7 @@ geoSampleAccession GSM733699
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=0f5d68cf8f9dfab3bb3ead91ae1a249d,bai=3a087ab372faa167d84da3a39077ba11
+md5sum 0f5d68cf8f9dfab3bb3ead91ae1a249d,3a087ab372faa167d84da3a39077ba11
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23365,7 +23365,7 @@ geoSampleAccession GSM733649
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=486e75dcd6626268507fe08d575352ab,bai=8acb02c001941da156cd0b1a6fe080b5
+md5sum 486e75dcd6626268507fe08d575352ab,8acb02c001941da156cd0b1a6fe080b5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23392,7 +23392,7 @@ geoSampleAccession GSM733649
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=e3ff1562d1a0298374536faae4d1a3e3,bai=76690c1f15883688da2dd9d4ea4d4904
+md5sum e3ff1562d1a0298374536faae4d1a3e3,76690c1f15883688da2dd9d4ea4d4904
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23524,7 +23524,7 @@ geoSampleAccession GSM733781
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=7508b1b11d3c62f0c859b26763dd2294,bai=34b8cef18e49042a17a83d61612ba4e0
+md5sum 7508b1b11d3c62f0c859b26763dd2294,34b8cef18e49042a17a83d61612ba4e0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23551,7 +23551,7 @@ geoSampleAccession GSM733781
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=4345c8d2dba360da556e607e4f7309d4,bai=56877b3f2cd683fccdb6de384ee7eef0
+md5sum 4345c8d2dba360da556e607e4f7309d4,56877b3f2cd683fccdb6de384ee7eef0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23683,7 +23683,7 @@ geoSampleAccession GSM733723
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=108f78d6b354335b6b838bd38818cc88,bai=edef9929c503b8f122a0dc7002f097dc
+md5sum 108f78d6b354335b6b838bd38818cc88,edef9929c503b8f122a0dc7002f097dc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23710,7 +23710,7 @@ geoSampleAccession GSM733723
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
-md5sum bam=8d6bdaa37f557df6138145468fdbfa52,bai=d60d555d2dd8b8de82f0d4ffc9531c83
+md5sum 8d6bdaa37f557df6138145468fdbfa52,d60d555d2dd8b8de82f0d4ffc9531c83
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23842,7 +23842,7 @@ geoSampleAccession GSM733652
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=5de1f6e3a457f4cd9e74fe5c4512d79c,bai=745099b4ddba99663f4f2172bc3155d0
+md5sum 5de1f6e3a457f4cd9e74fe5c4512d79c,745099b4ddba99663f4f2172bc3155d0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23869,7 +23869,7 @@ geoSampleAccession GSM733652
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=28d7942974400244cecd97931b6a72f9,bai=9483768bb7a4b0a665da0e3f8dd399ad
+md5sum 28d7942974400244cecd97931b6a72f9,9483768bb7a4b0a665da0e3f8dd399ad
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -24001,7 +24001,7 @@ geoSampleAccession GSM733706
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
-md5sum bam=b57ff8e1913244ffc18e628a16bdfef0,bai=14811605a1096d365a4af0f5531b5548
+md5sum b57ff8e1913244ffc18e628a16bdfef0,14811605a1096d365a4af0f5531b5548
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -24028,7 +24028,7 @@ geoSampleAccession GSM733706
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIe
-md5sum bam=32a226646e5d65979290bee9d8834edd,bai=17d6b3507ff632ac91fa5687de72a60b
+md5sum 32a226646e5d65979290bee9d8834edd,17d6b3507ff632ac91fa5687de72a60b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -24158,7 +24158,7 @@ fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam
 geoSampleAccession GSM733697
 grant Bernstein
 lab Broad
-md5sum bam=122ad39cf58b70d783009e6661231336,bai=6b9a4dc150dec49e106f59913a8a2e13
+md5sum 122ad39cf58b70d783009e6661231336,6b9a4dc150dec49e106f59913a8a2e13
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24183,7 +24183,7 @@ fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam
 geoSampleAccession GSM733697
 grant Bernstein
 lab Broad
-md5sum bam=d66418c8330ff3656684f8ecdbe8bcc7,bai=a68230d06e5b9089853da107b759820f
+md5sum d66418c8330ff3656684f8ecdbe8bcc7,a68230d06e5b9089853da107b759820f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24285,7 +24285,7 @@ fileName wgEncodeBroadHistoneOsteoblCtcfStdAlnRep1.bam
 geoSampleAccession GSM733784
 grant Bernstein
 lab Broad
-md5sum bam=23d48e02b6e7d25607b1ce946e64e4ac,bai=5b2a74c18abadd3dcf6a431ffb07aabc
+md5sum 23d48e02b6e7d25607b1ce946e64e4ac,5b2a74c18abadd3dcf6a431ffb07aabc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24310,7 +24310,7 @@ fileName wgEncodeBroadHistoneOsteoblCtcfStdAlnRep2.bam
 geoSampleAccession GSM733784
 grant Bernstein
 lab Broad
-md5sum bam=f04ac5c16b022df24f17170b915e63c0,bai=b645aeeb7b4dab2ef6a68ca63cc08ffd
+md5sum f04ac5c16b022df24f17170b915e63c0,b645aeeb7b4dab2ef6a68ca63cc08ffd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24438,7 +24438,7 @@ fileName wgEncodeBroadHistoneOsteoblH2azStdAlnRep1.bam
 geoSampleAccession GSM733766
 grant Bernstein
 lab Broad
-md5sum bam=710b7e72fd48917e5aa81948472d926c,bai=c2db25c0a8abe829ade7d2d5965efa67
+md5sum 710b7e72fd48917e5aa81948472d926c,c2db25c0a8abe829ade7d2d5965efa67
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24463,7 +24463,7 @@ fileName wgEncodeBroadHistoneOsteoblH2azStdAlnRep2.bam
 geoSampleAccession GSM733766
 grant Bernstein
 lab Broad
-md5sum bam=3ea8e70a82e8802f3756c1957ef8e07c,bai=0f7a33ec26418a3b751e650b0569e00b
+md5sum 3ea8e70a82e8802f3756c1957ef8e07c,0f7a33ec26418a3b751e650b0569e00b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24591,7 +24591,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep1.bam
 geoSampleAccession GSM733739
 grant Bernstein
 lab Broad
-md5sum bam=17ca3b217bb82ea5f41895b728931aa7,bai=f3f4499e7fd4238cb2880120f40be5d2
+md5sum 17ca3b217bb82ea5f41895b728931aa7,f3f4499e7fd4238cb2880120f40be5d2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24616,7 +24616,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep2.bam
 geoSampleAccession GSM733739
 grant Bernstein
 lab Broad
-md5sum bam=1e94d850601185b2a75ddb79472148e3,bai=4f5585e3577b3580267ec3119ac1395b
+md5sum 1e94d850601185b2a75ddb79472148e3,4f5585e3577b3580267ec3119ac1395b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24744,7 +24744,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep1.bam
 geoSampleAccession GSM733721
 grant Bernstein
 lab Broad
-md5sum bam=97a2f36d5358db1ab0330d48dd0d7eb1,bai=0c16db679cec00c3074e5cb645f217cf
+md5sum 97a2f36d5358db1ab0330d48dd0d7eb1,0c16db679cec00c3074e5cb645f217cf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24769,7 +24769,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep2.bam
 geoSampleAccession GSM733721
 grant Bernstein
 lab Broad
-md5sum bam=a23f2ef3b839b43470ca2908b6025dc7,bai=d8e1e388bdbcd1746e332dc0a6a41e95
+md5sum a23f2ef3b839b43470ca2908b6025dc7,d8e1e388bdbcd1746e332dc0a6a41e95
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24897,7 +24897,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep1.bam
 geoSampleAccession GSM733704
 grant Bernstein
 lab Broad
-md5sum bam=9a6a45f6d931cefa3241c40811224f63,bai=3dd83ff6fc89c0c701ace43518656d95
+md5sum 9a6a45f6d931cefa3241c40811224f63,3dd83ff6fc89c0c701ace43518656d95
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24922,7 +24922,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep2.bam
 geoSampleAccession GSM733704
 grant Bernstein
 lab Broad
-md5sum bam=3444110b1fd84fcd0add6fad56d16adb,bai=48c9104d0a6c46cd653ac840c3339525
+md5sum 3444110b1fd84fcd0add6fad56d16adb,48c9104d0a6c46cd653ac840c3339525
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25050,7 +25050,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep1.bam
 geoSampleAccession GSM733779
 grant Bernstein
 lab Broad
-md5sum bam=5c05564915fa3991b7854e0f043799c2,bai=5f19e8e2f52000628359b7c02c571bfd
+md5sum 5c05564915fa3991b7854e0f043799c2,5f19e8e2f52000628359b7c02c571bfd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25075,7 +25075,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep2.bam
 geoSampleAccession GSM733779
 grant Bernstein
 lab Broad
-md5sum bam=def54adbd4dc4b89527ab91d9fa7fe1e,bai=0fd8cddc2d47c26a02ef7b2987d06eb6
+md5sum def54adbd4dc4b89527ab91d9fa7fe1e,0fd8cddc2d47c26a02ef7b2987d06eb6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -25203,7 +25203,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep1.bam
 geoSampleAccession GSM733681
 grant Bernstein
 lab Broad
-md5sum bam=a16a82495992581da3ef544c9a9d1d3e,bai=e332f0549cfd7441bd81c6b948d60b68
+md5sum a16a82495992581da3ef544c9a9d1d3e,e332f0549cfd7441bd81c6b948d60b68
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -25228,7 +25228,7 @@ fileName wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep2.bam
 geoSampleAccession GSM733681
 grant Bernstein
 lab Broad
-md5sum bam=19f21c3df57732bebf4cdb446ea30d28,bai=bd9d1809d5bc9d1a022f395998ab44d5
+md5sum 19f21c3df57732bebf4cdb446ea30d28,bd9d1809d5bc9d1a022f395998ab44d5
 origAssembly hg19
 project wgEncode
 replicate 2
