@@ -2,6 +2,7 @@ metaObject wgEncodeSydhHistone
 objType composite
 composite wgEncodeSydhHistone
 expVars lab,dataType,cell,treatment,antibody,control
+geoSeriesAccession GSE31755
 
 metaObject wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1
 objType file
@@ -2769,4 +2770,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -396048598
+# MAGIC: 20657279
