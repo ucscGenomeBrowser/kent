@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "kgXref.h"
 
-static char const rcsid[] = "$Id: kgXref.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
+static char const rcsid[] = "$Id:$";
 
 void kgXrefStaticLoad(char **row, struct kgXref *ret)
 /* Load a row from kgXref table into ret.  The contents of ret will
@@ -23,6 +23,8 @@ ret->geneSymbol = row[4];
 ret->refseq = row[5];
 ret->protAcc = row[6];
 ret->description = row[7];
+ret->rfamAcc = row[8];
+ret->tRnaName = row[9];
 }
 
 struct kgXref *kgXrefLoad(char **row)
@@ -40,6 +42,8 @@ ret->geneSymbol = cloneString(row[4]);
 ret->refseq = cloneString(row[5]);
 ret->protAcc = cloneString(row[6]);
 ret->description = cloneString(row[7]);
+ret->rfamAcc = cloneString(row[8]);
+ret->tRnaName = cloneString(row[9]);
 return ret;
 }
 
@@ -49,7 +53,7 @@ struct kgXref *kgXrefLoadAll(char *fileName)
 {
 struct kgXref *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -67,7 +71,7 @@ struct kgXref *kgXrefLoadAllByChar(char *fileName, char chopper)
 {
 struct kgXref *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[8];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -96,6 +100,8 @@ ret->geneSymbol = sqlStringComma(&s);
 ret->refseq = sqlStringComma(&s);
 ret->protAcc = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
+ret->rfamAcc = sqlStringComma(&s);
+ret->tRnaName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -115,6 +121,8 @@ freeMem(el->geneSymbol);
 freeMem(el->refseq);
 freeMem(el->protAcc);
 freeMem(el->description);
+freeMem(el->rfamAcc);
+freeMem(el->tRnaName);
 freez(pEl);
 }
 
@@ -164,6 +172,14 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->rfamAcc);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->tRnaName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

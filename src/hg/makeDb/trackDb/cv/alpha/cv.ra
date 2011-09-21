@@ -3112,7 +3112,28 @@ tier 3
 termId BTO:0000847
 protocol Crawford:Melano_Crawford_protocol.pdf
 
+#it turns out there is another Monocytes-CD14+ cell line that is used in UW DNase and Open Chrom Chip
+#leaving this one in as a temporary stub
 term Monocytes-CD14+
+tag MONOCD14
+type Cell Line
+#tier 2
+tier 3
+organism human
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production
+#, newly promoted to tier 2: not in 2011 analysis
+lineage mesoderm
+karyotype normal
+sex F
+tissue Monocytes
+vendorName S. Heimfeld Laboratory, FHCRC
+vendorId Monocytes-CD14+
+orderUrl http://labs.fhcrc.org/heimfeld/contact.html
+termId BTO:0000876
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+protocol Stam:MonoCD14_Stam_protocol.pdf
+
+term Monocytes-CD14+_RO01746
 tag MONOCD14
 type Cell Line
 #tier 2
@@ -7399,13 +7420,13 @@ tag TCF4
 type Antibody
 target TCF4
 antibodyDescription Rabbit monoclonal
-targetDescription TCF4 is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
 vendorName Cell Signaling Technology
 vendorId 2569S
 orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
-targetId GeneCard:TCF4
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
+targetId GeneCard:TCF7L2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2&search=TCF7L2
 validation missing
 
 term TCF7L2
@@ -8702,12 +8723,12 @@ description Interferon alpha treatment - 6 hours (Snyder)
 type treatment
 
 term IFNg30
-tag IFNH30
+tag IFNG30
 description Interferon gamma treatment - 30 minutes (Snyder)
 type treatment
 
 term IFNg4h
-tag IFNH4H
+tag IFNG4H
 description Interferon gamma treatment - 4 hours with 5 ng/ml (Crawford)
 type treatment
 
@@ -8861,6 +8882,37 @@ term G1
 tag G1
 type phase
 description Flow sorted, G1 phase
+
+term G1b
+tag G1B
+type phase
+description Flow sorted, G1b phase (PROVISIONAL)
+
+term G2
+tag G2
+type phase
+description Flow sorted, G2 phase (PROVISIONAL)
+
+term S1
+tag S1
+type phase
+description Flow sorted, S1 phase (PROVISIONAL)
+
+term S2
+tag S2
+type phase
+description Flow sorted, S2 phase (PROVISIONAL)
+
+term S3
+tag S3
+type phase
+description Flow sorted, S3 phase (PROVISIONAL)
+
+term S4
+tag S4
+type phase
+description Flow sorted, S4 phase (PROVISIONAL)
+
 
 ### region
 # genomic regions used in experiments that are not whole-genome
@@ -9091,6 +9143,12 @@ type view
 label Peptide Mapping
 description PeptideMapping
 
+term PctSignal
+tag PCTSIG
+type view
+label Percentage-normalized Signal
+description Percentage-normalized Signal (PROVISIONAL)
+
 term PlusRawSignal
 tag PLUSRAWSIG
 type view
@@ -9213,6 +9271,12 @@ type view
 label SPP Optimal Peaks
 description Regions of conserved enriched signal in experiment performed by SPP 
 
+term SumSignal
+tag SUMSIG
+type view
+label Summed Densities
+description Shows summed densities of all phases combined (PROVISIONAL)
+
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
@@ -9266,6 +9330,19 @@ tag VALIDATION
 type view
 label Validation
 description Documents used for the verification of experimental results
+
+term Valleys
+tag VALS
+type view
+label Valleys
+description Regions of enriched signal in experiment (PROVISIONAL)
+
+term WaveSignal
+tag WAVESIG
+type view
+label Wavelet Smoothed Signal
+description Shows smoothed wavelet over all phases (PROVISIONAL)
+
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type
@@ -9416,6 +9493,12 @@ tag PROTGENO
 type dataType
 label Proteogenomics
 description Mass Spec Proteogenomic Mapping
+
+term RepliSeq
+tag  REPLISEQ
+type dataType
+label Repli-Seq
+description Replication Timing (PROVISIONAL)
 
 # tag not standard to match hg18
 term RnaPet
@@ -10951,8 +11034,8 @@ label Object Status
 description The status of the file or table object (revoked, replaced, etc)  
 searchable no
 hidden no
-cvDefined yes
-validate cv
+cvDefined no
+validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
 
 term obtainedBy

@@ -314,8 +314,18 @@ foreach my $key (sort keys %typeofterms){
 		print STDERR "$key has non-numeric characters in the priority field\n";
 		${$typeofterms{$key}}{'priority'} =~ s/\D//g;
 	}
+	
 	my @array;
-	push @array, $key;
+
+	#patch to special case cellType>cell and Antibody>antibody
+	my $kkey = $key;
+	if ($kkey =~ m/cellType/){
+		$kkey = "cell";
+	}
+	if ($kkey =~ m/Antibody/){
+		$kkey = "antibody";
+	}
+	push @array, $kkey;
 	push @array, ${$typeofterms{$key}}{'priority'};
 	push @sort, \@array;
 	
@@ -877,11 +887,12 @@ if ($opt{'verbose'} >= 2){
 #alphanumeric sort
 foreach my $file (sort { $a cmp $b } keys %fileinfo){
 	print FILE "$file\t";
-	
 	#print each element according to sort order
 	foreach my $key (@sortorder){
 		#don't repeat fileName in metadata strings
-		if ($key eq "fileName"){next}
+		if ($key eq "fileName"){
+			next
+		}
 		if (exists ${$fileinfo{$file}}{$key}){
 			print FILE "$key=${$fileinfo{$file}}{$key}; ";
 		}
@@ -905,7 +916,7 @@ options:
 	-md5			md5 sums the files in the directory
 	-table			selects which metadata table to use
 	-verbose		verbose output (levels 1 - 3)
-	-cv			custom cv directory (default is /data/apache/cgi-bin/encode)
+	-cv 			custom cv directory (default is /data/apache/cgi-bin/encode)
 	-directory		custom download directory (default is working directory)
 	-filemask		only allows selected pattern matches (must be in quotes)
 				E.g. -filemask "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb" (default)
