@@ -13,7 +13,7 @@ static void geneReviewsPrint(struct section *section,
 {
 char query[256];
 char * geneSymbol;
-if (sqlTablesExist(conn, "geneReviews"))
+if (sqlTablesExist(conn, "geneReviewsRefGene"))
     {
     safef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", itemName);
     geneSymbol = sqlQuickString(conn, query);
@@ -21,7 +21,7 @@ if (sqlTablesExist(conn, "geneReviews"))
         {
            prGRShortKg(conn,geneSymbol);
         } else {
-           hPrintf("<B>No GeneReviews for this gene </B><BR>" );
+           hPrintf("<B>No GeneReview for this gene </B><BR>" );
     }
   }
 }
@@ -41,25 +41,27 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
       if (firstTime)
         {
-          printf("<B> Gene Symbol: </B>%s<BR>", row[0]);    
+          printf("<B>GeneReview(s) and GeneTest disease(s) related to gene  </B>%s:<BR>", row[0]);    
           firstTime = FALSE;
         }
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s:</B></A>",row[1], row[1]);
-       printf(" ( %s )<BR>", row[3]);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>",row[1], row[1]);
+       printf(" ("); 
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", row[3], row[3]);
+       printf(")<BR>");
      }
      sqlFreeResult(&sr);
 }
 
 static boolean geneReviewsExists(struct section *section,
         struct sqlConnection *conn, char *geneId)
-/* Return TRUE if geneReviews table exist and have GeneReviews articles
+/* Return TRUE if geneReviewsRefGene table exist and have GeneReviews articles
  * on this one. */
 {
 char query[256];
 char * geneSymbol;
 char * grSymbol;
 
-if (sqlTablesExist(conn, "geneReviews"))
+if (sqlTablesExist(conn, "geneReviewsRefGene"))
     {
        safef(query, sizeof(query), "select geneSymbol from kgXref where kgId = '%s'", geneId);
        geneSymbol = sqlQuickString(conn, query);

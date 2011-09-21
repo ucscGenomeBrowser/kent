@@ -9736,23 +9736,6 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    // show GeneReviews  link(s)
-    if (sqlTablesExist(conn, "geneReviews"))
-        {
-        safef(query, sizeof(query),
-          "select distinct r.name2 from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
-        itemName, chrom, chromStart, chromEnd);
-        sr = sqlMustGetResult(conn, query);
-        if (sr != NULL)
-            {
-            while ((row = sqlNextRow(sr)) != NULL)
-                {
-                prGRShortRefGene(row[0]);
-                }
-            }
-        sqlFreeResult(&sr);
-        }
-
     // show Related UCSC Gene links
     safef(query, sizeof(query),
           "select distinct kgId from kgXref x, refLink l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
@@ -9775,6 +9758,24 @@ if (url != NULL && url[0] != 0)
         if (printedCnt >= 1) printf("<BR>\n");
 	}
     sqlFreeResult(&sr);
+
+    // show GeneReviews  link(s)
+    if (sqlTablesExist(conn, "geneReviewsRefGene"))
+        {
+        safef(query, sizeof(query),
+          "select distinct r.name2 from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+        itemName, chrom, chromStart, chromEnd);
+        sr = sqlMustGetResult(conn, query);
+        if (sr != NULL)
+            {
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                prGRShortRefGene(row[0]);
+                }
+            }
+        sqlFreeResult(&sr);
+        }
+
     }
 
 printf("<HR>");
@@ -23871,7 +23872,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
         if (firstTime)
         {
-          printf("<BR><B> GeneReview available for %s:</B> (%s)<BR>",itemName,clickMsg);
+          printf("<BR><B> GeneReview(s) available for %s:</B> (%s)<BR>",itemName,clickMsg);
           firstTime = FALSE;
           printf("<PRE><TT>"); 
               // #1234567890123456789012345678901234567890
@@ -23887,7 +23888,9 @@ while ((row = sqlNextRow(sr)) != NULL)
                 printf("%s", " " );
              }
            } 
-         printf("%-10s    %s<BR>", diseaseID, diseaseName);
+         printf("%-10s    ", diseaseID);
+        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
+
     }  /* end while */
  printf("</TT></PRE>");
  //printf("<BR>");
@@ -23911,14 +23914,24 @@ while ((row = sqlNextRow(sr)) != NULL)
         char *diseaseName = *row++;
         if (firstTime)
         {
-          printf("<B> GeneReviews: </B>");
+          printf("<B>Related GeneReview(s) and GeneTests disease(s): </B>");
           firstTime = FALSE;
-          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-          printf(" (%s) ", diseaseName);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+       printf(" (");                        
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf(")");
+
+//          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+//          printf(" (%s) ", diseaseName);
         } else {
           printf(", ");
-          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-          printf(" (%s) ", diseaseName);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+       printf(" (");
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf(")");
+
+//          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+//          printf(" (%s) ", diseaseName);
         }
      }
      printf("<BR>");

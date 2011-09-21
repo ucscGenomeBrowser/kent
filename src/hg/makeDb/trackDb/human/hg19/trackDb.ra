@@ -2486,13 +2486,3 @@ track decodeRmap override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
-track grBB
-shortLabel Gene Reviews bigBed format
-longLabel Gene Reviews bigBed format
-group x
-priority 155
-visibility hide
-color 0, 80, 0
-html geneReviews
-type bigBed 4 +
-
