@@ -259,7 +259,7 @@ var ddcl = {
         mySelf.onComplete(obj); // shows selected items in multiple lines
 
         // Set up the selector (control seen always and replacing select)
-        control = $('#ddcl-' + id);
+        var control = $('#ddcl-' + id);
         if (control == null || control == undefined) {
             warn('ddcl.setup('+id+') failed to create drop-down checkbox-list');
             return;
