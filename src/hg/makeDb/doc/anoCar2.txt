@@ -1970,7 +1970,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 ############################################################################
-## LASTZ Lizard anoCar2 (WORKING - 2011-09-19 - Hiram)
+## LASTZ Lizard anoCar2 (DONE - 2011-09-19 - Hiram)
     mkdir /cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19
     cd /cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19
 
@@ -2004,42 +2004,34 @@ TMPDIR=/scratch/tmp
 
     time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
 	-bigClusterHub=swarm -workhorse=hgwdev -smallClusterHub=memk \
-	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
-XXX - running - Mon Sep 19 14:03:02 PDT 2011
-
-
-    time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
 	-chainMinScore=5000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-blastzOutRoot /cluster/bluearc/anoCar2XenTro3 > do.log 2>&1 &
-    ## real    1522m46.550s
-    ## this broke down during chaining because this file:
-# -rw-rw-r--  1 5982855 Feb 21 14:39 ../../pslParts/part039.lst.psl.g
-    ## has a bogus character control-V in the middle on a number
-    ## manually running through that one chain step with that line removed
-    ##	got the chaining completed, then continuing:
-    time doBlastzChainNet.pl -verbose=2 DEF -bigClusterHub=pk \
-	-chainMinScore=5000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-continue=chainMerge \
-	-blastzOutRoot /cluster/bluearc/anoCar2XenTro3 > chainMerge.log 2>&1 &
-    #	real    119m12.634s
+	> do.log 2>&1 &
+    # got lost in some swarm problems, finish the lastz manually, then:
 
-    ssh hgwdev
-    cd /cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19]
-    time nice -n +19 featureBits anoCar2 chainXenTro3Link \
-	> fb.anoCar2.chainXenTro3Link.txt 2>&1
-    #	real    11m33.086s
-    #	83873500 bases of 1741478929 (4.816%) in intersection
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-bigClusterHub=swarm -workhorse=hgwdev -smallClusterHub=memk \
+	-continue=cat -chainMinScore=5000 \
+	-chainLinearGap=loose > cat.log 2>&1 &
+    #	real    338m49.752s
 
-    ssh kkstore04
-    mkdir /cluster/data/xenTro3/bed/blastz.anoCar2.swap
-    cd /cluster/data/xenTro3/bed/blastz.anoCar2.swap
+    cat fb.anoCar2.chainXenTro3Link.txt
+    #	86932478 bases of 1701353770 (5.110%) in intersection
+    cd /cluster/data/anoCar2/bed
+    ln -s blastz.xenTro3.2011-09-19 lastz.xenTro3
+
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.anoCar2.swap
 
     time doBlastzChainNet.pl -verbose=2 \
 	/cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19/DEF \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
-	-swap > swap.log 2>&1 &
+	-bigClusterHub=swarm -workhorse=hgwdev -smallClusterHub=memk \
+	-swap -chainMinScore=5000 \
+	-chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 88m21s
+    cat fb.xenTro3.chainAnoCar2Link.txt
+    #	92033566 bases of 1358334882 (6.775%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.anoCar2.swap lastz.anoCar2
 
 ##########################################################################
