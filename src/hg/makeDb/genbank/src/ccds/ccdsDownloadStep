@@ -35,7 +35,7 @@ sub getDumpFileName() {
     my @dumpFiles;
 
     foreach my $dumpFile (@ftpFiles) {
-        if ($dumpFile =~ /^CCDS\.[0-9]{8}\.tar\.gz$/) {
+        if ($dumpFile =~ /^\/CCDS\.[0-9]{8}\.tar\.gz$/) {
             push(@dumpFiles, $dumpFile);
         }
     }

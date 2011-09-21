@@ -563,7 +563,9 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
     | hgsql sacCer3 -e \
 'load data local infile "/dev/stdin" into table growthCondition'
 
-#  fixed some typos and other tweaks, including making some subscripts.  
+#  fixed some typos and other tweaks (added hyphens), 
+#  including making some subscripts in growthCondition table.  
+#  (also had to change transRegCodeCondition.growthCondition field to match)
 #  propagated to all 3 sacCer* dbs  - 2011-09-08  b0b and steve
 
 #	eliminate some names from Attr that are not in primary table

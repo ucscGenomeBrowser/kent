@@ -25,9 +25,9 @@ localization cytosol
 md5sum bam=4449565e58dcbce0ab7f04a61bf63f8e,bai=11c1a897f3c3215ac69ee77fdb030cac
 origAssembly hg18
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapAlnFree
 view Alignments
@@ -83,9 +83,9 @@ localization cytosol
 md5sum 43d7ca9a887f31047a1baccb796d9c8b
 origAssembly hg18
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapClustersFree
 view Clusters
@@ -141,9 +141,9 @@ localization cytosol
 md5sum fc34aca1582ce3c791a4f5df7311ca96
 origAssembly hg18
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 subId 4022
 view FastqRd1
 
@@ -197,9 +197,9 @@ localization cytosol
 md5sum a124b93ec33b6930e9ba241a13c749a8
 origAssembly hg18
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longPolyA
-seqPlatform Illumina_GA2
+seqPlatform Illumina_GA2x
 subId 4022
 view FastqRd2
 
@@ -253,8 +253,9 @@ localization cytosol
 md5sum f89ce7a4a60a27d2b406f8ab40b6e798
 origAssembly hg18
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigFree
 view MinusRawSignal
@@ -310,8 +311,9 @@ localization cytosol
 md5sum 8abeabbf4976dd5318d80d62f15b87ae
 origAssembly hg18
 project wgEncode
-replicate 2
+replicate 1
 rnaExtract longPolyA
+seqPlatform Illumina_GA2x
 subId 4022
 tableName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigFree
 view PlusRawSignal
@@ -3545,4 +3547,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 1670996138
+# MAGIC: -1745769148

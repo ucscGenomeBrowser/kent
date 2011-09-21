@@ -76,7 +76,7 @@ set tetNig tetNig1,tetNig2
 set tupBel tupBel1
 set turTru turTru1
 set vicPac vicPac1
-set xenTro xenTro1,xenTro2
+set xenTro xenTro1,xenTro2,xenTro3
 
 # Define all organism/assembly-specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$turTru,$vicPac,$tupBel
@@ -120,7 +120,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1,loxAfr3
-set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,loxAfr3
+set transMapDb anoCar1,anoCar2,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,xenTro3,loxAfr3
 
 # Define ucscRetro databases
 set ucscRetroDb hg18,hg19,mm9
@@ -129,10 +129,10 @@ set ucscRetroDb hg18,hg19,mm9
 # will complain about other databases.
 
 databasesChecked $gbd,$otherDb
-databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch5,hg19Patch2,hg19Patch2i,hg19snp131,hg19snp132,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch5,hg19Patch2,hg19Patch2i,hg19snp131,hg19snp132,hg19snp134,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
 
 # Define various non-self chains
-set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,PanTro3,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,ApiMel3,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,FelCat4,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar2,AnoCar1,Ce2,Ce4,Ce6,Ce9,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap3,CaeJap1,Cb3,PriPac2,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,GorGor2,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,AilMel1,CanFamPoodle1,ChoHof1,DasNov2,DipOrd1,EchTel1,EriEur1,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,TupBel1,TurTru1,VicPac1,BruMal1,HaeCon1,MelHap1,MelInc1,Hg19Patch5,Hg19Patch2,OviAri1,MelGal1,BosTau6,MyoLuc2,TurTle1
+set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,PanTro3,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,ApiMel3,TetNig1,TetNig2,XenTro1,XenTro2,XenTro3,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,FelCat4,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar2,AnoCar1,Ce2,Ce4,Ce6,Ce9,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap3,CaeJap1,Cb3,PriPac2,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,GorGor2,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,AilMel1,CanFamPoodle1,ChoHof1,DasNov2,DipOrd1,EchTel1,EriEur1,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,TupBel1,TurTru1,VicPac1,BruMal1,HaeCon1,MelHap1,MelInc1,Hg19Patch5,Hg19Patch2,OviAri1,MelGal1,BosTau6,MyoLuc2,TurTle1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -987,7 +987,8 @@ identifier gnfRatAtlas2
     hgFixed.gnfRatAtlas2AllRatio.name unique
     hgFixed.gnfRatAtlas2Median.name full unique
     hgFixed.gnfRatAtlas2MedianRatio.name unique
-    $rn.knownToU34A.value
+    $rn.knownToGnfRatAtlas2.value
+    $rn.rgdGene2ToGnfRatAtlas2.value
     $rn.gnfAtlas2.name
     $rn.affyU34A.qName
 
@@ -1053,11 +1054,13 @@ identifier affyRAE230
 "Affymetrix Rat RAE230 chip identifiers"
     $rn.affyRAE230.qName dupeOk
     $rn.knownToRAE230.value
+    $rn.rgdGene2ToRAE230.value
 
 identifier affyU34A
 "Affymetrix Rat U34A chip identifiers"
     $rn.affyU34A.qName dupeOk
     $rn.knownToU34A.value
+    $rn.rgdGene2ToU34A.value
 
 identifier illuminaWG6
 "Illumina WG-6 3.0 Probe set identifiers"
@@ -1480,6 +1483,11 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     hg19.geneNetworkId.id
     rn3.geneNetworkId.id minCheck=0.40
 
+identifier rgdGene2ToRefSeqId typeOf=mrnaAccession
+"RefSeq mRNA accession in rgdGene2ToRefSeq table"
+    $kgDb.rgdGene2ToRefSeq.value dupeOk
+    rn4.geneNetworkId.id minCheck=0.30
+
 identifier kgOldId
 "Old Known Gene ID - the genbank accession of the representative mRNA"
     hg17.kgOld.name dupeOk
@@ -1614,6 +1622,11 @@ identifier knownIsoformCluster
 "ID of a cluster of overlapping known genes"
     $kgDb.knownCanonical.clusterId
     $kgDb.knownIsoforms.clusterId full
+
+identifier rgdGene2IsoformCluster
+"ID of a cluster of overlapping rgdGene2 genes"
+    $kgDb.rgdGene2Canonical.clusterId
+    $kgDb.rgdGene2Isoforms.clusterId full
 
 # known relationship for both KG2 and KG3, but doesn't work across dbs.
 identifier knownXref
@@ -2442,15 +2455,25 @@ identifier snpName132
 "dbSNP version 132 rs* identifiers"
     $gbd.snp132.name dupeOk
     $gbd.snp132Common.name
-    $gbd.snp132Patient.name
-    $gbd.snp132NonUnique.name
-    $gbd.snp132Exceptions.name minCheck=.999
+    $gbd.snp132Flagged.name
+    $gbd.snp132Mult.name
     $gbd.snp132Seq.acc minCheck=.98
     $gbd.snp132CodingDbSnp.name minCheck=.90
     $hg.snp132OrthoPt2Pa2Rm2.name
-    # gwasCatalog SNPs were mapped to hg19 using snp132.  Move this and update trackDb
-    # settings if we remap to new dbSNP version:
+    # gwasCatalog SNPs were mapped to hg19 using snp132.  Move this down to snp134
+    # and update trackDb settings if we remap to new dbSNP version:
     hg19.gwasCatalog.name minCheck=0.99
+
+identifier snpName134
+"dbSNP version 134 rs* identifiers"
+    $gbd.snp134.name dupeOk
+    $gbd.snp134Common.name
+    $gbd.snp134Flagged.name
+    $gbd.snp134Mult.name
+    $gbd.snp134Seq.acc minCheck=.98
+    $gbd.snp134CodingDbSnp.name minCheck=.90
+    $hg.snp134OrthoPt3Pa2Rm2.name
+    # When hg19 gwasCatalog is regenerated w/snp134, move the line down here.
 
 # Other NCBI Identifiers
 
@@ -3459,6 +3482,7 @@ tablesIgnored $gbd
     uwNucOccMec
     ws210Gene
     snp132ExceptionDesc
+    snp134ExceptionDesc
 
 tablesIgnored $kgDb
     pbAaDist_

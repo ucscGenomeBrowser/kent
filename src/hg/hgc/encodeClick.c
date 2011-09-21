@@ -196,35 +196,61 @@ void doPeptideMapping(struct sqlConnection *conn, struct trackDb *tdb, char *ite
 char *chrom = cartString(cart,"c");
 int start = cgiInt("o");
 int end = cgiInt("t");
+char query[256];
 char **row;
 struct sqlResult *sr;
-struct peptideMapping *pos = NULL;
-int rowOffset;
+struct peptideMapping pos;
+int rowOffset = 0;  // skip bin field
+int found = 0;
 genericHeader(tdb, NULL);
+
 /* Just get the current item. */
-sr = hOrderedRangeQuery(conn, tdb->track, chrom, start, end, NULL, &rowOffset);
-if ((row = sqlNextRow(sr)) != NULL)
+safef(query, sizeof(query), "select * from %s where name='%s' and chrom='%s' and chromStart=%d and chromEnd=%d", 
+    tdb->track, item, chrom, start, end);
+sr = sqlGetResult(conn, query);
+
+if (sqlFieldColumn(sr, "bin") == 0)
+    rowOffset = 1;
+    
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    pos = peptideMappingLoad(row + rowOffset);
-    sqlFreeResult(&sr);
+    ++found;
+    peptideMappingStaticLoad(row + rowOffset, &pos);
+    if (found == 1)
+	{
+	printf("<B>Item:</B> %s<BR>\n", pos.name);
+	printPos(pos.chrom, pos.chromStart, pos.chromEnd, pos.strand, TRUE, item);
+
+	printf("<BR>\n");
+	printf("Additional details for all peptide mappings of %s:<BR>\n", item);
+
+	webPrintLinkTableStart();
+	webPrintLabelCell("Score");
+	webPrintLabelCell("Raw Score");
+	webPrintLabelCell("Spectrum ID");
+	webPrintLabelCell("Peptide Rank");
+	}
+    webPrintLinkTableNewRow();
+    webPrintIntCell(pos.score);
+    webPrintDoubleCell(pos.rawScore);
+    webPrintLinkCell(pos.spectrumId);
+    webPrintIntCell(pos.peptideRank);
     }
-else
-    {
+if (found == 0)
     errAbort("No items in range");
-    }
-printf("<B>Item:</B> %s<BR>\n", pos->name);
-printf("<B>Score:</B> %d<BR>\n", pos->score);
-printPos(pos->chrom, pos->chromStart, pos->chromEnd, pos->strand, TRUE, item);
-printf("<B>Raw Score:</B> %f<BR>\n", pos->rawScore);
-printf("<B>Peptide Rank:</B> %d<BR>\n", pos->peptideRank);
-printf("<B>Peptide Repeat Count:</B> %d<BR>\n", pos->peptideRepeatCount);
-printf("<B>Spectrum ID:</B> %s<BR>\n", pos->spectrumId);
-if (pos->peptideRepeatCount > 1)
+
+webPrintLinkTableEnd();
+sqlFreeResult(&sr);
+
+/* Draw table of other locations */
+printf("<BR>\n");
+printf("<B>Peptide Repeat Count:</B> %d<BR>\n", pos.peptideRepeatCount);
+if (pos.peptideRepeatCount > 1)
     {
-    char query[256];
+    struct hash *hash = hashNew(8);
     struct peptideMapping anotherPos;
-    safef(query, sizeof(query), "select * from %s where name=\'%s\' and not (chrom=\'%s\' and chromStart=%d and chromEnd=%d)", 
-	  tdb->track, pos->name, pos->chrom, pos->chromStart, pos->chromEnd);
+    safef(query, sizeof(query), "select * from %s where name='%s' and not (chrom='%s' and chromStart=%d and chromEnd=%d)", 
+	  tdb->track, item, chrom, start, end);
     printf("<BR>\n");
     webPrintLinkTableStart();
     webPrintLabelCell("Other genomic loci");
@@ -233,14 +259,21 @@ if (pos->peptideRepeatCount > 1)
 	{
 	char s[1024];
 	peptideMappingStaticLoad(row + rowOffset, &anotherPos);
-	safef(s, sizeof(s), "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
-	      hgTracksPathAndSettings(), database, anotherPos.chrom, anotherPos.chromStart+1, 
-	      anotherPos.chromEnd, anotherPos.chrom, anotherPos.chromStart+1, anotherPos.chromEnd);
-	webPrintLinkTableNewRow();
-	webPrintLinkCell(s);
+	char k[1024];
+	safef(k, sizeof k, "%s.%d.%d", anotherPos.chrom, anotherPos.chromStart, anotherPos.chromEnd);
+	if (!hashLookup(hash, k))
+	    {
+	    hashAdd(hash, k, NULL);
+	    safef(s, sizeof(s), "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
+		  hgTracksPathAndSettings(), database, anotherPos.chrom, anotherPos.chromStart+1, 
+		  anotherPos.chromEnd, anotherPos.chrom, anotherPos.chromStart+1, anotherPos.chromEnd);
+	    webPrintLinkTableNewRow();
+	    webPrintLinkCell(s);
+	    }
 	}
     webPrintLinkTableEnd();
     sqlFreeResult(&sr);
+    freeHash(&hash);
     }    
-peptideMappingFree(&pos);
+
 }
