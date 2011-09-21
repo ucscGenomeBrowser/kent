@@ -9778,7 +9778,7 @@ if (url != NULL && url[0] != 0)
     if (sqlTablesExist(conn, "geneReviewsRefGene"))
         {
         safef(query, sizeof(query),
-          "select distinct r.name2 from refLink l, mim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+          "select distinct r.name2 from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
         itemName, chrom, chromStart, chromEnd);
         sr = sqlMustGetResult(conn, query);
         if (sr != NULL)
@@ -23867,13 +23867,17 @@ int num = 4;
 }
 
 void prGeneReviews(struct sqlConnection *conn, char *itemName)
-/* print GeneReviews associated to this item */
+/* print GeneReviews associated to this item 
+   Note: this print function has been replaced by addGeneReviewToBed.pl
+         which print the same information to the field 5 of bigBed file
+*/ 
+         
 {
 struct sqlResult *sr;
 char **row;
 char query[512];
 int i;
-char *clickMsg = "Click 'Short name' link below to search GeneReviews";
+char *clickMsg = "Click link(s) below to search GeneReviews and GeneTests";
 boolean firstTime = TRUE;
 
 safef(query, sizeof(query), "select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
@@ -25166,7 +25170,7 @@ else if (startsWith("cosmic", table))
     {
     doCosmic(tdb, item);
     }
-else if (startsWith("geneReviews", table))
+else if (sameString("geneReviews", table))
     {
     doGeneReviews(tdb, item);
     }
