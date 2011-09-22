@@ -1,0 +1,131 @@
+# specifying path so that the "which" command will work within qa scripts.
+PATH=/cluster/bin/scripts:/cluster/bin/x86_64:/usr/local/bin:/bin:/usr/bin:/cluster/bin/i386
+# (added /cluster/bin/i386 to the path because it has ipw command, which catchBot.csh uses - BLR)
+
+# Minute Hour DOM Month DOW command
+
+MAILTO=rhead
+
+#### Jobs that were running on qateam crontab long before June 2010 (BLR):
+3 3 15 2,6,10 * echo "This is the tri-annual reminder to check with Jim and Galt about the BLAT executable to see if there are any upgrades worth installing on our servers." | mail -s "check for BLAT updates" qateam
+
+
+#### Jobs that ran on Angie's crontab until June 2010 (BLR):
+SHELL=/bin/csh
+# m h da mo dow
+# This refresh is now taken care of via a root cron job 2010-11-04 - Hiram
+# refresh custom tracks referenced by saved sessions (this is for genome-test):
+# 30 23 * * * setenv HGDB_CONF /cluster/home/qateam/.hg.conf.include; /cluster/bin/x86_64/refreshNamedSessionCustomTracks hgcentraltest 
+
+MAILTO=rhead,fanhsu
+# unigene update for human SAGE track (running from /cluster/home/angie/unigeneVers/ prior to 6/23/10)
+03 01 * * *       /cluster/bin/scripts/unigene.csh
+
+MAILTO=browser-staff
+# look for broken links in /gbdb and goldenPath:
+26 01 * * * 	find /gbdb/ -mindepth 1 -maxdepth 1 -not -regex '^/gbdb/\(visiGene\|zoo3\).*' | xargs findBrokenLinks.csh
+MAILTO=galt,rhead
+26 03 30 1,6 *  findBrokenLinks.csh /gbdb/visiGene
+MAILTO=encode-staff@soe.ucsc.edu,rhead@soe.ucsc.edu
+56 01 * * *	findBrokenLinks.csh /usr/local/apache/htdocs-hgdownload/goldenPath |& grep -v fish.seq15jun2001
+
+MAILTO=rhead
+# checkHgFindSpec -checkTermRegex
+03 03 * * * /cluster/home/qateam/bin/scripts/runCheckHgFindSpec > /usr/local/apache/htdocs-genecats/qa/test-results/checkHgFindSpec/hgwdevOutput
+
+# monitoring job inherited by angie from Heather:
+4 * * * * apacheMonitor genome-log apachelog 60
+
+
+#### Jobs that ran on b0b's crontab until June 2010 (BLR):
+# alert relevant people of B-queue content
+10 05 12 * * /cluster/bin/scripts/alertBqueue.csh go 
+
+# check for new tables daily 
+20 02 * * * /cluster/bin/scripts/findNewTables.csh hg19,hg18,mm9 | mail -s "new tables yesterday" rhead@soe.ucsc.edu pauline@soe.ucsc.edu katrina@soe.ucsc.edu
+
+# run sessionStats.csh monthly
+20 12 1 * * /cluster/bin/scripts/sessionStats.csh go | mail -s "monthly sessionStats" angie@soe.ucsc.edu rhead@soe.ucsc.edu kuhn@soe.ucsc.edu
+
+# run linkCheck on everything monthly (broken 2008-10-10)
+#######20 4 10 * * /cluster/bin/scripts/cronLinks.csh go | mail -s "linkCheck" kuhn@soe.ucsc.edu pauline@soe.ucsc.edu
+
+# check RR processes several times per workday:
+10 9,11,13,15,17 * * 1-5 /cluster/bin/scripts/showProcesslist.csh go | mail -s "showProcesslist" rhead@soe.ucsc.edu
+
+# check STATUS dumps on Mondays:
+04 02  * * 1 /cluster/bin/scripts/checkTableStatus.csh | mail -s "TABLE STATUS dump" rhead@soe.ucsc.edu
+
+# check genbank every tuesday morning:
+40 06 * * 4 /cluster/bin/scripts/realTime.csh hg18 gbCdnaInfo | mail -s "realTime genbank weekly check, hg18" rhead@soe.ucsc.edu
+
+# keep a dump of all hgcentral tables monthly
+40 22 1 * * /cluster/bin/scripts/backupCentral.csh go% | mail -s "save hgcentral monthly" rhead@soe.ucsc.edu
+
+# m h da mo dow
+# increment databaseAday:
+03 00 * * 1-5 /cluster/bin/scripts/databaseAday.csh next
+11 00 * * 1-5 /cluster/bin/scripts/databaseAday.csh today | mail -s "new database today" rhead@soe.ucsc.edu
+
+# check uiLinks on hgwbeta for today's db (and grep out the "doesn't exist" errors caused by multi-view pages):
+33 00 * * 1-5  /cluster/bin/scripts/checkTrackUiLinks.csh `/cluster/bin/scripts/databaseAday.csh today` all |& grep -v "doesn[']t exist" > /usr/local/apache/htdocs-genecats/qa/test-results/uiLinks/`/cluster/bin/scripts/databaseAday.csh today`
+55 00 * * 1-5 echo " http://genecats.cse.ucsc.edu/qa/test-results/uiLinks/`/cluster/bin/scripts/databaseAday.csh today`" | mail -s "today's ui link check" rhead luvina
+
+# check a database daily for sync:
+32 01 * * 1-5 /cluster/bin/scripts/syncAday.csh go | mail -s "sync for today" greg
+
+# do a realTime on db o' the day to get it in cache:
+12 05 * * 1-5 /cluster/bin/scripts/realTime.csh `/cluster/bin/scripts/databaseAday.csh today` gbLoaded   | mail -s "gbLoaded sync for `/cluster/bin/scripts/databaseAday.csh today`" rhead@soe.ucsc.edu
+
+# run a metadata check on the db o' th' day:
+46 03 * * 1-5 /cluster/bin/scripts/checkMetaAday.csh go | mail -s "metadata on `/cluster/bin/scripts/databaseAday.csh today`" rhead
+
+# store /gbdb dump from beta:
+23 00  * * *  /cluster/bin/scripts/checkGbdbDiffs.csh go | mail -s "/gbdb dump" rhead@soe.ucsc.edu
+
+# check site usage:
+56  2,7,15  * * 1-5 /cluster/bin/scripts/catchBot.csh 50000 10 | mail -s "catchBot 50000" rhead
+55 5 * * * /cluster/bin/scripts/catchBot.csh 10000 10 | mail -s "catchBot 10000" rhead
+
+# m h da mo dow
+# check trackDbs early monday morning:
+14  6  * * 1 /cluster/bin/scripts/trackDbGlobal.csh hgw2 realTime | mail -s "trackDbGlobal" rhead ann pauline mary greg luvina steve
+
+
+#### Jobs that ran on ann's crontab until June 2010 (BLR):
+# check to see if there are new files to go with the CGI push
+3 3 * * 3 /cluster/home/qateam/bin/scripts/findCgiFiles.csh go
+
+# check to see what kind of browsers and o/s people are using to access the public website
+44 4 * * 0 /cluster/bin/scripts/browserUsage.csh go; echo "http://genecats.cse.ucsc.edu/qa/test-results/browserUsage/?C=M;O=D" | mail -s "browser usage script ran" rhead
+
+MAILTO=browser-staff@soe.ucsc.edu
+# check the integrity of the trackDb.ra files
+5  6 * * 1-5 tdbQuery -check -strict "select count(*) from *" >/dev/null
+10 6 * * 1-5 tdbQuery -check -release=beta -strict "select count(*) from *" >/dev/null
+15 6 * * 1-5 tdbQuery -check -release=public -strict "select count(*) from *" >/dev/null
+
+MAILTO=rhead
+#### new jobs!:
+# Update the qateam sandbox
+# the script contains an email address for sending git reports to... currently this is 'rhead'
+22 4 * * 1-5 /cluster/home/qateam/bin/scripts/DailySandboxUpdate > /dev/null
+
+MAILTO=rhead,hiram
+# Check the source tree for duplicate case-independent filenames. These wreck havoc
+# with git on the default case-independent Mac OS filesystem. (Redmine #403)
+22 5 * * * cd ~qateam/kent; find . | tr '[A-Z]' '[a-z]' | sort | uniq -D
+
+MAILTO=rhead
+# generate the tableDescriptions push request for all active dbs on the RR
+32 12 * * 5 /cluster/home/qateam/bin/scripts/tabDescRequest | mail -s "push tableDescriptions" greg
+
+MAILTO=mary
+# Check to see if genome-mysql is corrupted for the database a day
+34 0 * * 1-5 checkGenomeMysql `databaseAday.csh today`
+# Check to see if genome-mysql is corrupted for hg19, hg18 and mm9 everyday.
+34 0 * * 1-5 checkGenomeMysql hg19
+34 0 * * 1-5 checkGenomeMysql hg18
+34 0 * * 1-5 checkGenomeMysql mm9
+
+# Minute Hour DOM Month DOW command
