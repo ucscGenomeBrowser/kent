@@ -4606,7 +4606,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibSitesRep1
-objType table
+objType file 
 attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
@@ -4626,12 +4626,11 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
-tableName wgEncodeHaibMethylRrbsHepg2HaibSitesRep1
 treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHepg2HaibSitesRep2
-objType table
+objType file 
 attic auxExp
 cell HepG2
 composite wgEncodeHaibMethylRrbs
@@ -4651,7 +4650,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
-tableName wgEncodeHaibMethylRrbsHepg2HaibSitesRep2
 treatment None
 view Sites
 
@@ -5521,7 +5519,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
-objType table
+objType file 
 attic auxExp
 cell HSMM
 composite wgEncodeHaibMethylRrbs
@@ -5541,7 +5539,6 @@ obtainedBy Duke
 project wgEncode
 replicate 3
 subId 3159
-tableName wgEncodeHaibMethylRrbsHsmmDukeSitesRep3
 treatment None
 view Sites
 
@@ -6732,7 +6729,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3
-objType table
+objType file 
 attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
@@ -6752,7 +6749,6 @@ obtainedBy Stanford
 project wgEncode
 replicate 3
 subId 3190
-tableName wgEncodeHaibMethylRrbsMcf10aesStanfordSitesRep3
 treatment None
 view Sites
 
@@ -6874,7 +6870,7 @@ treatment 4OHTAM_1uM_36hr
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
-objType table
+objType file 
 attic auxExp
 cell MCF10A-Er-Src
 composite wgEncodeHaibMethylRrbs
@@ -6894,7 +6890,6 @@ obtainedBy Stanford
 project wgEncode
 replicate 3
 subId 3190
-tableName wgEncodeHaibMethylRrbsMcf10aesTamStanfordSitesRep3
 treatment 4OHTAM_1uM_36hr
 view Sites
 
@@ -7039,7 +7034,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1
-objType table
+objType file 
 attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -7060,12 +7055,11 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
-tableName wgEncodeHaibMethylRrbsMcf7StanfordSitesRep1
 treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2
-objType table
+objType file 
 attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -7086,7 +7080,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
-tableName wgEncodeHaibMethylRrbsMcf7StanfordSitesRep2
 treatment None
 view Sites
 
@@ -7137,7 +7130,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwSitesRep1
-objType table
+objType file 
 attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -7158,12 +7151,11 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
-tableName wgEncodeHaibMethylRrbsMcf7UwSitesRep1
 treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7UwSitesRep2
-objType table
+objType file
 attic auxExp
 cell MCF-7
 composite wgEncodeHaibMethylRrbs
@@ -7184,7 +7176,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
-tableName wgEncodeHaibMethylRrbsMcf7UwSitesRep2
 treatment None
 view Sites
 
@@ -7306,7 +7297,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMelanoSitesRep3
-objType table
+objType file 
 attic auxExp
 cell Melano
 composite wgEncodeHaibMethylRrbs
@@ -7327,7 +7318,6 @@ origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
-tableName wgEncodeHaibMethylRrbsMelanoSitesRep3
 treatment None
 view Sites
 
@@ -8032,7 +8022,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwSitesRep1
-objType table
+objType file 
 attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
@@ -8053,12 +8043,11 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
-tableName wgEncodeHaibMethylRrbsNt2d1UwSitesRep1
 treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
-objType table
+objType file 
 attic auxExp
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
@@ -8078,9 +8067,29 @@ obtainedBy UW
 project wgEncode
 replicate 2
 subId 3159
-tableName wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
 treatment None
 view Sites
+
+metaObject wgEncodeHaibMethylRrbsHsmmSitesRep3
+objType table
+cell HSMM
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-29
+dateUnrestricted 2011-06-29
+fileName wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 3
+subId 2471
+tableName wgEncodeHaibMethylRrbsHsmmSitesRep3
+treatment None
+view Sites
+objStatus replaced - confusion over contents of file
 
 metaObject wgEncodeHaibMethylRrbsOsteoblDukeRawDataRep1
 objType file
@@ -8616,7 +8625,7 @@ treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep3
-objType table
+objType file 
 attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -8637,12 +8646,11 @@ origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
-tableName wgEncodeHaibMethylRrbsPanisletsSitesRep3
 treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep4
-objType table
+objType file 
 attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -8663,12 +8671,11 @@ origAssembly hg19
 project wgEncode
 replicate 4
 subId 2471
-tableName wgEncodeHaibMethylRrbsPanisletsSitesRep4
 treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsPanisletsSitesRep5
-objType table
+objType file 
 attic auxExp
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
@@ -8689,7 +8696,6 @@ origAssembly hg19
 project wgEncode
 replicate 5
 subId 2471
-tableName wgEncodeHaibMethylRrbsPanisletsSitesRep5
 treatment None
 view Sites
 
