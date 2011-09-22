@@ -21,7 +21,7 @@ fileName wgEncodeUwTfbsA549CtcfStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=49542721c598d72bc64a4ef7a333eec4,bai=56adf096d1c9ba11b054a7a7faa2070e
+md5sum 49542721c598d72bc64a4ef7a333eec4,56adf096d1c9ba11b054a7a7faa2070e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -46,7 +46,7 @@ fileName wgEncodeUwTfbsA549CtcfStdAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=4ba84dd8132f471526cd5e81cbb76752,bai=3bbd1d369d630acc62ca88ecef469686
+md5sum 4ba84dd8132f471526cd5e81cbb76752,3bbd1d369d630acc62ca88ecef469686
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -275,7 +275,7 @@ fileName wgEncodeUwTfbsA549InputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=78344e37ca386f993eea9a4705db5d8a,bai=1493841684f38afdf8c247bc364f07fa
+md5sum 78344e37ca386f993eea9a4705db5d8a,1493841684f38afdf8c247bc364f07fa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -351,7 +351,7 @@ geoSampleAccession GSM749695
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5fdf7aebf103b888d7e68f6223b37bed,bai=0f96b0908db34e8b3120136b3387afb1
+md5sum 5fdf7aebf103b888d7e68f6223b37bed,0f96b0908db34e8b3120136b3387afb1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -377,7 +377,7 @@ geoSampleAccession GSM749678
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a6f07d4c02fb29cab8ad11e87b087fff,bai=f92d8f6b4f567b1d221e690ad28cab6c
+md5sum a6f07d4c02fb29cab8ad11e87b087fff,f92d8f6b4f567b1d221e690ad28cab6c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -615,7 +615,7 @@ geoSampleAccession GSM749702
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5264bc1b354c973a80cadada2ae3c111,bai=da4cbf1437b874aea2686753b550d31d
+md5sum 5264bc1b354c973a80cadada2ae3c111,da4cbf1437b874aea2686753b550d31d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -693,7 +693,7 @@ geoSampleAccession GSM749769
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=f3af5b0bb2859df1895a986686895991,bai=889a3bf4c68c4f1239ea9711275471f4
+md5sum f3af5b0bb2859df1895a986686895991,889a3bf4c68c4f1239ea9711275471f4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -718,7 +718,7 @@ fileName wgEncodeUwTfbsAg04450CtcfStdAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=9764bec50d7907f18b72235940b050fa,bai=ffdbb0462e9ce797bacd32ca87c175c0
+md5sum 9764bec50d7907f18b72235940b050fa,ffdbb0462e9ce797bacd32ca87c175c0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -952,7 +952,7 @@ geoSampleAccession GSM749697
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=7f4e3b368922860a5add9f457fd9d796,bai=692fd4fd96f152afd5077dac52a3241c
+md5sum 7f4e3b368922860a5add9f457fd9d796,692fd4fd96f152afd5077dac52a3241c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1030,7 +1030,7 @@ geoSampleAccession GSM749750
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=cf3c0e7ed2070f3669ac454658613f6f,bai=633b3df5cea8ec80a52bca0ef27534d7
+md5sum cf3c0e7ed2070f3669ac454658613f6f,633b3df5cea8ec80a52bca0ef27534d7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1056,7 +1056,7 @@ geoSampleAccession GSM749680
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a505fd8b3cf974bfca7f491b58f723cb,bai=caf711d5f05a14c781e10cc724277878
+md5sum a505fd8b3cf974bfca7f491b58f723cb,caf711d5f05a14c781e10cc724277878
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1294,7 +1294,7 @@ geoSampleAccession GSM749718
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8e2dfec72ade961e0706a79277a5d320,bai=9789d6e625268e3dec816a095ab574d4
+md5sum 8e2dfec72ade961e0706a79277a5d320,9789d6e625268e3dec816a095ab574d4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1372,7 +1372,7 @@ geoSampleAccession GSM749728
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=6150710e5e2b586df77607bda94beb74,bai=42eb43ab128b742624624269928c7d6a
+md5sum 6150710e5e2b586df77607bda94beb74,42eb43ab128b742624624269928c7d6a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1398,7 +1398,7 @@ geoSampleAccession GSM749723
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=994707fd738c97162efaa99786239980,bai=85fb0927d1371454693f71135f3fb14f
+md5sum 994707fd738c97162efaa99786239980,85fb0927d1371454693f71135f3fb14f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1636,7 +1636,7 @@ geoSampleAccession GSM749671
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8cb8f57d14406129326eb24bcf48c0e0,bai=0500443230b64859deb3e7773c3464cf
+md5sum 8cb8f57d14406129326eb24bcf48c0e0,0500443230b64859deb3e7773c3464cf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1714,7 +1714,7 @@ geoSampleAccession GSM749714
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=c727e671d1240bcfd55c66a609df3877,bai=1ea634f94a6432d6f40b9505ba8c06b5
+md5sum c727e671d1240bcfd55c66a609df3877,1ea634f94a6432d6f40b9505ba8c06b5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1740,7 +1740,7 @@ geoSampleAccession GSM749759
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=40058cc7fee84233902a710cd2bc8749,bai=178ba00b684a86f593034d579d2bfeb3
+md5sum 40058cc7fee84233902a710cd2bc8749,178ba00b684a86f593034d579d2bfeb3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1978,7 +1978,7 @@ geoSampleAccession GSM749734
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=17750156661b841bbd474bc308d4c528,bai=ed7917b31d0f11879fe0d396000bbd2a
+md5sum 17750156661b841bbd474bc308d4c528,ed7917b31d0f11879fe0d396000bbd2a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2056,7 +2056,7 @@ geoSampleAccession GSM749666
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=e113c11d354ecd7e335e3a5c65023652,bai=900cd749c069b87a6a6fd2dec94395c7
+md5sum e113c11d354ecd7e335e3a5c65023652,900cd749c069b87a6a6fd2dec94395c7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2082,7 +2082,7 @@ geoSampleAccession GSM749736
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=d09a69a2229a77c01b1a5e367242f53d,bai=b53ff3a6a4c633ff3f3b049dc723340a
+md5sum d09a69a2229a77c01b1a5e367242f53d,b53ff3a6a4c633ff3f3b049dc723340a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2320,7 +2320,7 @@ geoSampleAccession GSM749772
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=0fe4cec03b194e29fbeaf3c1ab00db10,bai=972293f4a60b42d6fd41c82d520a78a2
+md5sum 0fe4cec03b194e29fbeaf3c1ab00db10,972293f4a60b42d6fd41c82d520a78a2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2397,7 +2397,7 @@ fileName wgEncodeUwTfbsBe2cCtcfStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=4d454ed75f35b2439905aac6f6470981,bai=a84b5d24d944c171f12a1f108e1a01e0
+md5sum 4d454ed75f35b2439905aac6f6470981,a84b5d24d944c171f12a1f108e1a01e0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2422,7 +2422,7 @@ fileName wgEncodeUwTfbsBe2cCtcfStdAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=59f663421fc198c234aca778a36d0ab0,bai=ba4dbe34647655182ecc06eb0319880a
+md5sum 59f663421fc198c234aca778a36d0ab0,ba4dbe34647655182ecc06eb0319880a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2651,7 +2651,7 @@ fileName wgEncodeUwTfbsBe2cInputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8ffd9d6bbee62c96341f5b8c2dc6675a,bai=0d2f2b8d843ced4cf9697a775667a095
+md5sum 8ffd9d6bbee62c96341f5b8c2dc6675a,0d2f2b8d843ced4cf9697a775667a095
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2728,7 +2728,7 @@ geoSampleAccession GSM749677
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e77483164c6f4e7eb3e5552de0c6db24,bai=2fd7f54de07a358cc4434214fa8d49b3
+md5sum e77483164c6f4e7eb3e5552de0c6db24,2fd7f54de07a358cc4434214fa8d49b3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2755,7 +2755,7 @@ geoSampleAccession GSM749752
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=ed7360ce07812fb67f3d3fc61468d557,bai=f7b8f2130c58b02a2fc2493462a76d49
+md5sum ed7360ce07812fb67f3d3fc61468d557,f7b8f2130c58b02a2fc2493462a76d49
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3001,7 +3001,7 @@ geoSampleAccession GSM749770
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=fecca16e8868cc72d17f9ece379c0e6f,bai=c647735f1f88c621699b56d28b1f5681
+md5sum fecca16e8868cc72d17f9ece379c0e6f,c647735f1f88c621699b56d28b1f5681
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3081,7 +3081,7 @@ geoSampleAccession GSM749748
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=3664454219b73f8869052f94026820a4,bai=c023fb21879ae74ace1fa22e6f8400d1
+md5sum 3664454219b73f8869052f94026820a4,c023fb21879ae74ace1fa22e6f8400d1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3108,7 +3108,7 @@ geoSampleAccession GSM749689
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e99856ab9ff37a3b201cf0da3876bf3a,bai=0a5cb415c249c7818f56e77eb221adf0
+md5sum e99856ab9ff37a3b201cf0da3876bf3a,0a5cb415c249c7818f56e77eb221adf0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3351,7 +3351,7 @@ geoSampleAccession GSM749691
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6841559c5ff00fbf211a9b53cc4fc9cb,bai=71afce2e46864fb15c4039cac797c019
+md5sum 6841559c5ff00fbf211a9b53cc4fc9cb,71afce2e46864fb15c4039cac797c019
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3431,7 +3431,7 @@ geoSampleAccession GSM749708
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=73b525de7f9cfa67d29a9dc5f987b5b4,bai=1ee5fb007c7234d6b13448f89c95302b
+md5sum 73b525de7f9cfa67d29a9dc5f987b5b4,1ee5fb007c7234d6b13448f89c95302b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3458,7 +3458,7 @@ geoSampleAccession GSM749705
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=73c7bb4455883f3b38d62c46d4aa9aff,bai=ace4bce5489c944190a59db79c0a0c5e
+md5sum 73c7bb4455883f3b38d62c46d4aa9aff,ace4bce5489c944190a59db79c0a0c5e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3702,7 +3702,7 @@ geoSampleAccession GSM749731
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=19b0c0b982adf1de2311892c51896fd1,bai=36b7c169451f71916a10daa9dae17373
+md5sum 19b0c0b982adf1de2311892c51896fd1,36b7c169451f71916a10daa9dae17373
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3782,7 +3782,7 @@ geoSampleAccession GSM749711
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=55766f730df5b3939105070ad9de4aa1,bai=3f5b38e6f808068d9a7cefdad848cd21
+md5sum 55766f730df5b3939105070ad9de4aa1,3f5b38e6f808068d9a7cefdad848cd21
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3918,7 +3918,7 @@ geoSampleAccession GSM749701
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=5b8d487a6633dc308361d2581ac679c0,bai=add45e8dc22ee7424a31af87e907b2ff
+md5sum 5b8d487a6633dc308361d2581ac679c0,add45e8dc22ee7424a31af87e907b2ff
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3998,7 +3998,7 @@ geoSampleAccession GSM749676
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2b720afd4c5a4ec49a8969889e84cb39,bai=94b8e5d4117a7004d5c67161fc0cfa4e
+md5sum 2b720afd4c5a4ec49a8969889e84cb39,94b8e5d4117a7004d5c67161fc0cfa4e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4025,7 +4025,7 @@ geoSampleAccession GSM749762
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=0463137ae17290911265b013e0c42ea3,bai=6dd7c06aa87e40e99daee98c140a3e1d
+md5sum 0463137ae17290911265b013e0c42ea3,6dd7c06aa87e40e99daee98c140a3e1d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4051,7 +4051,7 @@ grant Stam
 lab UW
 labExpId DS14431
 labVersion Bowtie 0.12.7
-md5sum bam=ea940ccfbeb0e3907d5bd422a9dfcc14,bai=47488a86815f630d02a28a8c0e2346ba
+md5sum ea940ccfbeb0e3907d5bd422a9dfcc14,47488a86815f630d02a28a8c0e2346ba
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -4400,7 +4400,7 @@ geoSampleAccession GSM749754
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=7b9f3dd8bc08f47c25197c191c145a5c,bai=3b2d93bb1a29ca4a28ac0acd335ff59a
+md5sum 7b9f3dd8bc08f47c25197c191c145a5c,3b2d93bb1a29ca4a28ac0acd335ff59a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4480,7 +4480,7 @@ geoSampleAccession GSM749740
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=71dbc9799e853cd0ef4dce60639e456d,bai=3f5793f7393743ac7b76494c84d2907f
+md5sum 71dbc9799e853cd0ef4dce60639e456d,3f5793f7393743ac7b76494c84d2907f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4507,7 +4507,7 @@ geoSampleAccession GSM749725
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e749803a8d6e1c63d768db2334d9c35d,bai=a0a9961f00367d263c0a8fc6f8ad2345
+md5sum e749803a8d6e1c63d768db2334d9c35d,a0a9961f00367d263c0a8fc6f8ad2345
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4533,7 +4533,7 @@ grant Stam
 lab UW
 labExpId DS13756
 labVersion Bowtie 0.12.7
-md5sum bam=1ad91453c62c2a2ce3aa99e13896c04d,bai=15fd342439046c19b312a49544f8150a
+md5sum 1ad91453c62c2a2ce3aa99e13896c04d,15fd342439046c19b312a49544f8150a
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -4882,7 +4882,7 @@ geoSampleAccession GSM749777
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2f328680d744eb80d163c7e82906c77b,bai=cdfe265a6fbcfb2fc543138de3317ae5
+md5sum 2f328680d744eb80d163c7e82906c77b,cdfe265a6fbcfb2fc543138de3317ae5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4961,7 +4961,7 @@ grant Stam
 lab UW
 labExpId DS10994
 labVersion Bowtie 0.12.7
-md5sum bam=a5c21d35a15ded06d479923a9cd509f7,bai=9d496d08c44e9046d105b9e0b18f6145
+md5sum a5c21d35a15ded06d479923a9cd509f7,9d496d08c44e9046d105b9e0b18f6145
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4987,7 +4987,7 @@ grant Stam
 lab UW
 labExpId DS11802
 labVersion Bowtie 0.12.7
-md5sum bam=02c21685173ed0f92e5c44481781c392,bai=664ec6b8f127efc7d96442fb86e16edb
+md5sum 02c21685173ed0f92e5c44481781c392,664ec6b8f127efc7d96442fb86e16edb
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5225,7 +5225,7 @@ grant Stam
 lab UW
 labExpId DS10995
 labVersion Bowtie 0.12.7
-md5sum bam=3509874faff1aa76c3e2012fe9d01351,bai=1c4510e379be81c291d13aa7069b14e4
+md5sum 3509874faff1aa76c3e2012fe9d01351,1c4510e379be81c291d13aa7069b14e4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5251,7 +5251,7 @@ grant Stam
 lab UW
 labExpId DS11803
 labVersion Bowtie 0.12.7
-md5sum bam=ea43532caca457b7f0706720a29388f1,bai=cd3f6dc9108756558be39e3ebe7ecdf6
+md5sum ea43532caca457b7f0706720a29388f1,cd3f6dc9108756558be39e3ebe7ecdf6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5489,7 +5489,7 @@ grant Stam
 lab UW
 labExpId DS10996
 labVersion Bowtie 0.12.7
-md5sum bam=cce95aa5d3496155d465fc677a9f1480,bai=18b768487a76b83b2a7ee9fb1ee900b7
+md5sum cce95aa5d3496155d465fc677a9f1480,18b768487a76b83b2a7ee9fb1ee900b7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5515,7 +5515,7 @@ grant Stam
 lab UW
 labExpId DS11804
 labVersion Bowtie 0.12.7
-md5sum bam=5cbb9fc1dca962396b9fa126c994bcc6,bai=8c9660dd2e92a8aecf4f663cd256482e
+md5sum 5cbb9fc1dca962396b9fa126c994bcc6,8c9660dd2e92a8aecf4f663cd256482e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5753,7 +5753,7 @@ grant Stam
 lab UW
 labExpId DS10997
 labVersion Bowtie 0.12.7
-md5sum bam=0a0ff2cc0dbe8241d658d23d8e93cd9f,bai=85e57fef0d3b8d1c6fccad9b6a997551
+md5sum 0a0ff2cc0dbe8241d658d23d8e93cd9f,85e57fef0d3b8d1c6fccad9b6a997551
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5779,7 +5779,7 @@ grant Stam
 lab UW
 labExpId DS11898
 labVersion Bowtie 0.12.7
-md5sum bam=48c35135f1dc2f2d4b85e1efe31abf92,bai=f724d00eb32f348068b68678e4f2edc7
+md5sum 48c35135f1dc2f2d4b85e1efe31abf92,f724d00eb32f348068b68678e4f2edc7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6017,7 +6017,7 @@ grant Stam
 lab UW
 labExpId DS10998
 labVersion Bowtie 0.12.7
-md5sum bam=45a1cab7f6fb1110a43c5c5b2b7e9662,bai=abca1bd2f0a02ff06e3c0e0949bf0230
+md5sum 45a1cab7f6fb1110a43c5c5b2b7e9662,abca1bd2f0a02ff06e3c0e0949bf0230
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6043,7 +6043,7 @@ grant Stam
 lab UW
 labExpId DS10729
 labVersion Bowtie 0.12.7
-md5sum bam=11fc4cf717b176f0996b647ae39b76ea,bai=c2139cf50cc8f5d166bd3002a08f4f88
+md5sum 11fc4cf717b176f0996b647ae39b76ea,c2139cf50cc8f5d166bd3002a08f4f88
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6281,7 +6281,7 @@ grant Stam
 lab UW
 labExpId DS10999
 labVersion Bowtie 0.12.7
-md5sum bam=1a7f9dc73885f386e08c91d65044df41,bai=2c1d741bd343db2fc7437f9d2fe5eebc
+md5sum 1a7f9dc73885f386e08c91d65044df41,2c1d741bd343db2fc7437f9d2fe5eebc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6307,7 +6307,7 @@ grant Stam
 lab UW
 labExpId DS11504
 labVersion Bowtie 0.12.7
-md5sum bam=259249cdc85450272c6f6b4c44ee8651,bai=5b8db549977503f029735acc8c269061
+md5sum 259249cdc85450272c6f6b4c44ee8651,5b8db549977503f029735acc8c269061
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6546,7 +6546,7 @@ geoSampleAccession GSM749694
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=1059fab8acd6fefeb5d2650971dac289,bai=42b9c1edad375d845a65263d2ca13042
+md5sum 1059fab8acd6fefeb5d2650971dac289,42b9c1edad375d845a65263d2ca13042
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6573,7 +6573,7 @@ geoSampleAccession GSM749692
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=ad856dd53494c83e884bb88462d5800d,bai=ef71db95581277cd186c4ac00a0f6706
+md5sum ad856dd53494c83e884bb88462d5800d,ef71db95581277cd186c4ac00a0f6706
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6599,7 +6599,7 @@ grant Stam
 lab UW
 labExpId DS14432
 labVersion Bowtie 0.12.7
-md5sum bam=85f4348cdd6c182a66f874560872cd6d,bai=3fbc04a0d1b15f627da1fbe4750c9484
+md5sum 85f4348cdd6c182a66f874560872cd6d,3fbc04a0d1b15f627da1fbe4750c9484
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -6948,7 +6948,7 @@ geoSampleAccession GSM749765
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=1a13d2d70ea99b015169eaef87b982a4,bai=e0105dd9973c2d8f28728d31f2e02425
+md5sum 1a13d2d70ea99b015169eaef87b982a4,e0105dd9973c2d8f28728d31f2e02425
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7028,7 +7028,7 @@ geoSampleAccession GSM749730
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=a28ad148b5d0ba79b1b3f27e7ac4da8d,bai=2b082d9286d7a3b6602383d14ebcd4e9
+md5sum a28ad148b5d0ba79b1b3f27e7ac4da8d,2b082d9286d7a3b6602383d14ebcd4e9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7055,7 +7055,7 @@ geoSampleAccession GSM749686
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=5d4a514fba1ebc9e337c6ae37961c5a1,bai=fe1a608a97f98cfc18d6b8c81eda3203
+md5sum 5d4a514fba1ebc9e337c6ae37961c5a1,fe1a608a97f98cfc18d6b8c81eda3203
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7081,7 +7081,7 @@ grant Stam
 lab UW
 labExpId DS14433
 labVersion Bowtie 0.12.7
-md5sum bam=1c60fc9e247a4de303fa818d3989eaa7,bai=ce5afb96c21aa205b7e0043534a3a6ac
+md5sum 1c60fc9e247a4de303fa818d3989eaa7,ce5afb96c21aa205b7e0043534a3a6ac
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -7430,7 +7430,7 @@ geoSampleAccession GSM749685
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=cdf719643032dcca2d80db4d6461a7b2,bai=55ecfb7bd5a24cb610c85bf00d3d166a
+md5sum cdf719643032dcca2d80db4d6461a7b2,55ecfb7bd5a24cb610c85bf00d3d166a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7510,7 +7510,7 @@ geoSampleAccession GSM749757
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=dd97a103cc6ba5e3ed3b9fbe33c88517,bai=8a426397b4386be3278108264f1ebe6b
+md5sum dd97a103cc6ba5e3ed3b9fbe33c88517,8a426397b4386be3278108264f1ebe6b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7537,7 +7537,7 @@ geoSampleAccession GSM749741
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=163c004e009b3d957c136d60cc5bf20a,bai=cb7dc2a089c879f02dfccc4e0ba23f5a
+md5sum 163c004e009b3d957c136d60cc5bf20a,cb7dc2a089c879f02dfccc4e0ba23f5a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -7780,7 +7780,7 @@ geoSampleAccession GSM749742
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=88e474a8e85077483fae831ecb359aa9,bai=381e806589e79511e5bdb1c6277fded0
+md5sum 88e474a8e85077483fae831ecb359aa9,381e806589e79511e5bdb1c6277fded0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7860,7 +7860,7 @@ geoSampleAccession GSM749764
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e67bf67562a8e1141231a0ef40f2f929,bai=6b9427e0de585634dac165f6fbedc21e
+md5sum e67bf67562a8e1141231a0ef40f2f929,6b9427e0de585634dac165f6fbedc21e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -7887,7 +7887,7 @@ geoSampleAccession GSM749670
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e9fcfa0cc9005e82eeeaaf4c118f01a9,bai=2d6b35ffa48d5781d6e36b6361a2a6b0
+md5sum e9fcfa0cc9005e82eeeaaf4c118f01a9,2d6b35ffa48d5781d6e36b6361a2a6b0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8130,7 +8130,7 @@ geoSampleAccession GSM749724
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=f6b1900bb87a5608a6e002bb5e2d64b1,bai=761fdbca5eca0e6fa219b9d97475b487
+md5sum f6b1900bb87a5608a6e002bb5e2d64b1,761fdbca5eca0e6fa219b9d97475b487
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8210,7 +8210,7 @@ geoSampleAccession GSM749704
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6bf57205ed4b094c5435d80ac98449de,bai=d74f5540c6807414bc5371545861f0d4
+md5sum 6bf57205ed4b094c5435d80ac98449de,d74f5540c6807414bc5371545861f0d4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8237,7 +8237,7 @@ geoSampleAccession GSM749706
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=64f1eb5bcb0ed376216ffe589350d703,bai=15bde971f4c46f5b2d53b644013c9de5
+md5sum 64f1eb5bcb0ed376216ffe589350d703,15bde971f4c46f5b2d53b644013c9de5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -8481,7 +8481,7 @@ geoSampleAccession GSM749669
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6164cad5393282dd732ffccbffa0509c,bai=d0e0e4b08a3597a8c3a3ab1a5c2a802d
+md5sum 6164cad5393282dd732ffccbffa0509c,d0e0e4b08a3597a8c3a3ab1a5c2a802d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -8559,7 +8559,7 @@ fileName wgEncodeUwTfbsHacCtcfStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=f11d20cc7d60bf939e2aee4d3d57bc4b,bai=b4a9897f7fe6b5e3ffb1c37b12363f06
+md5sum f11d20cc7d60bf939e2aee4d3d57bc4b,b4a9897f7fe6b5e3ffb1c37b12363f06
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8585,7 +8585,7 @@ grant Stam
 lab UW
 labExpId DS18312
 labVersion Bowtie 0.12.7
-md5sum bam=3146ed1874bc9fdbd0e07c6624b07b45,bai=e4f560847f8c43f1a4cad50f5ba32c83
+md5sum 3146ed1874bc9fdbd0e07c6624b07b45,e4f560847f8c43f1a4cad50f5ba32c83
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8819,7 +8819,7 @@ geoSampleAccession GSM749696
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=e45ee4e6b5605d75f8a92eb0ccaed96f,bai=816e212b4007c08ad9ad1c0871cb40e5
+md5sum e45ee4e6b5605d75f8a92eb0ccaed96f,816e212b4007c08ad9ad1c0871cb40e5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8845,7 +8845,7 @@ grant Stam
 lab UW
 labExpId DS18987
 labVersion Bowtie 0.12.7
-md5sum bam=0b89d681b3cc201a013cb2a239fc4630,bai=68cdc54127528443c81faaa596f12123
+md5sum 0b89d681b3cc201a013cb2a239fc4630,68cdc54127528443c81faaa596f12123
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9083,7 +9083,7 @@ geoSampleAccession GSM749720
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=7898c19965155ba7502fb48b47cb83b0,bai=9923c389163e1e20ad034c0052ef67cd
+md5sum 7898c19965155ba7502fb48b47cb83b0,9923c389163e1e20ad034c0052ef67cd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9161,7 +9161,7 @@ geoSampleAccession GSM749743
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=289b6f49e4ba2be1897463340ca79438,bai=4a79e54485c4aab10435ef3f5de70fcb
+md5sum 289b6f49e4ba2be1897463340ca79438,4a79e54485c4aab10435ef3f5de70fcb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9187,7 +9187,7 @@ geoSampleAccession GSM749710
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=6aed2ee7faa693d5c5e3c47e150f6aba,bai=c2843ce2e4c98ec825aa1e6fe0a8985f
+md5sum 6aed2ee7faa693d5c5e3c47e150f6aba,c2843ce2e4c98ec825aa1e6fe0a8985f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9425,7 +9425,7 @@ geoSampleAccession GSM749746
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=e400625c8c40668cab20f58ce19b9abd,bai=6aaf03f1027c0319cd525c8363a55eef
+md5sum e400625c8c40668cab20f58ce19b9abd,6aaf03f1027c0319cd525c8363a55eef
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9503,7 +9503,7 @@ geoSampleAccession GSM749713
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=2ce08da7ebf4f6b64c42bea529dcfa74,bai=b11178be325e73d32c8ca86fd8f1f67f
+md5sum 2ce08da7ebf4f6b64c42bea529dcfa74,b11178be325e73d32c8ca86fd8f1f67f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9581,7 +9581,7 @@ geoSampleAccession GSM749732
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=2b8c25154e5295238966be93946d1c93,bai=7f02260a5421e0d25c1dcd40d4fa7a5d
+md5sum 2b8c25154e5295238966be93946d1c93,7f02260a5421e0d25c1dcd40d4fa7a5d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9713,7 +9713,7 @@ geoSampleAccession GSM749761
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a60ee4f14ae5dcabe946ca8ee7e7f4d1,bai=fec0a0721116524d6c1c6d2c9d8f5953
+md5sum a60ee4f14ae5dcabe946ca8ee7e7f4d1,fec0a0721116524d6c1c6d2c9d8f5953
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9790,7 +9790,7 @@ fileName wgEncodeUwTfbsHcmCtcfStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=b4713d69c0470797b7a78a878e4dcac3,bai=b693bc23cd277810f6af8a4879b02e0a
+md5sum b4713d69c0470797b7a78a878e4dcac3,b693bc23cd277810f6af8a4879b02e0a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9816,7 +9816,7 @@ grant Stam
 lab UW
 labExpId DS18567
 labVersion Bowtie 0.12.7
-md5sum bam=8c479be476c357050312343ac1ad468e,bai=5567e385ef6190ba5d69a77aaed472d8
+md5sum 8c479be476c357050312343ac1ad468e,5567e385ef6190ba5d69a77aaed472d8
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10050,7 +10050,7 @@ geoSampleAccession GSM749738
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=0df7ecde7a43093a50d68fc0ba533357,bai=66f54ea18b5df81afb1ee6cfba598bcd
+md5sum 0df7ecde7a43093a50d68fc0ba533357,66f54ea18b5df81afb1ee6cfba598bcd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10128,7 +10128,7 @@ geoSampleAccession GSM749735
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=45f6f81cd3544400e9580fde6c7528dc,bai=7edd03ceb3beb1d067ff180fc37d6f8c
+md5sum 45f6f81cd3544400e9580fde6c7528dc,7edd03ceb3beb1d067ff180fc37d6f8c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10154,7 +10154,7 @@ geoSampleAccession GSM749745
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=ed0c9cd296d319958a36492464ba2071,bai=a35264aeec920a2ae488b31ca6e76905
+md5sum ed0c9cd296d319958a36492464ba2071,a35264aeec920a2ae488b31ca6e76905
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10392,7 +10392,7 @@ geoSampleAccession GSM749776
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=6ad1808f15353419a812ec8052f81542,bai=04b6d629e5d4a35762ad674db238d2b4
+md5sum 6ad1808f15353419a812ec8052f81542,04b6d629e5d4a35762ad674db238d2b4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10470,7 +10470,7 @@ grant Stam
 lab UW
 labExpId DS18710
 labVersion Bowtie 0.12.7
-md5sum bam=99d6ab21f0433e00f87820e600e05e6e,bai=1adb425542d1a256274f9bc3150da18c
+md5sum 99d6ab21f0433e00f87820e600e05e6e,1adb425542d1a256274f9bc3150da18c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10496,7 +10496,7 @@ grant Stam
 lab UW
 labExpId DS18568
 labVersion Bowtie 0.12.7
-md5sum bam=1db9673682943a66f7d69ad546354307,bai=fbb3d82dcb3d6713a07c1e1ac0d22936
+md5sum 1db9673682943a66f7d69ad546354307,fbb3d82dcb3d6713a07c1e1ac0d22936
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10734,7 +10734,7 @@ geoSampleAccession GSM749774
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=61678ad164b764b61fd09a6700d0b9f4,bai=74495607ab22a523622d7b9ac344f1b3
+md5sum 61678ad164b764b61fd09a6700d0b9f4,74495607ab22a523622d7b9ac344f1b3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10812,7 +10812,7 @@ geoSampleAccession GSM749712
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=1b56f8a8391f70ee4e0cf43bf330d533,bai=02f3959ebd9411cc971aa1a743fe49b2
+md5sum 1b56f8a8391f70ee4e0cf43bf330d533,02f3959ebd9411cc971aa1a743fe49b2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10838,7 +10838,7 @@ geoSampleAccession GSM749726
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=569e2394a221e499dcdc32b013d1d14f,bai=988644e89574299a45dfc9abd5b9eaec
+md5sum 569e2394a221e499dcdc32b013d1d14f,988644e89574299a45dfc9abd5b9eaec
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11076,7 +11076,7 @@ geoSampleAccession GSM749698
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=281d52b97200a80ef67671cdc3ec54ef,bai=14563062aba4a695c2b21de0c0793a57
+md5sum 281d52b97200a80ef67671cdc3ec54ef,14563062aba4a695c2b21de0c0793a57
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11155,7 +11155,7 @@ geoSampleAccession GSM749668
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=f289db0686280b757d51d632ddb8af89,bai=b6d93ebeaf1f7e2b7aec08611aaae640
+md5sum f289db0686280b757d51d632ddb8af89,b6d93ebeaf1f7e2b7aec08611aaae640
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11182,7 +11182,7 @@ geoSampleAccession GSM749687
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=b16c2c15742e64913bfb17f334449473,bai=188fde41d6e0395cca72ce9849c7c894
+md5sum b16c2c15742e64913bfb17f334449473,188fde41d6e0395cca72ce9849c7c894
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11426,7 +11426,7 @@ geoSampleAccession GSM749767
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=8695fa41a3a4d66742f10c0c58d1c641,bai=09665d59afaf8b28ac74373d2a5a310f
+md5sum 8695fa41a3a4d66742f10c0c58d1c641,09665d59afaf8b28ac74373d2a5a310f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11506,7 +11506,7 @@ geoSampleAccession GSM749729
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2fe57b4ff9c449445b3cd2ab5dce22bd,bai=afb23ebfb29baa40a6fe66d1f28f2728
+md5sum 2fe57b4ff9c449445b3cd2ab5dce22bd,afb23ebfb29baa40a6fe66d1f28f2728
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11533,7 +11533,7 @@ geoSampleAccession GSM749739
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e540ec85a611ba1b560cce4d7613ad9b,bai=4da666f7f152221ebea3822c0c93d84b
+md5sum e540ec85a611ba1b560cce4d7613ad9b,4da666f7f152221ebea3822c0c93d84b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11776,7 +11776,7 @@ geoSampleAccession GSM749721
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=b98c396a6096dc8022f1d2cdddc17c53,bai=3c55ba38424aefef430853f56ba20aa3
+md5sum b98c396a6096dc8022f1d2cdddc17c53,3c55ba38424aefef430853f56ba20aa3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11856,7 +11856,7 @@ geoSampleAccession GSM749715
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=5cc661c6e9ef3f394dcafb88d6afe073,bai=b0b08af9159137dd0259409dfa01030c
+md5sum 5cc661c6e9ef3f394dcafb88d6afe073,b0b08af9159137dd0259409dfa01030c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11883,7 +11883,7 @@ geoSampleAccession GSM749683
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=294081ca8ef7453bb36cc87d9ca23185,bai=ed85f20eb064b906d6cdbd98a32161ef
+md5sum 294081ca8ef7453bb36cc87d9ca23185,ed85f20eb064b906d6cdbd98a32161ef
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12128,7 +12128,7 @@ geoSampleAccession GSM749756
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=4c8d22ed605e136b98eaa395a140fc66,bai=073c42bec02eaddbe8ee8e8aab1b6ca3
+md5sum 4c8d22ed605e136b98eaa395a140fc66,073c42bec02eaddbe8ee8e8aab1b6ca3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12207,7 +12207,7 @@ grant Stam
 lab UW
 labExpId DS18316
 labVersion Bowtie 0.12.7
-md5sum bam=e9914cfc31c9cc3bc8ebb8cf488a1f67,bai=217c489ed9a2e4ccac50d00feb0de5e5
+md5sum e9914cfc31c9cc3bc8ebb8cf488a1f67,217c489ed9a2e4ccac50d00feb0de5e5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12284,7 +12284,7 @@ fileName wgEncodeUwTfbsHffmycCtcfStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5ab34c980265016640459770a70e2252,bai=e2e48ab0fb08f8c473745d6efa789ef2
+md5sum 5ab34c980265016640459770a70e2252,e2e48ab0fb08f8c473745d6efa789ef2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12309,7 +12309,7 @@ fileName wgEncodeUwTfbsHffmycCtcfStdAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=4f3310a68f7b1a67c7917b70b2d67a05,bai=117b06631a1a488a5aa63d1a50b4375b
+md5sum 4f3310a68f7b1a67c7917b70b2d67a05,117b06631a1a488a5aa63d1a50b4375b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12538,7 +12538,7 @@ fileName wgEncodeUwTfbsHffmycInputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=05f3eba6548b38fa8ef4d5b2f7037e62,bai=d400c312c0e3d1e6c7e36f547d29b9df
+md5sum 05f3eba6548b38fa8ef4d5b2f7037e62,d400c312c0e3d1e6c7e36f547d29b9df
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12615,7 +12615,7 @@ geoSampleAccession GSM749688
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=5a5681ee84f22d232ea8ffc9b4f3fc3d,bai=282c8c5dab1764ac880c9e553b244a32
+md5sum 5a5681ee84f22d232ea8ffc9b4f3fc3d,282c8c5dab1764ac880c9e553b244a32
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12751,7 +12751,7 @@ geoSampleAccession GSM749775
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=c65e659e364ddeddd821a73d643c87ab,bai=28b7ab34f13d37ecd24018483d522051
+md5sum c65e659e364ddeddd821a73d643c87ab,28b7ab34f13d37ecd24018483d522051
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12831,7 +12831,7 @@ geoSampleAccession GSM749753
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=559ad70363b0066b17d37f5bd7f19e43,bai=4d98f742f11287b30232631129f44921
+md5sum 559ad70363b0066b17d37f5bd7f19e43,4d98f742f11287b30232631129f44921
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12857,7 +12857,7 @@ grant Stam
 lab UW
 labExpId DS18569
 labVersion Bowtie 0.12.7
-md5sum bam=6e35ad78442608300659641adedcaf94,bai=1f88d744b80a7cb1a3fbd92ab1a35b9b
+md5sum 6e35ad78442608300659641adedcaf94,1f88d744b80a7cb1a3fbd92ab1a35b9b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13098,7 +13098,7 @@ geoSampleAccession GSM749755
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=84f1f647c7fa6a8fa6755ac90a37f496,bai=4dcb8fc8ee73511246cad1481f7309ac
+md5sum 84f1f647c7fa6a8fa6755ac90a37f496,4dcb8fc8ee73511246cad1481f7309ac
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13177,7 +13177,7 @@ geoSampleAccession GSM749665
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=76133e131a2bbae141eab7746a27043c,bai=dbec1b2706e6ed12bd3e503390e981cb
+md5sum 76133e131a2bbae141eab7746a27043c,dbec1b2706e6ed12bd3e503390e981cb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13203,7 +13203,7 @@ geoSampleAccession GSM749675
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=d97989193947522b638a926b92ed1cae,bai=7a0d7ed1097ef07f87dd32d2ab0a3238
+md5sum d97989193947522b638a926b92ed1cae,7a0d7ed1097ef07f87dd32d2ab0a3238
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13441,7 +13441,7 @@ geoSampleAccession GSM749763
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=68304f92a458c781c2512552e097a28f,bai=a10a5562ca21d8961fab60d6a7aea1ee
+md5sum 68304f92a458c781c2512552e097a28f,a10a5562ca21d8961fab60d6a7aea1ee
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13519,7 +13519,7 @@ geoSampleAccession GSM749681
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=2ff15bc0a396e67518d5ec5b04ceed4e,bai=fd2eb797122a0287897b9a598660e2a3
+md5sum 2ff15bc0a396e67518d5ec5b04ceed4e,fd2eb797122a0287897b9a598660e2a3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13545,7 +13545,7 @@ geoSampleAccession GSM749751
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=6757a2e4da9bff0b9602caec051fc38a,bai=f5ccb5df332acc8372cdb1adb47d10c7
+md5sum 6757a2e4da9bff0b9602caec051fc38a,f5ccb5df332acc8372cdb1adb47d10c7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13783,7 +13783,7 @@ geoSampleAccession GSM749709
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=230397d763983496c6a0e7aba97b8bde,bai=722fbe83858acf38e41c4537bea1e500
+md5sum 230397d763983496c6a0e7aba97b8bde,722fbe83858acf38e41c4537bea1e500
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13861,7 +13861,7 @@ geoSampleAccession GSM749699
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=81d03cbe349b8f6bf59d1004162864c4,bai=c0fd4bf9db7cd3a493170891768c4538
+md5sum 81d03cbe349b8f6bf59d1004162864c4,c0fd4bf9db7cd3a493170891768c4538
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13887,7 +13887,7 @@ geoSampleAccession GSM749717
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a04c97b1bed5b7b03a016c7ccadca9ca,bai=07ecc1428ab853a9e9f2992c5362de32
+md5sum a04c97b1bed5b7b03a016c7ccadca9ca,07ecc1428ab853a9e9f2992c5362de32
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14125,7 +14125,7 @@ geoSampleAccession GSM749773
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a3b23daa86e235298f88d81aaf985422,bai=8026b69f9f6f5d92669666e8aac15817
+md5sum a3b23daa86e235298f88d81aaf985422,8026b69f9f6f5d92669666e8aac15817
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14204,7 +14204,7 @@ geoSampleAccession GSM749727
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=c676d1b5f42538b83e2c9df59199c614,bai=9a6fa8cc6b786b258727a898206b21b4
+md5sum c676d1b5f42538b83e2c9df59199c614,9a6fa8cc6b786b258727a898206b21b4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14231,7 +14231,7 @@ geoSampleAccession GSM749737
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=0d49e62b3be96c0b2a7964da6ecdba12,bai=aaf471906dd648746dc032dec361593b
+md5sum 0d49e62b3be96c0b2a7964da6ecdba12,aaf471906dd648746dc032dec361593b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14474,7 +14474,7 @@ geoSampleAccession GSM749778
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=bccf9b943b8d4b3f944873f1b231974d,bai=e5c24a03e13225583b0cef01ab5618d5
+md5sum bccf9b943b8d4b3f944873f1b231974d,e5c24a03e13225583b0cef01ab5618d5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14553,7 +14553,7 @@ geoSampleAccession GSM749673
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=554ef0e8731de7d0f0504f827cd68c48,bai=d900b8f5b8a307e7ce9b9e7b9eeb5a4d
+md5sum 554ef0e8731de7d0f0504f827cd68c48,d900b8f5b8a307e7ce9b9e7b9eeb5a4d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14579,7 +14579,7 @@ grant Stam
 lab UW
 labExpId DS18570
 labVersion Bowtie 0.12.7
-md5sum bam=f4ba1113407d6ecc2a9743fa315633c9,bai=b0d51613b562f7e158b1d8e05d351f0f
+md5sum f4ba1113407d6ecc2a9743fa315633c9,b0d51613b562f7e158b1d8e05d351f0f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14817,7 +14817,7 @@ geoSampleAccession GSM749771
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=58b3f2fcef455370dca4a0d46dc450ae,bai=d0262574a710d50e39a7bd7fb3410318
+md5sum 58b3f2fcef455370dca4a0d46dc450ae,d0262574a710d50e39a7bd7fb3410318
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14896,7 +14896,7 @@ geoSampleAccession GSM749674
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=608271e097f2fba5bccbb40487e43b93,bai=c3e1ef275ff950fc98ad6ba8111be6f8
+md5sum 608271e097f2fba5bccbb40487e43b93,c3e1ef275ff950fc98ad6ba8111be6f8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14923,7 +14923,7 @@ geoSampleAccession GSM749749
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=102ab643c86f7fcde7ea895d8f80b770,bai=c0714f241f495d181ca2c72d38e3fcfe
+md5sum 102ab643c86f7fcde7ea895d8f80b770,c0714f241f495d181ca2c72d38e3fcfe
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15167,7 +15167,7 @@ geoSampleAccession GSM749758
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=1e53aafd4a01a42265f15da95c0d6739,bai=7d77affe531b3bf14b921132dee44005
+md5sum 1e53aafd4a01a42265f15da95c0d6739,7d77affe531b3bf14b921132dee44005
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15246,7 +15246,7 @@ grant Stam
 lab UW
 labExpId DS18571
 labVersion Bowtie 0.12.7
-md5sum bam=5e54051ff226c1e7e256ec76e3e46ccf,bai=8027cc1c4cdd382f5931a41194f46a83
+md5sum 5e54051ff226c1e7e256ec76e3e46ccf,8027cc1c4cdd382f5931a41194f46a83
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15272,7 +15272,7 @@ grant Stam
 lab UW
 labExpId DS18572
 labVersion Bowtie 0.12.7
-md5sum bam=6197249eeb3389a83be342611afc7e89,bai=155b7ac7dff55c417ddd3f800341eeee
+md5sum 6197249eeb3389a83be342611afc7e89,155b7ac7dff55c417ddd3f800341eeee
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15510,7 +15510,7 @@ geoSampleAccession GSM749703
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=b4f29bc2404fdb9116a579c6d13cac48,bai=777401b7e2ca22fba8bb86ae31fc6f6a
+md5sum b4f29bc2404fdb9116a579c6d13cac48,777401b7e2ca22fba8bb86ae31fc6f6a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15588,7 +15588,7 @@ geoSampleAccession GSM749672
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5081f727d9ff27391c09e391b3661da5,bai=479a874d00e6aabe212d5343abf1d3f9
+md5sum 5081f727d9ff27391c09e391b3661da5,479a874d00e6aabe212d5343abf1d3f9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15667,7 +15667,7 @@ geoSampleAccession GSM749690
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=47b33c89d7dcc58067550c7c28796794,bai=fa991dcf9da229136ed9ecdb710017d4
+md5sum 47b33c89d7dcc58067550c7c28796794,fa991dcf9da229136ed9ecdb710017d4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15694,7 +15694,7 @@ geoSampleAccession GSM749733
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=104368a2b940985778cd70e72a83005a,bai=ec2d75f582895252f6ddf732eb35bf01
+md5sum 104368a2b940985778cd70e72a83005a,ec2d75f582895252f6ddf732eb35bf01
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15938,7 +15938,7 @@ geoSampleAccession GSM749719
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=87bf94aee05213d3abd24e4256b14d29,bai=abd48cc689cd6efc49d2e42249540391
+md5sum 87bf94aee05213d3abd24e4256b14d29,abd48cc689cd6efc49d2e42249540391
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16016,7 +16016,7 @@ fileName wgEncodeUwTfbsLncapInputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=0b78ee0b19e13e795ef4320063929ca5,bai=e5ce88067c7f98de41b407e251515a3c
+md5sum 0b78ee0b19e13e795ef4320063929ca5,e5ce88067c7f98de41b407e251515a3c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16092,7 +16092,7 @@ grant Stam
 lab UW
 labExpId DS16200
 labVersion Bowtie 0.12.7
-md5sum bam=4fa5a37f36f4757896af9c013606c892,bai=3b309932edf2607eef3d67f74bd05f0e
+md5sum 4fa5a37f36f4757896af9c013606c892,3b309932edf2607eef3d67f74bd05f0e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16118,7 +16118,7 @@ grant Stam
 lab UW
 labExpId DS16199
 labVersion Bowtie 0.12.7
-md5sum bam=f6aa2fc193492e6b761c2c0e1475a1dc,bai=8145eba1c69c4d2c6d8262c21bcfb14e
+md5sum f6aa2fc193492e6b761c2c0e1475a1dc,8145eba1c69c4d2c6d8262c21bcfb14e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16356,7 +16356,7 @@ geoSampleAccession GSM749760
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=b10fb6885ec687300b45ba920772296d,bai=db93a51ff2fbc9ee1d5c1a9cbf8aa466
+md5sum b10fb6885ec687300b45ba920772296d,db93a51ff2fbc9ee1d5c1a9cbf8aa466
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16433,7 +16433,7 @@ fileName wgEncodeUwTfbsNb4CtcfStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5b980e11c9ccca7e3dc959cbddb71ec0,bai=c64014ba42d83db6ddcde14f7a1261ae
+md5sum 5b980e11c9ccca7e3dc959cbddb71ec0,c64014ba42d83db6ddcde14f7a1261ae
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16561,7 +16561,7 @@ geoSampleAccession GSM749716
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=68138205d5dc967e206d59aae202213f,bai=211072291311fe91b475ae0b65953b22
+md5sum 68138205d5dc967e206d59aae202213f,211072291311fe91b475ae0b65953b22
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16639,7 +16639,7 @@ grant Stam
 lab UW
 labExpId DS16204
 labVersion Bowtie 0.12.7
-md5sum bam=8ceb808c62f9c83e8b83c93fd4c3a461,bai=b3b8702f6e38900b70e0afb79dee59d5
+md5sum 8ceb808c62f9c83e8b83c93fd4c3a461,b3b8702f6e38900b70e0afb79dee59d5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16665,7 +16665,7 @@ grant Stam
 lab UW
 labExpId DS16205
 labVersion Bowtie 0.12.7
-md5sum bam=d2ab5dbb4987623093854aa650f46c44,bai=ec2c7e811c5329a43652c26c5f206bb1
+md5sum d2ab5dbb4987623093854aa650f46c44,ec2c7e811c5329a43652c26c5f206bb1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16903,7 +16903,7 @@ geoSampleAccession GSM749722
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=291082132e6429eb5af0094d5ec3b49c,bai=f479a8c0ab730ac32cac9bb8305b8e74
+md5sum 291082132e6429eb5af0094d5ec3b49c,f479a8c0ab730ac32cac9bb8305b8e74
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16982,7 +16982,7 @@ geoSampleAccession GSM749707
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=a9b0878b9096f033799fff42bd43c430,bai=0623805dc3a43c678b7841f97107c4c6
+md5sum a9b0878b9096f033799fff42bd43c430,0623805dc3a43c678b7841f97107c4c6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17009,7 +17009,7 @@ geoSampleAccession GSM749747
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2232c61bdb6d90b2a24892fb3a46c560,bai=a777c30937db95c21fd67cad0f53d079
+md5sum 2232c61bdb6d90b2a24892fb3a46c560,a777c30937db95c21fd67cad0f53d079
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17253,7 +17253,7 @@ geoSampleAccession GSM749744
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=91cc4ef6fe3f3a73395231f47f34f46f,bai=7307229f70d64fc97b3e225269ff1378
+md5sum 91cc4ef6fe3f3a73395231f47f34f46f,7307229f70d64fc97b3e225269ff1378
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17331,7 +17331,7 @@ fileName wgEncodeUwTfbsNhlfInputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=bc56a075054dbaeae27c9116f9bcda5d,bai=a96e44a6ab87f2e8d41ff5b8446fd47c
+md5sum bc56a075054dbaeae27c9116f9bcda5d,a96e44a6ab87f2e8d41ff5b8446fd47c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17406,7 +17406,7 @@ fileName wgEncodeUwTfbsPanc1InputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=e8444f8d9672c4c50d3b87f175c9e68e,bai=5b525c7c0811950c5b44929017c94014
+md5sum e8444f8d9672c4c50d3b87f175c9e68e,5b525c7c0811950c5b44929017c94014
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17482,7 +17482,7 @@ grant Stam
 lab UW
 labExpId DS18338
 labVersion Bowtie 0.12.7
-md5sum bam=1e498357a77c3b11d70b87192c0650bf,bai=17f2ec50b8f1d10e8ab883307e8396f6
+md5sum 1e498357a77c3b11d70b87192c0650bf,17f2ec50b8f1d10e8ab883307e8396f6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17508,7 +17508,7 @@ grant Stam
 lab UW
 labExpId DS18337
 labVersion Bowtie 0.12.7
-md5sum bam=1be83e68b1a35a7ff69247a61d140794,bai=57237c505231bf162ede3b4a8fc19d93
+md5sum 1be83e68b1a35a7ff69247a61d140794,57237c505231bf162ede3b4a8fc19d93
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17746,7 +17746,7 @@ grant Stam
 lab UW
 labExpId DS18336
 labVersion Bowtie 0.12.7
-md5sum bam=8e4598bd0dee85ccbe1fc4674a62edab,bai=2e11f9239948bdd171c4690794676ba6
+md5sum 8e4598bd0dee85ccbe1fc4674a62edab,2e11f9239948bdd171c4690794676ba6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17825,7 +17825,7 @@ geoSampleAccession GSM749684
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=3f856c7a5a02e640c4f6d96e2b31740b,bai=c283da4301e24181e3336b5e94464992
+md5sum 3f856c7a5a02e640c4f6d96e2b31740b,c283da4301e24181e3336b5e94464992
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17852,7 +17852,7 @@ geoSampleAccession GSM749779
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=9d5593dbd76f54dee67d4f975526de9a,bai=0fe29f42fba078106c0865f762b48a83
+md5sum 9d5593dbd76f54dee67d4f975526de9a,0fe29f42fba078106c0865f762b48a83
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -18095,7 +18095,7 @@ geoSampleAccession GSM749682
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=727bf1fb6715522036f5faf38b7824c1,bai=dbdf0b8adb79506a5092328d2f0a4b66
+md5sum 727bf1fb6715522036f5faf38b7824c1,dbdf0b8adb79506a5092328d2f0a4b66
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -18173,7 +18173,7 @@ fileName wgEncodeUwTfbsSknmcInputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=d5d191f1e9ca99b3e1121a9fd05ec28b,bai=6ac7de5c7f67f9e9c95911d7f0887bf6
+md5sum d5d191f1e9ca99b3e1121a9fd05ec28b,6ac7de5c7f67f9e9c95911d7f0887bf6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18250,7 +18250,7 @@ geoSampleAccession GSM749693
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=40c54f614a152795a5cca2ad353c693a,bai=d36d2ad165f29ce99faf96148a14faa2
+md5sum 40c54f614a152795a5cca2ad353c693a,d36d2ad165f29ce99faf96148a14faa2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -18277,7 +18277,7 @@ geoSampleAccession GSM749667
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=15b8b58d4061249fd4c7292173813643,bai=864870554b1cd3130761fd1f117a5207
+md5sum 15b8b58d4061249fd4c7292173813643,864870554b1cd3130761fd1f117a5207
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -18520,7 +18520,7 @@ geoSampleAccession GSM749700
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=fa68ac676eda604a99da8e0171a5ea02,bai=60ed9a08fc64468a2116227f1a277568
+md5sum fa68ac676eda604a99da8e0171a5ea02,60ed9a08fc64468a2116227f1a277568
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -18600,7 +18600,7 @@ geoSampleAccession GSM749768
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=bb79ef9593ca24444a71632a9e0ac47d,bai=0b68198a26bc2c0999ff2e53469800ff
+md5sum bb79ef9593ca24444a71632a9e0ac47d,0b68198a26bc2c0999ff2e53469800ff
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -18627,7 +18627,7 @@ geoSampleAccession GSM749679
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=dd54cce4bf9e34be10fe294e482e815b,bai=6aa96f052f362110862aee5a45c63bc3
+md5sum dd54cce4bf9e34be10fe294e482e815b,6aa96f052f362110862aee5a45c63bc3
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -18872,7 +18872,7 @@ geoSampleAccession GSM749766
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=4b263c42794d5aa07e09c5d9bebadde5,bai=85a07530004bfea6cf5b2c9fb94a5661
+md5sum 4b263c42794d5aa07e09c5d9bebadde5,85a07530004bfea6cf5b2c9fb94a5661
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -18950,7 +18950,7 @@ fileName wgEncodeUwTfbsWi38CtcfStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=3d137b810c3324a95d2f905558787c91,bai=df93f2f9dc16e3476b17c9445183a7eb
+md5sum 3d137b810c3324a95d2f905558787c91,df93f2f9dc16e3476b17c9445183a7eb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18975,7 +18975,7 @@ fileName wgEncodeUwTfbsWi38CtcfStdAlnRep2.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=767aee433dd2fdaac25236cc03e73cbc,bai=a7a1fde9e1f9dd830682ebd0ba72cd72
+md5sum 767aee433dd2fdaac25236cc03e73cbc,a7a1fde9e1f9dd830682ebd0ba72cd72
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19205,7 +19205,7 @@ grant Stam
 lab UW
 labExpId DS18351
 labVersion Bowtie 0.12.7
-md5sum bam=865b7374b5917014e92fbe0e4932afc4,bai=2fff3ca054957eae4248a9ab8f54b86a
+md5sum 865b7374b5917014e92fbe0e4932afc4,2fff3ca054957eae4248a9ab8f54b86a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19285,7 +19285,7 @@ fileName wgEncodeUwTfbsWi38InputStdAlnRep1.bam
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=ad9237429f19d8eba7252c7698b67679,bai=57958533d9b8a52c446bc55aded4339b
+md5sum ad9237429f19d8eba7252c7698b67679,57958533d9b8a52c446bc55aded4339b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19343,4 +19343,4 @@ subId 4365
 tableName wgEncodeUwTfbsWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: 569028233
+# MAGIC: 568905539
