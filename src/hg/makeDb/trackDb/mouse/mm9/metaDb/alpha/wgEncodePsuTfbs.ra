@@ -1960,7 +1960,7 @@ fileName wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep1.bam
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
-md5sum bam=9417fc24c48d74e3b2f76a0efd1652fc,bai=65f06dde79e1cffdafb56bb2229df21a
+md5sum 9417fc24c48d74e3b2f76a0efd1652fc,65f06dde79e1cffdafb56bb2229df21a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2923,4 +2923,4 @@ strain C57BL/6
 subId 4817
 view RawData
 
-# MAGIC: -1293854028
+# MAGIC: -1293854754
