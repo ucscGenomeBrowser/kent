@@ -35,7 +35,8 @@ class RaFile(OrderedDict):
 			print key
 	
 	Note that ra files are order preserving. Added entries are appended to the
-	end of the file, and 
+	end of the file. This allows you to print out a ra file easily:
+		print rafile
 	
 	Most of the time you don't want to do something with all stanzas though,
 	instead you want to filter them. The included filter method allows you to
