@@ -1,5 +1,7 @@
 // Javascript for use in hgTracks CGI
 
+// "use strict";
+
 var debug = false;
 var originalPosition;
 var originalSize;
@@ -1477,15 +1479,18 @@ $(document).ready(function()
         jQuery('body').css('cursor', 'wait');
             window.location = "../cgi-bin/hgTracks?hgsid=" + getHgsid();
             return false;
-        }
+    }
     initVars();
     var db = getDb();
     if(jQuery.fn.autocomplete && $('input#suggest') && db) {
+        if(jQuery.fn.Watermark) {
+            $('#suggest').Watermark("gene");
+        }
         if(newJQuery) {
             $('input#suggest').autocomplete({
                                                 delay: 500,
                                                 minLength: 2,
-                                                source: ajaxGet(function () {return db;}, new Object, true),
+                                                source: ajaxGet(function () {return getDb();}, new Object, true),
                                                 open: function(event, ui) {
                                                     var pos = $(this).offset().top + $(this).height();
                                                     if (!isNaN(pos)) {
@@ -1698,7 +1703,7 @@ function findMapItem(e)
     if(e.target.tagName.toUpperCase() != "AREA") {
         var tr = $( e.target ).parents('tr.imgOrd');
         if( $(tr).length == 1 ) {
-            a = /tr_(.*)/.exec($(tr).attr('id'));  // voodoo
+            var a = /tr_(.*)/.exec($(tr).attr('id'));  // voodoo
             if(a && a[1]) {
                 var id = a[1];
                 return makeMapItem(id);
@@ -2885,7 +2890,7 @@ function jumpButtonOnClick()
 // expecting the browser to jump to that gene.
     var gene = $('#suggest').val();
     var db = getDb();
-    if(gene && db && gene.length > 0 && (getOriginalPosition() == getPosition() || getPosition().length == 0)) {
+    if(gene && gene != "gene" && db && gene.length > 0 && (getOriginalPosition() == getPosition() || getPosition().length == 0)) {
         pos = lookupGene(db, gene);
         if(pos) {
             setPosition(pos, null);
@@ -3093,4 +3098,26 @@ function updateButtonClick(ele)
     } else {
         return true;
     }
+}
+
+function handleChangePosition(response, status)
+{
+    var json = eval("(" + response + ")");
+    setPosition(json.pos);
+}
+
+function changeAssemblies(ele)
+{
+// code to update page when user changes assembly select list.
+    $.ajax({
+               type: "GET",
+               url: "../cgi-bin/hgApi",
+               data: "cmd=defaultPos&db=" + getDb(),
+               dataType: "html",
+               trueSuccess: handleChangePosition,
+               success: catchErrorOrDispatch,
+               error: errorHandler,
+               cache: true
+           });
+    return false;
 }
