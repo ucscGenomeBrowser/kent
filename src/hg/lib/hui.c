@@ -4002,6 +4002,7 @@ else
     }
 
 // Finally the big "for loop" to list each subtrack as a table row.
+printf("\n<!-- ----- subtracks list ----- -->\n");
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
     subtrack = subtrackRef->val;
@@ -4063,25 +4064,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         printf("&nbsp;");
 
 #ifdef SUBTRACK_CFG
-#define SUBTRACK_CFG_VIS_SEEN
-#ifdef SUBTRACK_CFG_VIS_SEEN
     enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
     char *view = NULL;
     if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
         view = membership->membership[ix];
-    //enum trackVisibility vis = tdbVisLimitedByAncestry(cart, subtrack, TRUE);
-    //if (fourStateVisible(fourState))
-    //    {
-    //    safef(buffer, sizeof(buffer), " onclick='return scm.cfgToggle(\"%s\");'%s",subtrack->track,(fourStateVisible(fourState) ?"":" disabled"));
-    //    char classList[256];
-    //    if (view != NULL)
-    //        safef(classList,sizeof(classList),"normalText subVisDD %s",view);
-    //    else
-    //        safecpy(classList,sizeof(classList),"normalText subVisDD");
-    //    hTvDropDownClassVisOnlyAndExtra(subtrack->track,vis,TRUE,classList, NULL,buffer);
-    //    }
-    //else
-    //    {
         char classList[256];
         if (view != NULL)
             safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD %s",(visibleCB ? "":" disabled"),view); // view should be last!
@@ -4089,55 +4075,10 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",(visibleCB ? "":" disabled"));
         #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='%s' style='width:65px;' onclick='return scm.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
         printf(SUBTRACK_CFG_VIS,subtrack->track,classList,subtrack->track,hStringFromTv(vis));
-    //    }
-#endif///def SUBTRACK_CFG_VIS_SEEN
     if (cType != cfgNone)  // make a wrench
         {
-        //#define SUBTRACK_CFG_STARRED
-        #ifdef SUBTRACK_CFG_STARRED
-            //lmCleanup(&lm);
-            //struct lm *lm = lmInit(0); // FIXME: If used, move lmInit to outside of subtrack loop.
-            //struct slPair *changeViewSettings = cartVarsWithPrefixLm(cart, subtrack->track, lm);
-            struct slPair *subSpecificSettings = cartVarsWithPrefix(cart, subtrack->track);
-            buffer[0] = '\0';
-            if (subSpecificSettings)
-                {
-                // Not interested in some:
-                struct slPair *subSpecificFiltered = NULL;
-                struct slPair *onePair;
-                while(subSpecificSettings)
-                    {
-                    onePair = slPopHead(&subSpecificSettings);
-                    if (!endsWith(onePair->name,"_sel")
-                    && !endsWith(onePair->name,".priority")
-                    && !endsWith(onePair->name,"_imgOrd"))
-                        slAddHead(&subSpecificFiltered,onePair);
-                    //else
-                    //    slPairFreeValsAndList(&onePair)
-                    }
-                subSpecificSettings = subSpecificFiltered;
-                if (subSpecificSettings)
-                    safef(buffer, sizeof(buffer), " (has differences)");
-                    // DEBUGGING are there other differences to be filtered
-                    //safef(buffer, sizeof(buffer), " (has %d differences", slCount(subSpecificSettings));
-                    //safef(buffer, sizeof(buffer), "<span class='diff' title='Subtrack specific differences %d'>&#42;</span>", slCount(subSpecificSettings));
-                    //printf("<span id-'%s_differs'>&#42;<sup>%d</sup></span>\n",subtrack->track,slCount(subSpecificSettings));
-                    //{
-                    //printf("<span id-'%s_differs'>&#42;<sup>%d",subtrack->track,slCount(subSpecificSettings));
-                    //onePair = subSpecificSettings;
-                    //for(;onePair != NULL;onePair = onePair->next)
-                    //    printf(", %s=%s",onePair->name,(char *)onePair->val);
-                    //printf("</sup></span>\n");
-                    //}
-                }
-            #define SUBTRACK_CFG_WRENCH "<span class='clickable' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack%s'><img src='../images/wrench.png'>%s</span>\n"
-            printf(SUBTRACK_CFG_WRENCH,subtrack->track,buffer,(subSpecificSettings?"<span class='diff'>&#42;</span>":""));
-            // TODO: js support for adding/removing star.  Problem: how many differences will there be?
-        #else///ifndef SUBTRACK_CFG_STARRED
-            //#define SUBTRACK_CFG_WRENCH "<a href='#a_cfg' onclick='return scm.cfgToggle(\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></a>\n"
-            #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return scm.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
-            printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" halfVis"),subtrack->track);
-        #endif///ndef SUBTRACK_CFG_STARRED
+        #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return scm.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
+        printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" halfVis"),subtrack->track);
         }
 #endif///def SUBTRACK_CFG
 
@@ -6972,9 +6913,11 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     }
 
 #ifdef SUBTRACK_CFG
-cgiMakeHiddenVar("db", db); // TODO: Change these to json vars as per Larry's new method
-printf("<input type=HIDDEN id='track' value='%s'>\n",tdb->track);
-#endif
+    jsonHashAddBoolean(NULL, "subCfg", TRUE);
+#else///ifndef SUBTRACK_CFG
+    jsonHashAddBoolean(NULL, "subCfg", FALSE);
+#endif///ndef SUBTRACK_CFG
+
 cgiDown(0.7);
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {

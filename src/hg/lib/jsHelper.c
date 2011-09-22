@@ -28,6 +28,8 @@ static char const rcsid[] = "$Id: jsHelper.c,v 1.31 2009/09/10 04:19:26 larrym E
 
 static boolean jsInited = FALSE;
 
+struct jsonHashElement *jsonGlobalsHash = NULL;
+
 void jsInit()
 /* If this is the first call, set window.onload to the operations
  * performed upon loading a page and print supporting javascript.
@@ -516,6 +518,12 @@ return ele;
 
 void jsonHashAdd(struct jsonHashElement *h, char *name, struct jsonElement *ele)
 {
+if (h == NULL)  // If hash isn't provided, assume global
+    {
+    if (jsonGlobalsHash == NULL)
+        jsonGlobalsHash = newJsonHash(newHash(8));
+    h = jsonGlobalsHash;
+    }
 hashReplace(h->hash, name, ele);
 }
 
@@ -668,6 +676,20 @@ jsonPrintRecurse(json, indentLevel);
 if(name != NULL)
     hPrintf("%s;\n// END %s\n", indentBuf, name);
 freez(&indentBuf);
+}
+
+void jsonPrintGlobals(boolean wrapWithScriptTags)
+// prints out the "common" globals json hash
+// This hash is the one utils.js and therefore all CGIs know about
+{
+if (jsonGlobalsHash != NULL)
+    {
+    if (wrapWithScriptTags)
+        printf("<script type='text/javascript'>\n");
+    jsonPrint((struct jsonElement *) jsonGlobalsHash, "common", 0);
+    if (wrapWithScriptTags)
+        printf("</script>\n");
+    }
 }
 
 void jsonErrPrintf(struct dyString *ds, char *format, ...)

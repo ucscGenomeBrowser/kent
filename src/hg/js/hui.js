@@ -31,7 +31,6 @@ function _matSelectViewForSubTracks(obj,view)
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
-        exposeAll();
         matSubCBsEnable(true,view);
 
         // Needed for later
@@ -97,12 +96,11 @@ function matSelectViewForSubTracks(obj,view)
 function exposeAll()
 {
     // Make main display dropdown show full if currently hide
-    var visDD = $("select.visDD"); // limit to hidden
-    if ($(visDD).length == 1) {
-        visDD = visDD[0];              // limit to hidden
+    var visDD = normed($("select.visDD")); // limit to hidden
+    if (visDD != undefined) {
         if ($(visDD).attr('selectedIndex') == 0) {
             $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
-            scm.propagateVis(visDD);
+            $(visDD).change(); // triggers onchange code effecting inherited subtrack vis
         }
     }
 }
@@ -112,7 +110,8 @@ function matSubCbClick(subCB)
 // subCB:onclick  When a subtrack checkbox is clicked, it may result in
 // Clicking/unclicking the corresponding matrix CB.  Also the
 // subtrack may be hidden as a result.
-    scm.checkOneSubtrack(subCB,subCB.checked,!subCB.disabled);
+    if (common.subCfg)
+        scm.checkOneSubtrack(subCB,subCB.checked,!subCB.disabled);
     //////////matSubCBsetShadow(subCB);
     //////////hideOrShowSubtrack(subCB);
     // When subCBs are clicked, 3-state matCBs may need to be set
@@ -129,8 +128,6 @@ function matSubCbClick(subCB)
 
     if(subCB.checked)
         exposeAll();  // Unhide composite vis?
-
-    ///////////scm.enableCfg(subCB,null,subCB.checked);
 
     matSubCBsSelected();
 }
@@ -195,12 +192,14 @@ function _matSetMatrixCheckBoxes(state)
         var classes = matAbcCBclasses(false);
         subCbs = objsFilterByClasses(subCbs,"not",classes);  // remove unchecked abcCB classes
     }
-    $( subCbs ).each( function (i) {
-        scm.checkOneSubtrack(this,state,!(this.disabled));
+    if (common.subCfg) {
+        $( subCbs ).each( function (i) {
+            scm.checkOneSubtrack(this,state,!(this.disabled));
         /////////this.checked = state;
         /////////matSubCBsetShadow(this);
         /////////scm.enableCfg(this,null,this.checked);
-    });
+        });
+    }
     if(state)
         exposeAll();  // Unhide composite vis?
     ////////showOrHideSelectedSubtracks();
@@ -302,7 +301,8 @@ function matSubCBcheckOne(subCB,state)
 {
 // setting a single subCB may cause it to appear/disappear
     subCB.checked = state;
-    scm.enableCfg(subCB,null,state);
+    if (common.subCfg)
+       scm.checkOneSubtrack(subCB,state,!subCB.disabled);
     matSubCBsetShadow(subCB);
     hideOrShowSubtrack(subCB);
 }
@@ -315,7 +315,18 @@ function matSubCBsetShadow(subCB)
         shadowState = 1;
     if(subCB.disabled)
         shadowState -= 2;
-    $("#"+subCB.name+"_4way").val(shadowState);
+    var fourWay = normed($("input.fourWay#boolshad_-"+subCB.id));
+    if (fourWay == undefined && subCB.name != undefined) {
+        fourWay = normed($("input.fourWay[name='boolshad\\."+subCB.name+"']"));
+        if (fourWay == undefined)
+            fourWay = normed($("#"+subCB.name+"_4way"));  // FIXME: obsolete as soon as subCfg is working
+    }
+    if (fourWay != undefined)
+        $(fourWay).val(shadowState);
+    else
+        warn("DEBUG: Failed to find fourWay shadow for '#"+subCB.id+"' ["+subCB.name+"]");
+    if (common.subCfg)
+        scm.enableCfg(subCB,null,(shadowState == 1));
 }
 
 function matChkBoxNormalize(matCB)
@@ -390,7 +401,7 @@ function matCbFindFromSubCb(subCB)
 // returns the one matCB associated with a subCB (or undefined)
     var classList =  $( subCB ).attr("class").split(" ");
     // we need one or 2 classes, depending upon how many dimensions in matrix (e.g. "subDB GM10847 NFKB aNone IGGrab Signal")
-    classList = aryRemove(classList,"subCB");
+    classList = aryRemove(classList,"subCB","changed");
     var classes = classList.slice(0,2).join('.');   // How to get only X and Y classes?  Assume they are the first 2
     var matCB = $("input.matCB."+classes); // Note, this works for filtering multiple classes because we want AND
     if(matCB.length == 1)
@@ -409,7 +420,7 @@ function matAbcCBfindFromSubCb(subCB)
     var abcCBs = $("input.matCB.abc");
     if( abcCBs.length > 0 ) {
         var classList =  $( subCB ).attr("class").split(" ");
-        classList = aryRemove(classList,"subCB");
+        classList = aryRemove(classList,"subCB","changed");
         classList.shift(); // Gets rid of X and Y associated classes (first 2 after subCB)
         classList.shift();
         classList.pop();   // gets rid of view associated class (at end)
@@ -451,7 +462,7 @@ function matViewClasses(limitTo)
     }
     $(viewDDs).each( function (i) {
         var classList = $( this ).attr("class").split(" ");
-        classList = aryRemove(classList,"viewDD","normalText");
+        classList = aryRemove(classList,"viewDD","normalText","changed");
         classes.push( classList[0] );
     });
     return classes;
@@ -494,9 +505,9 @@ function compositeCfgUpdateSubtrackCfgs(inp)
 // Updates all subtrack configuration values when the composite cfg is changed
     // If view association then find it:
     var view = "";
-    var daddy = $(inp).parents(".blueBox");
-    if(daddy.length == 1) {
-        var classList = $(daddy[0]).attr("class").split(" ");
+    var daddy = normed($(inp).parents(".blueBox"));
+    if(daddy != undefined) {
+        var classList = $(daddy).attr("class").split(" ");
         if(classList.length == 2) {
             view = classList[1];
         }
@@ -510,7 +521,7 @@ function compositeCfgUpdateSubtrackCfgs(inp)
     }
     if(inp.type.indexOf("select") == 0) {
         var list = $("select[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0) {
             if(inp.multiple != true)
                 $(list).attr('selectedIndex',inp.selectedIndex);
@@ -532,20 +543,20 @@ function compositeCfgUpdateSubtrackCfgs(inp)
     }
     else if(inp.type.indexOf("checkbox") == 0) {
         var list = $("checkbox[name$='"+suffix+"']").not("[name='"+inp.name+"']"); // Exclude self from list
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0)
             $(list).attr("checked",$(inp).attr("checked"));
     }
     else if(inp.type.indexOf("radio") == 0) {
         var list = $("input:radio[name$='"+suffix+"']").not("[name='"+inp.name+"']");
         list = $(list).filter("[value='"+inp.value+"']")
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0)
             $(list).attr("checked",true);
     }
     else {  // Various types of inputs
         var list = $("input[name$='"+suffix+"']").not("[name='"+inp.name+"']");//.not("[name^='boolshad.']"); // Exclude self from list
-        if(view != "") { list =  $(list).filter(function(index) { return $(this).parents(".blueBox." + view).length == 1; });}
+        if(view != "") { list =  $(list).filter(function(index) { return normed($(this).parents(".blueBox." + view)) != undefined; });}
         if($(list).length>0)
             $(list).val(inp.value);
         //else {
@@ -948,7 +959,7 @@ function filterCompositeExcludeOptions(multiSelect)
 
         var possibleClasses = $( this ).attr("class").split(" ");
         if( $(possibleClasses).length > 0)
-            possibleClasses = aryRemoveVals(possibleClasses,[ "subCB" ]);
+            possibleClasses = aryRemoveVals(possibleClasses,[ "subCB","changed" ]);
         if( $(possibleClasses).length > 0)
             possibleSelections = possibleSelections.concat(possibleClasses);
     });
@@ -1069,7 +1080,7 @@ var scm = { // subtrack config module.
     // opened.  Composite and view level controls (parents) when updated override related
     // subtrack controls (children).  Subtrack controls, when updated overide parent controls
     // for the one subtrack.  Controls have no 'name' attribute until the user alters their value.
-    // Unnamed controls are not sent to the cart.
+    // Unnamed controls are not sent to the cart!!!
 
     // Definitions as used here:
     // obj: an input or select style html control which may be named or unnamed
@@ -1083,57 +1094,74 @@ var scm = { // subtrack config module.
     // unnamed: control that has not been updated by the user.  Will not be sent to cart.
 
     // TODO:
-    // 1) outside in: matrix and subtrack checkboxes to affect vis
-    // 2) Non-configurable will need to show/change vis independently! (separate vis control instead of wrench?)
-    // 3) SOLVED: Radio buttons work BUT they require name to keep unified set, so rely upon 'changed' class to detect changes.
-    // 4) SOLVED: checkboxes: working with name = boolshad.{name}   FIXME: multishad?
-    // 5) SOLVED: filterBy,filterComp working: they rely upon id, and id with '.' screwed it all up.  So replaced '.' with '_-'
-    // 6) SOLVED: subCfg not matching parent: solved.
-    // 7) SOLVED: OpenChromSynth: subtrack filterby needs to be updated by composite filterBy.
-    // 8) Remove debug code when ready
-    // - check subtrack to enable/disable fauxVis and wrench
-    // - matCB should effect subCb including enable/disable fauxVis and wrench
-    // - composite/view vis should effect subVis and enable/disable fauxVis and wrench
+    //  1) SOLVED: Radio buttons work BUT they require name to keep unified set, so rely upon 'changed' class to detect changes.
+    //  2) SOLVED: checkboxes: working with name = boolshad.{name}   FIXME: multishad?
+    //  3) SOLVED: filterBy,filterComp working: they rely upon id, and id with '.' screwed it all up.  So replaced '.' with '_-'
+    //  4) SOLVED: subCfg not matching parent: solved.
+    //  5) SOLVED: OpenChromSynth: subtrack filterby needs to be updated by composite filterBy.
+    //  6) SOLVED: check subtrack to enable/disable fauxVis and wrench
+    //  7) SOLVED: matCB should effect subCb including enable/disable fauxVis and wrench
+    //  8) SOLVED: composite/view vis should effect subVis and enable/disable fauxVis and wrench
+    //  9) SOLVED: inside out: changing subtrack vis should affect subCB and matCB
+    // 10) SOLVED: Loosing checked tracks!!!  Setting vis clears checkboxes?
+    // 11) When parent vis makes subs hidden, shouuld they go to unchecked?
+    // 12) Should user be able to click on disabled vis to check the CB?
+    // 13) Make vis changes "reshape" composite!  NOTE: Do we want to do this???
+    // 14) Non-configurable will need to show/change vis independently! (separate vis control but no wrench)
+    // - Verify all composites work (conservation and SNPs are likely failures)
+    // - Decide on a name (scm, subCfg, ? ) and then make a module file like ddcl.js.
+    // - Remove debug code when ready
     // NOTE:
     // Current implementation relies upon '.' delimiter in name and no '_-' in name.  Nothing breaks rule yet...
 
     //mySelf: null, // There is no need for a "mySelf" unless this object is being instantiated.
 
     // There is one instance and these vars are page wide
-    compositeId: null,
+    compositeId: undefined,
     visIndependent: false,
     viewIds: [],
 
     markChange: function (obj)
     { // Marks a control as having been changed by the user.  Naming will send value to cart.
         $(obj).addClass('changed');
-        if(obj.type.indexOf("radio") != 0) {   // radios must keep their names!
-            var oldName = obj.id.replace(/\_\-/g,'.');   // sanitized id replaces '.' with '_-'
-            $(obj).attr('name',oldName);
+
+        if(obj.type.indexOf("radio") == 0)   // radios must keep their names!
+            return;
+
+        var oldName = obj.id.replace(/\_\-/g,'.');   // sanitized id replaces '.' with '_-'
+        $(obj).attr('name',oldName);
+
+        // checkboxes have hidden boolshads which should be marked when unchecked
+        if(obj.type.indexOf("checkbox") == 0) {
+            var boolshad = normed($('input#boolshad_-' + obj.id));
+            if (boolshad != undefined) {
+                if(obj.checked == false) {
+                    var oldName = boolshad.id.replace(/\_\-/g,'.');   // sanitized id replaces '.' with '_-'
+                    $(obj).addClass('changed');
+                    $(boolshad).attr('name',oldName);
+                }
+                else
+                    scm.clearChange(boolshad);
+            }
         }
     },
 
     clearChange: function (obj)
     { // Mark as unchanged
         $(obj).removeClass('changed');
-        if(obj.type.indexOf("radio") != 0)   // radios must keep their names!
-            $(obj).removeAttr('name');
-    },
 
-    markCheckboxChange: function (obj)
-    { // Marks a checkbox as having changed and the boolshad too if there is one
-        scm.markChange(obj);
+        if(obj.type.indexOf("radio") == 0)    // radios must keep their names!
+            return;
 
-        //var safeId = obj.id.replace(/\./g,"\\.");
-        //var boolshad = $('input#boolshad\\.' + safeId);
-        var boolshad = $('input#boolshad_-' + obj.id);
-        if (boolshad != undefined && boolshad.length > 0) {
-            if (boolshad.length == 1)
-                boolshad = boolshad[0];
-            if(obj.checked == false)
-                scm.markChange(boolshad);
-            else
-                scm.clearChange(boolshad);
+        $(obj).removeAttr('name');
+
+        // checkboxes have hidden boolshads which should be cleared in tandem
+        if(obj.type.indexOf("checkbox") == 0) {
+            var boolshad = normed($('input#boolshad_-' + obj.id));
+            if (boolshad != undefined) {
+                $(boolshad).removeClass('changed');
+                $(boolshad).removeAttr('name');
+            }
         }
     },
 
@@ -1145,18 +1173,33 @@ var scm = { // subtrack config module.
     unnameIt: function (obj,setId)
     { // removes a control's name so that it will not be updated to the cart upon submit
       // If setId and obj has a name, will set id to current name
-        if (setId) {
-            var myName = $(obj).attr('name');
-            if (myName && myName.length > 0) {
+        var myName = $(obj).attr('name');
+        if (myName && myName.length > 0) {
+
+            // checkboxes have hidden boolshads which should be unamed in tandem
+            if(obj.type.indexOf("checkbox") == 0) {
+                var boolshad = normed( $("input[name='boolshad\\."+myName+"']") );  // Not yet sanitized name
+                if (boolshad != undefined) {
+                    scm.unnameIt(boolshad,setId);  // self referencing but boolshad not(':checkbox')
+                }
+            }
+
+            if (setId) {
                 // DEBUG -------------
                 if (myName.indexOf('_-') >= 0)
-                    warn("Found control with '_-' in name: "+myName + "<BR>This violates the naming rules and will break javascript code.");
+                    warn("DEBUG: Found control with '_-' in name: "+myName + "<BR>This violates the naming rules and will break javascript code.");
                 // DEBUG -------------
-                myName = myName.replace(/\./g,'_-');   // sanitized id replaces '.' with '_-'
-                $(obj).attr('id',myName);
+                var newId = myName.replace(/\./g,'_-');   // sanitized id replaces '.' with '_-'
+
+                // DEBUG -------------
+                if (obj.id && obj.id.length > 0 && obj.id != myName)
+                    warn("DEBUG: Obj is being re-ID'd but it already has an ID.  Old:'"+obj.id+"'  New:'"+newId+"'");
+                // DEBUG -------------
+                $(obj).attr('id',newId);
             }
         }
-        scm.clearChange(obj);
+
+        scm.clearChange(obj);  // actually removes the name!
     },
 
     compositeCfgFind: function ()
@@ -1166,34 +1209,35 @@ var scm = { // subtrack config module.
 
     compositeObjFind: function (suffix)
     { // returns the composite level control for this suffix
-        //var compCfg = scm.compositeCfgFind();
-        var compObj = undefined;
+        //var compCfg = scm.compositeCfgFind();  // TODO: when there is a composite cfg div!
+        var compObj;
         if (suffix != undefined) {
             //compObj = $('#'+ scm.compositeId + '\\.' + suffix);
-            compObj = $('#'+ scm.compositeId + '_-' + suffix);
-            if (compObj == undefined || compObj.length == 0) {
-                compObj = $('#'+ scm.compositeId + '_' + suffix);
+            compObj = normed($('#'+ scm.compositeId + '_-' + suffix));
+            if (compObj == undefined) {
+                compObj = normed($('#'+ scm.compositeId + '_' + suffix));
             }
         } else {
-            compObj = $("#"+scm.compositeId);
+            compObj = normed($("#"+scm.compositeId));
         }
-        if (compObj == undefined || compObj.length == 0) {
-            //warn('Could not find viewObj for '+suffix);
-            return undefined;
-        }
-        if (compObj.length == 1)
-            compObj = compObj[0];
         return compObj;
     },
 
     viewIdFind: function (childObj)
     { // returns the name of the view that is a parent of this subtrack control
-        var cfg = $(childObj).parents('div.subCfg');
-        if (cfg == undefined || cfg.length == 0) {
+        var cfg = normed($(childObj).parents('div.subCfg'));
+        if (cfg == undefined) {
+            // could be vis outside of cfg div
+            var subCb = normed($(childObj).closest('tr').find('input.subCB'));
+            if (subCb != undefined) {
+                var classList = $(subCb).attr("class").split(" ");
+                classList = aryRemove(classList,"changed");
+                return classList[classList.length - 1];
+            }
             warn("Can't find containing div.subCfg of child '"+$(childObj).attr('id')+"'.");
             return undefined;
         }
-        var classList = $( cfg[0] ).attr("class").split(" ");
+        var classList = $( cfg ).attr("class").split(" ");
         classList = aryRemove(classList,"subCfg","filled");
         if (classList.length == 0) {
             warn("Subtrack cfg div does not have view class for child '"+$(childObj).attr('id')+"'.");
@@ -1209,36 +1253,24 @@ var scm = { // subtrack config module.
 
     viewCfgFind: function (viewId)
     { // returns the cfg container for a given view
-        var viewCfg = $('tr#tr_cfg_'+viewId);
-        if (viewCfg == undefined || viewCfg.length == 0) {
+        var viewCfg = normed($('tr#tr_cfg_'+viewId));
+        if (viewCfg == undefined) {
             warn('Could not find viewCfg for '+viewId);
         }
-        if (viewCfg.length == 1)
-            viewCfg = viewCfg[0];
         return viewCfg;
     },
 
     viewObjFind: function (viewId,suffix)
     { // returns the control belonging to this view and suffix
-        var viewObj = undefined;
+        var viewObj;
         if (suffix != undefined) {
             var viewCfg = scm.viewCfgFind(viewId);
-            //viewObj = $(viewCfg).find("[id$='\\."+suffix+"']");
-            viewObj = $(viewCfg).find("[id$='_-"+suffix+"']");
-            if (viewObj == undefined || viewObj.length == 0) {
-                viewObj = $(viewCfg).find("[id$='_"+suffix+"']");
-            }
-        } else {
-            //viewObj = $("#"+scm.compositeId+"\\."+viewId+"\\.vis");
-            viewObj = $("#"+scm.compositeId+"_-"+viewId+"_-vis");
-        }
-        if (viewObj == undefined || viewObj.length == 0) {
-            // Okay not to find a view for this composite level obj
-            //warn('Could not find viewObj for '+viewId+'.'+suffix);
-            return undefined;
-        }
-        if (viewObj.length == 1)
-            viewObj = viewObj[0];
+            viewObj = normed($(viewCfg).find("[id$='_-"+suffix+"']"));
+            if (viewObj == undefined)
+                viewObj = normed($(viewCfg).find("[id$='_"+suffix+"']"));
+        } else
+            viewObj = normed($("#"+scm.compositeId+"_-"+viewId+"_-vis"));
+
         return viewObj;
     },
 
@@ -1252,7 +1284,7 @@ var scm = { // subtrack config module.
         } else {
             var childCfgs = $('div.subCfg.filled');
         }
-        if (childCfgs == undefined || childCfgs.length == 0)
+        if (childCfgs == undefined)
             return [];
 
         var childObjs = [];
@@ -1287,31 +1319,29 @@ var scm = { // subtrack config module.
 
     childCfgFind: function (childObj)
     { // returns the cfg wrapper for a child vis object
-        var childCfg = $(childObj).parents('div.subCfg.filled');
-        if (childCfg == undefined || childCfg.length == 0) {
+        var childCfg = normed($(childObj).parents('div.subCfg.filled'));
+        if (childCfg == undefined)
             warn("Can't find childCfg for "+childObj.id);
-            return false;
-        }
-        if (childCfg.length == 1)
-            childCfg = childCfg[0];
         return childCfg;
     },
 
     subCbFind: function (childObj)
     { // returns the subCB for a child vis object
+        // Look directly first
+        var subCb = normed($(childObj).closest('tr').find('input.subCB'));
+        if (subCb != undefined)
+            return subCb;
+
+        warn("DEBUG: Failed to find subCb for "+childObj.id);
         var childCfg = scm.childCfgFind(childObj);
         if (childCfg == undefined)
             return undefined;
 
         var tr = $(childCfg).parents('tr').first();
         var subtrack = childCfg.id.substring(8); // 'div_cfg_'.length
-        var subCb = $(tr).find("input[name='"+subtrack+"_sel']");
-        if (subCb == undefined || subCb.length == 0) {
+        var subCb = normed($(tr).find("input[name='"+subtrack+"_sel']"));
+        if (subCb == undefined)
             warn("Can't find subCB for subtrack: "+subtrack);
-            return undefined;
-        }
-        if (subCb.length == 1)
-            subCb = subCb[0];
         return subCb;
     },
 
@@ -1383,7 +1413,7 @@ var scm = { // subtrack config module.
             suffix = undefined;
             if (!isComposite) {
                 var classList = $( parentObj ).attr("class").split(" ");
-                classList = aryRemove(classList,"viewDD","normalText");
+                classList = aryRemove(classList,"viewDD","normalText","changed");
                 if (classList.length != 1) {
                     warn("Unexpected view vis class list:"+classList);
                     return [];
@@ -1392,11 +1422,9 @@ var scm = { // subtrack config module.
             }
         } else { // normal obj
 
-            var viewCfg = $(parentObj).parents("tr[id^='tr_cfg_']");
-            isComposite = (viewCfg == undefined || viewCfg.length == 0); // is composite
+            var viewCfg = normed($(parentObj).parents("tr[id^='tr_cfg_']"));
+            isComposite = (viewCfg == undefined); // is composite
             if (!isComposite) {
-                if (viewCfg.length == 1)
-                    viewCfg = viewCfg[0];
                 viewId = viewCfg.id.substring(7); // 'tr_cfg_'.length
             }
         }
@@ -1447,7 +1475,7 @@ var scm = { // subtrack config module.
 
         } else {
             var classList = $( parentObj ).attr("class").split(" ");
-            classList = aryRemove(classList,"viewDD","normalText");
+            classList = aryRemove(classList,"viewDD","normalText","changed");
             if (classList.length != 1) {
                 warn("Unexpected view vis class list:"+classList);
                 return [];
@@ -1460,9 +1488,10 @@ var scm = { // subtrack config module.
     { // Handle a single check of a single subCb
         subCb.checked = check;
         subCb.dsabled = enable;
+        scm.markChange(subCb);
         matSubCBsetShadow(subCb);
         hideOrShowSubtrack(subCb);
-        scm.enableCfg(subCb,null,check);
+        scm.enableCfg(subCb,undefined,check);
     },
 
     propagateSetting: function (parentObj)
@@ -1476,24 +1505,10 @@ var scm = { // subtrack config module.
                     this.checked = parentObj.checked;
                 scm.clearChange(this);
             });
-            // deal with hidden boolshads!
-            //var parentIdSafe = parentObj.id.replace(/\./g,"\\.");
-            //var boolshad = $('input#boolshad\\.'+parentIdSafe);
-            var boolshad = $('input#boolshad_-'+parentObj.id);
-            if (boolshad != undefined && boolshad.length > 0) {
-                if (boolshad.length == 1)
-                    boolshad = boolshad[0];
-                if (parentObj.checked == false)
-                    scm.markChange(boolshad);
-                else
-                    scm.clearChange(boolshad);
-            }
         } else if(parentObj.type.indexOf("radio") == 0) {
-            var parentChecked = parentObj.checked;
             var parentVal = $(parentObj).val();
             $(children).each(function (i) {
-                if ($(this).val() == parentVal)
-                    this.checked = parentObj.checked;
+                this.checked = ($(this).val() == parentVal);
                 scm.clearChange(this);
             });
         } else {// selects and inputs are easy
@@ -1521,7 +1536,7 @@ var scm = { // subtrack config module.
             visText = 'pack';
         else if (limitedVis == 4)
             visText = 'full';
-        // vis outside of subCfg
+
         var children = scm.visChildrenFind(viewObj);
         $(children).each(function (i) {
             if ($(this).hasClass('fauxInput')) {
@@ -1531,18 +1546,11 @@ var scm = { // subtrack config module.
                 scm.clearChange(this);
             }
         });
-        // vis inside of subCfg
-        //var children = scm.childrenFind(viewObj);
-        //$(children).each(function (i) {
-        //    // TODO: only set if selected?
-        //    $(this).attr('selectedIndex',limitedVis);
-        //    scm.clearChange(this);
-        //});
     },
 
     propagateVis: function (parentObj,viewId)
     { // propagate vis settings to subtrack children
-        if (viewId == null) {
+        if (viewId == undefined) {
             // Walk through views and set with this
             var parentVis = parentObj.selectedIndex;
             if (scm.viewIds.length > 0) {
@@ -1552,7 +1560,7 @@ var scm = { // subtrack config module.
                         scm.propagateViewVis(viewObj,parentVis);
                 }
             } else { // No view so, simple
-                // vis outside of subCfg
+
                 var visText = 'hide';
                 if (parentVis == 1)
                     visText = 'dense';
@@ -1571,17 +1579,6 @@ var scm = { // subtrack config module.
                         scm.clearChange(this);
                     }
                 });
-                // vis inside of subCfg
-                //var children = scm.childrenFind(parentObj);
-                //$(children).each(function (i) {
-                //    var subCb = scm.subCbFind(this);
-                //    if (subCb != undefined) {
-                //        if (subCb.disabled != true && subCb.checked) {  // TODO: Integrate with things that enable/check!
-                //            $(this).attr('selectedIndex',parentVis);
-                //            scm.clearChange(this);
-                //        }
-                //    }
-                //});
             }
         } else {
             // First get composite vis to limit with
@@ -1594,12 +1591,12 @@ var scm = { // subtrack config module.
         }
     },
 
-    inheritSetting: function (childObj)
+    inheritSetting: function (childObj,force)
     { // update value if parents values override child values.
         var myParents = scm.parentsFind(childObj);
         if (myParents == undefined || myParents.length < 1) {
             // DEBUG -------------  It is probably okay to subCfg without parent cfg, but we need to be sure
-            warn('No parents were found for childObj: '+childObj.id);
+            warn('DEBUG No parents were found for childObj: '+childObj.id);
             // DEBUG -------------
             return true;
         }
@@ -1607,25 +1604,21 @@ var scm = { // subtrack config module.
         if (isVis) {
             var subCb = scm.subCbFind(childObj);
             if (subCb != undefined) {
-                if (subCb.disabled == true || subCb.checked == false)   // TODO: Integrate with _sel subCbs and matCbs
-                    $(childObj).attr('selectedIndex',0);
-                else {
-                    var limitedVis = 9;
-                    if (myParents.length == 1 && scm.hasChanged(myParents[0]))
-                        limitedVis = myParents[0].selectedIndex;
-                    else if (myParents.length == 2) {
-                        if (scm.hasChanged(myParents[0]) || scm.hasChanged(myParents[1]))
-                            limitedVis = Math.min(myParents[0].selectedIndex,myParents[1].selectedIndex);
-                    }
-                    if (limitedVis < 9)
-                        $(childObj).attr('selectedIndex',limitedVis);
+                var limitedVis = 9;
+                if (myParents.length == 1 && (force || scm.hasChanged(myParents[0])))
+                    limitedVis = myParents[0].selectedIndex;
+                else if (myParents.length == 2) {
+                    if (force || scm.hasChanged(myParents[0]) || scm.hasChanged(myParents[1]))
+                        limitedVis = Math.min(myParents[0].selectedIndex,myParents[1].selectedIndex);
                 }
-            }
+                if (limitedVis < 9)
+                    $(childObj).attr('selectedIndex',limitedVis);
+           }
         } else {
             var count = 0;
             if(childObj.type.indexOf("checkbox") == 0) {
                 $(myParents).each(function (i) {
-                    if (scm.hasChanged(this)) {
+                    if (force || scm.hasChanged(this)) {
                         childObj.checked = this.checked;
                         // can ignore boolshad because this does not change
                         count++;
@@ -1633,7 +1626,7 @@ var scm = { // subtrack config module.
                 });
             } else if(childObj.type.indexOf("radio") == 0) {
                 $(myParents).each(function (i) {
-                    if (scm.hasChanged(this)) {
+                    if (force || scm.hasChanged(this)) {
                         childObj.checked = this.checked;
                         // parentObj is already "tuned" to the correct radio, so this works
                         count++;
@@ -1641,7 +1634,7 @@ var scm = { // subtrack config module.
                 });
             } else {// selects and inputs are easy
                 $(myParents).each(function (i) {
-                    if (scm.hasChanged(this)) {
+                    if (force || scm.hasChanged(this)) {
                         $(childObj).val($(this).val());
                         count++;
                     }
@@ -1652,13 +1645,13 @@ var scm = { // subtrack config module.
         }
     },
 
-    currentCfg: null, // keep track of cfg while ajaxing, man
-    currentSub: null, // keep track of subtrack while ajaxing, dude
+    currentCfg: undefined, // keep track of cfg while ajaxing, man
+    currentSub: undefined, // keep track of subtrack while ajaxing, dude
 
     cfgFill: function (content, status)
     { // Finishes the population of a subtrack cfg.  Called by ajax return.
         var cfg = scm.currentCfg;
-        scm.currentCfg = null;
+        scm.currentCfg = undefined;
         var cleanHtml = content;
         var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
         // DEBUG -------------
@@ -1723,7 +1716,7 @@ var scm = { // subtrack config module.
             if (this.name != undefined) { // The filter("[name]") above didn't do it!
                 if (this.type != 'hidden') {
                     scm.unnameIt(this,true);
-                    scm.inheritSetting(this); // updates any values that have been changed on this page
+                    scm.inheritSetting(this,false); // updates any values that have been changed on this page
                     // if view vis do more than just name it on change
                     var suffix = scm.objSuffixGet(this);
                     if (suffix == undefined) // vis
@@ -1732,16 +1725,8 @@ var scm = { // subtrack config module.
                         });
                     else {
                         $(this).bind('change',function (e) {
-                            if(this.type.indexOf("checkbox") == 0)
-                                scm.markCheckboxChange(this);
-                            else
-                                scm.markChange(this);
+                            scm.markChange(this);
                         });
-                    }
-                } else {//if (this.type == 'hidden') {
-                    // Special for checkboixes with name = boolshad.{name}.
-                    if ("boolshad." == this.name.substring(0,9)) {
-                        scm.unnameIt(this,true);
                     }
                 }
             }
@@ -1754,25 +1739,21 @@ var scm = { // subtrack config module.
         var shiftLeft = -1;
         if (scm.visIndependent) {
             shiftLeft *= ($(cfg).position().left - 125);
-            var subVis = $('div#' + scm.currentSub+'_faux');
-            if (subVis != undefined && subVis.length == 1) {
-                // SHOULD NOT NEED $(subVis[0]).removeClass('disabled');
-                scm.replaceWithVis(subVis[0],scm.currentSub,false);
-            }
+            var subVis = normed($('div#' + scm.currentSub+'_faux'));
+            if (subVis != undefined)
+                scm.replaceWithVis(subVis,scm.currentSub,false);
         }
         else
             shiftLeft *= ($(cfg).position().left - 40);
         $(cfg).css({ width: myWidth+'px',position: 'relative', left: shiftLeft + 'px' });
 
         // Setting up filterBys must follow show because sizing requires visibility
-        if (newJQuery) {
-            $(cfg).find('.filterBy,.filterComp').each( function(i) {
-                if ($(this).hasClass('filterComp'))
-                    ddcl.setup(this);
-                else
-                    ddcl.setup(this, 'noneIsAll');
-            });
-        }
+        $(cfg).find('.filterBy,.filterComp').each( function(i) {
+            if ($(this).hasClass('filterComp'))
+                ddcl.setup(this);
+            else
+                ddcl.setup(this, 'noneIsAll');
+        });
     },
 
     cfgPopulate: function (cfg,subtrack)
@@ -1800,76 +1781,80 @@ var scm = { // subtrack config module.
         var classList = $( obj ).attr("class").split(" ");
         var view = classList[classList.length - 1];
         var classList = $(obj).attr('class').split(' '); // This relies on view being the last class!!!
-        var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD "+view+"' style='width: 70px'";
-        if (open)
-            selectHtml += " size=5";
+        var selectHtml = "<SELECT id='"+subtrack+"' class='normalText subVisDD "+view+"' style='width:70px;'";
         selectHtml += ">";
         var selected = $(obj).text();
-        if (selected == 'hide')
-            selectHtml += "<OPTION SELECTED>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
-        else if (selected == 'dense')
-            selectHtml += "<OPTION>hide</OPTION><OPTION SELECTED>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
-        else if (selected == 'squish')
-            selectHtml += "<OPTION>hide</OPTION><OPTION>dense</OPTION><OPTION SELECTED>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
-        else if (selected == 'full')
-            selectHtml += "<OPTION>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION SELECTED>full</OPTION>";
-        else
-            selectHtml += "<OPTION>hide</OPTION><OPTION>dense</OPTION><OPTION>squish</OPTION><OPTION>pack</OPTION><OPTION>full</OPTION>";
+        var visibilities = ['hide','dense','squish','pack','full'];
+        $(visibilities).each( function (ix) {
+             selectHtml += "<OPTION" + (visibilities[ix] == selected ? " SELECTED":"") + ">"+visibilities[ix]+"</OPTION>";
+        });
         selectHtml += "</SELECT>";
         $(obj).replaceWith(selectHtml);
         if (open) {
             var newObj = $('select#'+subtrack);
-            //$(newObj).attr('size',5)
+            $(newObj).css({'zIndex':'2','vertical-align':'top'});
+            $(newObj).attr('size',5);
             $(newObj).one('blur',function (e) {
                 $(this).attr('size',1);
-                $(this).unbind()
+                $(this).unbind('blur');
             });
-            $(newObj).one('change',function (e) {
-                $(this).attr('size',1);
+            $(newObj).change(function (e) {
+                if ($(this).attr('size') > 1)
+                    $(this).attr('size',1);
+                if (this.selectedIndex == 0) { // setting to hide so uncheck and disable.
+                    // Easiest is to uncheck subCB and reset vis
+                    //    so that the reverse action makes sense
+                    var subCb = normed($('input#' + this.id + '_sel'));
+                    if (subCb != undefined) {
+                        scm.checkOneSubtrack(subCb,false,true);
+                        matSubCbClick(subCb);
+                        scm.inheritSetting(this,true);
+                        scm.unnameIt(this);
+                    // DEBUG -------------
+                    } else {
+                        warn('DEBUG: Cant find subCB for ' + this.id);
+                    // DEBUG -------------
+                    }
+                } else
+                    scm.markChange(this);
             });
-            // Doesn't work!
-            //$(newObj).parents('td').first().attr('valign','top');
             $(newObj).focus();
         }
     },
 
     enableCfg: function (subCb,subtrack,setTo)
     { // Enables or disables subVis and wrench
-        if (subCb == null || subCb == undefined) {
-            if (subtrack == null || subtrack.length == 0) {
-                warn("scm.enableCfg() called without CB or subtrack.");
+        if (subCb == undefined) {
+            if (subtrack == undefined || subtrack.length == 0) {
+                warn("DEBUG: scm.enableCfg() called without CB or subtrack.");
                 return false;
             }
-            subCb = $("input[name='"+subtrack+"'_sel]");
-            if (subCb == undefined || subCb.length == 0) {
-                warn("scm.enableCfg() could not find CB for subtrack: "+subtrack);
+            subCb = normed($("input[name='"+subtrack+"'_sel]"));
+            if (subCb == undefined) {
+                warn("DEBUG: scm.enableCfg() could not find CB for subtrack: "+subtrack);
                 return false;
             }
         }
-        if (subCb.length == 1)
-            subCb = subCb[0];
 
-        var td = $(subCb).parent('td');
-        if (td == undefined || td.length == 0) {
-            warn("scm.enableCfg() could not find TD for CB: "+subCb.name);
+        var td = normed($(subCb).parent('td'));
+        if (td == undefined) {
+            warn("DEBUG: scm.enableCfg() could not find TD for CB: "+subCb.name);
             return false;
         }
-        if (td.length == 1)
-            td = td[0];
-        var subFaux = $(td).find('div.subVisDD');
-        if (subFaux != undefined && subFaux.length > 0) {
+        var subFaux = normed($(td).find('div.subVisDD'));
+        if (subFaux != undefined) {
             if (setTo == true)
                 $(subFaux).removeClass('disabled');
             else
                 $(subFaux).addClass('disabled');
         } else {
-            var subVis = $(td).find('select.subVisDD');
-            if (subVis != undefined && subVis.length > 0) {
-                $(subVis).attr('disable',!setTo);
+            var subVis = normed($(td).find('select.subVisDD'));
+            if (subVis != undefined) {
+                $(subVis).attr('disabled',!setTo);
             }
         }
-        var wrench = $(td).find('span.clickable'); // TODO tighten this
-        if (wrench != undefined && wrench.length > 0) {
+        var wrench = normed($(td).find('span.clickable')); // TODO tighten this
+        if (wrench != undefined) {
             if (setTo == true)
                 $(wrench).removeClass('halfVis');
             else
@@ -1879,13 +1864,11 @@ var scm = { // subtrack config module.
 
     cfgToggle: function (wrench,subtrack)
     { // Opens/closes subtrack cfg dialog, populating if empty
-        var cfg = $("div#div_cfg_"+subtrack);
-        if (cfg == undefined || cfg.length == 0) {
-            warn("Can't find div_cfg_"+subtrack);
+        var cfg = normed($("div#div_cfg_"+subtrack));
+        if (cfg == undefined) {
+            warn("DEBUG: Can't find div_cfg_"+subtrack);
             return false;
         }
-        if (cfg.length == 1)
-            cfg = cfg[0];
 
         if ($(cfg).css('display') == 'none') {
             if ($(wrench).hasClass('halfVis'))
@@ -1893,13 +1876,11 @@ var scm = { // subtrack config module.
             // Don't allow if this composite is not enabled!
             // find the cb
             var tr = $(cfg).parents('tr').first();
-            var subCb = $(tr).find("input[name='"+subtrack+"_sel']");
-            if (subCb == undefined || subCb.length == 0) {
+            var subCb = normed($(tr).find("#"+subtrack+"_sel"));
+            if (subCb == undefined) {
                 warn("Can't find subCB for "+subtrack);
                 return false;
             }
-            if (subCb.length == 1)
-                subCb = subCb[0];
             if (subCb.disabled == true) // || subCb.checked == false)
                 return false;
 
@@ -1917,19 +1898,12 @@ var scm = { // subtrack config module.
     subCbInit: function (subCb)
     { // unnames the subCb control and sets up on change envent
         scm.unnameIt(subCb,true);
-        var boolshad = $('input#boolshad_-'+subCb.id);
-        if (boolshad != undefined && boolshad.length == 1) {
-            scm.unnameIt(boolshad[0],false);
+
+        var boolshad = normed( $("input[name='boolshad\\."+subCb.id+"']") );  // Not yet sanitized name
+        if (boolshad != undefined) {
+            scm.unnameIt(boolshad,true);
         }
         $(subCb).bind('click',function (e) {
-            // deal with hidden boolshads!
-            var boolshad = $('input#boolshad_-'+subCb.id);
-            if (boolshad != undefined && boolshad.length == 1) {
-                if (subCb.checked == false)
-                    scm.markChange(boolshad[0]);
-                else
-                    scm.clearChange(boolshad[0]);
-            }
             scm.markChange(subCb);
         });
     },
@@ -1937,13 +1911,11 @@ var scm = { // subtrack config module.
     viewInit: function (viewId)
     { // unnames all view controls
         // iterate through all matching controls and unname
-        var tr = $('tr#tr_cfg_'+viewId);
-        if (tr == undefined || tr.length == 0) {
-            warn('Did not find view: ' + viewId);
+        var tr = normed($('tr#tr_cfg_'+viewId));
+        if (tr == undefined) {
+            warn('DEBUG: Did not find view: ' + viewId);
             return;
         }
-        if (tr.length == 1)
-            tr = tr[0];
         var viewAllObjs = $(tr).find('input,select')
         var viewObjs = $(viewAllObjs).not("input[type='hidden']");
         if (viewObjs.length > 0) {
@@ -1961,24 +1933,43 @@ var scm = { // subtrack config module.
         });
 
         // Now vis control
-        var visObj = $("select[name='"+scm.compositeId+"\\."+viewId+"\\.vis']");
-        if (visObj == undefined || visObj.length == 0) {
-            warn('Did not find visibility control for view: ' + viewId);
+        var visObj = normed($("select[name='"+scm.compositeId+"\\."+viewId+"\\.vis']"));
+        if (visObj == undefined) {
+            warn('DEBUG: Did not find visibility control for view: ' + viewId);
             return;
         }
-        if (visObj.length == 1)
-            visObj = visObj[0];
         scm.unnameIt(visObj,true);
         $(visObj).bind('change',function (e) {
             scm.propagateVis(visObj,viewId);
+            scm.markChange(visObj);
         });
     },
 
     initialize: function ()
     { // unnames all composite controls and then all view controls
+      // names will be added back in onchange events
         // mySelf = this; // There is no need for a "mySelf" unless this object is being instantiated.
-        scm.compositeId = $('.visDD').first().attr('name');
-        scm.visIndependent = ($('.subVisDD').length > 0);
+
+        var visObj = $('.visDD');
+        if (visObj == undefined || visObj.length < 1) {
+            warn('DEBUG: Did not find visibility control for composite.');
+            return;
+        }
+        if (visObj.length > 1) {
+            warn('DEBUG: Multiple visibility controls for composite???');
+            return;
+        }
+
+        scm.compositeId = $(visObj).attr('name');
+        scm.visIndependent = ($('.subVisDD').length > 0);  // Can subtracks have their own vis?
+
+        // Unname and set up vis propagation
+        visObj = visObj[0];
+        scm.unnameIt(visObj,true);
+        $(visObj).bind('change',function (e) {
+            scm.propagateVis(visObj,undefined);
+            scm.markChange(visObj);
+        });
 
         // Find all appropriate controls and unname
 
@@ -1994,31 +1985,18 @@ var scm = { // subtrack config module.
             scm.subCbInit(this);
         });
 
-        // Now vis control
-        var visObj = $("select[name='"+scm.compositeId+"']");
-        if (visObj == undefined || visObj.length == 0) {
-            warn('Did not find visibility control for composite.');
-            return;
-        }
-        if (visObj.length == 1)
-            visObj = visObj[0];
-        scm.unnameIt(visObj,true);
-        $(visObj).bind('change',function (e) {
-            scm.propagateVis(visObj,null);
-        });
-
         // iterate through views
         var viewVis = $('select.viewDD');
         $(viewVis).each(function (i) {
             var classList = $( this ).attr("class").split(" ");
-            classList = aryRemove(classList,"viewDD","normalText");
+            classList = aryRemove(classList,"viewDD","normalText","changed");
             if (classList.length == 0)
-                warn('View classlist is missing view class.');
+                warn('DEBUG: View classlist is missing view class.');
             else if (classList.length > 1)
-                warn('View classlist contains unexpected classes:' + classList);
+                warn('DEBUG: View classlist contains unexpected classes:' + classList);
             else {
-                scm.viewIds[scm.viewIds.length] = classList[0];
-                scm.viewInit(classList[0]);
+                scm.viewIds[i] = classList[0];
+                scm.viewInit(scm.viewIds[i]);
             }
         });
 
@@ -2034,7 +2012,7 @@ var scm = { // subtrack config module.
                 && this.id.length > 0
                 && $(this).hasClass('filterBy') == false
                 && $(this).hasClass('filterComp') == false)
-                    warn('['+this.name + ']  #'+this.id);
+                    warn('DEBUG: Not expected control with name ['+this.name + '], and id #'+this.id);
                 // DEBUG -------------
                 scm.unnameIt(this,true);
                 $(this).bind('change',function (e) {
@@ -2057,9 +2035,11 @@ $(document).ready(function()
 {
     // If divs with class 'subCfg' then initialize the subtrack cfg code
     // NOTE: must be before any ddcl setup
-    var divs = $("div.subCfg");
-    if (divs != undefined && divs.length > 0) {
-        scm.initialize();
+    if (common.subCfg) {
+        var divs = $("div.subCfg");
+        if (divs != undefined && divs.length > 0) {
+            scm.initialize();
+        }
     }
 
     // Initialize sortable tables
@@ -2073,11 +2053,6 @@ $(document).ready(function()
     });
 
     //$('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
-
-    $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-        if (newJQuery == false)
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy'), maxDropHeight: filterByMaxHeight(this) });
-    });
 
     // Put navigation links in top corner
     navigationLinksSetup();

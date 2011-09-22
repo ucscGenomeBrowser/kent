@@ -108,6 +108,15 @@ function showSubTrackCheckBoxes(onlySelected)
     }
 }
 
+function normed(obj)
+{ // returns undefined, the obj or the obj normalized from one member array
+    if (obj == undefined || obj == null || obj.length == 0)
+        return undefined;
+    if (obj.length == 1)
+        return obj[0];
+    return obj;   // (obj.length > 1)
+}
+
 function hideOrShowSubtrack(obj)
 {
 // This can show/hide a tablerow that contains a specific object
@@ -800,38 +809,68 @@ function showTiming(start,whatTookSoLong)
 }
 
 function getHgsid()
-{
-// return current session id
-    var hgsid;
-    var list = document.getElementsByName("hgsid");
-    if(list.length) {
-        var ele = list[0];
-        hgsid = ele.value;
-    }
-    if(!hgsid) {
-        hgsid = getURLParam(window.location.href, "hgsid");
-    }
-    return hgsid;
+{// return current session id
+
+    // .first() because hgTracks turned up 3 of these!
+    var hgsid = normed($("input[name='hgsid']").first());
+    if(hgsid != undefined)
+        return hgsid.value;
+
+    hgsid = getURLParam(window.location.href, "hgsid");
+    if (hgsid.length > 0)
+        return hgsid;
+
+    // This may be moved to 1st position as the most likely source
+    if (typeof(common) !== "undefined" && common.hgsid !== undefined)
+        return common.hgsid;
+
+    hgsid = normed($("input#hgsid").first());
+    if(hgsid != undefined)
+        return hgsid.value;
+
+    return "";
 }
 
 function getDb()
 {
-    var db = document.getElementsByName("db");
-    if(db == undefined || db.length == 0)
-        {
-        db = $("#db");
-        if(db == undefined || db.length == 0)
-            return ""; // default?
-        }
-    return db[0].value;
+    var db = normed($("input[name='db']").first());
+    if(db != undefined)
+        return db.value;
+
+    db = getURLParam(window.location.href, "db");
+    if (db.length > 0)
+        return db;
+
+    // This may be moved to 1st position as the most likely source
+    if (typeof(common) !== "undefined" && common.db !== undefined)
+        return common.db;
+
+    db = normed($("input#db").first());
+    if(db != undefined)
+        return db.value;
+
+    return "";
 }
 
 function getTrack()
 {
-    var track = $("#track");
-    if(track == undefined || track.length == 0)
-        return ""; // default?
-    return track[0].value;
+    var track = normed($("input[name='g']").first());
+    if (track != undefined)
+        return track.value;
+
+    track = getURLParam(window.location.href, "g");
+    if (track.length > 0)
+        return track;
+
+    // This may be moved to 1st position as the most likely source
+    if (typeof(common) !== "undefined" && common.track !== undefined)
+        return common.track;
+
+    var track = normed($("input#g").first());
+    if (track != undefined)
+        return track.value;
+
+    return "";
 }
 
 function Rectangle()
@@ -1845,10 +1884,7 @@ function findTracksHandleNewMdbVals(response, status)
         }
         $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
             if (usesFilterBy) {
-                if (newJQuery)
-                    ddcl.setup(this,'noneIsAll');
-                else
-                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+                ddcl.setup(this,'noneIsAll');
             } else {
                 $(this).attr("multiple",false);
                 $(this).removeClass('filterBy');
@@ -1875,10 +1911,7 @@ function findTracksMdbValChanged(obj)
                 $(this).val(newVal);
                 if ($(this).hasClass('filterBy')) {
                     $(this).dropdownchecklist("destroy");
-                    if (newJQuery)
-                        ddcl.setup(this,'noneIsAll');
-                    else
-                        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+                    ddcl.setup(this,'noneIsAll');
                 }
             });
         }
@@ -2084,10 +2117,7 @@ function findTracksClear()
         //$(this).dropdownchecklist("refresh");  // requires v1.1
         $(this).dropdownchecklist("destroy");
         $(this).show();
-        if (newJQuery)
-            ddcl.setup(this,'noneIsAll');
-        else
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
+        ddcl.setup(this,'noneIsAll');
     });
 
     $('select.groupSearch').attr('selectedIndex',0);
@@ -2154,21 +2184,18 @@ function findTracksMdbSelectPlusMinus(obj, rowNum)
                 var tr = $(this).parents('tr.mdbSelect')[0];
                 if (tr != undefined) {
                     table = $(tr).parents('table')[0];
-                    if(newJQuery) {
-                        var newTr = $(tr).clone();
-                        var element = $(newTr).find("select.mdbVar")[0];
-                        if (element != undefined)
-                            $(element).attr('selectedIndex',-1);
+                    var newTr = $(tr).clone();
+                    var element = $(newTr).find("select.mdbVar")[0];
+                    if (element != undefined)
+                        $(element).attr('selectedIndex',-1);
 
-                        element = $(newTr).find("td[id^='hgt_mdbVal']")[0];
-                        if (element != undefined)
-                            $(element).empty();
-                        element = $(newTr).find("td[id^='isLike']")[0];
-                        if (element != undefined)
-                            $(element).empty();
-                        $(tr).after( newTr );
-                    } else
-                        $(tr).after( $(tr).clone() );
+                    element = $(newTr).find("td[id^='hgt_mdbVal']")[0];
+                    if (element != undefined)
+                        $(element).empty();
+                    element = $(newTr).find("td[id^='isLike']")[0];
+                    if (element != undefined)
+                        $(element).empty();
+                    $(tr).after( newTr );
                 }
             });
             if (table)

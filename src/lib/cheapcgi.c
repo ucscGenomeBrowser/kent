@@ -1324,7 +1324,7 @@ printf(">");
 
 // The hidden var needs to hold the 4way state
 safef(shadName, sizeof(shadName), "%s%s", cgiBooleanShadowPrefix(), name);
-safef(extra, sizeof(extra), "id='%s_4way'",name);
+safef(extra, sizeof(extra), "class='fourWay'");
 cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),extra); // Doesn't need enabled/checked!
 }
 
