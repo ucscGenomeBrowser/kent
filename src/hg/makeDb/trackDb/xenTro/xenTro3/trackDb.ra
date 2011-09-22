@@ -18,7 +18,7 @@ url none
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex scaffold_[0-9]+
+termRegex [As][Yc][a7][f8][f9][o0][l1][3d](_[0-9]+)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
