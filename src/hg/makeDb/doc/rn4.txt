@@ -5758,3 +5758,40 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn4.swap lastz.rn4
 
 #############################################################################
+# lastz Frog xenTro3 (WORKING - 2011-09-22 - Hiram)
+    mkdir /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
+    cd /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
+    cat << '_EOF_' > DEF
+# rat vs. frog
+# Mammal to non-mammal, with threshold of 8000 as in mm8-xenTro1
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Rat rn4
+SEQ1_DIR=/scratch/data/rn4/rn4.2bit
+SEQ1_LEN=/scratch/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
+'_EOF_'
+    # << emacs
+
+    screen # manage long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+
+#############################################################################

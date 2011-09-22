@@ -940,3 +940,56 @@ chainOne $(path1)
     hgsql -Ne 'select name from nscanGene' melGal1 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
 
 ############################################################################
+# lastz  Turkey vs Frog xenTro3 (WORKING - 2011-09-22 - Hiram)
+    mkdir /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22
+    cd /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22
+
+    cat << '_EOF_' > DEF
+# Turkey vs. Frog
+
+# TARGET: Turkey melGal1
+SEQ1_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs 
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+XXX - running - Thu Sep 22 11:32:42 PDT 2011
+    # real    288m3.884s
+    cat fb.melGal1.chainXenTro3Link.txt
+    # 36288270 bases of 935922386 (3.877%) in intersection
+    cd  /hive/data/genomes/melGal1/bed
+    ln -s lastzXenTro3.2011-09-22 lastz.xenTro3
+    
+    #   running the swap 
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #   real    3m40.138s
+    cat fb.xenTro3.chainMelGal1Link.txt
+    #   41967849 bases of 1359412157 (3.087%) in intersection
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+#######################################################################
