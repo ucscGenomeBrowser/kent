@@ -19,6 +19,8 @@ type bed 3
 noInherit on
 useScore 1
 wgEncode 1
+scoreFilter 500
+scoreFilterLimits 200:1000
 visibility hide
 	
         	track wgEncodeUncBsuProtGm12878NucleusSig

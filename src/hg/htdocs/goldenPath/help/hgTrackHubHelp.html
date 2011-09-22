@@ -183,7 +183,12 @@ add an unlisted hub, open the Track Hubs page and click the My Hubs
 tab. This tab lists the unlisted track hubs that you have loaded into your
 browser. To import a new hub, type its URL into the text box, then click
 the Add Hub button. If the track hub is imported successfully, it will
-be added to the list. If the browser is unable to load the track hub, it will
+be added to the list. It is also possible to add a track hub by directly adding
+the hub's URL to the browser URL. If you add hubUrl=[URL] to your hgTracks URL line,
+it will add the hub directly into the browser
+(e.g. <A HREF="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?hubUrl=http://hgwdev.cse.ucsc.edu/~braney/myHub/hub.txt">
+http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?hubUrl=http://hgwdev.cse.ucsc.edu/~braney/myHub/hub.txt</A>).
+If the browser is unable to load the track hub, it will
 display an error message. Some common causes for an import to
 fail include typos in the URL, attempting to add a track hub from a different
 assembly, a hub server that is offline, or errors in the track hub files. 
@@ -594,19 +599,9 @@ options:
 Note that you will have to use the udcDir if /tmp/udcCache is not writable
 on your machine.
 <P>
-The hubCheck program will soon be available from the UCSC downloads
+The hubCheck program is available from the UCSC downloads
 server at 
 <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">http://hgdownload.cse.ucsc.edu/admin/exe/</A>.
-Until the utility is available for download, you may need to build your
-own version from the Genome Browser
-<A HREF="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">source tree</A>.
-The hubCheck source is located in the directory
-kent/src/hg/utils/hubCheck within the source tree. Alternatively, send email to the Genome
-Browser technical support mailing list at 
-<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A> to request
-a copy of the binary. 
-<!--Question: is this on the todo list for this release? Would be nice
-to just have it on downloads.-->
 <P>
 As part of the track hub mechanism, UCSC caches data from the hub on the
 local server.  The hub utility periodically checks the time stamps
