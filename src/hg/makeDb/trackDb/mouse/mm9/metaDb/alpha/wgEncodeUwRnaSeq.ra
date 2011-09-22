@@ -17,7 +17,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=8c2ddb0bd9c34adf71174758619d9a52,bai=2662f3c2afc15b8bcbbaea162582f145
+md5sum 8c2ddb0bd9c34adf71174758619d9a52,2662f3c2afc15b8bcbbaea162582f145
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -42,7 +42,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=2bb12c0e69933a5bcfb5f7b9af2073f6,bai=68234e64e0f171cdbdceec991864d2f2
+md5sum 2bb12c0e69933a5bcfb5f7b9af2073f6,68234e64e0f171cdbdceec991864d2f2
 project wgEncode
 replicate 2
 rnaExtract polyA
@@ -265,7 +265,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=5bf20c41dc6578b4c8f407937f486b98,bai=98a4f0435223c1c536baa93675afe54d
+md5sum 5bf20c41dc6578b4c8f407937f486b98,98a4f0435223c1c536baa93675afe54d
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -389,7 +389,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=c5e8cbeb750231b7efcbbf5f50673125,bai=e6cbcfc9098347a2caa8a34334b5e216
+md5sum c5e8cbeb750231b7efcbbf5f50673125,e6cbcfc9098347a2caa8a34334b5e216
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -513,7 +513,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=1e6277e2277ab1cb38c081797b1a345e,bai=f3ca63f3603fdaf31711e2cb7e7e0d5d
+md5sum 1e6277e2277ab1cb38c081797b1a345e,f3ca63f3603fdaf31711e2cb7e7e0d5d
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -538,7 +538,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=dac0e890db8d462cb4e6d69788c7183e,bai=b57bb08367b825105c1e0ef7d13c33f8
+md5sum dac0e890db8d462cb4e6d69788c7183e,b57bb08367b825105c1e0ef7d13c33f8
 project wgEncode
 replicate 2
 rnaExtract polyA
@@ -761,7 +761,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=e1450bcae28036259937fa519d104337,bai=0e00fe275bf59e79005e286ee2fb0b41
+md5sum e1450bcae28036259937fa519d104337,0e00fe275bf59e79005e286ee2fb0b41
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -885,7 +885,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=904d05999a187f05ce61aeb0e8a23c1e,bai=3064c0377ac1b48dba807ce754d7919b
+md5sum 904d05999a187f05ce61aeb0e8a23c1e,3064c0377ac1b48dba807ce754d7919b
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -1009,7 +1009,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=3358d09ce185be58b71dde817351f614,bai=a3bbe06530b9e79729a3bcea699c7524
+md5sum 3358d09ce185be58b71dde817351f614,a3bbe06530b9e79729a3bcea699c7524
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -1133,7 +1133,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=800233a28ddd873546ce800bdd43d3e7,bai=3aaf79803212e95f57a8eeff02240359
+md5sum 800233a28ddd873546ce800bdd43d3e7,3aaf79803212e95f57a8eeff02240359
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -1158,7 +1158,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=3d99cf3047ada4bc7a10f85fc25b1c60,bai=954a97fcb6c2f7f4b3f399aea90c6247
+md5sum 3d99cf3047ada4bc7a10f85fc25b1c60,954a97fcb6c2f7f4b3f399aea90c6247
 project wgEncode
 replicate 2
 rnaExtract polyA
@@ -1183,7 +1183,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=0902eca75035b45b5e255b04a5825192,bai=4912883e6ca3de9c952e83771e849aba
+md5sum 0902eca75035b45b5e255b04a5825192,4912883e6ca3de9c952e83771e849aba
 project wgEncode
 replicate 3
 rnaExtract polyA
@@ -1208,7 +1208,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=a679d5ca11112f0a2340a8b692120ce7,bai=7b254f34e4aec3f8574da7bb31312762
+md5sum a679d5ca11112f0a2340a8b692120ce7,7b254f34e4aec3f8574da7bb31312762
 project wgEncode
 replicate 4
 rnaExtract polyA
@@ -1629,7 +1629,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=bd651ec179a8e4de73a6a3111b265512,bai=ebb02d730ab7f6b03ec051f6dca90c51
+md5sum bd651ec179a8e4de73a6a3111b265512,ebb02d730ab7f6b03ec051f6dca90c51
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -1753,7 +1753,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=26ae2bad9ae7f2b743227e93930626eb,bai=c90f68948ed45f2959e8c24e5ce0e850
+md5sum 26ae2bad9ae7f2b743227e93930626eb,c90f68948ed45f2959e8c24e5ce0e850
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -1778,7 +1778,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=698cacf46787a02139c2fdce36dd5ae7,bai=ee0b746eb51ba00343d6d65ba90c36da
+md5sum 698cacf46787a02139c2fdce36dd5ae7,ee0b746eb51ba00343d6d65ba90c36da
 project wgEncode
 replicate 2
 rnaExtract polyA
@@ -2001,7 +2001,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=9ee0a352da5e68e807577a0537a103e4,bai=c8fc571899d5c8f78e801eac6bf530d6
+md5sum 9ee0a352da5e68e807577a0537a103e4,c8fc571899d5c8f78e801eac6bf530d6
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -2026,7 +2026,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=cb13f31768a12f88b8d328233cbc2e6d,bai=1861abdfc6a886c0ef82364b5d717f1e
+md5sum cb13f31768a12f88b8d328233cbc2e6d,1861abdfc6a886c0ef82364b5d717f1e
 project wgEncode
 replicate 2
 rnaExtract polyA
@@ -2249,7 +2249,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=994c409b0393163db2631dfc9004b43d,bai=c44d40dfc42f5234e1b32f9db0f7fb54
+md5sum 994c409b0393163db2631dfc9004b43d,c44d40dfc42f5234e1b32f9db0f7fb54
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -2373,7 +2373,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=a1be9c1272ed1a5eb8bf5ec4aa105394,bai=8cd2bc24acb4d5866eb51a15349e5e81
+md5sum a1be9c1272ed1a5eb8bf5ec4aa105394,8cd2bc24acb4d5866eb51a15349e5e81
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -2398,7 +2398,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=647365df4111cceae38c88436483f02d,bai=8c017b4c0e8b91ab2114bd70ef248e63
+md5sum 647365df4111cceae38c88436483f02d,8c017b4c0e8b91ab2114bd70ef248e63
 project wgEncode
 replicate 2
 rnaExtract polyA
@@ -2621,7 +2621,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=d5276ecca97692d29b57b21f588be2c5,bai=fb7b053f59b3bf537476b6233d1aeb1f
+md5sum d5276ecca97692d29b57b21f588be2c5,fb7b053f59b3bf537476b6233d1aeb1f
 project wgEncode
 replicate 1
 rnaExtract polyA
@@ -2646,7 +2646,7 @@ grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
 localization cell
-md5sum bam=6243497f4887107ceb1b6af407bf4bdf,bai=688d94351fe2555213f1905a32ddc6e4
+md5sum 6243497f4887107ceb1b6af407bf4bdf,688d94351fe2555213f1905a32ddc6e4
 project wgEncode
 replicate 2
 rnaExtract polyA
@@ -2855,4 +2855,4 @@ tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -2051434022
+# MAGIC: -2051450720

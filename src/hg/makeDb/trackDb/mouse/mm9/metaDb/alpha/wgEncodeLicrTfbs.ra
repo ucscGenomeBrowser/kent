@@ -21,7 +21,7 @@ fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 11/19/09 Lane 1, 12/14/09 Lane 1
-md5sum bam=19a4854564b4635c461d2cc16ca10647,bai=4fdfe7c44d98237d2b64416dfa477d3c
+md5sum 19a4854564b4635c461d2cc16ca10647,4fdfe7c44d98237d2b64416dfa477d3c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -51,7 +51,7 @@ fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 12/09/09 Lane 4
-md5sum bam=e564577c31b50ec2d58371fbab025f0a,bai=e708b7d22084ca37adac7d38f2ee171a
+md5sum e564577c31b50ec2d58371fbab025f0a,e708b7d22084ca37adac7d38f2ee171a
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -201,7 +201,7 @@ fileName wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 11/05/09 Lane 3
-md5sum bam=94d0ab3f75ad4ae83d01bb42d66f13cb,bai=c1047c8bc0a121ccf6dc3b88f865502b
+md5sum 94d0ab3f75ad4ae83d01bb42d66f13cb,c1047c8bc0a121ccf6dc3b88f865502b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -231,7 +231,7 @@ fileName wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 11/20/09 Lane 5
-md5sum bam=5fdc00b8a590c94153fe242cf7c478cc,bai=69a3920d95c0fd6f029f751c80b2651e
+md5sum 5fdc00b8a590c94153fe242cf7c478cc,69a3920d95c0fd6f029f751c80b2651e
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -351,7 +351,7 @@ fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 12/09/09 Lane 3
-md5sum bam=e564577c31b50ec2d58371fbab025f0a,bai=e708b7d22084ca37adac7d38f2ee171a
+md5sum e564577c31b50ec2d58371fbab025f0a,e708b7d22084ca37adac7d38f2ee171a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -381,7 +381,7 @@ fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 04/12/10 Lane 3
-md5sum bam=4ba6e837fc7f0b113a507698093018bd,bai=94703918914327d79b99c6bcbfbe9159
+md5sum 4ba6e837fc7f0b113a507698093018bd,94703918914327d79b99c6bcbfbe9159
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -531,7 +531,7 @@ fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 08/17/09 Lane 6
-md5sum bam=f475f988145b2f4cadd02da622a7040f,bai=c60c19ed3e8c406560c2f3a9b4224dae
+md5sum f475f988145b2f4cadd02da622a7040f,c60c19ed3e8c406560c2f3a9b4224dae
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -561,7 +561,7 @@ fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 02/11/10 Lane 3
-md5sum bam=4ba6e837fc7f0b113a507698093018bd,bai=94703918914327d79b99c6bcbfbe9159
+md5sum 4ba6e837fc7f0b113a507698093018bd,94703918914327d79b99c6bcbfbe9159
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -712,7 +712,7 @@ fileName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 1
-md5sum bam=d820f717bd7a61a74823d64479c31d50,bai=5b0dfbf51f4eedcc421fc5898bd52961
+md5sum d820f717bd7a61a74823d64479c31d50,5b0dfbf51f4eedcc421fc5898bd52961
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -743,7 +743,7 @@ fileName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 01/16/10 Lane 2
-md5sum bam=a8e7687c448b4ab3eaa0d49900ae47ea,bai=1e5ee1bc7d79e3d19d7d5e28641d175a
+md5sum a8e7687c448b4ab3eaa0d49900ae47ea,1e5ee1bc7d79e3d19d7d5e28641d175a
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -866,7 +866,7 @@ fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/26/09 Lane 7
-md5sum bam=0b7d4ee465831e5623f9c70f71b95b89,bai=6feecce539731716556b6e0af13ad055
+md5sum 0b7d4ee465831e5623f9c70f71b95b89,6feecce539731716556b6e0af13ad055
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -896,7 +896,7 @@ fileName wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 12/23/09 Lane 1
-md5sum bam=43b486694184af679a0f6a31355fe1a3,bai=6a621ddbec41fd0495cb7f3c45651a1b
+md5sum 43b486694184af679a0f6a31355fe1a3,6a621ddbec41fd0495cb7f3c45651a1b
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1045,7 +1045,7 @@ fileName wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 1
-md5sum bam=d820f717bd7a61a74823d64479c31d50,bai=6cc1dc609199bd37dc9a615f18b4005a
+md5sum d820f717bd7a61a74823d64479c31d50,6cc1dc609199bd37dc9a615f18b4005a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1102,7 +1102,7 @@ fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/26/09 Lane 3
-md5sum bam=5007b12f831953f4a5ebcf451f33b9cf,bai=74f41687c34a97e75e0fe416badc2773
+md5sum 5007b12f831953f4a5ebcf451f33b9cf,74f41687c34a97e75e0fe416badc2773
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1132,7 +1132,7 @@ fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 08/17/09 Lane 5
-md5sum bam=b022a603a06ad6cfa375891e22fad992,bai=09b5db02e7e559813e2b4aabc5b2049a
+md5sum b022a603a06ad6cfa375891e22fad992,09b5db02e7e559813e2b4aabc5b2049a
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1282,7 +1282,7 @@ fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/26/09 Lane 5
-md5sum bam=34d934581dc012c284b340c561bd96e6,bai=995a4c00ac2e219cdf08ebbdb8adbbaf
+md5sum 34d934581dc012c284b340c561bd96e6,995a4c00ac2e219cdf08ebbdb8adbbaf
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1312,7 +1312,7 @@ fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 12/14/09 Lane 4
-md5sum bam=7fd26565f46ab4e20a4fb65bacf1bf61,bai=cf84e7370992c5b022efe91a02f5bdc3
+md5sum 7fd26565f46ab4e20a4fb65bacf1bf61,cf84e7370992c5b022efe91a02f5bdc3
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1432,7 +1432,7 @@ fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/26/09 Lane 2
-md5sum bam=367a8614a33a60b218a6b056cd7239dd,bai=6931e35ecd9622a5ac8ba4a388801807
+md5sum 367a8614a33a60b218a6b056cd7239dd,6931e35ecd9622a5ac8ba4a388801807
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1462,7 +1462,7 @@ fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 08/14/09 Lane 5
-md5sum bam=029d69499551cc1505e7e7a7fbeca62c,bai=31766658daeb9aa7a02bf0a88fe406b7
+md5sum 029d69499551cc1505e7e7a7fbeca62c,31766658daeb9aa7a02bf0a88fe406b7
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1612,7 +1612,7 @@ fileName wgEncodeLicrTfbsEsb4CtcfME0C57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 12/23/09 SOLEXA2 Lane 5
-md5sum bam=ff91d21de7bd0410ebe7d488669b652a,bai=a11d284a452c279bad0436b14db76692
+md5sum ff91d21de7bd0410ebe7d488669b652a,a11d284a452c279bad0436b14db76692
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1642,7 +1642,7 @@ fileName wgEncodeLicrTfbsEsb4CtcfME0C57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 12/23/09 SOLEXA1 Lane 3
-md5sum bam=a8da9a71ed2a19b289a21e67659793a7,bai=ea35e61025867f76193990b617d07a55
+md5sum a8da9a71ed2a19b289a21e67659793a7,ea35e61025867f76193990b617d07a55
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1792,7 +1792,7 @@ fileName wgEncodeLicrTfbsEsb4InputME0C57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 12/04/09 Lane 1
-md5sum bam=9e60b46ed347a05e37b771106cf9f774,bai=809d62933dd273e32ebce4a16f4210c0
+md5sum 9e60b46ed347a05e37b771106cf9f774,809d62933dd273e32ebce4a16f4210c0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1822,7 +1822,7 @@ fileName wgEncodeLicrTfbsEsb4InputME0C57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 12/04/09 Lane 2
-md5sum bam=d4f1095d804783460877fa313e2580f4,bai=5d180878e70e9b68460c1dbd4ffca4af
+md5sum d4f1095d804783460877fa313e2580f4,5d180878e70e9b68460c1dbd4ffca4af
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1942,7 +1942,7 @@ fileName wgEncodeLicrTfbsEsb4P300ME0C57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 12/23/09 SOLEXA2 Lane 3
-md5sum bam=0360897e7aa58b8ab60b74289b571b36,bai=2879d98df2a2927608b29cc6c4c8143f
+md5sum 0360897e7aa58b8ab60b74289b571b36,2879d98df2a2927608b29cc6c4c8143f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1972,7 +1972,7 @@ fileName wgEncodeLicrTfbsEsb4P300ME0C57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 12/23/09 SOLEXA2 Lane 6
-md5sum bam=e2ebd68f304d46428b4e2a46bc42271d,bai=8e53fc96a0b59364455e359972f29451
+md5sum e2ebd68f304d46428b4e2a46bc42271d,8e53fc96a0b59364455e359972f29451
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2122,7 +2122,7 @@ fileName wgEncodeLicrTfbsEsb4Pol2ME0C57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 12/23/09 SOLEXA1 Lane 1
-md5sum bam=67905f0989ca2b7c3294f29dd4243d4f,bai=2c41e9a5e22e46c974a5f92ab4aedf0b
+md5sum 67905f0989ca2b7c3294f29dd4243d4f,2c41e9a5e22e46c974a5f92ab4aedf0b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2152,7 +2152,7 @@ fileName wgEncodeLicrTfbsEsb4Pol2ME0C57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 01/06/10 Lane 4
-md5sum bam=d2f147b0b8344dfe916a956401b5f3f9,bai=7451d1bc568d5e7f241fe61a1e402153
+md5sum d2f147b0b8344dfe916a956401b5f3f9,7451d1bc568d5e7f241fe61a1e402153
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2303,7 +2303,7 @@ fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/04/09 Lane 7
-md5sum bam=cd36e9deab4f052f4baf3cdf7b04407b,bai=bee80be35f0fca2762597b37000683f1
+md5sum cd36e9deab4f052f4baf3cdf7b04407b,bee80be35f0fca2762597b37000683f1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2334,7 +2334,7 @@ fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 7
-md5sum bam=bdd0dd1305182a922b5e9f9d8997e53d,bai=89d29dcb6657af75a93dc63fbb0c4354
+md5sum bdd0dd1305182a922b5e9f9d8997e53d,89d29dcb6657af75a93dc63fbb0c4354
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2488,7 +2488,7 @@ fileName wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 3
-md5sum bam=ed951601654dfd168d95aa01b538fcb3,bai=12be080d16e2f4aff20527c3772c4317
+md5sum ed951601654dfd168d95aa01b538fcb3,12be080d16e2f4aff20527c3772c4317
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2518,7 +2518,7 @@ fileName wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 09/25/09 Lane 4
-md5sum bam=be4c2edd96dd39e292050f2798c2bb16,bai=78f70f813b790fc0c2ee99dc5b8ee904
+md5sum be4c2edd96dd39e292050f2798c2bb16,78f70f813b790fc0c2ee99dc5b8ee904
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2638,7 +2638,7 @@ fileName wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 01/05/10 Lane 3
-md5sum bam=28c48a669c377a2ed1e47bea1c4c769f,bai=f26839b781a3dc53b76c524ac9bab64f
+md5sum 28c48a669c377a2ed1e47bea1c4c769f,f26839b781a3dc53b76c524ac9bab64f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2668,7 +2668,7 @@ fileName wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 01/06/10 Lane 1
-md5sum bam=b56b707888aad50137b5f458d8e59506,bai=55c8da3863a2c85ec54a43bd953cafd4
+md5sum b56b707888aad50137b5f458d8e59506,55c8da3863a2c85ec54a43bd953cafd4
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2818,7 +2818,7 @@ fileName wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 6
-md5sum bam=fcea5d8d140f7a40e4adc817fc61ef63,bai=ba44265e1e162ffd1021debf5971e80d
+md5sum fcea5d8d140f7a40e4adc817fc61ef63,ba44265e1e162ffd1021debf5971e80d
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2848,7 +2848,7 @@ fileName wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 08/14/09 Lane 6
-md5sum bam=ca87b1fe60f74c60b7a85c859953ad4c,bai=7b0febce40e90a596218b0e942f396a7
+md5sum ca87b1fe60f74c60b7a85c859953ad4c,7b0febce40e90a596218b0e942f396a7
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2999,7 +2999,7 @@ fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/04/09 Lane 6
-md5sum bam=c1927aa703895c6619ca26a730eaffca,bai=32bf5f052c94760ee0b84f234c9ac18b
+md5sum c1927aa703895c6619ca26a730eaffca,32bf5f052c94760ee0b84f234c9ac18b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3030,7 +3030,7 @@ fileName wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 07/29/09 Lane 7
-md5sum bam=00a2ee9167921689ea9d56f9bf8b1bb6,bai=5bc35b1ca54a5d4231106967d43712f2
+md5sum 00a2ee9167921689ea9d56f9bf8b1bb6,5bc35b1ca54a5d4231106967d43712f2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3184,7 +3184,7 @@ fileName wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 7
-md5sum bam=ed951601654dfd168d95aa01b538fcb3,bai=12be080d16e2f4aff20527c3772c4317
+md5sum ed951601654dfd168d95aa01b538fcb3,12be080d16e2f4aff20527c3772c4317
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3214,7 +3214,7 @@ fileName wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 10/23/09 Lane 4
-md5sum bam=f5ab511de3994755b4483281c886b2e0,bai=17d510e47d89b1174cfb0c666680422d
+md5sum f5ab511de3994755b4483281c886b2e0,17d510e47d89b1174cfb0c666680422d
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3334,7 +3334,7 @@ fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/21/09 Lane 4
-md5sum bam=0be79c847ecc4c736b4319abfda8ba99,bai=bb1291d0959a4bcacca814737868be53
+md5sum 0be79c847ecc4c736b4319abfda8ba99,bb1291d0959a4bcacca814737868be53
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3365,7 +3365,7 @@ fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 2
-md5sum bam=0dc6d22b1412fca7329b20fdcac2ccae,bai=374450aec82ee8a92fbef82aeef79546
+md5sum 0dc6d22b1412fca7329b20fdcac2ccae,374450aec82ee8a92fbef82aeef79546
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3396,7 +3396,7 @@ fileName wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdAlnRep3.bam
 grant Ren
 lab LICR-m
 labVersion 01/26/10 Lane 2
-md5sum bam=340663c09fa363482c56fa335a5d722b,bai=ba4889d7b2d05ff5726c1a58514ce55a
+md5sum 340663c09fa363482c56fa335a5d722b,ba4889d7b2d05ff5726c1a58514ce55a
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2
@@ -3579,7 +3579,7 @@ fileName wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 01/26/10 Lane 5
-md5sum bam=3201f50c481ef41d5cd2a95b775dfc9b,bai=0e741a7f3f8cefcae8fecc384613affa
+md5sum 3201f50c481ef41d5cd2a95b775dfc9b,0e741a7f3f8cefcae8fecc384613affa
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3609,7 +3609,7 @@ fileName wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 02/22/10 Lane 1
-md5sum bam=bca9d37eeb16806ba14be507d7b0cb60,bai=8f12ebe3a696574cafac168f0cffda60
+md5sum bca9d37eeb16806ba14be507d7b0cb60,8f12ebe3a696574cafac168f0cffda60
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3759,7 +3759,7 @@ fileName wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/7/09 Lane 4
-md5sum bam=ee983fbbd5293110bff191971595f5f9,bai=17ed87a67d4df63c8eccc29adaca19eb
+md5sum ee983fbbd5293110bff191971595f5f9,17ed87a67d4df63c8eccc29adaca19eb
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3789,7 +3789,7 @@ fileName wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 01/22/10 Lane 5
-md5sum bam=17c647f8a2a92a14300da8de1b49a769,bai=d5cfae1afebfc79b1e7c60602aa9e7e5
+md5sum 17c647f8a2a92a14300da8de1b49a769,d5cfae1afebfc79b1e7c60602aa9e7e5
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3909,7 +3909,7 @@ fileName wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 04/20/09 Lane 2
-md5sum bam=7e9cbb6c4535d7218edcd3364c88d7a9,bai=7f10d6f4c0af2f8ee2487c7e0450f47c
+md5sum 7e9cbb6c4535d7218edcd3364c88d7a9,7f10d6f4c0af2f8ee2487c7e0450f47c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3939,7 +3939,7 @@ fileName wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 01/26/10 Lane 4
-md5sum bam=41e07dd014e18e22840e5f54c0f5d0aa,bai=d973b3c7113d9afdc3faba6146b1b20b
+md5sum 41e07dd014e18e22840e5f54c0f5d0aa,d973b3c7113d9afdc3faba6146b1b20b
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4089,7 +4089,7 @@ fileName wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 2
-md5sum bam=0589072114913501918356f5b55490f8,bai=ac0b6839e93d992a1632072ff84ba0a1
+md5sum 0589072114913501918356f5b55490f8,ac0b6839e93d992a1632072ff84ba0a1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4119,7 +4119,7 @@ fileName wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 08/14/09 Lane 3
-md5sum bam=e8a4452954df6e5fb34946dd8d36c8eb,bai=dd27589d5f1986609b9356a704938638
+md5sum e8a4452954df6e5fb34946dd8d36c8eb,dd27589d5f1986609b9356a704938638
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4269,7 +4269,7 @@ fileName wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 04/29/09 Lane 7
-md5sum bam=87754cafb857042daf127a47efa42a3e,bai=c8846a0502f441dfe85def3ed0fb3e17
+md5sum 87754cafb857042daf127a47efa42a3e,c8846a0502f441dfe85def3ed0fb3e17
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4299,7 +4299,7 @@ fileName wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 5
-md5sum bam=307c7ea1303bb7b43fcc055b00b441df,bai=80f7a4974b45992688a278b4db024762
+md5sum 307c7ea1303bb7b43fcc055b00b441df,80f7a4974b45992688a278b4db024762
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4419,7 +4419,7 @@ fileName wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 04/20/09 Lane 3
-md5sum bam=7945ab7c72920afc6c0e3e1fbdfd2bf2,bai=a44f73b8e8771a4e4275347a6e540c20
+md5sum 7945ab7c72920afc6c0e3e1fbdfd2bf2,a44f73b8e8771a4e4275347a6e540c20
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4449,7 +4449,7 @@ fileName wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 08/14/09 Lane 4
-md5sum bam=b73fe85e9f59a1fc0a37d50c40eaff9e,bai=c2b5369f3173efdf2881f681282188c9
+md5sum b73fe85e9f59a1fc0a37d50c40eaff9e,c2b5369f3173efdf2881f681282188c9
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4599,7 +4599,7 @@ fileName wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 08/17/09 Lane 7
-md5sum bam=11590909d37bc04e7d10f3ac35a07545,bai=b4ad301f62e8f1e3f1d5f789009154ae
+md5sum 11590909d37bc04e7d10f3ac35a07545,b4ad301f62e8f1e3f1d5f789009154ae
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4629,7 +4629,7 @@ fileName wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 01/04/10 Lane 1
-md5sum bam=b9e5c8f63ea7b618e632b60984a2be3d,bai=79eb2fa476b376683a04c34faa44f32a
+md5sum b9e5c8f63ea7b618e632b60984a2be3d,79eb2fa476b376683a04c34faa44f32a
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4779,7 +4779,7 @@ fileName wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 03/09/10 Lane 4
-md5sum bam=42b09efdf9c196fa88aabbc0a194e839,bai=ef577fa5b69c2b3ade48e82a75165ecb
+md5sum 42b09efdf9c196fa88aabbc0a194e839,ef577fa5b69c2b3ade48e82a75165ecb
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4809,7 +4809,7 @@ fileName wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 03/09/10 Lane 5
-md5sum bam=0307d21dcc9214cd355e3a3230c71b91,bai=e2c39c253458f4104c9d910d6a1c9701
+md5sum 0307d21dcc9214cd355e3a3230c71b91,e2c39c253458f4104c9d910d6a1c9701
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4929,7 +4929,7 @@ fileName wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 05/19/10 Lane 2
-md5sum bam=9957bc39b7cabafafbc5646a5ed75ba2,bai=a536e0adf0f81150e756fadf42190912
+md5sum 9957bc39b7cabafafbc5646a5ed75ba2,a536e0adf0f81150e756fadf42190912
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4959,7 +4959,7 @@ fileName wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 05/19/10 Lane 3
-md5sum bam=e67434e9f374ed2366fd6efb7e5e71a3,bai=d8cc32b9024c3fd5e085b2a6d940a256
+md5sum e67434e9f374ed2366fd6efb7e5e71a3,d8cc32b9024c3fd5e085b2a6d940a256
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5109,7 +5109,7 @@ fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8B
-md5sum bam=565290d2c1af09a65de30f4abcaa472e,bai=c0cc0d9518bd1c4066bf55612e61ecaa
+md5sum 565290d2c1af09a65de30f4abcaa472e,c0cc0d9518bd1c4066bf55612e61ecaa
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5139,7 +5139,7 @@ fileName wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 1E
-md5sum bam=b77efa5375b6efa7a999004598a439e0,bai=54d77776ffb0808c70bbd3daba1c7cc8
+md5sum b77efa5375b6efa7a999004598a439e0,54d77776ffb0808c70bbd3daba1c7cc8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5289,7 +5289,7 @@ fileName wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 07/28/10 Lane 7
-md5sum bam=105e46459ce0e640f8fdbdb40aa2ac50,bai=a92a16950e7e847db3c28f427319161f
+md5sum 105e46459ce0e640f8fdbdb40aa2ac50,a92a16950e7e847db3c28f427319161f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5319,7 +5319,7 @@ fileName wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 08/10/10 Lane 2B
-md5sum bam=45fca209125f846fa60caefffb07d448,bai=ca28750307c74fca3b31c4a85fce2bd6
+md5sum 45fca209125f846fa60caefffb07d448,ca28750307c74fca3b31c4a85fce2bd6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5439,7 +5439,7 @@ fileName wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
 labVersion 07/22/10 Lane 3
-md5sum bam=ee847f24ee6b9e59d95b0d1da8c9a2af,bai=b64e375a05785ce53107a642b6517d7b
+md5sum ee847f24ee6b9e59d95b0d1da8c9a2af,b64e375a05785ce53107a642b6517d7b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5469,7 +5469,7 @@ fileName wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
 labVersion 07/22/10 Lane 4
-md5sum bam=b32a01a86ab8881ae618c822b0d74cc2,bai=d46a8cf0fa8c0cb3c32af35acff42574
+md5sum b32a01a86ab8881ae618c822b0d74cc2,d46a8cf0fa8c0cb3c32af35acff42574
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -5601,4 +5601,4 @@ tableName wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdSig
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: -783741821
+# MAGIC: -783789737
