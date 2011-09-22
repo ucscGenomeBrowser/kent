@@ -24,10 +24,10 @@ set spDb = sp101005
 set pbDb = proteins101005
 set ratDb = rn4
 set RatDb = Rn4
-set fishDb = danRer5
+set fishDb = danRer7
 set flyDb = dm3
-set wormDb = ce6
-set yeastDb = sacCer2
+set wormDb = ce9
+set yeastDb = sacCer3
 
 # The net alignment for the closely-related species indicated in $xdb
 set xdbNetDir = $genomes/$db/bed/lastz.${xdb}/axtChain
@@ -65,11 +65,11 @@ set vgTextDbs = (mm8 mm9 hg18 $tempDb)
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
 set xdbFa = $genomes/$xdb/bed/ucsc.12/ucscGenes.faa
-set ratFa = $genomes/$ratDb/bed/blastp/known.faa
+set ratFa = $genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
-set flyFa = $genomes/$flyDb/bed/flybase5.3/flyBasePep.fa
-set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
-set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
+set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
+set wormFa = $genomes/$wormDb/bed/blastp/wormPep210.faa
+set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/$yeastDb.sgd.faa
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
@@ -173,6 +173,7 @@ pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
 bedSplitOnChrom trna.bed trna
 bedSplitOnChrom rfam/rfam.syntenic.bed rfam
+
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
@@ -219,6 +220,7 @@ else
     awk '$13 > 100' antibody.cluster | cut -f 1-12 > antibody.bed
 endif
 
+
 # Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (-s refSeq/$c.psl) then
@@ -243,7 +245,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	touch est/$c.bed
     endif
 end
-
 
 #  seven minutes to this point
 
@@ -294,6 +295,7 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
     hgGetAnn -noMatchOk $xdb mrna $c stdout | txPslToBed stdin $genomes/$xdb/$xdb.2bit mrna/$c.bed
     hgGetAnn -noMatchOk $xdb intronEst $c stdout | txPslToBed stdin $genomes/$xdb/$xdb.2bit est/$c.bed
 end
+
 
 # Create other species splicing graphs.  Takes about five minutes.
 cd $dir/$xdb
@@ -405,12 +407,12 @@ cd $dir
 rm -r $xdb/chains $xdb/nets
 
 
-
-
 # Get exonophy. Takes about 4 seconds.
 hgsql -N $db -e "select chrom, txStart, txEnd, name, "1", strand from exoniphy order by chrom, txStart;" \
     > exoniphy.bed
 bedToTxEdges exoniphy.bed exoniphy.edges
+
+
 
 # Add evidence from ests, orthologous other species transcripts, and exoniphy
 # Takes 36 seconds.
@@ -427,6 +429,7 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
+
 #
 # special testing suggestion: uncomment below
 # compareModifiedFileSizes.csh $oldGeneDir .
@@ -435,9 +438,6 @@ end
 # checkRandomLinesExist.py -s $testingDir/chr22.graph.bounds.old \
 #  -d $testingDir/chr22.graph.bounds.new
 #
-
-
-
 
 
 
@@ -454,6 +454,7 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	-evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25 \
 	    -singleExonFactor=$sef
 end
+
 
 # Make a file that lists the various categories of alt-splicing we see.
 # Do this by making and analysing splicing graphs of just the transcripts
@@ -542,6 +543,7 @@ ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 
+
 # Set up blat jobs for proteins vs. translated txWalk transcripts
 mkdir -p blat/protein/raw
 echo '#LOOP' > blat/protein/template
@@ -604,6 +606,8 @@ rm -r protein/raw
 
 
 
+
+
 cd $dir
 
 # Get parts of multiple alignments corresponding to transcripts.
@@ -616,6 +620,7 @@ foreach c (`cut -f1 $genomes/$db/chrom.sizes`)
 	   | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
     endif
 end
+
 
 cd $dir
 
@@ -729,6 +734,7 @@ txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa \
     ucscGenesTx.fa ucscGenesTx.faa
 
 
+
 # Generate ucscGene/uniprot blat run.
 mkdir -p $dir/blat/uniprotVsUcsc
 cd $dir/blat/uniprotVsUcsc
@@ -782,6 +788,8 @@ rm -r raw
 cd $dir
 txCdsRedoUniprotPicks ucscBadUniprot.picks ucscVsUniprot.psl uniCurated.tab ucscGenes.picks
 
+
+
 # Cluster the coding and the uncoding sets, and make up canonical and
 # isoforms tables. Takes 3 seconds.
 txCdsCluster ucscCoding.bed coding.cluster
@@ -795,7 +803,6 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 # table.
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
-
 
 
 
@@ -828,6 +835,7 @@ else
     exit 255
 endif
 
+
 # Make up knownGenes table, adding uniProt ID. Load into database.
 #	Takes 3 seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.faa uniProt.fa refPep.fa ucscGenes.gp
@@ -841,8 +849,6 @@ hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
-
-
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -896,9 +902,6 @@ hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
-#
-# TODO: determine WHY knownToHprd is so much smaller than previously
-# (knownToHprd old: 1,642,416 new: 1,214,016)     
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -937,7 +940,6 @@ cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
 cd $dir
 
-# TODO: rerun the hprd command after figuring out WHY knownToHprd seems so much smaller...
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
 hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
@@ -947,6 +949,9 @@ hgLoadNetDist $genomes/$db/p2p/vidal/humanVidal.pathLengths $tempDb humanVidalP2
 hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWankerP2P \
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
+
+# move this endif statement past business that has successfully been completed
+endif # BRACKET
 
 
 # Run nice Perl script to make all protein blast runs for
@@ -987,6 +992,7 @@ cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
+
 
 # Remove non-syntenic hits for human and rat
 # Takes a few minutes
@@ -1050,6 +1056,10 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+		
+
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
@@ -1057,8 +1067,8 @@ mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
-utrFa $db knownGene utr3 utr3/utr.fa
-utrFa $db knownGene utr5 utr5/utr.fa
+utrFa $tempDb knownGene utr3 utr3/utr.fa
+utrFa $tempDb knownGene utr5 utr5/utr.fa
 
 # Split up files and make files that define job.
 faSplit sequence utr3/utr.fa 10000 utr3/split/s
@@ -1094,13 +1104,15 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     cd ../utr5
     rm -r split fold err batch.bak
 
+
+
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
 #   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
-set pfamScratch = $scratchDir/tmp/pfam
-mkdir -p $pfamScratch
-cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
+set pfamScratch = $scratchDir/pfam
+ssh $cpufarm mkdir -p $pfamScratch
+ssh $cpufarm cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
 mkdir -p $dir/pfam
 cd $dir/pfam
 mkdir -p splitProt
@@ -1109,7 +1121,7 @@ mkdir -p result
 ls -1 splitProt > prot.list
 cat << '_EOF_' > doPfam
 #!/bin/csh -ef
-/hive/data/outside/pfam/hmmpfam -E 0.1 /scratch/tmp/Pfam_fs \
+/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/scratch/pfam/Pfam_fs \
 	splitProt/$1 > /scratch/tmp/$2.pf
 mv /scratch/tmp/$2.pf $3
 '_EOF_'
@@ -1219,8 +1231,6 @@ rm kgSpAlias_0.tmp
 
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET
 
 # Do BioCyc Pathways build
     mkdir -p $dir/bioCyc
@@ -1311,7 +1321,6 @@ rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
-#breakpoint
 
 # Build known genes list for google
 # make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
@@ -1330,7 +1339,7 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-#breakpoint
+exit $status
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms
