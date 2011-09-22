@@ -374,7 +374,7 @@ tag ASTRO
 type Cell Line
 organism human
 description normal human astrocytes, Astrocy is the same as cell line NH-A 
-# deprecated same as NH-A 
+deprecated same as NH-A 
 tissue Brain
 lineage ectoderm
 vendorName Lonza
