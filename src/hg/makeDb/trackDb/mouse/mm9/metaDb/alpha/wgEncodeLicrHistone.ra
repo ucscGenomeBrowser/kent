@@ -23,7 +23,7 @@ geoSampleAccession GSM769024
 grant Ren
 lab LICR-m
 labVersion 12/09/09 Lane 1
-md5sum bam=0db17c6ee7110eb122d1203c730a5225,bai=7f58a223340882168731f564d4d2ee3b
+md5sum 0db17c6ee7110eb122d1203c730a5225,7f58a223340882168731f564d4d2ee3b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -54,7 +54,7 @@ geoSampleAccession GSM769024
 grant Ren
 lab LICR-m
 labVersion 02/10/10 Lane 6
-md5sum bam=fac805c7184ac6964866cdd816f0e715,bai=6e19d35985ead56f75f856549445fd55
+md5sum fac805c7184ac6964866cdd816f0e715,6e19d35985ead56f75f856549445fd55
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -209,7 +209,7 @@ geoSampleAccession GSM769021
 grant Ren
 lab LICR-m
 labVersion 11/19/09 Lane 3
-md5sum bam=6460edcabbfc36635826dbd8bdbab259,bai=3f12db36395ed9bf4031fcac45e13913
+md5sum 6460edcabbfc36635826dbd8bdbab259,3f12db36395ed9bf4031fcac45e13913
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -240,7 +240,7 @@ geoSampleAccession GSM769021
 grant Ren
 lab LICR-m
 labVersion 12/09/09 Lane 2
-md5sum bam=a0b311e9b4afce168d0b0b28725e9ff6,bai=04a28d19dfa36b504c3b9c00b714af5f
+md5sum a0b311e9b4afce168d0b0b28725e9ff6,04a28d19dfa36b504c3b9c00b714af5f
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -395,7 +395,7 @@ geoSampleAccession GSM769011
 grant Ren
 lab LICR-m
 labVersion 11/05/09 Lane 3
-md5sum bam=94d0ab3f75ad4ae83d01bb42d66f13cb,bai=c1047c8bc0a121ccf6dc3b88f865502b
+md5sum 94d0ab3f75ad4ae83d01bb42d66f13cb,c1047c8bc0a121ccf6dc3b88f865502b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -426,7 +426,7 @@ geoSampleAccession GSM769011
 grant Ren
 lab LICR-m
 labVersion 11/20/09 Lane 5
-md5sum bam=5fdc00b8a590c94153fe242cf7c478cc,bai=69a3920d95c0fd6f029f751c80b2651e
+md5sum 5fdc00b8a590c94153fe242cf7c478cc,69a3920d95c0fd6f029f751c80b2651e
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -550,7 +550,7 @@ geoSampleAccession GSM769018
 grant Ren
 lab LICR-m
 labVersion 12/09/09 Lane 1
-md5sum bam=0892d9fd5db59311e87eba87b08357be,bai=d3135a22f4a9da61fa873aa31517c0c5
+md5sum 0892d9fd5db59311e87eba87b08357be,d3135a22f4a9da61fa873aa31517c0c5
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -581,7 +581,7 @@ geoSampleAccession GSM769018
 grant Ren
 lab LICR-m
 labVersion 02/10/10 Lane 6
-md5sum bam=0360897e7aa58b8ab60b74289b571b36,bai=2879d98df2a2927608b29cc6c4c8143f
+md5sum 0360897e7aa58b8ab60b74289b571b36,2879d98df2a2927608b29cc6c4c8143f
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -736,7 +736,7 @@ geoSampleAccession GSM769027
 grant Ren
 lab LICR-m
 labVersion 5/26/09 Lane 6
-md5sum bam=e14530b46a70209d9297d5ad2f626e82,bai=e2c497d2f64297207a9f55f89dc0a4cb
+md5sum e14530b46a70209d9297d5ad2f626e82,e2c497d2f64297207a9f55f89dc0a4cb
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -767,7 +767,7 @@ geoSampleAccession GSM769027
 grant Ren
 lab LICR-m
 labVersion 8/20/09 Lane 6
-md5sum bam=70c8a3cd61d5a431d4a8b8a85a705057,bai=1170a0f9ccfb25a9b70fb843989681c7
+md5sum 70c8a3cd61d5a431d4a8b8a85a705057,1170a0f9ccfb25a9b70fb843989681c7
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -922,7 +922,7 @@ geoSampleAccession GSM769020
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 1
-md5sum bam=d820f717bd7a61a74823d64479c31d50,bai=5b0dfbf51f4eedcc421fc5898bd52961
+md5sum d820f717bd7a61a74823d64479c31d50,5b0dfbf51f4eedcc421fc5898bd52961
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -953,7 +953,7 @@ geoSampleAccession GSM769020
 grant Ren
 lab LICR-m
 labVersion 01/16/10 Lane 2
-md5sum bam=a8e7687c448b4ab3eaa0d49900ae47ea,bai=1e5ee1bc7d79e3d19d7d5e28641d175a
+md5sum a8e7687c448b4ab3eaa0d49900ae47ea,1e5ee1bc7d79e3d19d7d5e28641d175a
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1077,7 +1077,7 @@ geoSampleAccession GSM769022
 grant Ren
 lab LICR-m
 labVersion 05/26/09 Lane 4
-md5sum bam=a426657c9c82c96771f361226de84e31,bai=bae9415c94706769e0d53aa5a7030ec8
+md5sum a426657c9c82c96771f361226de84e31,bae9415c94706769e0d53aa5a7030ec8
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1108,7 +1108,7 @@ geoSampleAccession GSM769022
 grant Ren
 lab LICR-m
 labVersion 12/14/09 Lane 2
-md5sum bam=136c2a62ee75518f4d919485cda5f1af,bai=b7c4707c540c87eb7daca8aca2fa5de4
+md5sum 136c2a62ee75518f4d919485cda5f1af,b7c4707c540c87eb7daca8aca2fa5de4
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1263,7 +1263,7 @@ geoSampleAccession GSM769026
 grant Ren
 lab LICR-m
 labVersion 05/26/09 Lane 1
-md5sum bam=1a521135788352b25986a0413fa4c4c6,bai=6057998733a6bd550bb3f767f28b05e8
+md5sum 1a521135788352b25986a0413fa4c4c6,6057998733a6bd550bb3f767f28b05e8
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1294,7 +1294,7 @@ geoSampleAccession GSM769026
 grant Ren
 lab LICR-m
 labVersion 08/21/09 Lane 1
-md5sum bam=ea58b66824d06dd51c8e18bf71003a88,bai=2151d680649b27c3a5c9f440506d26eb
+md5sum ea58b66824d06dd51c8e18bf71003a88,2151d680649b27c3a5c9f440506d26eb
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1449,7 +1449,7 @@ geoSampleAccession GSM769019
 grant Ren
 lab LICR-m
 labVersion 05/26/09 Lane 5
-md5sum bam=34d934581dc012c284b340c561bd96e6,bai=995a4c00ac2e219cdf08ebbdb8adbbaf
+md5sum 34d934581dc012c284b340c561bd96e6,995a4c00ac2e219cdf08ebbdb8adbbaf
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1480,7 +1480,7 @@ geoSampleAccession GSM769019
 grant Ren
 lab LICR-m
 labVersion 12/14/09 Lane 4
-md5sum bam=7fd26565f46ab4e20a4fb65bacf1bf61,bai=cf84e7370992c5b022efe91a02f5bdc3
+md5sum 7fd26565f46ab4e20a4fb65bacf1bf61,cf84e7370992c5b022efe91a02f5bdc3
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1604,7 +1604,7 @@ geoSampleAccession GSM769009
 grant Ren
 lab LICR-m
 labVersion 12/23/09 SOLEXA2 Lane 4
-md5sum bam=4c637529b22e6f2c4c2c01317751ce2a,bai=256ec46955f447a5d966b524112859a4
+md5sum 4c637529b22e6f2c4c2c01317751ce2a,256ec46955f447a5d966b524112859a4
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1635,7 +1635,7 @@ geoSampleAccession GSM769009
 grant Ren
 lab LICR-m
 labVersion 12/23/09 SOLEXA1 Lane 2
-md5sum bam=7a59e574aa89346fd241699698cc1aac,bai=0bd8e2e53dc2feac05188e9f0ad302f1
+md5sum 7a59e574aa89346fd241699698cc1aac,0bd8e2e53dc2feac05188e9f0ad302f1
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1790,7 +1790,7 @@ geoSampleAccession GSM769008
 grant Ren
 lab LICR-m
 labVersion 12/07/09 Lane 4
-md5sum bam=a1a9ca8618e824a2350c606239cd3027,bai=6a7c2a87e76696f159220b3e69cc775e
+md5sum a1a9ca8618e824a2350c606239cd3027,6a7c2a87e76696f159220b3e69cc775e
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1821,7 +1821,7 @@ geoSampleAccession GSM769008
 grant Ren
 lab LICR-m
 labVersion 12/07/09 Lane 5
-md5sum bam=c4b5968fef388f92f8146c818338eaf8,bai=6d0c33fa84ee869851254d2d5ce8eb14
+md5sum c4b5968fef388f92f8146c818338eaf8,6d0c33fa84ee869851254d2d5ce8eb14
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1976,7 +1976,7 @@ geoSampleAccession GSM769010
 grant Ren
 lab LICR-m
 labVersion 12/04/09 Lane 1
-md5sum bam=9e60b46ed347a05e37b771106cf9f774,bai=809d62933dd273e32ebce4a16f4210c0
+md5sum 9e60b46ed347a05e37b771106cf9f774,809d62933dd273e32ebce4a16f4210c0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2007,7 +2007,7 @@ geoSampleAccession GSM769010
 grant Ren
 lab LICR-m
 labVersion 12/04/09 Lane 2
-md5sum bam=d4f1095d804783460877fa313e2580f4,bai=5d180878e70e9b68460c1dbd4ffca4af
+md5sum d4f1095d804783460877fa313e2580f4,5d180878e70e9b68460c1dbd4ffca4af
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2132,7 +2132,7 @@ geoSampleAccession GSM769025
 grant Ren
 lab LICR-m
 labVersion 07/29/09 Lane 5
-md5sum bam=24030792213fe1acbc70afc5bc797d1e,bai=99f891d3857b170cbc3fb85018e03f5e
+md5sum 24030792213fe1acbc70afc5bc797d1e,99f891d3857b170cbc3fb85018e03f5e
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2164,7 +2164,7 @@ geoSampleAccession GSM769025
 grant Ren
 lab LICR-m
 labVersion 02/24/10 Lane 1
-md5sum bam=33dedb1222a13d9c0971fa3596f036d4,bai=3711e9b9c3d78be0795754decf7cbc29
+md5sum 33dedb1222a13d9c0971fa3596f036d4,3711e9b9c3d78be0795754decf7cbc29
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2323,7 +2323,7 @@ geoSampleAccession GSM769017
 grant Ren
 lab LICR-m
 labVersion 04/01/09 Lane 7
-md5sum bam=eba5970ebabbfe2c422874b8b64d3f71,bai=3f48c10bcd2fe66fc6d10cbd4ace918c
+md5sum eba5970ebabbfe2c422874b8b64d3f71,3f48c10bcd2fe66fc6d10cbd4ace918c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2354,7 +2354,7 @@ geoSampleAccession GSM769017
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 5
-md5sum bam=dbc1b4833a8683d596c3db4a4cba0be0,bai=256734d7076f4d25b92eec73277f8e0e
+md5sum dbc1b4833a8683d596c3db4a4cba0be0,256734d7076f4d25b92eec73277f8e0e
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2509,7 +2509,7 @@ geoSampleAccession GSM769032
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 3
-md5sum bam=ed951601654dfd168d95aa01b538fcb3,bai=12be080d16e2f4aff20527c3772c4317
+md5sum ed951601654dfd168d95aa01b538fcb3,12be080d16e2f4aff20527c3772c4317
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2540,7 +2540,7 @@ geoSampleAccession GSM769032
 grant Ren
 lab LICR-m
 labVersion 09/25/09 Lane 4
-md5sum bam=be4c2edd96dd39e292050f2798c2bb16,bai=78f70f813b790fc0c2ee99dc5b8ee904
+md5sum be4c2edd96dd39e292050f2798c2bb16,78f70f813b790fc0c2ee99dc5b8ee904
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2665,7 +2665,7 @@ geoSampleAccession GSM769023
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 3
-md5sum bam=ccecdd02877c8797358b88aea4c4562e,bai=1bab2075330b4c9e4bfb04957b16f181
+md5sum ccecdd02877c8797358b88aea4c4562e,1bab2075330b4c9e4bfb04957b16f181
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2697,7 +2697,7 @@ geoSampleAccession GSM769023
 grant Ren
 lab LICR-m
 labVersion 01/04/10 Lane 5
-md5sum bam=35723c1d22a94efe4522f5157ca95428,bai=e796df6fa224c0b61cf75b359bc24c24
+md5sum 35723c1d22a94efe4522f5157ca95428,e796df6fa224c0b61cf75b359bc24c24
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -2856,7 +2856,7 @@ geoSampleAccession GSM769016
 grant Ren
 lab LICR-m
 labVersion 04/16/09 Lane 6
-md5sum bam=e357e73eeb7775b3b02bc6b3cb4894b1,bai=db8da9d6180376a2271e3b4cd3b21091
+md5sum e357e73eeb7775b3b02bc6b3cb4894b1,db8da9d6180376a2271e3b4cd3b21091
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2887,7 +2887,7 @@ geoSampleAccession GSM769016
 grant Ren
 lab LICR-m
 labVersion 10/23/09 Lane 3
-md5sum bam=5a88b7f8d8519f872a793b55f5762b60,bai=e177a40d4805b71d40145bedd9b5ce8d
+md5sum 5a88b7f8d8519f872a793b55f5762b60,e177a40d4805b71d40145bedd9b5ce8d
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3042,7 +3042,7 @@ geoSampleAccession GSM769033
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 7
-md5sum bam=ed951601654dfd168d95aa01b538fcb3,bai=12be080d16e2f4aff20527c3772c4317
+md5sum ed951601654dfd168d95aa01b538fcb3,12be080d16e2f4aff20527c3772c4317
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3073,7 +3073,7 @@ geoSampleAccession GSM769033
 grant Ren
 lab LICR-m
 labVersion 10/23/09 Lane 4
-md5sum bam=f5ab511de3994755b4483281c886b2e0,bai=17d510e47d89b1174cfb0c666680422d
+md5sum f5ab511de3994755b4483281c886b2e0,17d510e47d89b1174cfb0c666680422d
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3197,7 +3197,7 @@ geoSampleAccession GSM769015
 grant Ren
 lab LICR-m
 labVersion 5/20/09 Lane 3
-md5sum bam=0a64c4ebb515234407728cdc247992bc,bai=d8de07ed974ab17ea340b72262547e48
+md5sum 0a64c4ebb515234407728cdc247992bc,d8de07ed974ab17ea340b72262547e48
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3228,7 +3228,7 @@ geoSampleAccession GSM769015
 grant Ren
 lab LICR-m
 labVersion 7/29/09 Lane 4
-md5sum bam=353b77d6eed9a64b293f350d03f1389a,bai=e0fd35689ed9b3d7c81bd05206435fac
+md5sum 353b77d6eed9a64b293f350d03f1389a,e0fd35689ed9b3d7c81bd05206435fac
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3383,7 +3383,7 @@ geoSampleAccession GSM769014
 grant Ren
 lab LICR-m
 labVersion 3/31/10 Lane 5
-md5sum bam=5c4c205a5296f2ceb3ccd8101935ca7c,bai=1324ecf2d70ad6b7e5318cb10e46cb71
+md5sum 5c4c205a5296f2ceb3ccd8101935ca7c,1324ecf2d70ad6b7e5318cb10e46cb71
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3414,7 +3414,7 @@ geoSampleAccession GSM769014
 grant Ren
 lab LICR-m
 labVersion 5/21/09 Lane 5
-md5sum bam=e9d947b0cfc9d94042db03cd45da9ace,bai=cbb36bdf7a17230f97118a8d0a34cd56
+md5sum e9d947b0cfc9d94042db03cd45da9ace,cbb36bdf7a17230f97118a8d0a34cd56
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3569,7 +3569,7 @@ geoSampleAccession GSM769034
 grant Ren
 lab LICR-m
 labVersion 05/7/09 Lane 4
-md5sum bam=ee983fbbd5293110bff191971595f5f9,bai=17ed87a67d4df63c8eccc29adaca19eb
+md5sum ee983fbbd5293110bff191971595f5f9,17ed87a67d4df63c8eccc29adaca19eb
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3600,7 +3600,7 @@ geoSampleAccession GSM769034
 grant Ren
 lab LICR-m
 labVersion 01/22/10 Lane 5
-md5sum bam=17c647f8a2a92a14300da8de1b49a769,bai=d5cfae1afebfc79b1e7c60602aa9e7e5
+md5sum 17c647f8a2a92a14300da8de1b49a769,d5cfae1afebfc79b1e7c60602aa9e7e5
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3724,7 +3724,7 @@ geoSampleAccession GSM769013
 grant Ren
 lab LICR-m
 labVersion 05/27/09 Lane 4
-md5sum bam=38b1ed8add7152603787bb38daef8ae6,bai=049b61b8e316723455d558169659c762
+md5sum 38b1ed8add7152603787bb38daef8ae6,049b61b8e316723455d558169659c762
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3755,7 +3755,7 @@ geoSampleAccession GSM769013
 grant Ren
 lab LICR-m
 labVersion 08/12/09 Lane 6
-md5sum bam=c92d42f6d53b18aaf5d8fa7ef4800104,bai=1711d4c857cae3d6487701767e738fc6
+md5sum c92d42f6d53b18aaf5d8fa7ef4800104,1711d4c857cae3d6487701767e738fc6
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -3910,7 +3910,7 @@ geoSampleAccession GSM769012
 grant Ren
 lab LICR-m
 labVersion 03/20/09 Lane 7
-md5sum bam=028448414cb694881390223d24fd1407,bai=dbc30fdba05be85c5e79bbe2273c240d
+md5sum 028448414cb694881390223d24fd1407,dbc30fdba05be85c5e79bbe2273c240d
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3941,7 +3941,7 @@ geoSampleAccession GSM769012
 grant Ren
 lab LICR-m
 labVersion 08/21/09 Lane 4
-md5sum bam=4057e57411da2893651601921d5a0877,bai=995b16e9cfd8cadd39275b0a000e3be2
+md5sum 4057e57411da2893651601921d5a0877,995b16e9cfd8cadd39275b0a000e3be2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4096,7 +4096,7 @@ geoSampleAccession GSM769035
 grant Ren
 lab LICR-m
 labVersion 04/29/09 Lane 7
-md5sum bam=87754cafb857042daf127a47efa42a3e,bai=c8846a0502f441dfe85def3ed0fb3e17
+md5sum 87754cafb857042daf127a47efa42a3e,c8846a0502f441dfe85def3ed0fb3e17
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4127,7 +4127,7 @@ geoSampleAccession GSM769035
 grant Ren
 lab LICR-m
 labVersion 05/07/09 Lane 5
-md5sum bam=307c7ea1303bb7b43fcc055b00b441df,bai=80f7a4974b45992688a278b4db024762
+md5sum 307c7ea1303bb7b43fcc055b00b441df,80f7a4974b45992688a278b4db024762
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4251,7 +4251,7 @@ geoSampleAccession GSM769028
 grant Ren
 lab LICR-m
 labVersion 05/19/09 Lane 4
-md5sum bam=d10452c1e024cd19517ffcbdde115a14,bai=2703e4f15728769f8365bb3d1f584313
+md5sum d10452c1e024cd19517ffcbdde115a14,2703e4f15728769f8365bb3d1f584313
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4282,7 +4282,7 @@ geoSampleAccession GSM769028
 grant Ren
 lab LICR-m
 labVersion 06/15/09 Lane 6
-md5sum bam=c7f9115cd2129655e66965d45cb1141f,bai=58640ef091c61da9ac78d29cfd9d5cb9
+md5sum c7f9115cd2129655e66965d45cb1141f,58640ef091c61da9ac78d29cfd9d5cb9
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4437,7 +4437,7 @@ geoSampleAccession GSM769029
 grant Ren
 lab LICR-m
 labVersion 05/19/09 Lane 1
-md5sum bam=76fad047e775de8cd8ca7534c4225a47,bai=da34a096d0a9c35efd02359f8297b2dc
+md5sum 76fad047e775de8cd8ca7534c4225a47,da34a096d0a9c35efd02359f8297b2dc
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4468,7 +4468,7 @@ geoSampleAccession GSM769029
 grant Ren
 lab LICR-m
 labVersion 05/19/09 Lane 6
-md5sum bam=f4df88671b97922e715a6cc370a41244,bai=3304996c22978bbea0e128d9280d278f
+md5sum f4df88671b97922e715a6cc370a41244,3304996c22978bbea0e128d9280d278f
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4623,7 +4623,7 @@ geoSampleAccession GSM769030
 grant Ren
 lab LICR-m
 labVersion 03/09/10 Lane 4
-md5sum bam=42b09efdf9c196fa88aabbc0a194e839,bai=ef577fa5b69c2b3ade48e82a75165ecb
+md5sum 42b09efdf9c196fa88aabbc0a194e839,ef577fa5b69c2b3ade48e82a75165ecb
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -4654,7 +4654,7 @@ geoSampleAccession GSM769030
 grant Ren
 lab LICR-m
 labVersion 03/09/10 Lane 5
-md5sum bam=0307d21dcc9214cd355e3a3230c71b91,bai=e2c39c253458f4104c9d910d6a1c9701
+md5sum 0307d21dcc9214cd355e3a3230c71b91,e2c39c253458f4104c9d910d6a1c9701
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -4778,7 +4778,7 @@ geoSampleAccession GSM769031
 grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8C
-md5sum bam=68a947e6c4550c0274e751b584fba721,bai=e4c80d4f26b941ec76ba2fedd6e447c9
+md5sum 68a947e6c4550c0274e751b584fba721,e4c80d4f26b941ec76ba2fedd6e447c9
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4809,7 +4809,7 @@ geoSampleAccession GSM769031
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 3F
-md5sum bam=571b6176db130de6eb5bd0bc2a5890ca,bai=16046c7689e859d1f01dee3830e0dfe3
+md5sum 571b6176db130de6eb5bd0bc2a5890ca,16046c7689e859d1f01dee3830e0dfe3
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -4964,7 +4964,7 @@ geoSampleAccession GSM769036
 grant Ren
 lab LICR-m
 labVersion 09/19/10 Lane 8D
-md5sum bam=1adb79952f432199c0358262201c2103,bai=a23310536494e67633c5e1c58490f242
+md5sum 1adb79952f432199c0358262201c2103,a23310536494e67633c5e1c58490f242
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4995,7 +4995,7 @@ geoSampleAccession GSM769036
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 4G
-md5sum bam=f9a8d4869fc483b88d4a38599112104c,bai=7b657841de3871021891c4c7a6c016d3
+md5sum f9a8d4869fc483b88d4a38599112104c,7b657841de3871021891c4c7a6c016d3
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5150,7 +5150,7 @@ geoSampleAccession GSM769037
 grant Ren
 lab LICR-m
 labVersion 07/28/10 Lane 7
-md5sum bam=105e46459ce0e640f8fdbdb40aa2ac50,bai=a92a16950e7e847db3c28f427319161f
+md5sum 105e46459ce0e640f8fdbdb40aa2ac50,a92a16950e7e847db3c28f427319161f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -5181,7 +5181,7 @@ geoSampleAccession GSM769037
 grant Ren
 lab LICR-m
 labVersion 08/10/10 Lane 2B
-md5sum bam=45fca209125f846fa60caefffb07d448,bai=ca28750307c74fca3b31c4a85fce2bd6
+md5sum 45fca209125f846fa60caefffb07d448,ca28750307c74fca3b31c4a85fce2bd6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5286,4 +5286,4 @@ tableName wgEncodeLicrHistoneSpleenInputMAdult8wksC57bl6StdSig
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: 1419738733
+# MAGIC: 1419695173

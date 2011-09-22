@@ -171,6 +171,7 @@ grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 md5sum 9637e12b3eee2817c7033c53045a801b,d6a8a9576997cf52b247c6bfe7b11775
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeOpenChromFaireNhaAlnRep1.bam
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -193,6 +194,7 @@ grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 md5sum e364e52c49d3a0be6f859acd89ffccc5,6cde30fab84cee3b1f2b14ce473eafde
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeOpenChromFaireNhaAlnRep2.bam
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -215,6 +217,7 @@ grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
 md5sum 5a8e95edd7993bb2f34a99dd7df46df5
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeOpenChromFaireNhaBaseOverlapSignal.bigwig
 origAssembly hg19
 project wgEncode
 subId 2481
@@ -237,6 +240,7 @@ grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
 md5sum 4f8ed48117a0a6e308fa16f37d309807
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeOpenChromFaireNhaPk.narrowPeak.gz
 origAssembly hg19
 project wgEncode
 subId 2481
@@ -258,6 +262,7 @@ fileName wgEncodeOpenChromFaireAstrocyRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
 md5sum 1bb75a8f015446653fb3f480a2331a4a
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeOpenChromFaireNhaRawDataRep1.fastq.gz
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -279,6 +284,7 @@ fileName wgEncodeOpenChromFaireAstrocyRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
 md5sum b7aba10557ac577dede15283f1b890ec
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeOpenChromFaireNhaRawDataRep2.fastq.gz
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -301,6 +307,7 @@ grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
 md5sum 9986af0f897a7edb7d4c3edbfb0d9988
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeOpenChromFaireNhaSig.bigWig
 origAssembly hg19
 project wgEncode
 subId 2481
@@ -3455,6 +3462,158 @@ subId 2501
 tableName wgEncodeOpenChromFaireMedulloSig
 view Signal
 
+metaObject wgEncodeOpenChromFaireNhaAlnRep1
+objType file
+cell NH-a
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
+fileName wgEncodeOpenChromFaireNhaAlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 9637e12b3eee2817c7033c53045a801b,d6a8a9576997cf52b247c6bfe7b11775
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2481
+view Alignments
+
+metaObject wgEncodeOpenChromFaireNhaAlnRep2
+objType file
+cell NH-a
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
+fileName wgEncodeOpenChromFaireNhaAlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+md5sum e364e52c49d3a0be6f859acd89ffccc5,6cde30fab84cee3b1f2b14ce473eafde
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2481
+view Alignments
+
+metaObject wgEncodeOpenChromFaireNhaBaseOverlapSignal
+objType table
+cell NH-a
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
+fileName wgEncodeOpenChromFaireNhaBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+md5sum 5a8e95edd7993bb2f34a99dd7df46df5
+origAssembly hg19
+project wgEncode
+subId 2481
+tableName wgEncodeOpenChromFaireNhaBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireNhaPk
+objType table
+cell NH-a
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
+fileName wgEncodeOpenChromFaireNhaPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+md5sum 4f8ed48117a0a6e308fa16f37d309807
+origAssembly hg19
+project wgEncode
+subId 2481
+tableName wgEncodeOpenChromFaireNhaPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireNhaRawDataRep1
+objType file
+cell NH-a
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
+fileName wgEncodeOpenChromFaireNhaRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+md5sum 1bb75a8f015446653fb3f480a2331a4a
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 2481
+view RawData
+
+metaObject wgEncodeOpenChromFaireNhaRawDataRep2
+objType file
+cell NH-a
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
+fileName wgEncodeOpenChromFaireNhaRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+md5sum b7aba10557ac577dede15283f1b890ec
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 2481
+view RawData
+
+metaObject wgEncodeOpenChromFaireNhaSig
+objType table
+cell NH-a
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+dccAccession wgEncodeEH001115
+expId 1115
+fileName wgEncodeOpenChromFaireNhaSig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_male
+md5sum 9986af0f897a7edb7d4c3edbfb0d9988
+origAssembly hg19
+project wgEncode
+subId 2481
+tableName wgEncodeOpenChromFaireNhaSig
+view Signal
+
 metaObject wgEncodeOpenChromFaireNhbeAlnRep1
 objType file
 cell NHBE
@@ -4221,4 +4380,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -2019195255
+# MAGIC: 161521642

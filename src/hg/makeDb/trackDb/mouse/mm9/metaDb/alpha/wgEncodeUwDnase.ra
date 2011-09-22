@@ -18,7 +18,7 @@ fileName wgEncodeUwDnase3134RiiiMImmortalAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=19749d5f69b107e58bf3cf50eda4aa2d,bai=b84fff004099d10e2b552561ef5ebded
+md5sum 19749d5f69b107e58bf3cf50eda4aa2d,b84fff004099d10e2b552561ef5ebded
 project wgEncode
 replicate 1
 sex M
@@ -41,7 +41,7 @@ fileName wgEncodeUwDnase3134RiiiMImmortalAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=94298186b2e6114a18db400988cf3a39,bai=95a6f8a7479520ce36b694a149da9d06
+md5sum 94298186b2e6114a18db400988cf3a39,95a6f8a7479520ce36b694a149da9d06
 project wgEncode
 replicate 2
 sex M
@@ -254,7 +254,7 @@ fileName wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=bf980e16a898611e9c0eeb1f7f2637f3,bai=a4c6dd5e57ecd1d1a7309f13a752f069
+md5sum bf980e16a898611e9c0eeb1f7f2637f3,a4c6dd5e57ecd1d1a7309f13a752f069
 project wgEncode
 replicate 1
 sex M
@@ -277,7 +277,7 @@ fileName wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=042eb2db390f17741522bd2e6dc0dbea,bai=f64970ce8b9ee3119ab94dbfa4db2a0d
+md5sum 042eb2db390f17741522bd2e6dc0dbea,f64970ce8b9ee3119ab94dbfa4db2a0d
 project wgEncode
 replicate 2
 sex M
@@ -490,7 +490,7 @@ fileName wgEncodeUwDnaseA20BalbcannMAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=4ad7fbcf89126e2148defba0591781c9,bai=a3973d3434e2b63878f595f47cf997ec
+md5sum 4ad7fbcf89126e2148defba0591781c9,a3973d3434e2b63878f595f47cf997ec
 project wgEncode
 replicate 1
 sex M
@@ -514,7 +514,7 @@ fileName wgEncodeUwDnaseA20BalbcannMAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=9b58bece4ecd69351f9a7012a96e6ea5,bai=63f758fe364884acae6807ad7ef11452
+md5sum 9b58bece4ecd69351f9a7012a96e6ea5,63f758fe364884acae6807ad7ef11452
 project wgEncode
 replicate 2
 sex M
@@ -736,7 +736,7 @@ fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=57c5c7e6dd7dd8ed48301d705fa485e9,bai=60993670c058f84d3684d5a4b9d366a4
+md5sum 57c5c7e6dd7dd8ed48301d705fa485e9,60993670c058f84d3684d5a4b9d366a4
 project wgEncode
 replicate 1
 sex M
@@ -760,7 +760,7 @@ fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=22dd4a20ae6f34514d4c95f0af3cc418,bai=72f98629bd97891ba26c64da24ad335c
+md5sum 22dd4a20ae6f34514d4c95f0af3cc418,72f98629bd97891ba26c64da24ad335c
 project wgEncode
 replicate 2
 sex M
@@ -977,7 +977,7 @@ fileName wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=f069a0f8fdf111d7c830f38b72153a17,bai=498acc69eca0c620d00b4af0e98ba84c
+md5sum f069a0f8fdf111d7c830f38b72153a17,498acc69eca0c620d00b4af0e98ba84c
 project wgEncode
 replicate 1
 sex M
@@ -1001,7 +1001,7 @@ fileName wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=403cf806991ec45229485bda95cb921a,bai=b4cc974ae4a4b9ce69dad35ca7486682
+md5sum 403cf806991ec45229485bda95cb921a,b4cc974ae4a4b9ce69dad35ca7486682
 project wgEncode
 replicate 2
 sex M
@@ -1026,7 +1026,7 @@ fileName wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=0620f8daa255ed8ae53e55ab9ed6e6b3,bai=b2ddd1d44b240819448bfff615905c72
+md5sum 0620f8daa255ed8ae53e55ab9ed6e6b3,b2ddd1d44b240819448bfff615905c72
 project wgEncode
 replicate 3
 sex M
@@ -1351,7 +1351,7 @@ fileName wgEncodeUwDnaseCbellumC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=fa2d5b47359a0727b5259d8d5fad4d11,bai=2b190182ccee584fa88389a18bf4217e
+md5sum fa2d5b47359a0727b5259d8d5fad4d11,2b190182ccee584fa88389a18bf4217e
 project wgEncode
 replicate 2
 sex M
@@ -1474,7 +1474,7 @@ fileName wgEncodeUwDnaseCerebellumC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=130e6ba2bc4ef90a40617f02b858a4b7,bai=80eaa4f78275e3e51535b5c73a80c313
+md5sum 130e6ba2bc4ef90a40617f02b858a4b7,80eaa4f78275e3e51535b5c73a80c313
 project wgEncode
 replicate 1
 sex M
@@ -1597,7 +1597,7 @@ fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=96a1e2ccdddf27160c68ceac0a26ab5b,bai=a039f942413a48a29dc57a372265a677
+md5sum 96a1e2ccdddf27160c68ceac0a26ab5b,a039f942413a48a29dc57a372265a677
 project wgEncode
 replicate 1
 sex M
@@ -1621,7 +1621,7 @@ fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=24256d7aca7856043c06f90e6d4b4e58,bai=2efeca671cddfeaa9479ef239f75bf2f
+md5sum 24256d7aca7856043c06f90e6d4b4e58,2efeca671cddfeaa9479ef239f75bf2f
 project wgEncode
 replicate 2
 sex M
@@ -1646,7 +1646,7 @@ fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=cfab01c77788d7af267e6cc9ea2b3bac,bai=33aebc50b733d6d0ea55cde54b8c02bb
+md5sum cfab01c77788d7af267e6cc9ea2b3bac,33aebc50b733d6d0ea55cde54b8c02bb
 project wgEncode
 replicate 3
 sex M
@@ -1971,7 +1971,7 @@ fileName wgEncodeUwDnaseEscj7S129ME0AlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=11890d995fb712040e7a9c1c0583d3cc,bai=03a11bd50b2700ad03fb36664837b659
+md5sum 11890d995fb712040e7a9c1c0583d3cc,03a11bd50b2700ad03fb36664837b659
 project wgEncode
 replicate 1
 sex M
@@ -1994,7 +1994,7 @@ fileName wgEncodeUwDnaseEscj7S129ME0AlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=46bc34f4b66881b071b65d7ad982d2b2,bai=d4ab1f620593a8fb87ad998c4dd71995
+md5sum 46bc34f4b66881b071b65d7ad982d2b2,d4ab1f620593a8fb87ad998c4dd71995
 project wgEncode
 replicate 2
 sex M
@@ -2207,7 +2207,7 @@ fileName wgEncodeUwDnaseFatC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=6fc84864317d202147be1403f86d3fdf,bai=237120ec18022cb60e1945511b85c058
+md5sum 6fc84864317d202147be1403f86d3fdf,237120ec18022cb60e1945511b85c058
 project wgEncode
 replicate 1
 sex M
@@ -2231,7 +2231,7 @@ fileName wgEncodeUwDnaseFatC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=5684073d78a7aa5235040f8703be4330,bai=29e4e90430a752e3eb2da604c675319c
+md5sum 5684073d78a7aa5235040f8703be4330,29e4e90430a752e3eb2da604c675319c
 project wgEncode
 replicate 2
 sex M
@@ -2453,7 +2453,7 @@ fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=7cc207d9ce030fb3b7112500edc3ea57,bai=c35319061ccbcf09044a080ad462b253
+md5sum 7cc207d9ce030fb3b7112500edc3ea57,c35319061ccbcf09044a080ad462b253
 project wgEncode
 replicate 1
 sex M
@@ -2476,7 +2476,7 @@ fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=e463e21a4866567bc0c1e585c16dfb5d,bai=1c6e771e353fac576081bb0be801292c
+md5sum e463e21a4866567bc0c1e585c16dfb5d,1c6e771e353fac576081bb0be801292c
 project wgEncode
 replicate 2
 sex M
@@ -2687,7 +2687,7 @@ fileName wgEncodeUwDnaseFlbudCd1ME11halfAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=65b4bb0a29436a4705b37b0702ddd17d,bai=d273f9dd8b39032a375aebf6958ae22d
+md5sum 65b4bb0a29436a4705b37b0702ddd17d,d273f9dd8b39032a375aebf6958ae22d
 project wgEncode
 replicate 1
 sex M
@@ -2709,7 +2709,7 @@ fileName wgEncodeUwDnaseFlbudCd1ME11halfAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=d11f15c96e276c4591c74cc79c62a004,bai=48d92ca15b89cb4fbef73e57903eec1e
+md5sum d11f15c96e276c4591c74cc79c62a004,48d92ca15b89cb4fbef73e57903eec1e
 project wgEncode
 replicate 2
 sex M
@@ -2913,7 +2913,7 @@ fileName wgEncodeUwDnaseGfatC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=e312f761d6ad5e163a2e8b449f9a4fc3,bai=2a27af08e57d658dc6a9ed1e6e5db7c4
+md5sum e312f761d6ad5e163a2e8b449f9a4fc3,2a27af08e57d658dc6a9ed1e6e5db7c4
 project wgEncode
 replicate 1
 sex M
@@ -2935,7 +2935,7 @@ fileName wgEncodeUwDnaseGfatC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=ddac157c1a8fccad4db373d44a127ab1,bai=04f1e71bd9b3fd079cc02e60858de8d8
+md5sum ddac157c1a8fccad4db373d44a127ab1,04f1e71bd9b3fd079cc02e60858de8d8
 project wgEncode
 replicate 2
 sex M
@@ -3141,7 +3141,7 @@ fileName wgEncodeUwDnaseHeartC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=5c56c9d9d463b763be7f8fd780c505ed,bai=3f52cc018d649832e291bf2ef4b86e74
+md5sum 5c56c9d9d463b763be7f8fd780c505ed,3f52cc018d649832e291bf2ef4b86e74
 project wgEncode
 replicate 1
 sex M
@@ -3262,7 +3262,7 @@ fileName wgEncodeUwDnaseHlbudCd1ME11halfAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=722ea5dcb1b19aed13d4cc5f82baa621,bai=05c240fb9a3238cf5a699b5bbbb13b24
+md5sum 722ea5dcb1b19aed13d4cc5f82baa621,05c240fb9a3238cf5a699b5bbbb13b24
 project wgEncode
 replicate 1
 sex M
@@ -3284,7 +3284,7 @@ fileName wgEncodeUwDnaseHlbudCd1ME11halfAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=74f240d00e153fa443eeca1eadab0642,bai=80a191053c3dcdaa54bc848b839e03a9
+md5sum 74f240d00e153fa443eeca1eadab0642,80a191053c3dcdaa54bc848b839e03a9
 project wgEncode
 replicate 2
 sex M
@@ -3488,7 +3488,7 @@ fileName wgEncodeUwDnaseHlembryoCd1ME11halfAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=12de5954b524442d2e7de9767fd5aa04,bai=12d89037c369f3006de4faefd14109f6
+md5sum 12de5954b524442d2e7de9767fd5aa04,12d89037c369f3006de4faefd14109f6
 project wgEncode
 replicate 2
 sex M
@@ -3603,7 +3603,7 @@ fileName wgEncodeUwDnaseKidneyC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=fe5e7b8c353b9341f567be164b34c790,bai=98cdaa99edbe62bbc184470c491fef0f
+md5sum fe5e7b8c353b9341f567be164b34c790,98cdaa99edbe62bbc184470c491fef0f
 project wgEncode
 replicate 1
 sex M
@@ -3627,7 +3627,7 @@ fileName wgEncodeUwDnaseKidneyC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=138f15ef247a1a74285a7ebfd9bda32a,bai=068c2026fe5248d62565f3d4d161d0a7
+md5sum 138f15ef247a1a74285a7ebfd9bda32a,068c2026fe5248d62565f3d4d161d0a7
 project wgEncode
 replicate 2
 sex M
@@ -3849,7 +3849,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=bfe6528f7bd654c51098e8816426045b,bai=40e8bf930002676382cd4aebdf5437a6
+md5sum bfe6528f7bd654c51098e8816426045b,40e8bf930002676382cd4aebdf5437a6
 project wgEncode
 replicate 1
 sex M
@@ -3874,7 +3874,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep10.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=99ceb06b99a28909a06836361482c222,bai=a53b0ab7907c4ce7b4ecef744caad7c6
+md5sum 99ceb06b99a28909a06836361482c222,a53b0ab7907c4ce7b4ecef744caad7c6
 project wgEncode
 replicate 10
 sex M
@@ -3898,7 +3898,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=b778c4f48371b093b2d0261ffbea7209,bai=bd929b044717e850a73e6c1e04466289
+md5sum b778c4f48371b093b2d0261ffbea7209,bd929b044717e850a73e6c1e04466289
 project wgEncode
 replicate 2
 sex M
@@ -3923,7 +3923,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=2460305446b384f68c0cda8cc709bf6e,bai=129b090ad2c5f993ac5c36ceab28903c
+md5sum 2460305446b384f68c0cda8cc709bf6e,129b090ad2c5f993ac5c36ceab28903c
 project wgEncode
 replicate 3
 sex M
@@ -3948,7 +3948,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep4.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=27313da5177045b225b59d2a3deb55b3,bai=7e768b1281fda6a4769b24ee2d205118
+md5sum 27313da5177045b225b59d2a3deb55b3,7e768b1281fda6a4769b24ee2d205118
 project wgEncode
 replicate 4
 sex M
@@ -3973,7 +3973,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep5.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=879e7dac0beafcdfdaeb60712bdab55e,bai=fbd6b952848802920acd43d4efe927bc
+md5sum 879e7dac0beafcdfdaeb60712bdab55e,fbd6b952848802920acd43d4efe927bc
 project wgEncode
 replicate 5
 sex M
@@ -3998,7 +3998,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep6.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=20cd921757591c098e0d94ac69aace9a,bai=ea817325526c171ae3b6e90cccd4d17e
+md5sum 20cd921757591c098e0d94ac69aace9a,ea817325526c171ae3b6e90cccd4d17e
 project wgEncode
 replicate 6
 sex M
@@ -4023,7 +4023,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep7.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=ab916452a000aa77f5820f1d24d594eb,bai=54bfa356ae18c02016429a4e34469144
+md5sum ab916452a000aa77f5820f1d24d594eb,54bfa356ae18c02016429a4e34469144
 project wgEncode
 replicate 7
 sex M
@@ -4048,7 +4048,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep8.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=6628c4a1ac782ef3159246bddc996493,bai=cdab31b666b681a4b9422c98953e1f48
+md5sum 6628c4a1ac782ef3159246bddc996493,cdab31b666b681a4b9422c98953e1f48
 project wgEncode
 replicate 8
 sex M
@@ -4073,7 +4073,7 @@ fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep9.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=35b8b099f9c49f7b2a54de4c11e40fac,bai=e5d9c1be87c9f6a81f97e58695c6e73c
+md5sum 35b8b099f9c49f7b2a54de4c11e40fac,e5d9c1be87c9f6a81f97e58695c6e73c
 project wgEncode
 replicate 9
 sex M
@@ -5119,7 +5119,7 @@ fileName wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=cfcda44767784c722c54144c5c53f46a,bai=675c713c30de43b355fa56be127f5db9
+md5sum cfcda44767784c722c54144c5c53f46a,675c713c30de43b355fa56be127f5db9
 project wgEncode
 replicate 1
 sex M
@@ -5143,7 +5143,7 @@ fileName wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=620f166617e82fd1b126d07ad1d60f9f,bai=9120a5de1181250c19c72505ea49ddc9
+md5sum 620f166617e82fd1b126d07ad1d60f9f,9120a5de1181250c19c72505ea49ddc9
 project wgEncode
 replicate 2
 sex M
@@ -5168,7 +5168,7 @@ fileName wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=988ae1e2b6a35f058684c607c3b08711,bai=fa068011c6dc91b31ddde136a6cf0551
+md5sum 988ae1e2b6a35f058684c607c3b08711,fa068011c6dc91b31ddde136a6cf0551
 project wgEncode
 replicate 3
 sex M
@@ -5493,7 +5493,7 @@ fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=16f43607583b9d023b7cce6118285a73,bai=447a979bef0879c1c0ccc6e50fab7037
+md5sum 16f43607583b9d023b7cce6118285a73,447a979bef0879c1c0ccc6e50fab7037
 project wgEncode
 replicate 1
 sex M
@@ -5516,7 +5516,7 @@ fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=8a761bfcfb67f119a235fcdc47aff1b4,bai=e37aaa5d9fa49f385b45d88676a13ada
+md5sum 8a761bfcfb67f119a235fcdc47aff1b4,e37aaa5d9fa49f385b45d88676a13ada
 project wgEncode
 replicate 2
 sex M
@@ -5540,7 +5540,7 @@ fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=f49538975b56ad8e6dfcc3327bf8c315,bai=2a8d8efd33fd2d471c98ea3a00ebd054
+md5sum f49538975b56ad8e6dfcc3327bf8c315,2a8d8efd33fd2d471c98ea3a00ebd054
 project wgEncode
 replicate 3
 sex M
@@ -5850,7 +5850,7 @@ fileName wgEncodeUwDnaseMesodermCd1ME11halfAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=b1aa222668935f14db41375eb5d3f82c,bai=d9d4de0a7af3f99c1267c1528035cace
+md5sum b1aa222668935f14db41375eb5d3f82c,d9d4de0a7af3f99c1267c1528035cace
 project wgEncode
 replicate 1
 sex M
@@ -5872,7 +5872,7 @@ fileName wgEncodeUwDnaseMesodermCd1ME11halfAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=e3baf1f46f33f9b391539507aa77aa3d,bai=141b2a569051f50d78582f678d845655
+md5sum e3baf1f46f33f9b391539507aa77aa3d,141b2a569051f50d78582f678d845655
 project wgEncode
 replicate 2
 sex M
@@ -6076,7 +6076,7 @@ fileName wgEncodeUwDnaseNih3t3NihsMImmortalAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=151df00958379a0c4b65abda1436b16b,bai=3d6a9410be68512443ec08d25ea4e7b5
+md5sum 151df00958379a0c4b65abda1436b16b,3d6a9410be68512443ec08d25ea4e7b5
 project wgEncode
 replicate 2
 sex M
@@ -6191,7 +6191,7 @@ fileName wgEncodeUwDnasePatskiSpbl6MImmortalAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=13d7c8ce0ba2879515efc23e7d9be344,bai=a33f5a9e8a5dce313ae160d03859a0f0
+md5sum 13d7c8ce0ba2879515efc23e7d9be344,a33f5a9e8a5dce313ae160d03859a0f0
 project wgEncode
 replicate 1
 sex M
@@ -6215,7 +6215,7 @@ fileName wgEncodeUwDnasePatskiSpbl6MImmortalAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=87f5a36910a35d1414239b4210c0d5f1,bai=3dfd0343e50a37a799c8fe12912dcdda
+md5sum 87f5a36910a35d1414239b4210c0d5f1,3dfd0343e50a37a799c8fe12912dcdda
 project wgEncode
 replicate 2
 sex M
@@ -6437,7 +6437,7 @@ fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=76573222085c3f8d557bba5f0a68df68,bai=0448346593ccbb732867a967841d0923
+md5sum 76573222085c3f8d557bba5f0a68df68,0448346593ccbb732867a967841d0923
 project wgEncode
 replicate 1
 sex M
@@ -6461,7 +6461,7 @@ fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=9006c6c8ef91efa7a1e39ccff7f551d5,bai=b755242330007b18d413e5f7dafb58da
+md5sum 9006c6c8ef91efa7a1e39ccff7f551d5,b755242330007b18d413e5f7dafb58da
 project wgEncode
 replicate 2
 sex M
@@ -6683,7 +6683,7 @@ fileName wgEncodeUwDnaseTregC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=59922d3427cf5eedcef6c36b0d593bcd,bai=659ffb3b2bb51e042252113d39fdad2a
+md5sum 59922d3427cf5eedcef6c36b0d593bcd,659ffb3b2bb51e042252113d39fdad2a
 project wgEncode
 replicate 1
 sex M
@@ -6705,7 +6705,7 @@ fileName wgEncodeUwDnaseTregC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=6843684e9deb47dd733766e0c9ff9ba4,bai=da5e3d02c5b2e6f5ab1dc171baebf76a
+md5sum 6843684e9deb47dd733766e0c9ff9ba4,da5e3d02c5b2e6f5ab1dc171baebf76a
 project wgEncode
 replicate 2
 sex M
@@ -6919,7 +6919,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=25b8c1bd41ecffa5695e7cb582da6cdc,bai=f1808c4b2049145fed8cbfac0e3e1c72
+md5sum 25b8c1bd41ecffa5695e7cb582da6cdc,f1808c4b2049145fed8cbfac0e3e1c72
 project wgEncode
 replicate 1
 sex M
@@ -6943,7 +6943,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=3f26f1f31b9e7b0de9e28b28ac5bbfc3,bai=2ba6cb6f499e74a1c3f137f594b2d34a
+md5sum 3f26f1f31b9e7b0de9e28b28ac5bbfc3,2ba6cb6f499e74a1c3f137f594b2d34a
 project wgEncode
 replicate 2
 sex M
@@ -6968,7 +6968,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep3.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=af97f23436a84e8ac092ba72ccc7bc50,bai=a0a04774135e299f1682862a699f33b9
+md5sum af97f23436a84e8ac092ba72ccc7bc50,a0a04774135e299f1682862a699f33b9
 project wgEncode
 replicate 3
 sex M
@@ -6993,7 +6993,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep4.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=2828698f0dead79ff713254d106eee66,bai=b934cb1a291900aa31f77fc102d3b337
+md5sum 2828698f0dead79ff713254d106eee66,b934cb1a291900aa31f77fc102d3b337
 project wgEncode
 replicate 4
 sex M
@@ -7018,7 +7018,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep5.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=b1537812ee1666d1a1db904fdcb3c80c,bai=5c7ac7622f86c7527fa0918d7eab94ef
+md5sum b1537812ee1666d1a1db904fdcb3c80c,5c7ac7622f86c7527fa0918d7eab94ef
 project wgEncode
 replicate 5
 sex M
@@ -7043,7 +7043,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep6.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=3cfd4d448f996d7250a0aa5a083ca1ee,bai=f6ae48a6ff2df3810fe47d8a7f55461f
+md5sum 3cfd4d448f996d7250a0aa5a083ca1ee,f6ae48a6ff2df3810fe47d8a7f55461f
 project wgEncode
 replicate 6
 sex M
@@ -7067,7 +7067,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep7.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=72da111a70f8b270ecf235c63fbc7c8a,bai=127ea50247c5f8506d44f247716017bc
+md5sum 72da111a70f8b270ecf235c63fbc7c8a,127ea50247c5f8506d44f247716017bc
 project wgEncode
 replicate 7
 sex M
@@ -7800,7 +7800,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfAlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=50d6978ab0afe22fcc791d50b4acf246,bai=73541a48d589ff1a7b2d57cc2da40d22
+md5sum 50d6978ab0afe22fcc791d50b4acf246,73541a48d589ff1a7b2d57cc2da40d22
 project wgEncode
 replicate 1
 sex M
@@ -7824,7 +7824,7 @@ fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfAlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=dadef3619815c853f537c930806800fb,bai=497fa60e8f429debf85ed637556ca6be
+md5sum dadef3619815c853f537c930806800fb,497fa60e8f429debf85ed637556ca6be
 project wgEncode
 replicate 2
 sex M
@@ -8046,7 +8046,7 @@ fileName wgEncodeUwDnaseZhbtc4129olaME0AlnRep1.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=da7ce24569974b7d1652b910c82825a2,bai=61730db93f90383bd229730260b2025a
+md5sum da7ce24569974b7d1652b910c82825a2,61730db93f90383bd229730260b2025a
 project wgEncode
 replicate 1
 sex M
@@ -8070,7 +8070,7 @@ fileName wgEncodeUwDnaseZhbtc4129olaME0AlnRep2.bam
 grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
-md5sum bam=f12c1511165a983a64f4235d27553036,bai=948c79c8e26457107cd9675b83a1a1c6
+md5sum f12c1511165a983a64f4235d27553036,948c79c8e26457107cd9675b83a1a1c6
 project wgEncode
 replicate 2
 sex M
@@ -8277,4 +8277,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: -2141433895
+# MAGIC: -2141483263
