@@ -768,3 +768,124 @@ chainOne $(path1)
 #end tblastn
 
 ##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2011-09-20 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("xenTro3", "blat12", "17828", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("xenTro3", "blat12", "17829", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# set default position the same as was xenTro2 via blat
+#	(DONE - 2011-09-20 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL172663:565941-578374" where name="xenTro3";' \
+	hgcentraltest
+
+############################################################################
+# Swap lastz galGal3 Chicken (DONE - 2011-09-20 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/galGal3/bed/lastzXenTro3.2011-09-20
+    cat fb.galGal3.chainXenTro3Link.txt 
+    #	54978665 bases of 1042591351 (5.273%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.galGal3.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.galGal3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/galGal3/bed/lastzXenTro3.2011-09-20/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    13m36.708s
+
+    cat fb.xenTro3.chainGalGal3Link.txt
+    #	64250673 bases of 1358334882 (4.730%) in intersection
+
+#########################################################################
+# Swap lastz anoCar2 Lizard (DONE - 2011-09-21 - Hiram)
+    # original alignment
+    cd /cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19
+    cat fb.anoCar2.chainXenTro3Link.txt
+    #	86932478 bases of 1701353770 (5.110%) in intersection
+
+    # and this swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.anoCar2.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19/DEF \
+	-bigClusterHub=swarm -workhorse=hgwdev -smallClusterHub=memk \
+	-swap -chainMinScore=5000 \
+	-chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 88m21s
+    cat fb.xenTro3.chainAnoCar2Link.txt
+    #	92033566 bases of 1358334882 (6.775%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.anoCar2.swap lastz.anoCar2
+
+##########################################################################
+# Swap lastz hg19 Human (DONE - 2011-09-21 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20
+    cat fb.hg19.chainXenTro3Link.txt
+    #	87928753 bases of 2897316137 (3.035%) in intersection
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    37m7.001s
+    cat fb.xenTro3.chainHg19Link.txt 
+    #	90929066 bases of 1358334882 (6.694%) in intersection
+
+##############################################################################
+# Swap lastz danRer7 Zebrafish (DONE - 2011-09-21 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/danRer7/bed/lastzXenTro3.2011-09-20
+    cat fb.danRer7.chainXenTro3Link.txt 
+    #	91771881 bases of 1409770109 (6.510%) in intersection
+    cd /hive/data/genomes/danRer7/bed
+    ln -s lastzXenTro3.2011-09-20 lastz.xenTro3
+
+    #	running the swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzXenTro3.2011-09-20/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    67m46.506s
+    cat fb.xenTro3.chainDanRer7Link.txt 
+    #	96539932 bases of 1358334882 (7.107%) in intersection
+
+#########################################################################
+# Swap lastz mm9 Mouse (DONE - 2011-09-21 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/mm9/bed/lastzXenTro3.2011-09-20
+    cat fb.mm9.chainXenTro3Link.txt 
+    #	81920795 bases of 2620346127 (3.126%) in intersection
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.mm9.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzXenTro3.2011-09-20/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    57m36.529s
+    cat fb.xenTro3.chainMm9Link.txt 
+    #	89770014 bases of 1358334882 (6.609%) in intersection
+
+##############################################################################
