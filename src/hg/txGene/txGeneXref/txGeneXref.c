@@ -47,6 +47,51 @@ lineFileClose(&lf);
 return hash;
 }
 
+
+boolean isTrna(char *sourceAcc)
+/* isTrna - determine if the gene is a tRNA gene predictioon */
+{
+/* If the gene is a tRNA gene prediction from the Lowe lab,
+ * then its name will contain the word 'tRNA' immediately after
+ * a period. */
+if (stringIn(".tRNA", sourceAcc))
+    return(TRUE);
+else
+    return(FALSE);
+}
+
+boolean isRfam(char *sourceAcc)
+/* isRfam - determine if the sequence comes from Rfam */
+{
+/* If the sequence comes from Rfam, its source accession should begin
+ * with the letters RF, and then should have a string of digits
+ * followed by a semicolon (and subsequent characters).  No other
+ * known accessions match this pattern. */
+/* Note: At this time (9/15/11), Rfam accessions include five digits after 
+ * the RF.  But I wouldn't want to bet on that never changing... */
+int ii;
+if (strlen(sourceAcc) >= 3) 
+    {
+    if (sourceAcc[0] == 'R' && sourceAcc[1] == 'F' && isdigit(sourceAcc[2]))
+	{
+	for (ii = 3; ii < strlen(sourceAcc); ii++) 
+	    {
+	    if (!isdigit(sourceAcc[ii]) && sourceAcc[ii] != ';')
+		{
+		break;
+		}
+	    if (sourceAcc[ii] == ';') 
+		{
+		return(TRUE);
+		}
+	    }
+	}
+	    
+    }
+    return(FALSE);
+}
+    
+
 void txGeneXref(char *genomeDb, char *uniProtDb, char *genePredFile, char *infoFile, char *pickFile, 
 	char *evFile, char *outFile)
 /* txGeneXref - Make kgXref type table for genes.. */
@@ -88,6 +133,8 @@ for (info = infoList; info != NULL; info = info->next)
     char *refseq = "";
     char *protAcc = "";
     char *description = NULL;
+    char *rfamAcc = "";
+    char *tRnaName = "";
     char query[256];
     char *proteinId = hashMustFindVal(geneToProtHash, info->name);
     boolean isAb = sameString(info->category, "antibodyParts");
@@ -147,6 +194,55 @@ for (info = infoList; info != NULL; info = info->next)
 	geneSymbol = cloneString("abParts");
 	description = cloneString("Parts of antibodies, mostly variable regions.");
 	isAb = TRUE;
+	}
+    /* If it's an Rfam, split out the tokens from the semicolon-delimited 
+     * sourceAcc.  The first token will be the Rfam accession, the second 
+     * token will be used as the gene symbol, and the description will be
+     * derived from the third symbol (contig ID) and Rfam accession */
+    else if (isRfam(info->sourceAcc)) 
+	{
+        struct slName *accessionTokens = slNameListFromString(info->sourceAcc, ';');
+	assert(accessionTokens != NULL);
+	rfamAcc = cloneString(accessionTokens->name);
+	assert(accessionTokens->next != NULL);
+	geneSymbol = replaceChars(accessionTokens->next->name, "-", "_");
+	if (isalpha(*geneSymbol))
+	    *geneSymbol = toupper(*geneSymbol);
+	assert(accessionTokens->next->next != NULL);
+	char *contigCoordinates = accessionTokens->next->next->name;
+	description =  needMem(strlen(rfamAcc) + strlen(contigCoordinates) + 45);
+	(void) sprintf(description,  "Rfam model %s hit found at contig region %s", 
+		       rfamAcc, contigCoordinates);
+	slFreeList(&accessionTokens);
+        }
+    /* If it's a tRNA from the tRNA track, sourceAcc will have the following 
+     * form: chr<C>.tRNA<N>-<AA><AC> where C identifies the chromosome, N 
+     * identifies the tRNA gene on the chromosome (so C and N together identify
+     * the tRNA track item), AA identifies the amino acid (or is Pseudo in the 
+     * case of a predicted pseudogene), and AC is the anticodon.  Use "TRNA_<AC>"
+     * as the gene symbol and a gene description of "transfer RNA <AA> (anticodon <AC>),
+     * and put the sourceAcc in the tRnaName field */
+    else if (isTrna(info->sourceAcc))
+	{
+	tRnaName = cloneString(info->sourceAcc);
+	description = (char *) needMem(50);
+	if (stringIn("Pseudo", tRnaName)) 
+	    {
+	    char antiCodon[4];
+	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + strlen("Pseudo") + 1, 3);
+	    geneSymbol = cloneString("TRNA_Pseudo");
+	    sprintf(description, "transfer RNA pseudogene (anticodon %s)",
+		    &antiCodon[0]);
+	    }
+	else 
+	    {
+	    char aminoAcid[4], antiCodon[4];
+	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + 4, 3);
+	    (void) strncpy(aminoAcid, strchr(tRnaName, '-') + 1, 3);
+	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + 4, 3);
+	    geneSymbol = catTwoStrings("TRNA_", aminoAcid);
+	    sprintf(description, "transfer RNA %s (anticodon %s)", &aminoAcid[0], &antiCodon[0]);
+	    }
 	}
 
     if (ev == NULL)
@@ -261,7 +357,9 @@ for (info = infoList; info != NULL; info = info->next)
     fprintf(f, "%s\t", geneSymbol);
     fprintf(f, "%s\t", refseq);
     fprintf(f, "%s\t", protAcc);
-    fprintf(f, "%s\n", description);
+    fprintf(f, "%s\t", description);
+    fprintf(f, "%s\t", rfamAcc);
+    fprintf(f, "%s\n", tRnaName);
     }
 carefulClose(&f);
 }

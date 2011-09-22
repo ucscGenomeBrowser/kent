@@ -1970,3 +1970,68 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 ############################################################################
+## LASTZ Lizard anoCar2 (DONE - 2011-09-19 - Hiram)
+    mkdir /cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19
+    cd /cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19
+
+    cat << '_EOF_' > DEF
+# Lizard vs frog
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Lizard AnoCar2
+SEQ1_DIR=/scratch/data/anoCar2/anoCar2.2bit
+SEQ1_LEN=/scratch/data/anoCar2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# TARGET: Frog xenTro3 - single chunk big enough for the largest scaffold
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-bigClusterHub=swarm -workhorse=hgwdev -smallClusterHub=memk \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	> do.log 2>&1 &
+    # got lost in some swarm problems, finish the lastz manually, then:
+
+    time doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-bigClusterHub=swarm -workhorse=hgwdev -smallClusterHub=memk \
+	-continue=cat -chainMinScore=5000 \
+	-chainLinearGap=loose > cat.log 2>&1 &
+    #	real    338m49.752s
+
+    cat fb.anoCar2.chainXenTro3Link.txt
+    #	86932478 bases of 1701353770 (5.110%) in intersection
+    cd /cluster/data/anoCar2/bed
+    ln -s blastz.xenTro3.2011-09-19 lastz.xenTro3
+
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.anoCar2.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.anoCar2.swap
+
+    time doBlastzChainNet.pl -verbose=2 \
+	/cluster/data/anoCar2/bed/blastz.xenTro3.2011-09-19/DEF \
+	-bigClusterHub=swarm -workhorse=hgwdev -smallClusterHub=memk \
+	-swap -chainMinScore=5000 \
+	-chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 88m21s
+    cat fb.xenTro3.chainAnoCar2Link.txt
+    #	92033566 bases of 1358334882 (6.775%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.anoCar2.swap lastz.anoCar2
+
+##########################################################################
