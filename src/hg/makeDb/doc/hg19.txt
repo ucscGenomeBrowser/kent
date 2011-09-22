@@ -16871,3 +16871,59 @@ EOF
 
 
 #############################################################################
+# LASTZ X. tropicalis XenTro3 (DONE - 2011-09-20 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20
+    cd /hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20
+
+    cat << '_EOF_' > DEF
+# human vs X. tropicalis
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    395m51.626s
+    cat fb.hg19.chainXenTro3Link.txt  
+    #	87928753 bases of 2897316137 (3.035%) in intersection
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzXenTro3.2011-09-20 lastz.xenTro3
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    37m7.001s
+    cat fb.xenTro3.chainHg19Link.txt 
+    #	90929066 bases of 1358334882 (6.694%) in intersection
+
+##############################################################################

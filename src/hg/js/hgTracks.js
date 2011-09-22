@@ -18,11 +18,13 @@ var selectedMenuItem;       // currently choosen context menu item (via context 
 var browser;                // browser ("msie", "safari" etc.)
 var mapIsUpdateable = true;
 var currentMapItem;
+var lastMapItem;            // this is used to try to keep what the user last was looking at in view after in-place updates.
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 var supportZoomCodon = false;  // turn on experimental zoom-to-codon functionality (currently only on in larrym's tree).
 var inPlaceUpdate = false;     // modified based on value of hgTracks.inPlaceUpdate and mapIsUpdateable
 var contextMenu;
+var lastMatchLast;
 
 /* Data passed in from CGI via the hgTracks object:
  *
@@ -325,10 +327,10 @@ function selectEnd(img, selection)
     if(doIt) {
         // startDragZoom is null if mouse has never been moved
         var singleClick = (selection.x2 == selection.x1) || startDragZoom == null || (now.getTime() - startDragZoom) < 100;
-        newPosition = updatePosition(img, selection, singleClick);
+        var newPosition = updatePosition(img, selection, singleClick);
 	if(newPosition != undefined) {
             if(inPlaceUpdate) {
-                navigateInPlace("position=" + newPosition, null);
+                navigateInPlace("position=" + newPosition, null, true);
             } else {
                 jQuery('body').css('cursor', 'wait');
 	        document.TrackHeaderForm.submit();
@@ -756,8 +758,6 @@ this.each(function(){
     function hiliteSetup()
     {   // Called on init: setup of drag region hilite (but don't show yet)
         $(hilite).css({ backgroundColor: 'green', opacity: 0.4, borderStyle: 'solid', borderWidth: '1px', bordercolor: '#0000FF' });
-        $p = $(chrImg);
-
         $(hilite).css({ display: 'none', position: 'absolute', overflow: 'hidden', zIndex: 1 });
         jQuery($(chrImg).parents('body')).append($(hilite));
         return hilite;
@@ -1186,7 +1186,7 @@ jQuery.fn.panImages = function(){
             if(beyondImage) {
                 if(inPlaceUpdate) {
                     var pos = parsePosition(getPosition());
-                    navigateInPlace("position=" + encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end), null);
+                    navigateInPlace("position=" + encodeURIComponent(pos.chrom + ":" + pos.start + "-" + pos.end), null, true);
                 } else {
                     document.TrackHeaderForm.submit();
                 }
@@ -1682,6 +1682,7 @@ function mapItemMouseOver()
 
 function mapItemMouseOut(obj)
 {
+    lastMapItem = currentMapItem;
     currentMapItem = null;
 }
 
@@ -1961,7 +1962,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
         var href = selectedMenuItem.href;
         var vars = new Array("c", "l", "r", "db");
         var valNames = new Array("chromName", "winStart", "winEnd");
-        for (i in vars) {
+        for (var i in vars) {
             // make sure the link contains chrom and window width info (necessary b/c we are stripping hgsid and/or the cart may be empty);
             // but don't add chrom to wikiTrack links (see redmine #2476).
             var v = vars[i];
@@ -2221,7 +2222,7 @@ function loadContextMenu(img)
                         if(rec) {
                             // XXXX check current state from a hidden variable.
                             var visibilityStrs = new Array("hide", "dense", "squish", "pack", "full");
-                            for (i in visibilityStrs) {
+                            for (var i in visibilityStrs) {
                                 // XXXX use maxVisibility and change hgTracks so it can hide subtracks
                                 var o = new Object();
                                 var str = blankImg + " " + visibilityStrs[i];
@@ -2770,14 +2771,14 @@ function handleUpdateTrackMap(response, status)
 	        document.TrackHeaderForm.submit();
             } else {
                 // We update rows one at a time (updating the whole imgTable at one time doesn't work in IE).
-                for (id in hgTracks.trackDb) {
+                for (var id in hgTracks.trackDb) {
                     if(hgTracks.trackDb[id].type != "remote" && !updateTrackImgForId(response, id)) {
                         showWarning("Couldn't parse out new image for id: " + id);
                         //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
                     }
                 }
 /* This (disabled) code handles dynamic addition of tracks:
-                for (id in hgTracks.trackDb) {
+                for (var id in hgTracks.trackDb) {
                     if(oldTrackDb[id] == undefined) {
                         // XXXX Tim, what s/d abbr attribute be?
                         $('#imgTbl').append("<tr id='tr_" + id + "' class='imgOrd trDraggable'></tr>");
@@ -2856,6 +2857,10 @@ function handleUpdateTrackMap(response, status)
         hideLoadingImage(this.loadingId);
     }
     jQuery('body').css('cursor', '');
+    if(this.currentId) {
+        var top = $("#tr_" + this.currentId).position().top;
+        $(window).scrollTop(top - this.currentIdYOffset);
+    }
 }
 
 function handleViewImg(response, status)
@@ -3018,18 +3023,31 @@ function navigateButtonClick(ele)
         } else if(ele.name == "hgt.dinkRL" || ele.name == "hgt.dinkRR") {
             params += "&dinkR=" + $("input[name='dinkR']").val();
         }
-        navigateInPlace(params, $(ele));
+        navigateInPlace(params, $(ele), false);
         return false;
     } else {
         return true;
     }
 }
 
-function navigateInPlace(params, disabledEle)
+function navigateInPlace(params, disabledEle, keepCurrentTrackVisible)
 {
 // request an hgTracks image, using params
 // disabledEle is optional; this element will be enabled when update is complete
+// If keepCurrentTrackVisible is true, we try to maintain relative position of the item under the mouse after the in-place update.
     jQuery('body').css('cursor', '');
+    var currentId, currentIdYOffset;
+    if(keepCurrentTrackVisible) {
+        var item = currentMapItem || lastMapItem;
+        if(item) {
+            var top = $("#tr_" + item.id).position().top;
+            if(top >= $(window).scrollTop() || top < $(window).scrollTop() + $(window).height()) {
+                // don't bother if the item is not currently visible.
+                currentId = item.id;
+                currentIdYOffset = top - $(window).scrollTop();
+            }
+        }
+    }
     $.ajax({
                type: "GET",
                url: "../cgi-bin/hgTracks",
@@ -3041,6 +3059,8 @@ function navigateInPlace(params, disabledEle)
                cmd: 'wholeImage',
                loadingId: showLoadingImage("imgTbl"),
                disabledEle: disabledEle,
+               currentId: currentId,
+               currentIdYOffset: currentIdYOffset,
                cache: false
            });
 }
@@ -3067,7 +3087,7 @@ function updateButtonClick(ele)
                                                }
                                             });
         if(data.length > 0) {
-            navigateInPlace(data, null);
+            navigateInPlace(data, null, false);
         }
         return false;
     } else {

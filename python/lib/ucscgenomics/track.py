@@ -14,6 +14,13 @@ def readMd5sums(filename):
 
 		
 class TrackFile(object):
+	"""
+	A file in the trackDb, which has useful information about iself.
+	
+	CompositeTrack (below) has multiple dictionaries of TrackFiles, one for
+	the root downloads directory, and one for each release. The root directory
+	will link itself to the CompositeTrack's alpha metadata.
+	"""
 
 	@property 
 	def name(self):
@@ -69,6 +76,40 @@ class TrackFile(object):
 	
 	
 class CompositeTrack(object):
+	"""
+	Stores an entire track, consisting mainly of its metadata and files.
+	
+	To make a CompositeTrack, you must specify database and name of the track:
+		sometrack = CompositeTrack('hg19', 'wgEncodeCshlLongRnaSeq')
+		
+	You can also specify a trackDb path in the event that yours is different
+	from the default, '~/kent/src/hg/makeDb/trackDb/':
+		sometrack = CompositeTrack('hg19', 'wgEncode...', '/weird/path')
+		
+	It's important to know that the CompositeTrack does NOT load all of its
+	information up front. Therefore, there's no performance hit for using a
+	CompositeTrack instead of just specifying a RaFile. In fact, it's
+	beneficial, since it adds another layer of abstraction to your code. You
+	can access a composite's ra files:
+		somemetadata = sometrack.alphaMetaDb
+		
+	For more information on what you can do with ra files, check the ra.py
+	documentation.
+	
+	You can also access a track's files. This is one of the more useful parts
+	of the composite track:
+		for file in sometrack.files:
+			print '%s %s' % (file.name, file.size)
+			
+	Each file is an instance of a TrackFile object, which is detailed in its
+	own documentation above. There are also lists of these files for each
+	release associated with the track:
+		for file in sometrack.releases[0]:
+			print file.name in sometrack.releases[1]
+			
+	Note that the files are indexed by their filename. This means that you can
+	easily compare multiple releases as in the above example.
+	"""
 
 	@property 
 	def database(self):
