@@ -2193,7 +2193,15 @@ if (vis == tvHide)
     }
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
-fourState = cartUsualInt(cart, objName, fourState);
+//fourState = cartUsualInt(cart, objName, fourState);
+setting = cartOptionalString(cart, objName);
+if (setting != NULL)
+    {
+    if (sameWord("on",setting)) // ouch! atoi was interpreting "on" as 0, which was a bad bug!
+        fourState = 1;
+    else
+        fourState = atoi(setting);
+    }
 tdbExtrasFourStateSet(subtrack,fourState);
 return fourState;
 }
@@ -3493,9 +3501,7 @@ if(cartOptionalString(cart, "ajax") == NULL)
     {
     webIncludeResourceFile("ui.dropdownchecklist.css");
     jsIncludeFile("ui.dropdownchecklist.js",NULL);
-#ifdef NEW_JQUERY
     jsIncludeFile("ddcl.js",NULL);
-#endif///def NEW_JQUERY
     }
 
 int ix=0;
@@ -3509,11 +3515,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     printf("<BR>\n");
 
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-    #ifdef NEW_JQUERY
-        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
-    #else///ifndef NEW_JQUERY
-        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterBy'><BR>\n"
-    #endif///ndef NEW_JQUERY
+    #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""));
@@ -3557,10 +3559,6 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     }
     printf("</SELECT>\n");
 
-#ifndef NEW_JQUERY
-    // The following is needed to make msie scroll to selected option.
-    printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->track);
-#endif///ndef NEW_JQUERY
 puts("</TR></TABLE>");
 
 return;
@@ -4059,7 +4057,15 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // And finally the checkBox is made!
     safef(buffer, sizeof(buffer), "%s_sel", subtrack->track);
-    cgiMakeCheckBoxFourWay(buffer,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' style='cursor:pointer'");
+#ifdef SUBTRACK_CFG
+    if (!enabledCB)
+        {
+        dyStringAppend(dyHtml, " disabled");
+        cgiMakeCheckBoxFourWay(buffer,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' style='cursor:pointer' title='view is hidden'");
+        }
+    else
+#endif///def SUBTRACK_CFG
+        cgiMakeCheckBoxFourWay(buffer,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' style='cursor:pointer'");
     if (useDragAndDrop)
         printf("&nbsp;");
 
@@ -4078,7 +4084,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     if (cType != cfgNone)  // make a wrench
         {
         #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return scm.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
-        printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" halfVis"),subtrack->track);
+        printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" disabled"),subtrack->track);
         }
 #endif///def SUBTRACK_CFG
 
@@ -6442,9 +6448,7 @@ if(cartOptionalString(cart, "ajax") == NULL)
     {
     webIncludeResourceFile("ui.dropdownchecklist.css");
     jsIncludeFile("ui.dropdownchecklist.js",NULL);
-#ifdef NEW_JQUERY
     jsIncludeFile("ddcl.js",NULL);
-#endif///def NEW_JQUERY
     }
 
 cgiDown(0.7);
@@ -6481,11 +6485,7 @@ for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
         fullSize++; // Room for "All"
     #endif///def FILTER_COMPOSITE_OPEN_SIZE
 
-#ifdef NEW_JQUERY
     #define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %s onchange='filterCompositeSelectionChanged(this);' style='display: none; font-size:.8em;' class='filterComp'><BR>\n"
-#else///ifndef NEW_JQUERY
-    #define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %s onchange='filterCompositeSelectionChanged(this);' style='display: none;' class='filterComp'><BR>\n"
-#endif///ndef NEW_JQUERY
     printf(FILTER_COMPOSITE_FORMAT,dimIx,parentTdb->track,membersForAll->members[dimIx]->groupTag,"multiple");
 
     #ifdef FILTER_COMPOSITE_ONLYONE
@@ -6676,7 +6676,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                         printf("<TD title='%s'>\n",(ttlX ? ttlX : ttlY));
                     dyStringPrintf(dyJS, " class=\"matCB");
                     if(halfChecked)
-                        dyStringPrintf(dyJS, " halfVis");  // needed for later js identification!
+                        dyStringPrintf(dyJS, " disabled");  // appears disabled but still clickable!
                     if(dimensionX)
                         dyStringPrintf(dyJS, " %s",dimensionX->tags[ixX]);
                     if(dimensionY)
@@ -6685,10 +6685,8 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     if(chked[ixX][ixY] > 0)
                         dyStringAppend(dyJS," CHECKED");
                     if(halfChecked)
-                        {
-                        //dyStringAppend(dyJS," style='filter:alpha(opacity=50)'"); // Doesn't get set overkill with class=halfVis but IE doesn't cooperate!
-                        dyStringAppend(dyJS," title='Not all associated subtracks have been selected'"); // overkill with class=halfVis but IE doesn't cooperate!
-                        }
+                        dyStringAppend(dyJS," title='Not all associated subtracks have been selected'");
+
                     MAT_CB(objName,dyStringCannibalize(&dyJS)); // X&Y are set by javascript page load
                     puts("</TD>");
                     }
@@ -6910,13 +6908,10 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     jsIncludeFile("jquery.fixedtable.js",NULL);
     #endif//def TABLE_SCROLL
     jsIncludeFile("hui.js",NULL);
-    }
-
 #ifdef SUBTRACK_CFG
-    jsonHashAddBoolean(NULL, "subCfg", TRUE);
-#else///ifndef SUBTRACK_CFG
-    jsonHashAddBoolean(NULL, "subCfg", FALSE);
+    jsIncludeFile("subCfg.js",NULL);
 #endif///ndef SUBTRACK_CFG
+    }
 
 cgiDown(0.7);
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)

@@ -1315,7 +1315,10 @@ if(id)
 if(checked)
     printf(" CHECKED");
 if(!enabled)
-    printf(" DISABLED");
+    {
+    if (findWordByDelimiter("disabled",' ', classes) == NULL) // fauxDisabled ?
+        printf(" DISABLED");
+    }
 if(classes)
     printf(" class='%s'",classes);
 if(moreHtml)

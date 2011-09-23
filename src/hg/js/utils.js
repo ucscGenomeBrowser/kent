@@ -276,20 +276,10 @@ function aryFind(ary,val)
     return -1;
 }
 
-function aryRemoveVals(ary,vals)
+function aryRemove(ary,vals)
 { // removes one or more variables that are found in the array
     for(var vIx=0;vIx<vals.length;vIx++) {
         var ix = aryFind(ary,vals[vIx]);
-        if(ix != -1)
-            ary.splice(ix,1);
-    }
-    return ary;
-}
-
-function aryRemove(ary,val)
-{ // removes one or more variables that are found in the array
-    for(var vIx=1;vIx<arguments.length;vIx++) {
-        var ix = aryFind(ary,arguments[vIx]);
         if(ix != -1)
             ary.splice(ix,1);
     }
@@ -1367,7 +1357,7 @@ function sortOrderUpdate(table,sortColumns,addSuperscript)
                 var classList = $( this ).attr("class").split(" ");
                 if (classList.length < 2) // assertable
                     return;
-                classList = aryRemove(classList,"sortable");
+                classList = aryRemove(classList,["sortable"]);
                 while( classList.length > 0 ) {
                     var aClass = classList.pop();
                     if (aClass.indexOf("sort") == 0)
@@ -1418,7 +1408,7 @@ function sortOrderFromTr(tr)
             var classList = $( this ).attr("class").split(" ");
             if (classList.length < 2) // assertable
                 return;
-            classList = aryRemove(classList,"sortable");
+            classList = aryRemove(classList,["sortable"]);
             var reverse = false;
             var sortIx = -1;
             while( classList.length > 0 ) {
@@ -2314,7 +2304,7 @@ function filterTableFilterVar(filter)
 
     // Find the var for this filter
     var classes = $(filter).attr("class").split(' ');
-    classes = aryRemove(classes,"filterBy","filterTable","noneIsAll");
+    classes = aryRemove(classes,["filterBy","filterTable","noneIsAll"]);
     if (classes.length > 1 ) {
         warn('Too many classes for filterBy: ' + classes);
         return undefined;
@@ -2628,7 +2618,7 @@ function filterTableExcludeOptions(filter)
     var classes = new Array();
     $(tds).each(function (i) {
         var someClass = $(this).attr("class").split(' ');
-        someClass = aryRemove(someClass,filterVar);
+        someClass = aryRemove(someClass,[filterVar]);
         var val = someClass.pop()
         if (aryFind(classes,val) == -1)
             classes.push(val);

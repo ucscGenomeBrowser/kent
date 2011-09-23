@@ -1084,7 +1084,7 @@ boolean cartBoolean(struct cart *cart, char *var)
 /* Retrieve cart boolean. */
 {
 char *s = cartString(cart, var);
-if (sameString(s, "on") || atoi(s) > 0)
+if (sameWord(s, "on") || atoi(s) > 0)
     return TRUE;
 else
     return FALSE;
@@ -1096,7 +1096,7 @@ boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
 char *s = cartOptionalString(cart, var);
 if (s == NULL)
     return usual;
-return (sameString(s, "on") || atoi(s) > 0);
+return (sameWord(s, "on") || atoi(s) > 0);
 }
 
 boolean cartCgiUsualBoolean(struct cart *cart, char *var, boolean usual)

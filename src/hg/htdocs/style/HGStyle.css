@@ -279,4 +279,6 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
 
 .clickable:hover { cursor: pointer; }
 .fauxInput  { border: 2px inset #CCCCCC; background-color: #fff; font-size: 10pt; display: inline-block; }
-.disabled  { border-color: gray; color: gray;  }
+div.disabled  { border-color: gray; color: gray;  }
+input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
+span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
