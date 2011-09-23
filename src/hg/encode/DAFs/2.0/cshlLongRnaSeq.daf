@@ -63,3 +63,54 @@ hasReplicates    yes
 required         yes
 downloadOnly     yes
 
+# Track/view definition
+view             Spikeins
+longLabelPrefix  CSHL Long RNA-seq Spike-ins
+type             spikes
+hasReplicates    yes
+required         yes
+downloadsOnly    yes
+
+# Track/view definition
+view             Contigs
+longLabelPrefix  CSHL Long Contigs
+type             bed6 +
+hasReplicates    no
+required         yes
+downloadOnly     no
+
+view             Junctions
+type             bed6 +
+hasReplicates    no
+required         yes
+downloadOnly     yes
+
+view             Exons
+type             bed6 +
+hasReplicates    no
+required         yes
+downloadOnly     yes
+
+view             GeneGencV3c
+type             gtf
+hasReplicates    no
+required         yes
+downloadOnly     yes
+
+view             TranscriptGencV3c
+type             gtf
+hasReplicates    no
+required         yes
+downloadOnly     yes
+
+view             GeneDeNovo
+type             gtf
+hasReplicates    no
+required         yes
+downloadOnly     yes
+
+view             TranscriptDeNovo
+type             gtf
+hasReplicates    no
+required         yes
+downloadOnly     yes
