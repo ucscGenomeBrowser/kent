@@ -4123,7 +4123,7 @@ include decode.rmap.ra
 track geneReviewsBB
 shortLabel GeneReviews
 longLabel GeneReviews   
-group x
+group  phenDis 
 priority 155
 visibility hide
 color 0, 80, 0
