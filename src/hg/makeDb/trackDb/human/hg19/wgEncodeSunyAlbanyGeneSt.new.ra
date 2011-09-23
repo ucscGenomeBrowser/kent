@@ -14,6 +14,7 @@ dragAndDrop subTracks
 priority 0
 wgEncode 1
 #noInherit on
+origAssembly hg18
 type broadPeak
 boxedCfg on
 canPack On
