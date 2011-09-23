@@ -183,7 +183,7 @@ if(!strcmp(cmd, "trackList"))
         }
     dyStringAppend(output, "\n]\n");
     }
-if(!strcmp(cmd, "defaultPos"))
+else if(!strcmp(cmd, "defaultPos"))
     {
     dyStringPrintf(output, "{\"pos\": \"%s\"}", hDefaultPos(database));
     }

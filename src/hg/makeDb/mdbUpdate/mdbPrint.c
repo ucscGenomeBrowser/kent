@@ -82,7 +82,7 @@ static struct optionSpec optionSpecs[] = {
     {"encodeExp",OPTION_STRING},     // Optionally tell which encodeExp to use
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
     {"order",    OPTION_STRING}, // comma delimited list of vars to order result by
-    {"seperator",OPTION_STRING}, // Optional seperator used with order
+    {"separator",OPTION_STRING}, // Optional separator used with order
     {"header",   OPTION_BOOLEAN},// Optional inclusion of header used with order
     {"updDb",    OPTION_STRING},// DB to update
     {"updMdb",   OPTION_STRING},// MDB table to update
@@ -100,7 +100,7 @@ errAbort(
   "mdbPrint - Prints specialty output from metadata objects and variables.\n"
   "usage:\n"
   "   mdbPrint {db} [-table=] -vars=\"var1=val1 var2=val2...\"\n"
-  "            -order={var1,var2,...} [-seperator={\"any string\"} [-header]\n"
+  "            -order={var1,var2,...} [-separator={\"any string\"} [-header]\n"
   "            -updDB={db} -updMdb={metaDb} -updSelect=var1,var2,... -updVars=varA,varB,...\n"
   "Options:\n"
   "    {db}     Database to query metadata from.  This argument is required.\n"
@@ -111,7 +111,7 @@ errAbort(
   "Special functions:\n"
   "  Print ordered vars:\n"
   "    -order       Prints only vars named and in the order named (comma delimited).\n"
-  "    -seperator   Optional, examples: \" \", \"\\t\\t\", \"<td>\" (will make html table).\n"
+  "    -separator   Optional, examples: \" \", \"\\t\\t\", \"<td>\" (will make html table).\n"
   "    -header      Optionally include header.\n"
   "  Print mdbUpdate lines to assist importing metadata from one db.table to another:\n"
   "    -updDb      Database to aim mdbUpdate lines at.\n"
@@ -417,7 +417,7 @@ else
                 }
             else if (order != NULL)
                 {
-                char *sep = optionVal("seperator",NULL);
+                char *sep = optionVal("separator",NULL);
                 boolean header = optionExists("header");
                 mdbObjPrintOrderedToStream(stdout,&queryResults,order, sep, header);
                 }
