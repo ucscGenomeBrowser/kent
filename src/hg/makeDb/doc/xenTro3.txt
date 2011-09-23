@@ -889,3 +889,74 @@ chainOne $(path1)
     #	89770014 bases of 1358334882 (6.609%) in intersection
 
 ##############################################################################
+# Swap lastz melGal1 Turkey (DONE - 2011-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22
+    cat fb.melGal1.chainXenTro3Link.txt 
+    #	35993896 bases of 935922386 (3.846%) in intersection
+
+    #   running the swap 
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #	real    3m29.407s
+
+    cat fb.xenTro3.chainMelGal1Link.txt 
+    #	42384698 bases of 1358334882 (3.120%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+#######################################################################
+# Swap lastz monDom5 Opossum (DONE - 2011-09-23 - Hiram)
+XXX - running - Thu Sep 22 10:49:19 PDT 2011
+    #   real    1188m23.907s
+    cd /hive/data/genomes/monDom5/bed/lastzXenTro3.2011-09-22
+    cat fb.monDom5.chainXenTro3Link.txt
+    #   207703303 bases of 3501660299 (5.932%) in intersection
+
+    # and the swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+XXX - running - Fri Sep 23 08:38:10 PDT 2011
+    #   real    52m10.229s
+
+    cat fb.xenTro3.chainMonDom5Link.txt
+    #   199980646 bases of 2649682029 (7.547%) in intersection
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+#########################################################################
+# Swap lastz rn4 Rat (DONE - 2011-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
+    cat fb.rn4.chainXenTro3Link.txt 
+    #	66202042 bases of 2571531505 (2.574%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.rn4.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.rn4.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 20m33s
+
+    cat fb.xenTro3.chainRn4Link.txt 
+    #	74593612 bases of 1358334882 (5.492%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.rn4.swap lastz.rn4
+
+#############################################################################
