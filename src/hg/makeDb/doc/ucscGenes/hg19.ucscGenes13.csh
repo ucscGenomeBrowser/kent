@@ -950,6 +950,9 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -1053,6 +1056,8 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
@@ -1061,8 +1066,8 @@ mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
-utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr3 utr3/utr.fa
-utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr5 utr5/utr.fa
+utrFa $db knownGene utr3 utr3/utr.fa
+utrFa $db knownGene utr5 utr5/utr.fa
 
 # Split up files and make files that define job.
 faSplit sequence utr3/utr.fa 10000 utr3/split/s
@@ -1097,6 +1102,8 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
+
+
 
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
@@ -1238,28 +1245,20 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     mkdir -p $dir/kegg
     cd $dir/kegg
 
-    # Load a table that maps KEGG pathway IDs to descriptive names
-    wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
-    cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
-    cut -f 2 j.tmp >j.hsa
-    cut -f 1,3 j.tmp >j.1
-    paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
-    rm j.hsa j.1 j.tmp
-    hgLoadSqlTab $tempDb keggMapDesc $kent/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+    wget --timestamping -O hsa2.html \
+    "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
 
-    # Build/load a table that maps UCSC Gene IDs to locusLink IDs, and from
-    # that to KEGG pathways.  It's a two-step process.  First, make a table
-    # that maps locusLink IDs to KEGG pathways.  Store it temporarily in
-    # the keggPathway Table.
-    wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
-    cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > keggPathway.tab
-    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
-    # Second, use the temporary contents of the keggPathway table to
-    # join with knownToLocusLink, to create the REAL contents of keggPathway.
-    # Load the real contents.
-    hgsql $tempDb -N -e \                                                              'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \                                                            >keggPathway.tab
+    cat hsa2.html |grep "show_pathway" |sed -e 's/show_pathway?/\tpath:/'\
+     |grep -v org_name |sed -e 's/">/\t/' |sed -e 's#</a><br>##'  |cut -f 2,3 \
+    >hsa.lis
+    
+    ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
+
+    kgAttachKegg $db keggList.tab  keggPathway.tab
     hgLoadSqlTab $tempDb keggPathway ~/kent/src/hg/lib/keggPathway.sql ./keggPathway.tab
 
+    cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
+    hgLoadSqlTab $tempDb keggMapDesc ~/kent/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1283,12 +1282,12 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
-
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
 
 # Save old known genes and kgXref tables
 sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer

@@ -13,7 +13,6 @@
 static char const rcsid[] = "$Id: utrFa.c,v 1.2 2008/09/03 19:21:18 markd Exp $";
 
 int minSize = 16;
-char *nibPath = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,14 +23,13 @@ errAbort(
   "   utrFa database geneTrack which output.fa\n"
   "The 'which' parameter is either 'utr3' or 'utr5'\n"
   "options:\n"
-  "   -nibPath=path - Indicate a nib file directory.\n"
+  "   -chrom=chrN - Restrict to a given chromosome.\n"
   "   -minSize=N  - Minimum size to output, default %d\n"
   , minSize);
 }
 
 static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
-   {"nibPath", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -102,15 +100,8 @@ struct genePred *gp;
 int rowOffset;
 struct dnaSeq *oldSeq, *seq;
 struct hashEl *oldHel;
-struct dnaSeq *chromSeq;
-if (nibPath == NULL) 
-    {
-    chromSeq = hChromSeq(database, chrom, 0, hChromSize(database, chrom));
-    }
-else
-    {
-    chromSeq = hChromSeqFromPath(nibPath, database, chrom, 0, hChromSize(database, chrom));
-    }
+struct dnaSeq *chromSeq = hChromSeq(database, chrom, 0, hChromSize(database, chrom));
+
 sr = hChromQuery(conn, track, chrom, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -184,7 +175,6 @@ optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
 minSize = optionInt("minSize", minSize);
-nibPath = cloneString(optionVal("nibPath", nibPath));
 utrFa(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
