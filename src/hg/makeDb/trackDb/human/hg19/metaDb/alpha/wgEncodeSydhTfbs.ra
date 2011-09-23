@@ -1961,7 +1961,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-27
@@ -1985,7 +1985,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-27
@@ -2009,7 +2009,7 @@ antibody Input
 cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId GM12878/None/Input/IgG-rab
+controlId wgEncodeEH000771
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-27
@@ -3542,7 +3542,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfyaIggmusAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -3563,7 +3563,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfyaIggmusAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -3584,7 +3584,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfyaIggmusPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3606,7 +3606,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfyaIggmusRawDataRep1.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -3627,7 +3627,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfyaIggmusRawDataRep2.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -3648,7 +3648,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfyaIggmusSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3670,7 +3670,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfybIggmusAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -3691,7 +3691,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfybIggmusAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -3712,7 +3712,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfybIggmusPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3734,7 +3734,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfybIggmusRawDataRep1.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -3755,7 +3755,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfybIggmusRawDataRep2.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -3776,7 +3776,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsGm12878NfybIggmusSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21267,7 +21267,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -21288,7 +21288,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -21309,7 +21309,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21331,7 +21331,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabRawDataRep1.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -21352,7 +21352,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabRawDataRep2.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -21373,7 +21373,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21395,7 +21395,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabAlnRep1.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -21416,7 +21416,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabAlnRep2.bam
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -21437,7 +21437,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabPk.narrowPeak.gz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -21459,7 +21459,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabRawDataRep1.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 1
 setType exp
@@ -21480,7 +21480,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabRawDataRep2.fastq.tgz
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 project wgEncode
 replicate 2
 setType exp
@@ -21501,7 +21501,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabSig.bigWig
 grant Snyder
-lab Harvard(Weissman)
+lab Yale-Weissman
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -40569,7 +40569,7 @@ antibody SETDB1
 cell K562
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562b/MNaseD/Input/UCDavis
+controlId K562/MNaseD/Input/UCDavis
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03

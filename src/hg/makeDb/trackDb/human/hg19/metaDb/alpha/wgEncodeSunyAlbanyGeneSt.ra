@@ -18,7 +18,7 @@ fileName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
-md5sum b81bdd9e5559b88f771fbbddc754e870
+md5sum 7e74edfdba0e8b3c509e96062a8fc2e5
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -45,7 +45,7 @@ md5sum c4c04e0e9a3955cf4233fbf87d08681b
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -91,7 +91,7 @@ md5sum b0c015c64ec5edd77e92f4df49c7adc4
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -137,7 +137,7 @@ md5sum 7a92323ce023fa0c16aeb40e7f3f2a32
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -183,7 +183,7 @@ md5sum bee7ffa58696a36c53fe60b495e869e7
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -229,7 +229,7 @@ md5sum f705ca0389014f2089999f1c652b1b7b
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 view RbpAssocRna
 
@@ -275,7 +275,7 @@ md5sum 72c1405b9f2d5d220580ad8762176b8a
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2
 view RbpAssocRna
 
@@ -321,7 +321,7 @@ md5sum 6fc1dd8beed6882a44d7b3c095d49bf3
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2
 view RbpAssocRna
 
@@ -365,7 +365,7 @@ labVersion SC_5261 antibody
 md5sum cf0e4f737f34a8220d4ef1a71e8ec899
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -409,7 +409,7 @@ labVersion Input
 md5sum 56bc3f4b1ed9b7339a19448da6146d9b
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
 view RbpAssocRna
 
@@ -453,7 +453,7 @@ labVersion Nov_69522,Mil_AB3790 antibodies
 md5sum 1a9849cf46a24b768f2be246b290c77b
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
 view RbpAssocRna
 
@@ -499,7 +499,7 @@ md5sum abd6ba25b2529e0f95b1e1ddda264a93
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -545,7 +545,7 @@ md5sum 8c9b3693f9a2b3b50736536086ad0a3a
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -591,7 +591,7 @@ md5sum 58d2761236cd3217c2d2e3c059333666
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2
 view RbpAssocRna
 
@@ -637,7 +637,7 @@ md5sum 469595a65afcc4a2afe67e82f079fc63
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2
 view RbpAssocRna
 
@@ -683,7 +683,7 @@ md5sum c123ed5c92fb5cd40e4501c43f000f1d
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -729,7 +729,7 @@ md5sum b7d22451ce0635c2ed652e4384b81839
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -775,7 +775,7 @@ md5sum d4a21d7da493250edb895e372c27e468
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2
 view RbpAssocRna
 
@@ -821,7 +821,7 @@ md5sum 1a737c552c884d23451756c2b50b8f28
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2
 view RbpAssocRna
 
@@ -867,7 +867,7 @@ md5sum a075dca37a28d7d135e49d511e97a1ac
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -913,7 +913,7 @@ md5sum b69fb24e5fb7219dfd54c2b6372f9945
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -959,7 +959,7 @@ md5sum 485a51135e8dff1cf6e83783f639c864
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2
 view RbpAssocRna
 
@@ -1005,7 +1005,7 @@ md5sum 63f25bd353b5df1f2b0065b8ab7d8558
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2
 view RbpAssocRna
 
@@ -1051,7 +1051,7 @@ md5sum 64b1727d4a95f76ed50dc2435dde6273
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2
 view RbpAssocRna
 
@@ -1097,8 +1097,8 @@ md5sum 86b23a35e8584469e8ce825c3c40c4df
 origAssembly hg18
 project wgEncode
 subId 4790
-submittedDataVersion V2 - P and Q values are now -log10
+submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 view RbpAssocRna
 
-# MAGIC: 1653427699
+# MAGIC: -2088375313

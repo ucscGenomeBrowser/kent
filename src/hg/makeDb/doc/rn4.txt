@@ -5793,5 +5793,27 @@ BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
         -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    549m35.173s
+    cat fb.rn4.chainXenTro3Link.txt 
+    #	66202042 bases of 2571531505 (2.574%) in intersection
+
+    cd /hive/data/genomes/rn4/bed
+    ln -s lastzXenTro3.2011-09-22 lastz.xenTro3
+
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.rn4.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.rn4.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 20m33s
+
+    cat fb.xenTro3.chainRn4Link.txt 
+    #	70846825 bases of 1358334882 (5.216%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.rn4.swap lastz.rn4
 
 #############################################################################
