@@ -84,6 +84,11 @@ shortLabel Other Names
 longLabel Other Names for This Gene
 priority 135
 
+name geneReviews
+shortLabel GeneReviews
+longLabel GeneReviews for This Gene
+priority 137
+
 name info
 shortLabel Model Information
 longLabel Gene Model Information
