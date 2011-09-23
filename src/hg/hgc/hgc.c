@@ -23850,72 +23850,6 @@ if (sameString("hg18", database))
  hFreeConn(&conn);
 }
 
-void doGeneReviews(struct trackDb *tdb, char *itemName)
-/* generate the detail page for geneReviews */
-{
-struct sqlConnection *conn = hAllocConn(database);
-//char *table = tdb->table;
-int start = cartInt(cart, "o");
-int num = 4;
-
- genericHeader(tdb, itemName);
- genericBedClick(conn, tdb, itemName, start, num);
- prGeneReviews(conn, itemName);
- printf("<BR>");
- printTrackHtml(tdb);
- hFreeConn(&conn);
-}
-
-void prGeneReviews(struct sqlConnection *conn, char *itemName)
-/* print GeneReviews associated to this item 
-   Note: this print function has been replaced by addGeneReviewToBed.pl
-         which print the same information to the field 5 of bigBed file
-*/ 
-         
-{
-struct sqlResult *sr;
-char **row;
-char query[512];
-int i;
-char *clickMsg = "Click link(s) below to search GeneReviews and GeneTests";
-boolean firstTime = TRUE;
-
-safef(query, sizeof(query), "select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-        char *grShort = *row++;
-        char *diseaseID = *row++;
-        char *diseaseName = *row++;
-
-
-        if (firstTime)
-        {
-          printf("<BR><B> GeneReview(s) available for %s:</B> (%s)<BR>",itemName,clickMsg);
-          firstTime = FALSE;
-          printf("<PRE><TT>"); 
-              // #1234567890123456789012345678901234567890
-          printf("Short name    Disease ID     GeneTests disease name<BR>");
-          printf("-----------------------------------------------------------");
-          printf("-----------------------------------------------------------");  
-          printf("----------------------------------<BR>");
-        }      
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-        if (strlen(grShort) <= 15) {
-          for (i = 0; i <  15-strlen(grShort); i ++ )
-             { 
-                printf("%s", " " );
-             }
-           } 
-         printf("%-10s    ", diseaseID);
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
-
-    }  /* end while */
- printf("</TT></PRE>");
- //printf("<BR>");
- sqlFreeResult(&sr);
-} /* end of prGeneReviews */
-
 void prGRShortRefGene(char *itemName)
 /* print GeneReviews short label associated to this refGene item */
 {
@@ -25169,10 +25103,6 @@ else if (startsWith("numtS", table))
 else if (startsWith("cosmic", table))
     {
     doCosmic(tdb, item);
-    }
-else if (sameString("geneReviews", table))
-    {
-    doGeneReviews(tdb, item);
     }
 else if (tdb != NULL)
     {
