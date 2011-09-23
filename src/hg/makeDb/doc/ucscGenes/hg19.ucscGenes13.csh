@@ -950,8 +950,6 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # Run nice Perl script to make all protein blast runs for
@@ -1056,8 +1054,6 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
 
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
@@ -1282,8 +1278,8 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
@@ -1338,7 +1334,9 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-exit $status
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms
