@@ -18,7 +18,7 @@ fileName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
-md5sum b81bdd9e5559b88f771fbbddc754e870
+md5sum 7e74edfdba0e8b3c509e96062a8fc2e5
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -1101,4 +1101,4 @@ submittedDataVersion V2 - P and Q values are now -log10
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 view RbpAssocRna
 
-# MAGIC: 1653427699
+# MAGIC: -2088375313
