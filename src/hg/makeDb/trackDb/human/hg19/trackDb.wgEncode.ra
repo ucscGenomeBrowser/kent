@@ -52,8 +52,8 @@ include wgEncodeUw5C.ra alpha
 include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
-include wgEncodeDukeAffyExon.ra 
-
+include wgEncodeDukeAffyExon.ra beta,public
+include wgEncodeDukeAffyExon.new.ra alpha
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
@@ -173,8 +173,8 @@ include wgEncodeUchicagoTfbs.ra
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra beta,public
-include wgEncodeSunyAlbanyGeneSt.new.ra alpha
+include wgEncodeSunyAlbanyGeneSt.ra public
+include wgEncodeSunyAlbanyGeneSt.new.ra alpha,beta
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra
