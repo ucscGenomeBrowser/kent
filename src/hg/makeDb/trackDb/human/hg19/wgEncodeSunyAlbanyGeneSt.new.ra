@@ -18,7 +18,7 @@ type broadPeak
 boxedCfg on
 canPack On
 useScore 1
-minGrayLevel 11%
+#minGrayLevel 11%
 scoreFilter 2
 scoreFilterLimits 1:1000
 #pValueFilter 0.0
