@@ -93,8 +93,8 @@ sub processFilesList {
     my $largest;
     my $sleepTime = "1";
     foreach my $size (keys %sizes) {
-    	# set sleep time based on largest file order of magniture (K, M, G) encountered
-    	# uni-directional
+        # set sleep time based on largest file order of magniture (K, M, G) encountered
+        # uni-directional
         if ($sizes{$size} =~ m/K/ && $sleepTime eq "1") {
             $sleepTime = "U";
         }
@@ -132,7 +132,7 @@ sub sortTypeOfTermPriority {
 
         #make sure priority is there
         unless (exists ${$typeofterms{$key}}{'priority'}) {
-        	next;
+            next;
         }
 
         #multidimensional array sort, @sort is the multidimentional one
@@ -253,6 +253,65 @@ sub getMd5Files {
     return (\@return);
 }
 
+sub metaDbUpdate {
+    my %md5sums = %{$_[0]};
+    my %fileHash = %{$_[1]};
+    my %opt = %{$_[2]};
+    my $db = $_[3];
+    my $filename = $_[4];
+    my $tableName = $_[5];
+    my $metadb = $_[6];
+    my $objName = $_[7];
+    my $localUpdate = 0;
+    my $inlist = 0;
+    my @fileList;
+
+    if ($fileHash{'fileName'} =~ m/,/) {
+        @fileList = split ",", $fileHash{'fileName'};
+    } else {
+        push @fileList, $fileHash{'fileName'};
+    }
+    @fileList = sort {$a cmp $b} (@fileList);
+    my $md5Str = "";
+    foreach my $file (@fileList) {
+        if ($file eq $filename) {
+            $inlist = 1;
+        }
+        $md5Str = $md5Str . "$md5sums{$file},";
+    }
+    unless ($inlist) {
+        print STDERR "$filename is not in fileName field\n";
+        return (0);
+    }
+    #remove trailing comma
+    $md5Str =~ s/,$//;
+    #print "md5Str = $md5Str\n";
+    unless (exists($fileHash{'md5sum'})) {
+        my @into = ('obj', 'var', 'val');
+        my @values = ($objName, 'md5sum', $md5Str);
+        $db->insert($metadb, \@into, \@values);
+        if ($opt{'verbose'} >= 1) {
+            print STDERR "Inserted md5sum for $fileHash{'fileName'}\n";
+        }
+        $localUpdate = 1;
+    } else {
+        unless ($md5Str eq $fileHash{'md5sum'}) {
+            my @values = ($md5Str, $objName, 'md5sum');
+            $db->execute("update $metadb set val = ? where obj = ? and var = ?", @values);
+            if ($opt{'verbose'} >= 1) {
+                print STDERR "Updated md5sum for $fileHash{'fileName'}\n";
+            }
+            $localUpdate = 1;
+        }
+    }
+
+    if ($localUpdate) {
+        return (1);
+    } else {
+        return (0);
+    }
+}
+
 
 ############
 ### INIT ###
@@ -340,7 +399,7 @@ if ($opt{'fileMask'}) {
 my @mask = split /\s+/, $fileMask;
 
 if ($opt{'verbose'} >= 1) {
-	print STDERR "fileMasks (regex's):";
+    print STDERR "fileMasks (regex's):";
 }
 foreach my $mask (@mask) {
     # convert $mask to regex if user used * as wildcard so that it can be inserted into 
@@ -400,7 +459,7 @@ my @sortorder = @{&sortTypeOfTermPriority(\%typeofterms, \%opt)};
 
 # list of stat terms for clean verbose output
 my @statlist = qw(dev inode file linknum uid grpid devid 
-					file lastaccess lastmodify inochng blksize blkamt);
+                    file lastaccess lastmodify inochng blksize blkamt);
 
 #thread status, shared between threads
 my %threadStatus : shared;
@@ -427,7 +486,7 @@ if ($opt{'md5'}) {
     }
     
     open MDF, ">md5sum.txt" or die "die: can't open md5sum.txt file to write\n";
-    if ($opt{'verbose'} >= 2) {
+    if ($opt{'verbose'} >= 1) {
         print STDERR "\n";
         print STDERR "writing md5sum.txt\n";
     }
@@ -452,6 +511,13 @@ if ($opt{'md5'}) {
         print MDF "$file $md5sums{$file} $stat[9]\n";
     }
     close MDF;
+} else {
+    my $md5hist = "md5sum.history";
+    if ($opt{'history'}) {
+        $md5hist = $opt{'history'};
+    }
+    my @md5return = @{&getMd5Files(\@files, \%md5sums, $md5hist, \@statlist, \%opt)};
+    %md5sums = %{$md5return[1]};
 }
 
 if ($opt{'verbose'} >= 3) {
@@ -489,49 +555,72 @@ foreach my $file (@fileMask) {
     }
 
     #hash to store info about file MDB + extraneous, except size;
-    my %filehash;
+    my %fileHash;
 
     #only process if the first part of the file matches wgEncode
-    if ($tableName =~ m/^wgEncode/) {
+    if ($file =~ m/^wgEncode/) {
 
-        # make sure you've only seen this table once
-        unless (exists ($seentables{$tableName})) {
-            $seentables{$tableName} = $file;
-        } elsif ($type eq "bai") {
-        	# unless the file is type bai, which have no corresponding table
-        } else {
-            die "die: $tableName has already been processed with file: $seentables{$tableName},".
-            	" current file is $file\n";
-        }
-
-        my $query = $db->execute("select var,val from $metadb where obj = '$tableName'");
+        # there are two different methods to get the stanza, one makes the assumption that the base
+        # filename is the table name, that may not be true, so if it fails to grab a stanza
+        # a second method that uses the full filename to look up the stanza is used
+        my $objName = 0;
+        my $retry = 0;
+        my $fail = 0;
+        my $query = $db->execute("select obj,var,val from $metadb where obj = '$tableName'");
 
         while(my $ref = $query->fetchrow_arrayref) {
             my @temp = @{$ref};
-            $filehash{$temp[0]} = $temp[1];
+            $objName = $temp[0];
+            $fileHash{$temp[1]} = $temp[2];
+        }
+        unless ($objName) {
+                $retry = 1;
+        }
+        if ($retry) {
+            my $statement = "select a.obj,a.var,a.val from $metadb a , $metadb b where a.obj=b.obj "
+                            . "and b.var=\"fileName\" and b.val like '%$file%'";
+            my $query = $db->execute("$statement");
+            while(my $ref = $query->fetchrow_arrayref) {
+                my @temp = @{$ref};
+                $objName = $temp[0];
+                 unless ($objName) {
+                    last
+                }
+                $fileHash{$temp[1]} = $temp[2];
+            }
         }
 
         if ($opt{'verbose'} >=4) {
             print STDERR "mdb info for table $tableName:\n";
-            foreach my $mdbobj (keys %filehash) {
-                print STDERR "$mdbobj = $filehash{$mdbobj}\n";
+            foreach my $mdbobj (keys %fileHash) {
+                print STDERR "$mdbobj = $fileHash{$mdbobj}\n";
             }
             print STDERR "\n";
         }
-        
-        unless (exists $filehash{'fileName'}) {
-            print STDERR "$file is an orphaned file, it has no metadata or fileName field\n";
+
+        unless ($objName) {
+            print STDERR "$file is an orphaned file, there is no matching metadata\n";
+        } elsif ($objName && !(exists $fileHash{'fileName'})) {
+            print STDERR "There was metadata found for $file, but no fileName field\n";
         }
-        if (exists $md5sums{$file} && $writedb == 1 && exists($filehash{'fileName'})) {
+
+        if (exists $md5sums{$file} && $writedb == 1 && exists($fileHash{'fileName'})) {
             # write in functionality to handle comma delimited lists
+            my $localup = &metaDbUpdate(\%md5sums, \%fileHash, \%opt, $db, $file,
+                                    $tableName, $metadb, $objName);
+            if ($localup && ($updated == 0)) {
+                $updated = 1;
+            }
+
+            $fileHash{'md5sum'} = $md5sums{$file};
         } elsif (exists $md5sums{$file}) {
-            $filehash{'md5sum'} = $md5sums{$file};
+            $fileHash{'md5sum'} = $md5sums{$file};
         }
     }
-    $filehash{'type'} = $type;
+    $fileHash{'type'} = $type;
 
     #put hash into fileInfo container
-    $fileInfo{$file} = \%filehash;
+    $fileInfo{$file} = \%fileHash;
 }
 
 #if the metaDb was updated, and the species is matching either mm or hg
@@ -551,10 +640,12 @@ if ($updated && (($assm =~ m/hg/) || ($assm =~ m/mm/))) {
         my $rafile = "$kentsrc/$composite.ra";
         if (-e $rafile) {
             `mdbPrint $assm -composite=$composite 1> $rafile 2>/dev/null`;
+            print STDERR "\n\n";
             print STDERR "Update .ra file, please commit and push out md5sum changes\n";
         } else {
+            print STDERR "\n\n";
             print STDERR "Couldn't find composite .ra file, please manually update the .ra file".
-            			 " and push out md5sum changes\n";
+                         " and push out md5sum changes\n";
         }
     }
 } elsif ($updated == 0) {
@@ -566,7 +657,6 @@ if ($updated && (($assm =~ m/hg/) || ($assm =~ m/mm/))) {
 
 open FILE, ">files.txt" or die "die: can't open files.txt to write\n";
 if ($opt{'verbose'} >= 2) {
-    #print "\n";
     print STDERR "writing files.txt\n";
 }
 #alphanumeric sort
@@ -590,6 +680,7 @@ close FILE;
 # these has to go at the end because the shared variable must be pre-declared before the interpreter
 # sees it
 sub doMd5Threads {
+    # takes in a list of files and md5sums them two at a time with threads
     my %md5sums = %{$_[0]};
     my @md5files = @{$_[1]};
     my %opt = %{$_[2]};
@@ -642,11 +733,11 @@ sub doMd5Threads {
         }
         # sleep a certain amount of time determined earlier
         if ($sleepTime eq "U") {
-        	usleep(10000);
+            usleep(10000);
         } elsif ($sleepTime eq "U2") {
-        	usleep(400000);
+            usleep(400000);
         } else {
-        	sleep 2;
+            sleep 2;
         }
     }
 
