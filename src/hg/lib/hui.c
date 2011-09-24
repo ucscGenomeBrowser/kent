@@ -4037,7 +4037,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,membership); // view is known tag
 
     printf("<TR valign='top' class='%s%s'",colors[colorIx],(useDragAndDrop?" trDraggable":""));
-    printf(" id=tr_%s p%s>\n",id,(!visibleCB && !displayAll?" style='display:none'":""));
+    printf(" id=tr_%s%s>\n",id,(!visibleCB && !displayAll?" style='display:none'":""));
 
     // Now the TD that holds the checkbox
     printf("<TD%s%s>",
@@ -4221,8 +4221,6 @@ puts("</TABLE>");
 if (sortOrder == NULL)
     printf("</td></tr></table>");
 
-// Tying subtracks with matrix and subtrack cfgs with views requires javascript help
-puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 #ifndef SUBTRACK_CFG
 if (dependentCfgsNeedBinding)
     cfgLinkToDependentCfgs(cart,parentTdb,parentTdb->track);

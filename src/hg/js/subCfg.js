@@ -32,6 +32,7 @@
 // 10) SOLVED: Loosing checked tracks!!!  Setting vis clears checkboxes?
 // 11) TESTED: hui.c #ifdef SUBTRACK_CFG should switch full functionality on/off
 // 12) SOLVED: Make "disabled" subCB clickable!
+// 13) SOLVED: PROBLEM is fauxDisabled.  SOLUTION is convert fauxDisabled to true disabled on form.submit()
 //  -) When parent vis makes subs hidden, should they go to unchecked?   No, disabled!
 //  -) Should user be able to click on disabled vis to check the CB?  No, not important.
 //  -) Make vis changes "reshape" composite!  NOTE: Do we want to do this???   I am against this as too disruptive.  We may want to end reshaping in CGIs as well!
@@ -52,6 +53,7 @@ var scm = { // subtrack config module.
 
     markChange: function (obj)
     { // Marks a control as having been changed by the user.  Naming will send value to cart.
+
         $(obj).addClass('changed');
 
         if(obj.type.indexOf("radio") == 0)   // radios must keep their names!
@@ -64,13 +66,9 @@ var scm = { // subtrack config module.
         if(obj.type.indexOf("checkbox") == 0) {
             var boolshad = normed($('input#boolshad_-' + obj.id));
             if (boolshad != undefined) {
-                //if(obj.checked == false) {
-                    var oldName = boolshad.id.replace(/\_\-/g,'.');   // sanitized id replaces '.' with '_-'
-                    $(obj).addClass('changed');
-                    $(boolshad).attr('name',oldName);
-                //}
-                //else
-                //    scm.clearChange(boolshad);
+                var oldName = boolshad.id.replace(/\_\-/g,'.');   // sanitized id replaces '.' with '_-'
+                $(obj).addClass('changed');
+                $(boolshad).attr('name',oldName);
             }
         }
     },
@@ -417,7 +415,10 @@ var scm = { // subtrack config module.
     { // Handle a single check of a single subCb
       // called by changing subVis to/from 'hide'
         subCb.checked = check;
-        subCb.dsabled = enable;
+        if (enable)
+            fauxDisable(subCb,false,"");
+        else
+            fauxDisable(subCb,true, "View is hidden");
         scm.markChange(subCb);
         matSubCBsetShadow(subCb);
         hideOrShowSubtrack(subCb);
@@ -948,6 +949,11 @@ var scm = { // subtrack config module.
                 });
             });
         }
+
+        // Because of fauxDisabled subCBs, it is necessary to truly disable them before submitting.
+        $("FORM").submit(function (i) {
+            $('input.subCB.changed.disabled').attr('disabled',true);
+        });
     }
 };
 

@@ -330,7 +330,7 @@ function matSubCBsetShadow(subCB)
         warn("DEBUG: Failed to find fourWay shadow for '#"+subCB.id+"' ["+subCB.name+"]");
         return;
     }
-    if ($(fourWay).val() != shadowState) {
+    if ($(fourWay).val() != shadowState.toString()) {
         $(fourWay).val(shadowState);
         if (typeof(scm) !== "undefined") {
             scm.enableCfg(subCB,null,(shadowState == 1));
@@ -667,6 +667,49 @@ function showConfigControls(name)
     return true;
 }
 
+function hideOrShowSubtrack(obj)
+{
+// This can show/hide a tablerow that contains a specific object
+// Containing <tr>'s must be id'd with 'tr_' + obj.id
+// Also, this relies upon the "displaySubtracks" radio button control
+    var tr = normed($(obj).parents('tr#tr_'+obj.id));
+    if (tr != undefined) {
+        if(!obj.checked || isFauxDisabled(obj,true))  {
+            var radio = $('input.allOrOnly');
+            for (var ix=0;ix<radio.length;ix++) {
+                if(radio[ix].checked && radio[ix].value == "selected") {
+                    $(tr).hide();
+                    return;
+                }
+            }
+        }
+        $(tr).show();
+    }
+}
+
+function showSubTrackCheckBoxes(onlySelected)
+{
+// If a Subtrack configuration page has show "only selected subtracks" option,
+// This can show/hide tablerows that contain the checkboxes
+// Containing <tr>'s must be id'd with 'tr_' + the checkbox id,
+// while checkbox id must have 'cb_' prefix (ie: 'tr_cb_checkThis' & 'cb_checkThis')
+    var trs = $('table.subtracks').children('tbody').children('tr');
+    if(!onlySelected)
+        $(trs).show();
+    else {
+        $(trs).each(function (ix) {
+            var subCB = normed($(this).find('input.subCB'));
+            if (subCB != undefined) {
+                if (subCB.checked && isFauxDisabled(subCB,true) == false)
+                    $(this).show();
+                else
+                    $(this).hide();
+            }
+            //else
+            //    warn('DEBUG: subtrack table row '+ix+' without subCB?');
+        });
+    }
+}
 function showOrHideSelectedSubtracks(inp)
 {
 // Show or Hide subtracks based upon radio toggle
@@ -692,14 +735,12 @@ function showOrHideSelectedSubtracks(inp)
 function matInitializeMatrix()
 {
 // Called at Onload to coordinate all subtracks with the matrix of check boxes
-//var start = startTiming();
-jQuery('body').css('cursor', 'wait');
-    if (document.getElementsByTagName) {
-        matSubCBsSelected();
-        showOrHideSelectedSubtracks();
-    }
-jQuery('body').css('cursor', '');
-//showTiming(start,"matInitializeMatrix()");
+    //var start = startTiming();
+
+    matSubCBsSelected(); // counts
+    //showOrHideSelectedSubtracks();    // Don't need this because hui.c is doing it
+
+    //showTiming(start,"matInitializeMatrix()");
 }
 
 function multiSelectLoad(div,sizeWhenOpen)
@@ -1075,10 +1116,9 @@ function tableSortAtButtonPress(anchor,tagId)
 }
 
 function fauxDisable(obj,disable,title)
-{
-// Makes an obj appear diabled, but it isn't
-//       span.disabled & input.disabled is opacity 0.5
-//       div.disabled is border-color: gray; color: gray;
+{// Makes an obj appear disabled, but it isn't
+ //  span.disabled & input.disabled is opacity 0.5
+ //   div.disabled is border-color: gray; color: gray;
     if ($(obj).hasClass('subCB') == false || typeof(scm) !== "undefined") {
         if(disable) {
             if ($.browser.msie)
@@ -1097,23 +1137,22 @@ function fauxDisable(obj,disable,title)
 }
 
 function isFauxDisabled(obj,orReallyDisabled)
-{
-// Is object [faux] disabled?
+{// Is object [faux] disabled?
     if (orReallyDisabled && obj.disabled)
         return true;
 
     return ($(obj).hasClass('disabled'));
 }
 
-
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
-    // If divs with class 'subCfg' then initialize the subtrack cfg code
-    // NOTE: must be before any ddcl setup
-    if (typeof(scm) !== "undefined") {
-        var divs = $("div.subCfg");
-        if (divs != undefined && divs.length > 0) {
+    if (normed($('table.subtracks')) != undefined) {
+        matInitializeMatrix();
+
+        // If divs with class 'subCfg' then initialize the subtrack cfg code
+        // NOTE: must be before any ddcl setup
+        if (typeof(scm) !== "undefined" && normed($("div.subCfg")) != undefined) {
             scm.initialize();
         }
     }

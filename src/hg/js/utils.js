@@ -88,25 +88,7 @@ function inputArrayThatMatches(inpType,nameOrId,prefix,suffix)
     }
     return found;
 }
-function showSubTrackCheckBoxes(onlySelected)
-{
-// If a Subtrack configuration page has show "only selected subtracks" option,
-// This can show/hide tablerows that contain the checkboxes
-// Containing <tr>'s must be id'd with 'tr_' + the checkbox id,
-// while checkbox id must have 'cb_' prefix (ie: 'tr_cb_checkThis' & 'cb_checkThis')
-    var trs = $('table.subtracks').children('tbody').children('tr');
-    if(!onlySelected)
-        $(trs).show();
-    else {
-        $(trs).each(function (ix) {
-            var subCB = $(this).find('input.subCB');
-            if (subCB.length > 0 && subCB[0].checked && subCB[0].disabled == false)
-                $(this).show();
-            else
-                $(this).hide();
-        });
-    }
-}
+
 
 function normed(obj)
 { // returns undefined, the obj or the obj normalized from one member array
@@ -115,28 +97,6 @@ function normed(obj)
     if (obj.length == 1)
         return obj[0];
     return obj;   // (obj.length > 1)
-}
-
-function hideOrShowSubtrack(obj)
-{
-// This can show/hide a tablerow that contains a specific object
-// Containing <tr>'s must be id'd with 'tr_' + obj.id
-// Also, this relies upon the "displaySubtracks" radio button control
-    var tr = $(obj).parents('tr#tr_'+obj.id);
-    if (tr != undefined && tr.length == 1) {
-        tr = tr[0];
-
-        if(!obj.checked || obj.disabled)  {
-            var radio = $('input.allOrOnly');
-            for (var ix=0;ix<radio.length;ix++) {
-                if(radio[ix].checked && radio[ix].value == "selected") {
-                    $(tr).hide();
-                    return;
-                }
-            }
-        }
-        $(tr).show();
-    }
 }
 
 function waitCursor(obj)
