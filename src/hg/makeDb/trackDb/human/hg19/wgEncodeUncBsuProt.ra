@@ -15,7 +15,7 @@ fileSortOrder cell=Cell_Line localization=Localization view=View dccAccession=UC
 controlledVocabulary encode/cv.ra cellType=cell localization=localization
 dragAndDrop subTracks
 priority 0
-type bed 3
+type bed 6 +
 noInherit on
 useScore 1
 wgEncode 1
