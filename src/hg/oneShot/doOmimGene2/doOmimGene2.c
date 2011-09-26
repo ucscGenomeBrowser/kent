@@ -41,8 +41,7 @@ outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
 /* get all OMIM Genes with Gene ID (Entrez/LocusLink) */
-//sprintf(query1, "select omimId, geneId from mim2gene where geneId <>'-' ");
-sprintf(query1, "select omimId, geneId from mim2gene where geneId <>'-' and entryType='gene' ");
+sprintf(query1, "select omimId, geneId from omim2gene where geneId <>'-' and entryType='gene' ");
 sr1 = sqlMustGetResult(conn1, query1);
 row1 = sqlNextRow(sr1);
 while (row1 != NULL)
