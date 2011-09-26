@@ -46563,7 +46563,7 @@ antibody Input
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46587,7 +46587,7 @@ antibody Input
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46611,7 +46611,7 @@ antibody Input
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46636,7 +46636,7 @@ antibody TCF4
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46660,7 +46660,7 @@ antibody TCF4
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46684,7 +46684,7 @@ antibody TCF4
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46709,7 +46709,7 @@ antibody TCF4
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46733,7 +46733,7 @@ antibody TCF4
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -46757,7 +46757,7 @@ antibody TCF4
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -48307,4 +48307,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1143427041
+# MAGIC: 1690552178
