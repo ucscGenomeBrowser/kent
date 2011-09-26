@@ -8274,6 +8274,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 ############################################################################
 # SEGMENTAL DUPLICATIONS (2010-02-02 - 2010-02-04, hartera, DONE)
+# (2011-09-26, Fan, REBUILT using corrected data from provider)
 # File emailed from Tin Louie <tinlouie at u.washington.edu>
 # in Evan Eichler's lab on 01/28/10. This is a data update since it was
 # thought that the last data set was incorrect so the pipeline had to be
@@ -8296,20 +8297,19 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # 2010-02-09 Received new data on 02/08/10 as there were more errors in the
 # code that caused the data to have empty fields.
 # 2010-02-19 Changed the posBasesHit column values to match those for hg18.
+# 2011-09-26 Rebuilt, using corrected (10th col) from data provider.
 # In hg18, they are all 1000, but this is meaningless. 
-    mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
-    cd /hive/data/genomes/hg19/bed/genomicSuperDups
-    # Remove old data
-    rm *
+    mkdir /hive/data/genomes/hg19/bed/genomicSuperDups/0926_2011
+    cd /hive/data/genomes/hg19/bed/genomicSuperDups/0926_2011
     wget --timestamping \
-        ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.tab.gz    
-    gunzip hg19genomicSuperDups.tab.gz
+         ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.fixed.tab.gz
+    gunzip hg19genomicSuperDups.fixed.tab.gz
     # Fix incorrect chromosome names in data. Check both chrom and otherChrom.
     # Previously, found several cases where the last letter of random was
     # missing for the names of the random contigs. They all look good this
     # time.
-    awk '{print $1}' hg19genomicSuperDups.tab | sort | uniq > chroms
-    awk '{print $7}' hg19genomicSuperDups.tab | sort | uniq > otherChroms
+    awk '{print $1}' hg19genomicSuperDups.fixed.tab | sort | uniq > chroms
+    awk '{print $7}' hg19genomicSuperDups.fixed.tab | sort | uniq > otherChroms
     hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq > chromInfo.txt 
     comm -23 chroms chromInfo.txt
     comm -23 otherChroms chromInfo.txt
@@ -8321,7 +8321,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # to be necessary here, but doesn't hurt and may be useful in
     # future builds.
     hgsql -e 'drop table genomicSuperDups;' hg19
-    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups.tab \
+    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups.fixed.tab \
     | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
     | hgLoadBed hg19 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
@@ -8347,8 +8347,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
      # 2010-02-19 Changed the posBasesHit column to be 1000. Checked with 
      # data provider about doing this so that the values are the same as for
      # those in the hg18 table.
-     hgsql -e 'update genomicSuperDups set posBasesHit = 1000;' hg19
-
+     # hgsql -e 'update genomicSuperDups set posBasesHit = 1000;' hg19
+# New corrected data fixed the above problem. 
 ############################################################################
 # ADD LINK TO GENENETWORK (DONE. 12/02/09 Fan).
 
@@ -16871,3 +16871,224 @@ EOF
 
 
 #############################################################################
+# LASTZ X. tropicalis XenTro3 (DONE - 2011-09-20 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20
+    cd /hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20
+
+    cat << '_EOF_' > DEF
+# human vs X. tropicalis
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    395m51.626s
+    cat fb.hg19.chainXenTro3Link.txt  
+    #	87928753 bases of 2897316137 (3.035%) in intersection
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzXenTro3.2011-09-20 lastz.xenTro3
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzXenTro3.2011-09-20/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    37m7.001s
+    cat fb.xenTro3.chainHg19Link.txt 
+    #	90929066 bases of 1358334882 (6.694%) in intersection
+
+############################################################################
+# GENEREVIEWS TRACK (DONE 2011-09-22 - Chin)
+    mkdir /hive/data/genomes/hg19/bed/geneReviews
+    mkdir -p /hive/data/outside/ncbi/geneReviews/current
+    cd /hive/data/outside/ncbi/geneReviews/current
+    wget --timestamping ftp://ftp.ncbi.nih.gov/pub/GeneTests/README.html
+    wget --timestamping ftp://ftp.ncbi.nih.gov/pub/GeneTests/*.txt
+    # Note: the report *.txt are updated daily
+    wc -l *.txt
+    219 README.html
+    #   3043 data_to_build_custom_reports.txt
+    #   7245 disease_OMIM.txt
+    #   3729 disease_gene_GR.txt
+    #   1415 disease_hierarchy.txt
+
+    cp disease_gene_GR.txt /hive/data/genomes/hg19/bed/geneReviews/.
+    cd /hive/data/genomes/hg19/bed/geneReviews
+    cat disease_gene_GR.txt | grep -v "^#" \
+     | awk  -F'|' '{if ($3!="-" && $3!="Not applicable" && $4!="-") \
+      printf  "%s\t%s\t%s\t%s\n", $3, $4, $1, $2}' | sort -k1 > grRefGeneData.tab
+    # Create geneReviewsRefGene table
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsRefGene.sql
+CREATE TABLE geneReviewsRefGene (
+    geneSymbol  varchar(255) not null,   # refSeq gene symbol         
+    grShort     varchar(255) not null,   # short name for GeneReviews article
+    diseaseID   int unsigned not null,   # Disease ID of the review article
+    diseaseName varchar(255) not null,   # Disease name of the review article
+    index (geneSymbol)
+);
+'_EOF_'
+    # << happy emacs
+
+    # load RefSeg Gene to geneReview mapping list to hg19
+    hgLoadSqlTab -warn hg19 geneReviewsRefGene \
+      $HOME/kent/src/hg/lib/geneReviewsRefGene.sql grRefGeneData.tab
+    # Scanning through 1 files
+
+    # Generate a list of refSeq genes thah have geneReview assoicate with it.
+    cat  grRefGeneData.tab | awk -F'\t' '{printf  "%s\n", $1}' \
+       | sort  | uniq  > grRefGene.lst
+    wc -l *.*
+    #   3729 disease_gene_GR.txt
+    #   1111 grData.tab
+    #    946 grRefGene.lst
+  
+    # for each refGen in grRefGene.lst, create a non-overlapping bed row.
+    cat grRefGene.lst | while read G
+      do
+        echo ${G}
+        hgsql hg19 -N -e \
+          "SELECT e.chrom,e.txStart,e.txEnd,j.geneSymbol \
+          FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND \
+          j.geneSymbol ='${G}' ORDER BY e.chrom,e.txStart;" > temp.in
+        bedRemoveOverlap temp.in temp.out
+        cat temp.out >> geneReviews.tab
+      done
+    rm temp.*
+
+    # load the collapsed bed4 file to hg19,
+    hgLoadBed hg19 geneReviews geneReviews.tab
+
+    # addGeneReviewToBed.pl will add the geneReviews detail in html format to 
+    # the bed 4 file
+    cat << '_EOF_' > $HOME/kent/src/utils/geneReviews/addGeneReviewToBed.pl
+#!/usr/bin/perl
+use warnings;
+use strict;
+sub usage() {
+    print "usage: ./addGRtoBed.pl dbName > outputFile\n";
+}
+my $argc=scalar(@ARGV);
+if ($argc != 1) {
+    usage; die "ERROR: Please supply a database name for results.\n";
+}
+#get the list of (unique) of gene symbols form geneReviews table
+my @geneReviews = split('\n',
+ `hgsql -N -e "select chrom, chromStart, chromEnd, name from geneReviews;" $ARGV[0]`);
+my $grBed;
+my $clickMsg = " (Click links below to search GeneReviews or GeneTests)";
+my $firstTime = 1;
+my $field;
+my $details;
+foreach $grBed(@geneReviews) {
+   $details = "";
+   my @col = split(/\t/, $grBed);
+   #print "Processing name: ", $col[3], " <BR>";
+   my @grShort = split('\n',
+    `hgsql -N -e 'select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol="$col[3]"' $ARGV[0]`);
+   $firstTime = 1;
+   my $count = scalar(@grShort);
+   my $i;
+   my $j;
+   for ($i=0; $i < $count; $i++) {
+       my @f5 = split(/\t/, $grShort[$i]);
+   if ($firstTime == 1) {
+      $firstTime=0;
+      $details = "";
+      $details = "<BR><B>GeneReview available for " . $col[3] .  ": </B> " . $clickMsg . "<BR>";
+      $details .= "<PRE><TT>";
+      $details .= "Short name    Disease ID     GeneTests disease name<BR>";
+      $details .= "-----------------------------------------------------------";
+      $details .= "-----------------------------------------------------------";
+      $details .= "----------------------------------<BR>";
+      } 
+      $details .= "<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/" . $f5[0] . "\" TARGET=_blank><B>" . $f5[0] . "</B></A>";
+      if (length($f5[0]) <= 15) {
+        for ($j = 0; $j <  15-length($f5[0]); $j ++ )
+           {
+              $details .= " ";
+           }
+         }
+       $details .=  $f5[1] . "       ";
+       $details .= "<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/" . $f5[2] . "?db=genetests&search_param==begins_with\" TARGET=_blank>" . $f5[2]  ."<BR>";
+     }
+       $details .= "</TT></PRE><BR>";
+       print $col[0], "\t", $col[1], "\t", $col[2], "\t", $col[3], "\t", $details, "\n";
+  }
+'_EOF_'
+    # << happy emacs
+    chmod +x $HOME/kent/src/utils/geneReviews/addGeneReviewToBed.pl
+    # Add geneReview item in html format format as field 5
+    $HOME/kent/src/utils/geneReviews//addGeneReviewToBed.pl hg19 > hg19.geneReviews.bed5
+
+    # Convert to bigBed format 
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsBed5.as
+table geneReviewsBed5
+"GeneReviews  bigBed 4 + with extra field for detail page"
+    (
+    string chrom;      "Reference sequence chromosome or scaffold"
+    uint   chromStart; "Start position in chromosome"
+    uint   chromEnd;   "End position in chromosome"
+    string name;       "Short Name of item"
+    lstring description; "geneReviews item details in html"
+    )
+'_EOF_'
+    # << happy emacs
+
+    /cluster/bin/x86_64/bedToBigBed -bedFields=4 -tabs \
+     -as=$HOME/kent/src/hg/lib/geneReviewsBed5.as  hg19.geneReviews.bed5 \
+     /hive/data/genomes/hg19/chrom.sizes hg19.geneReviews.bb
+
+    # upload the bigBed file to genomewiki
+    /cluster/bin/scripts/gwUploadFile hg19.geneReviews.bb hg19.geneReviews.bb
+    #  UploadFile hg19.geneReviews.bb hg19.geneReviews.bb
+    #  # loading file: hg19.geneReviews.bb
+    #  # into Image name: Hg19.geneReviews.bb
+    #  # login name: chinhli
+    #  # siteUrl: genomewiki.ucsc.edu
+    #  # traceBackLimit: 0
+    #  # traceBackLimit: 0 past site.Images
+    #  Image info: {u'comment': u'gwUploadFile upload', u'sha1': u'643966466503bd6770f67d49397f4b94174beed2', u'url': u'http://genomewiki.ucsc.edu/images/b/b9/Hg19.geneReviews.bb', u'timestamp': u'2011-09-22T17:40:56Z', u'metadata': None, u'height': 0, u'width': 0, u'user': u'Chinhli', u'descriptionurl': u'http://genomewiki.ucsc.edu/index.php/File:Hg19.geneReviews.bb', u'size': 174667}
+    #  Image File:Hg19.geneReviews.bb usage:
+
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/geneReviewsBB.sql
+# sql to create geneReviewsBB table 
+DROP TABLE IF EXISTS geneReviewsBB;
+CREATE TABLE geneReviewsBB (
+    fileName varchar(255) not null      # geneReviews.bb location (url)
+);
+'_EOF_' 
+    # << happy emacs
+    hgsql hg19 -e "source $HOME/kent/src/hg/lib/geneReviewsBB.sql;"
+    hgsql hg19 -e 'insert into geneReviewsBB values ("http://genomewiki.ucsc.edu/images/b/b9/Hg19.geneReviews.bb");'
+
+
+##############################################################################

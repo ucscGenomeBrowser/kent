@@ -2567,11 +2567,13 @@ if(options != NULL)
 struct dyString *currentlyCheckedTags = NULL;
 // Need a string of subGroup tags which are currently checked
 safef(settingName,sizeof(settingName),"dimension%cchecked",letter);
-char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"");
+char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"All");
 for(mIx=0;mIx<members->count;mIx++)
     {
     safef(settingName, sizeof(settingName), "%s.mat_%s_dim%c_cb",parentTdb->track,members->tags[mIx],letter);
-    members->selected[mIx] = (NULL!=findWordByDelimiter(members->tags[mIx],',',dimCheckedDefaults));
+    members->selected[mIx] = TRUE;
+    if (differentWord(dimCheckedDefaults,"All") && differentWord(dimCheckedDefaults,"Any"))
+        members->selected[mIx] = (NULL!=findWordByDelimiter(members->tags[mIx],',',dimCheckedDefaults));
     members->selected[mIx] = cartUsualBoolean(cart,settingName,members->selected[mIx]);
     if(members->selected[mIx])
         {

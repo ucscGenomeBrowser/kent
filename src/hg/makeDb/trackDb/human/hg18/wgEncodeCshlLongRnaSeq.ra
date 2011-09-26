@@ -8,6 +8,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 localization Localization cell=Cell cytosol=Cytosol
 subGroup4 rnaExtract Rna_Extract total=Total_RNA longPolyA=Long_PolyA+
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
+#fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks

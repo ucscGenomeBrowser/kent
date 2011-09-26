@@ -76,7 +76,7 @@ int count = 0;
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCartAll(cart);
 for(hub = hubList; hub; hub = hub->next)
     {
-    if (isHubUnlisted(hub))
+    if (isHubUnlisted(hub) && hubHasDatabase(hub, database) )
 	count++;
     }
 
@@ -107,7 +107,7 @@ count = 0;
 for(hub = hubList; hub; hub = hub->next)
     {
     /* if the hub is public, then don't list it here */
-    if (!isHubUnlisted(hub))
+    if (!(isHubUnlisted(hub) && hubHasDatabase(hub, database) ))
 	continue;
 
     if (count)

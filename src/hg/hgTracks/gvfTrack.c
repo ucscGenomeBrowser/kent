@@ -16,29 +16,29 @@ int ix = stringArrayIx("var_type", gvf->attrTags, gvf->attrCount);
 if (ix < 0)
     return dbVarUnknown;
 char *varType = gvf->attrVals[ix];
-if (sameString(varType, "CNV"))
+if (sameString(varType, "CNV") || sameString(varType, "copy_number_variation"))
     return MG_BLACK;
-else if (sameString(varType, "Gain"))
+else if (strstrNoCase(varType, "Gain"))
     return hvGfxFindColorIx(hvg, 0x00, 0x00, 0xff);
-else if (sameString(varType, "Loss"))
+else if (strstrNoCase(varType, "Loss"))
     return hvGfxFindColorIx(hvg, 0xff, 0x00, 0x00);
-else if (sameString(varType, "Insertion"))
+else if (strstrNoCase(varType, "Insertion"))
     return hvGfxFindColorIx(hvg, 0xff, 0xcc, 0x00);
-else if (sameString(varType, "Complex"))
+else if (strstrNoCase(varType, "Complex"))
     return hvGfxFindColorIx(hvg, 0x99, 0xcc, 0xff);
-else if (sameString(varType, "Unknown"))
+else if (strstrNoCase(varType, "Unknown"))
     return dbVarUnknown;
-else if (sameString(varType, "Other"))
+else if (strstrNoCase(varType, "Other"))
     return hvGfxFindColorIx(hvg, 0xcc, 0x99, 0xff);
-else if (sameString(varType, "Inversion"))
+else if (strstrNoCase(varType, "Inversion"))
     return hvGfxFindColorIx(hvg, 0x99, 0x33, 0xff); // Needs pattern
-else if (sameString(varType, "LOH"))
+else if (strstrNoCase(varType, "LOH"))
     return hvGfxFindColorIx(hvg, 0x00, 0x00, 0xff); // Needs pattern
-else if (sameString(varType, "Everted"))
+else if (strstrNoCase(varType, "Everted"))
     return hvGfxFindColorIx(hvg, 0x66, 0x66, 0x66); // Needs pattern
-else if (sameString(varType, "Transchr"))
+else if (strstrNoCase(varType, "Transchr"))
     return hvGfxFindColorIx(hvg, 0xb2, 0xb2, 0xb2); // Plus black vert. bar at broken end
-else if (sameString(varType, "UPD"))
+else if (strstrNoCase(varType, "UPD"))
     return hvGfxFindColorIx(hvg, 0x00, 0xff, 0xff); // Needs pattern
 return dbVarUnknown;
 }
@@ -67,7 +67,8 @@ if (bParentName != NULL && sameString(bParentName, a->name))
     return -1;
 else if (aParentName != NULL && sameString(aParentName, b->name))
     return 1;
-else if (aParentName != NULL && bParentName != NULL && sameString(aParentName, bParentName))
+else if (aParentName != NULL && bParentName != NULL && sameString(aParentName, bParentName) &&
+	 getAttributeVal(a, "var_type") != NULL && getAttributeVal(b, "var_type") != NULL)
     return strcmp(getAttributeVal(a, "var_type"), getAttributeVal(b, "var_type"));
 else
     {

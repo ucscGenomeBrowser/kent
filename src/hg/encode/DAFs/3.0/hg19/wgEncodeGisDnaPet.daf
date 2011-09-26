@@ -1,0 +1,72 @@
+# Data Agreement File for Genomic DNA PET Ditag project $Revision: 1.3 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header of the associated ddf file should look like this:
+# files	view	cell	fragSize	accession	labVersion	replicate
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Gingeras
+lab               GIS
+dataType          DnaPet
+compositeSuffix   GisDnaPet
+group             variation
+variables         cell, fragSize
+assembly          hg19
+noAutoCreate      yes
+
+validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=6,mmPerPair;validateFiles.fastQ:quick=1000
+
+noAutoCreate     yes
+
+view             Alignments
+type             bam
+hasReplicates    no
+required         no
+
+# Send the raw seq reads data in either Solexa (fastq) or SOLiD (csfasta+csqual) formats:-
+# Ideally we would be able to check that the data contains either fastq or csfasta+csqual formats
+#   but the DAF control 'required=yes/no' is to simple to specify that.
+
+# Solexa:-
+view             FastqRd1
+type             fastq
+hasReplicates    no
+required         no
+downloadOnly	yes
+
+view             FastqRd2
+type             fastq
+hasReplicates    no
+required         no
+downloadOnly	yes
+
+# SOLiD:-5'
+#view             Fasta5p
+#type             csfasta
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
+
+#view             Qual5p
+#type             csqual
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
+
+# SOLiD:-3'
+#view             Fasta3p
+#type             csfasta
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
+
+#view             Qual3p
+#type             csqual
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
+

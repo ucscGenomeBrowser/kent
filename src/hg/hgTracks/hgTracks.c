@@ -2528,7 +2528,7 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 hPrintf("</MAP>\n");
 
 jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE && advancedJavascriptFeaturesEnabled(cart));
 
 if(rulerClickHeight)
     {
@@ -2554,7 +2554,7 @@ if(sameString(type, "jsonp"))
     jsonHashAddString(json, "track", cartString(cart, "hgt.trackNameFilter"));
     jsonHashAddNumber(json, "height", pixHeight);
     jsonHashAddNumber(json, "width", pixWidth);
-    jsonHashAddString(json, "src", gifTn.forHtml);
+    jsonHashAddString(json, "img", gifTn.forHtml);
     printf("%s(", cartString(cart, "jsonp"));
     hPrintEnable();
     jsonPrint((struct jsonElement *) json, NULL, 0);

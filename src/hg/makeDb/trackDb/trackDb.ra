@@ -2685,6 +2685,38 @@ termRegex rs[0-9]+
 searchPriority 12.9904
 padding 250
 
+searchTable snp134Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9891
+padding 250
+
+searchTable snp134Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9892
+padding 250
+
+searchTable snp134Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9893
+padding 250
+
+searchTable snp134
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9894
+padding 250
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1

@@ -245,7 +245,7 @@ noInherit on
 	color 189,0,157
 	# subId=1613 dateSubmitted=2010-06-18
 
-	track wgEncodeSunyAlbanyGeneStH1-hESCRipinputRbpAssocRna
+	track wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 	parent wgEncodeSunyAlbanyGeneStView off
 	shortLabel H1-hESC RIP-Input
 	longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
@@ -256,7 +256,7 @@ noInherit on
 	# subId=3084 dateSubmitted=2010-12-10 
 
 
-	track wgEncodeSunyAlbanyGeneStH1-hESCT7tagRbpAssocRna
+	track wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 	parent wgEncodeSunyAlbanyGeneStView off
 	shortLabel H1-hESC T7Tag
 	longLabel H1-hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
@@ -266,7 +266,7 @@ noInherit on
 	color 0,107,27
 	# subId=3084 dateSubmitted=2010-12-10
 
-	track wgEncodeSunyAlbanyGeneStH1-hESCElavl1RbpAssocRna
+	track wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 	parent wgEncodeSunyAlbanyGeneStView on
 	shortLabel H1-hESC ELAVL1
 	longLabel H1-hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY

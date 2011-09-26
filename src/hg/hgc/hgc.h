@@ -425,6 +425,9 @@ void doPgSnp(struct trackDb *tdb, char *itemName, struct customTrack *ct);
 void doGvf(struct trackDb *tdb, char *item);
 /* Show details for variants represented as GVF, stored in a bed8Attrs table */
 
+void prGRShortRefGene(char *itemName);
+/* print GeneReviews short label associated to this refGene item */
+
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 #endif

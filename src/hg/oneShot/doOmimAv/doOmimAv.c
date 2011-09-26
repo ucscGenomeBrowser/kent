@@ -66,7 +66,6 @@ char repl[1024];
 strncpy(repl, replIn, sizeof(repl));
 
 result = 0;
-
 for (i=0; i<21; i++)
     {
     chp = strstr(repl, aaAbbrev[i]);
@@ -77,6 +76,11 @@ for (i=0; i<21; i++)
 	    aaRepl->firstAa = aaChar[i];
 	    chp++;chp++;chp++;
 	    part2 = chp;
+	    
+	    // chop off anything after the first replacement string if there is more than one
+	    chp = strstr(part2, ",");
+	    if (chp != NULL) *chp = '\0';
+
 	    for (j=0; j<21; j++)
 	        {
 		chp = strstr(part2, aaAbbrev[j]);
@@ -128,6 +132,7 @@ for (i=0; i<21; i++)
 		    
 		    result = 1;		    
 		    fflush(stdout);
+		    return(result);
 		    }
 		}
 	    }
