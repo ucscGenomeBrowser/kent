@@ -15,7 +15,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam
+fileName wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam,wgEncodeGisRnaPetGm12878CytosolPapAlnFree.bam.bai
 grant Gingeras
 lab GIS
 labExpId IHG024
@@ -44,7 +44,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000248
 expId 248
-fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam,wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHG001
@@ -359,7 +359,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000249
 expId 249
-fileName wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam
+fileName wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam,wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHG002
@@ -531,7 +531,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000250
 expId 250
-fileName wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam
+fileName wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam,wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId IHE001
@@ -702,7 +702,7 @@ dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
 expId 1744
-fileName wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam
+fileName wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam,wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId RHH014
@@ -730,7 +730,7 @@ dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
 expId 1744
-fileName wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
+fileName wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam,wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam.bai
 grant Gingeras
 lab GIS
 labExpId RHH015
@@ -1035,7 +1035,7 @@ dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
 dccAccession wgEncodeEH000268
 expId 268
-fileName wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam,wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId RHH002
@@ -1207,7 +1207,7 @@ dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000267
 expId 267
-fileName wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
+fileName wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam,wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId RHH004
@@ -1379,7 +1379,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000252
 expId 252
-fileName wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam,wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHH002
@@ -1551,7 +1551,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000253
 expId 253
-fileName wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam
+fileName wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam,wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHH003
@@ -1723,7 +1723,7 @@ dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 dccAccession wgEncodeEH000266
 expId 266
-fileName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam,wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId RHH003
@@ -1895,7 +1895,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000251
 expId 251
-fileName wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam
+fileName wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam,wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId RHH001
@@ -2067,7 +2067,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000254
 expId 254
-fileName wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam
+fileName wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam,wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId PHK001
@@ -2211,7 +2211,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000255
 expId 255
-fileName wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam,wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId IHK009010015
@@ -2383,7 +2383,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000256
 expId 256
-fileName wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam
+fileName wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam,wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHK008
@@ -2555,7 +2555,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000257
 expId 257
-fileName wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam
+fileName wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam,wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId PHK002
@@ -2699,7 +2699,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000258
 expId 258
-fileName wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam
+fileName wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam,wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHK006
@@ -2871,7 +2871,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000259
 expId 259
-fileName wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam
+fileName wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam,wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHK007
@@ -3043,7 +3043,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000260
 expId 260
-fileName wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam,wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId IHN011
@@ -3215,7 +3215,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000261
 expId 261
-fileName wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam
+fileName wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam,wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId IHN012
@@ -3387,7 +3387,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 dccAccession wgEncodeEH000262
 expId 262
-fileName wgEncodeGisRnaPetProstateCellPapAlnRep1.bam
+fileName wgEncodeGisRnaPetProstateCellPapAlnRep1.bam,wgEncodeGisRnaPetProstateCellPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 labExpId DHP001

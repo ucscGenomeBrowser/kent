@@ -41,8 +41,7 @@ outFn   = argv[2];
 outf    = mustOpen(outFn, "w");
 
 /* get all OMIM Genes with Gene ID (Entrez/LocusLink) */
-//sprintf(query1, "select omimId, geneId from mim2gene where geneId <>'-' ");
-sprintf(query1, "select omimId, geneId from mim2gene where geneId <>'-' and entryType='gene' ");
+sprintf(query1, "select omimId, geneId from omim2gene where geneId <>'-' and entryType='gene' ");
 sr1 = sqlMustGetResult(conn1, query1);
 row1 = sqlNextRow(sr1);
 while (row1 != NULL)
@@ -53,7 +52,8 @@ while (row1 != NULL)
     /* get corresponding RefSeq data, ordered by length of the gene */
     sprintf(query2,
     // added mrnaAcc as the 2nd ordering condition
-    "select r.chrom, r.txStart, r.txEnd, r.name, r.txEnd-r.txStart, mrnaAcc from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s order by txEnd-txStart desc, mrnaAcc desc", geneId);
+    // added txStart as the 3rd ordering condition
+    "select r.chrom, r.txStart, r.txEnd, r.name, r.txEnd-r.txStart, mrnaAcc from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s order by txEnd-txStart desc, mrnaAcc desc, txStart asc", geneId);
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
     
