@@ -4348,6 +4348,495 @@ subId 1287
 tableName wgEncodeUwHistoneCaco2InputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep2.bam
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01778
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01778
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01778InputStdAlnRep1
+objType file
+antibody Input
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-25
+fileName wgEncodeUwHistoneCd20ro01778InputStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4638
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01778InputStdRawDataRep1
+objType file
+antibody Input
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-25
+fileName wgEncodeUwHistoneCd20ro01778InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01778
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4638
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01778InputStdRawRep1
+objType table
+antibody Input
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-25
+fileName wgEncodeUwHistoneCd20ro01778InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4638
+tableName wgEncodeUwHistoneCd20ro01778InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdAlnRep3
+objType file
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdAlnRep3.bam
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3
+objType table
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+tableName wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3
+view Hotspots
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3
+objType table
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+tableName wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3
+view Peaks
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdRawDataRep3
+objType file
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdRawDataRep3.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3
+objType table
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+tableName wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01794InputStdAlnRep1
+objType file
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794InputStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId RO 01794
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4636
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01794InputStdRawDataRep1
+objType file
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01794
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4636
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01794InputStdRawRep1
+objType table
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01794
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4636
+tableName wgEncodeUwHistoneCd20ro01794InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1
 objType file
 antibody H3K27me3
@@ -18910,6 +19399,309 @@ subId 2655
 tableName wgEncodeUwHistoneMcf7InputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdAlnRep1.bam
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+view Alignments
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+tableName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+tableName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+view RawData
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+tableName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdAlnRep1
+objType file
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdAlnRep1.bam
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+view Alignments
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1
+objType table
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+tableName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1
+objType table
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+tableName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawDataRep1
+objType file
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+view RawData
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1
+objType table
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+tableName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneMonocd14ro1746InputStdAlnRep1
+objType file
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746InputStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4641
+view Alignments
+
+metaObject wgEncodeUwHistoneMonocd14ro1746InputStdRawDataRep1
+objType file
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4641
+view RawData
+
+metaObject wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1
+objType table
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4641
+tableName wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneNb4H3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -24544,4 +25336,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -1048362862
+# MAGIC: -2056391426
