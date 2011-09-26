@@ -17,7 +17,7 @@ dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH001740
 dccRep 1
 expId 1740
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20749
@@ -46,7 +46,7 @@ dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001740
 dccRep 2
 expId 1740
-fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20750
@@ -322,7 +322,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
 dccRep 1
 expId 1081
-fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20745
@@ -351,7 +351,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001081
 dccRep 2
 expId 1081
-fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20746
@@ -627,7 +627,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
 dccRep 1
 expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20909
@@ -656,7 +656,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001079
 dccRep 2
 expId 1079
-fileName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20910
@@ -934,7 +934,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000212
 dccRep 1
 expId 212
-fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam
+fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam,wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam.bai
 geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
@@ -1050,7 +1050,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
 dccRep 1
 expId 212
-fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20899
@@ -1079,7 +1079,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000212
 dccRep 2
 expId 212
-fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20902
@@ -1357,7 +1357,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000203
 dccRep 1
 expId 203
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam,wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam.bai
 geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
@@ -1503,7 +1503,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
 dccRep 1
 expId 203
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20901
@@ -1532,7 +1532,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000203
 dccRep 2
 expId 203
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20904
@@ -1810,7 +1810,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000204
 dccRep 1
 expId 204
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam,wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam.bai
 geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
@@ -1956,7 +1956,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000204
 dccRep 1
 expId 204
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20900
@@ -1985,7 +1985,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000204
 dccRep 2
 expId 204
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20903
@@ -2261,7 +2261,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
 dccRep 1
 expId 1082
-fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20905
@@ -2290,7 +2290,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001082
 dccRep 2
 expId 1082
-fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20906
@@ -2566,7 +2566,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001083
 dccRep 2
 expId 1083
-fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20908
@@ -2758,7 +2758,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001084
 dccRep 2
 expId 1084
-fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20907
@@ -2950,7 +2950,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
 dccRep 1
 expId 1089
-fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21143
@@ -2979,7 +2979,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001089
 dccRep 2
 expId 1089
-fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21146
@@ -3255,7 +3255,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
 dccRep 1
 expId 1087
-fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21145
@@ -3284,7 +3284,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001087
 dccRep 2
 expId 1087
-fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21148
@@ -3560,7 +3560,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
 dccRep 1
 expId 1088
-fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21144
@@ -3589,7 +3589,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001088
 dccRep 2
 expId 1088
-fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21147
@@ -3865,7 +3865,7 @@ dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
 dccRep 1
 expId 1741
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID44460
@@ -3894,7 +3894,7 @@ dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001741
 dccRep 2
 expId 1741
-fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID44461
@@ -4170,7 +4170,7 @@ dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001743
 dccRep 2
 expId 1743
-fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID44465
@@ -4360,7 +4360,7 @@ dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
 dccRep 1
 expId 1742
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID44462
@@ -4389,7 +4389,7 @@ dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001742
 dccRep 2
 expId 1742
-fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID44463
@@ -4665,7 +4665,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001085
 dccRep 1
 expId 1085
-fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21054
@@ -4694,7 +4694,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001085
 dccRep 2
 expId 1085
-fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21055
@@ -4919,7 +4919,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001086
 dccRep 1
 expId 1086
-fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3.bam
+fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3.bam,wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21057
@@ -4948,7 +4948,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001086
 dccRep 2
 expId 1086
-fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4.bam
+fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4.bam,wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21059
@@ -5173,7 +5173,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001080
 dccRep 1
 expId 1080
-fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3.bam
+fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3.bam,wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21056
@@ -5202,7 +5202,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001080
 dccRep 2
 expId 1080
-fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4.bam
+fileName wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4.bam,wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21058
@@ -5480,7 +5480,7 @@ dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000213
 dccRep 1
 expId 213
-fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam
+fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam,wgEncodeCshlShortRnaSeqK562CellShortAln.bam.bai
 geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
@@ -5626,7 +5626,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000213
 dccRep 1
 expId 213
-fileName wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID10567
@@ -5655,7 +5655,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000213
 dccRep 2
 expId 213
-fileName wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID10568
@@ -5935,7 +5935,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000205
 dccRep 1
 expId 205
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam,wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam.bai
 geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
@@ -6081,7 +6081,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
 dccRep 1
 expId 205
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3.bam
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3.bam,wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID8930
@@ -6110,7 +6110,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000205
 dccRep 2
 expId 205
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4.bam
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4.bam,wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID18560
@@ -6388,7 +6388,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000206
 dccRep 1
 expId 206
-fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam
+fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam,wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam.bai
 geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
@@ -6534,7 +6534,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
 dccRep 1
 expId 206
-fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID10572
@@ -6563,7 +6563,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000206
 dccRep 2
 expId 206
-fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID10571
@@ -6840,7 +6840,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000207
 dccRep 1
 expId 207
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam,wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam.bai
 geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
@@ -6986,7 +6986,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
 dccRep 1
 expId 207
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3.bam,wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID8928
@@ -7015,7 +7015,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000207
 dccRep 2
 expId 207
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4.bam,wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID18558
@@ -7293,7 +7293,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000208
 dccRep 1
 expId 208
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam,wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam.bai
 geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
@@ -7439,7 +7439,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
 dccRep 1
 expId 208
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3.bam,wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID8929
@@ -7468,7 +7468,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH000208
 dccRep 2
 expId 208
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4.bam,wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID18559
@@ -7746,7 +7746,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000209
 dccRep 1
 expId 209
-fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam,wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam.bai
 geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
@@ -7892,7 +7892,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
 dccRep 1
 expId 209
-fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID10570
@@ -7921,7 +7921,7 @@ dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH000209
 dccRep 2
 expId 209
-fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID10569
@@ -8198,7 +8198,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000210
 dccRep 1
 expId 210
-fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam
+fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam,wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam.bai
 geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
@@ -8340,7 +8340,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 dccRep 1
 expId 1090
-fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20743
@@ -8369,7 +8369,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001090
 dccRep 2
 expId 1090
-fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20744
@@ -8645,7 +8645,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
 dccRep 1
 expId 1091
-fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20999
@@ -8674,7 +8674,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001091
 dccRep 2
 expId 1091
-fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21000
@@ -8950,7 +8950,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
 dccRep 1
 expId 1092
-fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3.bam
+fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3.bam,wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21002
@@ -8979,7 +8979,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001092
 dccRep 2
 expId 1092
-fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4.bam
+fileName wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4.bam,wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21004
@@ -9255,7 +9255,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
 dccRep 1
 expId 1093
-fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3.bam
+fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3.bam,wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21001
@@ -9284,7 +9284,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001093
 dccRep 2
 expId 1093
-fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4.bam
+fileName wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4.bam,wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID21003
@@ -9590,7 +9590,7 @@ dateUnrestricted 2010-06-23
 dccAccession wgEncodeEH000211
 dccRep 1
 expId 211
-fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam
+fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam,wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam.bai
 geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
@@ -9703,7 +9703,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
 dccRep 1
 expId 1094
-fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1.bam
+fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1.bam,wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20747
@@ -9730,7 +9730,7 @@ dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001094
 dccRep 2
 expId 1094
-fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2.bam
+fileName wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2.bam,wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID20748
