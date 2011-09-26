@@ -4768,7 +4768,7 @@ subId 4637
 tableName wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3
 view RawSignal
 
-metaObject wgEncodeUwHistoneCd20ro01794InputStdAlnRep2
+metaObject wgEncodeUwHistoneCd20ro01794InputStdAlnRep1
 objType file
 antibody Input
 cell CD20+_RO01794
@@ -4779,7 +4779,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodeUwHistoneCd20ro01794InputStdAlnRep2.bam
+fileName wgEncodeUwHistoneCd20ro01794InputStdAlnRep1.bam
 grant Stam
 lab UW
 labExpId RO 01794
@@ -4791,7 +4791,7 @@ setType input
 subId 4636
 view Alignments
 
-metaObject wgEncodeUwHistoneCd20ro01794InputStdRawDataRep2
+metaObject wgEncodeUwHistoneCd20ro01794InputStdRawDataRep1
 objType file
 antibody Input
 cell CD20+_RO01794
@@ -4802,7 +4802,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodeUwHistoneCd20ro01794InputStdRawDataRep2.fastq.gz
+fileName wgEncodeUwHistoneCd20ro01794InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId RO 01794
@@ -4813,7 +4813,7 @@ setType input
 subId 4636
 view RawData
 
-metaObject wgEncodeUwHistoneCd20ro01794InputStdRawRep2
+metaObject wgEncodeUwHistoneCd20ro01794InputStdRawRep1
 objType table
 antibody Input
 cell CD20+_RO01794
@@ -4824,7 +4824,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodeUwHistoneCd20ro01794InputStdRawRep2.bigWig
+fileName wgEncodeUwHistoneCd20ro01794InputStdRawRep1.bigWig
 grant Stam
 lab UW
 labExpId RO 01794
@@ -4834,7 +4834,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4636
-tableName wgEncodeUwHistoneCd20ro01794InputStdRawRep2
+tableName wgEncodeUwHistoneCd20ro01794InputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1
@@ -25336,4 +25336,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -2056112631
+# MAGIC: -2056391426
