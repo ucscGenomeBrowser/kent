@@ -21279,7 +21279,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep1.bam,wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep1.bam.bai
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum 1f452f3d521dd745d68658b9f23e470a,16eb852ae436607feaeab444f369c1f1
 project wgEncode
 replicate 1
@@ -21301,7 +21301,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep2.bam,wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep2.bam.bai
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum b89bd5da6bc03e66549325cef7dcf566,aa2ad41e63f7971ec7303ab9312e5474
 project wgEncode
 replicate 2
@@ -21323,7 +21323,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 labVersion PeakSeq1.0
 md5sum 3acd468d4c1319043c797eb775c09659
 project wgEncode
@@ -21346,7 +21346,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabRawDataRep1.fastq.tgz
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum 933ca6e125d137b40276d4daee50ab8d
 project wgEncode
 replicate 1
@@ -21368,7 +21368,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabRawDataRep2.fastq.tgz
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum 2a71c8db3fa4732b477b0ca2dac43873
 project wgEncode
 replicate 2
@@ -21390,7 +21390,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfyaIggrabSig.bigWig
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 labVersion PeakSeq1.0
 md5sum 9330400a7e939bf040cea5f59e93e43c
 project wgEncode
@@ -21413,7 +21413,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabAlnRep1.bam,wgEncodeSydhTfbsHelas3NfybIggrabAlnRep1.bam.bai
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum 6877d45bbe6d4f6f6db8b9fce37d01b6,b170e4af91f6ffaf9485b7b938f13f05
 project wgEncode
 replicate 1
@@ -21435,7 +21435,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabAlnRep2.bam,wgEncodeSydhTfbsHelas3NfybIggrabAlnRep2.bam.bai
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum 3713fc38e685b7f53bb32a79b266bf0c,b437d14ec2af1ae28c05c0307ccb95f4
 project wgEncode
 replicate 2
@@ -21457,7 +21457,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabPk.narrowPeak.gz
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 labVersion PeakSeq1.0
 md5sum 12edffc71fcd35fbb367b9b3675ee4ca
 project wgEncode
@@ -21480,7 +21480,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabRawDataRep1.fastq.tgz
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum f95a1b7659c4cca26f362053e61ce281
 project wgEncode
 replicate 1
@@ -21502,7 +21502,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabRawDataRep2.fastq.tgz
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 md5sum 34e1dc3679b3234f9d71b6b196504af6
 project wgEncode
 replicate 2
@@ -21524,7 +21524,7 @@ dateSubmitted 2011-09-08
 dateUnrestricted 2012-06-08
 fileName wgEncodeSydhTfbsHelas3NfybIggrabSig.bigWig
 grant Snyder
-lab Yale-Weissman
+lab Harvard
 labVersion PeakSeq1.0
 md5sum ca9c267c9c128e7e5a1002467198f3bb
 project wgEncode
@@ -48205,4 +48205,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1621154972
+# MAGIC: -1434945344
