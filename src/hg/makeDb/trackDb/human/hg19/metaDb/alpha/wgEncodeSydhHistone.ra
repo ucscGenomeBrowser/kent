@@ -17,7 +17,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1.bam,wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788088
 grant Snyder
 lab USC
@@ -42,7 +42,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000912
 expId 912
-fileName wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2.bam,wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788088
 grant Snyder
 lab USC
@@ -171,7 +171,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam,wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam.bai
 geoSampleAccession GSM788085
 grant Snyder
 lab USC
@@ -196,7 +196,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 dccAccession wgEncodeEH000911
 expId 911
-fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam,wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam.bai
 geoSampleAccession GSM788085
 grant Snyder
 lab USC
@@ -323,7 +323,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1.bam,wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788087
 grant Snyder
 lab USC
@@ -348,7 +348,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000913
 expId 913
-fileName wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2.bam,wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788087
 grant Snyder
 lab USC
@@ -477,7 +477,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam,wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam.bai
 geoSampleAccession GSM788082
 grant Snyder
 lab USC
@@ -502,7 +502,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000914
 expId 914
-fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam,wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam.bai
 geoSampleAccession GSM788082
 grant Snyder
 lab USC
@@ -632,7 +632,7 @@ dateSubmitted 2009-06-11
 dateUnrestricted 2010-03-11
 dccAccession wgEncodeEH000672
 expId 672
-fileName wgEncodeSydhHistoneK562InputUcdAln.bam
+fileName wgEncodeSydhHistoneK562InputUcdAln.bam,wgEncodeSydhHistoneK562InputUcdAln.bam.bai
 geoSampleAccession GSM788074
 grant Snyder
 lab USC
@@ -714,7 +714,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam,wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam.bai
 geoSampleAccession GSM788080
 grant Snyder
 lab USC
@@ -740,7 +740,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000918
 expId 918
-fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam,wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam.bai
 geoSampleAccession GSM788080
 grant Snyder
 lab USC
@@ -873,7 +873,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam,wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788071
 grant Snyder
 lab USC
@@ -898,7 +898,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000908
 expId 908
-fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam,wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788071
 grant Snyder
 lab USC
@@ -1027,7 +1027,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam,wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788081
 grant Snyder
 lab USC
@@ -1052,7 +1052,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000915
 expId 915
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam,wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788081
 grant Snyder
 lab USC
@@ -1181,7 +1181,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam,wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam.bai
 geoSampleAccession GSM788083
 grant Snyder
 lab USC
@@ -1206,7 +1206,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000917
 expId 917
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam,wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam.bai
 geoSampleAccession GSM788083
 grant Snyder
 lab USC
@@ -1333,7 +1333,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam,wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788072
 grant Snyder
 lab USC
@@ -1358,7 +1358,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000909
 expId 909
-fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam,wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788072
 grant Snyder
 lab USC
@@ -1487,7 +1487,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam,wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam.bai
 geoSampleAccession GSM788086
 grant Snyder
 lab USC
@@ -1512,7 +1512,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000910
 expId 910
-fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam,wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam.bai
 geoSampleAccession GSM788086
 grant Snyder
 lab USC
@@ -1641,7 +1641,7 @@ dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
 dccAccession wgEncodeEH000654
 expId 654
-fileName wgEncodeSydhHistoneNt2d1InputUcdAln.bam
+fileName wgEncodeSydhHistoneNt2d1InputUcdAln.bam,wgEncodeSydhHistoneNt2d1InputUcdAln.bam.bai
 geoSampleAccession GSM788077
 grant Snyder
 lab USC
@@ -1715,7 +1715,7 @@ dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
 expId 1882
-fileName wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam,wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788075
 grant Snyder
 lab USC
@@ -1740,7 +1740,7 @@ dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001882
 expId 1882
-fileName wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam,wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788075
 grant Snyder
 lab USC
@@ -1867,7 +1867,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam,wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788073
 grant Snyder
 lab USC
@@ -1892,7 +1892,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001746
 expId 1746
-fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam,wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788073
 grant Snyder
 lab USC
@@ -2019,7 +2019,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam,wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam.bai
 geoSampleAccession GSM788084
 grant Snyder
 lab USC
@@ -2044,7 +2044,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001747
 expId 1747
-fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam,wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam.bai
 geoSampleAccession GSM788084
 grant Snyder
 lab USC
@@ -2171,7 +2171,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam,wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam.bai
 geoSampleAccession GSM788079
 grant Snyder
 lab USC
@@ -2196,7 +2196,7 @@ dateSubmitted 2011-05-13
 dateUnrestricted 2012-02-13
 dccAccession wgEncodeEH001748
 expId 1748
-fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam
+fileName wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam,wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam.bai
 geoSampleAccession GSM788079
 grant Snyder
 lab USC
@@ -2323,7 +2323,7 @@ dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001883
 expId 1883
-fileName wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam
+fileName wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam,wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam.bai
 geoSampleAccession GSM788070
 grant Snyder
 lab USC
@@ -2399,7 +2399,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam,wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam.bai
 geoSampleAccession GSM788076
 grant Snyder
 lab USC
@@ -2424,7 +2424,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-02-15
 dccAccession wgEncodeEH000920
 expId 920
-fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam,wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam.bai
 geoSampleAccession GSM788076
 grant Snyder
 lab USC
@@ -2551,7 +2551,7 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam,wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam.bai
 geoSampleAccession GSM788078
 grant Snyder
 lab USC
@@ -2576,7 +2576,7 @@ dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 dccAccession wgEncodeEH000919
 expId 919
-fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam,wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam.bai
 geoSampleAccession GSM788078
 grant Snyder
 lab USC
@@ -2706,7 +2706,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 dccAccession wgEncodeEH000916
 expId 916
-fileName wgEncodeSydhHistoneU2osInputUcdAln.bam
+fileName wgEncodeSydhHistoneU2osInputUcdAln.bam,wgEncodeSydhHistoneU2osInputUcdAln.bam.bai
 geoSampleAccession GSM788069
 grant Snyder
 lab USC

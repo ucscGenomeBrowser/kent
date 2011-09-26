@@ -16,7 +16,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
 expId 1905
-fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -41,7 +41,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
 expId 1905
-fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -270,7 +270,7 @@ dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH001904
 expId 1904
-fileName wgEncodeUwHistoneA549InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneA549InputStdAlnRep1.bam,wgEncodeUwHistoneA549InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -345,7 +345,7 @@ dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000927
 expId 927
-fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -370,7 +370,7 @@ dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000927
 expId 927
-fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -599,7 +599,7 @@ dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000928
 expId 928
-fileName wgEncodeUwHistoneAg04449InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04449InputStdAlnRep1.bam,wgEncodeUwHistoneAg04449InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -674,7 +674,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000929
 expId 929
-fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -699,7 +699,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000929
 expId 929
-fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -928,7 +928,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000930
 expId 930
-fileName wgEncodeUwHistoneAg04450InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04450InputStdAlnRep1.bam,wgEncodeUwHistoneAg04450InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1003,7 +1003,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000931
 expId 931
-fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1028,7 +1028,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000931
 expId 931
-fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1257,7 +1257,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000932
 expId 932
-fileName wgEncodeUwHistoneAg09309InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09309InputStdAlnRep1.bam,wgEncodeUwHistoneAg09309InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1332,7 +1332,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000933
 expId 933
-fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1357,7 +1357,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000933
 expId 933
-fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1586,7 +1586,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000934
 expId 934
-fileName wgEncodeUwHistoneAg09319InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09319InputStdAlnRep1.bam,wgEncodeUwHistoneAg09319InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1661,7 +1661,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000935
 expId 935
-fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1686,7 +1686,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000935
 expId 935
-fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1915,7 +1915,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000936
 expId 936
-fileName wgEncodeUwHistoneAg10803InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg10803InputStdAlnRep1.bam,wgEncodeUwHistoneAg10803InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1990,7 +1990,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000937
 expId 937
-fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2015,7 +2015,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000937
 expId 937
-fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2244,7 +2244,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000938
 expId 938
-fileName wgEncodeUwHistoneAoafInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAoafInputStdAlnRep1.bam,wgEncodeUwHistoneAoafInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2319,7 +2319,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
 expId 1906
-fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2344,7 +2344,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
 expId 1906
-fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2573,7 +2573,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001892
 expId 1892
-fileName wgEncodeUwHistoneBe2cInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneBe2cInputStdAlnRep1.bam,wgEncodeUwHistoneBe2cInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2649,7 +2649,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000424
 expId 424
-fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -2675,7 +2675,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000424
 expId 424
-fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -2909,7 +2909,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000443
 expId 443
-fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -2935,7 +2935,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000443
 expId 443
-fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -3169,7 +3169,7 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000416
 expId 416
-fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -3195,7 +3195,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000416
 expId 416
-fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -3429,7 +3429,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000453
 expId 453
-fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam,wgEncodeUwHistoneBjInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -3505,7 +3505,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000425
 expId 425
-fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -3531,7 +3531,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000425
 expId 425
-fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -3765,7 +3765,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000426
 expId 426
-fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -3791,7 +3791,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000426
 expId 426
-fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4025,7 +4025,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000407
 expId 407
-fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4051,7 +4051,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000407
 expId 407
-fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4285,7 +4285,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000454
 expId 454
-fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam,wgEncodeUwHistoneCaco2InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4362,7 +4362,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000427
 expId 427
-fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4388,7 +4388,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000427
 expId 427
-fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4622,7 +4622,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000444
 expId 444
-fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4648,7 +4648,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000444
 expId 444
-fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4882,7 +4882,7 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000417
 expId 417
-fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -4908,7 +4908,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000417
 expId 417
-fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -5142,7 +5142,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000455
 expId 455
-fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam,wgEncodeUwHistoneGm06990InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -5218,7 +5218,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
 expId 2038
-fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18706
@@ -5244,7 +5244,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
 expId 2038
-fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS18900
@@ -5482,7 +5482,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002039
 expId 2039
-fileName wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18707
@@ -5614,7 +5614,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002040
 expId 2040
-fileName wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18912
@@ -5746,7 +5746,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002041
 expId 2041
-fileName wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18910
@@ -5879,7 +5879,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000428
 expId 428
-fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -5905,7 +5905,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000428
 expId 428
-fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6139,7 +6139,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000445
 expId 445
-fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6165,7 +6165,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000445
 expId 445
-fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6399,7 +6399,7 @@ dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 dccAccession wgEncodeEH000395
 expId 395
-fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6425,7 +6425,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000395
 expId 395
-fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6660,7 +6660,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000463
 expId 463
-fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam,wgEncodeUwHistoneGm12878InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6736,7 +6736,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000923
 expId 923
-fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6761,7 +6761,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000923
 expId 923
-fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -6990,7 +6990,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000924
 expId 924
-fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -7015,7 +7015,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000924
 expId 924
-fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -7244,7 +7244,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000925
 expId 925
-fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -7269,7 +7269,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000925
 expId 925
-fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -7498,7 +7498,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000926
 expId 926
-fileName wgEncodeUwHistoneH7esInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esInputStdAlnRep1.bam,wgEncodeUwHistoneH7esInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -7573,7 +7573,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
 expId 1907
-fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -7598,7 +7598,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
 expId 1907
-fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -7827,7 +7827,7 @@ dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH000973
 expId 973
-fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -7852,7 +7852,7 @@ dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH000973
 expId 973
-fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8081,7 +8081,7 @@ dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH000974
 expId 974
-fileName wgEncodeUwHistoneHaspInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHaspInputStdAlnRep1.bam,wgEncodeUwHistoneHaspInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8156,7 +8156,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000939
 expId 939
-fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8181,7 +8181,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000939
 expId 939
-fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8410,7 +8410,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000940
 expId 940
-fileName wgEncodeUwHistoneHbmecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHbmecInputStdAlnRep1.bam,wgEncodeUwHistoneHbmecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8485,7 +8485,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000941
 expId 941
-fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8510,7 +8510,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000941
 expId 941
-fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8739,7 +8739,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000942
 expId 942
-fileName wgEncodeUwHistoneHcfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfInputStdAlnRep1.bam,wgEncodeUwHistoneHcfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8814,7 +8814,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000943
 expId 943
-fileName wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8941,7 +8941,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000944
 expId 944
-fileName wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam,wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9016,7 +9016,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000945
 expId 945
-fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9041,7 +9041,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000945
 expId 945
-fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9270,7 +9270,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000946
 expId 946
-fileName wgEncodeUwHistoneHcmInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcmInputStdAlnRep1.bam,wgEncodeUwHistoneHcmInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9345,7 +9345,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000947
 expId 947
-fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9370,7 +9370,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000947
 expId 947
-fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9599,7 +9599,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000948
 expId 948
-fileName wgEncodeUwHistoneHcpeInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcpeInputStdAlnRep1.bam,wgEncodeUwHistoneHcpeInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9674,7 +9674,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000949
 expId 949
-fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9699,7 +9699,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000949
 expId 949
-fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9928,7 +9928,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000950
 expId 950
-fileName wgEncodeUwHistoneHct116InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHct116InputStdAlnRep1.bam,wgEncodeUwHistoneHct116InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -10003,7 +10003,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000951
 expId 951
-fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -10028,7 +10028,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000951
 expId 951
-fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -10257,7 +10257,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000952
 expId 952
-fileName wgEncodeUwHistoneHeeInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHeeInputStdAlnRep1.bam,wgEncodeUwHistoneHeeInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -10332,7 +10332,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000953
 expId 953
-fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -10357,7 +10357,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000953
 expId 953
-fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -10587,7 +10587,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000464
 expId 464
-fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam,wgEncodeUwHistoneHek293InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -10664,7 +10664,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000442
 expId 442
-fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -10690,7 +10690,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000442
 expId 442
-fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -10924,7 +10924,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000432
 expId 432
-fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -10950,7 +10950,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000432
 expId 432
-fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -11184,7 +11184,7 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000423
 expId 423
-fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -11210,7 +11210,7 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000423
 expId 423
-fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -11444,7 +11444,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000469
 expId 469
-fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam,wgEncodeUwHistoneHelas3InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -11521,7 +11521,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000433
 expId 433
-fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -11547,7 +11547,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000433
 expId 433
-fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -11781,7 +11781,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000446
 expId 446
-fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -11806,7 +11806,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000446
 expId 446
-fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -12038,7 +12038,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000413
 expId 413
-fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -12064,7 +12064,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000413
 expId 413
-fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -12298,7 +12298,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000470
 expId 470
-fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam,wgEncodeUwHistoneHepg2InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -12374,7 +12374,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002042
 expId 2042
-fileName wgEncodeUwHistoneHffH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHffH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneHffH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18320
@@ -12506,7 +12506,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002043
 expId 2043
-fileName wgEncodeUwHistoneHffInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHffInputStdAlnRep1.bam,wgEncodeUwHistoneHffInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18316
@@ -12584,7 +12584,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
 expId 1908
-fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -12609,7 +12609,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
 expId 1908
-fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -12838,7 +12838,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001896
 expId 1896
-fileName wgEncodeUwHistoneHffmycInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHffmycInputStdAlnRep1.bam,wgEncodeUwHistoneHffmycInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -12914,7 +12914,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000418
 expId 418
-fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -12940,7 +12940,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000418
 expId 418
-fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -13174,7 +13174,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000465
 expId 465
-fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam,wgEncodeUwHistoneHl60InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -13251,7 +13251,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000408
 expId 408
-fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -13381,7 +13381,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000954
 expId 954
-fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -13406,7 +13406,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000954
 expId 954
-fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -13636,7 +13636,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000466
 expId 466
-fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam,wgEncodeUwHistoneHmecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -13712,7 +13712,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000955
 expId 955
-fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -13737,7 +13737,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000955
 expId 955
-fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -13966,7 +13966,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000956
 expId 956
-fileName wgEncodeUwHistoneHmfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHmfInputStdAlnRep1.bam,wgEncodeUwHistoneHmfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14041,7 +14041,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000957
 expId 957
-fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14066,7 +14066,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000957
 expId 957
-fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14295,7 +14295,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000958
 expId 958
-fileName wgEncodeUwHistoneHpafInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHpafInputStdAlnRep1.bam,wgEncodeUwHistoneHpafInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14370,7 +14370,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000959
 expId 959
-fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14395,7 +14395,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000959
 expId 959
-fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14624,7 +14624,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000960
 expId 960
-fileName wgEncodeUwHistoneHpfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHpfInputStdAlnRep1.bam,wgEncodeUwHistoneHpfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14700,7 +14700,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000429
 expId 429
-fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -14726,7 +14726,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000429
 expId 429
-fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -14960,7 +14960,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000430
 expId 430
-fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -14986,7 +14986,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000430
 expId 430
-fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -15220,7 +15220,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000409
 expId 409
-fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -15246,7 +15246,7 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000409
 expId 409
-fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -15480,7 +15480,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000467
 expId 467
-fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam,wgEncodeUwHistoneHreInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -15556,7 +15556,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000961
 expId 961
-fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -15581,7 +15581,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000961
 expId 961
-fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -15810,7 +15810,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000962
 expId 962
-fileName wgEncodeUwHistoneHrpeInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHrpeInputStdAlnRep1.bam,wgEncodeUwHistoneHrpeInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -15886,7 +15886,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000411
 expId 411
-fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -15912,7 +15912,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000411
 expId 411
-fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -16147,7 +16147,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000431
 expId 431
-fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -16173,7 +16173,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000431
 expId 431
-fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -16407,7 +16407,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000412
 expId 412
-fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -16433,7 +16433,7 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000412
 expId 412
-fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -16667,7 +16667,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000468
 expId 468
-fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam,wgEncodeUwHistoneHuvecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -16743,7 +16743,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000963
 expId 963
-fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -16768,7 +16768,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000963
 expId 963
-fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -16997,7 +16997,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000964
 expId 964
-fileName wgEncodeUwHistoneHvmfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHvmfInputStdAlnRep1.bam,wgEncodeUwHistoneHvmfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -17072,7 +17072,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000965
 expId 965
-fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -17097,7 +17097,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000965
 expId 965
-fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -17326,7 +17326,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000966
 expId 966
-fileName wgEncodeUwHistoneJurkatInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneJurkatInputStdAlnRep1.bam,wgEncodeUwHistoneJurkatInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -17402,7 +17402,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000434
 expId 434
-fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -17428,7 +17428,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000434
 expId 434
-fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -17662,7 +17662,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000435
 expId 435
-fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -17688,7 +17688,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000435
 expId 435
-fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -17922,7 +17922,7 @@ dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 dccAccession wgEncodeEH000400
 expId 400
-fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -17948,7 +17948,7 @@ dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
 dccAccession wgEncodeEH000400
 expId 400
-fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -18184,7 +18184,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000471
 expId 471
-fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam,wgEncodeUwHistoneK562InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -18260,7 +18260,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
 expId 1909
-fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -18285,7 +18285,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
 expId 1909
-fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -18514,7 +18514,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001897
 expId 1897
-fileName wgEncodeUwHistoneLncapInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneLncapInputStdAlnRep1.bam,wgEncodeUwHistoneLncapInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -18589,7 +18589,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000967
 expId 967
-fileName wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS16201
@@ -18721,7 +18721,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000967
 expId 967
-fileName wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -18848,7 +18848,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000968
 expId 968
-fileName wgEncodeUwHistoneMcf7InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneMcf7InputStdAlnRep1.bam,wgEncodeUwHistoneMcf7InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -18923,7 +18923,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000969
 expId 969
-fileName wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -19050,7 +19050,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000970
 expId 970
-fileName wgEncodeUwHistoneNb4InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNb4InputStdAlnRep1.bam,wgEncodeUwHistoneNb4InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -19125,7 +19125,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000971
 expId 971
-fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -19150,7 +19150,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000971
 expId 971
-fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -19379,7 +19379,7 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000972
 expId 972
-fileName wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam,wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -19455,7 +19455,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000436
 expId 436
-fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -19481,7 +19481,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000436
 expId 436
-fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -19715,7 +19715,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000414
 expId 414
-fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -19741,7 +19741,7 @@ dateSubmitted 2010-06-15
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000414
 expId 414
-fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -19976,7 +19976,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000415
 expId 415
-fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -20002,7 +20002,7 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000415
 expId 415
-fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -20236,7 +20236,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000472
 expId 472
-fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam,wgEncodeUwHistoneNhekInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -20312,7 +20312,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
 expId 1910
-fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -20337,7 +20337,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
 expId 1910
-fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -20566,7 +20566,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001899
 expId 1899
-fileName wgEncodeUwHistoneNhlfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNhlfInputStdAlnRep1.bam,wgEncodeUwHistoneNhlfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -20641,7 +20641,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
 expId 1911
-fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam,wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -20666,7 +20666,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
 expId 1911
-fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam,wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -20895,7 +20895,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001900
 expId 1900
-fileName wgEncodeUwHistonePanc1InputStdAlnRep1.bam
+fileName wgEncodeUwHistonePanc1InputStdAlnRep1.bam,wgEncodeUwHistonePanc1InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -20970,7 +20970,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
 expId 2044
-fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneRptecH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18340
@@ -20996,7 +20996,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
 expId 2044
-fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneRptecH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS18339
@@ -21234,7 +21234,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002045
 expId 2045
-fileName wgEncodeUwHistoneRptecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneRptecInputStdAlnRep1.bam,wgEncodeUwHistoneRptecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18336
@@ -21313,7 +21313,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000420
 expId 420
-fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -21339,7 +21339,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000420
 expId 420
-fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -21573,7 +21573,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000438
 expId 438
-fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -21599,7 +21599,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000438
 expId 438
-fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -21833,7 +21833,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000421
 expId 421
-fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -21859,7 +21859,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000421
 expId 421
-fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -22093,7 +22093,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000473
 expId 473
-fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam,wgEncodeUwHistoneSaecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -22169,7 +22169,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
 expId 2046
-fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS16211
@@ -22195,7 +22195,7 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
 expId 2046
-fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS16212
@@ -22433,7 +22433,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
 expId 1912
-fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -22458,7 +22458,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
 expId 1912
-fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -22687,7 +22687,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001901
 expId 1901
-fileName wgEncodeUwHistoneSknmcInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneSknmcInputStdAlnRep1.bam,wgEncodeUwHistoneSknmcInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -22763,7 +22763,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000440
 expId 440
-fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -22789,7 +22789,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000440
 expId 440
-fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -23023,7 +23023,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000441
 expId 441
-fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -23049,7 +23049,7 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000441
 expId 441
-fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -23283,7 +23283,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000422
 expId 422
-fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -23309,7 +23309,7 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000422
 expId 422
-fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -23543,7 +23543,7 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000474
 expId 474
-fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam,wgEncodeUwHistoneSknshraInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -23619,7 +23619,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
 expId 1913
-fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -23644,7 +23644,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
 expId 1913
-fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -23873,7 +23873,7 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
 expId 2047
-fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1.bam,wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18355
@@ -23900,7 +23900,7 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
 expId 2047
-fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2.bam
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2.bam,wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS18354
@@ -24147,7 +24147,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
 expId 1914
-fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -24172,7 +24172,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
 expId 1914
-fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -24401,7 +24401,7 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002048
 expId 2048
-fileName wgEncodeUwHistoneWi38InputOhtamStdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38InputOhtamStdAlnRep1.bam,wgEncodeUwHistoneWi38InputOhtamStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18351
@@ -24482,7 +24482,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001903
 expId 1903
-fileName wgEncodeUwHistoneWi38InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38InputStdAlnRep1.bam,wgEncodeUwHistoneWi38InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
