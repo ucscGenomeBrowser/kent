@@ -8274,6 +8274,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 
 ############################################################################
 # SEGMENTAL DUPLICATIONS (2010-02-02 - 2010-02-04, hartera, DONE)
+# (2011-09-26, Fan, REBUILT using corrected data from provider)
 # File emailed from Tin Louie <tinlouie at u.washington.edu>
 # in Evan Eichler's lab on 01/28/10. This is a data update since it was
 # thought that the last data set was incorrect so the pipeline had to be
@@ -8296,20 +8297,19 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
 # 2010-02-09 Received new data on 02/08/10 as there were more errors in the
 # code that caused the data to have empty fields.
 # 2010-02-19 Changed the posBasesHit column values to match those for hg18.
+# 2011-09-26 Rebuilt, using corrected (10th col) from data provider.
 # In hg18, they are all 1000, but this is meaningless. 
-    mkdir /hive/data/genomes/hg19/bed/genomicSuperDups
-    cd /hive/data/genomes/hg19/bed/genomicSuperDups
-    # Remove old data
-    rm *
+    mkdir /hive/data/genomes/hg19/bed/genomicSuperDups/0926_2011
+    cd /hive/data/genomes/hg19/bed/genomicSuperDups/0926_2011
     wget --timestamping \
-        ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.tab.gz    
-    gunzip hg19genomicSuperDups.tab.gz
+         ftp://mesh.gs.washington.edu/pub/UCSC/hg19genomicSuperDups.fixed.tab.gz
+    gunzip hg19genomicSuperDups.fixed.tab.gz
     # Fix incorrect chromosome names in data. Check both chrom and otherChrom.
     # Previously, found several cases where the last letter of random was
     # missing for the names of the random contigs. They all look good this
     # time.
-    awk '{print $1}' hg19genomicSuperDups.tab | sort | uniq > chroms
-    awk '{print $7}' hg19genomicSuperDups.tab | sort | uniq > otherChroms
+    awk '{print $1}' hg19genomicSuperDups.fixed.tab | sort | uniq > chroms
+    awk '{print $7}' hg19genomicSuperDups.fixed.tab | sort | uniq > otherChroms
     hgsql -Ne 'select chrom from chromInfo;' hg19 | sort | uniq > chromInfo.txt 
     comm -23 chroms chromInfo.txt
     comm -23 otherChroms chromInfo.txt
@@ -8321,7 +8321,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # to be necessary here, but doesn't hurt and may be useful in
     # future builds.
     hgsql -e 'drop table genomicSuperDups;' hg19
-    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups.tab \
+    sed -e 's/\t_\t/\t-\t/' hg19genomicSuperDups.fixed.tab \
     | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' \
     | hgLoadBed hg19 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
@@ -8347,8 +8347,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
      # 2010-02-19 Changed the posBasesHit column to be 1000. Checked with 
      # data provider about doing this so that the values are the same as for
      # those in the hg18 table.
-     hgsql -e 'update genomicSuperDups set posBasesHit = 1000;' hg19
-
+     # hgsql -e 'update genomicSuperDups set posBasesHit = 1000;' hg19
+# New corrected data fixed the above problem. 
 ############################################################################
 # ADD LINK TO GENENETWORK (DONE. 12/02/09 Fan).
 
