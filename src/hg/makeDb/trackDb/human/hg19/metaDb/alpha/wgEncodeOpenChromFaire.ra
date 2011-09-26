@@ -14,7 +14,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
-fileName wgEncodeOpenChromFaireA549AlnRep1.bam
+fileName wgEncodeOpenChromFaireA549AlnRep1.bam,wgEncodeOpenChromFaireA549AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -36,7 +36,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001126
 expId 1126
-fileName wgEncodeOpenChromFaireA549AlnRep2.bam
+fileName wgEncodeOpenChromFaireA549AlnRep2.bam,wgEncodeOpenChromFaireA549AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -166,7 +166,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
-fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
+fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam,wgEncodeOpenChromFaireAstrocyAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -189,7 +189,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
-fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
+fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam,wgEncodeOpenChromFaireAstrocyAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -325,7 +325,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
-fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
+fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam,wgEncodeOpenChromFaireGlioblaAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -347,7 +347,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
-fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
+fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam,wgEncodeOpenChromFaireGlioblaAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -369,7 +369,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001119
 expId 1119
-fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
+fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam,wgEncodeOpenChromFaireGlioblaAlnRep3.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -521,7 +521,7 @@ dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
-fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam
+fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam,wgEncodeOpenChromFaireGm12878AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -544,7 +544,7 @@ dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
-fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam
+fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam,wgEncodeOpenChromFaireGm12878AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -567,7 +567,7 @@ dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 dccAccession wgEncodeEH000533
 expId 533
-fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam
+fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam,wgEncodeOpenChromFaireGm12878AlnRep3.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -744,7 +744,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
-fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
+fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam,wgEncodeOpenChromFaireGm12891AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -766,7 +766,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001116
 expId 1116
-fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
+fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam,wgEncodeOpenChromFaireGm12891AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -896,7 +896,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
-fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
+fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam,wgEncodeOpenChromFaireGm12892AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -918,7 +918,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001117
 expId 1117
-fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
+fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam,wgEncodeOpenChromFaireGm12892AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1070,7 +1070,7 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
-fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam
+fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam,wgEncodeOpenChromFaireGm18507AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1093,7 +1093,7 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000586
 expId 586
-fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam
+fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam,wgEncodeOpenChromFaireGm18507AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1252,7 +1252,7 @@ dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
-fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam
+fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam,wgEncodeOpenChromFaireGm19239AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1275,7 +1275,7 @@ dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000580
 expId 580
-fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam
+fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam,wgEncodeOpenChromFaireGm19239AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1434,7 +1434,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
-fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam
+fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam,wgEncodeOpenChromFaireH1hescAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1457,7 +1457,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000557
 expId 557
-fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam
+fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam,wgEncodeOpenChromFaireH1hescAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1595,7 +1595,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
-fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam
+fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam,wgEncodeOpenChromFaireHelas3AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1618,7 +1618,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000544
 expId 544
-fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam
+fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam,wgEncodeOpenChromFaireHelas3AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1664,7 +1664,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
-fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam
+fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam,wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1688,7 +1688,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000587
 expId 587
-fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam
+fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam,wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1830,7 +1830,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
-fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam
+fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam,wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -1854,7 +1854,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000588
 expId 588
-fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam
+fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam,wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2107,7 +2107,7 @@ dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
-fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam
+fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam,wgEncodeOpenChromFaireHepg2AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2130,7 +2130,7 @@ dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
-fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam
+fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam,wgEncodeOpenChromFaireHepg2AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2153,7 +2153,7 @@ dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000546
 expId 546
-fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam
+fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam,wgEncodeOpenChromFaireHepg2AlnRep3.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2331,7 +2331,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
-fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam
+fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam,wgEncodeOpenChromFaireHtr8AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2353,7 +2353,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001124
 expId 1124
-fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam
+fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam,wgEncodeOpenChromFaireHtr8AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2484,7 +2484,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
-fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam
+fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam,wgEncodeOpenChromFaireHuvecAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2507,7 +2507,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000549
 expId 549
-fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam
+fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam,wgEncodeOpenChromFaireHuvecAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2666,7 +2666,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
-fileName wgEncodeOpenChromFaireK562AlnRep1.bam
+fileName wgEncodeOpenChromFaireK562AlnRep1.bam,wgEncodeOpenChromFaireK562AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2689,7 +2689,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
 dccAccession wgEncodeEH000531
 expId 531
-fileName wgEncodeOpenChromFaireK562AlnRep2.bam
+fileName wgEncodeOpenChromFaireK562AlnRep2.bam,wgEncodeOpenChromFaireK562AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2734,7 +2734,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
-fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
+fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam,wgEncodeOpenChromFaireK562NabutAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2757,7 +2757,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001120
 expId 1120
-fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
+fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam,wgEncodeOpenChromFaireK562NabutAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2893,7 +2893,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
-fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
+fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam,wgEncodeOpenChromFaireK562OhureaAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -2916,7 +2916,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001121
 expId 1121
-fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
+fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam,wgEncodeOpenChromFaireK562OhureaAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3162,7 +3162,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
-fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam
+fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam,wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3185,7 +3185,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001125
 expId 1125
-fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam
+fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam,wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3321,7 +3321,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
-fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
+fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam,wgEncodeOpenChromFaireMedulloAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3343,7 +3343,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001118
 expId 1118
-fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
+fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam,wgEncodeOpenChromFaireMedulloAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3473,7 +3473,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
-fileName wgEncodeOpenChromFaireNhaAlnRep1.bam
+fileName wgEncodeOpenChromFaireNhaAlnRep1.bam,wgEncodeOpenChromFaireNhaAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3495,7 +3495,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001115
 expId 1115
-fileName wgEncodeOpenChromFaireNhaAlnRep2.bam
+fileName wgEncodeOpenChromFaireNhaAlnRep2.bam,wgEncodeOpenChromFaireNhaAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3625,7 +3625,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
-fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
+fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam,wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3647,7 +3647,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000604
 expId 604
-fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
+fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam,wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3784,7 +3784,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
-fileName wgEncodeOpenChromFaireNhekAlnRep1.bam
+fileName wgEncodeOpenChromFaireNhekAlnRep1.bam,wgEncodeOpenChromFaireNhekAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3807,7 +3807,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000558
 expId 558
-fileName wgEncodeOpenChromFaireNhekAlnRep2.bam
+fileName wgEncodeOpenChromFaireNhekAlnRep2.bam,wgEncodeOpenChromFaireNhekAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -3966,7 +3966,7 @@ dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
 dccAccession wgEncodeEH000573
 expId 573
-fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam
+fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam,wgEncodeOpenChromFairePanisletsAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4080,7 +4080,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
-fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam
+fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam,wgEncodeOpenChromFaireUrotsaAlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4102,7 +4102,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001122
 expId 1122
-fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam
+fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam,wgEncodeOpenChromFaireUrotsaAlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4232,7 +4232,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
-fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam
+fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam,wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
@@ -4255,7 +4255,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001123
 expId 1123
-fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam
+fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam,wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam.bai
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1

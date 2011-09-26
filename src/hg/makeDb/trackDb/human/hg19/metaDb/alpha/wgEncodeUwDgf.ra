@@ -14,7 +14,7 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000841
 expId 841
-fileName wgEncodeUwDgfAoafAln.bam
+fileName wgEncodeUwDgfAoafAln.bam,wgEncodeUwDgfAoafAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -137,7 +137,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000479
 expId 479
-fileName wgEncodeUwDgfGm06990Aln.bam
+fileName wgEncodeUwDgfGm06990Aln.bam,wgEncodeUwDgfGm06990Aln.bam.bai
 geoSampleAccession GSM646568
 grant Stam
 lab UW
@@ -269,7 +269,7 @@ dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH000834
 expId 834
-fileName wgEncodeUwDgfH7esAln.bam
+fileName wgEncodeUwDgfH7esAln.bam,wgEncodeUwDgfH7esAln.bam.bai
 geoSampleAccession GSM646563
 grant Stam
 lab UW
@@ -398,7 +398,7 @@ dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH000835
 expId 835
-fileName wgEncodeUwDgfHaeAln.bam
+fileName wgEncodeUwDgfHaeAln.bam,wgEncodeUwDgfHaeAln.bam.bai
 geoSampleAccession GSM646560
 grant Stam
 lab UW
@@ -527,7 +527,7 @@ dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 dccAccession wgEncodeEH000836
 expId 836
-fileName wgEncodeUwDgfHcpeAln.bam
+fileName wgEncodeUwDgfHcpeAln.bam,wgEncodeUwDgfHcpeAln.bam.bai
 geoSampleAccession GSM646565
 grant Stam
 lab UW
@@ -657,7 +657,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000476
 expId 476
-fileName wgEncodeUwDgfHepg2Aln.bam
+fileName wgEncodeUwDgfHepg2Aln.bam,wgEncodeUwDgfHepg2Aln.bam.bai
 geoSampleAccession GSM646559
 grant Stam
 lab UW
@@ -789,7 +789,7 @@ dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 dccAccession wgEncodeEH000837
 expId 837
-fileName wgEncodeUwDgfHmfAln.bam
+fileName wgEncodeUwDgfHmfAln.bam,wgEncodeUwDgfHmfAln.bam.bai
 geoSampleAccession GSM646561
 grant Stam
 lab UW
@@ -918,7 +918,7 @@ dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 dccAccession wgEncodeEH000838
 expId 838
-fileName wgEncodeUwDgfHmvecdbladAln.bam
+fileName wgEncodeUwDgfHmvecdbladAln.bam,wgEncodeUwDgfHmvecdbladAln.bam.bai
 geoSampleAccession GSM646570
 grant Stam
 lab UW
@@ -1047,7 +1047,7 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000842
 expId 842
-fileName wgEncodeUwDgfHpafAln.bam
+fileName wgEncodeUwDgfHpafAln.bam,wgEncodeUwDgfHpafAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1169,7 +1169,7 @@ dateSubmitted 2011-01-07
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000843
 expId 843
-fileName wgEncodeUwDgfHpdlfAln.bam
+fileName wgEncodeUwDgfHpdlfAln.bam,wgEncodeUwDgfHpdlfAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1291,7 +1291,7 @@ dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000844
 expId 844
-fileName wgEncodeUwDgfHpfAln.bam
+fileName wgEncodeUwDgfHpfAln.bam,wgEncodeUwDgfHpfAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1413,7 +1413,7 @@ dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000845
 expId 845
-fileName wgEncodeUwDgfHrceAln.bam
+fileName wgEncodeUwDgfHrceAln.bam,wgEncodeUwDgfHrceAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1536,7 +1536,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000480
 expId 480
-fileName wgEncodeUwDgfK562Aln.bam
+fileName wgEncodeUwDgfK562Aln.bam,wgEncodeUwDgfK562Aln.bam.bai
 geoSampleAccession GSM646567
 grant Stam
 lab UW
@@ -1668,7 +1668,7 @@ dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000846
 expId 846
-fileName wgEncodeUwDgfNhaAln.bam
+fileName wgEncodeUwDgfNhaAln.bam,wgEncodeUwDgfNhaAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -1790,7 +1790,7 @@ dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH000839
 expId 839
-fileName wgEncodeUwDgfNhdfadAln.bam
+fileName wgEncodeUwDgfNhdfadAln.bam,wgEncodeUwDgfNhdfadAln.bam.bai
 geoSampleAccession GSM646564
 grant Stam
 lab UW
@@ -1919,7 +1919,7 @@ dateSubmitted 2011-01-08
 dateUnrestricted 2011-10-07
 dccAccession wgEncodeEH000847
 expId 847
-fileName wgEncodeUwDgfSaecAln.bam
+fileName wgEncodeUwDgfSaecAln.bam,wgEncodeUwDgfSaecAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2041,7 +2041,7 @@ dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH000840
 expId 840
-fileName wgEncodeUwDgfSkmcAln.bam
+fileName wgEncodeUwDgfSkmcAln.bam,wgEncodeUwDgfSkmcAln.bam.bai
 geoSampleAccession GSM646562
 grant Stam
 lab UW
@@ -2171,7 +2171,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000477
 expId 477
-fileName wgEncodeUwDgfSknshraAln.bam
+fileName wgEncodeUwDgfSknshraAln.bam,wgEncodeUwDgfSknshraAln.bam.bai
 geoSampleAccession GSM646566
 grant Stam
 lab UW
@@ -2304,7 +2304,7 @@ dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 dccAccession wgEncodeEH000478
 expId 478
-fileName wgEncodeUwDgfTh1Aln.bam
+fileName wgEncodeUwDgfTh1Aln.bam,wgEncodeUwDgfTh1Aln.bam.bai
 geoSampleAccession GSM646569
 grant Stam
 lab UW

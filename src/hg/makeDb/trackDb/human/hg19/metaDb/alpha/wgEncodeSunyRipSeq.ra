@@ -14,7 +14,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000796
 expId 796
-fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam,wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -36,7 +36,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000796
 expId 796
-fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam,wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -165,7 +165,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000797
 expId 797
-fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam,wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -187,7 +187,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000797
 expId 797
-fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam,wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -316,7 +316,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000798
 expId 798
-fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam,wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 md5sum 520ae680dd974c1cc5e25053f1a4e6dd,c244eebe17cf9fee96014eacca38fae9
@@ -337,7 +337,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000798
 expId 798
-fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam,wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 md5sum d4bbb373f592be5c808ada966f9c1952,4eba7dc042ad7aac8abe32ade038b83b
@@ -460,7 +460,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000799
 expId 799
-fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam,wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -482,7 +482,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000799
 expId 799
-fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam,wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -590,7 +590,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000793
 expId 793
-fileName wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam,wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -612,7 +612,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000793
 expId 793
-fileName wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam,wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -741,7 +741,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000794
 expId 794
-fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam,wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -763,7 +763,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000794
 expId 794
-fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam,wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -892,7 +892,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000795
 expId 795
-fileName wgEncodeSunyRipSeqK562RipinputAlnRep1.bam
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep1.bam,wgEncodeSunyRipSeqK562RipinputAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 md5sum b9946f5c231fa041955b56c38f1c3063,9effbe44d0fa0ccbcc3560f76f282024
@@ -913,7 +913,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000795
 expId 795
-fileName wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep2.bam,wgEncodeSunyRipSeqK562RipinputAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 md5sum 95a97446ee0832de77593175bd94c9ce,01a386791aa4e685777b3fdc292ec3fb
@@ -1036,7 +1036,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000800
 expId 800
-fileName wgEncodeSunyRipSeqK562T7tagAlnRep1.bam
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep1.bam,wgEncodeSunyRipSeqK562T7tagAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -1058,7 +1058,7 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000800
 expId 800
-fileName wgEncodeSunyRipSeqK562T7tagAlnRep2.bam
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep2.bam,wgEncodeSunyRipSeqK562T7tagAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody

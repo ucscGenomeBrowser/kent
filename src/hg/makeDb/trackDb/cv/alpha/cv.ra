@@ -3131,7 +3131,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Monocytes-CD14+_RO01746
-tag MONOCD14
+tag MONOCD14RO1746
 type Cell Line
 #tier 2
 tier 3
