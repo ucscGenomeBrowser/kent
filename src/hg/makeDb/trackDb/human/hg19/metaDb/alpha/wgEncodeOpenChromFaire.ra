@@ -3464,7 +3464,7 @@ view Signal
 
 metaObject wgEncodeOpenChromFaireNhaAlnRep1
 objType file
-cell NH-a
+cell NH-A
 composite wgEncodeOpenChromFaire
 controlId generic_male
 dataType FaireSeq
@@ -3486,7 +3486,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromFaireNhaAlnRep2
 objType file
-cell NH-a
+cell NH-A
 composite wgEncodeOpenChromFaire
 controlId generic_male
 dataType FaireSeq
@@ -3508,7 +3508,7 @@ view Alignments
 
 metaObject wgEncodeOpenChromFaireNhaBaseOverlapSignal
 objType table
-cell NH-a
+cell NH-A
 composite wgEncodeOpenChromFaire
 controlId generic_male
 dataType FaireSeq
@@ -3530,7 +3530,7 @@ view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromFaireNhaPk
 objType table
-cell NH-a
+cell NH-A
 composite wgEncodeOpenChromFaire
 controlId generic_male
 dataType FaireSeq
@@ -3552,7 +3552,7 @@ view Peaks
 
 metaObject wgEncodeOpenChromFaireNhaRawDataRep1
 objType file
-cell NH-a
+cell NH-A
 composite wgEncodeOpenChromFaire
 controlId generic_male
 dataType FaireSeq
@@ -3573,7 +3573,7 @@ view RawData
 
 metaObject wgEncodeOpenChromFaireNhaRawDataRep2
 objType file
-cell NH-a
+cell NH-A
 composite wgEncodeOpenChromFaire
 controlId generic_male
 dataType FaireSeq
@@ -3594,7 +3594,7 @@ view RawData
 
 metaObject wgEncodeOpenChromFaireNhaSig
 objType table
-cell NH-a
+cell NH-A
 composite wgEncodeOpenChromFaire
 controlId generic_male
 dataType FaireSeq
@@ -4380,4 +4380,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 161521642
+# MAGIC: 161521194

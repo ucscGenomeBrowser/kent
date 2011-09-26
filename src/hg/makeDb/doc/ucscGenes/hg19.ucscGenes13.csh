@@ -27,7 +27,7 @@ set RatDb = Rn4
 set fishDb = danRer7
 set flyDb = dm3
 set wormDb = ce9
-set yeastDb = sacCer3
+set yeastDb = sacCer2
 
 # The net alignment for the closely-related species indicated in $xdb
 set xdbNetDir = $genomes/$db/bed/lastz.${xdb}/axtChain
@@ -65,11 +65,11 @@ set vgTextDbs = (mm8 mm9 hg18 $tempDb)
 # Proteins in various species
 set tempFa = $dir/ucscGenes.faa
 set xdbFa = $genomes/$xdb/bed/ucsc.12/ucscGenes.faa
-set ratFa = $genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
+set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep210.faa
-set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/$yeastDb.sgd.faa
+set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
@@ -950,8 +950,6 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET
 
 
 # Run nice Perl script to make all protein blast runs for
@@ -1056,9 +1054,6 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-		
 
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
@@ -1067,8 +1062,8 @@ mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
-utrFa $tempDb knownGene utr3 utr3/utr.fa
-utrFa $tempDb knownGene utr5 utr5/utr.fa
+utrFa $db knownGene utr3 utr3/utr.fa
+utrFa $db knownGene utr5 utr5/utr.fa
 
 # Split up files and make files that define job.
 faSplit sequence utr3/utr.fa 10000 utr3/split/s
@@ -1283,8 +1278,8 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
@@ -1339,7 +1334,9 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-exit $status
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms
