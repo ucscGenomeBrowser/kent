@@ -52,7 +52,8 @@ while (row1 != NULL)
     /* get corresponding RefSeq data, ordered by length of the gene */
     sprintf(query2,
     // added mrnaAcc as the 2nd ordering condition
-    "select r.chrom, r.txStart, r.txEnd, r.name, r.txEnd-r.txStart, mrnaAcc from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s order by txEnd-txStart desc, mrnaAcc desc", geneId);
+    // added txStart as the 3rd ordering condition
+    "select r.chrom, r.txStart, r.txEnd, r.name, r.txEnd-r.txStart, mrnaAcc from refGene r, refLink where mrnaAcc=r.name and locusLinkId = %s order by txEnd-txStart desc, mrnaAcc desc, txStart asc", geneId);
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
     
