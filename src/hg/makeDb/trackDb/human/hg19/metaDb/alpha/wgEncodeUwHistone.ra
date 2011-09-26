@@ -4786,7 +4786,7 @@ labExpId RO 01794
 labVersion Bowtie 0.12.7
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 setType input
 subId 4636
 view Alignments
@@ -4808,7 +4808,7 @@ lab UW
 labExpId RO 01794
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 setType input
 subId 4636
 view RawData
@@ -4831,7 +4831,7 @@ labExpId RO 01794
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 setType input
 subId 4636
 tableName wgEncodeUwHistoneCd20ro01794InputStdRawRep2
@@ -25336,4 +25336,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -2056112625
+# MAGIC: -2056112631
