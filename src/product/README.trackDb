@@ -9,7 +9,13 @@ A track needs two items to make it exist in the browser:
 
 1.  A database table with the track data
 2.  An entry in a database table: trackDb_localTracks
-	(built from track specifications in your trackDb.ra file)
+	Built from track specifications in your trackDb.ra file.
+	Please note the description of trackDb.ra entries in the
+	source tree: src/hg/makeDb/README
+	The correspondence between the database table and the trackDb.ra
+	definition is in the name used on the 'track' line in the
+	trackDb.ra file.  Your database table name is used on the 'track'
+	definition line.
 
 Almost all of the database tables have specific loader
 programs to load the track data.  The loader programs
