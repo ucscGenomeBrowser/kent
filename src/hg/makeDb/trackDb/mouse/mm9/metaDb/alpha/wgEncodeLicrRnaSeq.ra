@@ -19,7 +19,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4G
 localization cell
-md5sum bam=14237a1ad3e88c4963346688087910d1,bai=6af4b8e00935a5c2146ae5b5a3a13f6f
+md5sum 14237a1ad3e88c4963346688087910d1,6af4b8e00935a5c2146ae5b5a3a13f6f
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -48,7 +48,7 @@ grant Ren
 lab LICR-m
 labVersion 09/08/10 Lane 4H
 localization cell
-md5sum bam=7ed3746b848be72621e6a4ccf231575f,bai=d3a25f473d4d4668d9d440c6a65d831c
+md5sum 7ed3746b848be72621e6a4ccf231575f,d3a25f473d4d4668d9d440c6a65d831c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -191,7 +191,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 2
 localization cell
-md5sum bam=8da723d235d2b5e19950f5d5ca45394e,bai=d5a85a2216c7939b90316f8667512907
+md5sum 8da723d235d2b5e19950f5d5ca45394e,d5a85a2216c7939b90316f8667512907
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -220,7 +220,7 @@ grant Ren
 lab LICR-m
 labVersion 03/16/10 Lane 3
 localization cell
-md5sum bam=5027d18a5bf6319620e935863a178d0e,bai=d835d29b627a329e0baeec74bfcf7817
+md5sum 5027d18a5bf6319620e935863a178d0e,d835d29b627a329e0baeec74bfcf7817
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -363,7 +363,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 1
 localization cell
-md5sum bam=6a770ca539e22727b255ab31d14d6630,bai=8f8ac55627b64f3cd532ed7d92a787f3
+md5sum 6a770ca539e22727b255ab31d14d6630,8f8ac55627b64f3cd532ed7d92a787f3
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -392,7 +392,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 2
 localization cell
-md5sum bam=ffb8bbd7bba53b1199d5357901e76086,bai=a07a095bdb9fb742063641bd5c78451f
+md5sum ffb8bbd7bba53b1199d5357901e76086,a07a095bdb9fb742063641bd5c78451f
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -535,7 +535,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4A
 localization cell
-md5sum bam=b3333bb37c9e71cc87bcdec4580c60d8,bai=7e3b532ecf75e4e6504f77a5eabccc7a
+md5sum b3333bb37c9e71cc87bcdec4580c60d8,7e3b532ecf75e4e6504f77a5eabccc7a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -564,7 +564,7 @@ grant Ren
 lab LICR-m
 labVersion 10/13/10 Lane 4B
 localization cell
-md5sum bam=f9ed43263e65d56caf9d9010f87a0ea8,bai=28bd15def9af947611341b37927357fe
+md5sum f9ed43263e65d56caf9d9010f87a0ea8,28bd15def9af947611341b37927357fe
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -707,7 +707,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 1
 localization cell
-md5sum bam=f1ed78a6f5a5ad6653978b552d8fce89,bai=f94072db798f77ab8bfbb31090c79939
+md5sum f1ed78a6f5a5ad6653978b552d8fce89,f94072db798f77ab8bfbb31090c79939
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -736,7 +736,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 2
 localization cell
-md5sum bam=14b61a5ef161c7db658efabd7ef0da38,bai=815ae8f340492f2a06afcba5f3b41f2c
+md5sum 14b61a5ef161c7db658efabd7ef0da38,815ae8f340492f2a06afcba5f3b41f2c
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -879,7 +879,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 3
 localization cell
-md5sum bam=22b8617e5391dcf7246784fe82c154bc,bai=c86f3a70d91e0a6d2ecf96afc70fbc37
+md5sum 22b8617e5391dcf7246784fe82c154bc,c86f3a70d91e0a6d2ecf96afc70fbc37
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -908,7 +908,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 4
 localization cell
-md5sum bam=eb4c39ed1151d670ea90e922ebec56ff,bai=f394e17b499f259ae5fa6ab1cf7ee64d
+md5sum eb4c39ed1151d670ea90e922ebec56ff,f394e17b499f259ae5fa6ab1cf7ee64d
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1051,7 +1051,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 3
 localization cell
-md5sum bam=8190233ef599431709351de3690fcffc,bai=ffe95756d895aeec9b6a3ec09307f16e
+md5sum 8190233ef599431709351de3690fcffc,ffe95756d895aeec9b6a3ec09307f16e
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1080,7 +1080,7 @@ grant Ren
 lab LICR-m
 labVersion 03/02/10 Lane 4
 localization cell
-md5sum bam=633a3b0d8ab37f7cac048fa31d8ca554,bai=2c606d5efeacecc64590c05aec3e0e0b
+md5sum 633a3b0d8ab37f7cac048fa31d8ca554,2c606d5efeacecc64590c05aec3e0e0b
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1223,7 +1223,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 5
 localization cell
-md5sum bam=49f7bf22c064adca9c1308b064367a85,bai=9ccca606351138abc58b68a01f11bf4a
+md5sum 49f7bf22c064adca9c1308b064367a85,9ccca606351138abc58b68a01f11bf4a
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1252,7 +1252,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 6
 localization cell
-md5sum bam=733c0c951014489448774e26775a6b7a,bai=7e58d4676d8c7cbe19d70102bd2d0386
+md5sum 733c0c951014489448774e26775a6b7a,7e58d4676d8c7cbe19d70102bd2d0386
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1395,7 +1395,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 5
 localization cell
-md5sum bam=5a06b9f4580636592c7f92080da63f46,bai=59e5e3eb4f542b22b3b6745e403c7ebe
+md5sum 5a06b9f4580636592c7f92080da63f46,59e5e3eb4f542b22b3b6745e403c7ebe
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1424,7 +1424,7 @@ grant Ren
 lab LICR-m
 labVersion 03/15/10 Lane 6
 localization cell
-md5sum bam=b479c86706e2f4c016c1872375b804db,bai=65e2ddec8d81b43c5fa2e2a249ade4fd
+md5sum b479c86706e2f4c016c1872375b804db,65e2ddec8d81b43c5fa2e2a249ade4fd
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1567,7 +1567,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 3
 localization cell
-md5sum bam=ff20f1d7352d444de01b67a93732eefe,bai=d30f2b5d68b88c4689814362290271f3
+md5sum ff20f1d7352d444de01b67a93732eefe,d30f2b5d68b88c4689814362290271f3
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1596,7 +1596,7 @@ grant Ren
 lab LICR-m
 labVersion 03/10/10 Lane 4
 localization cell
-md5sum bam=92dfac8fda769647565582c9f44d46bb,bai=13628f1af0f460d431621ac74d8a7841
+md5sum 92dfac8fda769647565582c9f44d46bb,13628f1af0f460d431621ac74d8a7841
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1723,4 +1723,4 @@ tableName wgEncodeLicrRnaSeqSpleenCellPapMAdult8wksC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: -822475310
+# MAGIC: -822489830

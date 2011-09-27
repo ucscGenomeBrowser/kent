@@ -52,18 +52,19 @@ include wgEncodeUw5C.ra alpha
 include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
-include wgEncodeDukeAffyExon.ra 
-
+include wgEncodeDukeAffyExon.ra beta,public
+include wgEncodeDukeAffyExon.new.ra alpha
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
-#UNC FAIRE (wrangler: tim)
+#UNC FAIRE (wrangler: Matt)
 include wgEncodeOpenChromFaire.new.ra alpha
 include wgEncodeOpenChromFaire.ra beta,public
 
-#Open Chrom Synth (wrangler: tim)
-include wgEncodeOpenChromSynth.ra
+#Open Chrom Synth (wrangler: Matt)
+include wgEncodeOpenChromSynth.new.ra alpha
+include wgEncodeOpenChromSynth.ra beta,public
 
-#Duke DNaseI HS (wrangler: tim)
+#Duke DNaseI HS (wrangler: Matt)
 include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
@@ -122,8 +123,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra alpha
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra beta,public
-include wgEncodeHaibMethylRrbs.new.ra alpha
+include wgEncodeHaibMethylRrbs.ra public
+include wgEncodeHaibMethylRrbs.new.ra alpha,beta
 
 
 
@@ -132,11 +133,11 @@ include wgEncodeHaibMethylRrbs.new.ra alpha
 
 # ENCODE HISTONE --------------------------------------
 
-#Broad Histone (wrangler: Tim)
+#Broad Histone (wrangler: Matt)
 include wgEncodeBroadHistone.new.ra alpha
 include wgEncodeBroadHistone.ra beta,public
 
-#Broad HMM (wrangler: Tim)
+#Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
@@ -154,7 +155,7 @@ include wgEncodeSydhHistone.new.ra alpha
 include wgEncodeUwTfbs.new.ra alpha
 include wgEncodeUwTfbs.ra beta,public
 
-#UTA TFBS (wrangler: Tim)
+#UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.new.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
@@ -172,8 +173,8 @@ include wgEncodeUchicagoTfbs.ra
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra beta,public
-include wgEncodeSunyAlbanyGeneSt.new.ra alpha
+include wgEncodeSunyAlbanyGeneSt.ra public
+include wgEncodeSunyAlbanyGeneSt.new.ra alpha,beta
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra

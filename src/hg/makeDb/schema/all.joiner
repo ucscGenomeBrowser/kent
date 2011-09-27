@@ -350,6 +350,7 @@ identifier ncbiTaxon
 identifier tRNAsId
 "ID of tRNAs"
     $tRNAsDbs.tRNAs.name dupeOk
+    $kgDb3.kgXref.tRnaName
 
 # CGAP SAGE track Stuff
 
@@ -1634,6 +1635,11 @@ identifier knownXref
     $kgDb.kgXref.spID  dupeOk
     proteome.spXref2.accession
     proteome.hgnc.uniProt
+
+identifier tRNAName
+"tRNA track name"
+    $kgDb3.kgXref.tRname
+    $kgDb3.tRNAsDbs.tRNAs.name
 
 identifier ccdsGeneId
 "CCDS Gene ID"

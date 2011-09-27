@@ -16,14 +16,14 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000269
 expId 269
-fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam,wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.bai
 geoSampleAccession GSM672834
 grant Gingeras
 lab GIS
 labExpId crg-9
 labProtocolId gen0106C+
 localization cytosol
-md5sum bam=cbe74aad388e38dfb2ca4da93f6a9fee,bai=47e1118bdfe446d7951914f6e6e91db0
+md5sum cbe74aad388e38dfb2ca4da93f6a9fee,47e1118bdfe446d7951914f6e6e91db0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -154,14 +154,14 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000270
 expId 270
-fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
+fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam,wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam.bai
 geoSampleAccession GSM672836
 grant Gingeras
 lab GIS
 labExpId crg-16
 labProtocolId gen0115WC+
 localization cell
-md5sum bam=7081f6c40227464a083a267cfae0793c,bai=442bfbe42b283c7aabcdca3b434eeb7c
+md5sum 7081f6c40227464a083a267cfae0793c,442bfbe42b283c7aabcdca3b434eeb7c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -265,14 +265,14 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000271
 expId 271
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam,wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam.bai
 geoSampleAccession GSM672833
 grant Gingeras
 lab GIS
 labExpId crg-48
 labProtocolId gen0139C+
 localization cytosol
-md5sum bam=ee30c5e4e0477cf211d80d6b9234b656,bai=2eb7e297f20fa5bfc3434f285cef0837
+md5sum ee30c5e4e0477cf211d80d6b9234b656,2eb7e297f20fa5bfc3434f285cef0837
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -293,14 +293,14 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000271
 expId 271
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam,wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam.bai
 geoSampleAccession GSM672835
 grant Gingeras
 lab GIS
 labExpId crg-55
 labProtocolId gen0141C+
 localization cytosol
-md5sum bam=ab4c8b4cda763aa07c35bb7258b82593,bai=6184fd823d60bdc69abeada594989013
+md5sum ab4c8b4cda763aa07c35bb7258b82593,6184fd823d60bdc69abeada594989013
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -502,4 +502,4 @@ rnaExtract longPolyA
 subId 2323
 view RawData
 
-# MAGIC: -1865066114
+# MAGIC: -1865069018

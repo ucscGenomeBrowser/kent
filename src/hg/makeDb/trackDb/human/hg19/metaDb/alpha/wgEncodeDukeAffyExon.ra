@@ -203,6 +203,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum 3275891c918dcee733b1fb4a1523bd15
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeDukeAffyExonNhaSimpleSignalRep1.broadPeak.gz
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -227,6 +228,7 @@ grant Crawford
 lab Duke
 labVersion 1.0
 md5sum ab729c0d011c3124fd227a159cfaff51
+objStatus renamed - Cell renaming caused file to be renamed to wgEncodeDukeAffyExonNhaSimpleSignalRep2.broadPeak.gz
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2235,6 +2237,54 @@ tableName wgEncodeDukeAffyExonMyometrSimpleSignalRep2
 treatment None
 view SimpleSignal
 
+metaObject wgEncodeDukeAffyExonNhaSimpleSignalRep1
+objType table
+cell NH-A
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000214
+expId 214
+fileName wgEncodeDukeAffyExonNhaSimpleSignalRep1.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum 3275891c918dcee733b1fb4a1523bd15
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3200
+tableName wgEncodeDukeAffyExonNhaSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeDukeAffyExonNhaSimpleSignalRep2
+objType table
+cell NH-A
+composite wgEncodeDukeAffyExon
+dataType AffyExonArray
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
+dccAccession wgEncodeEH000214
+expId 214
+fileName wgEncodeDukeAffyExonNhaSimpleSignalRep2.broadPeak.gz
+grant Crawford
+lab Duke
+labVersion 1.0
+md5sum ab729c0d011c3124fd227a159cfaff51
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3200
+tableName wgEncodeDukeAffyExonNhaSimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeDukeAffyExonNhekSimpleSignalRep1
 objType table
 cell NHEK
@@ -2471,4 +2521,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: -1063729594
+# MAGIC: -1556704471
