@@ -8683,13 +8683,11 @@ tag DEX500PM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
-
 term DMSO_0.02pct
 #tag DMSO2
 tag DM002P1H
 description 1 h with 0.02% DMSO (Myers)
 type treatment
-
 
 term DMSO_0.02pct_24hr
 #tag DMSO224H
@@ -8718,6 +8716,11 @@ type treatment
 term Estradiol_10nM
 tag EST10NM1H
 description  1 h with 10 nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_10nM_30m
+tag EST10NM30M
+description 30 min with 10nM 7b-Estradiol (Crawford)
 type treatment
 
 term Estradiol_10nM_24hr
@@ -8892,6 +8895,11 @@ description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
 type treatment
 #label 4-hydroxytamoxifen 20uM 72hr # proposed
 label 4-OHTAM_20nM_72hr
+
+term 4OHTAM_100nM_30m
+tag OHTAM100NM30M
+description 30 minutes with 100nM 4hydroxytamoxifen (Crawford)
+term treatment
 
 term TGFb
 tag TGFB
