@@ -4,6 +4,80 @@ composite wgEncodeUncBsuProt
 expVars lab,dataType,cell,localization
 protocol SDS-Page
 
+metaObject wgEncodeUncBsuProtGm12878MembranefractionRaw
+objType file
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-15
+dateUnrestricted 2012-05-15
+fileName wgEncodeUncBsuProtGm12878MembranefractionRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+origAssembly hg19
+project wgEncode
+subId 4775
+view RawSignal
+
+metaObject wgEncodeUncBsuProtGm12878MembranefractionSig
+objType table
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-11
+dateUnrestricted 2012-05-11
+fileName wgEncodeUncBsuProtGm12878MembranefractionSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+origAssembly hg19
+project wgEncode
+subId 4773
+tableName wgEncodeUncBsuProtGm12878MembranefractionSig
+view Signal
+
+metaObject wgEncodeUncBsuProtGm12878MitoRaw
+objType file
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-15
+dateUnrestricted 2012-05-15
+fileName wgEncodeUncBsuProtGm12878MitoRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+origAssembly hg19
+project wgEncode
+subId 4774
+view RawSignal
+
+metaObject wgEncodeUncBsuProtGm12878MitoSig
+objType table
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-11
+dateUnrestricted 2012-05-11
+fileName wgEncodeUncBsuProtGm12878MitoSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+origAssembly hg19
+project wgEncode
+subId 4771
+tableName wgEncodeUncBsuProtGm12878MitoSig
+view Signal
+
 metaObject wgEncodeUncBsuProtGm12878NucleusRaw
 objType file
 cell GM12878
@@ -221,4 +295,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -115192894
+# MAGIC: 412037714
