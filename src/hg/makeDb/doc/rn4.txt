@@ -5523,6 +5523,13 @@ hgsql rn4 -N -e\
 doRgdGene2Col rn4 ensembl_id rgdGene2ToEnsembl.txt
 hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToEnsembl -lookup=rgdGene2ToEnsembl.txt
 
+# transcript ID instead of gene ID should be used.  Fix it here.  (Fan, 9/27/2011)
+
+hgsql rn4 -N -e 'select r.name, gtp.transcript from ensGtp gtp,
+rgdGene2ToEnsembl r where r.value=gtp.gene' >rgdGene2ToEnsTranscript.tab
+hgsql rn4 -e 'delete from rgdGene2ToEnsembl'
+hgsql rn4 -e 'load data local infile "rgdGene2ToEnsTranscript.tab" into table rgdGene2ToEnsembl'
+
 # build rgdGene2ToLocusLink table
 
 doRgdGene2Col rn4 entrez_gene rgdGene2ToLl.txt
