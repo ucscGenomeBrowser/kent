@@ -64,8 +64,8 @@ INLINE int bamUnpackCigarElement(unsigned int packed, char *retOp)
  * char into *retOp (retOp must not be NULL) and return the number of bases. */
 {
 #ifdef USE_BAM
-// decoding lifted from samtools bam.c bam_format1(), long may it remain stable:
-#define BAM_DOT_C_OPCODE_STRING "MIDNSHP"
+// decoding lifted from samtools bam.c bam_format1_core(), long may it remain stable:
+#define BAM_DOT_C_OPCODE_STRING "MIDNSHP=X"
 int n = packed>>BAM_CIGAR_SHIFT;
 int opcode = packed & BAM_CIGAR_MASK;
 if (opcode >= strlen(BAM_DOT_C_OPCODE_STRING))

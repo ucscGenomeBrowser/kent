@@ -13,7 +13,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL330
@@ -40,7 +40,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000313
 expId 313
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL332
@@ -225,7 +225,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1256
@@ -252,7 +252,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001237
 expId 1237
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1261
@@ -437,7 +437,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1258
@@ -464,7 +464,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001246
 expId 1246
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1263
@@ -649,7 +649,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1257
@@ -676,7 +676,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001247
 expId 1247
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1262
@@ -861,7 +861,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1259
@@ -888,7 +888,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001248
 expId 1248
-fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1264
@@ -1073,7 +1073,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL331
@@ -1100,7 +1100,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL333
@@ -1127,7 +1127,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1255
@@ -1154,7 +1154,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000314
 expId 314
-fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4.bam
+fileName wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4.bam,wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1260
@@ -1497,7 +1497,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1.bam
+fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL524
@@ -1524,7 +1524,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001249
 expId 1249
-fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2.bam
+fileName wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL525
@@ -1711,7 +1711,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1552
@@ -1738,7 +1738,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001238
 expId 1238
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2859
@@ -1923,7 +1923,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL989
@@ -1950,7 +1950,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001239
 expId 1239
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2861
@@ -2135,7 +2135,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL990
@@ -2162,7 +2162,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001240
 expId 1240
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2932
@@ -2347,7 +2347,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL991
@@ -2374,7 +2374,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001241
 expId 1241
-fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2.bam,wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL2860
@@ -2559,7 +2559,7 @@ dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1.bam
+fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL316
@@ -2586,7 +2586,7 @@ dateSubmitted 2011-04-05
 dateUnrestricted 2012-01-04
 dccAccession wgEncodeEH000315
 expId 315
-fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2.bam
+fileName wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL317
@@ -2746,7 +2746,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1.bam
+fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL528
@@ -2773,7 +2773,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001251
 expId 1251
-fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2.bam
+fileName wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL529
@@ -2960,7 +2960,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1.bam
+fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL530
@@ -2987,7 +2987,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001252
 expId 1252
-fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2.bam
+fileName wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL531
@@ -3174,7 +3174,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1.bam
+fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL526
@@ -3201,7 +3201,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001250
 expId 1250
-fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2.bam
+fileName wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqSknshShortpolyaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL527
@@ -3388,7 +3388,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1550
@@ -3415,7 +3415,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001242
 expId 1242
-fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1911
@@ -3600,7 +3600,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1244
@@ -3627,7 +3627,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001243
 expId 1243
-fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1547
@@ -3812,7 +3812,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1245
@@ -3839,7 +3839,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001244
 expId 1244
-fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1548
@@ -4024,7 +4024,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1.bam,wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1246
@@ -4051,7 +4051,7 @@ dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001245
 expId 1245
-fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2.bam
+fileName wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2.bam,wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL1549
@@ -4236,7 +4236,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1.bam
+fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1.bam,wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL532
@@ -4263,7 +4263,7 @@ dateSubmitted 2011-03-31
 dateUnrestricted 2011-12-31
 dccAccession wgEncodeEH001253
 expId 1253
-fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2.bam
+fileName wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2.bam,wgEncodeHaibRnaSeqU87ShortpolyaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL533

@@ -3784,6 +3784,22 @@ noInherit on
         type broadPeak
         # subId=4778 dateSubmitted=2011-08-16
 
+        track wgEncodeHaibTfbsSknshPol24h8V0416101PkRep1
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel SK-N-SH Pol2-4H8 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (Pol2-4H8 in SK-N-SH cells)
+        subGroups view=Peaks factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
+        type broadPeak
+        # subId=4320 dateSubmitted=2011-06-27
+
+        track wgEncodeHaibTfbsSknshPol24h8V0416101PkRep2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel SK-N-SH Pol2-4H8 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (Pol2-4H8 in SK-N-SH cells)
+        subGroups view=Peaks factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
+        type broadPeak
+        # subId=4320 dateSubmitted=2011-06-27
+
 
 
     #Raw Signal Track HAIB TFBS#
@@ -8105,3 +8121,109 @@ noInherit on
         subGroups view=RawSignal factor=ELF1SC631 cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type bigWig 0.131247 293.501007
         # subId=4778 dateSubmitted=2011-08-16
+
+        track wgEncodeHaibTfbsSknshControlV0416101RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel SK-N-SH Control Raw 1
+        longLabel SK-N-SH v041610.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
+        type bigWig 0.112652 219.136993
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsPfsk1ControlV0416101RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel PFSK-1 Control Raw 1
+        longLabel PFSK-1 v041610.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep1
+        type bigWig 0.212393 233.207993
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsPanc1ControlV0416101RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel PANC-1 Control Raw 1
+        longLabel PANC-1 v041610.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep1
+        type bigWig 0.066014 232.074005
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsSknshControlV0416101RawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel SK-N-SH Control Raw 2
+        longLabel SK-N-SH v041610.1 Control ChIP-seq Raw Signal Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
+        type bigWig 0.122278 190.447998
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsSknshControlV0416101RawRep3
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel SK-N-SH Control Raw 3
+        longLabel SK-N-SH v041610.1 Control ChIP-seq Raw Signal Rep 3 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep3
+        type bigWig 0.128654 169.501999
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsPanc1ControlV0416101RawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel PANC-1 Control Raw 2
+        longLabel PANC-1 v041610.1 Control ChIP-seq Raw Signal Rep 2 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep2
+        type bigWig 0.085486 268.854004
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsA549ControlV0416101Etoh02RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 Control Raw 1
+        longLabel A549 EtOH 0.02pct v041610.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha #too long length = 85
+        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=V0416101 treatment=ETOH02 rep=rep1
+        type bigWig 0.148981 209.354996
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsH1hescControlV0422111RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel H1-hESC Control Raw 1
+        longLabel H1-hESC v042211.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=1H1hESC protocol=V0422111 treatment=NONE rep=rep1
+        type bigWig 0.081923 204.009003
+        color 0,107,27
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsHepg2ControlV0422111RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HepG2 Control Raw 1
+        longLabel HepG2 v042211.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha
+        subGroups view=RawSignal factor=zRXLCH cellType=2HEPG2 protocol=V0422111 treatment=NONE rep=rep1
+        type bigWig 0.084620 145.080002
+        color 189,0,157
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsA549ControlV0422111Dex100nmRawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 Control Raw 1
+        longLabel A549 DEX 100nM v042211.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha #too long length = 82
+        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=V0422111 treatment=DEX100NM rep=rep1
+        type bigWig 0.082165 233.000000
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsA549ControlV0422111Etoh02RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 Control Raw 1
+        longLabel A549 EtOH 0.02pct v042211.1 Control ChIP-seq Raw Signal Rep 1 from ENCODE/HudsonAlpha #too long length = 85
+        subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
+        type bigWig 0.079808 214.365005
+        # subId=4321 dateSubmitted=2011-07-18
+
+        track wgEncodeHaibTfbsSknshPol24h8V0416101RawRep1
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel SK-N-SH Pol2-4H8 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in SK-N-SH cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
+        type bigWig 0.220326 220.104996
+        # subId=4320 dateSubmitted=2011-06-27
+
+        track wgEncodeHaibTfbsSknshPol24h8V0416101RawRep2
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel SK-N-SH Pol2-4H8 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2-4H8 in SK-N-SH cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
+        type bigWig 0.100500 144.744995
+        # subId=4320 dateSubmitted=2011-06-27

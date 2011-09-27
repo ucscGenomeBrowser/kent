@@ -70,6 +70,8 @@ for (i = iStart;  isRc ? (i >= 0) : (i < core->n_cigar);  i += iIncr)
     switch (op)
 	{
 	case 'M': // match or mismatch (gapless aligned block)
+	case '=': // match
+	case 'X': // mismatch
 	    AllocVar(ff);
 	    ff->left = ffList;
 	    ffList = ff;

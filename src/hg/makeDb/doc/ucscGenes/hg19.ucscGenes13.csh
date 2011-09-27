@@ -950,8 +950,6 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # Run nice Perl script to make all protein blast runs for
@@ -1056,8 +1054,6 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
 
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
@@ -1066,8 +1062,8 @@ mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
-utrFa $db knownGene utr3 utr3/utr.fa
-utrFa $db knownGene utr5 utr5/utr.fa
+utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr3 utr3/utr.fa
+utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr5 utr5/utr.fa
 
 # Split up files and make files that define job.
 faSplit sequence utr3/utr.fa 10000 utr3/split/s
@@ -1241,24 +1237,34 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
 
-# Do KEGG Pathways build
+# Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
     mkdir -p $dir/kegg
     cd $dir/kegg
 
-    wget --timestamping -O hsa2.html \
-    "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
+    # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+    cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
+    cut -f 2 j.tmp >j.hsa
+    cut -f 1,3 j.tmp >j.1
+    paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
+    rm j.hsa j.1 j.tmp
+    hgLoadSqlTab $tempDb keggMapDesc $kent/src/hg/lib/keggMapDesc.sql keggMapDesc.tab
 
-    cat hsa2.html |grep "show_pathway" |sed -e 's/show_pathway?/\tpath:/'\
-     |grep -v org_name |sed -e 's/">/\t/' |sed -e 's#</a><br>##'  |cut -f 2,3 \
-    >hsa.lis
-    
-    ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
+    # Following in two-step process, build/load a table that maps UCSC Gene IDs
+    # to LocusLink IDs and to KEGG pathways.  First, make a table that maps 
+    # LocusLink IDs to KEGG pathways from the downloaded data.  Store it temporarily
+    # in the keggPathway table, overloading the schema.
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+    cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
-    kgAttachKegg $db keggList.tab  keggPathway.tab
-    hgLoadSqlTab $tempDb keggPathway ~/kent/src/hg/lib/keggPathway.sql ./keggPathway.tab
-
-    cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
-    hgLoadSqlTab $tempDb keggMapDesc ~/kent/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+    # Next, use the temporary contents of the keggPathway table to join with
+    # knownToLocusLink, creating the real content of the keggPathway table.
+    # Load this data, erasing the old temporary content
+    hgsql hg19 -N -e \
+    'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+    >keggPathway.tab
+    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1282,8 +1288,6 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
@@ -1308,6 +1312,9 @@ sudo ln -s /var/lib/mysql/$spDb /var/lib/mysql/uniProt
 sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
+
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
@@ -1338,7 +1345,9 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-exit $status
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms

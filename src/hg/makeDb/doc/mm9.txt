@@ -11302,18 +11302,15 @@ ssh hgwbeta
 knownToVisiGene mm9
 
 #########################################################################
-# SEGMENTAL DUPLICATIONS (DONE 1/11/2011 Fan)
-    # File indicated by email from T. Louie <tinlouie@u.washington.edu>
-    mkdir /cluster/data/mm9/bed/genomicSuperDups
-    cd /cluster/data/mm9/bed/genomicSuperDups
-    wget --timestamping 'http://staff.washington.edu/tinlouie/mm9genomicSuperDups.tab.gz'
-    
-    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm9genomicSuperDups.tab \
+# SEGMENTAL DUPLICATIONS (REBUILT 9/26/20111 Fan)
+    # corrected data file sent by email from John Huddleston [jlhudd@uw.edu].
+    mkdir /cluster/data/mm9/bed/genomicSuperDups/09262011
+    cd /cluster/data/mm9/bed/genomicSuperDups/09262011
+    wget --timestamping ftp://mesh.gs.washington.edu/pub/UCSC/mm9genomicSuperDups.fixed.tab.gz
+    gzip -d mm9genomicSuperDups.fixed.tab.gz
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm9genomicSuperDups.fixed.tab \
     | hgLoadBed mm9 genomicSuperDups stdin \
       -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
-    # 8/29/07 Gak!  Kayla found that the strand values were "+" and "_" -- fix:
-    hgsql mm9 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
-
 #####################################################################
 # NCBI Incident database (DONE - 2011-02-10 - Hiram)
     # this procedure is run as a cron job in Hiram's account:
