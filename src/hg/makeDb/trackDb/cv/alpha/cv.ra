@@ -5047,6 +5047,21 @@ targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation missing
 
+term BTF3_(SC-166093)
+tag BTF3SC166093
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against amino acids 1-206 representing full length BTF3a of human origin.
+target BTF3
+targetDescription This gene encodes the basic transcription factor 3. This protein forms a stable complex with RNA polymerase IIB and is required for transcriptional initiation. Alternative splicing results in multiple transcript variants encoding different isoforms. This gene has multiple pseudogenes. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-166093
+orderUrl http://www.scbt.com/datasheet-166093-btf3a-b-a-5-antibody.html
+lab Myers
+lots G2209
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
+validation BTF3_(SC-166093)(missing):human_BTF3_SC-166093_validation_Myers.pdf
+
 term c-Fos
 tag CFOS
 type Antibody
@@ -6593,8 +6608,6 @@ targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 
-
-
 term NELFe
 tag NELFE
 type Antibody
@@ -6608,6 +6621,21 @@ lab Struhl
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
 validation missing
+
+term NFIC_(SC-81335)
+tag NFICSC81335
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of NF-1 of human origin.
+target NFIC
+targetDescription Recognizes and binds the palindromic sequence 5'-TTGGCNNNNNGCCAA-3' present in viral and cellular promoters and in the origin of replication of adenovirus type 2. These proteins are individually capable of activating transcription and replication.
+vendorName Santa Cruz Biotech
+vendorId sc-81335
+orderUrl http://www.scbt.com/datasheet-81335-nf-1-nfi5i299-antibody.html
+lab Myers
+lots L0808
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
+validation NFIC_(SC-81335)(missing):human_NFIC_SC-81335_validation_Myers.pdf
 
 term NF-E2
 tag NFE2
@@ -7053,6 +7081,21 @@ targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_200-401-194_validation_Snyder.pdf
 
+term RUNX3_(SC-101553)
+tag RUNX3SC101553
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against amino acids 191-300 of recombinant RUNX3 of human origin.
+target RUNX3
+targetDescription This gene encodes a member of the runt domain-containing family of transcription factors. A heterodimer of this protein and a beta subunit forms a complex that binds to the core DNA sequence 5'-PYGPYGGT-3' found in a number of enhancers and promoters, and can either activate or suppress transcription. It also interacts with other transcription factors.  It functions as a tumor suppressor, and the gene is frequently deleted or transcriptionally silenced in cancer.  Multiple transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq)
+vendorName Santa Cruz Biotech 
+vendorId sc-101553
+orderUrl http://www.scbt.com/datasheet-101553-runx3-r3-5g4-antibody.html
+lab Myers
+lots B0909
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
+validation RUNX3_(SC-101553)(missing):human_RUNX3_SC-101553_validation_Myers.pdf
+
 term RXRA
 tag RXRA
 type Antibody
@@ -7298,6 +7341,21 @@ targetId GeneCard:STAT3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT3
 validation STAT3(Western_blot,Immunoprecipitation):human_STAT3_validation_Snyder.pdf
 
+term STAT5A_(SC-74442)
+tag STAT5ASC74442
+type Antibody
+antibodyDescription Mouse monoclonal IgG, recommended for the detection of Stat5a and Stat5b of human origin by WB, IP, IF and ELISA.
+target STAT5A
+targetDescription The protein encoded by this gene is a member of the STAT family of transcription factors. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo- or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein is activated by, and mediates the responses of many cell ligands, such as IL2, IL3, IL7 GM-CSF, erythropoietin, thrombopoietin, and different growth hormones. Activation of this protein in myeloma and lymphoma associated with a TEL/JAK2 gene fusion is independent of cell stimulus and has been shown to be essential for the tumorigenesis. The mouse counterpart of this gene is found to induce the expression of BCL2L1/BCL-X(L), which suggests the antiapoptotic function of this gene in cells. (provided by RefSeq)
+vendorName Santa Cruz Biotech 
+vendorId sc-74442
+orderUrl http://www.scbt.com/datasheet-74442-stat5-a-9-antibody.html
+lab Myers
+lots G0208
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
+validation STAT5A_(SC-74442)(missing):human_STAT5A_SC-74442_validation_Myers.pdf
+
 term SUZ12
 tag SUZ12
 type Antibody
@@ -7439,6 +7497,21 @@ lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
 validation missing
+
+term TEAD4_(SC-101184)
+tag TEAD4SC101184
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against recombinant protein TEF-3 (TEAD4) of human origin.
+target TEAD4
+targetDescription Member of the transcriptional enhancer factor (TEF) family of transcription factors, which contain the TEA/ATTS DNA-binding domain. It is preferentially expressed in the skeletal muscle, and binds to the M-CAT regulatory element found in promoters of muscle-specific genes to direct their gene expression.
+vendorName Santa Cruz Biotech
+vendorId sc-101184
+orderUrl http://www.scbt.com/datasheet-101184-tef-3-n-g2-antibody.html
+lab Myers
+lots A1811
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
+validation TEAD4_(SC-101184)(missing):human_TEAD4_SC-101184_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term TFIIB
