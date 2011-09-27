@@ -69,7 +69,9 @@ endif
 
 # remove files a year old
 set lastYear=`getMonthLastYear.csh go | sed "s/-//"`
-rm -f $outpath/gbdb*${lastYear}*
+# throw away output below because rm complains about no match for
+# the globbing character during most of the month
+rm -f $outpath/gbdb*${lastYear} >& /dev/null
 
 exit
 
