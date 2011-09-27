@@ -167,9 +167,7 @@ hgLoadSqlTab proteins101005 pepPi $kent/src/hg/lib/pepPi.sql ./pi101005.tab
 hgsql sp101005 -N -e "select acc, molWeight, aaSize from info" >pepMwAa.tab
 hgLoadSqlTab proteins101005 pepMwAa $kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
 
-endif # BRACKET
 cd /hive/data/inside/proteins/101005/pbGlobal
-
 nice pbCalDistGlobal sp101005 proteins101005
 
 # Load the tables
@@ -219,10 +217,6 @@ cd /hive/data/inside/proteins/101005
 mkdir alias
 cd alias
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
 hgsql proteins101005 -N -e 'select accession, accession,  "uAcc", "2006-01-15" from spXref3' >j1.tmp
 hgsql proteins101005 -N -e 'select accession, accession2, "u2Ac", "2006-01-15" from spSecondaryID' >j2.tmp
 hgsql proteins101005 -N -e 'select accession, displayID,  "uDis", "2006-01-15" from spXref3' >j3.tmp
@@ -247,7 +241,7 @@ hgsql proteins101005 -e 'create index newDisplayId on spOldNew(newDisplayId)'
 # Download list of deleted accession numbers from UniProt
 cd /hive/data/inside/proteins/101005
 
-wget --timestamping http://ca.expasy.org/txt/delac_tr.txt
+wget --timestamping ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/docs/delac_tr.txt
 cp delac_tr.txt spDeleted.tab
 
 # Edit spDeleted.tab to get rid of other lines except accession numbers
@@ -275,6 +269,8 @@ hgsql proteins101005 -N -e \
 
 hgLoadSqlTab -append proteins101005 pfamXref $kent/src/hg/lib/pfamXref.sql ./pfamXrefVar.tab
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 
 # SWITCH SYMBOLIC PROTEIN DATABASE LINKS (TBD)
@@ -292,6 +288,9 @@ hgLoadSqlTab -append proteins101005 pfamXref $kent/src/hg/lib/pfamXref.sql ./pfa
 # Then edit pbStamp.tab to adjust maximum y values for various stamps 
 # and load it to pbStamp tables until all their scales look reasonable.
 # For this particular release, no adjustment seems necessary.	
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
     
 #########################################################
 # CREATE REACTOME TABLES 

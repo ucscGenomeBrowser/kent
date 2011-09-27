@@ -14,10 +14,10 @@ dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000524
 expId 524
-fileName wgEncodeSydhRnaSeqK562Ifna30PolyaAln.bam
+fileName wgEncodeSydhRnaSeqK562Ifna30PolyaAln.bam,wgEncodeSydhRnaSeqK562Ifna30PolyaAln.bam.bai
 grant Snyder
 lab Yale
-md5sum bam=f5d4e6b7f083751736ef0f8378ce73a2,bai=c50a5ff149f100bb40852e80f242700d
+md5sum f5d4e6b7f083751736ef0f8378ce73a2,c50a5ff149f100bb40852e80f242700d
 origAssembly hg18
 project wgEncode
 rnaExtract polyA
@@ -80,10 +80,10 @@ dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000525
 expId 525
-fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaAln.bam
+fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaAln.bam,wgEncodeSydhRnaSeqK562Ifna6hPolyaAln.bam.bai
 grant Snyder
 lab Yale
-md5sum bam=5c913e5da898ac5fbea6dfcc3519d34d,bai=eb458cfd58f31e1aa15134d5084b3052
+md5sum 5c913e5da898ac5fbea6dfcc3519d34d,eb458cfd58f31e1aa15134d5084b3052
 origAssembly hg18
 project wgEncode
 rnaExtract polyA
@@ -146,10 +146,10 @@ dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000526
 expId 526
-fileName wgEncodeSydhRnaSeqK562Ifng30PolyaAln.bam
+fileName wgEncodeSydhRnaSeqK562Ifng30PolyaAln.bam,wgEncodeSydhRnaSeqK562Ifng30PolyaAln.bam.bai
 grant Snyder
 lab Yale
-md5sum bam=4fdfddad146f78730d24c8d599fb15ce,bai=d8eb7fe2cc6e63801c439882c35c1255
+md5sum 4fdfddad146f78730d24c8d599fb15ce,d8eb7fe2cc6e63801c439882c35c1255
 origAssembly hg18
 project wgEncode
 rnaExtract polyA
@@ -212,10 +212,10 @@ dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000527
 expId 527
-fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaAln.bam
+fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaAln.bam,wgEncodeSydhRnaSeqK562Ifng6hPolyaAln.bam.bai
 grant Snyder
 lab Yale
-md5sum bam=6c7800d9ae4e07e789142ba71df563c6,bai=1343206bf0f8f831b9fd9165ac0e6c1f
+md5sum 6c7800d9ae4e07e789142ba71df563c6,1343206bf0f8f831b9fd9165ac0e6c1f
 origAssembly hg18
 project wgEncode
 rnaExtract polyA
@@ -267,4 +267,4 @@ subId 543
 treatment IFNg6h
 view RawData
 
-# MAGIC: -1752047368
+# MAGIC: -1752050272

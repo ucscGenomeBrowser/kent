@@ -14,11 +14,11 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 dccAccession wgEncodeEH001103
 expId 1103
-fileName wgEncodeOpenChromDnase8988tAlnRep1.bam
+fileName wgEncodeOpenChromDnase8988tAlnRep1.bam,wgEncodeOpenChromDnase8988tAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=11225b06963c6670cd5bea47ebab2c86,bai=7b3ae6f39be67d91000f97f95dd5f562
+md5sum 11225b06963c6670cd5bea47ebab2c86,7b3ae6f39be67d91000f97f95dd5f562
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -36,11 +36,11 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 dccAccession wgEncodeEH001103
 expId 1103
-fileName wgEncodeOpenChromDnase8988tAlnRep2.bam
+fileName wgEncodeOpenChromDnase8988tAlnRep2.bam,wgEncodeOpenChromDnase8988tAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=597e1cb3a55b035bd5bcd0bef2ec7c50,bai=a8abaab26f4182b0dfe086e8fff41536
+md5sum 597e1cb3a55b035bd5bcd0bef2ec7c50,a8abaab26f4182b0dfe086e8fff41536
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -166,11 +166,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001095
 expId 1095
-fileName wgEncodeOpenChromDnaseA549AlnRep1.bam
+fileName wgEncodeOpenChromDnaseA549AlnRep1.bam,wgEncodeOpenChromDnaseA549AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=962efdf8117195dc94fb5345b61c9e15,bai=f7ec93b0916a8337c43d274c5d449a94
+md5sum 962efdf8117195dc94fb5345b61c9e15,f7ec93b0916a8337c43d274c5d449a94
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -188,11 +188,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001095
 expId 1095
-fileName wgEncodeOpenChromDnaseA549AlnRep2.bam
+fileName wgEncodeOpenChromDnaseA549AlnRep2.bam,wgEncodeOpenChromDnaseA549AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=c34a0fd75d8205475d305bb4da260983,bai=d5b21944c7f7816a55a9edac2287f88b
+md5sum c34a0fd75d8205475d305bb4da260983,d5b21944c7f7816a55a9edac2287f88b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -319,11 +319,11 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000601
 expId 601
-fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam
+fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam,wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=c6cc79e299fb65573794d5908d815d06,bai=250f7bbacc33fdbe5051ca0825d90fff
+md5sum c6cc79e299fb65573794d5908d815d06,250f7bbacc33fdbe5051ca0825d90fff
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -344,11 +344,11 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000601
 expId 601
-fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam
+fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam,wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=19de87429c02fb032ce6a6b986e25887,bai=91d10f12c3462d1c10427e5f51a26fae
+md5sum 19de87429c02fb032ce6a6b986e25887,91d10f12c3462d1c10427e5f51a26fae
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -444,11 +444,11 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000595
 expId 595
-fileName wgEncodeOpenChromDnaseChorionAlnRep1.bam
+fileName wgEncodeOpenChromDnaseChorionAlnRep1.bam,wgEncodeOpenChromDnaseChorionAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=cd167cf7dfc1722c30f4a4ca52abc90a,bai=95770e66c3e5a583254d8d685943ebd6
+md5sum cd167cf7dfc1722c30f4a4ca52abc90a,95770e66c3e5a583254d8d685943ebd6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -468,11 +468,11 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000595
 expId 595
-fileName wgEncodeOpenChromDnaseChorionAlnRep2.bam
+fileName wgEncodeOpenChromDnaseChorionAlnRep2.bam,wgEncodeOpenChromDnaseChorionAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=3182952b7ce921d7977c28878ad5f01c,bai=ed80469b9786b7270af773333b2d8dc9
+md5sum 3182952b7ce921d7977c28878ad5f01c,ed80469b9786b7270af773333b2d8dc9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -605,11 +605,11 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 dccAccession wgEncodeEH001104
 expId 1104
-fileName wgEncodeOpenChromDnaseCllAlnRep1.bam
+fileName wgEncodeOpenChromDnaseCllAlnRep1.bam,wgEncodeOpenChromDnaseCllAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=8cdb5025b4123f9020ff42dd96d715ce,bai=74761913f7e3f1dca10f9324c91c3ee8
+md5sum 8cdb5025b4123f9020ff42dd96d715ce,74761913f7e3f1dca10f9324c91c3ee8
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -628,11 +628,11 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 dccAccession wgEncodeEH001104
 expId 1104
-fileName wgEncodeOpenChromDnaseCllAlnRep2.bam
+fileName wgEncodeOpenChromDnaseCllAlnRep2.bam,wgEncodeOpenChromDnaseCllAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ffbd20cc8e2f7e6f37215e1a853fae9f,bai=b0b51bb1ffe19c17ace4cdba7436e26b
+md5sum ffbd20cc8e2f7e6f37215e1a853fae9f,b0b51bb1ffe19c17ace4cdba7436e26b
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -651,11 +651,11 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 dccAccession wgEncodeEH001104
 expId 1104
-fileName wgEncodeOpenChromDnaseCllAlnRep3.bam
+fileName wgEncodeOpenChromDnaseCllAlnRep3.bam,wgEncodeOpenChromDnaseCllAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e0beb6808cd21dbb2f7ffa8f1bc31514,bai=edc4aed66c121031407998412046831c
+md5sum e0beb6808cd21dbb2f7ffa8f1bc31514,edc4aed66c121031407998412046831c
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -744,11 +744,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000583
 expId 583
-fileName wgEncodeOpenChromDnaseFibroblAlnRep1.bam
+fileName wgEncodeOpenChromDnaseFibroblAlnRep1.bam,wgEncodeOpenChromDnaseFibroblAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=08889ea4dfdc188230fc9b515ef2b649,bai=c3b473720c155f08fed495f2061f7dff
+md5sum 08889ea4dfdc188230fc9b515ef2b649,c3b473720c155f08fed495f2061f7dff
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -769,11 +769,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 dccAccession wgEncodeEH000583
 expId 583
-fileName wgEncodeOpenChromDnaseFibroblAlnRep2.bam
+fileName wgEncodeOpenChromDnaseFibroblAlnRep2.bam,wgEncodeOpenChromDnaseFibroblAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=f5942623d15ef5ca4a83d5cdca7af582,bai=778ac073a5ce728140d99efb4e053938
+md5sum f5942623d15ef5ca4a83d5cdca7af582,778ac073a5ce728140d99efb4e053938
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -890,11 +890,11 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000605
 expId 605
-fileName wgEncodeOpenChromDnaseFibropAlnRep1.bam
+fileName wgEncodeOpenChromDnaseFibropAlnRep1.bam,wgEncodeOpenChromDnaseFibropAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=eeb62c590e9e2cac333e53e084fe4f32,bai=3046225845619fa90376fcffee80b215
+md5sum eeb62c590e9e2cac333e53e084fe4f32,3046225845619fa90376fcffee80b215
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -915,11 +915,11 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000605
 expId 605
-fileName wgEncodeOpenChromDnaseFibropAlnRep2.bam
+fileName wgEncodeOpenChromDnaseFibropAlnRep2.bam,wgEncodeOpenChromDnaseFibropAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=183e435a56585bd4b8cd2e887e32135d,bai=444318cb94a989d83d4d74387ece5dcd
+md5sum 183e435a56585bd4b8cd2e887e32135d,444318cb94a989d83d4d74387ece5dcd
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -940,11 +940,11 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000605
 expId 605
-fileName wgEncodeOpenChromDnaseFibropAlnRep3.bam
+fileName wgEncodeOpenChromDnaseFibropAlnRep3.bam,wgEncodeOpenChromDnaseFibropAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b807dad5d1e26a5f8a205e3b98e33364,bai=568908cf2c94b9e37a60987bde5b50ba
+md5sum b807dad5d1e26a5f8a205e3b98e33364,568908cf2c94b9e37a60987bde5b50ba
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -1039,11 +1039,11 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001100
 expId 1100
-fileName wgEncodeOpenChromDnaseGlioblaAlnRep1.bam
+fileName wgEncodeOpenChromDnaseGlioblaAlnRep1.bam,wgEncodeOpenChromDnaseGlioblaAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b61dca9533741c9f31145fa93ad7a90e,bai=7c397da40bfc5db2077b95e47b220cc9
+md5sum b61dca9533741c9f31145fa93ad7a90e,7c397da40bfc5db2077b95e47b220cc9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1061,11 +1061,11 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001100
 expId 1100
-fileName wgEncodeOpenChromDnaseGlioblaAlnRep2.bam
+fileName wgEncodeOpenChromDnaseGlioblaAlnRep2.bam,wgEncodeOpenChromDnaseGlioblaAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=94673b4021e3347906d5a3fa538f5b24,bai=c2fd80ad1061daed5a2d9aa8da421ac4
+md5sum 94673b4021e3347906d5a3fa538f5b24,c2fd80ad1061daed5a2d9aa8da421ac4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1192,11 +1192,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000534
 expId 534
-fileName wgEncodeOpenChromDnaseGm12878AlnRep1.bam
+fileName wgEncodeOpenChromDnaseGm12878AlnRep1.bam,wgEncodeOpenChromDnaseGm12878AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=5476da9356e7261da2c6b5e3ee733a3a,bai=4e1a5466a2f078fa2830e4dd2222cda1
+md5sum 5476da9356e7261da2c6b5e3ee733a3a,4e1a5466a2f078fa2830e4dd2222cda1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1216,11 +1216,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000534
 expId 534
-fileName wgEncodeOpenChromDnaseGm12878AlnRep2.bam
+fileName wgEncodeOpenChromDnaseGm12878AlnRep2.bam,wgEncodeOpenChromDnaseGm12878AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=6948980428a5255c9b76f6af02d7fb71,bai=b90a1f99751910adc6150053ace6825e
+md5sum 6948980428a5255c9b76f6af02d7fb71,b90a1f99751910adc6150053ace6825e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1240,11 +1240,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000534
 expId 534
-fileName wgEncodeOpenChromDnaseGm12878AlnRep3.bam
+fileName wgEncodeOpenChromDnaseGm12878AlnRep3.bam,wgEncodeOpenChromDnaseGm12878AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ef367e8ed67efe0266dcc9cef2884ff1,bai=ba08e9678293acdf9b14907658890782
+md5sum ef367e8ed67efe0266dcc9cef2884ff1,ba08e9678293acdf9b14907658890782
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -1264,11 +1264,11 @@ dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000534
 expId 534
-fileName wgEncodeOpenChromDnaseGm12878AlnRep4.bam
+fileName wgEncodeOpenChromDnaseGm12878AlnRep4.bam,wgEncodeOpenChromDnaseGm12878AlnRep4.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7ea20d0fcd4e528591796032113e9e20,bai=a212658e48a4eb6ed3765f8b32625bbc
+md5sum 7ea20d0fcd4e528591796032113e9e20,a212658e48a4eb6ed3765f8b32625bbc
 origAssembly hg18
 project wgEncode
 replicate 4
@@ -1288,11 +1288,11 @@ dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
 dccAccession wgEncodeEH000534
 expId 534
-fileName wgEncodeOpenChromDnaseGm12878AlnRep5.bam
+fileName wgEncodeOpenChromDnaseGm12878AlnRep5.bam,wgEncodeOpenChromDnaseGm12878AlnRep5.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ad1d7a3a18cfb39e7f4c1bd2dbbcbc83,bai=687b8c8264d063d23a21b5f1990934ec
+md5sum ad1d7a3a18cfb39e7f4c1bd2dbbcbc83,687b8c8264d063d23a21b5f1990934ec
 origAssembly hg18
 project wgEncode
 replicate 5
@@ -1515,11 +1515,11 @@ dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
 dccAccession wgEncodeEH000564
 expId 564
-fileName wgEncodeOpenChromDnaseGm12891AlnRep1.bam
+fileName wgEncodeOpenChromDnaseGm12891AlnRep1.bam,wgEncodeOpenChromDnaseGm12891AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b07bb27ce704d3df5c771ab0c3012dac,bai=fce4c597427652bef5ebaedc17ed1b52
+md5sum b07bb27ce704d3df5c771ab0c3012dac,fce4c597427652bef5ebaedc17ed1b52
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1539,11 +1539,11 @@ dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
 dccAccession wgEncodeEH000564
 expId 564
-fileName wgEncodeOpenChromDnaseGm12891AlnRep2.bam
+fileName wgEncodeOpenChromDnaseGm12891AlnRep2.bam,wgEncodeOpenChromDnaseGm12891AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=612b6af023239f610047de76d3cc4780,bai=e0bc6967f4b82483d25ac81f5342f1ca
+md5sum 612b6af023239f610047de76d3cc4780,e0bc6967f4b82483d25ac81f5342f1ca
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1677,11 +1677,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000565
 expId 565
-fileName wgEncodeOpenChromDnaseGm12892AlnRep1.bam
+fileName wgEncodeOpenChromDnaseGm12892AlnRep1.bam,wgEncodeOpenChromDnaseGm12892AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=66b0c4a30f39b10f19fbd3d9cbb824ba,bai=757e5217aba34f9eb1691dbab9944238
+md5sum 66b0c4a30f39b10f19fbd3d9cbb824ba,757e5217aba34f9eb1691dbab9944238
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1701,11 +1701,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000565
 expId 565
-fileName wgEncodeOpenChromDnaseGm12892AlnRep2.bam
+fileName wgEncodeOpenChromDnaseGm12892AlnRep2.bam,wgEncodeOpenChromDnaseGm12892AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=a91ce24b32708f3fb6307bfd3e397d1d,bai=e262b607dec384eed3d1e7f246c143f0
+md5sum a91ce24b32708f3fb6307bfd3e397d1d,e262b607dec384eed3d1e7f246c143f0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1839,11 +1839,11 @@ dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000581
 expId 581
-fileName wgEncodeOpenChromDnaseGm18507AlnRep1.bam
+fileName wgEncodeOpenChromDnaseGm18507AlnRep1.bam,wgEncodeOpenChromDnaseGm18507AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7e00b73b5a9e38473ae80b39c47e89cc,bai=f8437b60b49ac25d6b8124c42b722e1d
+md5sum 7e00b73b5a9e38473ae80b39c47e89cc,f8437b60b49ac25d6b8124c42b722e1d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1863,11 +1863,11 @@ dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000581
 expId 581
-fileName wgEncodeOpenChromDnaseGm18507AlnRep2.bam
+fileName wgEncodeOpenChromDnaseGm18507AlnRep2.bam,wgEncodeOpenChromDnaseGm18507AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e68d0f984050f369fb2d3b43cac051e4,bai=d9fa2fde1c20fc90dc6d5f69c2de72b8
+md5sum e68d0f984050f369fb2d3b43cac051e4,d9fa2fde1c20fc90dc6d5f69c2de72b8
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1887,11 +1887,11 @@ dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000581
 expId 581
-fileName wgEncodeOpenChromDnaseGm18507AlnRep3.bam
+fileName wgEncodeOpenChromDnaseGm18507AlnRep3.bam,wgEncodeOpenChromDnaseGm18507AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=dfeb47a322164e640ddb78a9393d1056,bai=2eeb7fffc7ed47ccde5c4b334bf3e6fc
+md5sum dfeb47a322164e640ddb78a9393d1056,2eeb7fffc7ed47ccde5c4b334bf3e6fc
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -2067,11 +2067,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000566
 expId 566
-fileName wgEncodeOpenChromDnaseGm19238AlnRep1.bam
+fileName wgEncodeOpenChromDnaseGm19238AlnRep1.bam,wgEncodeOpenChromDnaseGm19238AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=1678378d60f892178d57aad55369bcf8,bai=82841cb9fc6f8754b7bb904dad1c7a80
+md5sum 1678378d60f892178d57aad55369bcf8,82841cb9fc6f8754b7bb904dad1c7a80
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2091,11 +2091,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000566
 expId 566
-fileName wgEncodeOpenChromDnaseGm19238AlnRep2.bam
+fileName wgEncodeOpenChromDnaseGm19238AlnRep2.bam,wgEncodeOpenChromDnaseGm19238AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=5e610fb5b566623795312db773ab5124,bai=08689fe89216ba7fa5b514fa6b3d64b6
+md5sum 5e610fb5b566623795312db773ab5124,08689fe89216ba7fa5b514fa6b3d64b6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2229,11 +2229,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000567
 expId 567
-fileName wgEncodeOpenChromDnaseGm19239AlnRep1.bam
+fileName wgEncodeOpenChromDnaseGm19239AlnRep1.bam,wgEncodeOpenChromDnaseGm19239AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=6ee9b6d19e3f2d15293e81da816a3849,bai=29e0977b4c4392e3dc81ee5d0d8c8724
+md5sum 6ee9b6d19e3f2d15293e81da816a3849,29e0977b4c4392e3dc81ee5d0d8c8724
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2253,11 +2253,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000567
 expId 567
-fileName wgEncodeOpenChromDnaseGm19239AlnRep2.bam
+fileName wgEncodeOpenChromDnaseGm19239AlnRep2.bam,wgEncodeOpenChromDnaseGm19239AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e8baebe2833345115154c626f3644e51,bai=e430db4c2962244d2dab72a56d8bf802
+md5sum e8baebe2833345115154c626f3644e51,e430db4c2962244d2dab72a56d8bf802
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2391,11 +2391,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000568
 expId 568
-fileName wgEncodeOpenChromDnaseGm19240AlnRep1.bam
+fileName wgEncodeOpenChromDnaseGm19240AlnRep1.bam,wgEncodeOpenChromDnaseGm19240AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e8ab88ad0309a611890ff6988393e0e4,bai=bd6ba9238eedaf6fd62f4c5ca64cb52b
+md5sum e8ab88ad0309a611890ff6988393e0e4,bd6ba9238eedaf6fd62f4c5ca64cb52b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2415,11 +2415,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000568
 expId 568
-fileName wgEncodeOpenChromDnaseGm19240AlnRep2.bam
+fileName wgEncodeOpenChromDnaseGm19240AlnRep2.bam,wgEncodeOpenChromDnaseGm19240AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ea1c2954e0dad4f67dc2b4e4b7408a27,bai=6c6fc0c9e4afbead8a0b68159b89733e
+md5sum ea1c2954e0dad4f67dc2b4e4b7408a27,6c6fc0c9e4afbead8a0b68159b89733e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2553,11 +2553,11 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000556
 expId 556
-fileName wgEncodeOpenChromDnaseH1hescAlnRep1.bam
+fileName wgEncodeOpenChromDnaseH1hescAlnRep1.bam,wgEncodeOpenChromDnaseH1hescAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=9950c312585e8557d5bb5ec6378e711a,bai=91f0f07b7b25e4598414daeb282db577
+md5sum 9950c312585e8557d5bb5ec6378e711a,91f0f07b7b25e4598414daeb282db577
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2577,11 +2577,11 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000556
 expId 556
-fileName wgEncodeOpenChromDnaseH1hescAlnRep2.bam
+fileName wgEncodeOpenChromDnaseH1hescAlnRep2.bam,wgEncodeOpenChromDnaseH1hescAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4bc63784b35f5a577ac376a1787adfd8,bai=8818f61f9837ccac91cf2518013728e5
+md5sum 4bc63784b35f5a577ac376a1787adfd8,8818f61f9837ccac91cf2518013728e5
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2715,11 +2715,11 @@ dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
 dccAccession wgEncodeEH000594
 expId 594
-fileName wgEncodeOpenChromDnaseH9esAlnRep1.bam
+fileName wgEncodeOpenChromDnaseH9esAlnRep1.bam,wgEncodeOpenChromDnaseH9esAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ac55acf964b6f00d2e64770b2bf35b52,bai=3686586c663dd3c54658e0785ae519c4
+md5sum ac55acf964b6f00d2e64770b2bf35b52,3686586c663dd3c54658e0785ae519c4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2739,11 +2739,11 @@ dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
 dccAccession wgEncodeEH000594
 expId 594
-fileName wgEncodeOpenChromDnaseH9esAlnRep2.bam
+fileName wgEncodeOpenChromDnaseH9esAlnRep2.bam,wgEncodeOpenChromDnaseH9esAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=f0a7d3f7790864d74be9725c64e93683,bai=e51e49cb25a2fbb5cd70278ff9143086
+md5sum f0a7d3f7790864d74be9725c64e93683,e51e49cb25a2fbb5cd70278ff9143086
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2877,11 +2877,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000540
 expId 540
-fileName wgEncodeOpenChromDnaseHelas3AlnRep1.bam
+fileName wgEncodeOpenChromDnaseHelas3AlnRep1.bam,wgEncodeOpenChromDnaseHelas3AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=da4e54a36110849fa41dbcf5711315f0,bai=dc1084abfd17a8ab30615e1a0d691ed1
+md5sum da4e54a36110849fa41dbcf5711315f0,dc1084abfd17a8ab30615e1a0d691ed1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2901,11 +2901,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000540
 expId 540
-fileName wgEncodeOpenChromDnaseHelas3AlnRep2.bam
+fileName wgEncodeOpenChromDnaseHelas3AlnRep2.bam,wgEncodeOpenChromDnaseHelas3AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e0b5426f74e0418e8e61cd42345b5129,bai=07916a95b6a61c90bc829a46c640564c
+md5sum e0b5426f74e0418e8e61cd42345b5129,07916a95b6a61c90bc829a46c640564c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2925,11 +2925,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000540
 expId 540
-fileName wgEncodeOpenChromDnaseHelas3AlnRep3.bam
+fileName wgEncodeOpenChromDnaseHelas3AlnRep3.bam,wgEncodeOpenChromDnaseHelas3AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4b8e54a080d77a5c2dc082fb87815510,bai=49cde5c69a13920e3842c241738c9738
+md5sum 4b8e54a080d77a5c2dc082fb87815510,49cde5c69a13920e3842c241738c9738
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -2973,11 +2973,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000577
 expId 577
-fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1.bam
+fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1.bam,wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=0fd862209ef1bdc6fe5e41e7b6541423,bai=e7c4dfc606d7dc35e66048d4468590c1
+md5sum 0fd862209ef1bdc6fe5e41e7b6541423,e7c4dfc606d7dc35e66048d4468590c1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2997,11 +2997,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000577
 expId 577
-fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2.bam
+fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2.bam,wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=d70320ca049145c999594bddbafa8241,bai=bde411d46b8d44bf33ffe1526837c044
+md5sum d70320ca049145c999594bddbafa8241,bde411d46b8d44bf33ffe1526837c044
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3271,11 +3271,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001107
 expId 1107
-fileName wgEncodeOpenChromDnaseHepatocytesAlnRep1.bam
+fileName wgEncodeOpenChromDnaseHepatocytesAlnRep1.bam,wgEncodeOpenChromDnaseHepatocytesAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1, input was generic_female (should have been male)
-md5sum bam=5744171c26554ce51f61e777814bc317,bai=9f9c7c1bae87e97cab359b5b373a1dd0
+md5sum 5744171c26554ce51f61e777814bc317,9f9c7c1bae87e97cab359b5b373a1dd0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3293,11 +3293,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001107
 expId 1107
-fileName wgEncodeOpenChromDnaseHepatocytesAlnRep2.bam
+fileName wgEncodeOpenChromDnaseHepatocytesAlnRep2.bam,wgEncodeOpenChromDnaseHepatocytesAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1, input was generic_female (should have been male)
-md5sum bam=16ace81de945700b8fda6e01ab62073a,bai=6169f4567935d55a93df380ddefdb08f
+md5sum 16ace81de945700b8fda6e01ab62073a,6169f4567935d55a93df380ddefdb08f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3426,11 +3426,11 @@ dateSubmitted 2009-03-11
 dateUnrestricted 2010-01-15
 dccAccession wgEncodeEH000537
 expId 537
-fileName wgEncodeOpenChromDnaseHepg2AlnRep1.bam
+fileName wgEncodeOpenChromDnaseHepg2AlnRep1.bam,wgEncodeOpenChromDnaseHepg2AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=9f1337365d7e06b98ea60cd0d756bdc9,bai=e1304d1e799068aadbfd3c31104f59a9
+md5sum 9f1337365d7e06b98ea60cd0d756bdc9,e1304d1e799068aadbfd3c31104f59a9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3450,11 +3450,11 @@ dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
 dccAccession wgEncodeEH000537
 expId 537
-fileName wgEncodeOpenChromDnaseHepg2AlnRep2.bam
+fileName wgEncodeOpenChromDnaseHepg2AlnRep2.bam,wgEncodeOpenChromDnaseHepg2AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=2ce2533d1b66c3dd2215cb6403216494,bai=2a53523681f13a7fb1ad51a60be59b59
+md5sum 2ce2533d1b66c3dd2215cb6403216494,2a53523681f13a7fb1ad51a60be59b59
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3474,11 +3474,11 @@ dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
 dccAccession wgEncodeEH000537
 expId 537
-fileName wgEncodeOpenChromDnaseHepg2AlnRep3.bam
+fileName wgEncodeOpenChromDnaseHepg2AlnRep3.bam,wgEncodeOpenChromDnaseHepg2AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=78ec59ed11cca80797f8211680868288,bai=c4b0456185ba6b1ad158bd7d95ee76c3
+md5sum 78ec59ed11cca80797f8211680868288,c4b0456185ba6b1ad158bd7d95ee76c3
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3656,11 +3656,11 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001101
 expId 1101
-fileName wgEncodeOpenChromDnaseHmecAlnRep1.bam
+fileName wgEncodeOpenChromDnaseHmecAlnRep1.bam,wgEncodeOpenChromDnaseHmecAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=fc137e55098f8973ab77b54e7611f784,bai=b5e7fb8a4dbf22889694f1b172473f7e
+md5sum fc137e55098f8973ab77b54e7611f784,b5e7fb8a4dbf22889694f1b172473f7e
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -3679,11 +3679,11 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 dccAccession wgEncodeEH001101
 expId 1101
-fileName wgEncodeOpenChromDnaseHmecAlnRep2.bam
+fileName wgEncodeOpenChromDnaseHmecAlnRep2.bam,wgEncodeOpenChromDnaseHmecAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4a2361f0e95e891157b492e21a669135,bai=0a884382971c448176cf3512d179cc73
+md5sum 4a2361f0e95e891157b492e21a669135,0a884382971c448176cf3512d179cc73
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -3792,11 +3792,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001106
 expId 1106
-fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep1.bam
+fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep1.bam,wgEncodeOpenChromDnaseHpde6e6e7AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e714176c3cd329f623396fa37eb18dcd,bai=68c01f4c9d90638325229c00596b1bef
+md5sum e714176c3cd329f623396fa37eb18dcd,68c01f4c9d90638325229c00596b1bef
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3814,11 +3814,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001106
 expId 1106
-fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep2.bam
+fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep2.bam,wgEncodeOpenChromDnaseHpde6e6e7AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b416a59f420293e2b253e00909c1bf93,bai=e1a1bac5e605da8b535fe25e757214f5
+md5sum b416a59f420293e2b253e00909c1bf93,e1a1bac5e605da8b535fe25e757214f5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3945,11 +3945,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000584
 expId 584
-fileName wgEncodeOpenChromDnaseHsmmAlnRep1.bam
+fileName wgEncodeOpenChromDnaseHsmmAlnRep1.bam,wgEncodeOpenChromDnaseHsmmAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=6de6d42b7d0fee43951f52a46d881776,bai=07b796a1116958485bcc73cb9ecf7e22
+md5sum 6de6d42b7d0fee43951f52a46d881776,07b796a1116958485bcc73cb9ecf7e22
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -3970,11 +3970,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000584
 expId 584
-fileName wgEncodeOpenChromDnaseHsmmAlnRep2.bam
+fileName wgEncodeOpenChromDnaseHsmmAlnRep2.bam,wgEncodeOpenChromDnaseHsmmAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=187b2cabc9ad86b9101f10e31ff15470,bai=8e8166d83f1f8c6baabb1aa9225fc45d
+md5sum 187b2cabc9ad86b9101f10e31ff15470,8e8166d83f1f8c6baabb1aa9225fc45d
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -3995,11 +3995,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000584
 expId 584
-fileName wgEncodeOpenChromDnaseHsmmAlnRep3.bam
+fileName wgEncodeOpenChromDnaseHsmmAlnRep3.bam,wgEncodeOpenChromDnaseHsmmAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=cb2bf821de56cc354b52f25a975a1bfa,bai=458cad72cd8ee83534dbf0b79412cd8f
+md5sum cb2bf821de56cc354b52f25a975a1bfa,458cad72cd8ee83534dbf0b79412cd8f
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -4095,11 +4095,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000585
 expId 585
-fileName wgEncodeOpenChromDnaseHsmmtAlnRep1.bam
+fileName wgEncodeOpenChromDnaseHsmmtAlnRep1.bam,wgEncodeOpenChromDnaseHsmmtAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e392d4ab1f7494f46c319602e3afb8c5,bai=3d5f4d8fc6693f0ef4c42f335a719f8e
+md5sum e392d4ab1f7494f46c319602e3afb8c5,3d5f4d8fc6693f0ef4c42f335a719f8e
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -4120,11 +4120,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000585
 expId 585
-fileName wgEncodeOpenChromDnaseHsmmtAlnRep2.bam
+fileName wgEncodeOpenChromDnaseHsmmtAlnRep2.bam,wgEncodeOpenChromDnaseHsmmtAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=5d67fb7dd269c2622c93b9883e9c03f5,bai=ec3b0ebe6bccaab31ef5bee13edbaf8f
+md5sum 5d67fb7dd269c2622c93b9883e9c03f5,ec3b0ebe6bccaab31ef5bee13edbaf8f
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -4145,11 +4145,11 @@ dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 dccAccession wgEncodeEH000585
 expId 585
-fileName wgEncodeOpenChromDnaseHsmmtAlnRep3.bam
+fileName wgEncodeOpenChromDnaseHsmmtAlnRep3.bam,wgEncodeOpenChromDnaseHsmmtAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=22a7f42087f982b1bc44dedcd98c1a6f,bai=d9a85a8c9f6c7bb80bbd5faca8dea5e4
+md5sum 22a7f42087f982b1bc44dedcd98c1a6f,d9a85a8c9f6c7bb80bbd5faca8dea5e4
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -4244,11 +4244,11 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH001105
 expId 1105
-fileName wgEncodeOpenChromDnaseHtr8AlnRep1.bam
+fileName wgEncodeOpenChromDnaseHtr8AlnRep1.bam,wgEncodeOpenChromDnaseHtr8AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=edbfdd382ae3071d68d9361b31288722,bai=7afd98712199a5478510e7ab36541299
+md5sum edbfdd382ae3071d68d9361b31288722,7afd98712199a5478510e7ab36541299
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4266,11 +4266,11 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 dccAccession wgEncodeEH001105
 expId 1105
-fileName wgEncodeOpenChromDnaseHtr8AlnRep2.bam
+fileName wgEncodeOpenChromDnaseHtr8AlnRep2.bam,wgEncodeOpenChromDnaseHtr8AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=3875f2202b17d324448fd8196c93ae20,bai=50cd28b417d9b7a43eef897c294f3e43
+md5sum 3875f2202b17d324448fd8196c93ae20,50cd28b417d9b7a43eef897c294f3e43
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4396,11 +4396,11 @@ dateSubmitted 2010-12-07
 dateUnrestricted 2011-09-07
 dccAccession wgEncodeEH001112
 expId 1112
-fileName wgEncodeOpenChromDnaseHuh75AlnRep1.bam
+fileName wgEncodeOpenChromDnaseHuh75AlnRep1.bam,wgEncodeOpenChromDnaseHuh75AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=f0e07ec08fff4adb8cdf4b1e5e5575ea,bai=15de857e9729609654bdb69ef169fc1d
+md5sum f0e07ec08fff4adb8cdf4b1e5e5575ea,15de857e9729609654bdb69ef169fc1d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4418,11 +4418,11 @@ dateSubmitted 2010-12-07
 dateUnrestricted 2011-09-07
 dccAccession wgEncodeEH001112
 expId 1112
-fileName wgEncodeOpenChromDnaseHuh75AlnRep2.bam
+fileName wgEncodeOpenChromDnaseHuh75AlnRep2.bam,wgEncodeOpenChromDnaseHuh75AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4d276d3230102cf412a9818f3a1b0a4a,bai=63e746a840b8d3454c72945056a544fc
+md5sum 4d276d3230102cf412a9818f3a1b0a4a,63e746a840b8d3454c72945056a544fc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4548,11 +4548,11 @@ dateSubmitted 2010-12-07
 dateUnrestricted 2011-09-07
 dccAccession wgEncodeEH001111
 expId 1111
-fileName wgEncodeOpenChromDnaseHuh7AlnRep1.bam
+fileName wgEncodeOpenChromDnaseHuh7AlnRep1.bam,wgEncodeOpenChromDnaseHuh7AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=971b69c4a6d0640f1cb69423b8e44368,bai=234c2d00786633f233824665a4b454d8
+md5sum 971b69c4a6d0640f1cb69423b8e44368,234c2d00786633f233824665a4b454d8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4570,11 +4570,11 @@ dateSubmitted 2010-12-07
 dateUnrestricted 2011-09-07
 dccAccession wgEncodeEH001111
 expId 1111
-fileName wgEncodeOpenChromDnaseHuh7AlnRep2.bam
+fileName wgEncodeOpenChromDnaseHuh7AlnRep2.bam,wgEncodeOpenChromDnaseHuh7AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=abc5e17db4127f0e04c75fd036f0798c,bai=cb9626a84ea253bbff201d8c348ccc30
+md5sum abc5e17db4127f0e04c75fd036f0798c,cb9626a84ea253bbff201d8c348ccc30
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4701,11 +4701,11 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000548
 expId 548
-fileName wgEncodeOpenChromDnaseHuvecAlnRep1.bam
+fileName wgEncodeOpenChromDnaseHuvecAlnRep1.bam,wgEncodeOpenChromDnaseHuvecAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=bc6e7484fd1055bd05d9bef2393a2510,bai=83061f2e4322aaafead9d15f199dc9be
+md5sum bc6e7484fd1055bd05d9bef2393a2510,83061f2e4322aaafead9d15f199dc9be
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4725,11 +4725,11 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000548
 expId 548
-fileName wgEncodeOpenChromDnaseHuvecAlnRep2.bam
+fileName wgEncodeOpenChromDnaseHuvecAlnRep2.bam,wgEncodeOpenChromDnaseHuvecAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ae8e6bef5d84a3909f424a90e28ac64e,bai=a9ca746641291b4ac627cdcba3ab0981
+md5sum ae8e6bef5d84a3909f424a90e28ac64e,a9ca746641291b4ac627cdcba3ab0981
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4883,11 +4883,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001110
 expId 1110
-fileName wgEncodeOpenChromDnaseIpsAlnRep1.bam
+fileName wgEncodeOpenChromDnaseIpsAlnRep1.bam,wgEncodeOpenChromDnaseIpsAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=6c59023e702086da5f5aeabc7b86be6e,bai=351a0c0e8fb8baf0d72a73d0214961ff
+md5sum 6c59023e702086da5f5aeabc7b86be6e,351a0c0e8fb8baf0d72a73d0214961ff
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -4906,11 +4906,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001110
 expId 1110
-fileName wgEncodeOpenChromDnaseIpsAlnRep2.bam
+fileName wgEncodeOpenChromDnaseIpsAlnRep2.bam,wgEncodeOpenChromDnaseIpsAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=cd5c405dba7596f4317e7c149567513f,bai=ec8d5b7c59ef3ad18cecb57ffd9b4317
+md5sum cd5c405dba7596f4317e7c149567513f,ec8d5b7c59ef3ad18cecb57ffd9b4317
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -4929,11 +4929,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001110
 expId 1110
-fileName wgEncodeOpenChromDnaseIpsAlnRep3.bam
+fileName wgEncodeOpenChromDnaseIpsAlnRep3.bam,wgEncodeOpenChromDnaseIpsAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=65ab4433efcaa3b4d427b4035bbaa6c1,bai=49039c7ad275a54875d2afc54bcc7013
+md5sum 65ab4433efcaa3b4d427b4035bbaa6c1,49039c7ad275a54875d2afc54bcc7013
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -5022,11 +5022,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000530
 expId 530
-fileName wgEncodeOpenChromDnaseK562AlnRep1.bam
+fileName wgEncodeOpenChromDnaseK562AlnRep1.bam,wgEncodeOpenChromDnaseK562AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=38c581b92a5bdf9d3ee8dbead811627a,bai=786389664dcf11495a85e097d01ac44e
+md5sum 38c581b92a5bdf9d3ee8dbead811627a,786389664dcf11495a85e097d01ac44e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5046,11 +5046,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000530
 expId 530
-fileName wgEncodeOpenChromDnaseK562AlnRep2.bam
+fileName wgEncodeOpenChromDnaseK562AlnRep2.bam,wgEncodeOpenChromDnaseK562AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=db8c1f50f40f9f210ba58adbf7439631,bai=5934dffd67f7f8bf416387352fa0d2d4
+md5sum db8c1f50f40f9f210ba58adbf7439631,5934dffd67f7f8bf416387352fa0d2d4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5205,11 +5205,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001097
 expId 1097
-fileName wgEncodeOpenChromDnaseLncapAlnRep1.bam
+fileName wgEncodeOpenChromDnaseLncapAlnRep1.bam,wgEncodeOpenChromDnaseLncapAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4327a3f3f7b3defd6ade4f7f0462319c,bai=4219d53b9ce86bf3461fea2429422352
+md5sum 4327a3f3f7b3defd6ade4f7f0462319c,4219d53b9ce86bf3461fea2429422352
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5227,11 +5227,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001097
 expId 1097
-fileName wgEncodeOpenChromDnaseLncapAlnRep2.bam
+fileName wgEncodeOpenChromDnaseLncapAlnRep2.bam,wgEncodeOpenChromDnaseLncapAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7340a7b5a5dc92120dde462da95d4c8d,bai=4b2eb1a151e5fac3457c18d756729926
+md5sum 7340a7b5a5dc92120dde462da95d4c8d,4b2eb1a151e5fac3457c18d756729926
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5249,11 +5249,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001097
 expId 1097
-fileName wgEncodeOpenChromDnaseLncapAlnRep3.bam
+fileName wgEncodeOpenChromDnaseLncapAlnRep3.bam,wgEncodeOpenChromDnaseLncapAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=328311f86444811ed2741c73671f6c10,bai=150a4fd9a3f5432822a9ffb1084518ad
+md5sum 328311f86444811ed2741c73671f6c10,150a4fd9a3f5432822a9ffb1084518ad
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -5271,11 +5271,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001096
 expId 1096
-fileName wgEncodeOpenChromDnaseLncapAndroAlnRep1.bam
+fileName wgEncodeOpenChromDnaseLncapAndroAlnRep1.bam,wgEncodeOpenChromDnaseLncapAndroAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=37cf378a7ff16caa268596686eaadae8,bai=74099dee207c9b7fd7be7c09b6f21c15
+md5sum 37cf378a7ff16caa268596686eaadae8,74099dee207c9b7fd7be7c09b6f21c15
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5294,11 +5294,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001096
 expId 1096
-fileName wgEncodeOpenChromDnaseLncapAndroAlnRep2.bam
+fileName wgEncodeOpenChromDnaseLncapAndroAlnRep2.bam,wgEncodeOpenChromDnaseLncapAndroAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=07ea564c6d3a603640ef8f4e5a362186,bai=82c9eceac96d7d9e834f19f35bbac96c
+md5sum 07ea564c6d3a603640ef8f4e5a362186,82c9eceac96d7d9e834f19f35bbac96c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5602,11 +5602,11 @@ dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000579
 expId 579
-fileName wgEncodeOpenChromDnaseMcf7AlnRep1.bam
+fileName wgEncodeOpenChromDnaseMcf7AlnRep1.bam,wgEncodeOpenChromDnaseMcf7AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=3716c4c9c6c06abf89e2179505bf59e5,bai=a801dfccd5111b9178b70f04615bcbbe
+md5sum 3716c4c9c6c06abf89e2179505bf59e5,a801dfccd5111b9178b70f04615bcbbe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5626,11 +5626,11 @@ dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 dccAccession wgEncodeEH000579
 expId 579
-fileName wgEncodeOpenChromDnaseMcf7AlnRep2.bam
+fileName wgEncodeOpenChromDnaseMcf7AlnRep2.bam,wgEncodeOpenChromDnaseMcf7AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7be110029f7310b6afa4d6bff06e90d8,bai=84670d4533089640e3e86ebb451001ff
+md5sum 7be110029f7310b6afa4d6bff06e90d8,84670d4533089640e3e86ebb451001ff
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5672,11 +5672,11 @@ dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
 expId 1745
-fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep1.bam
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep1.bam,wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=c754330c4500e3f8504459aca4db6215,bai=1684cabfb47ecc00c291f77448908764
+md5sum c754330c4500e3f8504459aca4db6215,1684cabfb47ecc00c291f77448908764
 project wgEncode
 replicate 1
 subId 4155
@@ -5693,11 +5693,11 @@ dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
 expId 1745
-fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep2.bam
+fileName wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep2.bam,wgEncodeOpenChromDnaseMcf7HypoxlacAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=484fa970e91e2e7291a5034d0464a974,bai=3da80d066a0faa0666e063c02da82761
+md5sum 484fa970e91e2e7291a5034d0464a974,3da80d066a0faa0666e063c02da82761
 project wgEncode
 replicate 2
 subId 4155
@@ -5930,11 +5930,11 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000574
 expId 574
-fileName wgEncodeOpenChromDnaseMedulloAlnRep1.bam
+fileName wgEncodeOpenChromDnaseMedulloAlnRep1.bam,wgEncodeOpenChromDnaseMedulloAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1, input was generic_female (should have been male)
-md5sum bam=00a6f792b37ba0ed28d335a8033e8758,bai=c3bf0b769c7d3fabefd02fdb62d1381b
+md5sum 00a6f792b37ba0ed28d335a8033e8758,c3bf0b769c7d3fabefd02fdb62d1381b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5954,11 +5954,11 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000574
 expId 574
-fileName wgEncodeOpenChromDnaseMedulloAlnRep2.bam
+fileName wgEncodeOpenChromDnaseMedulloAlnRep2.bam,wgEncodeOpenChromDnaseMedulloAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1, input was generic_female (should have been male)
-md5sum bam=d444c02cf4c41a44c5145f38d38ebf5d,bai=b9c051110e1cec93d30f8bd3ea8d6b63
+md5sum d444c02cf4c41a44c5145f38d38ebf5d,b9c051110e1cec93d30f8bd3ea8d6b63
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6093,11 +6093,11 @@ dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 dccAccession wgEncodeEH000602
 expId 602
-fileName wgEncodeOpenChromDnaseMelanoAlnRep1.bam
+fileName wgEncodeOpenChromDnaseMelanoAlnRep1.bam,wgEncodeOpenChromDnaseMelanoAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=56b745753cfb421f283edbad509c6e25,bai=b148fecbfe4dfe204eb1a690d66d1b6b
+md5sum 56b745753cfb421f283edbad509c6e25,b148fecbfe4dfe204eb1a690d66d1b6b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6116,11 +6116,11 @@ dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 dccAccession wgEncodeEH000602
 expId 602
-fileName wgEncodeOpenChromDnaseMelanoAlnRep2.bam
+fileName wgEncodeOpenChromDnaseMelanoAlnRep2.bam,wgEncodeOpenChromDnaseMelanoAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=690b082ce884533b4250f30693a46701,bai=48faed5681641157093898dc6dc2180c
+md5sum 690b082ce884533b4250f30693a46701,48faed5681641157093898dc6dc2180c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6251,11 +6251,11 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000603
 expId 603
-fileName wgEncodeOpenChromDnaseMyometrAlnRep1.bam
+fileName wgEncodeOpenChromDnaseMyometrAlnRep1.bam,wgEncodeOpenChromDnaseMyometrAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=bcead1b4f080999da8cac963ad557d9d,bai=6ac0d6560242dabf8f7de7322a845dba
+md5sum bcead1b4f080999da8cac963ad557d9d,6ac0d6560242dabf8f7de7322a845dba
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6276,11 +6276,11 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000603
 expId 603
-fileName wgEncodeOpenChromDnaseMyometrAlnRep2.bam
+fileName wgEncodeOpenChromDnaseMyometrAlnRep2.bam,wgEncodeOpenChromDnaseMyometrAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=73a5de69af4847424e80d5f0e0a253be,bai=71395cdbd8c854665f3c0c1451afdbcc
+md5sum 73a5de69af4847424e80d5f0e0a253be,71395cdbd8c854665f3c0c1451afdbcc
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6376,11 +6376,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000553
 expId 553
-fileName wgEncodeOpenChromDnaseNhekAlnRep1.bam
+fileName wgEncodeOpenChromDnaseNhekAlnRep1.bam,wgEncodeOpenChromDnaseNhekAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=43d4292a6e72c67c8420e1567605251b,bai=2938640ef592878c143d317bb425aa7a
+md5sum 43d4292a6e72c67c8420e1567605251b,2938640ef592878c143d317bb425aa7a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6400,11 +6400,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000553
 expId 553
-fileName wgEncodeOpenChromDnaseNhekAlnRep2.bam
+fileName wgEncodeOpenChromDnaseNhekAlnRep2.bam,wgEncodeOpenChromDnaseNhekAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=1b16d9a47a6376d7db53a837ba483ef5,bai=57ef2841a6108d4c30e5e6438f7adf98
+md5sum 1b16d9a47a6376d7db53a837ba483ef5,57ef2841a6108d4c30e5e6438f7adf98
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6558,11 +6558,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001098
 expId 1098
-fileName wgEncodeOpenChromDnaseOsteoblAlnRep1.bam
+fileName wgEncodeOpenChromDnaseOsteoblAlnRep1.bam,wgEncodeOpenChromDnaseOsteoblAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b93f1b0a48f45dd01f87d9f90d5defed,bai=e61c26b6f16d348dfd4c7147e63ae3a6
+md5sum b93f1b0a48f45dd01f87d9f90d5defed,e61c26b6f16d348dfd4c7147e63ae3a6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6580,11 +6580,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001098
 expId 1098
-fileName wgEncodeOpenChromDnaseOsteoblAlnRep2.bam
+fileName wgEncodeOpenChromDnaseOsteoblAlnRep2.bam,wgEncodeOpenChromDnaseOsteoblAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=73b6d4a4a5feb0e264a2641e0f3b6a50,bai=183d637aa85282afd8fa99f7cc6e25d3
+md5sum 73b6d4a4a5feb0e264a2641e0f3b6a50,183d637aa85282afd8fa99f7cc6e25d3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6602,11 +6602,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001098
 expId 1098
-fileName wgEncodeOpenChromDnaseOsteoblAlnRep3.bam
+fileName wgEncodeOpenChromDnaseOsteoblAlnRep3.bam,wgEncodeOpenChromDnaseOsteoblAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=f027b81a6e42765f6199daeb69aabaf9,bai=318369d3d081eeaf99ec195c4523e75e
+md5sum f027b81a6e42765f6199daeb69aabaf9,318369d3d081eeaf99ec195c4523e75e
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -6753,11 +6753,11 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001102
 expId 1102
-fileName wgEncodeOpenChromDnasePanisdAlnRep1.bam
+fileName wgEncodeOpenChromDnasePanisdAlnRep1.bam,wgEncodeOpenChromDnasePanisdAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=247461f69e331352361b2ee6747455b6,bai=b35af82009e4b262f6f3bc4011ef8861
+md5sum 247461f69e331352361b2ee6747455b6,b35af82009e4b262f6f3bc4011ef8861
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6776,11 +6776,11 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001102
 expId 1102
-fileName wgEncodeOpenChromDnasePanisdAlnRep2.bam
+fileName wgEncodeOpenChromDnasePanisdAlnRep2.bam,wgEncodeOpenChromDnasePanisdAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=556d696d1ddb623c62180303f53b22c1,bai=1b1cd35f310c06ca92d21575d3643bff
+md5sum 556d696d1ddb623c62180303f53b22c1,1b1cd35f310c06ca92d21575d3643bff
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6799,11 +6799,11 @@ dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001102
 expId 1102
-fileName wgEncodeOpenChromDnasePanisdAlnRep3.bam
+fileName wgEncodeOpenChromDnasePanisdAlnRep3.bam,wgEncodeOpenChromDnasePanisdAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=5afd1cf7722f7635c9bb8742bde3cf30,bai=c5016d3460d08388985041a6219a6c3b
+md5sum 5afd1cf7722f7635c9bb8742bde3cf30,c5016d3460d08388985041a6219a6c3b
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6892,11 +6892,11 @@ dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 dccAccession wgEncodeEH000575
 expId 575
-fileName wgEncodeOpenChromDnasePanisletsAlnRep1.bam
+fileName wgEncodeOpenChromDnasePanisletsAlnRep1.bam,wgEncodeOpenChromDnasePanisletsAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=d70fad6fee4875a6e051e7a90380eaaa,bai=a72db7ec8649e69e5f6a1f13b5afc832
+md5sum d70fad6fee4875a6e051e7a90380eaaa,a72db7ec8649e69e5f6a1f13b5afc832
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6917,11 +6917,11 @@ dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 dccAccession wgEncodeEH000575
 expId 575
-fileName wgEncodeOpenChromDnasePanisletsAlnRep2.bam
+fileName wgEncodeOpenChromDnasePanisletsAlnRep2.bam,wgEncodeOpenChromDnasePanisletsAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ceb3b311bbaa5526f6e8f3a61d6de266,bai=2f466e36761cd2f7ea75aa5d844899c6
+md5sum ceb3b311bbaa5526f6e8f3a61d6de266,2f466e36761cd2f7ea75aa5d844899c6
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6942,11 +6942,11 @@ dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 dccAccession wgEncodeEH000575
 expId 575
-fileName wgEncodeOpenChromDnasePanisletsAlnRep3.bam
+fileName wgEncodeOpenChromDnasePanisletsAlnRep3.bam,wgEncodeOpenChromDnasePanisletsAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=35708e462a234eb1884b62de4a4112f7,bai=3636bb5687c898841d9f19d190a57d15
+md5sum 35708e462a234eb1884b62de4a4112f7,3636bb5687c898841d9f19d190a57d15
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -7041,11 +7041,11 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 dccAccession wgEncodeEH001099
 expId 1099
-fileName wgEncodeOpenChromDnasePhteAlnRep1.bam
+fileName wgEncodeOpenChromDnasePhteAlnRep1.bam,wgEncodeOpenChromDnasePhteAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=60604e8bf4d5d680e2b40ee3fd7cd29c,bai=8594b814593ad8f0b21b95077f24baf8
+md5sum 60604e8bf4d5d680e2b40ee3fd7cd29c,8594b814593ad8f0b21b95077f24baf8
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -7064,11 +7064,11 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 dccAccession wgEncodeEH001099
 expId 1099
-fileName wgEncodeOpenChromDnasePhteAlnRep2.bam
+fileName wgEncodeOpenChromDnasePhteAlnRep2.bam,wgEncodeOpenChromDnasePhteAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=0440fcfd6f70394326e42d636aa8ef86,bai=619eb1f7d69567318cd16d48572e46a1
+md5sum 0440fcfd6f70394326e42d636aa8ef86,619eb1f7d69567318cd16d48572e46a1
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -7157,11 +7157,11 @@ dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 dccAccession wgEncodeEH000576
 expId 576
-fileName wgEncodeOpenChromDnaseProgfibAlnRep1.bam
+fileName wgEncodeOpenChromDnaseProgfibAlnRep1.bam,wgEncodeOpenChromDnaseProgfibAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7b58ffebd36b0435a1e44d58c0dbee3b,bai=87193b1be90c1336977e136db8603000
+md5sum 7b58ffebd36b0435a1e44d58c0dbee3b,87193b1be90c1336977e136db8603000
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -7182,11 +7182,11 @@ dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 dccAccession wgEncodeEH000576
 expId 576
-fileName wgEncodeOpenChromDnaseProgfibAlnRep2.bam
+fileName wgEncodeOpenChromDnaseProgfibAlnRep2.bam,wgEncodeOpenChromDnaseProgfibAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=454ac2d6880fec6937acbec996c91c27,bai=fd4313e3684a81a94542066e64e24672
+md5sum 454ac2d6880fec6937acbec996c91c27,fd4313e3684a81a94542066e64e24672
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -7302,11 +7302,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001108
 expId 1108
-fileName wgEncodeOpenChromDnaseStellateAlnRep1.bam
+fileName wgEncodeOpenChromDnaseStellateAlnRep1.bam,wgEncodeOpenChromDnaseStellateAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=dc9986776756d15dc5de355a37f7f392,bai=a2ac6658b22ce4be1df86134f6384dd5
+md5sum dc9986776756d15dc5de355a37f7f392,a2ac6658b22ce4be1df86134f6384dd5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7324,11 +7324,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001108
 expId 1108
-fileName wgEncodeOpenChromDnaseStellateAlnRep2.bam
+fileName wgEncodeOpenChromDnaseStellateAlnRep2.bam,wgEncodeOpenChromDnaseStellateAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=562d4e15b535abec6e07ace9a4972cc0,bai=0d86c89a2036d8dd4adc54cac96bee8c
+md5sum 562d4e15b535abec6e07ace9a4972cc0,0d86c89a2036d8dd4adc54cac96bee8c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7454,11 +7454,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001109
 expId 1109
-fileName wgEncodeOpenChromDnaseT47dAlnRep1.bam
+fileName wgEncodeOpenChromDnaseT47dAlnRep1.bam,wgEncodeOpenChromDnaseT47dAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=33ada980e63988108bf6fc9b6d0e9e81,bai=26c7ec69920f28d09d58c68d3f798747
+md5sum 33ada980e63988108bf6fc9b6d0e9e81,26c7ec69920f28d09d58c68d3f798747
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7476,11 +7476,11 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001109
 expId 1109
-fileName wgEncodeOpenChromDnaseT47dAlnRep2.bam
+fileName wgEncodeOpenChromDnaseT47dAlnRep2.bam,wgEncodeOpenChromDnaseT47dAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=6ab3aa93ed2756863f673c7629b9e5f5,bai=30ddbc00bdeeeaf2f139052fee1fec3b
+md5sum 6ab3aa93ed2756863f673c7629b9e5f5,30ddbc00bdeeeaf2f139052fee1fec3b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7606,11 +7606,11 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
-fileName wgEncodeOpenChromDnaseUrotsaAlnRep1.bam
+fileName wgEncodeOpenChromDnaseUrotsaAlnRep1.bam,wgEncodeOpenChromDnaseUrotsaAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b20ebbe94859e3b60f6fad5b97577859,bai=ca9551a51b15f8e868a50d1b4e222848
+md5sum b20ebbe94859e3b60f6fad5b97577859,ca9551a51b15f8e868a50d1b4e222848
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7628,11 +7628,11 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001113
 expId 1113
-fileName wgEncodeOpenChromDnaseUrotsaAlnRep2.bam
+fileName wgEncodeOpenChromDnaseUrotsaAlnRep2.bam,wgEncodeOpenChromDnaseUrotsaAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e7e503c8f12b09581ce929a6164c313b,bai=e2629a0c63006e7536322cdfe3319e47
+md5sum e7e503c8f12b09581ce929a6164c313b,e2629a0c63006e7536322cdfe3319e47
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7758,11 +7758,11 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
-fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam
+fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam,wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b1e719048c085dd7023617c86a2a250d,bai=f145a3dc3bf450bedf53fcd8e52ea89d
+md5sum b1e719048c085dd7023617c86a2a250d,f145a3dc3bf450bedf53fcd8e52ea89d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7781,11 +7781,11 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH001114
 expId 1114
-fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam
+fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam,wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=09f9ddbd363e4b93183f531f321e780e,bai=cc62c19f4a66b66bea9298d09aebe5a1
+md5sum 09f9ddbd363e4b93183f531f321e780e,cc62c19f4a66b66bea9298d09aebe5a1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7906,4 +7906,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1813667583
+# MAGIC: -1813748169
