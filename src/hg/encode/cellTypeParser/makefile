@@ -5,10 +5,10 @@ include ../../../inc/common.mk
 SCRIPT_FILES = \
 	cellTypeParser.py
 
-install: 
-	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} scripts
+all:	wranglerTools 
+	
 
-scripts:
+wranglerTools:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
             cp -upv $$F ${SCRIPTS}; \

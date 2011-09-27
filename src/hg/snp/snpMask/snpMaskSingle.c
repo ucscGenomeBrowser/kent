@@ -13,11 +13,12 @@ void usage()
 errAbort(
 "snpMaskSingle - print sequence using IUPAC ambiguous nucleotide codes for single base substitutions\n"
 "usage:\n"
-"    snpMaskSingle snpNNN.bed db.2bit out.fa\n"
+"    snpMaskSingle snpNNN.bed db.2bit out.fa [diffObserved.txt]\n"
 "Given a snpNNN.bed (NNN >= 125) and the corresponding 2bit assembly\n"
 "sequence, write a fasta file with an IUPAC ambiguous nucleotide code\n"
 "representing the observed alleles at the position of each single-base\n"
-"SNP.\n"
+"SNP. If optional arg [diffOberved.txt] is given, then differing observed\n"
+"strings at the same location will be written to that file.\n"
 "Note1: This assumes that snpNNN.bed is sorted by position -- results will\n"
 "be incorrect if rows for different chroms are shuffled!\n"
 "Note2: It is a good idea to filter the snpNNN.bed input to exclude SNPs\n"
@@ -160,7 +161,7 @@ return cloneString(observed);
 }
 
 char mergeBaseAndObserved(char oldIupac, char *observed, char strand,
-			  char *chrom, int chromStart, int chromEnd)
+			  char *chrom, int chromStart, int chromEnd, FILE *diffObsOut)
 /* Return an IUPAC base encompassing the old base and all of the bases
  * contained in observed.  Alert the developer if different SNPs at the
  * same base have different bases in observed. */
@@ -171,19 +172,27 @@ UBYTE obsBits = dnaToAggregateBaseBits(observed);
 if (strand == '-')
     obsBits = baseBitsComplement(obsBits);
 if (isAmbig && obsBits != oldBits)
-    verbose(1, "differing observed strings at %s|%d|%d: %s, %s\n",
-	    chrom, chromStart, chromEnd,
-	    bitsToObserved(oldBits), bitsToObserved(obsBits));
+    {
+    if (diffObsOut != NULL)
+	fprintf(diffObsOut, "differing observed strings at %s|%d|%d: %s, %s\n",
+		chrom, chromStart, chromEnd,
+		bitsToObserved(oldBits), bitsToObserved(obsBits));
+    else
+	verbose(1, "differing observed strings at %s|%d|%d: %s, %s\n",
+		chrom, chromStart, chromEnd,
+		bitsToObserved(oldBits), bitsToObserved(obsBits));
+    }
 return baseBitsToIupacNt(oldBits | obsBits);
 }
 
 
-void snpMaskSingle(char *snpBedFile, char *twoBitFile, char *outFile)
+void snpMaskSingle(char *snpBedFile, char *twoBitFile, char *outFile, char *diffObsFile)
 {
 /* snpMaskSingle - Print sequence using IUPAC ambiguous nucleotide codes for single base substitutions. */
 struct lineFile *lfSnp = lineFileOpen(snpBedFile, TRUE);
 struct twoBitFile *tbfGenomic = twoBitOpen(twoBitFile);
 FILE *outMasked = mustOpen(outFile, "w");
+FILE *diffObsOut = (diffObsFile == NULL) ? NULL : mustOpen(diffObsFile, "w");
 long long expectedTotalSize = twoBitTotalSize(tbfGenomic);
 long long totalMaskedSnps = 0, totalMaskedBases = 0, totalSize = 0;
 int prevMaskedChromStart = -1;
@@ -218,7 +227,7 @@ while ((wordCount = lineFileChopTab(lfSnp, words)) > 0)
     boolean inRep = islower(seq->dna[chromStart]);
     char oldCode = toupper(seq->dna[chromStart]);
     char newCode = mergeBaseAndObserved(oldCode, observed, strand,
-					chrom, chromStart, chromEnd);
+					chrom, chromStart, chromEnd, diffObsOut);
     if (oldCode != newCode)
 	{
 	if (inRep)
@@ -251,8 +260,9 @@ if (totalSize != expectedTotalSize)
 int main(int argc, char *argv[])
 /* Check args and call snpMaskSingle. */
 {
-if (argc != 4)
+if (argc != 4 && argc != 5)
     usage();
-snpMaskSingle(argv[1], argv[2], argv[3]);
+char *diffObsFile = (argc == 5) ? argv[4] : NULL;
+snpMaskSingle(argv[1], argv[2], argv[3], diffObsFile);
 return 0;
 }

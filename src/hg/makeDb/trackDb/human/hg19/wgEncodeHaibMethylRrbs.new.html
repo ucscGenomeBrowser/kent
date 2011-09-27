@@ -14,22 +14,18 @@ Methylation status is represented with an 11-color gradient using the following 
 <p>
 The score in this track reports the number of sequencing reads obtained for each CpG, which is often called 'coverage'.  Score is capped at 1000, so any CpGs that were covered by more than 1000 sequencing reads will have a score of 1000.  The bed files available for download contain two extra columns, one with the uncapped coverage (number of reads at that site), and one with the percentage of those reads that show methylation.  We obtain high reproducibility, with correlation coefficients greater than 0.9 between biological replicates, when we only consider CpGs represented by at least 10 sequencing reads (10x coverage, score=10).  Therefore, the default view for this track is set to 10X coverage, or a score of 10.
 </p>
-<P>
+<!--<P>
 This track is a multi-view composite track that contains multiple data types
 (<EM>views</EM>). For each view, there are multiple subtracks that display
 individually on the browser. Instructions for configuring multi-view tracks
 are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-<P>
-
-
+<P>-->
 
 <a name="Methods"></a><h2>Methods</h2>
-DNA methylation at CpG sites was assayed with a modified version of Reduced Representation Bisulfite Sequencing (RRBS; Meissner <span style="font-style: italic">et al</span>., 2008).  RRBS was performed on cell lines grown by many ENCODE production groups.  The production group that grew the cells and isolated genomic DNA is indicated in the "obtainedBy" field of the metadata.  When a cell type was provided by more than one lab, the data for the cells from only one lab are displayed in the table above.  However, the data for every cell type from every lab is available from the <A HREF="/cgi-bin/hgFileUi?db=hg19&g=wgEncodeHaibMethylRrbs" TARGET=_BLANK>Downloads</A> page.  RRBS was carried out by the Myers production group at the HudsonAlpha Institute for Biotechnology.
-
+DNA methylation at CpG sites was assayed with a modified version of Reduced Representation Bisulfite Sequencing (RRBS; Meissner <span style="font-style: italic">et al</span>., 2008).  RRBS was performed on cell lines grown by many ENCODE production groups.  The production group that grew the cells and isolated genomic DNA is indicated in the "obtainedBy" field of the metadata.  When a cell type was provided by more than one lab, the data from only one lab are available for immediate display.  However, the data for every cell type from every lab is available from the <A HREF="/cgi-bin/hgFileUi?db=hg19&g=wgEncodeHaibMethylRrbs" TARGET=_BLANK>Downloads</A> page.  RRBS was also performed on genomic DNA from tissue samples provided by BioChain (denoted as "BC" in the sample name).  The replicates for the BioChain tissues are technical beginning at the bisulfite treatment step. RRBS was carried out by the Myers production group at the HudsonAlpha Institute for Biotechnology.
 
 <h3>Isolation of genomic DNA</h3>
 Genomic DNA is isolated from biological replicates of each cell line using the QIAGEN DNeasy Blood & Tissue Kit according to the instructions provided by the manufacturer.  DNA concentrations for each genomic DNA preparation are determined using fluorescent DNA binding dye and a fluorometer (Invitrogen Quant-iT dsDNA High Sensitivity Kit and Qubit Fluorometer).  Typically, 1 &micro;g of DNA is used to make an RRBS library; however, we have also had success in making libraries with 200 ng genomic DNA from rare or precious samples.
-
 
 <h3>RRBS library construction and sequencing</h3>
 RRBS library construction starts with MspI digestion of genomic DNA , which cuts at every CCGG regardless of methylation status.  Klenow exo- DNA Polymerase is then used to fill in the recessed end of the genomic DNA and add an adenosine as a 3prime overhang.  Next, a methylated version of the Illumina paired-end adapters is ligated onto the DNA.  Adapter ligated genomic DNA fragments between 105 and 185 basepairs are selected using agarose gel electrophoresis and Qiagen Qiaquick Gel Extraction Kit.  The selected adapter-ligated fragments are treated with sodium bisulfite using the Zymo Research EZ DNA Methylation Gold Kit, which converts unmethylated cytosines to uracils and leaves methylated cytosines unchanged.  Bisulfite treated DNA is amplified in a final PCR reaction which has been optimized to uniformly amplify diverse fragment sizes and sequence contexts in the same reaction.  During this final PCR reaction uracils are copied as thymines resulting in a thymine in the PCR products wherever an unmethylated cytosine existed in the genomic DNA. The sample is now ready for sequencing on the Illumina sequencing platform.  These libraries were sequenced with an Illumina Genome Analyzer IIx according to the manufacturer's recommendations.  The full RRBS protocol can be found <A HREF="http://hudsonalpha.org/myers-lab/protocols" TARGET=_BLANK>here</A>.</P> 
@@ -39,13 +35,13 @@ To analyze the sequence data, a reference genome is created that contains only t
 
 <h2>Release Notes</h2>
 <P>
-This is release 2 (2011) of this track and includes an additional 86 subtracks for display representing 39 new cell lines. 
-There is also additional data in the Downloads only section
-Fastq files are available for every experiment.  These contain raw DNA sequencing reads of bisulfite treated DNA. 
+This is release 2 (2011) of this track and includes an additional 44 cell types. 
+Please refer to the <A HREF="../../cgi-bin/hgEncodeVocab?tag=HSMM,HSMMFSHD,HSMMt,HSMMTUBEFSHD" TARGET=_BLANK>cell line descriptions</A> and the Open Chromatin(Crawford) protocols for details on the HSMM, HSMM_tube, HSMM_FSHD and HSMMtube_FSHD samples.
+There are also additional data in the <A HREF="../../cgi-bin/hgFileUi?db=hg19&g=wgEncodeHaibMethylRrbs" TARGET=_BLANK> Downloads</A> section. Fastq files, which contain the raw DNA sequencing reads of the bisulfite treated DNA are now 
+available for every experiment. GEO accession numbers are available for the data from release 1.
 </P>
 <P>
-The subtrack for HSMM Rep 3 was replaced with the correct data for that replicate.  
-Refer to the Duke/UNC/UTA/EBI Open Chromatin protocol for HSMM and HSMMtube.  Replicates 4-6 for HSMM and HSMMtube were revoked due to a cell line mislabeling and will be included in a future release when the correct cell line is registered.
+Please note: The subtrack for HSMM Rep 3 was replaced with the correct data for that replicate.  
 </P>
 
 

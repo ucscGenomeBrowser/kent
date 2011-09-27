@@ -654,8 +654,8 @@ char *cloneLine = cloneString(line);
                 *end = '\0';
                 val++;
                 }
-            // handle comma separated list of vals (if unquoted)
-            if (strchr(val,',') != NULL)
+            // handle comma separated list of vals (if not framed with widcards)
+            if (strchr(val,',') != NULL && (*val != '%' || *(val + strlen(val) - 1) != '%'))
                 {
                 char * aVal = NULL;
                 while((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
@@ -1376,29 +1376,45 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
             (strchr(rootVar->var,'%')?"LIKE":"="), rootVar->var);
 
         struct mdbLimbVal *limbVal;
-        boolean multiVals = FALSE;
+        boolean multiVals = (rootVar->vals != NULL && rootVar->vals->next != NULL);
+        boolean wilds = FALSE;
+        for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
+            {
+            if (strchr(limbVal->val,'%') != NULL)
+                wilds = TRUE;
+            }
         for(limbVal=rootVar->vals;limbVal!=NULL;limbVal=limbVal->next)
             {
             if(limbVal->val == NULL || strlen(limbVal->val) < 1)
                 continue;
 
-            if(!multiVals)
+            if(limbVal==rootVar->vals) // First val
                 {
-                dyStringPrintf(dy, " AND T%d.val ",tix);
+                if (wilds && multiVals)
+                    dyStringPrintf(dy, " AND (T%d.val ",tix);
+                else
+                    dyStringPrintf(dy, " AND T%d.val ",tix);
+                }
+            else                      // successive vals
+                {
+                if (wilds && multiVals)
+                    dyStringPrintf(dy, " or T%d.val ",tix);
+                else
+                    dyStringPrintf(dy, ",");
+                }
+
+            if (limbVal==rootVar->vals   // First val
+            ||  (wilds && multiVals))      // and successive if wildcards
+                {
                 if(rootVar->notEqual)
                     dyStringPrintf(dy, "%s",(strchr(limbVal->val,'%') || limbVal->next)?"NOT ":"!");
-                if(limbVal->next == NULL) // only one val
-                    {
-                    dyStringPrintf(dy, "%s '%s'",
-                        (strchr(limbVal->val,'%')?"LIKE":"="), sqlEscapeString(limbVal->val));
-                    break;
-                    }
+                if (strchr(limbVal->val,'%') != NULL)
+                    dyStringPrintf(dy, "LIKE ");
+                else if (!multiVals || wilds)
+                    dyStringPrintf(dy, "= ");
                 else
                     dyStringPrintf(dy, "IN (");
-                multiVals=TRUE;
                 }
-            else
-                dyStringPrintf(dy, ",");
             dyStringPrintf(dy, "'%s'", sqlEscapeString(limbVal->val));
             }
         if(multiVals)
@@ -1516,7 +1532,7 @@ if(raStyle) // NOTE: currently only supporting validation of RA files
     fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
 }
 
-char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude)
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude,boolean cvLabels)
 // returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
 {
 if (mdbObj!=NULL)
@@ -1533,7 +1549,16 @@ if (mdbObj!=NULL)
     for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
-            dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            {
+            if (cvLabels)
+                {
+                char *varLabel = (char *)cvLabel(NULL,mdbVar->var);
+                char *valLabel = (char *)cvLabel(mdbVar->var,mdbVar->val);
+                dyStringPrintf(dyLine,"%s=%s; ",varLabel,valLabel);
+                }
+            else
+                dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            }
         }
     char *line = dyStringCannibalize(&dyLine);
     if (line)
@@ -1566,6 +1591,82 @@ FILE *f = mustOpen(file, "w");
 mdbObjPrintToStream(mdbObjs, raStyle, f);
 
 fclose(f);
+}
+
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator, boolean header)
+// prints mdbObjs as a table, but only the vars listed in comma delimited order.
+// Examples of separator: " " "\t\t" or "<TD>", in which case this is an HTML table.
+// mdbObjs list will be reordered. Sort fails when vars are missing in objs.
+{
+if (separator == NULL)
+    separator = " ";
+boolean html = FALSE;
+if (startsWith("<T",separator) || startsWith("<t",separator))
+    {
+    if(!endsWith(separator,">"))
+        errAbort("mdbObjPrintOrdered() separator is invalid HTML '%s'.\n",separator);
+    html = TRUE;
+    }
+
+if (!startsWithWordByDelimiter("obj"       ,',',order)
+&&  !startsWithWordByDelimiter("objName"   ,',',order)
+&&  !startsWithWordByDelimiter("metaObject",',',order))
+    mdbObjsSortOnVars(mdbObjs, order);
+
+struct slName *vars = slNameListFromString(order, ',');
+struct slName *var = NULL;
+
+if (html)
+    fprintf(outF, "<table>");
+if (header)
+    {
+    if (html)
+        fprintf(outF, "<tr>");
+    for (var = vars;var != NULL; var = var->next)
+        {
+        if (html)
+            fprintf(outF, "%s%s",separator,var->name); // <td> is first
+        else
+            fprintf(outF, "%s%s",var->name,separator);
+        if (html)
+            fprintf(outF, "</td>");
+        }
+    if (html)
+        fprintf(outF, "</tr>");
+    fprintf(outF, "\n");
+    }
+
+struct mdbObj *mdbObj = *mdbObjs;
+for (;mdbObj != NULL; mdbObj = mdbObj->next)
+    {
+    if (html)
+        fprintf(outF, "<tr>");
+    for (var = vars;var != NULL; var = var->next)
+        {
+        char *val = mdbObjFindValue(mdbObj, var->name);
+        if (val == NULL)
+            {
+            /*if (sameWord(var->name,"obj") || sameWord(var->name,"objName") || sameWord(var->name,"metaObject"))
+                val = mdbObj->obj;
+            else*/ if (html)
+                val = "&nbsp;";
+            else
+                val = " ";
+            }
+        if (html)
+            fprintf(outF, "%s%s",separator,val); // <td> is first
+        else
+            fprintf(outF, "%s%s",val,separator);
+        if (html)
+            fprintf(outF, "</td>");
+        }
+    if (html)
+        fprintf(outF, "</tr>");
+    fprintf(outF, "\n");
+    }
+
+if (html)
+    fprintf(outF, "</table>\n");
 }
 
 int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file)
@@ -1739,7 +1840,11 @@ char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
 struct mdbVar *mdbVar = mdbObjFind(mdbObj, var);
 
 if(mdbVar == NULL)
+    {
+    if (sameWord(var,"obj") || sameWord(var,"objName") || sameWord(var,"metaObject"))
+        return mdbObj->obj;
     return NULL;
+    }
 
 return mdbVar->val;
 }
@@ -2220,6 +2325,7 @@ struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,bool
 struct mdbObj *mdbObjsReturned = NULL;
 struct mdbObj *mdbObjs = *pMdbObjs;
 *pMdbObjs = NULL;
+boolean wildValMatch = (val != NULL && strchr(val,'*') != NULL);
 struct mdbObj **pMatchTail   = returnMatches ? &mdbObjsReturned : pMdbObjs;  // Slightly faster than slAddHead/slReverse
 struct mdbObj **pNoMatchTail = returnMatches ? pMdbObjs : &mdbObjsReturned;  // Also known as too clever by half
 while (mdbObjs!=NULL)
@@ -2230,7 +2336,12 @@ while (mdbObjs!=NULL)
     if (val == NULL)
         match = (foundVal != NULL);           // any val will match
     else if (foundVal)
-        match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        {
+        if (wildValMatch)
+            match = (wildMatch(val,foundVal));
+        else
+            match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        }
     if (match)
         {
         *pMatchTail = obj;
@@ -2476,9 +2587,9 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         if (!valid)
             {
             if (startsWith("ERROR in ",reason))
-                verbose(1,"%s\n",reason);
+                printf("%s\n",reason);
             else
-                verbose(1,"%s in %s: %s\n",reason,MDB_OBJ,mdbObj->obj);
+                printf("%s in %s: %s\n",reason,MDB_OBJ,mdbObj->obj);
             invalids++;
             }
         }
@@ -3090,7 +3201,9 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     if (isEmpty(((char *)(onePair->val)))) // NOTE: All the parens are needed to get the macro to do the right thing
         continue;
     enum cvSearchable searchBy = cvSearchMethod(onePair->name);
-    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
+    if (searchBy == cvSearchByMultiSelect  // multiSelect val will be filled with a comma delimited list
+    || searchBy == cvSearchBySingleSelect
+    || searchBy == cvSearchByWildList)
         {
         if (strchr((char *)onePair->val,' '))
             dyStringPrintf(dyTerms,"%s=\"%s\" ",onePair->name,(char *)onePair->val);
@@ -3098,7 +3211,7 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
             dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
         }
     else if (searchBy == cvSearchByFreeText)                                      // If select is by free text then like
-        dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
+        dyStringPrintf(dyTerms,"%s=\"%%%s%%\" ",onePair->name,(char *)onePair->val);
     else if (sameWord(onePair->name,MDB_VAR_COMPOSITE))  // special case.  Not directly searchable by UI but indirectly and will show up here.
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
     else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
@@ -3239,7 +3352,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                 }
             }
         }
-    if (label == NULL);
+    if (label == NULL)
         label = cloneString(row[0]);
     label = strSwapChar(label,'_',' ');  // vestigial _ meaning space
     slPairAdd(&pairs,val,label);

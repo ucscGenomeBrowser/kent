@@ -1172,7 +1172,7 @@ localization nucleolus
 project wgEncode
 rnaExtract total
 subId 1001
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3H1hescCellLongnonpolya
 objType file
@@ -1190,7 +1190,7 @@ localization cell
 project wgEncode
 rnaExtract longNonPolyA
 subId 1002
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3Hepg2CytosolLongnonpolya
 objType file
@@ -1208,7 +1208,7 @@ localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
 subId 1015
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3Hepg2NucleolusTotal
 objType file
@@ -1226,7 +1226,7 @@ localization nucleolus
 project wgEncode
 rnaExtract total
 subId 1015
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3Hepg2NucleusLongnonpolya
 objType file
@@ -1244,7 +1244,7 @@ localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
 subId 1015
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3HuvecCytosolLongnonpolya
 objType file
@@ -1262,7 +1262,7 @@ localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
 subId 1014
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3NhekCytosolLongnonpolya
 objType file
@@ -1280,7 +1280,7 @@ localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
 subId 1018
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawData3NhekNucleusLongnonpolya
 objType file
@@ -1298,7 +1298,7 @@ localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
 subId 1018
-view RawData3
+view RawData
 
 metaObject wgEncodeRikenCageRawDataGm12878CytosolLongnonpolya
 objType file
@@ -1498,4 +1498,4 @@ rnaExtract longNonPolyA
 subId 9
 view RawData
 
-# MAGIC: -706852655
+# MAGIC: -718184567

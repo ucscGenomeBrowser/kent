@@ -657,11 +657,19 @@ Quickly zoom to a specific region of interest by using the browser's
 click-and-hold the mouse button on one edge of the desired zoom area in the Base
 Position track, drag the mouse right or left to highlight the selection area, 
 then release the mouse button. The annotation tracks image will automatically 
-zoom to the new region. Note that the <em>Enable advanced javascript 
+zoom to the new region. To drag-and-zoom in a part of the image other
+than the Base Position track, depress the shift key before clicking and dragging
+the mouse. 
+Note that the <em>Enable advanced javascript 
 features</em> option on the Track Configuration page must be toggled on to use 
 this feature. 
 <P>
-To scroll the annotation tracks sideways to the left or right by 10%, 50%, or 95% of the displayed
+To scroll (pan) the view of the entire tracks image horizontally, click on the 
+image and drag the cursor to the left or right, then release the mouse button, 
+to shift the displayed region in the corresponding direction. The view may be 
+scrolled by up to one image width.
+To scroll the annotation tracks horizontally by set increments of 10%, 50%, or 
+95% of the displayed
 size (as given in base pairs), click the corresponding <I>move</I> arrow. It is also 
 possible to scroll the left or right side of the tracks by a specified number
 of vertical gridlines while keeping the
@@ -686,18 +694,22 @@ to select the entire band.
 <P>
 <B>Changing the order of the displayed tracks</B><BR>
 To vertically reposition a track in the annotation track window, click-and-hold 
-the mouse button on the side label or gray mini-button to the left of the track,
-then drag the highlighted track up or down within the image. Release the mouse 
-button when the track is in the desired position.
+the mouse button on the side label, then drag the highlighted track up or down 
+within the image. Release the mouse button when the track is in the desired 
+position. To move an entire group of associated tracks (such as all the
+displayed subtracks in a composite track), click-and-hold the gray mini-button 
+to the left of the tracks, then drag.
 <P>
 <A NAME="TRACK_CONFIG"></A>
 <B>Changing the width of the annotation track window</B><BR>
-By default, the width of the annotation track window is set to 800 pixels. To modify the width to 
-best suit the display capabilities of your monitor, enter a new value in the 
-<I>image width</I> text box on the Track Configuration page, then click the 
-<I>submit</I> button. For example, setting the 
-display to 1100 pixels on a 19" monitor will increase the visible portion of the genome
-and reduce the need for redraws. The maximum supported width is 5000 pixels.
+The first time the annotation track window is displayed, or after the
+Genome Browser has been reset, the size of the track window is 
+set by default to the width that best fits your Internet browser window. If you
+horizontally resize the browser window, you can automatically adjust the 
+annotation track image size to the new width by clicking the <em>resize</em> 
+button under the track image. To manually override the default width, enter a 
+new value in the <em>image width</em> text box on the Track Configuration page, 
+then click the <em>submit</em> button. The maximum supported width is 5000 pixels.
 <P>
 <B>Changing the width of the label area to the left of the image</B><BR>
 The item labels (or track label, when viewed in dense mode) are displayed to

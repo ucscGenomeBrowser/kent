@@ -70,6 +70,9 @@ static boolean measureTiming = FALSE;
 #define hgCtDoRefreshClr  hgCtDo "refresh_clr"
 #define hgCtDoGenomeBrowser	  hgCtDo "gb"
 #define hgCtDoTableBrowser	  hgCtDo "tb"
+#ifdef PROGRESS_METER
+#define hgCtDoProgress	  hgCtDo "progress"
+#endif
 
 /* Global variables */
 struct cart *cart;
@@ -834,6 +837,27 @@ if (retErr)
     *retErr = err;
 }
 
+#ifdef PROGRESS_METER
+static void progressMeter()
+{
+printf("<FORM STYLE=\"margin-bottom:0;\" ACTION=\"%s\" METHOD=\"GET\" NAME=\"orgForm\">", hgCustomName());
+cartSaveSession(cart);
+printf("<INPUT TYPE=\"HIDDEN\" NAME=\"org\" VALUE=\"%s\">\n", organism);
+printf("<INPUT TYPE=\"HIDDEN\" NAME=\"db\" VALUE=\"%s\">\n", database);
+printf("<INPUT TYPE=\"HIDDEN\" NAME=\"hgct_do_add\" VALUE=\"1\">\n");
+puts("</FORM>");
+}
+static void doProgress(char *err)
+/* display progress meter to show loading process */
+{
+cartWebStart(cart, database, "Custom Track loading progress meter");
+progressMeter();
+// addCustomForm(NULL, err);
+helpCustom();
+cartWebEnd(cart);
+}
+#endif
+
 void doAddCustom(char *err)
 /* display form for adding custom tracks.
  * Include error message, if any */
@@ -1064,6 +1088,12 @@ if (sameString(initialDb, "0"))
 
 if (cartVarExists(cart, hgCtDoAdd))
     doAddCustom(NULL);
+#ifdef PROGRESS_METER
+else if (cartVarExists(cart, hgCtDoProgress))
+    {
+    doProgress(NULL);
+    }
+#endif
 else if (cartVarExists(cart, hgCtTable))
     {
     /* update track */

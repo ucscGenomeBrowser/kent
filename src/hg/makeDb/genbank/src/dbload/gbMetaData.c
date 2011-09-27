@@ -42,7 +42,7 @@ static char const rcsid[] = "$Id: gbMetaData.c,v 1.48 2009/04/21 00:14:50 markd 
 #define molEnumDef \
   "mol enum('DNA', 'RNA', 'ds-RNA', 'ds-mRNA', 'ds-rRNA', 'mRNA', 'ms-DNA', 'ms-RNA',"\
   "         'rRNA', 'scRNA', 'snRNA', 'snoRNA', 'ss-DNA', 'ss-RNA', 'ss-snoRNA', 'tRNA',"\
-  "         'cRNA', 'ss-cRNA', 'ds-cRNA') not null,\n"
+  "         'cRNA', 'ss-cRNA', 'ds-cRNA', 'ms-rRNA') not null,\n"
 
 static char* gbCdnaInfoCreate =
 /* This keeps track of mRNA. */

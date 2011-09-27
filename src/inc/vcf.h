@@ -88,7 +88,7 @@ struct vcfFile
  * Clearly borrowing structure from MarkD's gff3File. :) */
 {
     char *fileOrUrl;		// VCF local file path or URL
-    struct hash *metaDataHash;	// Store all header metadata lines here
+    char *headerString;		// Complete original header including newlines.
     int majorVersion;		// 4 etc.
     int minorVersion;		// 0, 1 etc.
     struct vcfInfoDef *infoDefs;	// Header's definitions of INFO column components

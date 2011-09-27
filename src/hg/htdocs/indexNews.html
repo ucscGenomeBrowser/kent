@@ -26,90 +26,71 @@
 
             
             <!-- start news -->
-
-
-            <!-- OMIM release  -->
+            <!-- New javascript features -->
 		    <P>
-                    <FONT FACE="courier" SIZE="3"><B>16 June 2011 -
-Re-engineered OMIM Tracks Released </B></FONT>
+                    <FONT FACE="courier" SIZE="3"><B>8 September 2011 -
+New Navigation and Display Features  </B></FONT>
 		    <P>
-                    We announce today the release of our newly re-engineered OMIM 
-                    (Online Mendelian Inheritance in Man) tracks for both hg18 and 
-                    hg19. With the kind assistance of Ada Hamosh (director), 
-                    Joanna Amberger and Francois Schiettecatte of the OMIM project, 
-                    we have divided the OMIM records into three separate tracks:
-                    </P>
-                    <P>
-                    <B>OMIM Allelic Variant SNPs</B>
-                    <BR> &nbsp; &nbsp; &nbsp; &nbsp;
-                      Variants in the OMIM database that have associated dbSNP identifiers.
-                    </P>
-
-                    <P>
-                    <B>OMIM Genes</B>
-                    <BR> &nbsp; &nbsp; &nbsp; &nbsp;
-                      The genomic positions of gene entries in the OMIM database. 
-                      The coloring indicates the associated OMIM phenotype class.
-                    </P>
-
-                    <P>
-                    <B>OMIM Phenotypes - Gene Unknown</B>
-                    <BR> &nbsp; &nbsp; &nbsp; &nbsp;
-                      Regions known to be associated with a phenotype, but for which no 
-                      specific gene is known to be causative. This track also includes 
-                      known multi-gene syndromes.
-                    </P>
-
-                    <P>
-                    The new tracks can be found in the Phenotype and Disease Associations
-                    track group below the browser graphic
-                    and are searchable by OMIM number. In most cases, 
-                    simply typing the 6-digit MIM number into the position/search box 
-                    on the Browser will take you to the record.
-                    </P>
-
-                    <P>
-                    The OMIM data are the property of Johns Hopkins University and 
-                    will not be available for download from UCSC. Please contact the 
-                    OMIM project at <A HREF = "http://omim.org/downloads" 
-                    TARGET = _BLANK>omim.org</A> for download information.
-                    </P>
-
-                    <P>
-                    UCSC thanks engineers Fan Hsu, Brooke Rhead and Robert Kuhn for 
-                    this release.
-                    </P>
-                    <HR>
-
-            <!-- Preview Browser -->
+		    We've added several new features to the Genome Browser 
+		    that make it easier to quickly configure and navigate 
+		    around in the browser's annotation tracks window.
 		    <P>
-                    <FONT FACE="courier" SIZE="3"><B>9 June 2011 -
-UCSC Preview Browser Available:</B></FONT>
-                    Early access to ENCODE and other UCSC browser data tracks under 
-                    construction is now available from the new UCSC Preview Browser site:
-                    <A HREF="http://genome-preview.ucsc.edu">http://genome-preview.ucsc.edu</A>. 
-		    <A HREF="goldenPath/newsarch.html#060911">Read more</A>.
-                    </P>
-
-
-            <!-- anoCar2 Browser Release -->
+		    <B>Automatic image resizing:</B> The first time the annotation 
+		    track window is displayed, or after the Genome Browser has
+		    been reset, the size of the track window is now set by 
+		    default to the width that best fits your Internet browser 
+		    window. If you subsequently resize your browser window, 
+		    you can automatically adjust the annotation track image 
+		    size to the new width by clicking the <em>resize</em> button
+		    under the track image. The default width can still be 
+		    manually overridden on the Track Configuration page. 
 		    <P>
-                    <FONT FACE="courier" SIZE="3"><B>7 June 2011 -
-Updated Lizard Browser Available: </B></FONT>
-		    We have released a Genome Browser for the May 2010 
-		    genome assembly of the green anole lizard, <em>Anolis 
-		    carolinensis</em> (Broad 
-		    version AnoCar2.0, UCSC version anoCar2). 
-		    <A HREF="goldenPath/newsarch.html#060711">Read more</A>.
-		    </P>
-
-            <!-- mm9 UCSC Genes -->
+		    <B>Scrolling left or right in the track window:</B> You can now 
+		    scroll (pan) horizontally through the tracks image by clicking 
+		    on the image, dragging the cursor to the left or right, 
+		    then releasing the mouse button. The view may be scrolled 
+		    by up to one image width.
 		    <P>
-                    <FONT FACE="courier" SIZE="3"><B>26 May 2011 - New
-Release of UCSC Genes for Mouse:</B></FONT>
-		    We've released an updated set of UCSC Genes for the mm9 
-		    (NCBI Build 37) mouse Genome Browser. 
-		    <A HREF="goldenPath/newsarch.html#052611">Read more</A>.
+		    <B>Improved drag-zoom navigation:</B>  The browser's 
+		    &quot;drag-and-zoom&quot; feature lets you quickly zoom to a
+		    specific region of interest on the annotation tracks image.
+		    To define the region you wish to zoom to, depress the shift 
+		    key, click-and-hold 
+		    the mouse button on one edge of the desired zoom area
+		    (which can be anywhere in the tracks window), 
+		    drag the mouse right or left to highlight the 
+		    selection area, then release the mouse button.
+		    The annotation tracks image will automatically zoom to
+		    the new region. The Genome Browser still supports the 
+		    earlier implementation of this feature, which restricted
+		    the click-drag to the Base Position track area of the image,
+		    but did not require the shift key to be pressed. 
+		    <P>
+		    <B>Reordering groups of tracks:</B> 
+		    You can now vertically reposition an entire group of 
+		    associated tracks in the tracks image (such as all the 
+		    displayed subtracks in a composite track) by clicking and 
+		    holding the gray bar to the left of the tracks,
+		    dragging the group to the new position, then releasing
+		    the mouse button. To move a single track up or down, click 
+		    and hold the mouse button on the side label, drag the 
+		    highlighted track to the new position, then release the 
+		    mouse button.
+		    <P>
+		    If you haven't yet tried the browser's right-click 
+		    menu for quick access to frequently used track 
+		    configuration features and functionality, read more
+		    <A HREF="goldenPath/newsarch.html#011011">here</A>.
+		    <HR>
+
+            <!-- data hubs release  -->
+		    <P>
+                    <FONT FACE="courier" SIZE="3"><B>18 August 2011 -
+New Feature: Track Data Hubs:  </B></FONT>
+                    We are pleased to announce a new feature in the UCSC Genome Browser: Track Data Hubs. Track hubs are web-accessible directories of genomic data 
+			that can be viewed on the UCSC Genome Browser alongside native annotation 
+			tracks. 
+		    <A HREF="goldenPath/newsarch.html#081811">Read more</A>.
 		    </P>
 
 ==> <a href="goldenPath/newsarch.html">News Archives</a>

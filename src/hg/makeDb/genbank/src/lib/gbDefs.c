@@ -42,6 +42,7 @@ static struct {
     {mol_cRNA,      "cRNA"},
     {mol_ss_cRNA,   "ss-cRNA"},
     {mol_ds_cRNA,   "ds-cRNA"},
+    {mol_ms_rRNA,   "ms-rRNA",},
     {-1,            NULL}
 };
 static struct hash *molSymToType = NULL;

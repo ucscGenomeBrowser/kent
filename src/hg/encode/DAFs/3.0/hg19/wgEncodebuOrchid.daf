@@ -1,0 +1,33 @@
+# Data Agreement File $Revision: 1.3 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files	view	cell	replicate 
+#
+#files          a list of files that will be concatenated together
+#view           the view of the data as described below
+#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
+#origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)
+#NOTE:          The optional columns do not have to be in the DDF for validation
+
+dafVersion       2.0
+
+# Lab and general info
+grant             Tullius
+lab               BU
+dataType          Orchid
+compositeSuffix   BuOrchid
+group             map
+variables         cell
+assembly          hg19
+
+validationSettings none	
+
+# Track/view definition
+view             Signal
+type             bigWig 
+hasReplicates    yes
+required         no

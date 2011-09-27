@@ -241,8 +241,16 @@ function setCartVarAndRefresh(name,val)
 
 function errorHandler(request, textStatus)
 {
-    showWarning("ajax error: " + textStatus);
+    var str = "encountered ajax error";
+    if(textStatus && textStatus.length) {
+        str += ": '" + textStatus + "'";
+    }
+    str += "; please retry the action you just performed";
+    showWarning(str);
     jQuery('body').css('cursor', '');
+    if(this.disabledEle) {
+        this.disabledEle.attr('disabled', '');
+    }
     if(this.loadingId) {
 	hideLoadingImage(this.loadingId);
     }

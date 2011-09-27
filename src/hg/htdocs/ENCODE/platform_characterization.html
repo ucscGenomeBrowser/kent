@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+        <title>Platform Characterization</title>
+        <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+        <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+    </head>
+
+    <body>
+        <!--#include virtual="/inc/encodeProject.topbar.html"-->
+
+        <div class="encodeHeader">
+            <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+            <span class="txt">Platform Characterization</span>
+        </div>
+         
+        <div class="wrapper">
+        <div class="bar"><h4 class="title">What is Platform Characterization?</h4></div>
+                <div class="content">
+                            <p>             
+                            The ENCODE and modENCODE projects have collected thousands of datasets to identify functional 
+                            elements, each consisting of at least two replicates.  Biochemical validation of every individual 
+                            dataset is an impractical prospect.  As an alternative, the consortia are characterizing the platforms 
+                            used to comprehensively identify these functional elements.  In some cases, this involves orthogonal testing 
+                            of the platforms used to collect data to form catalogs of functional elements.  For ChIP datasets, comparisons 
+                            of ChIP-seq to ChIP-chip have been performed, as well as analysis of detection of spiked-in standards.  For 
+                            RNA-seq, examination of the behavior of spike-in standards has been performed.  In addition to the standard 
+                            ENCODE antibody characterization efforts, a systematic analysis of histone antibodies has been performed.
+                            Summaries to these individual studies and links to the publications are below.
+                            </p>
+               </div><!--end content-->
+       </div><!--end wrapper-->
+
+        <div class="wrapper">
+        <div class="bar"><h4 class="title">Platform characterization studies:</h4></div>
+                <div class="content">
+			
+			<p><a class="thick" href="http://www.ncbi.nlm.nih.gov/pubmed/21816910">Synthetic spike-in standards for RNA-seq experiments.</a><br>
+			Jiang L, Schlesinger F, Davis CA, Zhang Y, Li R, Salit M, Gingeras TR, Oliver B.<br>
+			<i>Genome Res</i>. 2011 Aug 4. [Epub ahead of print]; PMID: 21816910
+			</p>
+		
+			<p>Key platform characterization finding is that over a wide range, there is a linear correlation 
+			between signal (read density) and RNA concentration (input) in RNA-seq experiments.  Another key 
+			finding is excellent agreement between replicates.  A pool of RNA standards (96 different RNAs, 
+			various lengths and GC content) spanning a million fold concentration range was used in this determination.
+			Some bias was found with respect to GC content and fragment length; these biases were reproducible and protocol dependent.
+			</p>
+		
+			<p><a class="thick" href="http://www.ncbi.nlm.nih.gov/pubmed/21356108">ChIP-chip versus ChIP-seq: lessons for experimental design and data analysis.</a><br>
+			Ho JW, Bishop E, Karchenko PV, Nègre N, White KP, Park PJ.<br>
+			<i>BMC Genomics</i>. 2011 Feb 28;12:134. PMID: 21356108; PMCID: PMC3053263
+			</p>
+		
+			<p>Key platform characterization findings include ChIP-seq data are generally better than ChIP-chip 
+			data with respect to signal-to-noise ratio, number of detected peaks and resolution. While there is 
+			strong agreement between the two platforms, the peaks identified using these two platforms can be significantly 
+			different, depending on the factor antibody and the analysis pipeline. Identification of binding regions is 
+			dependent on the peak calling pipeline used, and more difficult for factors that are enriched in broad regions.  
+			In addition, input DNA libraries used for ChIP-seq can vary, and high-quality input samples sequenced with 
+			sufficient depth are important for accurate peak calling.
+			</p>
+		
+			<p><a class="thick" href="http://www.ncbi.nlm.nih.gov/pubmed/21131980">An assessment of histone-modification antibody quality.</a><br>
+			Egelhofer TA, Minoda A, Klugman S, Lee K, Kolasinska-Zwierz P, Alekseyenko AA, Cheung MS, Day DS, Gadel S, 
+			Gorchakov AA <i>et al</i>.<br>
+			<i>Nat Struct Mol Biol</i>. 2011 Jan;18(1):91-3. Epub 2010 Dec 5. PMID: 21131980; PMCID: PMC3017233
+			</p>
+		
+			<p>Histone modification antibodies were characterized for specificity by dot blot, immunoblot and ChIP.  
+			More than 20&#37; of the tested antibodies failed in ChIP experiments. A website was developed for posting 
+			results of the antibody characterization.
+			</p>
+		
+			<p><a class="thick" href="http://www.ncbi.nlm.nih.gov/pubmed/18258921">Systematic evaluation of variability in ChIP-chip experiments using predefined DNA targets.</a><br>
+			Johnson DS, Li W, Gordon DB, Bhattacharjee A, Curry B, Ghosh J, Brizuela L, Carroll JS, Brown M, Flicek P <i>et al</i>.<br>
+			<i>Genome Res</i>. 2008 Mar;18(3):393-403. Epub 2008 Feb 7.PMID: 18258921; PMCID: PMC2259103
+			</p>
+		
+			<p>A number of microarray platforms were tested using a spike-in positive control approach, and found to provide results that 
+			were consistent with each other.  Variance specific to microarray platform was similar or smaller than the variance associated with 
+			laboratory, protocols and analysis pipeline.  Sensitivity was good even at relatively low spike-in levels.  Simple repeats and 
+			segmental duplication caused false positive errors in peak detection.
+			</p>
+		
+               </div><!--end content-->
+       </div><!--end wrapper-->
+       <p class="date">Updated August 29th, 2011</p>
+    </body>
+</html>

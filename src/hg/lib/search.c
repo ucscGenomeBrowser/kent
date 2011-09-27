@@ -75,7 +75,7 @@ if (slCount(fileTypes) > 0)
 return NULL;
 }
 
-struct slPair *mdbSelectPairs(struct cart *cart,enum searchTab selectedTab, struct slPair *mdbVars)
+struct slPair *mdbSelectPairs(struct cart *cart, struct slPair *mdbVars)
 // Returns the current mdb  vars and vals in the table of drop down selects
 {
 // figure out how many metadata selects are visible.
@@ -122,35 +122,34 @@ if(numMetadataSelects)
         char *var = cartOptionalString(cart, buf);
         char *val = NULL;
 
-        if(selectedTab!=simpleTab)
+        // We need to make sure var is valid in this assembly; if it isn't, reset it to "cell".
+        if(slPairFindVal(mdbVars,var) == NULL)
+            var = "cell";
+        else
             {
-            // We need to make sure var is valid in this assembly; if it isn't, reset it to "cell".
-            if(slPairFindVal(mdbVars,var) == NULL)
-                var = "cell";
-            else
+            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, ix + offset);
+            enum cvSearchable searchBy = cvSearchMethod(var);
+            if (searchBy == cvSearchByMultiSelect)
                 {
-                safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, ix + offset);
-                enum cvSearchable searchBy = cvSearchMethod(var);
-                if (searchBy == cvSearchByMultiSelect)
+                // Multi-selects as comma delimited list of values
+                struct slName *vals = cartOptionalSlNameList(cart,buf);
+                if (vals)
                     {
-                    // Multi-selects as comma delimited list of values
-                    struct slName *vals = cartOptionalSlNameList(cart,buf);
-                    if (vals)
-                        {
-                        val = slNameListToString(vals,','); // A comma delimited list of values
-                        slNameFreeList(&vals);
-                        }
+                    val = slNameListToString(vals,','); // A comma delimited list of values
+                    slNameFreeList(&vals);
                     }
-                else if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByFreeText)
-                    val = cloneString(cartUsualString(cart, buf,ANYLABEL));
-                //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
-                //    {
-                //    // TO BE IMPLEMENTED
-                //    }
-
-                if (val != NULL && sameString(val, ANYLABEL))
-                    val = NULL;
                 }
+            else if (searchBy == cvSearchBySingleSelect
+                 ||  searchBy == cvSearchByFreeText
+                 ||  searchBy == cvSearchByWildList)
+                val = cloneString(cartUsualString(cart, buf,ANYLABEL));
+            //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)
+            //    {
+            //    // TO BE IMPLEMENTED
+            //    }
+
+            if (val != NULL && sameString(val, ANYLABEL))
+                val = NULL;
             }
         slPairAdd(&mdbSelectPairs,var,val); // val already cloned
         }
@@ -232,8 +231,16 @@ for(;mdbSelect != NULL; mdbSelect = mdbSelect->next)
         }
     else if (searchBy == cvSearchByFreeText)
         {
-        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",row,buf);
+        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
+                       row,buf);
         dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal freeText' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
+                buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
+        }
+    else if (searchBy == cvSearchByWildList)
+        {
+        dyStringPrintf(output,"</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is among</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",
+                       row,buf);
+        dyStringPrintf(output,"<input type='text' name='%s' value='%s' class='mdbVal wildList' title='enter comma separated list of values' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
                 buf,(mdbSelect->val ? (char *)mdbSelect->val: ""));
         }
     //else if (searchBy == cvSearchByDateRange || searchBy == cvSearchByIntegerRange)

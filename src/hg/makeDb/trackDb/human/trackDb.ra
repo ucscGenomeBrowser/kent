@@ -3896,6 +3896,32 @@ priority 110
 visibility hide
 type gvf
 noScoreFilter .
+release beta,public
+
+track iscaRetrospectiveComposite
+compositeTrack on
+shortLabel ISCA Retro
+longLabel International Standards for Cytogenetic Arrays Consortium - Retrospective variants
+group varRep
+priority 110
+visibility hide
+type gvf
+noScoreFilter .
+
+    track iscaRetrospectiveBenign
+    parent iscaRetrospectiveComposite
+    shortLabel ISCA Ret Benign
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Benign)
+
+    track iscaRetrospectivePathogenic
+    parent iscaRetrospectiveComposite
+    shortLabel ISCA Ret Pathog.
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Pathogenic)
+
+    track iscaRetrospectiveUncertain
+    parent iscaRetrospectiveComposite
+    shortLabel ISCA Ret Uncert.
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Uncertain)
 
 searchName decipherId
 searchTable decipher
@@ -3949,6 +3975,28 @@ searchPriority 12.991
 padding 250
 
 searchTable iscaRetrospective
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20
+release beta,public
+
+searchTable iscaRetrospectiveBenign
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20
+
+searchTable iscaRetrospectivePathogenic
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20
+
+searchTable iscaRetrospectiveUncertain
 searchMethod exact
 searchType bed
 semiShortCircuit 1
@@ -4068,4 +4116,19 @@ searchType bed
 searchPriority 15
 query select chrom, chromStart, chromEnd, name from %s where name like '%s%%'
 termiRegex HSA_NumtS_*
+
+include decode.rmap.ra
+
+#geneReviews track
+track geneReviewsBB
+shortLabel GeneReviews
+longLabel GeneReviews   
+group  phenDis 
+priority 155
+visibility hide
+color 0, 80, 0
+type bigBed 4 +
+nonBedFieldsLabel  
+html geneReviews
+
 

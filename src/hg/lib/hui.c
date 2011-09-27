@@ -217,30 +217,21 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         if (cvTermTypes && differentString(mdbVar->var,MDB_VAR_TABLENAME)) // Don't bother with tableName
             {
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
-            if (cvTerm != NULL)
+            if (cvTerm != NULL) // even if cvTerm isn't used, it proves that it exists and a link is desirable
                 {
                 if(!cvTermIsHidden(mdbVar->var))
                     {
-                    char *label=hashFindVal(cvTerm,CV_LABEL);
-                    if (label == NULL)
-                        label = mdbVar->var;
+                    char *label = (char *)cvLabel(NULL,mdbVar->var);
                     char *linkOfType = controlledVocabLink(NULL,CV_TYPE,mdbVar->var,label,label,NULL);
-                    char *cvDefined=hashFindVal(cvTerm,CV_TOT_CV_DEFINED);
-                    if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
+                    if (cvTermIsCvDefined(mdbVar->var))
                         {
-                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        label = (char *)cvLabel(mdbVar->var,mdbVar->val);
+                        char *linkOfTerm = controlledVocabLink(NULL,CV_TERM,mdbVar->val,label,label,NULL);
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
                         freeMem(linkOfTerm);
                         }
                     else
                         dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
-                        //{  // NOTE: Could just have a tool tip for these.
-                        //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
-                        //label = cgiEncode(label);
-                        //dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
-                        //freeMem(descr);
-                        //freeMem(label);
-                        //}
                     freeMem(linkOfType);
                     continue;
                     }
@@ -2576,11 +2567,13 @@ if(options != NULL)
 struct dyString *currentlyCheckedTags = NULL;
 // Need a string of subGroup tags which are currently checked
 safef(settingName,sizeof(settingName),"dimension%cchecked",letter);
-char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"");
+char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"All");
 for(mIx=0;mIx<members->count;mIx++)
     {
     safef(settingName, sizeof(settingName), "%s.mat_%s_dim%c_cb",parentTdb->track,members->tags[mIx],letter);
-    members->selected[mIx] = (NULL!=findWordByDelimiter(members->tags[mIx],',',dimCheckedDefaults));
+    members->selected[mIx] = TRUE;
+    if (differentWord(dimCheckedDefaults,"All") && differentWord(dimCheckedDefaults,"Any"))
+        members->selected[mIx] = (NULL!=findWordByDelimiter(members->tags[mIx],',',dimCheckedDefaults));
     members->selected[mIx] = cartUsualBoolean(cart,settingName,members->selected[mIx]);
     if(members->selected[mIx])
         {
@@ -3740,40 +3733,23 @@ switch(cType)
     }
 }
 
-char *encodeRestrictionDateDisplay(char *db,struct trackDb *trackDb)
+char *encodeRestrictionDate(char *db,struct trackDb *trackDb,boolean excludePast)
 /* Create a string for ENCODE restriction date of this track
    if return is not null, then free it after use */
 {
 if (!trackDb)
     return NULL;
 
-boolean addMonths = FALSE;
 char *date = NULL;
 
 if(metadataForTable(db,trackDb,NULL) != NULL)
     {
-    addMonths = FALSE;
     date = cloneString((char *)metadataFindValue(trackDb,"dateUnrestricted"));
-    if(date == NULL)  // TODO: The logic to calculate date based upon dateSubmitted should be removed.  However, I don't think we can do it until the mdb is used for all hg18 composites.
-        {
-        date = cloneString((char *)metadataFindValue(trackDb,"dateSubmitted"));
-        addMonths = TRUE;
-        }
-    }
-if(date == NULL)
-    {
-    date = trackDbSetting(trackDb, "dateSubmitted");
-    if(date)
-        {
-        addMonths = TRUE;
-        date = cloneString(date); // all returns should be freeable memory
-        }
-    }
-if (date != NULL)
-    {
-    date = strSwapChar(date, ' ', 0);   // Truncate time
-    if(addMonths)
-        date = dateAddTo(date, "%F", 0, 9, 0);
+    if (date != NULL)
+        date = strSwapChar(date, ' ', 0);   // Truncate time (not expected, but just in case)
+
+    if (excludePast && !isEmpty(date) && dateIsOld(date,"%F"))
+        freez(&date);
     }
 return date;
 }
@@ -4146,7 +4122,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     // Do we have a restricted until date?
     if (restrictions)
         {
-        char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
+        char *dateDisplay = encodeRestrictionDate(db,subtrack,FALSE); // includes dates in the past
         if (dateDisplay)
             {
             if (dateIsOld(dateDisplay,"%F"))
@@ -6403,7 +6379,6 @@ static boolean compositeUiByFilter(char *db, struct cart *cart, struct trackDb *
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,cart);
 if(membersForAll == NULL || membersForAll->filters == FALSE) // Not Matrix or filters
     return FALSE;
-jsIncludeFile("ui.core.js",NULL);
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 #ifdef NEW_JQUERY

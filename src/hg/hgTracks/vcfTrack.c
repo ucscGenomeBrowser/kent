@@ -218,7 +218,7 @@ else
 }
 
 static unsigned short *clusterChroms(const struct vcfFile *vcff, int centerIx,
-				     unsigned short *retGtHapEnd)
+				     unsigned short *retGtHapEnd, struct hacTree **retTree)
 /* Given a bunch of VCF records with phased genotypes, build up one haplotype string
  * per chromosome that is the sequence of alleles in all variants (simplified to one base
  * per variant).  Each individual/sample will have two haplotype strings (unless haploid
@@ -227,11 +227,14 @@ static unsigned short *clusterChroms(const struct vcfFile *vcff, int centerIx,
  * in the order determined by the hacTree, and set retGtHapEnd to its length/end. */
 {
 int len = slCount(vcff->records);
-// Should alpha depend on len?  Should the penalty drop off with distance?  Seems like
-// straight-up exponential will cause the signal to drop to nothing pretty quickly...
+// Limit the number of variants that we compare, to keep from timing out:
+// (really what we should limit is the number of distinct haplo's passed to hacTree!)
+const int maxVariantsPerSide = 20;
+int startIx = max(0, centerIx - maxVariantsPerSide);
+int endIx = min(len, centerIx+1 + maxVariantsPerSide);
 double alpha = 0.5;
 struct lm *lm = lmInit(0);
-struct cwaExtraData helper = { centerIx, len, alpha, lm };
+struct cwaExtraData helper = { centerIx-startIx, endIx-startIx, alpha, lm };
 int ploidy = 2; // Assuming diploid genomes here, no XXY, tetraploid etc.
 int gtCount = vcff->genotypeCount;
 // Make an slList of hapClusters, but allocate in a big block so I can use
@@ -247,9 +250,11 @@ for (i=0;  i < ploidy * gtCount;  i++)
 boolean haveHaploid = FALSE;
 int varIx;
 struct vcfRecord *rec;
-for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
+for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, rec = rec->next)
     {
-    vcfParseGenotypes(rec);
+    if (varIx < startIx)
+	continue;
+    int countIx = varIx - startIx;
     int gtIx;
     for (gtIx=0;  gtIx < gtCount;  gtIx++)
 	{
@@ -262,7 +267,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
 	    c1->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
 	    if (gt->hapIxA == 0)
-		c1->refCounts[varIx] = 1;
+		c1->refCounts[countIx] = 1;
 	    if (gt->isHaploid)
 		haveHaploid = TRUE;
 	    else
@@ -270,7 +275,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
 		c2->leafCount = 1;
 		c2->gtHapIx = (gtIx << 1) | 1;
 		if (gt->hapIxB == 0)
-		    c2->refCounts[varIx] = 1;
+		    c2->refCounts[countIx] = 1;
 		}
 	    }
 	else
@@ -279,7 +284,7 @@ for (varIx = 0, rec = vcff->records;  rec != NULL;  varIx++, rec = rec->next)
 	    c1->leafCount = c2->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
 	    c2->gtHapIx = (gtIx << 1) | 1;
-	    c1->unkCounts[varIx] = c2->unkCounts[varIx] = 1;
+	    c1->unkCounts[countIx] = c2->unkCounts[countIx] = 1;
 	    }
 	}
     if (haveHaploid)
@@ -299,6 +304,7 @@ struct hacTree *ht = hacTreeFromItems((struct slList *)(hapArray[0]), lm,
 				      cwaDistance, cwaMerge, cwaCmp, &helper);
 unsigned short *gtHapOrder = needMem(vcff->genotypeCount * 2 * sizeof(unsigned short));
 rSetGtHapOrder(ht, gtHapOrder, retGtHapEnd);
+*retTree = ht;
 return gtHapOrder;
 }
 
@@ -366,7 +372,7 @@ return dy->string;
 // This is initialized when we start drawing:
 static Color purple = 0;
 
-static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, int gtHapEnd,
+static void drawOneRec(struct vcfRecord *rec, unsigned short *gtHapOrder, unsigned short gtHapCount,
 		       struct track *tg, struct hvGfx *hvg, int xOff, int yOff, int width,
 		       boolean isCenter, boolean colorByRefAlt)
 /* Draw a stack of genotype bars for this record */
@@ -380,11 +386,14 @@ if (w <= 1)
     x1--;
     w = 3;
     }
-double hapsPerPix = (2 * (double)rec->file->genotypeCount / tg->height);
+double hapsPerPix = (double)gtHapCount / (tg->height-1);
 int pixIx;
 for (pixIx = 0;  pixIx < tg->height;  pixIx++)
     {
     int gtHapOrderIxStart = round(hapsPerPix * pixIx);
+    // Watch out for overflow:
+    if (gtHapOrderIxStart >= gtHapCount)
+	break;
     int gtHapOrderIxEnd = round(hapsPerPix * (pixIx + 1));
     if (gtHapOrderIxEnd == gtHapOrderIxStart)
 	gtHapOrderIxEnd++;
@@ -476,6 +485,173 @@ if (centerChrom != NULL && sameString(chromName, centerChrom))
 return defaultIx;
 }
 
+/* Pixel y offset return type for recursive tree-drawing: */
+enum yRetType
+    {
+    yrtMidPoint,
+    yrtStart,
+    yrtEnd,
+    };
+
+/* Callback for calculating y (in pixels) for a cluster node: */
+typedef int yFromNodeFunc(const struct slList *itemOrCluster, void *extraData,
+			  enum yRetType yType);
+
+static int rDrawTreeInLabelArea(struct hacTree *ht, struct hvGfx *hvg, enum yRetType yType, int x,
+				yFromNodeFunc *yFromNode, void *extraData)
+/* Recursively draw the haplotype clustering tree in the left label area.
+ * Returns pixel height for use at non-leaf levels of tree. */
+{
+const int branchW = 3;
+const Color boundaryColor = MG_RED;
+const int labelEnd = leftLabelX + leftLabelWidth;
+const int rightEdge = labelEnd - 1;
+if (yType == yrtStart || yType == yrtEnd)
+    {
+    // We're just getting vertical span of a leaf cluster, not drawing any lines.
+    int yLeft, yRight;
+    if (ht->left)
+	yLeft = rDrawTreeInLabelArea(ht->left, hvg, yType, x, yFromNode, extraData);
+    else
+	yLeft = yFromNode(ht->itemOrCluster, extraData, yType);
+    if (ht->right)
+	yRight = rDrawTreeInLabelArea(ht->right, hvg, yType, x, yFromNode, extraData);
+    else
+	yRight = yFromNode(ht->itemOrCluster, extraData, yType);
+    if (yType == yrtStart)
+	return min(yLeft, yRight);
+    else
+	return max(yLeft, yRight);
+    }
+// Otherwise yType is yrtMidPoint.  If we have 2 children, we'll be drawing some lines:
+if (ht->left != NULL && ht->right != NULL)
+    {
+    const int nextX = x + branchW;
+    int midY;
+    if (ht->childDistance == 0 || x+(2*branchW) > labelEnd)
+	{
+	// Treat this as a leaf cluster.
+	// Recursing twice is wasteful. Could be avoided if this, and yFromNode,
+	// returned both yStart and yEnd. However, the time to draw a tree of
+	// 2188 hap's (1kG phase1 interim) is in the noise, so I consider it
+	// not worth the effort of refactoring to save a sub-millisecond here.
+	int yStartLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtStart, nextX,
+					      yFromNode, extraData);
+	int yEndLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtEnd, nextX,
+					    yFromNode, extraData);
+	int yStartRight = rDrawTreeInLabelArea(ht->right, hvg, yrtStart, nextX,
+					       yFromNode, extraData);
+	int yEndRight = rDrawTreeInLabelArea(ht->right, hvg, yrtEnd, nextX,
+					     yFromNode, extraData);
+	int yStart = min(yStartLeft, yStartRight);
+	int yEnd = max(yEndLeft, yEndRight);
+	midY = (yStart + yEnd) / 2;
+	Color branchColor = (ht->childDistance == 0) ? MG_BLACK : shadesOfGray[5];
+	hvGfxLine(hvg, x, midY, rightEdge, midY, branchColor);
+	hvGfxLine(hvg, rightEdge, yStart, rightEdge, yEnd-1, branchColor);
+	hvGfxLine(hvg, max(rightEdge-1, x), yStart, rightEdge, yStart, boundaryColor);
+	hvGfxLine(hvg, max(rightEdge-1, x), yEnd-1, rightEdge, yEnd-1, boundaryColor);
+	}
+    else
+	{
+	int leftMid = rDrawTreeInLabelArea(ht->left, hvg, yrtMidPoint, nextX,
+					   yFromNode, extraData);
+	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, nextX,
+					    yFromNode, extraData);
+	midY = (leftMid + rightMid) / 2;
+	hvGfxLine(hvg, nextX-1, leftMid, nextX-1, rightMid, MG_BLACK);
+	hvGfxLine(hvg, x, midY, nextX-1, midY, MG_BLACK);
+	}
+    return midY;
+    }
+else if (ht->left != NULL)
+    return rDrawTreeInLabelArea(ht->left, hvg, yType, x, yFromNode, extraData);
+else if (ht->right != NULL)
+    return rDrawTreeInLabelArea(ht->right, hvg, yType, x, yFromNode, extraData);
+// Leaf node -- return pixel height. Draw a line if yType is midpoint.
+int y = yFromNode(ht->itemOrCluster, extraData, yType);
+if (yType == yrtMidPoint && x < labelEnd)
+    {
+    hvGfxLine(hvg, x, y, rightEdge, y, MG_BLACK);
+    hvGfxLine(hvg, max(rightEdge-1, x), y, rightEdge, y, boundaryColor);
+    }
+return y;
+}
+
+struct yFromNodeHelper
+/* Pre-computed mapping from cluster nodes' gtHapIx to pixel heights. */
+    {
+    unsigned short gtHapCount;
+    unsigned short *gtHapIxToPxStart;
+    unsigned short *gtHapIxToPxEnd;
+    };
+
+void initYFromNodeHelper(struct yFromNodeHelper *helper, int yOff, int height,
+			 unsigned short gtHapCount, unsigned short *gtHapOrder)
+/* Build a mapping of genotype and haplotype to pixel y coords. */
+{
+helper->gtHapCount = gtHapCount;
+helper->gtHapIxToPxStart = needMem(gtHapCount * sizeof(unsigned short));
+helper->gtHapIxToPxEnd = needMem(gtHapCount * sizeof(unsigned short));
+double pxPerHap = (double)height / gtHapCount;
+int i;
+for (i = 0;  i < gtHapCount;  i++)
+    {
+    int yStart = round(i * pxPerHap);
+    int yEnd = round((i+1) * pxPerHap);
+    if (yEnd == yStart)
+	yEnd++;
+    int gtHapIx = gtHapOrder[i];
+    helper->gtHapIxToPxStart[gtHapIx] = yOff + yStart;
+    helper->gtHapIxToPxEnd[gtHapIx] = yOff + yEnd;
+    }
+}
+
+static int yFromHapNode(const struct slList *itemOrCluster, void *extraData,
+			enum yRetType yType)
+/* Extract the gtHapIx from hapCluster (hacTree node item), find out its relative order
+ * and translate that to a pixel height. */
+{
+unsigned short gtHapIx = ((const struct hapCluster *)itemOrCluster)->gtHapIx;
+struct yFromNodeHelper *helper = extraData;
+if (gtHapIx >= helper->gtHapCount)
+    errAbort("vcfTrack.c: gtHapIx %d out of range [0,%d).", gtHapIx, helper->gtHapCount);
+int y;
+if (yType == yrtStart)
+    y = helper->gtHapIxToPxStart[gtHapIx];
+else if (yType == yrtEnd)
+    y = helper->gtHapIxToPxEnd[gtHapIx];
+else
+    y = (helper->gtHapIxToPxStart[gtHapIx] + helper->gtHapIxToPxEnd[gtHapIx]) / 2;
+return y;
+}
+
+static void drawTreeInLabelArea(struct hacTree *ht, struct hvGfx *hvg, int yOff, int height,
+				unsigned short gtHapCount, unsigned short *gtHapOrder)
+/* Draw the haplotype clustering in the left label area (as much as fits there). */
+{
+// Figure out which hvg to use, save current clipping, and clip to left label coords:
+struct hvGfx *hvgLL = (hvgSide != NULL) ? hvgSide : hvg;
+int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
+hvGfxGetClip(hvgLL, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, leftLabelX, yOff, leftLabelWidth, height);
+// Draw the tree:
+int x = leftLabelX;
+struct yFromNodeHelper helper = {0, NULL, NULL};
+initYFromNodeHelper(&helper, yOff, height-1, gtHapCount, gtHapOrder);
+(void)rDrawTreeInLabelArea(ht, hvgLL, yrtMidPoint, x, yFromHapNode, &helper);
+// Restore the prior clipping:
+hvGfxUnclip(hvgLL);
+hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
+}
+
+static void ignoreEm(char *format, va_list args)
+/* Ignore warnings from genotype parsing -- when there's one, there
+ * are usually hundreds more just like it. */
+{
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -490,19 +666,27 @@ boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
-unsigned short gtHapEnd = 0;
+pushWarnHandler(ignoreEm);
+struct vcfRecord *rec;
+for (rec = vcff->records;  rec != NULL;  rec = rec->next)
+    vcfParseGenotypes(rec);
+popWarnHandler();
+unsigned short gtHapCount = 0;
 int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
-unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapEnd);
-struct vcfRecord *rec, *centerRec = NULL;
+struct hacTree *ht = NULL;
+unsigned short *gtHapOrder = clusterChroms(vcff, centerIx, &gtHapCount, &ht);
+struct vcfRecord *centerRec = NULL;
 for (rec = vcff->records, ix=0;  rec != NULL;  rec = rec->next, ix++)
     {
     if (ix == centerIx)
 	centerRec = rec;
     else
-	drawOneRec(rec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, FALSE, colorByRefAlt);
+	drawOneRec(rec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, FALSE, colorByRefAlt);
     }
 // Draw the center rec on top, outlined with black lines, to make sure it is very visible:
-drawOneRec(centerRec, gtHapOrder, gtHapEnd, tg, hvg, xOff, yOff, width, TRUE, colorByRefAlt);
+drawOneRec(centerRec, gtHapOrder, gtHapCount, tg, hvg, xOff, yOff, width, TRUE, colorByRefAlt);
+// Draw as much of the tree as can fit in the left label area:
+drawTreeInLabelArea(ht, hvg, yOff, tg->height, gtHapCount, gtHapOrder);
 }
 
 static int vcfHapClusterTotalHeight(struct track *tg, enum trackVisibility vis)
@@ -517,7 +701,7 @@ int ploidy = sameString(chromName, "chrY") ? 1 : 2;
 int simpleHeight = ploidy * vcff->genotypeCount * tg->lineHeight;
 int defaultHeight = min(simpleHeight, VCF_DEFAULT_HAP_HEIGHT);
 int cartHeight = cartOrTdbInt(cart, tg->tdb, VCF_HAP_HEIGHT_VAR, defaultHeight);
-tg->height = min(cartHeight, maximumTrackHeight(tg));
+tg->height = min(cartHeight+1, maximumTrackHeight(tg));
 return tg->height;
 }
 
@@ -561,7 +745,7 @@ else
     fileOrUrl = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
     hFreeConn(&conn);
     }
-int vcfMaxErr = 100;
+int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,

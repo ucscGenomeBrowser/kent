@@ -61,8 +61,13 @@ Missing sequence in the assemblies is highlighted in the track display
 by regions of yellow when zoomed out and Ns displayed at base level
 (see <EM>Gap Annotation</EM>, below). </P>
 <P>
-<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<BLOCKQUOTE>
+
+<TABLE class="descTbl">
+<thead>
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
+</thead>
+<tbody>
 <TR ALIGN=left><TD>Chimp</TD><TD>Pan troglodytes</TD><TD>
     Oct. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=panTro3"
     TARGET=_blank>CGSC 2.1.3/panTro3</A></TD><TD>reference species</TD></TR>
@@ -78,28 +83,29 @@ by regions of yellow when zoomed out and Ns displayed at base level
 <TR ALIGN=left><TD>Marmoset</TD><TD>Callithrx jacchus</TD><TD>
     Mar. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=calJac3"
     TARGET=_blank>WUGSC 3.2/calJac3</A></TD><TD>Syntenic Net</TD></TR>
+<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>
+    Jul. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=mm9"
+    TARGET=_blank>NCBI37/mm9</A></TD><TD>Syntenic Net</TD></TR>
+<TR ALIGN=left><TD>Rat</TD><TD>Rattus norvegicus</TD><TD>
+    Nov. 2004</TD><TD> <A HREF="../cgi-bin/hgGateway?db=rn4"
+    TARGET=_blank>Baylor 3.4/rn4</A></TD><TD>Syntenic Net</TD></TR>
 <TR ALIGN=left><TD>Horse</TD><TD>Equus caballus</TD><TD>
     Sep. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=equCab2"
     TARGET=_blank>equCab2</A></TD><TD>Syntenic Net</TD></TR>
 <TR ALIGN=left><TD>Dog</TD><TD>Canis lupus familiaris</TD><TD>
     July 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=canFam2"
     TARGET=_blank>canFam2</A></TD><TD>Syntenic Net</TD></TR>
-<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>
-    Jul. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=mm9"
-    TARGET=_blank>NCBI37/mm9</A></TD><TD>Syntenic Net</TD></TR>
-<TR ALIGN=left><TD>Rat</TD><TD>Rattus norvegicus</TD><TD>
-    Nov. 2004</TD><TD> <A HREF="../cgi-bin/hgGateway?db=rn4"
-    TARGET=_blank>Baylor 3.4/rn4</TD><TD>Syntenic Net</TD></TR>
 <TR ALIGN=left><TD>Opossum</TD><TD>Monodelphis domestica</TD><TD>
     Oct. 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=monDom5"
-    TARGET=_blank>monDom5</TD><TD>Syntenic Net</TD></TR>
+    TARGET=_blank>monDom5</A></TD><TD>Syntenic Net</TD></TR>
 <TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>
     May 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=galGal3"
-    TARGET=_blank>WUGSC 2.1/galGal3</TD><TD>Syntenic Net</TD></TR>
+    TARGET=_blank>WUGSC 2.1/galGal3</A></TD><TD>Syntenic Net</TD></TR>
 <TR ALIGN=left><TD>Zebrafish</TD><TD>Danio rerio</TD><TD>
     Jul. 2010</TD><TD> <A HREF="../cgi-bin/hgGateway?db=danRer7"
-    TARGET=_blank>Zv9/danRer7</TD><TD>Syntenic Net</TD></TR>
-</TABLE><BR>
+    TARGET=_blank>Zv9/danRer7</A></TD><TD>Syntenic Net</TD></TR>
+</tbody>
+</TABLE>
 <B>Table 1.</B> <EM>Genome assemblies included in the 12-way Conservation 
 track.</EM>
 </BLOCKQUOTE></P>
@@ -140,9 +146,9 @@ species to include in the pairwise display.
 Configuration buttons are available to select all of the species (<EM>Set 
 all</EM>), deselect all of the species (<EM>Clear all</EM>), or 
 use the default settings (<EM>Set defaults</EM>).
-By default, the all 12 species are included in the pairwise display:
-chimp, human, orangutan, rhesus, marmoset, horse, dog, mouse, rat,
-opossum, chicken, zebrafish.
+By default, 9 of the 12 species are included in the pairwise display:
+chimp, human, orangutan, rhesus, marmoset, mouse, dog,
+opossum, chicken (rat, horse and zebrafish are off).
 Note that excluding species from the pairwise display does not alter the
 the conservation score display.</P>
 <P>
@@ -223,15 +229,16 @@ codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
 species are translated using the default species annotation. 
 </UL></P>
+
 <P>
 Codon translation uses the following gene tracks as the basis for
 translation, depending on the species chosen (<B>Table 2</B>).  
 
-<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<BLOCKQUOTE><TABLE class="descTbl">
 <TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
 <TR ALIGN=left><TD>Known Genes</TD><TD>human, mouse</TD></TR>
 <TR ALIGN=left><TD>Ensembl Genes v61</TD><TD>chimp, orangutan, rhesus,
-marmoset, horse, dog, rat, opossum, chicken, zebrafish</TD></TR>
+marmoset, rat, horse, dog, opossum, chicken, zebrafish</TD></TR>
 </TABLE>
 <B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
 </BLOCKQUOTE></P>

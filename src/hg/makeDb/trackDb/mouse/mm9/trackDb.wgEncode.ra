@@ -3,11 +3,10 @@
 #Encode Composite tracks (main wrangler:Venkat)
 
 # Stan/Yale TFBS (wrangler: Venkat) 
-include wgEncodeSydhTfbs.ra beta,public
-include wgEncodeSydhTfbs.newR2.ra alpha
+include wgEncodeSydhTfbs.ra 
 
 # Stan/Yale Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra
+include wgEncodeSydhHist.ra
 
 # UW DNaseI HS (wrangler: Venkat)
 include wgEncodeUwDnase.ra beta,public
@@ -36,3 +35,6 @@ include wgEncodeUwRnaSeq.ra alpha
 
 # Caltech TFBS (wrangler: Venkat)
 include wgEncodeCaltechTfbs.ra alpha
+
+# Caltech Histone (wrangler: Venkat)
+include wgEncodeCaltechHist.ra alpha                                      

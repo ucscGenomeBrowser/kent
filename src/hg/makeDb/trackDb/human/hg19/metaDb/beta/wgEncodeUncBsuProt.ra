@@ -1,0 +1,224 @@
+metaObject wgEncodeUncBsuProt
+objType composite
+composite wgEncodeUncBsuProt
+expVars lab,dataType,cell,localization
+protocol SDS-Page
+
+metaObject wgEncodeUncBsuProtGm12878NucleusRaw
+objType file
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+dccAccession wgEncodeEH001199
+expId 1199
+fileName wgEncodeUncBsuProtGm12878NucleusRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.2Da,msMsMassTolerance=0.5Da
+localization nucleus
+md5sum ae94d26d4b814417b0e2eb8b12ebbcdf
+project wgEncode
+protocol SDS-Page
+subId 4184
+view RawSignal
+
+metaObject wgEncodeUncBsuProtGm12878NucleusSig
+objType table
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2012-10-05
+dccAccession wgEncodeEH001199
+dccInternalNotes was subId 3160
+expId 1199
+fileName wgEncodeUncBsuProtGm12878NucleusSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.2Da,msMsMassTolerance=0.5Da
+localization nucleus
+md5sum 9856f1cec710e90ac373fa163ffc4b2a
+project wgEncode
+protocol SDS-Page
+subId 4177
+tableName wgEncodeUncBsuProtGm12878NucleusSig
+view Signal
+
+metaObject wgEncodeUncBsuProtK562CytosolRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+dccAccession wgEncodeEH001737
+expId 1737
+fileName wgEncodeUncBsuProtK562CytosolRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization cytosol
+md5sum d8a53eed15fb882526361549e8935a43
+project wgEncode
+protocol SDS-Page
+subId 4172
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562CytosolSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH001737
+expId 1737
+fileName wgEncodeUncBsuProtK562CytosolSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization cytosol
+md5sum 3fa499e2c977964cce1f7339bedf3eb4
+project wgEncode
+protocol SDS-Page
+subId 4171
+tableName wgEncodeUncBsuProtK562CytosolSig
+view Signal
+
+metaObject wgEncodeUncBsuProtK562MembranefractionRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+dccAccession wgEncodeEH001200
+expId 1200
+fileName wgEncodeUncBsuProtK562MembranefractionRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+md5sum 61598b6a23b39d6e7afa17638aa62d58
+project wgEncode
+protocol SDS-Page
+subId 4182
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562MembranefractionSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2012-10-05
+dccAccession wgEncodeEH001200
+dccInternalNotes was subId 3238
+expId 1200
+fileName wgEncodeUncBsuProtK562MembranefractionSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+md5sum 0c9d8bffb89338769234e0a660eadbb6
+project wgEncode
+protocol SDS-Page
+subId 4174
+tableName wgEncodeUncBsuProtK562MembranefractionSig
+view Signal
+
+metaObject wgEncodeUncBsuProtK562MitoRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+dccAccession wgEncodeEH001738
+expId 1738
+fileName wgEncodeUncBsuProtK562MitoRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+md5sum e16c1c0fccd61f1435b2cd02322aa42e
+project wgEncode
+protocol SDS-Page
+subId 4180
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562MitoSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH001738
+expId 1738
+fileName wgEncodeUncBsuProtK562MitoSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+md5sum d1ce8faf0aa0116e44feb42dc5d154ec
+project wgEncode
+protocol SDS-Page
+subId 4178
+tableName wgEncodeUncBsuProtK562MitoSig
+view Signal
+
+metaObject wgEncodeUncBsuProtK562NucleusRaw
+objType file
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-06
+dateUnrestricted 2012-03-06
+dccAccession wgEncodeEH001739
+expId 1739
+fileName wgEncodeUncBsuProtK562NucleusRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization nucleus
+md5sum 68fb4ffa048b542b79b622c2bd260a03
+project wgEncode
+protocol SDS-Page
+subId 4181
+view RawSignal
+
+metaObject wgEncodeUncBsuProtK562NucleusSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-06-03
+dateUnrestricted 2012-03-03
+dccAccession wgEncodeEH001739
+expId 1739
+fileName wgEncodeUncBsuProtK562NucleusSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization nucleus
+md5sum dd8b0570585f83eaec8e6afe22d342e6
+project wgEncode
+protocol SDS-Page
+subId 4176
+tableName wgEncodeUncBsuProtK562NucleusSig
+view Signal
+
+# MAGIC: -1868474173

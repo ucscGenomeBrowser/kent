@@ -75,7 +75,8 @@ enum molType {
     mol_tRNA,
     mol_cRNA,
     mol_ss_cRNA,
-    mol_ds_cRNA
+    mol_ds_cRNA,
+    mol_ms_rRNA,
 };
 
 

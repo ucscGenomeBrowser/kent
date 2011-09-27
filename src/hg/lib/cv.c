@@ -23,6 +23,7 @@
 #define CV_SEARCHABLE_SINGLE_SELECT "select"
 #define CV_SEARCHABLE_MULTI_SELECT  "multiSelect"
 #define CV_SEARCHABLE_FREE_TEXT     "freeText"
+#define CV_SEARCHABLE_WILD_LIST     "wildList"
 
 const char *cvTypeNormalized(const char *sloppyTerm)
 // returns the proper term to use when requesting a typeOfTerm
@@ -221,7 +222,8 @@ while ((hEl = hashNext(&hc)) != NULL)
         if (setting == NULL
         || (   differentWord(setting,CV_SEARCHABLE_SINGLE_SELECT)
             && differentWord(setting,CV_SEARCHABLE_MULTI_SELECT)
-            && differentWord(setting,CV_SEARCHABLE_FREE_TEXT)))
+            && differentWord(setting,CV_SEARCHABLE_FREE_TEXT)
+            && differentWord(setting,CV_SEARCHABLE_WILD_LIST)))
            continue;
         }
     if (cvDefined)
@@ -259,6 +261,8 @@ if (termHash != NULL)
             return cvSearchByMultiSelect;
         if (sameWord(searchable,CV_SEARCHABLE_FREE_TEXT))
             return cvSearchByFreeText;
+        if (sameWord(searchable,CV_SEARCHABLE_WILD_LIST))
+            return cvSearchByWildList;
         if (sameWord(searchable,"date"))
             return cvSearchByDateRange;
         if (sameWord(searchable,"numeric"))
@@ -303,12 +307,20 @@ if (validationRule != NULL)
 return cvIndeterminant;
 }
 
-const char *cvLabel(const char *term)
+const char *cvLabel(const char *type,const char *term)
 // returns cv label if term found or else just term
+// If type not supplied, must be a typeOfTerm definition
 {
-// Get the list of term types from thew cv
-struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
-struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
+struct hash *termHash = NULL;
+if (type == NULL) // Must be a typeOfTerm
+    {
+    // Get the list of term types from thew cv
+    struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+    termHash = hashFindVal(termTypeHash,(char *)term);
+    }
+else
+    termHash = (struct hash *)cvOneTermHash(type,term);
+
 if (termHash != NULL)
     {
     char *label = hashFindVal(termHash,CV_LABEL);
@@ -368,6 +380,20 @@ if (termHash != NULL)
 return FALSE;
 }
 
+boolean cvTermIsCvDefined(const char *term)
+// returns TRUE if the terms values are defined in the cv.ra
+// For example anitobody is cv defined but expId isn't
+{
+struct hash *termTypeHash = (struct hash *)cvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,(char *)term);
+if (termHash != NULL)
+    {
+    char *setting = hashFindVal(termHash,CV_TOT_CV_DEFINED);
+    return SETTING_IS_ON(setting);
+    }
+return FALSE;
+}
+
 boolean cvTermIsEmpty(const char *term,const char *val)
 // returns TRUE if term has validation of "cv or None" and the val is None
 {
@@ -423,7 +449,8 @@ if (validationRule == NULL)
                 safef(reason,len,"ERROR in %s: Term '%s' says validate in cv but not found as a cv term.",CV_FILE_NAME,(char *)term);
             return FALSE;
             }
-        if (hashFindVal(cvHashForTerm,(char *)val) == NULL) // No cv definition for term so no validation can be done
+        struct hash *cvHashForVal = hashFindVal(cvHashForTerm,(char *)val);
+        if (cvHashForVal == NULL || hashFindVal(cvHashForVal, "deprecated")) // No cv definition for term so no validation can be done
             {
             if (sameString(validationRule,CV_VALIDATE_CV_OR_NONE) && sameString((char *)val,MDB_VAL_ENCODE_EDV_NONE))
                 return TRUE;
@@ -440,7 +467,7 @@ if (validationRule == NULL)
                     return TRUE;
                 }
             if (reason != NULL)
-                safef(reason,len,"INVALID cv lookup: %s = '%s'",(char *)term,(char *)val);
+                safef(reason,len,"INVALID cv lookup: %s = '%s' %s",(char *)term,(char *)val,(cvHashForVal?"DEPRECATED.":"not found."));
             return FALSE;
             }
         }

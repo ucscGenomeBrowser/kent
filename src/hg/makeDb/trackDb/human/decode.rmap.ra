@@ -1,0 +1,203 @@
+track decodeRmap
+compositeTrack on
+shortLabel deCODE Recomb
+longLabel deCODE Recombination maps, 10Kb bin size, October 2010
+group map
+priority 8.5
+type bed 3
+noInherit on
+viewLimits 0:10
+maxHeightPixels 100:36:11
+visibility hide
+subGroup1 view Views male=Male female=Female avg=Sex_Average diff=Sex_Difference hot=Hot_Spots other=Other_maps
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr16,chr14,chr15,chr17,chr18,chr19,chr20,chr22,chr21
+
+    track avgView
+    view avg
+    shortLabel Sex Average
+    parent decodeRmap
+    visibility full
+
+	track decodeSexAveraged
+	shortLabel Sex Average
+	longLabel deCODE recombination map, sex-average
+	parent avgView
+	subGroups view=avg
+	type bigWig 0.0 108.804
+	color 109,51,43
+	configurable on
+	priority 1
+
+	track decodeSexAveragedCarrier
+	shortLabel Sex Average Carrier
+	longLabel deCODE recombination map, sex-average carrier
+	parent avgView off
+	subGroups view=avg
+	type bigWig 0.0 76.046
+	color 209,45,51
+	configurable on
+	priority 2
+
+	track decodeSexAveragedNonCarrier
+	shortLabel Sex Average Non-carrier
+	longLabel deCODE recombination map, sex-average non-carrier
+	parent avgView off
+	subGroups view=avg
+	type bigWig 0.0 113.023
+	color 252,79,89
+	configurable on
+	priority 3
+
+    track femaleView
+    view female
+    shortLabel Female
+    parent decodeRmap
+    visibility hide
+
+	track decodeFemale
+	shortLabel Female
+	longLabel deCODE recombination map, female
+	parent femaleView
+	subGroups view=female
+	type bigWig 0.0 90.808
+	color 200,60,200
+	configurable on
+	priority 4
+
+	track decodeFemaleCarrier
+	shortLabel Female Carrier
+	longLabel deCODE recombination map, female carrier
+	parent femaleView
+	subGroups view=female
+	type bigWig 0.0 77.704
+	color 187,102,255
+	configurable on
+	priority 5
+
+	track decodeFemaleNonCarrier
+	shortLabel Female Non-carrier
+	longLabel deCODE recombination map, female non-carrier
+	parent femaleView
+	subGroups view=female
+	type bigWig 0.0 93.929
+	color 148,128,200
+	configurable on
+	priority 6
+
+    track maleView
+    view male
+    shortLabel Male
+    parent decodeRmap
+    visibility hide
+
+	track decodeMale
+	shortLabel Male
+	longLabel deCODE recombination map, male
+	parent maleView
+	subGroups view=male
+	type bigWig 0.0 144.958
+	color 0,81,200
+	configurable on
+	priority 7
+
+	track decodeMaleCarrier
+	shortLabel Male Carrier
+	longLabel deCODE recombination map, male carrier
+	parent maleView
+	subGroups view=male
+	type bigWig 0.0 204.214
+	color 0,100,180
+	configurable on
+	priority 8
+
+	track decodeMaleNonCarrier
+	shortLabel Male Non-carrier
+	longLabel deCODE recombination map, male non-carrier
+	parent maleView
+	subGroups view=male
+	type bigWig 0.0 151.353
+	color 0,128,140
+	configurable on
+	priority 9
+
+    track diffView
+    view diff
+    shortLabel Male-Female
+    parent decodeRmap
+    visibility full
+
+	track decodeMaleFemaleDifference
+	shortLabel Sex Difference
+	longLabel deCODE recombination map, male minus female difference
+	parent diffView
+	subGroups view=diff
+	type bigWig -65 94
+	color 0,0,128
+	altColor 128,0,0
+	viewLimits -20:20
+	configurable on
+	priority 10
+
+    track hotView
+    view hot
+    shortLabel Hot Spots
+    longLabel deCODE recombination map, Female and Male hot spots, >= 10.0
+    parent decodeRmap
+    visibility dense
+    type bed 4
+
+	track decodeHotSpotMale
+	shortLabel Hot Spot Male
+	longLabel deCODE recombination map, male >= 10.0
+	parent hotView
+	color 0,81,200
+	subGroups view=hot
+	configurable on
+	priority 11
+
+	track decodeHotSpotFemale
+	shortLabel Hot Spot Female
+	longLabel deCODE recombination map, female >= 10.0
+	parent hotView
+	color 255,0,255
+	subGroups view=hot
+	configurable on
+	priority 12
+
+    track otherMaps
+    view other
+    shortLabel HapMap
+    longLabel HapMap Release 24 recombination maps
+    parent decodeRmap
+    visibility hide
+    type bigWig -1.0 111.0
+
+	track hapMapRelease24CombinedRecombMap
+	shortLabel HapMap
+	longLabel HapMap Release 24 combined recombination map
+	parent otherMaps
+	subGroups view=other
+	type bigWig -1.0 91.6
+	color 50,50,50
+	configurable on
+	priority 13
+
+	track hapMapRelease24CEURecombMap
+	shortLabel HapMap CEU
+	longLabel HapMap Release 24 CEU recombination map
+	parent otherMaps
+	subGroups view=other
+	type bigWig 0.0 111.0
+	color 80,80,80
+	configurable on
+	priority 14
+
+	track hapMapRelease24YRIRecombMap
+	shortLabel HapMap YRI
+	longLabel HapMap Release 24 YRI recombination map
+	parent otherMaps
+	subGroups view=other
+	type bigWig 0.0 72.21
+	color 110,110,110
+	configurable on
+	priority 15

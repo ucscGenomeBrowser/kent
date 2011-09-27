@@ -12,7 +12,7 @@ O = $A.o asFilter.o asObj.o bam.o bedList.o bigBed.o bigWig.o \
     chromGraph.o compositeTrack.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
     joining.o maf.o mainPage.o microarrayTables.o rangeHistogram.o schema.o pal.o \
-    seqOut.o sumStats.o usage.o wiggle.o wikiTrack.o galaxy.o great.o userRegions.o
+    seqOut.o sumStats.o usage.o vcf.o wiggle.o wikiTrack.o galaxy.o great.o userRegions.o
 
 include ../../inc/cgi_build_rules.mk
 

@@ -1,0 +1,15 @@
+mkGeoPkg
+
+First an overview for programmers who have no idea what all this means:
+GEO collects data for permanant archival. The data we submit to them is contained as one Series. A Series is a set of Samples. A Sample corresponds to a small set of our Stanzas, or corresponds 1:1 with our expIds. A Series directly corresponds to our Composite. So one file in the MDB = one Composite (our term) = one Series (in the soft file) = at least 1 submission to GEO.
+
+Submit data to GEO for processing. This will generate a SOFT file for part or all of a composite, and a script with the aspera command to submit all the required files. The SOFT file will not be complete, and you will have to manually curate some data. To do this, replace all values with the value '[REPLACE]'. 
+
+This script takes data from:
+-the composite's RA file in the mdb
+-the CV in alpha
+-the trackDb ra file
+-the MD5 sums from the downloads directory
+
+There is also a lot of hand-curated data in the top of the program, namely the DataType, which you might want to modify.
+

@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "cds.h"
-#include "bamFile.h"
+#include "hgBam.h"
 #include "wigCommon.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
@@ -250,7 +250,7 @@ else if (sameString(btd->colorMode, BAM_COLOR_MODE_TAG) && isNotEmpty(btd->userT
 	// Instead, pack RGB values into lf->filterColor which fortunately is an int.
 	unsigned char r, g, b;
 	if (parseRgb(rgb, &r, &g, &b))
-	    lf->filterColor = ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+	    lf->filterColor = MAKECOLOR_32(r,g,b);
 	else
 	    {
 	    static boolean already = FALSE;
@@ -598,14 +598,10 @@ if (darkRedColor == 0)
     }
 if (sameString(colorMode, BAM_COLOR_MODE_STRAND))
     color = (lf->orientation < 0) ? darkRedColor : darkBlueColor;
-else if (lf->filterColor > 0)
+else if (lf->filterColor != 0)
     {
-    // In bamTrack, lf->filterColor is a packed int.  Unpack:
-    int r, g, b;
-    r = (lf->filterColor >> 16) & 0xff;
-    g = (lf->filterColor >> 8) & 0xff;
-    b = lf->filterColor & 0xff;
-    color = hvGfxFindColorIx(hvg, r, g, b);
+    // In bamTrack, lf->filterColor is an RGBA value
+    color = lf->filterColor;
     }
 else if (tg->colorShades)
     color = tg->colorShades[lf->grayIx];

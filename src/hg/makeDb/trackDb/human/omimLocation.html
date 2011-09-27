@@ -40,6 +40,9 @@ This track was constructed as follows:
 <UL>
 <LI>The data file <TT>genemap.txt</TT> from OMIM was loaded into the MySQL table
 <TT>omimGeneMap</TT>.
+<LI>Entries in <TT>genemap.txt</TT> having disorder info were parsed and loaded into the
+<TT>omimPhenotype</TT> table. The phenotype map keys (the numbers (1)(2)(3)(4) from the
+disorder columns) were placed into a separate field.
 <LI>The cytogenetic location data (from the location column in <TT>omimGeneMap</TT>) were
 parsed and converted into genomic start and end positions based on the <TT>cytoBand</TT> table.
 These genomic positions, together with the corresponding OMIM IDs, were loaded into the

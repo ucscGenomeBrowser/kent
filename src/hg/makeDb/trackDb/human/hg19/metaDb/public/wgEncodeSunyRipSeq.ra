@@ -1,0 +1,1158 @@
+metaObject wgEncodeSunyRipSeq
+objType composite
+composite wgEncodeSunyRipSeq
+expVars lab,dataType,cell,antibody
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1AlnRep1
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000796
+expId 796
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum bam=943107cd2fc437dff04098c604d053e2,bai=ef06c6d83e888e7fbde9ffc8848f0dae
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1AlnRep2
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000796
+expId 796
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum bam=376b865faa2a124b9825266256b1c26e,bai=27d95f6a12874fc0f7fbc5dcf825d1ac
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1Pk
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000796
+expId 796
+fileName wgEncodeSunyRipSeqGm12878Elavl1Pk.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum 17c56dd022ace9785367ebceb76ff581
+project wgEncode
+subId 3306
+tableName wgEncodeSunyRipSeqGm12878Elavl1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1
+objType file
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000796
+expId 796
+fileName wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum 07d6caad17bfaab4f4436374955369c3
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2
+objType file
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000796
+expId 796
+fileName wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum a75f374311943fc7645dcc4884820d79
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1SigRep1
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000796
+expId 796
+fileName wgEncodeSunyRipSeqGm12878Elavl1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum ef861d9af632b0ba6a31c4e08009e16e
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1SigRep2
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000796
+expId 796
+fileName wgEncodeSunyRipSeqGm12878Elavl1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum 57fbc4d8b79d2410e432c9ac1cfb6e9f
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000797
+expId 797
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum bam=0893917404fc33e60c261cc9588c9732,bai=ba3136f9532b17704b106023a41ac8d6
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000797
+expId 797
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum bam=7bc706622e3e5c18d2517001d39b63c6,bai=759fb8647dba14f586c8d5d54e495891
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1Pk
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000797
+expId 797
+fileName wgEncodeSunyRipSeqGm12878Pabpc1Pk.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 4031b3142d6ca841405544e019c32435
+project wgEncode
+subId 3306
+tableName wgEncodeSunyRipSeqGm12878Pabpc1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1
+objType file
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000797
+expId 797
+fileName wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 80dbb0db72ebd488d8ef3c39cdd2e951
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2
+objType file
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000797
+expId 797
+fileName wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 02e15bfa8318b8213f42ce2e2bc822f5
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1SigRep1
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000797
+expId 797
+fileName wgEncodeSunyRipSeqGm12878Pabpc1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 68a5d00a2df7acc691e7f0c81510abb2
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1SigRep2
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000797
+expId 797
+fileName wgEncodeSunyRipSeqGm12878Pabpc1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 14fb7c1cc7e0be7d7f95e478fd4ddfee
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputAlnRep1
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000798
+expId 798
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+md5sum bam=520ae680dd974c1cc5e25053f1a4e6dd,bai=c244eebe17cf9fee96014eacca38fae9
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputAlnRep2
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000798
+expId 798
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+md5sum bam=d4bbb373f592be5c808ada966f9c1952,bai=4eba7dc042ad7aac8abe32ade038b83b
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputPk
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000798
+expId 798
+fileName wgEncodeSunyRipSeqGm12878RipinputPk.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum b671dce6abc995f5e47157f84b6e0226
+project wgEncode
+subId 3306
+tableName wgEncodeSunyRipSeqGm12878RipinputPk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputRawDataRep1
+objType file
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000798
+expId 798
+fileName wgEncodeSunyRipSeqGm12878RipinputRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum 0b3d478e7011b1104b451ae4de2639ed
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputRawDataRep2
+objType file
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000798
+expId 798
+fileName wgEncodeSunyRipSeqGm12878RipinputRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum 4d8a482b7ca29f56bff40bd110d5a431
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputSigRep1
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000798
+expId 798
+fileName wgEncodeSunyRipSeqGm12878RipinputSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+md5sum 6fc963d37686f8a7ba73b7adeea1f6e7
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputSigRep2
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000798
+expId 798
+fileName wgEncodeSunyRipSeqGm12878RipinputSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+md5sum e97f1cffaee0f2b9d4c8f2ee7058c6dc
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputSigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagAlnRep1
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000799
+expId 799
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum bam=e93f1b8f78fb9c35a579567513238557,bai=79e8bcb375ff1a54d0d7e189b08de83b
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagAlnRep2
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000799
+expId 799
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum bam=d64d6a2790ec360bed0b24d1e7705426,bai=cda5c92175b0a98674657f07dfb13da9
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagRawDataRep1
+objType file
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000799
+expId 799
+fileName wgEncodeSunyRipSeqGm12878T7tagRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum 6287d54f4736376579e57e77265dac5b
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagRawDataRep2
+objType file
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000799
+expId 799
+fileName wgEncodeSunyRipSeqGm12878T7tagRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum 0c7d7e88e2d0aaf9e12017caab084b60
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagSigRep1
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000799
+expId 799
+fileName wgEncodeSunyRipSeqGm12878T7tagSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum 444ecc13c927aec541fda438033827ba
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagSigRep2
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000799
+expId 799
+fileName wgEncodeSunyRipSeqGm12878T7tagSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum 889611b51ae4ceaae665756472d97a8b
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagSigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Elavl1AlnRep1
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000793
+expId 793
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum bam=212f2e7c780b8195bf26383ef5d6283f,bai=56a6d9bbc82aad76c140cd2c2dad271e
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Elavl1AlnRep2
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000793
+expId 793
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum bam=1b088a487491d437e49d364943e9db44,bai=bd3294415c3b79e44d4b96fc05f6c4b1
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Elavl1Pk
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000793
+expId 793
+fileName wgEncodeSunyRipSeqK562Elavl1Pk.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum cd3aa5ead63cb1fef3e27d2fc8181054
+project wgEncode
+subId 3291
+tableName wgEncodeSunyRipSeqK562Elavl1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqK562Elavl1RawDataRep1
+objType file
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000793
+expId 793
+fileName wgEncodeSunyRipSeqK562Elavl1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum ba3556004122fecfbfd0054b37a4aefa
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Elavl1RawDataRep2
+objType file
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000793
+expId 793
+fileName wgEncodeSunyRipSeqK562Elavl1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum f46a944edd1b734570ae8b280a7fe63b
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Elavl1SigRep1
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000793
+expId 793
+fileName wgEncodeSunyRipSeqK562Elavl1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum 337329ce77cb27d358ec5ea807f951c7
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Elavl1SigRep2
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000793
+expId 793
+fileName wgEncodeSunyRipSeqK562Elavl1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+md5sum 9ef0efd828644574c954221cd9ddd81e
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1AlnRep1
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000794
+expId 794
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum bam=22eca903bbc982a413decb540b556a00,bai=ad0baf1d2d715b28f7f66cd94a56ae68
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1AlnRep2
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000794
+expId 794
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum bam=05f96f4d2c9c0bd411fc16d600c9a4fb,bai=91e4b8bfbe79e6ec4aecde7464695c54
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1Pk
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000794
+expId 794
+fileName wgEncodeSunyRipSeqK562Pabpc1Pk.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum b9d48a69d2e1699398e2f87da4161815
+project wgEncode
+subId 3291
+tableName wgEncodeSunyRipSeqK562Pabpc1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1RawDataRep1
+objType file
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000794
+expId 794
+fileName wgEncodeSunyRipSeqK562Pabpc1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum d2261c92a562e4c9178740672c08bdca
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1RawDataRep2
+objType file
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000794
+expId 794
+fileName wgEncodeSunyRipSeqK562Pabpc1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 7aebac3d234d83346f1b2142e1e26e46
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1SigRep1
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000794
+expId 794
+fileName wgEncodeSunyRipSeqK562Pabpc1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 7561c144d3006b7c40dada2a202b1521
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1SigRep2
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000794
+expId 794
+fileName wgEncodeSunyRipSeqK562Pabpc1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+md5sum 30a6a96b5092b7c2675dfde782388afb
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562RipinputAlnRep1
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000795
+expId 795
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+md5sum bam=b9946f5c231fa041955b56c38f1c3063,bai=9effbe44d0fa0ccbcc3560f76f282024
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562RipinputAlnRep2
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000795
+expId 795
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+md5sum bam=95a97446ee0832de77593175bd94c9ce,bai=01a386791aa4e685777b3fdc292ec3fb
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562RipinputPk
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+dccAccession wgEncodeEH000795
+expId 795
+fileName wgEncodeSunyRipSeqK562RipinputPk.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum 8732a97b404b05e6cdcfc9157e752b10
+project wgEncode
+subId 3291
+tableName wgEncodeSunyRipSeqK562RipinputPk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqK562RipinputRawDataRep1
+objType file
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000795
+expId 795
+fileName wgEncodeSunyRipSeqK562RipinputRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum f6fbf96100718232b38680d6511c87d3
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562RipinputRawDataRep2
+objType file
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000795
+expId 795
+fileName wgEncodeSunyRipSeqK562RipinputRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+md5sum a64639ff8fa8039446ba0c20c8d25e57
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562RipinputSigRep1
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000795
+expId 795
+fileName wgEncodeSunyRipSeqK562RipinputSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+md5sum fd05149874e1d5b5716db384295659fc
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562RipinputSigRep2
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000795
+expId 795
+fileName wgEncodeSunyRipSeqK562RipinputSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+md5sum 5c4819fc03ae862ad6bcaf28925438be
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputSigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562T7tagAlnRep1
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000800
+expId 800
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum bam=b1af906d167b070ebc67744cce0fb521,bai=bb518ead9dc51a9e0d585d80780deb76
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562T7tagAlnRep2
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000800
+expId 800
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum bam=2fdefeb9db79da66ac379cb9a22930f1,bai=55a00f8ff474027d96004b5667c378b9
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562T7tagRawDataRep1
+objType file
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000800
+expId 800
+fileName wgEncodeSunyRipSeqK562T7tagRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum ac72342f178656cf62392a93e9b685b2
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562T7tagRawDataRep2
+objType file
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000800
+expId 800
+fileName wgEncodeSunyRipSeqK562T7tagRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum 1519e3306c38e0159310bc100abb8277
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562T7tagSigRep1
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000800
+expId 800
+fileName wgEncodeSunyRipSeqK562T7tagSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum 5f55cf78fe2e915b1568db6e3f972d77
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562T7tagSigRep2
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH000800
+expId 800
+fileName wgEncodeSunyRipSeqK562T7tagSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+md5sum 66a2ad0d34bde70a3496bd1c4166a2ba
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagSigRep2
+view Signal
+
+# MAGIC: -1302774945

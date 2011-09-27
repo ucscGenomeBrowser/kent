@@ -11302,18 +11302,15 @@ ssh hgwbeta
 knownToVisiGene mm9
 
 #########################################################################
-# SEGMENTAL DUPLICATIONS (DONE 1/11/2011 Fan)
-    # File indicated by email from T. Louie <tinlouie@u.washington.edu>
-    mkdir /cluster/data/mm9/bed/genomicSuperDups
-    cd /cluster/data/mm9/bed/genomicSuperDups
-    wget --timestamping 'http://staff.washington.edu/tinlouie/mm9genomicSuperDups.tab.gz'
-    
-    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm9genomicSuperDups.tab \
+# SEGMENTAL DUPLICATIONS (REBUILT 9/26/20111 Fan)
+    # corrected data file sent by email from John Huddleston [jlhudd@uw.edu].
+    mkdir /cluster/data/mm9/bed/genomicSuperDups/09262011
+    cd /cluster/data/mm9/bed/genomicSuperDups/09262011
+    wget --timestamping ftp://mesh.gs.washington.edu/pub/UCSC/mm9genomicSuperDups.fixed.tab.gz
+    gzip -d mm9genomicSuperDups.fixed.tab.gz
+    awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' mm9genomicSuperDups.fixed.tab \
     | hgLoadBed mm9 genomicSuperDups stdin \
       -tab -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
-    # 8/29/07 Gak!  Kayla found that the strand values were "+" and "_" -- fix:
-    hgsql mm9 -e 'update genomicSuperDups set strand = "-" where strand = "_";'
-
 #####################################################################
 # NCBI Incident database (DONE - 2011-02-10 - Hiram)
     # this procedure is run as a cron job in Hiram's account:
@@ -12065,5 +12062,59 @@ TMPDIR=/scratch/tmp
     ln -s `pwd`/MMS_NumtS.fasta.sorted.bam{,.bai} /gbdb/mm9/NumtS/
     hgBbiDbLink mm9 bamMmsNumtSSorted /gbdb/mm9/NumtS/MMS_NumtS.fasta.sorted.bam 
     # setup trackDb for mm9
+
+##############################################################################
+# LASTZ X. tropicalis XenTro3 (DONE - 2011-09-20 - Hiram)
+    mkdir /hive/data/genomes/mm9/bed/lastzXenTro3.2011-09-20
+    cd /hive/data/genomes/mm9/bed/lastzXenTro3.2011-09-20
+
+    cat << '_EOF_' > DEF
+# Mouse (mm9) vs frog (xenTro2)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/mm9/bed/lastzXenTro3.2011-09-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    382m43.129s
+    cat fb.mm9.chainXenTro3Link.txt 
+    #	81920795 bases of 2620346127 (3.126%) in intersection
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.mm9.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzXenTro3.2011-09-20/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    57m36.529s
+    cat fb.xenTro3.chainMm9Link.txt 
+    #	89770014 bases of 1358334882 (6.609%) in intersection
 
 ##############################################################################

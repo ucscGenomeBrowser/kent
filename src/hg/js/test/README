@@ -1,0 +1,130 @@
+This directory has an example of the usage of jsTestDriver, a platform
+for automated unit testing of javascript in the style of jUnit.
+
+There are also notes here (at the end) for some other JS tools installed on hgwdev:
+        jslint - syntax and code-quality checker
+        jsbeautifier - pretty printer, standardizes whitespace layout
+
+----------------------------
+
+Some docs are here:
+
+http://code.google.com/p/js-test-driver/wiki/TestCase
+
+Components are:
+
+JsTestDriver-1.3.2.jar  Implementation of jsTestDriver
+src/Greeter.js          Sample JS code to test
+test/GreeterTest.js     Simple test of sample JS code
+jsTestDriver.conf       Configuration for jsTest server -- has server, port, and src, test to load
+jsTestServer            Script to start jsTest server
+jsTestRun               Script to run tests
+
+plugins/coverage-1.3.2.jar      Test coverage plug-in
+lcov-1.9/bin                    Test coverage tools
+
+
+To use the framework:
+
+Server setup:
+* start test server (jsTestServer)
+* open browser and navigate to host:port in jsTestDriver.conf (hgwdev.cse.ucsc.edu:4224)
+* click on "Capture this Browser" (Strict mode for HTML 4.0.1 strict)
+
+Running tests:
+* update .conf file if needed.  Load section can have multiple entries to load in order needed.
+        Paths in .conf file are relative to directory having .conf file (and they cannot be above
+        that directory in the hierarchy)
+* run test runner (jsTestRun)
+
+If tests pass, jsTestRun return status will be 0.  On failure it will be 1.
+jsTestRun output will include error log.
+
+
+Patterns for use:
+
+TestCase("MyTest", {
+    setup: function () {
+    }
+    tearDown: function () {
+    }
+    // test methods
+    "feature x should do Y": function() {
+    },
+    "test feature 1": function() {
+    }
+});
+
+
+Assertions:
+
+assert(msg, value)
+assertTrue(msg, value)
+assertFalse(msg, value)
+assertEquals(msg, expected, actual)
+assertNotEquals(msg, expected, actual)
+assertSame(msg, expected, actual)
+...
+assertMatch(msg, pattern, string)
+etc.
+
+
+Test coverage:
+
+Downloaded 'lcov' visualizer from sourceforge:
+http://sourceforge.net/projects/ltp/files/Coverage%20Analysis/LCOV-1.9/lcov-1.9.tar.gz
+
+
+cp lcov-1.9/bin/genhtml ~/bin
+
+This package works with GNU 'gcov'.
+
+--testOutput <dir> will cause output to testOutput dir as jsTestDriver.conf-coverage.dat in LCOV format
+
+ln -s <dir> ~kate/public_html
+#ln -s /cluster/home/kate/js/coverageOut /cluster/home/kate/public_html/
+
+After a coverage run:
+
+% cd <dir>
+% genhtml jsTestDriver.conf-coverage.dat.
+
+View in browser:  hgwdev.cse.ucsc.edu/~kate/coverageOut
+
+----------------
+JSLint here: www.jslint.com
+
+For ENCODE use, I configure like so:
+
+1) missing 'use script' pragma
+- why: it's a feature of JS5, not yet supported in browsers, so if your
+        code violates, you won't find out until JS in browsers are upgraded
+2) tolerate ++ and --
+- why: my own pref
+
+3) tolerate continue
+- why: my own pref
+
+4) expect browser
+- we are always ? client-side
+
+For web verification, include this in file:
+/*jslint indent:4, plusplus: true, continue: true, sloppy: true, browser: true */
+
+For command-line use (jslint-v8 version):
+
+alias jsl /usr/local/bin/jslint --indent=4 --plusplus=true --strict=false --browser=true
+
+-----------
+jsbeautifier here: http://jsbeautifier.org/ 
+
+Command-line:
+
+alias jsb ~/bin/jsbeautifier.py -j
+
+-j option formats whitespace friendly to jslint
+
+Note: this is not yet installed in centralized location.  Grab
+~kate/bin/jsbeautifer.py to use.
+
+

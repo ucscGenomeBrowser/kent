@@ -206,14 +206,15 @@ int itemCount = slCount(itemList);
 int pairCount = 0;
 struct hacTree *leafPairs = pairUpItems(itemList, itemCount, &pairCount, localMem,
 					distF, mergeF, cmpF, extraData);
+int *nodesToDelete = needMem(pairCount * sizeof(int));
 struct hacTree *poolHead = leafPairs;
 int poolLength = pairCount;
 while (poolLength > 0)
     {
     // Scan pool for node with lowest childDistance; swap that node w/head
-    int i;
     int bestIx = 0;
     double minScore = poolHead[0].childDistance;
+    int i;
     for (i=1;  i < poolLength;  i++)
 	if (poolHead[i].childDistance < minScore)
 	    {
@@ -229,6 +230,7 @@ while (poolLength > 0)
     // Where root->left is found in the pool, replace it with root.
     // Where root->right is found, drop that node so it doesn't become
     // a duplicate of the replacement cases.
+    int numNodesToDelete = 0;
     for (i=0;  i < poolLength;  i++)
 	{
 	struct hacTree *node = &(poolHead[i]);
@@ -237,15 +239,29 @@ while (poolLength > 0)
 	    initNode(node, root, node->right, distF, mergeF, extraData);
 	else if (node->right == root->left)
 	    // found root->left; replace node->right with root (merge root with node->left):
-	    initNode(node, root, node->left, distF, mergeF, extraData);
+	    initNode(node, node->left, root, distF, mergeF, extraData);
 	else if (node->left == root->right || node->right == root->right)
+	    // found root->right; mark this node for deletion:
+	    nodesToDelete[numNodesToDelete++] = i;
+	}
+    if (numNodesToDelete > 0)
+	{
+	int newPoolLen = nodesToDelete[0];
+	// This will be "next node to delete" for the last marked node:
+	nodesToDelete[numNodesToDelete] = poolLength;
+	for (i = 0;  i < numNodesToDelete;  i++)
 	    {
-	    // found root->right; drop this node:
-	    if (i < poolLength-1)
-		memcpy(node, &(poolHead[i+1]), (poolLength-i-1)*sizeof(struct hacTree));
-	    poolLength--;
-	    i--;
+	    int nodeToDel = nodesToDelete[i];
+	    int nextNodeToDel = nodesToDelete[i+1];
+	    int blkSize = nextNodeToDel - (nodeToDel+1);
+	    if (blkSize == 0)
+		continue;
+	    struct hacTree *fromNode = &(poolHead[nodeToDel+1]);
+	    struct hacTree *toNode = &(poolHead[newPoolLen]);
+	    memmove(toNode, fromNode, blkSize * sizeof(struct hacTree));
+	    newPoolLen += blkSize;
 	    }
+	poolLength = newPoolLen;
 	}
     // root now has a stable address, unlike nodes still in the pool, so set parents here:
     if (root->left != NULL)

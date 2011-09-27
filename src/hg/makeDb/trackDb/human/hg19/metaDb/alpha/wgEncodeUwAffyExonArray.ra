@@ -18,6 +18,7 @@ fileName wgEncodeUwAffyExonArrayA549SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651560
 grant Stam
 lab UW
+md5sum f422ac43b37031a46c2acade09860afe
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -39,6 +40,7 @@ fileName wgEncodeUwAffyExonArrayA549SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651561
 grant Stam
 lab UW
+md5sum 7e2b608ccaffdc32d0e9df4654fe9a40
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -61,6 +63,7 @@ fileName wgEncodeUwAffyExonArrayAg04449SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510528
 grant Stam
 lab UW
+md5sum 1e97768c2c1d98d1aa6c063093cbbe23
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -83,6 +86,7 @@ fileName wgEncodeUwAffyExonArrayAg04449SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510530
 grant Stam
 lab UW
+md5sum 53f6be35393403859ed3e6075906f88e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -105,6 +109,7 @@ fileName wgEncodeUwAffyExonArrayAg04450SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510532
 grant Stam
 lab UW
+md5sum 9a18896ec8b1b1e6fcbbdb00be691849
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -127,6 +132,7 @@ fileName wgEncodeUwAffyExonArrayAg04450SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510534
 grant Stam
 lab UW
+md5sum b9e7d0ef1205142f793bd992d90aef97
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -149,6 +155,7 @@ fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510522
 grant Stam
 lab UW
+md5sum b02261b8b4e57b60edf54bf6371ed555
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -170,6 +177,7 @@ fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510525
 grant Stam
 lab UW
+md5sum 9f899b9e692216384064c26801484126
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -192,6 +200,7 @@ fileName wgEncodeUwAffyExonArrayAg09319SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510536
 grant Stam
 lab UW
+md5sum 26f78b438499e1970fed87cb690f4972
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -214,6 +223,7 @@ fileName wgEncodeUwAffyExonArrayAg09319SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510538
 grant Stam
 lab UW
+md5sum d5e12edb70ca453569c98b72b63476c7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -236,6 +246,7 @@ fileName wgEncodeUwAffyExonArrayAg10803SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510520
 grant Stam
 lab UW
+md5sum 3f3fc9eda121cd2fa61abeba352e7581
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -258,6 +269,7 @@ fileName wgEncodeUwAffyExonArrayAg10803SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510521
 grant Stam
 lab UW
+md5sum 436a0c20087f99ea6793b1065b3e2a99
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -279,6 +291,7 @@ fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580029
 grant Stam
 lab UW
+md5sum 6d31aef3661318faa728ebc91389ee07
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -300,6 +313,7 @@ fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580030
 grant Stam
 lab UW
+md5sum 21045807d35a71a7395ec37581d213e5
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -321,6 +335,7 @@ fileName wgEncodeUwAffyExonArrayBe2cSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651567
 grant Stam
 lab UW
+md5sum ecccaa938905fe348c27dff8e21e2578
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -342,6 +357,7 @@ fileName wgEncodeUwAffyExonArrayBe2cSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651568
 grant Stam
 lab UW
+md5sum 087642d33dd99c11c5e14396b754ac06
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -366,6 +382,7 @@ fileName wgEncodeUwAffyExonArrayBjSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472924
 grant Stam
 lab UW
+md5sum c848980bd1931e60df3eda7c181ca012
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -388,6 +405,7 @@ fileName wgEncodeUwAffyExonArrayBjSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472925
 grant Stam
 lab UW
+md5sum b0a0d7d31ae04e50bbdb598f2d2fc6c0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -410,6 +428,7 @@ fileName wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472900
 grant Stam
 lab UW
+md5sum 71566bcbfc5a994698bab7240035839f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -432,6 +451,7 @@ fileName wgEncodeUwAffyExonArrayCaco2SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472933
 grant Stam
 lab UW
+md5sum 9e8fef78a3d5cd1f522e3b27a589d13b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -454,6 +474,7 @@ fileName wgEncodeUwAffyExonArrayCmkSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510583
 grant Stam
 lab UW
+md5sum f74c05f7a1258ab17f97bfbdf1121663
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -476,6 +497,7 @@ fileName wgEncodeUwAffyExonArrayGm06990SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472903
 grant Stam
 lab UW
+md5sum 0f527d08fe85af98acab86e4ea2d05d3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -498,6 +520,7 @@ fileName wgEncodeUwAffyExonArrayGm06990SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472904
 grant Stam
 lab UW
+md5sum c569ff2d2c9b7e07232cda2335c0e71b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -520,6 +543,7 @@ fileName wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472931
 grant Stam
 lab UW
+md5sum f6a2c97c200a4cafe4db7986258f6db5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -542,6 +566,7 @@ fileName wgEncodeUwAffyExonArrayH7esSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510581
 grant Stam
 lab UW
+md5sum ab74cf651393272f5a326fb451534baa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -563,6 +588,7 @@ fileName wgEncodeUwAffyExonArrayH7esSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580005
 grant Stam
 lab UW
+md5sum d6d48bffbc7d1128c0638e36c7c129e6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -584,6 +610,7 @@ fileName wgEncodeUwAffyExonArrayHacSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651569
 grant Stam
 lab UW
+md5sum bdf64ce82b7105e9aa65177c8855b58e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -607,6 +634,7 @@ fileName wgEncodeUwAffyExonArrayHacSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651570
 grant Stam
 lab UW
+md5sum 3eee4fd337b2b46dce420dc92dbb2ab4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -631,6 +659,7 @@ fileName wgEncodeUwAffyExonArrayHaeSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510516
 grant Stam
 lab UW
+md5sum a1afdf111aa408123468c36d073cf7d9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -653,6 +682,7 @@ fileName wgEncodeUwAffyExonArrayHaeSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510517
 grant Stam
 lab UW
+md5sum 37ff606a0e232360d0e0affea9e88b83
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -674,6 +704,7 @@ fileName wgEncodeUwAffyExonArrayHaspSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651562
 grant Stam
 lab UW
+md5sum 35537d7b5e28b8e6fd53bd70cb06f48a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -695,6 +726,7 @@ fileName wgEncodeUwAffyExonArrayHaspSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651563
 grant Stam
 lab UW
+md5sum 063b1579a9ee1b7bbd8a324eafe844dd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -716,6 +748,7 @@ fileName wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580045
 grant Stam
 lab UW
+md5sum 80e715f221c0c4a1e67f709e6d27885b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -737,6 +770,7 @@ fileName wgEncodeUwAffyExonArrayHbmecSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651564
 grant Stam
 lab UW
+md5sum a0585e4686e53c2712abd7be69f0efc0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -759,6 +793,7 @@ fileName wgEncodeUwAffyExonArrayHcfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510542
 grant Stam
 lab UW
+md5sum 090fbcbb166d5c7fc9f9654479318120
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -781,6 +816,7 @@ fileName wgEncodeUwAffyExonArrayHcfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510545
 grant Stam
 lab UW
+md5sum dc525f294d268d95159a7e15ff332b13
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -802,6 +838,7 @@ fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580031
 grant Stam
 lab UW
+md5sum cfa1b290f6f6375eea64799b45211850
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -823,6 +860,7 @@ fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580032
 grant Stam
 lab UW
+md5sum 6f19b53d19b9c39ae3b25c22eeb81740
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -845,6 +883,7 @@ fileName wgEncodeUwAffyExonArrayHcmSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510566
 grant Stam
 lab UW
+md5sum 38961d6ae845ea7c9fa002ec67e230b1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -867,6 +906,7 @@ fileName wgEncodeUwAffyExonArrayHcmSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510569
 grant Stam
 lab UW
+md5sum 824fba35b2c6bebaa64cb8169b986ed9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -888,6 +928,7 @@ fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580007
 grant Stam
 lab UW
+md5sum 3b0f941ffc438f8b2167336dda312de4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -909,6 +950,7 @@ fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580008
 grant Stam
 lab UW
+md5sum 9b2b171c14dc909d9a3dc40208e3a2b4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -931,6 +973,7 @@ fileName wgEncodeUwAffyExonArrayHcpeSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510547
 grant Stam
 lab UW
+md5sum 9e39e166d0ed530a5eb27367d1bdd074
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -953,6 +996,7 @@ fileName wgEncodeUwAffyExonArrayHcpeSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510551
 grant Stam
 lab UW
+md5sum 8ce5b2b49790cf403093ad5306bd7671
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -974,6 +1018,7 @@ fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580039
 grant Stam
 lab UW
+md5sum a3aa81a3ee179d5f13a8c8d1d9158cc5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -995,6 +1040,7 @@ fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580040
 grant Stam
 lab UW
+md5sum 63b64086a3772b3f99b53f4dabfdec99
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1017,6 +1063,7 @@ fileName wgEncodeUwAffyExonArrayHeeSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510571
 grant Stam
 lab UW
+md5sum 8329c8eb8e686c2b010eb20de6a23db5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1039,6 +1086,7 @@ fileName wgEncodeUwAffyExonArrayHeeSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510574
 grant Stam
 lab UW
+md5sum 002b7e958afc2a261804ef05ecacb0ab
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1060,6 +1108,7 @@ fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580027
 grant Stam
 lab UW
+md5sum 7449cb9a95da92a47efa5928190ebfe5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1081,6 +1130,7 @@ fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580028
 grant Stam
 lab UW
+md5sum 9104b2ca3d4331488af92090990d3970
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1103,6 +1153,7 @@ fileName wgEncodeUwAffyExonArrayHelas3SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472916
 grant Stam
 lab UW
+md5sum 8f78564ee13cac5b9a342886df43cc29
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1125,6 +1176,7 @@ fileName wgEncodeUwAffyExonArrayHelas3SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472932
 grant Stam
 lab UW
+md5sum 077e602d860e397b3dbfaed1c2a7af02
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1147,6 +1199,7 @@ fileName wgEncodeUwAffyExonArrayHepg2SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472906
 grant Stam
 lab UW
+md5sum fd936dd132c7139eb7a9575904dfb4b3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1169,6 +1222,7 @@ fileName wgEncodeUwAffyExonArrayHepg2SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472907
 grant Stam
 lab UW
+md5sum 9837ed5823a6a51deff80bc9e5364ec6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1190,6 +1244,7 @@ fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472940
 grant Stam
 lab UW
+md5sum dbcab31cebf86a51335972f372a1cdc7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1211,6 +1266,7 @@ fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472941
 grant Stam
 lab UW
+md5sum fde5c36e8fc342d0bc949a23093edfda
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1233,6 +1289,7 @@ fileName wgEncodeUwAffyExonArrayHipeSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510518
 grant Stam
 lab UW
+md5sum c6ef8bd704c692bbb8b800a6ad52ff07
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1255,6 +1312,7 @@ fileName wgEncodeUwAffyExonArrayHipeSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510519
 grant Stam
 lab UW
+md5sum 0ce7738fa75cd16f35aef1318d2d9dd7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1276,6 +1334,7 @@ fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472908
 grant Stam
 lab UW
+md5sum e762c9610d9ac9ae5fdd54a16b54a860
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1297,6 +1356,7 @@ fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472942
 grant Stam
 lab UW
+md5sum 3b823d22877a6f0ff9ca9a17cda81c8e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1319,6 +1379,7 @@ fileName wgEncodeUwAffyExonArrayHmecSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472934
 grant Stam
 lab UW
+md5sum 790f3e07e1c037482bee71a4d1f98f14
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1340,6 +1401,7 @@ fileName wgEncodeUwAffyExonArrayHmecSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580006
 grant Stam
 lab UW
+md5sum 423eff1cad1e85e47eb8b33ff7dd1420
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1361,6 +1423,7 @@ fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580041
 grant Stam
 lab UW
+md5sum d9b73a5254e8fccb03b862be4d679f32
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1382,6 +1445,7 @@ fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580042
 grant Stam
 lab UW
+md5sum 6ea599fa15b7b128d8cb9d423988ac02
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1403,6 +1467,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580021
 grant Stam
 lab UW
+md5sum 8b05c1426cfdc1e36b9304ac1b29313d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1424,6 +1489,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580022
 grant Stam
 lab UW
+md5sum 679d99001c42ff2ff7b7c50f39e2881d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1445,6 +1511,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580023
 grant Stam
 lab UW
+md5sum 47bd884b457f28472d2d2aa210f5d7b8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1466,6 +1533,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580024
 grant Stam
 lab UW
+md5sum 52e31f6f67410853b223419a7e782cd2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1487,6 +1555,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580014
 grant Stam
 lab UW
+md5sum 3e15efa88c558d1d2c49086ea01fe394
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1508,6 +1577,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580013
 grant Stam
 lab UW
+md5sum ee2f0ee61e9c8945f81c49881e9fde5d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1529,6 +1599,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580011
 grant Stam
 lab UW
+md5sum ca5d2996a8df43c22b0bbd1b193f58ad
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1550,6 +1621,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580012
 grant Stam
 lab UW
+md5sum f6fec0e9884a78eae792f3794cbbe72e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1571,6 +1643,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580015
 grant Stam
 lab UW
+md5sum 239ecfc586be65d97d104b5a70c39be8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1592,6 +1665,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580016
 grant Stam
 lab UW
+md5sum 70bc72d16f7883fe2e86a62f341d0a82
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1613,6 +1687,7 @@ fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580019
 grant Stam
 lab UW
+md5sum 70af60326100d9f170cb5c3cd65dcef5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1634,6 +1709,7 @@ fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580020
 grant Stam
 lab UW
+md5sum 149bdfa1e66b576a31b5127a5e3ad587
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1655,6 +1731,7 @@ fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580009
 grant Stam
 lab UW
+md5sum 75bf38a8336542fc9dddfeb47aeec1e5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1676,6 +1753,7 @@ fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580010
 grant Stam
 lab UW
+md5sum dacb8cba760ff2225eeb063b22d0f3cd
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1698,6 +1776,7 @@ fileName wgEncodeUwAffyExonArrayHnpceSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510560
 grant Stam
 lab UW
+md5sum 20b94887a8bf813ce5b1011e2c2d88e6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1720,6 +1799,7 @@ fileName wgEncodeUwAffyExonArrayHnpceSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510564
 grant Stam
 lab UW
+md5sum 65da8d56057c9936d9db6e0d2fd48de4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1741,6 +1821,7 @@ fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580033
 grant Stam
 lab UW
+md5sum 4b38d479ea0b6ac4ff2ebf41f3d7f4e5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1762,6 +1843,7 @@ fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580034
 grant Stam
 lab UW
+md5sum 363c4cb39186208cc7c63808f3419f1e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1783,6 +1865,7 @@ fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580025
 grant Stam
 lab UW
+md5sum 53c9f092d9cebae309c5b916febed028
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1804,6 +1887,7 @@ fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580026
 grant Stam
 lab UW
+md5sum cc4238bf69125bf80398242403c51a25
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1825,6 +1909,7 @@ fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580035
 grant Stam
 lab UW
+md5sum 4a4344384ed5892a51c6c9287fc37204
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1846,6 +1931,7 @@ fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580036
 grant Stam
 lab UW
+md5sum d89fb5e2c53209ef3268afebd6abb1de
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1868,6 +1954,7 @@ fileName wgEncodeUwAffyExonArrayHrceSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472920
 grant Stam
 lab UW
+md5sum 8668ad112cd8902d393ff7f7e38cab49
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1890,6 +1977,7 @@ fileName wgEncodeUwAffyExonArrayHrceSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472921
 grant Stam
 lab UW
+md5sum e605ddeb1fdbf3fe001f2487ff29cfb6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1912,6 +2000,7 @@ fileName wgEncodeUwAffyExonArrayHreSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472919
 grant Stam
 lab UW
+md5sum a5910eb03089beb7e26ed32ffe43523e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1934,6 +2023,7 @@ fileName wgEncodeUwAffyExonArrayHreSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472918
 grant Stam
 lab UW
+md5sum d6189242192e6b4812597fa0f5d04c09
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1955,6 +2045,7 @@ fileName wgEncodeUwAffyExonArrayHrgecSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651572
 grant Stam
 lab UW
+md5sum 1e117debef3094e45d76bf5301595fa7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1978,6 +2069,7 @@ fileName wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651573
 grant Stam
 lab UW
+md5sum 68574016f6f83a737bb30870adcdab48
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2002,6 +2094,7 @@ fileName wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510514
 grant Stam
 lab UW
+md5sum ee5a433882ba397ff51ed082a85d1f41
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2024,6 +2117,7 @@ fileName wgEncodeUwAffyExonArrayHrpeSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510515
 grant Stam
 lab UW
+md5sum 39b929add81f6dc5b2f6ba4e76cc3471
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2045,6 +2139,7 @@ fileName wgEncodeUwAffyExonArrayHsmmSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651574
 grant Stam
 lab UW
+md5sum 1d17b56fefe3487c7b617bf20f5f27d9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2068,6 +2163,7 @@ fileName wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651575
 grant Stam
 lab UW
+md5sum 1c1116c7fc3cefb56a447c9b7b3204b0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2091,6 +2187,7 @@ fileName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651576
 grant Stam
 lab UW
+md5sum 616e4bc4bd5315207334fc76d16f49a3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2113,6 +2210,7 @@ fileName wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472935
 grant Stam
 lab UW
+md5sum c6f83663ec84170f74b628d18bfdbd13
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2134,6 +2232,7 @@ fileName wgEncodeUwAffyExonArrayHuvecSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651577
 grant Stam
 lab UW
+md5sum 819213d4a73deee17bf1f47d57bdb616
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2155,6 +2254,7 @@ fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580037
 grant Stam
 lab UW
+md5sum 7e2d1d9c96174fef814e12f959534979
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2176,6 +2276,7 @@ fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580038
 grant Stam
 lab UW
+md5sum 7d68f4fde89359e59d5b03668666ea12
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2198,6 +2299,7 @@ fileName wgEncodeUwAffyExonArrayJurkatSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472928
 grant Stam
 lab UW
+md5sum be4733fceabba4fdb3cf35fc1e41d713
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2220,6 +2322,7 @@ fileName wgEncodeUwAffyExonArrayJurkatSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510511
 grant Stam
 lab UW
+md5sum 0d2697e2daf6283be15f097e31ff27c7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2242,6 +2345,7 @@ fileName wgEncodeUwAffyExonArrayK562SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472926
 grant Stam
 lab UW
+md5sum 40f55f72b5b616ad17fbd87f87e60ec0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2264,6 +2368,7 @@ fileName wgEncodeUwAffyExonArrayK562SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472927
 grant Stam
 lab UW
+md5sum 0d52361033fe085d68e53ccce045ea7d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2285,6 +2390,7 @@ fileName wgEncodeUwAffyExonArrayLncapSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651578
 grant Stam
 lab UW
+md5sum b866e75f4669ac656cfe387aa9bd2b98
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2306,6 +2412,7 @@ fileName wgEncodeUwAffyExonArrayLncapSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651579
 grant Stam
 lab UW
+md5sum d03059611898499dc89a54e8e1ce658e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2328,6 +2435,7 @@ fileName wgEncodeUwAffyExonArrayMcf7SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472936
 grant Stam
 lab UW
+md5sum c74c6567cc184a438136032b896dfa77
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2350,6 +2458,7 @@ fileName wgEncodeUwAffyExonArrayMcf7SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510510
 grant Stam
 lab UW
+md5sum d35d3dc2fd52d42e842410932d55ee78
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2372,6 +2481,7 @@ fileName wgEncodeUwAffyExonArrayNb4SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510512
 grant Stam
 lab UW
+md5sum a6c2887c8ff637e5dbda01e384929727
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2394,6 +2504,7 @@ fileName wgEncodeUwAffyExonArrayNb4SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510513
 grant Stam
 lab UW
+md5sum 2a869c60211c5da4e0175b090585e166
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2415,6 +2526,7 @@ fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580043
 grant Stam
 lab UW
+md5sum 33f27f4a2ff61a9b231c60196ca4a5d4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2436,6 +2548,7 @@ fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580044
 grant Stam
 lab UW
+md5sum b1b738e59f723c7fa301a1b90ff3e4dc
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2457,6 +2570,7 @@ fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM580017
 grant Stam
 lab UW
+md5sum 561121bc41e1a1063b15695986e569aa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2478,6 +2592,7 @@ fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM580018
 grant Stam
 lab UW
+md5sum f7599ec4c1060ea8c7e259261cc378c1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2500,6 +2615,7 @@ fileName wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510554
 grant Stam
 lab UW
+md5sum d5c294986d6332f4de0d72fa5b89a8d1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2522,6 +2638,7 @@ fileName wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510557
 grant Stam
 lab UW
+md5sum 832391bc459622f827b44c69b4faaa7b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2544,6 +2661,7 @@ fileName wgEncodeUwAffyExonArrayNhekSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472937
 grant Stam
 lab UW
+md5sum f0ea38b49f7dc4f55c3a209ae0c5a2d5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2566,6 +2684,7 @@ fileName wgEncodeUwAffyExonArrayNhlfSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510577
 grant Stam
 lab UW
+md5sum 7ba28714083146d88049d6a5cf84200d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2588,6 +2707,7 @@ fileName wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM510579
 grant Stam
 lab UW
+md5sum c49aca1c20279db623b1ce96d6dba6b4
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2610,6 +2730,7 @@ fileName wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472939
 grant Stam
 lab UW
+md5sum 623f30f29ef6c1c51ae638fa2eec704d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2632,6 +2753,7 @@ fileName wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472938
 grant Stam
 lab UW
+md5sum 0fb0efe201f551ea9a1f4e16355d5420
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2653,6 +2775,7 @@ fileName wgEncodeUwAffyExonArrayRptecSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651565
 grant Stam
 lab UW
+md5sum 3ffb983dc0305184eb2d82f168bb1235
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2674,6 +2797,7 @@ fileName wgEncodeUwAffyExonArrayRptecSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651566
 grant Stam
 lab UW
+md5sum 18ec74217b2c455157b6b7b97cff9a7b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2696,6 +2820,7 @@ fileName wgEncodeUwAffyExonArraySaecSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472923
 grant Stam
 lab UW
+md5sum d89736f6dd535e6527b931e0323b4b56
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2718,6 +2843,7 @@ fileName wgEncodeUwAffyExonArraySaecSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472922
 grant Stam
 lab UW
+md5sum e399feb8617fc77f4f303073ca6e6179
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2740,6 +2866,7 @@ fileName wgEncodeUwAffyExonArraySkmcSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM510509
 grant Stam
 lab UW
+md5sum 8536b93a5a66a547633f352ef2e463f8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2762,6 +2889,7 @@ fileName wgEncodeUwAffyExonArraySkmcSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472911
 grant Stam
 lab UW
+md5sum e26a5dbcd92a79ae81b3fbe246ec2243
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2784,6 +2912,7 @@ fileName wgEncodeUwAffyExonArraySknshraSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472913
 grant Stam
 lab UW
+md5sum 13d13c630ea2002649342cfb0b8bd90f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2806,6 +2935,7 @@ fileName wgEncodeUwAffyExonArraySknshraSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM472912
 grant Stam
 lab UW
+md5sum 47d51163ccb7bcb0222a4309586d8572
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2828,6 +2958,7 @@ fileName wgEncodeUwAffyExonArrayTh1SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM472914
 grant Stam
 lab UW
+md5sum b44365a12cc87e527757886b3b583b50
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2849,6 +2980,7 @@ fileName wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651582
 grant Stam
 lab UW
+md5sum 92c4d9af69102101b2e67c5dc4d4188b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2871,6 +3003,7 @@ fileName wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651583
 grant Stam
 lab UW
+md5sum f361ca9645fa5574788eb8033e274dc4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2893,6 +3026,7 @@ fileName wgEncodeUwAffyExonArrayWi38SimpleSignalRep1.broadPeak.gz
 geoSampleAccession GSM651580
 grant Stam
 lab UW
+md5sum 0bd58f69567a92d5b4b175099621ce96
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2915,6 +3049,7 @@ fileName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2.broadPeak.gz
 geoSampleAccession GSM651581
 grant Stam
 lab UW
+md5sum bdf0ff688df7f7770fc72510c7fc6682
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2923,4 +3058,4 @@ tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 treatment None
 view SimpleSignal
 
-# MAGIC: 397648689
+# MAGIC: -1787945528

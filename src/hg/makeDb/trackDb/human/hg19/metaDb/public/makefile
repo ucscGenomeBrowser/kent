@@ -30,6 +30,10 @@ wgEncodeBroadHmm.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeSydhNsome.ra \
+wgEncodeHaibGenotype.ra \
+wgEncodeSunyRipSeq.ra \
+wgEncodeSunySwitchgear.ra \
+wgEncodeSydhRnaSeq.ra \
 
 include ../../../../makefile.metaDb
 

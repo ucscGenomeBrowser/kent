@@ -5,17 +5,17 @@
 # and download any newly-approved validation documents.
 #
 
+import argparse
 import base64
 from BeautifulSoup import BeautifulSoup
 import HTMLParser
-from optparse import OptionParser
 import re
 import shlex
 import string
 import subprocess
 import sys
 import urllib2 
-from rafile.RaFile import *
+from ucscgenomics.rafile.RaFile import *
 
 
 
@@ -164,7 +164,8 @@ def processValidation(validationCell, species, antibody, lab, downloadsDir, noDo
                             newValidationFile = open(downloadFilename, "wb")
                             newValidationFile.write(validationData)
                             newValidationFile.close()
-                            downloadedFileList = downloadedFileList + " " + downloadFilename
+                            downloadedFileList = "%s %s" % (downloadedFileList,
+                                                            downloadFilename)
                         else:
                             print "Warning: not downloading", url, ": not a PDF file";
             if len(urlClauses) == 1:
@@ -264,20 +265,25 @@ def accessWiki(url, username, password):
 wikiBaseUrl = "http://encodewiki.ucsc.edu/"
 defaultUsername = "encode"
 defaultPassword = "human"
-parser = OptionParser()
-parser.add_option("-s", "--species", dest="species", default="human",
-                  help="Species")
-parser.add_option("-d", "--downloadDir", dest="downloadDirectory", default=".",
-                  help="Directory to download any validation documents into")
-parser.add_option("-f", "--force", dest="forcePrinting", default=False,
-                  help="Force printing of all stanzas, whether or not there's NHGRI approval")
-parser.add_option("-n", "--noDownload", dest="noDownload", default=False,
-                  help="Don't download any documents")
-parser.add_option("-u", "--username", dest="username", default=defaultUsername,
-                  help="Username to access the wiki page")
-parser.add_option("-p", "--password", dest="password", default=defaultPassword,
-                  help="Password to access the wiki page")
-(parameters, args) = parser.parse_args()
+parser = argparse.ArgumentParser(description="Parse new antibody registrations from the ENCODE wiki and download validation documents") 
+parser.add_argument("-s", dest="species", default="human",
+                    action="store", help="Species (default: human)")
+parser.add_argument("-d", dest="downloadDirectory", default=".",
+                    action="store",
+                    help="Directory to download any documents into (default: '.'")
+parser.add_argument("-f", dest="forcePrinting", default=False,
+                    action="store_true",
+                    help="Force printing of all stanzas, whether or not there's NHGRI approval (default: false)")
+parser.add_argument("-n", dest="noDownload", default=False, 
+                    action="store_true", 
+                    help="Download no files (default: false)")
+parser.add_argument("-u", dest="username", default=defaultUsername,
+                    action="store", 
+                    help="Username to access the wiki page (default: encode)")
+parser.add_argument("-p", dest="password", default=defaultPassword,
+                    action="store", 
+                    help="Password to access the wiki page (default: human)")
+args = parser.parse_args()
 
 #
 # Read the antibodies page.  If successful, proceed to the new antibodies table,
@@ -286,7 +292,7 @@ parser.add_option("-p", "--password", dest="password", default=defaultPassword,
 # after the first.
 #
 antibodiesPage = accessWiki(wikiBaseUrl+"EncodeDCC/index.php/Antibodies", 
-                            parameters.username, parameters.password)
+                            args.username, args.password)
 if antibodiesPage != None:
     soup = BeautifulSoup(antibodiesPage)
     antibodyEntryTable = soup.findAll("table")[1]
@@ -295,12 +301,12 @@ if antibodiesPage != None:
         if not skippedHeaderRow:
             skippedHeaderRow = True
         else:
-            (newStanza, approvedByNhgri) = processAntibodyEntry(entry, parameters.species, 
-                                                                parameters.downloadDirectory,
-                                                                parameters.noDownload,
-                                                                parameters.username,
-                                                                parameters.password,
+            (newStanza, approvedByNhgri) = processAntibodyEntry(entry, args.species, 
+                                                                args.downloadDirectory,
+                                                                args.noDownload,
+                                                                args.username,
+                                                                args.password,
                                                                 wikiBaseUrl)
-            if approvedByNhgri or parameters.forcePrinting:
+            if approvedByNhgri or args.forcePrinting:
                 if newStanza is not None:
                     print newStanza

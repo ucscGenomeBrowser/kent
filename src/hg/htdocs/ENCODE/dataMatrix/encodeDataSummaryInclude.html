@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>ENCODE Data Summary</title>
+    <link rel="stylesheet" href="/style/HGStyle.css" type="text/css">
+    <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
+    <script src="/js/jquery.js" type="text/javascript"></script>
+    <script src="/js/encodeProject.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <!-- Standard ENCODE top menu bar -->
+    <!--#include virtual="/inc/encodeProject.topbar.html"-->
+
+    <!-- Standard ENCODE page header -->
+    <div class="encodeHeader">
+        <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
+        <span id="pageHeader" class="txt">Data Summary</span>
+    </div>
+
+    <!-- Main content:  3 tables summarizing ENCODE experiment table.
+        Script adds rows to the tables, based on data from the server -->
+
+    <!-- Table 1: Reference genome datasets -->
+    <table id="refGenomeTable" class="summaryTable">
+    <tr>
+        <th colspan=2>Annotations in Reference Genome
+            <span id="searchButtons">
+            <button id="buttonTrackSearch" class="searchButton" title="Search for tracks in genome browser">search tracks</button>
+            <button id="buttonFileSearch" class="searchButton" title="Search for files on download server">search files</button>
+            </span></th>
+    </tr>
+    </table>
+
+    <!-- Table 2: Cell-based datasets -->
+    <table id="elementTable" class="summaryTable">
+    <tr>
+        <th colspan=2>Functional Elements from Cell-Based Assays <button id="buttonDataMatrix" class="matrixButton">view matrix</button></span></th>
+    </tr>
+    </table>
+
+    <!-- Table 3: TFBS datasets -->
+    <table id="tfbsTable" class="summaryTable">
+    <tr>
+        <th colspan=2>Transcription Factor Binding Elements
+            <button id="buttonChipMatrix" class="matrixButton">view matrix</button></span></th>
+    </tr>
+    </table>

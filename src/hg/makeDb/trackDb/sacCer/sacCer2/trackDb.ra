@@ -2,6 +2,7 @@
 # Local declaration so that local gap.html is picked up.
 track gap override
 visibility hide
+chromosomes none
 
 track testSgdGene
 shortLabel test SGD Gene

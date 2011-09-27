@@ -16,6 +16,7 @@ expId 784
 fileName wgEncodeBroadHmmGm12878HMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum 29a58b030fbb79da2b385a4af4352ac7
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -36,6 +37,7 @@ expId 785
 fileName wgEncodeBroadHmmH1hescHMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum 2ba11bd6b7e90308e4a8a5de099ebd64
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -56,6 +58,7 @@ expId 789
 fileName wgEncodeBroadHmmHepg2HMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum 47cbafd04a8c1a2ec376c71ebbe1a87a
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -76,6 +79,7 @@ expId 786
 fileName wgEncodeBroadHmmHmecHMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum f1a3a1443ad37555d6781318705834fc
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -96,6 +100,7 @@ expId 787
 fileName wgEncodeBroadHmmHsmmHMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum aa5ae42f4fee3d24f0dbf62997d0eec4
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -116,6 +121,7 @@ expId 788
 fileName wgEncodeBroadHmmHuvecHMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum e904cd14a58938a9d82441d4cd8d3a38
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -136,6 +142,7 @@ expId 790
 fileName wgEncodeBroadHmmK562HMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum eb23b5e0970e8d7367bfd784079c088a
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -156,6 +163,7 @@ expId 791
 fileName wgEncodeBroadHmmNhekHMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum f2d0115e4aa58cbf9121a39729f0a48c
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicsPaper
@@ -176,6 +184,7 @@ expId 792
 fileName wgEncodeBroadHmmNhlfHMM.bed.gz
 grant Bernstein
 lab Broad
+md5sum a0d63a5e1ffeacb2fdd91a528bd96fa9
 origAssembly hg18
 project wgEncode
 softwareVersion ChromHMM_ENCODEDynamicPaper
@@ -183,4 +192,4 @@ subId 3823
 tableName wgEncodeBroadHmmNhlfHMM
 view HMM
 
-# MAGIC: -1927810900
+# MAGIC: 1591659937

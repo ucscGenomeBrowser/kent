@@ -1,0 +1,64 @@
+metaObject wgEncodeGencodeAutoV3
+objType table
+annotation Automatic
+composite wgEncodeGencodeV3
+dataType Gencode
+dataVersion ENCODE September 2009 Freeze
+dateSubmitted 2009-10-27
+dccAccession wgEncodeEH001878
+expId 1878
+fileName wgEncodeGencodeAutoV3.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V3c
+level 3
+md5sum 8a1368b54413267d061c047c04e3dd9c
+project wgEncode
+subId 453
+tableName wgEncodeGencodeAutoV3
+
+metaObject wgEncodeGencodeManualV3
+objType table
+annotation Manual
+composite wgEncodeGencodeV3
+dataType Gencode
+dataVersion ENCODE September 2009 Freeze
+dateSubmitted 2009-10-27
+dccAccession wgEncodeEH001878
+expId 1878
+fileName wgEncodeGencodeManualV3.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V3c
+level 1-2
+md5sum 9fe6de65bc0212ea10190ebffb90fcb5
+project wgEncode
+subId 453
+tableName wgEncodeGencodeManualV3
+
+metaObject wgEncodeGencodePolyaV3
+objType table
+annotation Automatic
+composite wgEncodeGencodeV3
+dataType Gencode
+dataVersion ENCODE September 2009 Freeze
+dateSubmitted 2009-10-27
+dccAccession wgEncodeEH001878
+expId 1878
+expVars lab,dataType,labExpId
+fileName wgEncodeGencodePolyaV3.gtf.gz
+grant Hubbard
+lab Sanger
+labExpId V3c
+level 3
+md5sum b6af95d1612be3bfd41faefabfd61bf1
+project wgEncode
+subId 453
+tableName wgEncodeGencodePolyaV3
+
+metaObject wgEncodeGencodeV3
+objType composite
+composite wgEncodeGencodeV3
+expVars lab,dataType,labExpId
+
+# MAGIC: -1096984363

@@ -26,7 +26,7 @@
 #include "trackDb.h"
 #include "trackHub.h"
 #include "errCatch.h"
-#include "bamFile.h"
+#include "hgBam.h"
 #include "bigWig.h"
 #include "bigBed.h"
 

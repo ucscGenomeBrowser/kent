@@ -1,0 +1,25 @@
+# Data Agreement File for Weng Lab TFBS Validation
+# $Revision: 1.2 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Weng
+lab               UMass-Weng
+dataType          TfbsValid
+compositeSuffix   UMassWengTfbsValid
+group             regulation
+variables         cell
+assembly          hg19
+
+validationSettings none
+
+# Track/view definition
+view             TestedSites
+type             bed 6 +
+sql              wgEncodeWengTfbsValid
+required         yes
+hasReplicates    no

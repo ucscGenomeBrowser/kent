@@ -1547,6 +1547,45 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp134Common override
+snpSeqFile /gbdb/hg19/snp/snp134.fa
+chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp134CodingDbSnp,
+codingAnnoLabel_snp134CodingDbSnp dbSNP
+
+track snp134Flagged override
+snpSeqFile /gbdb/hg19/snp/snp134.fa
+chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp134CodingDbSnp,
+codingAnnoLabel_snp134CodingDbSnp dbSNP
+
+track snp134Mult override
+snpSeqFile /gbdb/hg19/snp/snp134.fa
+chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp134CodingDbSnp,
+codingAnnoLabel_snp134CodingDbSnp dbSNP
+
+track snp134 override
+chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp134CodingDbSnp,
+codingAnnoLabel_snp134CodingDbSnp dbSNP
+
 track snp132Common override
 snpSeqFile /gbdb/hg19/snp/snp132.fa
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
@@ -1585,12 +1624,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp132CodingDbSnp,
 codingAnnoLabel_snp132CodingDbSnp dbSNP
-
-track snp131Clinical override
-snpSeqFile /gbdb/hg19/snp/snp131.fa
-
-track snp131NonClinical override
-snpSeqFile /gbdb/hg19/snp/snp131.fa
 
 track snp131 override
 chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
@@ -2033,8 +2066,7 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
-include altSeqComposite2.ra public
-include altSeqComposite5.ra alpha,beta
+include altSeqComposite5.ra
 
 track vistaEnhancers override
 url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
@@ -2448,4 +2480,8 @@ type bed 6 +
 color 0,0,0
 altColor 90,90,90
 exonArrows off
+
+track decodeRmap override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 

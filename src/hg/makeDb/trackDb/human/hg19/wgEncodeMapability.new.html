@@ -4,6 +4,32 @@ These tracks display the level of sequence uniqueness of the reference <B>GRCh37
 genome assembly.  They were generated using different window sizes, and high signal
 will be found in areas where the sequence is unique.
 
+<H2> Display Conventions and Configuration </H2>
+<P>This track is a multi-view composite track that contains multiple data types
+separated as separate (views). For each view, there are
+multiple subtracks representing different sequence lengths or methods of preparation.
+Instructions for configuring multi-view tracks are
+<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+<B>Mapability</B> tracks consist of the following views:
+<DL>
+<DT><I>Alignability</I></DT>
+<DD>These tracks provide a measure of how often the sequence found at the particular
+location will align with the whole genome.  Unlike measures of uniqueness, alignability
+will tolerate up to 2 mismatches. These tracks are in the form of signals ranging from
+0 to 1 and have several configuration options.</DD>
+</P>
+<DT><I>Uniqueness</I></DT>
+<DD>These tracks are a direct measure of sequence uniqueness throughout the reference
+genome. These tracks are in the form of signals ranging from 0 to 1 and have several
+configuration options.</DD>
+</P>
+<P><DT><I>Blacklisted Regions</I></DT>
+<DD>Both tracks of blacklisted regions attempt to identify regions of the reference
+genome which are troublesome for high throughput sequencing aligners.  Troubled
+regions may be due to repetitive elements or other anomalies.  Each track contains a
+set of regions of varying length with no special configuration options.</DD>
+</P>
+
 <H2>Methods</H2>
 <H4>Alignability</H4>
 The <em>CRG Alignability</em> tracks display how uniquely k-mer sequences align
@@ -44,11 +70,11 @@ cell line and type of experiment. We use 80 open chromatin tracks
 (DNase and FAIRE datasets) and 20 ChIP-seq input/control tracks spanning
 &#126;60 human tissue types/cell lines in total to identify these regions
 with signal artifacts. These regions tend to have a very high ratio of
-multi-mapping to unique mapping reads and high variance in mappability.
+multi-mapping to unique mapping reads and high variance in mapability.
 Some of these regions overlap pathological repeat elements such as satellite,
-centromeric and telomeric repeats. However, simple mappability based filters
+centromeric and telomeric repeats. However, simple mapability based filters
 do not account for most of these regions. Hence, it is recommended to use this
-blacklist alongside mappability filters.  The
+blacklist alongside mapability filters.  The
 <em>DAC Blacklist regions</em> track was generated for the ENCODE project.
 <!-- Complete methods can be found
 <A HREF="ftp://encodeftp.cse.ucsc.edu/users/akundaje/rawdata/blacklists/hg19/hg19-blacklist-README.pdf">here</a>.

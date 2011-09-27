@@ -97,7 +97,6 @@ puts(
 if(supportsSuggest)
     puts("<td align=center valign=baseline><a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a></td>\n");
 puts(
-"<td align=center valign=baseline>image width</td>\n"
 "<td align=center valign=baseline> &nbsp; </td>\n"
 "</tr>\n<tr>"
 );
@@ -142,12 +141,6 @@ if (gotClade)
 freez(&defaultPosition);
 position = NULL;
 
-puts("<td align=center>\n");
-if(cartVarExists(cart, "pix"))
-    cgiMakeIntVar("pix", cartUsualInt(cart, "pix", hgDefaultPixWidth), 4);
-else
-    printf("<INPUT TYPE='TEXT' NAME='pix' SIZE='4'>\n");
-puts("</td>\n");
 puts("<td align=center>");
 if(supportsSuggest)
     hButtonWithOnClick("Submit", "submit", NULL, "submitButtonOnClick()");
@@ -231,6 +224,12 @@ puts("</CENTER>");
 #ifdef NEW_JQUERY
 hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
 #endif
+
+
+if(!cartVarExists(cart, "pix"))
+    // put a hidden input for pix on page so default value can be filled in on the client side
+    hPrintf("<input type='hidden' name='pix' value=''>\n");
+
 puts("</FORM>");
 if (hIsPreviewHost())
     {

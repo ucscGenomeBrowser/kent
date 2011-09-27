@@ -1,8 +1,3 @@
-metaObject wgEncodeGencodeV4
-objType composite
-composite wgEncodeGencodeV4
-expVars lab,dataType,labExpId
-
 metaObject wgEncodeGencode2wayConsPseudoV4
 objType table
 annotation Automatic
@@ -17,6 +12,7 @@ grant Hubbard
 lab Sanger
 labExpId V4
 level 3
+md5sum d9ab71aba73feeec2fcdc3481e55b566
 project wgEncode
 subId 2094
 tableName wgEncodeGencode2wayConsPseudoV4
@@ -35,6 +31,7 @@ grant Hubbard
 lab Sanger
 labExpId V4
 level 3
+md5sum 73f99245e3c965ddeea833cb4cea4b46
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeAutoV4
@@ -51,6 +48,7 @@ fileName wgEncodeGencodeClassesV4.tab.gz
 grant Hubbard
 lab Sanger
 labExpId V4
+md5sum 8bdefa36c611e608c33cd8496821da58
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeClassesV4
@@ -69,6 +67,7 @@ grant Hubbard
 lab Sanger
 labExpId V4
 level 1-2
+md5sum 641475f0b3e587056505ebc4ea520e70
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeManualV4
@@ -87,9 +86,15 @@ grant Hubbard
 lab Sanger
 labExpId V4
 level 2
+md5sum 053e158a4c29c0dc81401a44b01749b9
 project wgEncode
 subId 2094
 tableName wgEncodeGencodePolyAV4
+
+metaObject wgEncodeGencodeV4
+objType composite
+composite wgEncodeGencodeV4
+expVars lab,dataType,labExpId
 
 metaObject wgEncodeGencodeYalePseudoV4
 objType table
@@ -103,8 +108,9 @@ fileName wgEncodeGencodeYalePseudoV4.gtf.gz
 grant Hubbard
 lab Sanger
 labExpId V4
+md5sum 6832a5362ffaa7f0f660c6f666436a68
 project wgEncode
 subId 2094
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: 2005405747
+# MAGIC: -548690092

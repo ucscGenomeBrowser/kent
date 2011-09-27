@@ -469,7 +469,7 @@ nbSpaces(2);
 cgiMakeCheckBoxIdAndJS("sendToGreat", doGreat(),
     "checkboxGreat",
     "onclick=\"return onSelectGreat();\"");
-hPrintf(" <A HREF=\"http://great.stanford.edu/help/index.php/Main_Page\" target=_BLANK>GREAT</A>");
+hPrintf(" <A HREF=\"http://great.stanford.edu\" target=_BLANK>GREAT</A>");
 hPrintf("</TD></TR>\n");
 }
 
@@ -597,7 +597,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-      isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE;
+        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -660,6 +660,7 @@ hPrintf("<TABLE BORDER=0>\n");
         isPositional = htiIsPositional(hti);
         }
     isBam = isBamTable( curTable);
+    isVcf = isVcfTable( curTable);
     isWig = isWiggle(database, curTable);
     if (isBigWigTable(curTable))
         {
@@ -778,7 +779,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam);
+boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam && !isVcf);
 if (canSubtrackMerge)
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
@@ -890,7 +891,7 @@ hPrintf("</TABLE>\n");
 /* Submit buttons. */
     {
     hPrintf("<BR>\n");
-    if (isWig || isBam)
+    if (isWig || isBam || isVcf)
 	{
 	char *name;
 	extern char *maxOutMenu[];
@@ -910,7 +911,7 @@ hPrintf("</TABLE>\n");
 		" a very large file that contains the original data values (not"
 		" compressed into the wiggle format) -- see the Downloads page."
 		"</I><BR>", maxOutput);
-	else if (isBam)
+	else if (isBam || isVcf)
 	    hPrintf(
 		"<I>Note: to return more than %s lines, change the filter setting"
 		" (above). Please consider downloading the entire data from our Download pages."

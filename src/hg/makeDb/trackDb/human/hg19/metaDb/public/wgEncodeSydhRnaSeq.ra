@@ -1,0 +1,270 @@
+metaObject wgEncodeSydhRnaSeq
+objType composite
+composite wgEncodeSydhRnaSeq
+expVars lab,dataType,cell,treatment,rnaExtract
+
+metaObject wgEncodeSydhRnaSeqK562Ifna30PolyaAln
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-23
+dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000524
+expId 524
+fileName wgEncodeSydhRnaSeqK562Ifna30PolyaAln.bam
+grant Snyder
+lab Yale
+md5sum bam=f5d4e6b7f083751736ef0f8378ce73a2,bai=c50a5ff149f100bb40852e80f242700d
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 2007
+tableName wgEncodeSydhRnaSeqK562Ifna30PolyaAln
+treatment IFNa30
+view Alignments
+
+metaObject wgEncodeSydhRnaSeqK562Ifna30PolyaRaw
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-17
+dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000524
+expId 524
+fileName wgEncodeSydhRnaSeqK562Ifna30PolyaRaw.bigWig
+grant Snyder
+lab Yale
+md5sum 21f96f5dad27c1ff06d366b50ee4dd8a
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 3113
+tableName wgEncodeSydhRnaSeqK562Ifna30PolyaRaw
+treatment IFNa30
+view RawSignal
+
+metaObject wgEncodeSydhRnaSeqK562Ifna30PolyaRawData
+objType file
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000524
+expId 524
+fileName wgEncodeSydhRnaSeqK562Ifna30PolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+md5sum 7256a053c3ad4c1d534b84f2b026b91f
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 540
+treatment IFNa30
+view RawData
+
+metaObject wgEncodeSydhRnaSeqK562Ifna6hPolyaAln
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-23
+dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000525
+expId 525
+fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaAln.bam
+grant Snyder
+lab Yale
+md5sum bam=5c913e5da898ac5fbea6dfcc3519d34d,bai=eb458cfd58f31e1aa15134d5084b3052
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 2007
+tableName wgEncodeSydhRnaSeqK562Ifna6hPolyaAln
+treatment IFNa6h
+view Alignments
+
+metaObject wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-17
+dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000525
+expId 525
+fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw.bigWig
+grant Snyder
+lab Yale
+md5sum bf43ce7474a5d6719b913db4669f63e0
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 3113
+tableName wgEncodeSydhRnaSeqK562Ifna6hPolyaRaw
+treatment IFNa6h
+view RawSignal
+
+metaObject wgEncodeSydhRnaSeqK562Ifna6hPolyaRawData
+objType file
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000525
+expId 525
+fileName wgEncodeSydhRnaSeqK562Ifna6hPolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+md5sum e84cf4c32eb25451fa42552356a9051c
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 541
+treatment IFNa6h
+view RawData
+
+metaObject wgEncodeSydhRnaSeqK562Ifng30PolyaAln
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-23
+dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000526
+expId 526
+fileName wgEncodeSydhRnaSeqK562Ifng30PolyaAln.bam
+grant Snyder
+lab Yale
+md5sum bam=4fdfddad146f78730d24c8d599fb15ce,bai=d8eb7fe2cc6e63801c439882c35c1255
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 2007
+tableName wgEncodeSydhRnaSeqK562Ifng30PolyaAln
+treatment IFNg30
+view Alignments
+
+metaObject wgEncodeSydhRnaSeqK562Ifng30PolyaRaw
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-17
+dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000526
+expId 526
+fileName wgEncodeSydhRnaSeqK562Ifng30PolyaRaw.bigWig
+grant Snyder
+lab Yale
+md5sum 743068172a9326bb2eaeeef85040f848
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 3113
+tableName wgEncodeSydhRnaSeqK562Ifng30PolyaRaw
+treatment IFNg30
+view RawSignal
+
+metaObject wgEncodeSydhRnaSeqK562Ifng30PolyaRawData
+objType file
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000526
+expId 526
+fileName wgEncodeSydhRnaSeqK562Ifng30PolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+md5sum 1c4921fd415475111ed52e0fe67d2980
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 542
+treatment IFNg30
+view RawData
+
+metaObject wgEncodeSydhRnaSeqK562Ifng6hPolyaAln
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-23
+dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000527
+expId 527
+fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaAln.bam
+grant Snyder
+lab Yale
+md5sum bam=6c7800d9ae4e07e789142ba71df563c6,bai=1343206bf0f8f831b9fd9165ac0e6c1f
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 2007
+tableName wgEncodeSydhRnaSeqK562Ifng6hPolyaAln
+treatment IFNg6h
+view Alignments
+
+metaObject wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw
+objType table
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-17
+dateUnrestricted 2011-09-17
+dccAccession wgEncodeEH000527
+expId 527
+fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw.bigWig
+grant Snyder
+lab Yale
+md5sum 1bab4c6f7515ecef3adf7ac3c072362d
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 3113
+tableName wgEncodeSydhRnaSeqK562Ifng6hPolyaRaw
+treatment IFNg6h
+view RawSignal
+
+metaObject wgEncodeSydhRnaSeqK562Ifng6hPolyaRawData
+objType file
+cell K562
+composite wgEncodeSydhRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+dccAccession wgEncodeEH000527
+expId 527
+fileName wgEncodeSydhRnaSeqK562Ifng6hPolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+md5sum 7e1bc75e179bedb05dcfd8ef4b30e9ae
+origAssembly hg18
+project wgEncode
+rnaExtract polyA
+subId 543
+treatment IFNg6h
+view RawData
+
+# MAGIC: -1752047368

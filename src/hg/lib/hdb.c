@@ -3768,19 +3768,15 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
-#define HGAPI_NEEDS_THIS
-#ifdef HGAPI_NEEDS_THIS
-    // This was removed becuase of missing cart. BUT CART ISN"T USED DOWN BLELOW
     // NOTE: Currently any call to this (hub or not), makes a tdbList and leaks it!
     if (isHubTrack(track))
         {
 	struct hash *hash = hashNew(0);
         // NOTE: cart is not even used!
-	theTdbs = hubConnectAddHubForTrackAndFindTdb((struct cart *)NULL,db, track, tdbList, hash);
+	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
         return hashFindVal(hash, track); // leaks tdbList and hash
 	}
     else
-#endif///def HGAPI_NEEDS_THIS
 	{
 	theTdbs = hTrackDb(db);
 	if (tdbList != NULL)

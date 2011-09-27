@@ -5,7 +5,7 @@
 #include "common.h"
 #include "hash.h"
 #include "hdb.h"
-#include "bamFile.h"
+#include "hgBam.h"
 #include "hgc.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
@@ -14,7 +14,7 @@
 
 static char const rcsid[] = "$Id: bamClick.c,v 1.21 2010/05/11 01:43:28 kent Exp $";
 
-#include "bamFile.h"
+#include "hgBam.h"
 
 struct bamTrackData
     {

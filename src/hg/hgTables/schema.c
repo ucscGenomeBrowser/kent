@@ -599,6 +599,8 @@ if (sameString(type, "bigBed"))
     showSchemaBigBed(table);
 else if (sameString(type, "bam"))
     showSchemaBam(table);
+else if (sameString(type, "vcfTabix"))
+    showSchemaVcf(table);
 }
 
 static void showSchemaWiki(struct trackDb *tdb, char *table)
@@ -615,6 +617,8 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
 else if (isBamTable(table))
     showSchemaBam(table);
+else if (isVcfTable(table))
+    showSchemaVcf(table);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (isHubTrack(table))

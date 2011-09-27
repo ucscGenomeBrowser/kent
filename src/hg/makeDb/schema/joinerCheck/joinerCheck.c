@@ -910,6 +910,12 @@ if (database)
     if (! hashLookup(allDbHash, database))
 	errAbort("specified database '%s' not available", database);
     }
+if (! (checkFields|foreignKeys|dbCoverage|tableCoverage|checkTimes))
+    {
+    warn("*** Error: need to specify one of the options:\n"
+	"\tfields, keys, tableCoverage, dbCoverage, times or all\n");
+    usage();
+    }
 joinerCheck(argv[1]);
 return 0;
 }

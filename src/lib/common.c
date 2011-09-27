@@ -2514,13 +2514,18 @@ return fd;
 void mustReadFd(int fd, void *buf, size_t size)
 /* Read size bytes from a file or squawk and die. */
 {
-long long actualSize;
-if (size != 0 && (actualSize = read(fd, buf, size)) != size)
+ssize_t actualSize;
+char *cbuf = buf;
+// using a loop because linux was not returning all data in a single request when request size exceeded 2GB.
+while (size > 0) 
     {
+    actualSize = read(fd, cbuf, size);
     if (actualSize < 0)
 	errnoAbort("Error reading %lld bytes", (long long)size);
-    else
-	errAbort("End of file reading %lld bytes (got %lld)", (long long)size, actualSize);
+    if (actualSize == 0)
+	errAbort("End of file reading %llu bytes (got %lld)", (unsigned long long)size, (long long)actualSize);
+    cbuf += actualSize;
+    size -= actualSize;
     }
 }
 
@@ -3225,8 +3230,9 @@ va_list args;
 va_start(args, label);
 if (label != NULL)
     {
+    fprintf(stdout, "<span class='timing'>");
     vfprintf(stdout, label, args);
-    fprintf(stdout, ": %ld millis<BR>\n", time - lastTime);
+    fprintf(stdout, ": %ld millis<BR></span>\n", time - lastTime);
     }
 lastTime = time;
 va_end(args);

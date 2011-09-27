@@ -5,14 +5,16 @@
 
 #Link together a Known Gene ID and a gene alias
 CREATE TABLE kgXref (
-    kgID varchar(40) not null,	# Known Gene ID
-    mRNA varchar(40),		# mRNA ID
-    spID varchar(40),		# SWISS-PROT protein Accession number
-    spDisplayID varchar(40),	# SWISS-PROT display ID
-    geneSymbol varchar(40),	# Gene Symbol
-    refseq varchar(40),		# RefSeq ID
-    protAcc varchar(40),	# NCBI protein Accession number
+    kgID varchar(255) not null,	# Known Gene ID
+    mRNA varchar(255) not null,	# mRNA ID
+    spID varchar(255) not null,	# SWISS-PROT protein Accession number
+    spDisplayID varchar(255) not null,	# SWISS-PROT display ID
+    geneSymbol varchar(255) not null,	# Gene Symbol
+    refseq varchar(255) not null,	# RefSeq ID
+    protAcc varchar(255) not null,	# NCBI protein Accession number
     description longblob not null,	# Description
+    rfamAcc varchar(255) not null,	# Rfam accession number
+    tRnaName varchar(255) not null,	# Name from the tRNA track
               #Indices
     KEY(kgID),
     KEY(mRNA),
@@ -20,5 +22,7 @@ CREATE TABLE kgXref (
     KEY(spDisplayID),
     KEY(geneSymbol),
     KEY(refseq),
-    KEY(protAcc)
+    KEY(protAcc),
+    KEY(rfamAcc),
+    KEY(tRnaName)
 );

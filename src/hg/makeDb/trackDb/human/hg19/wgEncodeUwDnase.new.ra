@@ -58,7 +58,7 @@ subGroup3 rep Replicate 1=1 2=2
 subGroup4 treatment Treatment None=None OHTAM=4-OHTAM_20nM_72hr
 dimensions dimensionY=cellType dimensionX=rep
 sortOrder cellType=+ rep=+ view=+ treatment=+
-fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accessio geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
+fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 dragAndDrop subTracks
 noInherit on
 html wgEncodeUwDnase.new

@@ -1170,10 +1170,10 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int w, y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
 if (theImgBox != NULL)
     withLabels = (withLeftLabels && (vis == tvPack || vis == tvFull) && !tg->drawName);
-#endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
@@ -1202,11 +1202,11 @@ if (vis == tvPack || vis == tvSquish)
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
             textX -= nameWidth + dotWidth;
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox == NULL && textX < insideX)
-        #else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+        #else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (textX < insideX)        /* Snap label to the left. */
-        #endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+        #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
 		{
 		textX = leftLabelX;
                 assert(hvgSide != NULL);
@@ -1236,7 +1236,7 @@ else
         tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, itemColor, vis);
         if (vis == tvFull)
             {
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox != NULL) // In dragScroll >1x item labels cannot be in leftLabel
                 {                  // So they appear here in the image, just like in pack
                 int s = tg->itemStart(tg, item);
@@ -1249,7 +1249,7 @@ else
                     hvGfxTextRight(hvg, textX, y, nameWidth, heightPer, itemNameColor, font, name);
                     }
                 }
-        #endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
 	    y += lineHeight;
             }
         }
@@ -1266,10 +1266,10 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-#if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
 if (theImgBox != NULL)
     withLabels = (withLeftLabels && (vis == tvPack || tvFull) && !tg->drawName);
-#endif /// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+#endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
 snp125ColorSource = snp125ColorSourceFromCart(cart, tg->tdb);
 
 if (!tg->drawItemAt)
@@ -1302,11 +1302,11 @@ if (vis == tvPack || vis == tvSquish)
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
 	    snapLeft = (textX < insideX);
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox == NULL && snapLeft)
-        #else///if !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+        #else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (snapLeft)
-        #endif /// !defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+        #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
 		{
 		textX = leftLabelX;
                 assert(hvgSide != NULL);

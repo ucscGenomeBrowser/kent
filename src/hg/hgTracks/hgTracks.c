@@ -60,6 +60,26 @@
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
+/* Other than submit and Submit all these vars should start with hgt.
+ * to avoid weeding things out of other program's namespaces.
+ * Because the browser is a central program, most of it's cart
+ * variables are not hgt. qualified.  It's a good idea if other
+ * program's unique variables be qualified with a prefix though. */
+char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
+            "hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
+            "hgt.out1", "hgt.out2", "hgt.out3",
+            "hgt.left1", "hgt.left2", "hgt.left3",
+            "hgt.right1", "hgt.right2", "hgt.right3",
+            "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
+            "hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
+	    "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
+	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
+	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
+            "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
+             TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
+            "hgt.contentType",
+            NULL };
+
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
 boolean baseShowPos;           /* TRUE if should display full position at top of base track */
@@ -1340,7 +1360,7 @@ hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWid
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
 mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
-#ifdef IMAGEv2_SHORT_MAPITEMS
+#ifdef IMAGEv2_SHORT_TOGGLE
 char *label = (theImgBox ? track->longLabel : parentTrack->longLabel);
 int width = portWidth - (2 * arrowButtonWidth);
 int x = portX + arrowButtonWidth;
@@ -1352,10 +1372,10 @@ if (width > size)
     width = size;
     }
 mapBoxToggleVis(hvg, x, y + 1, width, insideHeight, (theImgBox ? track : parentTrack));
-#else///ifndef IMAGEv2_SHORT_MAPITEMS
+#else///ifndef IMAGEv2_SHORT_TOGGLE
 mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
-#endif///ndef IMAGEv2_SHORT_MAPITEMS
+#endif///ndef IMAGEv2_SHORT_TOGGLE
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
 mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, track, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
@@ -1392,7 +1412,7 @@ if (track->limitedVis != tvHide)
             }
         if (!toggleDone)
             {
-        #ifdef IMAGEv2_SHORT_MAPITEMS
+        #ifdef IMAGEv2_SHORT_TOGGLE
             // make toggle cover only actual label
             int size = mgFontStringWidth(font,label) + 12;  // get close enough to the label
             if (trackPastTabWidth > size)
@@ -1400,7 +1420,7 @@ if (track->limitedVis != tvHide)
                 trackPastTabX = insideX + insideWidth/2 - size/2;
                 trackPastTabWidth = size;
                 }
-        #endif///def IMAGEv2_SHORT_MAPITEMS
+        #endif///def IMAGEv2_SHORT_TOGGLE
             mapBoxToggleVis(hvg, trackPastTabX, y+1,trackPastTabWidth, insideHeight,
                             (theImgBox ? track : parentTrack));
             }
@@ -1560,10 +1580,8 @@ switch (track->limitedVis)
                             {
                             if (isCenterLabelIncluded(subtrack))
                                 y += fontHeight;
-                        #ifndef IMAGEv2_DRAG_SCROLL
                             if(theImgBox && subtrack->limitedVis == tvDense)
                                 mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, track->lineHeight, subtrack);
-                        #endif///ndef IMAGEv2_DRAG_SCROLL
                             y += subtrack->totalHeight(subtrack, subtrack->limitedVis);
                             }
                         }
@@ -1582,11 +1600,9 @@ switch (track->limitedVis)
             mapHeight = track->height;
         else
             mapHeight = track->lineHeight;
-    #ifndef IMAGEv2_DRAG_SCROLL
         int maxWinToDraw = getMaxWindowToDraw(track->tdb);
         if (maxWinToDraw <= 1 || (winEnd - winStart) <= maxWinToDraw)
             mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, mapHeight, track);
-    #endif///ndef IMAGEv2_DRAG_SCROLL
         y += mapHeight;
         break;
     case tvHide:
@@ -2318,11 +2334,11 @@ if (withLeftLabels)
             y += REMOTE_TRACK_HEIGHT;
         else
             {
-        #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox && track->limitedVis != tvDense)
                 y += sliceHeight;
             else
-        #endif ///defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+        #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
                 y = doLeftLabels(track, hvgSide, font, y);
             }
         }
@@ -2447,10 +2463,8 @@ if (withCenterLabels)
         else
             y = doDrawItems(track, hvg, font, y, &lastTime);
 
-        #ifndef IMAGEv2_DRAG_SCROLL
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track); // Strange mabBoxToggleLogic handles reverse complement itself so x=0, width=tl.picWidth
-        #endif///ndef IMAGEv2_DRAG_SCROLL
 
         if(yEnd!=y)
             warn("Slice height does not add up.  Expecting %d != %d actual",yEnd - yStart - 1,y-yStart);
@@ -2480,11 +2494,11 @@ if (withLeftLabels)
 
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
-    #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
+    #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL && (theImgBox == NULL || track->limitedVis == tvDense))
-    #else ///!defined(IMAGEv2_DRAG_SCROLL_SZ) || (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+    #else ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
         else if (track->drawLeftLabels != NULL)
-    #endif ///!defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ <= 1)
+    #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -2514,7 +2528,7 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 hPrintf("</MAP>\n");
 
 jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE && advancedJavascriptFeaturesEnabled(cart));
 
 if(rulerClickHeight)
     {
@@ -2529,6 +2543,49 @@ if(newWinWidth)
 if(hvgSide != hvg)
     hvGfxClose(&hvgSide);
 hvGfxClose(&hvg);
+
+#ifdef SUPPORT_CONTENT_TYPE
+char *type = cartUsualString(cart, "hgt.contentType", "html");
+if(sameString(type, "jsonp"))
+    {
+    struct jsonHashElement *json = newJsonHash(newHash(8));
+
+    printf("Content-Type: application/json\n\n");
+    jsonHashAddString(json, "track", cartString(cart, "hgt.trackNameFilter"));
+    jsonHashAddNumber(json, "height", pixHeight);
+    jsonHashAddNumber(json, "width", pixWidth);
+    jsonHashAddString(json, "img", gifTn.forHtml);
+    printf("%s(", cartString(cart, "jsonp"));
+    hPrintEnable();
+    jsonPrint((struct jsonElement *) json, NULL, 0);
+    hPrintDisable();
+    printf(")\n");
+    return;
+    }
+else if(sameString(type, "png"))
+    {
+    // following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
+    printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+
+    char buf[4096];
+    FILE *fd = fopen(gifTn.forCgi, "r");
+    if(fd == NULL)
+        // fail some other way (e.g. HTTP 500)?
+        errAbort("Couldn't open png for reading");
+    while(TRUE)
+        {
+        size_t n = fread(buf, 1, sizeof(buf), fd);
+        if(n)
+            fwrite(buf, 1, n, stdout);
+        else
+            break;
+        }
+    fclose(fd);
+    unlink(gifTn.forCgi);
+    return;
+    }
+#endif
+
 if(theImgBox)
     {
     imageBoxDraw(theImgBox);
@@ -2553,8 +2610,19 @@ else
 flatTracksFree(&flatTracks);
 }
 
+static void appendLink(struct hotLink **links, char *url, char *name, char *id)
+{
+// append to list of links for later printing and/or communication with javascript client
+struct hotLink *link;
+AllocVar(link);
+link->name = cloneString(name);
+link->url = cloneString(url);
+link->id = cloneString(id);
+slAddTail(links, link);
+}
+
 static void printEnsemblAnchor(char *database, char* archive,
-    char *chrName, int start, int end)
+                               char *chrName, int start, int end, struct hotLink **links)
 /* Print anchor to Ensembl display on same window. */
 {
 char *scientificName = hScientificName(database);
@@ -2603,10 +2671,8 @@ else if (sameWord(scientificName, "Saccharomyces cerevisiae"))
 
 if (sameWord(chrName, "chrM"))
     name = "chrMt";
-localStart = start;
-localEnd = end + 1; // Ensembl base-1 display coordinates
-ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, localStart, localEnd, archive);
-hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
+ensUrl = ensContigViewUrl(database, dir, name, seqBaseCount, start+1, end, archive);
+appendLink(links, ensUrl->string, "Ensembl", "ensemblLink");
 /* NOTE: you can not freeMem(dir) because sometimes it is a literal
  * constant */
 freeMem(scientificName);
@@ -3399,27 +3465,10 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         if (errCatchStart(errCatch))
 	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
         errCatchEnd(errCatch);
-	struct sqlConnection *conn = hConnectCentral();
-	char query[256];
         if (errCatch->gotError)
-	    {
-	    safef(query, sizeof(query),
-		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
-		, hubStatusTableName
-		, errCatch->message->string
-		, hub->id
-		);
-	    }
+	    hubSetErrorMessage( errCatch->message->string, hub->id);
 	else
-	    {
-	    safef(query, sizeof(query),
-		"update %s set errorMessage=\"\", lastOkTime=now() where id=%d"
-		, hubStatusTableName
-		, hub->id
-		);
-	    }
-	sqlUpdate(conn, query);
-	hDisconnectCentral(&conn);
+	    hubSetErrorMessage(NULL, hub->id);
         errCatchFree(&errCatch);
 	}
     }
@@ -3434,7 +3483,7 @@ return (hTableExists("hgFixed", "cutters") &&
     hTableExists("hgFixed", "rebaseCompanies"));
 }
 
-void fr2ScaffoldEnsemblLink(char *archive)
+static void fr2ScaffoldEnsemblLink(char *archive, struct hotLink **links)
 /* print out Ensembl link to appropriate scaffold there */
 {
 struct sqlConnection *conn = hAllocConn(database);
@@ -3467,7 +3516,7 @@ if (1 == itemCount)
 	int agpEnd = agpStart + winEnd - winStart;
 	hPuts("<TD ALIGN=CENTER>");
 	printEnsemblAnchor(database, archive, agpItem->frag,
-	agpStart, agpEnd);
+                           agpStart, agpEnd, links);
 	hPrintf("%s</A></TD>", "Ensembl");
 	}
     }
@@ -3481,6 +3530,7 @@ boolean gotBlat = hIsBlatIndexedDatabase(database);
 struct dyString *uiVars = uiStateUrlPart(NULL);
 char *orgEnc = cgiEncode(organism);
 boolean psOutput = cgiVarExists("hgt.psOutput");
+struct hotLink *link, *links = NULL;
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR>\n");
@@ -3537,10 +3587,9 @@ else
     /* disable TB for CGB servers */
     if (!hIsCgbServer())
 	{
-	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-	    database, chromName, winStart+1, winEnd,
-	cartSessionVarName(),
-	    cartSessionId(cart),
+	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&%s=%u\" "
+		    "class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+		    database, cartSessionVarName(), cartSessionId(cart),
 	"Tables");
 	}
     }
@@ -3556,7 +3605,7 @@ if (hgPcrOk(database))
     }
 if (!psOutput)
     {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\" id='dnaLink'>"
         "%s</A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
         winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
     }
@@ -3567,9 +3616,8 @@ if (!psOutput)
     if (!hIsCgbServer())
     if (liftOverChainForDb(database) != NULL)
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"");
-        hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d",
-            uiVars->string, database, chromName, winStart+1, winEnd);
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgConvert?%s&db=%s",
+		uiVars->string, database);
         hPrintf("\" class=\"topbar\">Convert</A>&nbsp;&nbsp;</TD>");
         }
     }
@@ -3587,21 +3635,15 @@ if (!psOutput)
         * supported by Ensembl == if versionString from trackVersion exists */
         if (sameWord(database,"hg19"))
             {
-            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
-            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
             }
         else if (sameWord(database,"hg18"))
             {
-            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-            printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
-            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd, &links);
             }
         else if (sameWord(database,"oryCun2") || sameWord(database,"anoCar2") || sameWord(database,"calJac3"))
             {
-            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
-            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd, &links);
             }
         else if (ensVersionString[0])
             {
@@ -3615,7 +3657,7 @@ if (!psOutput)
                 char *ctgPos = "ctgPos";
 
                 if (sameWord(database,"fr2"))
-                    fr2ScaffoldEnsemblLink(archive);
+                    fr2ScaffoldEnsemblLink(archive, &links);
                 else if (hTableExists(database, ctgPos))
                     /* see if we are entirely within a single contig */
                     {
@@ -3647,10 +3689,8 @@ if (!psOutput)
                             {
                             int ctgStart = winStart - ctgItem->chromStart;
                             int ctgEnd = ctgStart + winEnd - winStart;
-                            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
                             printEnsemblAnchor(database, archive, ctgItem->contig,
-                            ctgStart, ctgEnd);
-                            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+                                               ctgStart, ctgEnd, &links);
                             }
                         }
                     ctgPosFree(&ctgItem);   // the one we maybe used
@@ -3658,9 +3698,7 @@ if (!psOutput)
                 }
             else
                 {
-                hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
-                printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
-                hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+                printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
                 }
             }
         }
@@ -3668,106 +3706,108 @@ if (!psOutput)
 
 if (!psOutput)
     {
+    char buf[2056];
     /* Print NCBI MapView anchor */
     if (sameString(database, "hg18"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=previous\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&build=previous&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "hg19"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "mm8"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "danRer2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "galGal3"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "canFam2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "rheMac2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "panTro2"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "anoGam1"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (sameString(database, "bosTau6"))
         {
-        hPrintf("<TD ALIGN=CENTER>");
-        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+        safef(buf, sizeof(buf), "http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9913&CHR=%s&BEG=%d&END=%d",
             skipChr(chromName), winStart+1, winEnd);
-        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        appendLink(&links, buf, "NCBI", "ncbiLink");
         }
     if (startsWith("oryLat", database))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "UTGB");
+        safef(buf, sizeof(buf), "http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "UTGB", "medakaLink");
         }
     if (sameString(database, "cb3"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "cb4"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-            chromName, winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_briggsae?name=%s:%d-%d",
+            chromName, winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "ce10"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://www.wormbase.org/db/gb2/gbrowse/c_elegans?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "ce4"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     if (sameString(database, "ce2"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
-            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        safef(buf, sizeof(buf), "http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d",
+            skipChr(chromName), winStart+1, winEnd);
+        appendLink(&links, buf, "WormBase", "wormbaseLink");
         }
     }
+
+for(link = links; link != NULL; link = link->next)
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s\" TARGET=\"_blank\" class=\"topbar\" id=\"%s\">%s</A>&nbsp;&nbsp;</TD>\n", link->url, link->id, link->name);
 
 if (!psOutput)
     {
@@ -3784,6 +3824,7 @@ if (!psOutput)
         cartSessionVarName(), cartSessionId(cart));
         }
     }
+
 if (hIsGisaidServer())
     {
     //hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
@@ -3798,6 +3839,7 @@ else
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
     }
+
 hPuts("<TD colspan=20>&nbsp;</TD></TR></TABLE></TD>");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
@@ -4594,6 +4636,38 @@ pthread_mutex_unlock( &pfdMutex );
 return errCount;
 }
 
+static void printTrackTiming()
+{
+hPrintf("<span class='trackTiming'>track, load time, draw time, total<br />\n");
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (track->visibility == tvHide)
+        continue;
+    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
+        {
+        struct track *subtrack;
+        for (subtrack = track->subtracks; subtrack != NULL;
+             subtrack = subtrack->next)
+            if (isSubtrackVisible(subtrack))
+                hPrintf("%s, %d, %d, %d<br />\n", subtrack->shortLabel,
+                            subtrack->loadTime, subtrack->drawTime,
+                            subtrack->loadTime + subtrack->drawTime);
+        }
+    else
+        {
+        hPrintf("%s, %d, %d, %d<br />\n",
+		    track->shortLabel, track->loadTime, track->drawTime,
+		    track->loadTime + track->drawTime);
+        if (startsWith("wigMaf", track->tdb->type))
+            if (track->subtracks)
+                if (track->subtracks->loadTime)
+                    hPrintf("&nbsp; &nbsp; %s wiggle, load %d<br />\n",
+                                track->shortLabel, track->subtracks->loadTime);
+        }
+    }
+hPrintf("</span>\n");
+}
 
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4635,7 +4709,7 @@ hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 #else///ifndef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
 #endif///ndef NEW_JQUERY
-if (!psOutput) cartSaveSession(cart);
+if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
@@ -4681,7 +4755,7 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
-if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cgiVarExists("hgt.imageV1"))
+if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
     // Set up imgBox dimensions
@@ -4910,6 +4984,14 @@ if (!hideControls)
 	 * we need to repeat the position in a hidden variable here
 	 * so that zoom/scrolling always has current position to work
 	 * from. */
+    #if IN_PLACE_UPDATE
+        // This 'dirty' field is used to check if js/ajax changes to the page have occurred.
+        // If so and it is reached by the back button, a page reload will occur instead.
+        hPrintf("<INPUT TYPE='text' style='display:none;' name='dirty' id='dirty' VALUE='false'>\n");
+        // Unfortunately this does not work in IE, so that browser will get the reload only after this full load.
+        // NOTE: Larry and I have seen that the new URL is not even used, but this will abort the page load and hasten the isDirty() check in hgTracks.js
+        hPrintf("<script type='text/javascript'>if (document.getElementById('dirty').value == 'true') {document.getElementById('dirty').value = 'false'; window.location = '%s?hgsid=%d';}</script>\n",hgTracksName(),cart->sessionId);
+    #endif/// IN_PLACE_UPDATE
 	hPrintf("<INPUT TYPE=HIDDEN id='positionHidden' NAME=\"position\" "
 	    "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
 	    hPrintf("\n%s", trackGroupsHidden1->string);
@@ -4996,8 +5078,14 @@ makeActiveImage(trackList, psOutput);
 fflush(stdout);
 
 if(trackImgOnly)
+    {
     // bail out b/c we are done
+    if (measureTiming)
+        {
+        printTrackTiming();
+        }
     return;
+    }
 
 if (!hideControls)
     {
@@ -5237,35 +5325,8 @@ if (!hideControls)
 	}
 
     if (measureTiming)
-	{
-	hPrintf("track, load time, draw time, total<BR>\n");
-	for (track = trackList; track != NULL; track = track->next)
-	    {
-	    if (track->visibility == tvHide)
-		    continue;
-	    if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-		{
-		struct track *subtrack;
-		for (subtrack = track->subtracks; subtrack != NULL;
-						    subtrack = subtrack->next)
-		    if (isSubtrackVisible(subtrack))
-			hPrintf("%s, %d, %d, %d<BR>\n", subtrack->shortLabel,
-				subtrack->loadTime, subtrack->drawTime,
-		subtrack->loadTime + subtrack->drawTime);
-		}
-	    else
-		{
-		hPrintf("%s, %d, %d, %d<BR>\n",
-		    track->shortLabel, track->loadTime, track->drawTime,
-		    track->loadTime + track->drawTime);
-		if (startsWith("wigMaf", track->tdb->type))
-		  if (track->subtracks)
-		      if (track->subtracks->loadTime)
-			 hPrintf("&nbsp; &nbsp; %s wiggle, load %d<BR>\n",
-			    track->shortLabel, track->subtracks->loadTime);
-		}
-	    }
-	}
+        printTrackTiming();
+
     hPrintf("</DIV>\n");
     }
 if (showTrackControls)
@@ -5504,7 +5565,7 @@ withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
-if (!cgiVarExists("hgt.imageV1"))
+if (!cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 
 withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
@@ -5876,7 +5937,7 @@ char *debugTmp = NULL;
 /* Initialize layout and database. */
 cart = theCart;
 
-measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
+measureTiming = hPrintStatus() && isNotEmpty(cartOptionalString(cart, "measureTiming"));
 if (measureTiming)
     measureTime("Get cart of %d for user:%u session:%u", theCart->hash->elCount,
 	    theCart->userId, theCart->sessionId);
@@ -6048,6 +6109,7 @@ else
     tracksDisplay();
     }
 
+jsonHashAddBoolean(jsonForClient, "measureTiming", measureTiming);
 hPrintf("<script type='text/javascript'>\n");
 jsonPrint((struct jsonElement *) jsonForClient, "hgTracks", 0);
 hPrintf("</script>\n");

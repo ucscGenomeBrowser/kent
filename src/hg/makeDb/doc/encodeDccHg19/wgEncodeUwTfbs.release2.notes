@@ -234,44 +234,114 @@ The composite track is wgEncodeUwTfbs
 230 - table wgEncodeUwTfbsWerirb1CtcfStdAlnRep1 does not exist, from filetype bam
 231 - could not find gbdb path in table hg19.wgEncodeUwTfbsWi38InputStdAlnRep1
 232 - table wgEncodeUwTfbsWi38InputStdAlnRep1 does not exist, from filetype bam
-233 - could not find gbdb path in table hg19.wgEncodeUwTfbsNb4CtcfStdAlnRep1
-234 - table wgEncodeUwTfbsNb4CtcfStdAlnRep1 does not exist, from filetype bam
-235 - could not find gbdb path in table hg19.wgEncodeUwTfbsWi38CtcfStdAlnRep2
-236 - table wgEncodeUwTfbsWi38CtcfStdAlnRep2 does not exist, from filetype bam
-237 - could not find gbdb path in table hg19.wgEncodeUwTfbsBe2cCtcfStdAlnRep1
-238 - table wgEncodeUwTfbsBe2cCtcfStdAlnRep1 does not exist, from filetype bam
-239 - could not find gbdb path in table hg19.wgEncodeUwTfbsA549CtcfStdAlnRep1
-240 - table wgEncodeUwTfbsA549CtcfStdAlnRep1 does not exist, from filetype bam
-241 - could not find gbdb path in table hg19.wgEncodeUwTfbsHffmycCtcfStdAlnRep2
-242 - table wgEncodeUwTfbsHffmycCtcfStdAlnRep2 does not exist, from filetype bam
-243 - could not find gbdb path in table hg19.wgEncodeUwTfbsHcmCtcfStdAlnRep1
-244 - table wgEncodeUwTfbsHcmCtcfStdAlnRep1 does not exist, from filetype bam
-245 - could not find gbdb path in table hg19.wgEncodeUwTfbsHacCtcfStdAlnRep1
-246 - table wgEncodeUwTfbsHacCtcfStdAlnRep1 does not exist, from filetype bam
-247 - could not find gbdb path in table hg19.wgEncodeUwTfbsHffmycCtcfStdAlnRep1
-248 - table wgEncodeUwTfbsHffmycCtcfStdAlnRep1 does not exist, from filetype bam
-249 - could not find gbdb path in table hg19.wgEncodeUwTfbsBe2cCtcfStdAlnRep2
-250 - table wgEncodeUwTfbsBe2cCtcfStdAlnRep2 does not exist, from filetype bam
-251 - could not find gbdb path in table hg19.wgEncodeUwTfbsA549InputStdAlnRep1
-252 - table wgEncodeUwTfbsA549InputStdAlnRep1 does not exist, from filetype bam
-253 - could not find gbdb path in table hg19.wgEncodeUwTfbsHffmycInputStdAlnRep1
-254 - table wgEncodeUwTfbsHffmycInputStdAlnRep1 does not exist, from filetype bam
-255 - could not find gbdb path in table hg19.wgEncodeUwTfbsAg04450CtcfStdAlnRep2
-256 - table wgEncodeUwTfbsAg04450CtcfStdAlnRep2 does not exist, from filetype bam
-257 - could not find gbdb path in table hg19.wgEncodeUwTfbsWi38CtcfStdAlnRep1
-258 - table wgEncodeUwTfbsWi38CtcfStdAlnRep1 does not exist, from filetype bam
-259 - could not find gbdb path in table hg19.wgEncodeUwTfbsBe2cInputStdAlnRep1
-260 - table wgEncodeUwTfbsBe2cInputStdAlnRep1 does not exist, from filetype bam
-261 - could not find gbdb path in table hg19.wgEncodeUwTfbsNhlfInputStdAlnRep1
-262 - table wgEncodeUwTfbsNhlfInputStdAlnRep1 does not exist, from filetype bam
-263 - could not find gbdb path in table hg19.wgEncodeUwTfbsA549CtcfStdAlnRep2
-264 - table wgEncodeUwTfbsA549CtcfStdAlnRep2 does not exist, from filetype bam
-265 - could not find gbdb path in table hg19.wgEncodeUwTfbsLncapInputStdAlnRep1
-266 - table wgEncodeUwTfbsLncapInputStdAlnRep1 does not exist, from filetype bam
-267 - could not find gbdb path in table hg19.wgEncodeUwTfbsSknmcInputStdAlnRep1
-268 - table wgEncodeUwTfbsSknmcInputStdAlnRep1 does not exist, from filetype bam
-269 - could not find gbdb path in table hg19.wgEncodeUwTfbsPanc1InputStdAlnRep1
-270 - table wgEncodeUwTfbsPanc1InputStdAlnRep1 does not exist, from filetype bam
+233 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12873CtcfStdAlnRep3
+234 - table wgEncodeUwTfbsGm12873CtcfStdAlnRep3 does not exist, from filetype bam
+235 - could not find gbdb path in table hg19.wgEncodeUwTfbsHaspCtcfStdAlnRep2
+236 - table wgEncodeUwTfbsHaspCtcfStdAlnRep2 does not exist, from filetype bam
+237 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12866CtcfStdAlnRep1
+238 - table wgEncodeUwTfbsGm12866CtcfStdAlnRep1 does not exist, from filetype bam
+239 - could not find gbdb path in table hg19.wgEncodeUwTfbsMcf7CtcfStdAlnRep1
+240 - table wgEncodeUwTfbsMcf7CtcfStdAlnRep1 does not exist, from filetype bam
+241 - could not find gbdb path in table hg19.wgEncodeUwTfbsHffmycCtcfStdAlnRep1
+242 - table wgEncodeUwTfbsHffmycCtcfStdAlnRep1 does not exist, from filetype bam
+243 - could not find gbdb path in table hg19.wgEncodeUwTfbsHrpeCtcfStdAlnRep2
+244 - table wgEncodeUwTfbsHrpeCtcfStdAlnRep2 does not exist, from filetype bam
+245 - could not find gbdb path in table hg19.wgEncodeUwTfbsAg04450CtcfStdAlnRep2
+246 - table wgEncodeUwTfbsAg04450CtcfStdAlnRep2 does not exist, from filetype bam
+247 - could not find gbdb path in table hg19.wgEncodeUwTfbsRptecCtcfStdAlnRep2
+248 - table wgEncodeUwTfbsRptecCtcfStdAlnRep2 does not exist, from filetype bam
+249 - could not find gbdb path in table hg19.wgEncodeUwTfbsHct116CtcfStdAlnRep2
+250 - table wgEncodeUwTfbsHct116CtcfStdAlnRep2 does not exist, from filetype bam
+251 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12865CtcfStdAlnRep3
+252 - table wgEncodeUwTfbsGm12865CtcfStdAlnRep3 does not exist, from filetype bam
+253 - could not find gbdb path in table hg19.wgEncodeUwTfbsWi38InputOhtamStdAlnRep1
+254 - table wgEncodeUwTfbsWi38InputOhtamStdAlnRep1 does not exist, from filetype bam
+255 - could not find gbdb path in table hg19.wgEncodeUwTfbsBe2cInputStdAlnRep1
+256 - table wgEncodeUwTfbsBe2cInputStdAlnRep1 does not exist, from filetype bam
+257 - could not find gbdb path in table hg19.wgEncodeUwTfbsNhlfInputStdAlnRep1
+258 - table wgEncodeUwTfbsNhlfInputStdAlnRep1 does not exist, from filetype bam
+259 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12864CtcfStdAlnRep3
+260 - table wgEncodeUwTfbsGm12864CtcfStdAlnRep3 does not exist, from filetype bam
+261 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12867CtcfStdAlnRep1
+262 - table wgEncodeUwTfbsGm12867CtcfStdAlnRep1 does not exist, from filetype bam
+263 - could not find gbdb path in table hg19.wgEncodeUwTfbsLncapInputStdAlnRep1
+264 - table wgEncodeUwTfbsLncapInputStdAlnRep1 does not exist, from filetype bam
+265 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12870CtcfStdAlnRep1
+266 - table wgEncodeUwTfbsGm12870CtcfStdAlnRep1 does not exist, from filetype bam
+267 - could not find gbdb path in table hg19.wgEncodeUwTfbsHacCtcfStdAlnRep2
+268 - table wgEncodeUwTfbsHacCtcfStdAlnRep2 does not exist, from filetype bam
+269 - could not find gbdb path in table hg19.wgEncodeUwTfbsWi38CtcfStdAlnRep2
+270 - table wgEncodeUwTfbsWi38CtcfStdAlnRep2 does not exist, from filetype bam
+271 - could not find gbdb path in table hg19.wgEncodeUwTfbsBe2cCtcfStdAlnRep1
+272 - table wgEncodeUwTfbsBe2cCtcfStdAlnRep1 does not exist, from filetype bam
+273 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12866CtcfStdAlnRep2
+274 - table wgEncodeUwTfbsGm12866CtcfStdAlnRep2 does not exist, from filetype bam
+275 - could not find gbdb path in table hg19.wgEncodeUwTfbsHacCtcfStdAlnRep1
+276 - table wgEncodeUwTfbsHacCtcfStdAlnRep1 does not exist, from filetype bam
+277 - could not find gbdb path in table hg19.wgEncodeUwTfbsBe2cCtcfStdAlnRep2
+278 - table wgEncodeUwTfbsBe2cCtcfStdAlnRep2 does not exist, from filetype bam
+279 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12868CtcfStdAlnRep1
+280 - table wgEncodeUwTfbsGm12868CtcfStdAlnRep1 does not exist, from filetype bam
+281 - could not find gbdb path in table hg19.wgEncodeUwTfbsHct116CtcfStdAlnRep1
+282 - table wgEncodeUwTfbsHct116CtcfStdAlnRep1 does not exist, from filetype bam
+283 - could not find gbdb path in table hg19.wgEncodeUwTfbsA549InputStdAlnRep1
+284 - table wgEncodeUwTfbsA549InputStdAlnRep1 does not exist, from filetype bam
+285 - could not find gbdb path in table hg19.wgEncodeUwTfbsHvmfCtcfStdAlnRep1
+286 - table wgEncodeUwTfbsHvmfCtcfStdAlnRep1 does not exist, from filetype bam
+287 - could not find gbdb path in table hg19.wgEncodeUwTfbsA549CtcfStdAlnRep1
+288 - table wgEncodeUwTfbsA549CtcfStdAlnRep1 does not exist, from filetype bam
+289 - could not find gbdb path in table hg19.wgEncodeUwTfbsHffmycInputStdAlnRep1
+290 - table wgEncodeUwTfbsHffmycInputStdAlnRep1 does not exist, from filetype bam
+291 - could not find gbdb path in table hg19.wgEncodeUwTfbsHacInputStdAlnRep1
+292 - table wgEncodeUwTfbsHacInputStdAlnRep1 does not exist, from filetype bam
+293 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12867CtcfStdAlnRep2
+294 - table wgEncodeUwTfbsGm12867CtcfStdAlnRep2 does not exist, from filetype bam
+295 - could not find gbdb path in table hg19.wgEncodeUwTfbsHffmycCtcfStdAlnRep2
+296 - table wgEncodeUwTfbsHffmycCtcfStdAlnRep2 does not exist, from filetype bam
+297 - could not find gbdb path in table hg19.wgEncodeUwTfbsSknmcInputStdAlnRep1
+298 - table wgEncodeUwTfbsSknmcInputStdAlnRep1 does not exist, from filetype bam
+299 - could not find gbdb path in table hg19.wgEncodeUwTfbsHmecCtcfStdAlnRep2
+300 - table wgEncodeUwTfbsHmecCtcfStdAlnRep2 does not exist, from filetype bam
+301 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12872CtcfStdAlnRep3
+302 - table wgEncodeUwTfbsGm12872CtcfStdAlnRep3 does not exist, from filetype bam
+303 - could not find gbdb path in table hg19.wgEncodeUwTfbsNb4CtcfStdAlnRep1
+304 - table wgEncodeUwTfbsNb4CtcfStdAlnRep1 does not exist, from filetype bam
+305 - could not find gbdb path in table hg19.wgEncodeUwTfbsNhdfneoCtcfStdAlnRep1
+306 - table wgEncodeUwTfbsNhdfneoCtcfStdAlnRep1 does not exist, from filetype bam
+307 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12871CtcfStdAlnRep1
+308 - table wgEncodeUwTfbsGm12871CtcfStdAlnRep1 does not exist, from filetype bam
+309 - could not find gbdb path in table hg19.wgEncodeUwTfbsWi38CtcfStdAlnRep1
+310 - table wgEncodeUwTfbsWi38CtcfStdAlnRep1 does not exist, from filetype bam
+311 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12868CtcfStdAlnRep2
+312 - table wgEncodeUwTfbsGm12868CtcfStdAlnRep2 does not exist, from filetype bam
+313 - could not find gbdb path in table hg19.wgEncodeUwTfbsHcmCtcfStdAlnRep1
+314 - table wgEncodeUwTfbsHcmCtcfStdAlnRep1 does not exist, from filetype bam
+315 - could not find gbdb path in table hg19.wgEncodeUwTfbsHcmCtcfStdAlnRep2
+316 - table wgEncodeUwTfbsHcmCtcfStdAlnRep2 does not exist, from filetype bam
+317 - could not find gbdb path in table hg19.wgEncodeUwTfbsRptecCtcfStdAlnRep1
+318 - table wgEncodeUwTfbsRptecCtcfStdAlnRep1 does not exist, from filetype bam
+319 - could not find gbdb path in table hg19.wgEncodeUwTfbsA549CtcfStdAlnRep2
+320 - table wgEncodeUwTfbsA549CtcfStdAlnRep2 does not exist, from filetype bam
+321 - could not find gbdb path in table hg19.wgEncodeUwTfbsPanc1InputStdAlnRep1
+322 - table wgEncodeUwTfbsPanc1InputStdAlnRep1 does not exist, from filetype bam
+323 - could not find gbdb path in table hg19.wgEncodeUwTfbsHvmfCtcfStdAlnRep2
+324 - table wgEncodeUwTfbsHvmfCtcfStdAlnRep2 does not exist, from filetype bam
+325 - could not find gbdb path in table hg19.wgEncodeUwTfbsNhdfneoCtcfStdAlnRep2
+326 - table wgEncodeUwTfbsNhdfneoCtcfStdAlnRep2 does not exist, from filetype bam
+327 - could not find gbdb path in table hg19.wgEncodeUwTfbsRptecInputStdAlnRep1
+328 - table wgEncodeUwTfbsRptecInputStdAlnRep1 does not exist, from filetype bam
+329 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12869CtcfStdAlnRep1
+330 - table wgEncodeUwTfbsGm12869CtcfStdAlnRep1 does not exist, from filetype bam
+331 - could not find gbdb path in table hg19.wgEncodeUwTfbsMcf7CtcfStdAlnRep2
+332 - table wgEncodeUwTfbsMcf7CtcfStdAlnRep2 does not exist, from filetype bam
+333 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12871CtcfStdAlnRep2
+334 - table wgEncodeUwTfbsGm12871CtcfStdAlnRep2 does not exist, from filetype bam
+335 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12869CtcfStdAlnRep2
+336 - table wgEncodeUwTfbsGm12869CtcfStdAlnRep2 does not exist, from filetype bam
+337 - could not find gbdb path in table hg19.wgEncodeUwTfbsHffInputStdAlnRep1
+338 - table wgEncodeUwTfbsHffInputStdAlnRep1 does not exist, from filetype bam
+339 - could not find gbdb path in table hg19.wgEncodeUwTfbsGm12870CtcfStdAlnRep2
+340 - table wgEncodeUwTfbsGm12870CtcfStdAlnRep2 does not exist, from filetype bam
 ############################################################
 
 Categories of tables and files('):
@@ -283,9 +353,9 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release2 (new+untouched):
-    Tables: 297
-    Files: 705
-    Gbdbs: 135
+    Tables: 394
+    Files: 907
+    Gbdbs: 170
 
 A) Untouched Tables (253):
 wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1
@@ -1275,7 +1345,7 @@ B') Deprecated files (0 downloadables, 0 gbdbs):
 
 
 
-C) New tables (44):
+C) New tables (141):
 wgEncodeUwTfbsA549CtcfStdHotspotsRep1
 wgEncodeUwTfbsA549CtcfStdHotspotsRep2
 wgEncodeUwTfbsA549CtcfStdPkRep1
@@ -1293,12 +1363,77 @@ wgEncodeUwTfbsBe2cCtcfStdPkRep2
 wgEncodeUwTfbsBe2cCtcfStdRawRep1
 wgEncodeUwTfbsBe2cCtcfStdRawRep2
 wgEncodeUwTfbsBe2cInputStdRawRep1
+wgEncodeUwTfbsGm12864CtcfStdHotspotsRep3
+wgEncodeUwTfbsGm12864CtcfStdPkRep3
+wgEncodeUwTfbsGm12864CtcfStdRawRep3
+wgEncodeUwTfbsGm12865CtcfStdHotspotsRep3
+wgEncodeUwTfbsGm12865CtcfStdPkRep3
+wgEncodeUwTfbsGm12865CtcfStdRawRep3
+wgEncodeUwTfbsGm12866CtcfStdHotspotsRep1
+wgEncodeUwTfbsGm12866CtcfStdHotspotsRep2
+wgEncodeUwTfbsGm12866CtcfStdPkRep1
+wgEncodeUwTfbsGm12866CtcfStdPkRep2
+wgEncodeUwTfbsGm12866CtcfStdRawRep1
+wgEncodeUwTfbsGm12866CtcfStdRawRep2
+wgEncodeUwTfbsGm12867CtcfStdHotspotsRep1
+wgEncodeUwTfbsGm12867CtcfStdHotspotsRep2
+wgEncodeUwTfbsGm12867CtcfStdPkRep1
+wgEncodeUwTfbsGm12867CtcfStdPkRep2
+wgEncodeUwTfbsGm12867CtcfStdRawRep1
+wgEncodeUwTfbsGm12867CtcfStdRawRep2
+wgEncodeUwTfbsGm12868CtcfStdHotspotsRep1
+wgEncodeUwTfbsGm12868CtcfStdHotspotsRep2
+wgEncodeUwTfbsGm12868CtcfStdPkRep1
+wgEncodeUwTfbsGm12868CtcfStdPkRep2
+wgEncodeUwTfbsGm12868CtcfStdRawRep1
+wgEncodeUwTfbsGm12868CtcfStdRawRep2
+wgEncodeUwTfbsGm12869CtcfStdHotspotsRep1
+wgEncodeUwTfbsGm12869CtcfStdHotspotsRep2
+wgEncodeUwTfbsGm12869CtcfStdPkRep1
+wgEncodeUwTfbsGm12869CtcfStdPkRep2
+wgEncodeUwTfbsGm12869CtcfStdRawRep1
+wgEncodeUwTfbsGm12869CtcfStdRawRep2
+wgEncodeUwTfbsGm12870CtcfStdHotspotsRep1
+wgEncodeUwTfbsGm12870CtcfStdHotspotsRep2
+wgEncodeUwTfbsGm12870CtcfStdPkRep1
+wgEncodeUwTfbsGm12870CtcfStdPkRep2
+wgEncodeUwTfbsGm12870CtcfStdRawRep1
+wgEncodeUwTfbsGm12870CtcfStdRawRep2
+wgEncodeUwTfbsGm12871CtcfStdHotspotsRep1
+wgEncodeUwTfbsGm12871CtcfStdHotspotsRep2
+wgEncodeUwTfbsGm12871CtcfStdPkRep1
+wgEncodeUwTfbsGm12871CtcfStdPkRep2
+wgEncodeUwTfbsGm12871CtcfStdRawRep1
+wgEncodeUwTfbsGm12871CtcfStdRawRep2
+wgEncodeUwTfbsGm12872CtcfStdHotspotsRep3
+wgEncodeUwTfbsGm12872CtcfStdPkRep3
+wgEncodeUwTfbsGm12872CtcfStdRawRep3
+wgEncodeUwTfbsGm12873CtcfStdHotspotsRep3
+wgEncodeUwTfbsGm12873CtcfStdPkRep3
+wgEncodeUwTfbsGm12873CtcfStdRawRep3
 wgEncodeUwTfbsHacCtcfStdHotspotsRep1
+wgEncodeUwTfbsHacCtcfStdHotspotsRep2
 wgEncodeUwTfbsHacCtcfStdPkRep1
+wgEncodeUwTfbsHacCtcfStdPkRep2
 wgEncodeUwTfbsHacCtcfStdRawRep1
+wgEncodeUwTfbsHacCtcfStdRawRep2
+wgEncodeUwTfbsHacInputStdRawRep1
+wgEncodeUwTfbsHaspCtcfStdHotspotsRep2
+wgEncodeUwTfbsHaspCtcfStdPkRep2
+wgEncodeUwTfbsHaspCtcfStdRawRep2
 wgEncodeUwTfbsHcmCtcfStdHotspotsRep1
+wgEncodeUwTfbsHcmCtcfStdHotspotsRep2
 wgEncodeUwTfbsHcmCtcfStdPkRep1
+wgEncodeUwTfbsHcmCtcfStdPkRep2
 wgEncodeUwTfbsHcmCtcfStdRawRep1
+wgEncodeUwTfbsHcmCtcfStdRawRep2
+wgEncodeUwTfbsHct116CtcfStdHotspotsRep1
+wgEncodeUwTfbsHct116CtcfStdHotspotsRep2
+wgEncodeUwTfbsHct116CtcfStdPkRep1
+wgEncodeUwTfbsHct116CtcfStdPkRep2
+wgEncodeUwTfbsHct116CtcfStdRawRep1
+wgEncodeUwTfbsHct116CtcfStdRawRep2
+wgEncodeUwTfbsHffInputStdRawRep1
 wgEncodeUwTfbsHffmycCtcfStdHotspotsRep1
 wgEncodeUwTfbsHffmycCtcfStdHotspotsRep2
 wgEncodeUwTfbsHffmycCtcfStdPkRep1
@@ -1306,12 +1441,43 @@ wgEncodeUwTfbsHffmycCtcfStdPkRep2
 wgEncodeUwTfbsHffmycCtcfStdRawRep1
 wgEncodeUwTfbsHffmycCtcfStdRawRep2
 wgEncodeUwTfbsHffmycInputStdRawRep1
+wgEncodeUwTfbsHmecCtcfStdHotspotsRep2
+wgEncodeUwTfbsHmecCtcfStdPkRep2
+wgEncodeUwTfbsHmecCtcfStdRawRep2
+wgEncodeUwTfbsHrpeCtcfStdHotspotsRep2
+wgEncodeUwTfbsHrpeCtcfStdPkRep2
+wgEncodeUwTfbsHrpeCtcfStdRawRep2
+wgEncodeUwTfbsHvmfCtcfStdHotspotsRep1
+wgEncodeUwTfbsHvmfCtcfStdHotspotsRep2
+wgEncodeUwTfbsHvmfCtcfStdPkRep1
+wgEncodeUwTfbsHvmfCtcfStdPkRep2
+wgEncodeUwTfbsHvmfCtcfStdRawRep1
+wgEncodeUwTfbsHvmfCtcfStdRawRep2
 wgEncodeUwTfbsLncapInputStdRawRep1
+wgEncodeUwTfbsMcf7CtcfStdHotspotsRep1
+wgEncodeUwTfbsMcf7CtcfStdHotspotsRep2
+wgEncodeUwTfbsMcf7CtcfStdPkRep1
+wgEncodeUwTfbsMcf7CtcfStdPkRep2
+wgEncodeUwTfbsMcf7CtcfStdRawRep1
+wgEncodeUwTfbsMcf7CtcfStdRawRep2
 wgEncodeUwTfbsNb4CtcfStdHotspotsRep1
 wgEncodeUwTfbsNb4CtcfStdPkRep1
 wgEncodeUwTfbsNb4CtcfStdRawRep1
+wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep1
+wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep2
+wgEncodeUwTfbsNhdfneoCtcfStdPkRep1
+wgEncodeUwTfbsNhdfneoCtcfStdPkRep2
+wgEncodeUwTfbsNhdfneoCtcfStdRawRep1
+wgEncodeUwTfbsNhdfneoCtcfStdRawRep2
 wgEncodeUwTfbsNhlfInputStdRawRep1
 wgEncodeUwTfbsPanc1InputStdRawRep1
+wgEncodeUwTfbsRptecCtcfStdHotspotsRep1
+wgEncodeUwTfbsRptecCtcfStdHotspotsRep2
+wgEncodeUwTfbsRptecCtcfStdPkRep1
+wgEncodeUwTfbsRptecCtcfStdPkRep2
+wgEncodeUwTfbsRptecCtcfStdRawRep1
+wgEncodeUwTfbsRptecCtcfStdRawRep2
+wgEncodeUwTfbsRptecInputStdRawRep1
 wgEncodeUwTfbsSknmcInputStdRawRep1
 wgEncodeUwTfbsWi38CtcfStdHotspotsRep1
 wgEncodeUwTfbsWi38CtcfStdHotspotsRep2
@@ -1319,9 +1485,10 @@ wgEncodeUwTfbsWi38CtcfStdPkRep1
 wgEncodeUwTfbsWi38CtcfStdPkRep2
 wgEncodeUwTfbsWi38CtcfStdRawRep1
 wgEncodeUwTfbsWi38CtcfStdRawRep2
+wgEncodeUwTfbsWi38InputOhtamStdRawRep1
 wgEncodeUwTfbsWi38InputStdRawRep1
 
-C') New files (104 downloadables, 20 gbdbs):
+C') New files (306 downloadables, 55 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/release2/
     NOT on RR but must be placed in:
@@ -1365,18 +1532,152 @@ wgEncodeUwTfbsBe2cInputStdAlnRep1.bam
 wgEncodeUwTfbsBe2cInputStdAlnRep1.bam.bai
 wgEncodeUwTfbsBe2cInputStdRawDataRep1.fastq.gz
 wgEncodeUwTfbsBe2cInputStdRawRep1.bigWig
+wgEncodeUwTfbsGm12864CtcfStdAlnRep3.bam
+wgEncodeUwTfbsGm12864CtcfStdAlnRep3.bam.bai
+wgEncodeUwTfbsGm12864CtcfStdHotspotsRep3.broadPeak.gz
+wgEncodeUwTfbsGm12864CtcfStdPkRep3.narrowPeak.gz
+wgEncodeUwTfbsGm12864CtcfStdRawDataRep3.fastq.gz
+wgEncodeUwTfbsGm12864CtcfStdRawRep3.bigWig
+wgEncodeUwTfbsGm12865CtcfStdAlnRep3.bam
+wgEncodeUwTfbsGm12865CtcfStdAlnRep3.bam.bai
+wgEncodeUwTfbsGm12865CtcfStdHotspotsRep3.broadPeak.gz
+wgEncodeUwTfbsGm12865CtcfStdPkRep3.narrowPeak.gz
+wgEncodeUwTfbsGm12865CtcfStdRawDataRep3.fastq.gz
+wgEncodeUwTfbsGm12865CtcfStdRawRep3.bigWig
+wgEncodeUwTfbsGm12866CtcfStdAlnRep1.bam
+wgEncodeUwTfbsGm12866CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsGm12866CtcfStdAlnRep2.bam
+wgEncodeUwTfbsGm12866CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsGm12866CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsGm12866CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsGm12866CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsGm12866CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsGm12866CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsGm12866CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsGm12866CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsGm12866CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsGm12867CtcfStdAlnRep1.bam
+wgEncodeUwTfbsGm12867CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsGm12867CtcfStdAlnRep2.bam
+wgEncodeUwTfbsGm12867CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsGm12867CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsGm12867CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsGm12867CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsGm12867CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsGm12867CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsGm12867CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsGm12867CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsGm12867CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsGm12868CtcfStdAlnRep1.bam
+wgEncodeUwTfbsGm12868CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsGm12868CtcfStdAlnRep2.bam
+wgEncodeUwTfbsGm12868CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsGm12868CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsGm12868CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsGm12868CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsGm12868CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsGm12868CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsGm12868CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsGm12868CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsGm12868CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsGm12869CtcfStdAlnRep1.bam
+wgEncodeUwTfbsGm12869CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsGm12869CtcfStdAlnRep2.bam
+wgEncodeUwTfbsGm12869CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsGm12869CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsGm12869CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsGm12869CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsGm12869CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsGm12869CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsGm12869CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsGm12869CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsGm12869CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsGm12870CtcfStdAlnRep1.bam
+wgEncodeUwTfbsGm12870CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsGm12870CtcfStdAlnRep2.bam
+wgEncodeUwTfbsGm12870CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsGm12870CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsGm12870CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsGm12870CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsGm12870CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsGm12870CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsGm12870CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsGm12870CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsGm12870CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsGm12871CtcfStdAlnRep1.bam
+wgEncodeUwTfbsGm12871CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsGm12871CtcfStdAlnRep2.bam
+wgEncodeUwTfbsGm12871CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsGm12871CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsGm12871CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsGm12871CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsGm12871CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsGm12871CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsGm12871CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsGm12871CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsGm12871CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsGm12872CtcfStdAlnRep3.bam
+wgEncodeUwTfbsGm12872CtcfStdAlnRep3.bam.bai
+wgEncodeUwTfbsGm12872CtcfStdHotspotsRep3.broadPeak.gz
+wgEncodeUwTfbsGm12872CtcfStdPkRep3.narrowPeak.gz
+wgEncodeUwTfbsGm12872CtcfStdRawDataRep3.fastq.gz
+wgEncodeUwTfbsGm12872CtcfStdRawRep3.bigWig
+wgEncodeUwTfbsGm12873CtcfStdAlnRep3.bam
+wgEncodeUwTfbsGm12873CtcfStdAlnRep3.bam.bai
+wgEncodeUwTfbsGm12873CtcfStdHotspotsRep3.broadPeak.gz
+wgEncodeUwTfbsGm12873CtcfStdPkRep3.narrowPeak.gz
+wgEncodeUwTfbsGm12873CtcfStdRawDataRep3.fastq.gz
+wgEncodeUwTfbsGm12873CtcfStdRawRep3.bigWig
 wgEncodeUwTfbsHacCtcfStdAlnRep1.bam
 wgEncodeUwTfbsHacCtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsHacCtcfStdAlnRep2.bam
+wgEncodeUwTfbsHacCtcfStdAlnRep2.bam.bai
 wgEncodeUwTfbsHacCtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsHacCtcfStdHotspotsRep2.broadPeak.gz
 wgEncodeUwTfbsHacCtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsHacCtcfStdPkRep2.narrowPeak.gz
 wgEncodeUwTfbsHacCtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsHacCtcfStdRawDataRep2.fastq.gz
 wgEncodeUwTfbsHacCtcfStdRawRep1.bigWig
+wgEncodeUwTfbsHacCtcfStdRawRep2.bigWig
+wgEncodeUwTfbsHacInputStdAlnRep1.bam
+wgEncodeUwTfbsHacInputStdAlnRep1.bam.bai
+wgEncodeUwTfbsHacInputStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsHacInputStdRawRep1.bigWig
+wgEncodeUwTfbsHaspCtcfStdAlnRep2.bam
+wgEncodeUwTfbsHaspCtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsHaspCtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsHaspCtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsHaspCtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsHaspCtcfStdRawRep2.bigWig
 wgEncodeUwTfbsHcmCtcfStdAlnRep1.bam
 wgEncodeUwTfbsHcmCtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsHcmCtcfStdAlnRep2.bam
+wgEncodeUwTfbsHcmCtcfStdAlnRep2.bam.bai
 wgEncodeUwTfbsHcmCtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsHcmCtcfStdHotspotsRep2.broadPeak.gz
 wgEncodeUwTfbsHcmCtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsHcmCtcfStdPkRep2.narrowPeak.gz
 wgEncodeUwTfbsHcmCtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsHcmCtcfStdRawDataRep2.fastq.gz
 wgEncodeUwTfbsHcmCtcfStdRawRep1.bigWig
+wgEncodeUwTfbsHcmCtcfStdRawRep2.bigWig
+wgEncodeUwTfbsHct116CtcfStdAlnRep1.bam
+wgEncodeUwTfbsHct116CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsHct116CtcfStdAlnRep2.bam
+wgEncodeUwTfbsHct116CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsHct116CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsHct116CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsHct116CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsHct116CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsHct116CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsHct116CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsHct116CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsHct116CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsHffInputStdAlnRep1.bam
+wgEncodeUwTfbsHffInputStdAlnRep1.bam.bai
+wgEncodeUwTfbsHffInputStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsHffInputStdRawRep1.bigWig
 wgEncodeUwTfbsHffmycCtcfStdAlnRep1.bam
 wgEncodeUwTfbsHffmycCtcfStdAlnRep1.bam.bai
 wgEncodeUwTfbsHffmycCtcfStdAlnRep2.bam
@@ -1393,16 +1694,64 @@ wgEncodeUwTfbsHffmycInputStdAlnRep1.bam
 wgEncodeUwTfbsHffmycInputStdAlnRep1.bam.bai
 wgEncodeUwTfbsHffmycInputStdRawDataRep1.fastq.gz
 wgEncodeUwTfbsHffmycInputStdRawRep1.bigWig
+wgEncodeUwTfbsHmecCtcfStdAlnRep2.bam
+wgEncodeUwTfbsHmecCtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsHmecCtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsHmecCtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsHmecCtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsHmecCtcfStdRawRep2.bigWig
+wgEncodeUwTfbsHrpeCtcfStdAlnRep2.bam
+wgEncodeUwTfbsHrpeCtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsHrpeCtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsHrpeCtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsHrpeCtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsHrpeCtcfStdRawRep2.bigWig
+wgEncodeUwTfbsHvmfCtcfStdAlnRep1.bam
+wgEncodeUwTfbsHvmfCtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsHvmfCtcfStdAlnRep2.bam
+wgEncodeUwTfbsHvmfCtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsHvmfCtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsHvmfCtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsHvmfCtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsHvmfCtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsHvmfCtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsHvmfCtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsHvmfCtcfStdRawRep1.bigWig
+wgEncodeUwTfbsHvmfCtcfStdRawRep2.bigWig
 wgEncodeUwTfbsLncapInputStdAlnRep1.bam
 wgEncodeUwTfbsLncapInputStdAlnRep1.bam.bai
 wgEncodeUwTfbsLncapInputStdRawDataRep1.fastq.gz
 wgEncodeUwTfbsLncapInputStdRawRep1.bigWig
+wgEncodeUwTfbsMcf7CtcfStdAlnRep1.bam
+wgEncodeUwTfbsMcf7CtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsMcf7CtcfStdAlnRep2.bam
+wgEncodeUwTfbsMcf7CtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsMcf7CtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsMcf7CtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsMcf7CtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsMcf7CtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsMcf7CtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsMcf7CtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsMcf7CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsMcf7CtcfStdRawRep2.bigWig
 wgEncodeUwTfbsNb4CtcfStdAlnRep1.bam
 wgEncodeUwTfbsNb4CtcfStdAlnRep1.bam.bai
 wgEncodeUwTfbsNb4CtcfStdHotspotsRep1.broadPeak.gz
 wgEncodeUwTfbsNb4CtcfStdPkRep1.narrowPeak.gz
 wgEncodeUwTfbsNb4CtcfStdRawDataRep1.fastq.gz
 wgEncodeUwTfbsNb4CtcfStdRawRep1.bigWig
+wgEncodeUwTfbsNhdfneoCtcfStdAlnRep1.bam
+wgEncodeUwTfbsNhdfneoCtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsNhdfneoCtcfStdAlnRep2.bam
+wgEncodeUwTfbsNhdfneoCtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsNhdfneoCtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsNhdfneoCtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsNhdfneoCtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsNhdfneoCtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsNhdfneoCtcfStdRawRep1.bigWig
+wgEncodeUwTfbsNhdfneoCtcfStdRawRep2.bigWig
 wgEncodeUwTfbsNhlfInputStdAlnRep1.bam
 wgEncodeUwTfbsNhlfInputStdAlnRep1.bam.bai
 wgEncodeUwTfbsNhlfInputStdRawDataRep1.fastq.gz
@@ -1411,6 +1760,22 @@ wgEncodeUwTfbsPanc1InputStdAlnRep1.bam
 wgEncodeUwTfbsPanc1InputStdAlnRep1.bam.bai
 wgEncodeUwTfbsPanc1InputStdRawDataRep1.fastq.gz
 wgEncodeUwTfbsPanc1InputStdRawRep1.bigWig
+wgEncodeUwTfbsRptecCtcfStdAlnRep1.bam
+wgEncodeUwTfbsRptecCtcfStdAlnRep1.bam.bai
+wgEncodeUwTfbsRptecCtcfStdAlnRep2.bam
+wgEncodeUwTfbsRptecCtcfStdAlnRep2.bam.bai
+wgEncodeUwTfbsRptecCtcfStdHotspotsRep1.broadPeak.gz
+wgEncodeUwTfbsRptecCtcfStdHotspotsRep2.broadPeak.gz
+wgEncodeUwTfbsRptecCtcfStdPkRep1.narrowPeak.gz
+wgEncodeUwTfbsRptecCtcfStdPkRep2.narrowPeak.gz
+wgEncodeUwTfbsRptecCtcfStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsRptecCtcfStdRawDataRep2.fastq.gz
+wgEncodeUwTfbsRptecCtcfStdRawRep1.bigWig
+wgEncodeUwTfbsRptecCtcfStdRawRep2.bigWig
+wgEncodeUwTfbsRptecInputStdAlnRep1.bam
+wgEncodeUwTfbsRptecInputStdAlnRep1.bam.bai
+wgEncodeUwTfbsRptecInputStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsRptecInputStdRawRep1.bigWig
 wgEncodeUwTfbsSknmcInputStdAlnRep1.bam
 wgEncodeUwTfbsSknmcInputStdAlnRep1.bam.bai
 wgEncodeUwTfbsSknmcInputStdRawDataRep1.fastq.gz
@@ -1427,6 +1792,10 @@ wgEncodeUwTfbsWi38CtcfStdRawDataRep1.fastq.gz
 wgEncodeUwTfbsWi38CtcfStdRawDataRep2.fastq.gz
 wgEncodeUwTfbsWi38CtcfStdRawRep1.bigWig
 wgEncodeUwTfbsWi38CtcfStdRawRep2.bigWig
+wgEncodeUwTfbsWi38InputOhtamStdAlnRep1.bam
+wgEncodeUwTfbsWi38InputOhtamStdAlnRep1.bam.bai
+wgEncodeUwTfbsWi38InputOhtamStdRawDataRep1.fastq.gz
+wgEncodeUwTfbsWi38InputOhtamStdRawRep1.bigWig
 wgEncodeUwTfbsWi38InputStdAlnRep1.bam
 wgEncodeUwTfbsWi38InputStdAlnRep1.bam.bai
 wgEncodeUwTfbsWi38InputStdRawDataRep1.fastq.gz
@@ -1439,18 +1808,53 @@ wgEncodeUwTfbsWi38InputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsBe2cCtcfStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsBe2cCtcfStdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsBe2cInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12864CtcfStdRawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12865CtcfStdRawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12866CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12866CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12867CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12867CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12868CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12868CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12869CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12869CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12870CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12870CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12871CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12871CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12872CtcfStdRawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsGm12873CtcfStdRawRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsHacCtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHacCtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHacInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHaspCtcfStdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsHcmCtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHcmCtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHct116CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHct116CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHffInputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsHffmycCtcfStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsHffmycCtcfStdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsHffmycInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHmecCtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHrpeCtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHvmfCtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsHvmfCtcfStdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsLncapInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsMcf7CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsMcf7CtcfStdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsNb4CtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsNhdfneoCtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsNhdfneoCtcfStdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsNhlfInputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsPanc1InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsRptecCtcfStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsRptecCtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsRptecInputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsSknmcInputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsWi38CtcfStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsWi38CtcfStdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwTfbsWi38InputOhtamStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwTfbsWi38InputStdRawRep1.bigWig
 
 D) Additional items:
@@ -1459,6 +1863,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwTfbs/
 
-index.html
+README.txt
 files.txt
 md5sum.txt

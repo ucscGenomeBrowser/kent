@@ -6,7 +6,7 @@
 	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
 </HEAD>
 
-<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
@@ -21,15 +21,15 @@
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
 	    <TR><TD>	
-    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 		    <TR><TD>	
-			<TABLE BGCOLOR="D9E4F8" WIDTH="100%">
+			<TABLE BGCOLOR="#D9E4F8" WIDTH="100%">
 			    <TR><TD>
 			    <FONT SIZE="4"><B>&nbsp;Using UCSC Genome
 Browser Track Hubs</B></FONT> 
 			    </TD></TR>
 			</TABLE>
-			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
 			    <TR><TH HEIGHT=10></TH></TR>
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD> 
 				<B><FONT COLOR="#006666" SIZE=4> Table of Contents: </FONT></B>
@@ -75,14 +75,14 @@ Up Your Own Track Hub</A></b>
 	<!--outer table is for border purposes-->
 	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
 	    <TR><TD>	
-    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 		    <TR><TD>	
-			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
+			<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
 			    <TR><TD><FONT SIZE="4"><A
 NAME="TOC"></A><B>&nbsp; What Are Track Hubs?</B></FONT>
 			    </TD></TR>
 			</TABLE>
-			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
 			    <TR><TH HEIGHT=10></TH></TR>
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 				<P>
@@ -106,8 +106,8 @@ server of the data provider rather than at UCSC.
 The data are stored in compressed binary indexed files in bigBed, bigWig or BAM 
 format that contain the data at several resolutions.
 When a hub track is displayed in the Genome Browser, only the
-relevant data needed to support the view of the current genomic region is 
-transmitted rather than the entire file. The transmitted data is cached
+relevant data needed to support the view of the current genomic region are 
+transmitted rather than the entire file. The transmitted data are cached
 on the UCSC server to expedite future access. This on-demand transfer mechanism 
 eliminates the need to transmit large data sets across the Internet,
 thereby minimizing upload time into the browser. 
@@ -145,14 +145,14 @@ and remove data from their display as needed.
 	<!--outer table is for border purposes-->
 	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
 	    <TR><TD>	
-    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 		    <TR><TD>	
-			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
+			<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
 			    <TR><TD><FONT SIZE="4"><A
 NAME="TOC"></A><B>&nbsp; Viewing Track Hubs in the Browser</B></FONT>
 			    </TD></TR>
 			</TABLE>
-			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
 			    <TR><TH HEIGHT=10></TH></TR>
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 				<P>
@@ -183,7 +183,12 @@ add an unlisted hub, open the Track Hubs page and click the My Hubs
 tab. This tab lists the unlisted track hubs that you have loaded into your
 browser. To import a new hub, type its URL into the text box, then click
 the Add Hub button. If the track hub is imported successfully, it will
-be added to the list. If the browser is unable to load the track hub, it will
+be added to the list. It is also possible to add a track hub by directly adding
+the hub's URL to the browser URL. If you add hubUrl=[URL] to your hgTracks URL line,
+it will add the hub directly into the browser
+(e.g. <A HREF="http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?hubUrl=http://hgwdev.cse.ucsc.edu/~braney/myHub/hub.txt">
+http://hgwdev.cse.ucsc.edu/cgi-bin/hgTracks?hubUrl=http://hgwdev.cse.ucsc.edu/~braney/myHub/hub.txt</A>).
+If the browser is unable to load the track hub, it will
 display an error message. Some common causes for an import to
 fail include typos in the URL, attempting to add a track hub from a different
 assembly, a hub server that is offline, or errors in the track hub files. 
@@ -233,14 +238,14 @@ data hub tracks can be viewed, manipulated, and downloaded using the
 	<!--outer table is for border purposes-->
 	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
 	    <TR><TD>	
-    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 		    <TR><TD>	
-			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
+			<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
 			    <TR><TD><FONT SIZE="4"><A
 NAME="TOC"></A><B>&nbsp; Setting Up Your Own Track Hub</B></FONT>
 			    </TD></TR>
 			</TABLE>
-			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
 			    <TR><TH HEIGHT=10></TH></TR>
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 				
@@ -571,13 +576,13 @@ track in the composite.</p>
 	<!--outer table is for border purposes-->
 	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
 	    <TR><TD>	
-    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 		    <TR><TD>	
-			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
+			<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
 			    <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Debugging and Updating Track Hubs</B></FONT>
 			    </TD></TR>
 			</TABLE>
-			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
 			    <TR><TH HEIGHT=10></TH></TR>
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>It is a good practice to run the command-line utility <em>hubCheck</em> on
@@ -594,19 +599,9 @@ options:
 Note that you will have to use the udcDir if /tmp/udcCache is not writable
 on your machine.
 <P>
-The hubCheck program will soon be available from the UCSC downloads
+The hubCheck program is available from the UCSC downloads
 server at 
 <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">http://hgdownload.cse.ucsc.edu/admin/exe/</A>.
-Until the utility is available for download, you may need to build your
-own version from the Genome Browser
-<A HREF="http://hgdownload.cse.ucsc.edu/admin/jksrc.zip">source tree</A>.
-The hubCheck source is located in the directory
-kent/src/hg/utils/hubCheck within the source tree. Alternatively, send email to the Genome
-Browser technical support mailing list at 
-<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A> to request
-a copy of the binary. 
-<!--Question: is this on the todo list for this release? Would be nice
-to just have it on downloads.-->
 <P>
 As part of the track hub mechanism, UCSC caches data from the hub on the
 local server.  The hub utility periodically checks the time stamps
@@ -641,13 +636,13 @@ i.e. <em>udcTimeout=300</em>.
 	<!-- outer table is for border purposes -->
 	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
 	    <TR><TD>	
-    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+    		<TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
 		    <TR><TD>	
-			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
+			<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH="100%">
 			    <TR><TD><FONT SIZE="4"><A NAME="TOC"></A><B>&nbsp; Registering a Track Hub with UCSC</B></FONT>
 			    </TD></TR>
 			</TABLE>
-			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			<TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
 			    <TR><TH HEIGHT=10></TH></TR>
 			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 <P>

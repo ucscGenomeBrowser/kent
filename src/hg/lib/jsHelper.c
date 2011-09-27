@@ -662,9 +662,11 @@ void jsonPrint(struct jsonElement *json, char *name, int indentLevel)
 // print out a jsonElement
 
 char *indentBuf = makeIndentBuf(indentLevel);
-hPrintf("// START %s\n%svar %s = ", name, indentBuf, name);
+if(name != NULL)
+    hPrintf("// START %s\n%svar %s = ", name, indentBuf, name);
 jsonPrintRecurse(json, indentLevel);
-hPrintf("%s;\n// END %s\n", indentBuf, name);
+if(name != NULL)
+    hPrintf("%s;\n// END %s\n", indentBuf, name);
 freez(&indentBuf);
 }
 

@@ -292,6 +292,8 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     bedList = bigBedGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
 else if (isBamTable(table))
     bedList = bamGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
+else if (isVcfTable(table))
+    bedList = vcfGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
 else if (isCustomTrack(table))
     bedList = customTrackGetFilteredBeds(database, table, region, lm, retFieldCount);
 else if (sameWord(table, WIKI_TRACK_TABLE))

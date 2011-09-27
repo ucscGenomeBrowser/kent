@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# Copy files to resource directory; make versioned soft-links as appropriate (and delete obsolete ones too).
+# Copy files to resource directory; make versioned soft-links and/or files as appropriate (and delete obsolete ones too).
 
 use strict;
 
@@ -23,16 +23,23 @@ Options:
 
      -destDir=dir          Directory where we copy files
      -exclude=fileList     Comma-delimited list of files to exclude (useful if the files argument was created using "ls *.js")
+     -force                Force update of all files
      -forceVersionNumbers  Force use of CGI versioned softlinks; useful for debugging in dev trees
+     -minify               Minify javascript files (currently experimental)
      -versionFile=file     Get CGI version from this header file
 END
 }
 
 my ($exclude, $destDir, $debug, $versionFile, $cgiVersion, $useMtimes);
 my %exclude;
+my %seen;
 my $forceVersionNumbers;   # You can use this option to test CGI-versioned links on dev server
+my ($force, $minify);
 
-GetOptions("exclude=s" => \$exclude, "destDir=s" => \$destDir, "debug" => \$debug, 
+# minify code is experimental (hence this hardwired path; I'm not sure where to install the jar (in utils dir?)).
+my $minifyJar = "/cluster/home/larrym/tmp/yuicompressor-2.4.6/build/yuicompressor-2.4.6.jar";
+
+GetOptions("exclude=s" => \$exclude, "destDir=s" => \$destDir, "debug" => \$debug, "force" => \$force, "minify" => \$minify,
            "versionFile=s" => \$versionFile,  "forceVersionNumbers" =>  \$forceVersionNumbers);
 
 if($exclude) {
@@ -47,7 +54,7 @@ if(!defined($host)) {
     chomp($host);
 }
 
-# Use version based links in production sites, mtime based links in dev sites (see redmine #3170)
+# Use version based copies in production sites, mtime based links in dev sites (see redmine #3170 and 5104).
 if($forceVersionNumbers) {
     $useMtimes = 0;
 } else {
@@ -88,56 +95,105 @@ chdir($destDir) || die "Couldn't chdir into '$destDir'; err: $!";
 
 for my $file (@ARGV)
 {
-    if(!$exclude{$file}) {
-        my @stat = stat("$cwd/$file") or die "Couldn't stat '$file'; err: $!";
+    if(!$seen{$file} && !$exclude{$file}) {
+        $seen{$file} = 1;
+        my $srcFile = "$cwd/$file";
+        my @stat = stat($srcFile) or die "Couldn't stat '$srcFile'; err: $!";
         my $mtime = $stat[9];
-        
-        # update destination file as appropriate
-        my $update = 0;
-        my $destFile = $file;
-        if(-e $destFile) {
-            my @destStat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
-            $update = ($destStat[9] < $mtime);
+        my ($prefix, $suffix);
+        if($file =~ /(.+)\.([a-z]+)$/) {
+            $prefix = $1;
+            $suffix = $2;
         } else {
-            $update = 1;
-        }
-        if($update) {
-            if (-e $destFile) {
-                unlink($destFile) || die "Couldn't unlink $destFile'; err: $!";
-            }
-            if($debug) {
-                print STDERR "cp -p $cwd/$file $destFile\n";
-            }
-            !system("cp -p $cwd/$file $destFile") || die "Couldn't cp $cwd/file to $destFile: err: $!";
+            die "Couldn't parse prefix and suffix out of file '$file'";
         }
 
-        if($file =~ /(.+)\.([a-z]+)$/) {
-            my $prefix = $1;
-            my $suffix = $2;
+        if($useMtimes) {
+            # On dev machine, we copy file to apache dir and then create a mtime versioned softlink to this file.
+
+            my $update = 0;
+            my $exists = 0;
+            my $destFile = $file;
+            if(-e $destFile) {
+                my @destStat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
+                $update = ($destStat[9] < $mtime);
+                $exists = 1;
+            } else {
+                $update = 1;
+            }
+            $update = $update || $force;
+            if($update) {
+                if ($exists) {
+                    unlink($destFile) || die "Couldn't unlink $destFile'; err: $!";
+                }
+                if($debug) {
+                    print STDERR "cp -p $srcFile $destFile\n";
+                }
+                !system("cp -p $srcFile $destFile") || die "Couldn't cp $srcFile to $destFile: err: $!";
+            }
+
             # make sure time is right, in case file; file might have been newer,
             # speculation that cp -p silently failed if user doesn't own destDir
             @stat = stat($destFile) or die "Couldn't stat '$destFile'; err: $!";
             $mtime = $stat[9];
 
             my $softLink = $file;
-            if($useMtimes) {
-                $softLink =~ s/\.${suffix}$/-$mtime.${suffix}/;
-            } else {
-                $softLink =~ s/\.${suffix}$/-v$cgiVersion.${suffix}/;
-            }
+            $softLink =~ s/\.$suffix$/-$mtime.$suffix/;
+
             # Delete obsolete symlinks
             for my $f (@destFiles) {
-                if(($useMtimes && $f =~ /^$prefix-\d+\.$suffix$/) || ($useMtimes && $f =~ /^$prefix-v\d+\.$suffix$/)) {
+                if($f =~ /^$prefix-\d+\.$suffix$/ || $f =~ /^$prefix-v\d+\.$suffix$/) {
                     if($f ne $softLink) {
                         print STDERR "Deleting old soft-link $f\n" if($debug);
-                        unlink($f) || die "Couldn't unlink obsolete softlink '$softLink'; err: $!";
+                        unlink($f) || die "Couldn't unlink obsolete softlink '$f'; err: $!";
                     }
                 }
             }
             # create new symlink
             if(!(-l "$softLink")) {
-                print STDERR "ln -s $softLink\n" if($debug);
-                !system("ln -s $file $softLink") || die "Couldn't ln -s $file; err: $!";
+                my $cmd = "ln -s $file $softLink";
+                print STDERR "cmd: $cmd\n" if($debug);
+                !system($cmd) || die "Couldn't $cmd; err: $!";
+            }
+        } else {
+            # On production machines, we make a copy of git file with the CGI version burned in (see redmine #5104).
+            # We also copy over a non-versioned copy for use by static files.
+            my $versionedFile = $file;
+            $versionedFile =~ s/\.$suffix$/-v$cgiVersion.$suffix/;
+            for my $destFile ($file, $versionedFile) {
+                my $update = 0;
+                my $exists = 0;
+                if(-e $destFile) {
+                    my @destStat = stat("$destFile") or die "Couldn't stat '$destFile'; err: $!";
+                    $update = ($destStat[9] < $mtime);
+                    $exists = 1;
+                } else {
+                    $update = 1;
+                }
+                $update = $update || $force;
+                if($update) {
+                    # delete obsolete files
+                    for my $f (@destFiles) {
+                        if(-e $f && $f =~ /^$prefix-v\d+\.$suffix$/) {
+                            if($f ne $destFile) {
+                                print STDERR "Deleting old version of file $file: '$f'\n" if($debug);
+                                unlink($f) || die "Couldn't unlink obsolete versioned file '$f'; err: $!";
+                            }
+                        }
+                    }
+                    if($exists) {
+                        unlink($destFile) || die "Couldn't unlink '$destFile'";
+                    }
+                    if($minify && $suffix eq 'js') {
+                        my $cmd = "/usr/bin/java -jar $minifyJar $srcFile -o $destFile";
+                        print STDERR "cmd: $cmd\n" if($debug);
+                        !system($cmd) || die "Couldn't run cmd '$cmd': err: $!";
+                    } else {
+                        my $cmd = "cp -p $srcFile $destFile";
+                        print STDERR "cmd: $cmd\n" if($debug);
+                        !system($cmd) || die "Couldn't $cmd; err: $!";
+                    }
+                }
             }
         }
     }
