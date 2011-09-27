@@ -72,6 +72,7 @@ static struct optionSpec options[] = {
    {"tileSize", OPTION_INT},
    {"stepSize", OPTION_INT},
    {"mask", OPTION_STRING},
+   {"minSize", OPTION_INT},
    {"maxSize", OPTION_INT},
    {"minPerfect", OPTION_INT},
    {"minGood", OPTION_INT},
