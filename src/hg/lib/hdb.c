@@ -953,7 +953,7 @@ else
     }
 }
 
-void hNibForChromFromPath(char *nibPath, char *db, char *chromName, 
+void hNibForChromFromPath(char *nibPath, char *db, char *chromName,
 			  char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome, given a nib file path. */
 {
@@ -1015,7 +1015,7 @@ hNibForChrom(db, chrom, fileName);
 return hFetchSeqMixed(fileName, chrom, start, end);
 }
 
-struct dnaSeq *hChromSeqMixedFromPath(char *nibPath, char *db, char *chrom, 
+struct dnaSeq *hChromSeqMixedFromPath(char *nibPath, char *db, char *chrom,
 				      int start, int end)
 /* Return mixed case (repeats in lower case) DNA from chromosome, given an
  * input nib path. */
@@ -1033,7 +1033,7 @@ hNibForChrom(db, chrom, fileName);
 return hFetchSeq(fileName, chrom, start, end);
 }
 
-struct dnaSeq *hChromSeqFromPath(char *nibPath, char *db, char *chrom, 
+struct dnaSeq *hChromSeqFromPath(char *nibPath, char *db, char *chrom,
 				 int start, int end)
 /* Return lower case DNA from chromosome. */
 {
@@ -3832,6 +3832,7 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
+#define HGAPI_NEEDS_THIS
 #ifdef HGAPI_NEEDS_THIS
 if (isHubTrack(track))
     return tdbForTrack(db, track,NULL);
