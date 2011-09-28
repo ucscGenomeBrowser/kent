@@ -981,7 +981,7 @@ chainOne $(path1)
     ln -s blastz.melGal1.swap lastz.melGal1
 
 #######################################################################
-## 9-Way Multiz (DONE - 2011-05-13 - Hiram)
+## 9-Way Multiz (DONE - 2011-09-28 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/xenTro3/bed/multiz9way
     cd /hive/data/genomes/xenTro3/bed/multiz9way
@@ -1047,13 +1047,13 @@ xenTro3.9way.nh > xenTro3.commonNames.9way.nh
 #                                   chainAnoCar2Link         chain linearGap
 #    distance                    on xenTro3  on other     minScore
 #  1  1.532 - turkey melGal1     (%  4.20) (%  5.24)       5000     loose
-#  2  1.550 - opossum monDom5    (%  4.56) (%  4.09)       5000     loose
-#  3  1.598 - chicken galGal3    (%  5.19) (%  3.55)       5000     loose
-#  4  1.622 - lizard anoCar2     (%  4.98) (%  3.36)       5000     loose
-#  5  1.632 - human hg19         (%  6.76)       5000     loose
-#  6  1.845 - mouse mm9          (%  3.14) (% 12.54)       5000     loose
-#  7  1.852 - rat rn4            (%  3.14) (% 12.54)       5000     loose
-#  8  2.046 - zebrafish danRer7  (%  3.14) (% 12.54)       5000     loose
+#  2  1.550 - opossum monDom5    (%  5.49) (%  2.14)       5000     loose
+#  3  1.598 - chicken galGal3    (%  4.73) (%  5.27)       5000     loose
+#  4  1.622 - lizard anoCar2     (%  6.78) (%  5.11)       5000     loose
+#  5  1.632 - human hg19         (%  6.69) (%  3.04)       5000     loose
+#  6  1.845 - mouse mm9          (%  6.61) (%  3.13)       5000     loose
+#  7  1.852 - rat rn4            (%  5.49) (%  2.57)       5000     loose
+#  8  2.046 - zebrafish danRer7  (%  7.11) (%  6.51)       5000     loose
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
@@ -1075,7 +1075,7 @@ do
     echo "${D}"
     mkdir $D
     cd $D
-    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/xenTro3.${D}.synNet.maf.gz"
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/xenTro3.${D}.maf.gz"
     mafSplit -byTarget -useHashedName=8 /dev/null . \
 	../../../lastz.${D}/mafNet/xenTro3.${D}.net.maf.gz
     cd ..
@@ -1084,7 +1084,7 @@ done
     # construct a list of all possible maf file names.
     # they do not all exist in each of the species directories
     find . -type f | wc -l
-    # 1536
+    # 2048
     find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
     wc -l maf.list
     # 256 maf.list
@@ -1147,15 +1147,15 @@ popd > /dev/null
     ln -s ../../mafSplit/maf.list maf.list
     ssh swarm
     cd /hive/data/genomes/xenTro3/bed/multiz9way/splitRun/run
-    gensub2 maf.list single template jobList
-    tac jobList > smallJobsFirst
-    para -ram=8g create smallJobsFirst
-# Completed: 484 of 484 jobs
-# CPU time in finished jobs:     370423s    6173.72m   102.90h    4.29d  0.012 y
-# IO & Wait Time:                 27319s     455.32m     7.59h    0.32d  0.001 y
-# Average job time:                 822s      13.70m     0.23h    0.01d
-# Longest finished job:           31994s     533.23m     8.89h    0.37d
-# Submission to last job:         32007s     533.45m     8.89h    0.37d
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    para -ram=8g create jobsList
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:      14427s     240.45m     4.01h    0.17d  0.000 y
+# IO & Wait Time:                  1927s      32.12m     0.54h    0.02d  0.000 y
+# Average job time:                  64s       1.06m     0.02h    0.00d
+# Longest finished job:             280s       4.67m     0.08h    0.00d
+# Submission to last job:          1536s      25.60m     0.43h    0.02d
 
     # assemble into a single maf file
     cd /hive/data/genomes/xenTro3/bed/multiz9way
@@ -1166,7 +1166,7 @@ do
 done >> multiz9way.maf
     tail -1 splitRun/maf/001.maf >> multiz9way.maf
 
-# -rw-rw-r-- 1 1237537614 May 13 16:13 multiz9way.maf
+# -rw-rw-r--  1 1524521286 Sep 28 13:28 multiz9way.maf
 
     # Load into database
     ssh hgwdev
@@ -1176,21 +1176,200 @@ done >> multiz9way.maf
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf xenTro3 multiz9way
     #	Indexing and tabulating /gbdb/xenTro3/multiz9way/multiz9way.maf
-    #	Loaded 2182259 mafs in 1 files from /gbdb/xenTro3/multiz9way
-    #	real    0m48.824s
+    #	Loaded 2591342 mafs in 1 files from /gbdb/xenTro3/multiz9way
+    #	real    1m4.383s
 
     time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 xenTro3 multiz9waySummary \
 	/gbdb/xenTro3/multiz9way/multiz9way.maf
-    #	Created 623115 summary blocks from 4606157 components and 2182259 mafs
+    #	Created 516059 summary blocks from 5782695 components and 2591342 mafs
     #	from /gbdb/xenTro3/multiz9way/multiz9way.maf
-    #	real    0m38.445s
+    #	real    1m2.197s
 
     wc -l multiz9way*.tab
-    #	2182259 multiz9way.tab
-    #	623115 multiz9waySummary.tab
-    #	2805374 total
+    #	2591342 multiz9way.tab
+    #	516059 multiz9waySummary.tab
+    #	3107401 total
 
     rm multiz9way*.tab
 
 #######################################################################
+# GAP ANNOTATE MULTIZ9WAY MAF AND LOAD TABLES (DONE - 2011-09-28 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir -p /hive/data/genomes/xenTro3/bed/multiz9way/anno/mafSplit
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/anno/mafSplit
+    time mafSplit -byTarget -useFullSequenceName \
+	/dev/null . ../../multiz9way.maf
+    #	real    0m53.756s
+
+    ls | wc
+    #	9202    9202  119622
+
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/anno
+    # a couple of these do not yet have an N.bed file
+    for DB in xenTro3 melGal1 anoCar2
+do
+    cd /hive/data/genomes/${DB}
+    twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+done
+
+for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    ssh swarm
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/anno
+    mkdir result
+    # NEXT TIME: this template should have a check out exists+ statement
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/xenTro3/xenTro3.2bit result/$(file1)
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls mafSplit/*.maf > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 9202 of 9202 jobs
+# CPU time in finished jobs:       4291s      71.52m     1.19h    0.05d  0.000 y
+# IO & Wait Time:                 24581s     409.68m     6.83h    0.28d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:           146s       2.43m     0.04h    0.00d
+
+    # verify all result files have some content, look for 0 size files:
+    find . -type f -size 0
+    # should see none
+
+    # combine into one file
+    head -q -n 1 result/GL172637.maf > xenTro3.9way.maf
+    for F in result/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> xenTro3.9way.maf
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/GL172637.maf >> xenTro3.9way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> xenTro3.9way.maf
+
+    # Load into database
+    rm /gbdb/xenTro3/multiz9way/multiz9way.maf   # remove old symlink
+    ln -s `pwd`/xenTro3.9way.maf /gbdb/xenTro3/multiz9way/multiz9way.maf
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf xenTro3 multiz9way
+    #	Loaded 2929343 mafs in 1 files from /gbdb/xenTro3/multiz9way
+    #	real    1m21.568s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 xenTro3 multiz9waySummary \
+	/gbdb/xenTro3/multiz9way/multiz9way.maf
+    #	Created 516059 summary blocks from 5782695 components and 2929343 mafs
+    #	from /gbdb/xenTro3/multiz9way/multiz9way.maf
+    #	real    1m6.705s
+
+    wc -l multiz9way*.tab
+    #	2929343 multiz9way.tab
+    #	516059 multiz9waySummary.tab
+    #	3445402 total
+
+    rm multiz9way*.tab
+
+#########################################################################
+# MULTIZ9WAY MAF FRAMES (DONE - 2011-05-16 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro3/bed/multiz9way/frames
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/frames
+    mkdir genes
+
+    #	we get more annotations using the ensGene on mm9 and hg19
+    #	instead of knownGene, so, using ensGene for hg19 and mm9
+
+xenTro3	ensGene
+hg19	knownGene
+mm9	knownGene
+rn4	rgdGene2
+monDom5	ensGene
+melGal1	ensGene
+galGal3	ensGene
+anoCar2	ensGene
+danRer7	ensGene
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+for qDB in xenTro3 monDom5 melGal1 galGal3 anoCar2 danRer7
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # if you were using knownGene for mm9 hg19
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    for qDB in mm9 hg19
+    do
+      echo hgsql -N -e \"'select * from 'knownGene\;\" ${qDB}
+      hgsql -N -e "select * from knownGene" ${qDB} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+    done
+
+      hgsql -N -e "select * from rgdGene2" rn4 | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/rn4.gp.gz
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/anoCar2.gp.gz: 17757
+# genes/danRer7.gp.gz: 25874
+# genes/galGal3.gp.gz: 16491
+# genes/hg19.gp.gz: 20709
+# genes/melGal1.gp.gz: 14040
+# genes/mm9.gp.gz: 20905
+# genes/monDom5.gp.gz: 19188
+# genes/rn4.gp.gz: 18093
+# genes/xenTro3.gp.gz: 18416
+
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/frames
+    time (cat ../anno/xenTro3.9way.maf \
+	| nice -n +19 genePredToMafFrames xenTro3 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz9way.mafFrames.gz)
+    #	real    2m22.546s
+
+    # verify there are frames on everything:
+    zcat multiz9way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	279231 anoCar2
+    #	372399 danRer7
+    #	258019 galGal3
+    #	341339 hg19
+    #	249007 melGal1
+    #	322663 mm9
+    #	257623 monDom5
+    #	214301 rn4
+    #	191614 xenTro3
+
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/frames
+    time hgLoadMafFrames xenTro3 multiz9wayFrames multiz9way.mafFrames.gz
+    #	real    0m21.425s
+
+#########################################################################
