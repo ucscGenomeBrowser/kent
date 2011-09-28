@@ -38599,7 +38599,7 @@ fileName wgEncodeSydhTfbsK562NfyaStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
-md5sum b379f9fa97957cc386f4e2e727d0e107
+md5sum 25d59cf9c08f567235cf89b6c5c72aeb
 project wgEncode
 setType exp
 subId 4342
@@ -38745,7 +38745,7 @@ fileName wgEncodeSydhTfbsK562NfybStdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
-md5sum 19ec6fdfc335cf1f0c6cafc322310f7f
+md5sum 4a56cf0ff6c926957a6f035dcf4eaa3f
 project wgEncode
 setType exp
 subId 4410
@@ -48307,4 +48307,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1690552178
+# MAGIC: -1022646839
