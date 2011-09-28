@@ -4,22 +4,22 @@ track wgEncodeUncBsuProt
 compositeTrack on
 superTrack wgEncodeProtGenoSuper dense
 shortLabel UNC/BSU ProtGeno
-longLabel ENCODE UNC/BSU Proteogenomics
+longLabel Proteogenomics from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
-subGroup1 cellType Cell_Line 1GM12878=GM12878 (Tier 1) 1K562=K562 (Tier 1)
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)
 subGroup2 localization Localization cytosol=cytosol membraneFraction=membrane mito=mitochondria nucleus=nucleus 
 #subGroup3 view View Signal=Signal RawSignal=RawSignal
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ 
 fileSortOrder cell=Cell_Line localization=Localization view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
-controlledVocabulary encode/cv.ra cellType localization
+controlledVocabulary encode/cv.ra cellType=cell localization=localization
 dragAndDrop subTracks
 priority 0
-type bed 3
+type bed 6 +
 noInherit on
 useScore 1
 wgEncode 1
-scoreFilter 500
+scoreFilter 200
 scoreFilterLimits 200:1000
 visibility hide
 	
@@ -83,7 +83,7 @@ visibility hide
 	       	shortLabel GM12878 mito
 	        longLabel GM12878 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU
 	        subGroups cellType=1GM12878 localization=mito
-	       	visibility full
+	        visibility full
 	        type peptideMapping
 	        origAssembly hg19
 	        color 153,38,0
