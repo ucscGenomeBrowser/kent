@@ -1373,3 +1373,125 @@ done
     #	real    0m21.425s
 
 #########################################################################
+# Phylogenetic tree from 9-way (DONE - 2011-09-28 - Hiram)
+    # this is a chancy operation with this business.  These alignments are
+    #	too distant and not much of the gene sequence is matching.
+    mkdir /hive/data/genomes/xenTro3/bed/multiz9way/4d
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/4d
+
+    # the split annotated maf's are in:
+    ../anno/result/*.maf
+
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/4d
+
+    # using ensGene for xenTro3, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql xenTro3 -Ne \
+    "select * from ensGene WHERE cdsEnd > cdsStart;" | cut -f 2-20 \
+	> ensGene.gp
+    #	22705 ensGene.gp
+
+    genePredSingleCover ensGene.gp stdout | sort > ensGeneNR.gp
+    wc -l ensGeneNR.gp
+    #	18416 ensGeneNR.gp
+
+    ssh encodek
+    mkdir /hive/data/genomes/xenTro3/bed/multiz9way/4d/run
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/xenTro3/bed/multiz9way"
+set c = $1
+set infile = $r/anno/result/$2
+set outfile = $3
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\txenTro3.$c\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/xenTro3/bed/multiz9way/anno/result/*.maf \
+	| sed -e "s#.*multiz9way/anno/result/##" \
+	> maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # the tac puts the quick jobs at the front
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check
+    para -maxJob=5 push
+    para time
+    # there are numerous problems in some of the result.  Not a whole lot
+    #	of sequence is matching in these distant organisms
+# Completed: 9143 of 9202 jobs
+# Crashed: 30 jobs
+# Other count: 29 jobs
+# CPU time in finished jobs:        711s      11.85m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                 23273s     387.89m     6.46h    0.27d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               7s       0.12m     0.00h    0.00d
+# Submission to last job:          2270s      37.83m     0.63h    0.03d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    ls -og mfa | awk '$3 == 1' > empty.list
+    sed -e "s#^#mfa/##" empty.list | xargs rm -f
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #	>xenTro3
+    #	>hg19
+    #	>mm9
+    #	>rn4
+    #	>monDom5
+    #	>melGal1
+    #	>galGal3
+    #	>anoCar2
+    #	>danRer7
+
+    # tree-commas.nh:
+#((xenTro3,(((hg19,(mm9, rn4)),monDom5), ((melGal1,galGal3), anoCar2))),danRer7)
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ../tree-commas.nh 4d.all.mfa
+    #	real    2m10.469s
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+    # TREE: ((xenTro3:0.678022,(((hg19:0.160837,(mm9:0.0938355,rn4:0.110316):0.205024):0.213345,monDom5:0.346247):0.158444,((melGal1:0.0616202,galGal3:0.0595626):0.332209,anoCar2:0.500881):0.098368):0.212664):0.492003,danRer7:0.492003);
+
+    # it actually looks pretty good as a tree estimate ...
+
+#########################################################################
