@@ -163,7 +163,7 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.ra beta,public
 include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.new.ra
+include wgEncodeSydhTfbs.ra
 #include wgEncodeSydhTfbs.ra beta,public
 
 # U Chicago TFBS (wrangler: Venkat)
