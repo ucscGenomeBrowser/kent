@@ -45,6 +45,7 @@ errAbort(
   "   -as=fields.as - If have non-standard fields, it's great to put a definition\n"
   "                   of each field in a row in AutoSql format here.\n"
   "   -rgbField=N  - the Nth field is a comma separated R,G,B triple.\n"
+  "                  For the usual itemRgb/reserved bed field this is 9.\n"
   "   -unc - If set, do not use compression.\n"
   "   -tabs - If set, expect fields to be tab separated, normally\n"
   "           expects white space separator.\n"

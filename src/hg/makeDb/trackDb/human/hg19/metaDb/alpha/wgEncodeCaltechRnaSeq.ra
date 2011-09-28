@@ -14,7 +14,7 @@ dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -41,7 +41,7 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -224,7 +224,7 @@ dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -251,7 +251,7 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -378,7 +378,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -406,7 +406,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -798,7 +798,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -826,7 +826,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -1010,7 +1010,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
@@ -1220,7 +1220,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
@@ -1400,7 +1400,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -1427,7 +1427,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -1816,7 +1816,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -1843,7 +1843,7 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -2026,7 +2026,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -2053,7 +2053,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -2080,7 +2080,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -2652,7 +2652,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -2679,7 +2679,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -2706,7 +2706,7 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -2968,7 +2968,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -2995,7 +2995,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -3178,7 +3178,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -3205,7 +3205,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -3332,7 +3332,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -3360,7 +3360,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -3388,7 +3388,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -3416,7 +3416,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -4172,7 +4172,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -4200,7 +4200,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -4228,7 +4228,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -4256,7 +4256,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -4596,7 +4596,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
@@ -4806,7 +4806,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
@@ -5036,7 +5036,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -5063,7 +5063,7 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -5448,7 +5448,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -5475,7 +5475,7 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -5659,7 +5659,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -5686,7 +5686,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -5869,7 +5869,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -5896,7 +5896,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -6023,7 +6023,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -6051,7 +6051,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -6443,7 +6443,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -6471,7 +6471,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -6705,7 +6705,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -6733,7 +6733,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -6760,7 +6760,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -6788,7 +6788,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -6971,7 +6971,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -6998,7 +6998,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -7125,7 +7125,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -7153,7 +7153,7 @@ dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -7545,7 +7545,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -7573,7 +7573,7 @@ dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -7806,7 +7806,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -7832,7 +7832,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -8206,7 +8206,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -8232,7 +8232,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -8457,7 +8457,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -8484,7 +8484,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -8667,7 +8667,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -8694,7 +8694,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -8821,7 +8821,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -8849,7 +8849,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -9241,7 +9241,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -9269,7 +9269,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -9503,7 +9503,7 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -9530,7 +9530,7 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -9713,7 +9713,7 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -9740,7 +9740,7 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -9867,7 +9867,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -9895,7 +9895,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -10285,7 +10285,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -10313,7 +10313,7 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -10546,7 +10546,7 @@ dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -10725,7 +10725,7 @@ dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -10937,7 +10937,7 @@ dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -11071,7 +11071,7 @@ dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -11176,7 +11176,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -11202,7 +11202,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -11228,7 +11228,7 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -11776,7 +11776,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -11802,7 +11802,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -11828,7 +11828,7 @@ dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -12129,7 +12129,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
-fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -12234,7 +12234,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
-fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
 localization cell
@@ -12311,7 +12311,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -12338,7 +12338,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -12727,7 +12727,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -12754,7 +12754,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -12986,7 +12986,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -13012,7 +13012,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -13386,7 +13386,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
@@ -13412,7 +13412,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
