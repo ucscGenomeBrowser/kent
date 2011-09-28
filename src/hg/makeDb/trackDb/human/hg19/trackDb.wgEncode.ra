@@ -11,6 +11,7 @@ include wgEncodeGencodeV7.ra
 # UNC/BSU Proteogenomics (wrangler: cline,cricket)
 include wgEncodeUncBsuProt.ra beta
 include wgEncodeUncBsuProt.new.ra alpha
+include wgEncodeUncBsuProtFasp.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra
