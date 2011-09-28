@@ -329,7 +329,7 @@ if (mdbObjs != NULL)
     if (count <= 0)
         retCode = 1;
 
-    if (testIt && encodeExp == NULL)
+    if (testIt && !deleteIt && encodeExp == NULL)
         {
         int invalids = mdbObjsValidate(mdbObjs,TRUE);
         int varsCnt=mdbObjCount(mdbObjs,FALSE);
