@@ -3816,11 +3816,11 @@ int dimCount=0,di;
 for(di=0;di<membersForAll->dimMax;di++) { if (membersForAll->members[di]) dimCount++; }
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
-#ifdef SUBTRACK_CFG
-boolean useDragAndDrop = (sortOrder == NULL); // Only support drag and drop when not sortable table
-#else///ifndef SUBTRACK_CFG
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
-#endif///ndef SUBTRACK_CFG
+#ifdef SUBTRACK_CFG
+if (useDragAndDrop)
+    useDragAndDrop = (sortOrder == NULL); // Only support drag and drop when not sortable table
+#endif///def SUBTRACK_CFG
 char buffer[SMALLBUF];
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
