@@ -61,7 +61,7 @@ function _matSelectViewForSubTracks(obj,view)
                     // Check the subCBs that belong to this view and checked matCBs
                     subCBsMatching.each( function (i) {
                         this.checked = true;
-                        matSubCBsetShadow(this);  // will update "subCfg" if needed
+                        matSubCBsetShadow(this,true);  // will update "subCfg" if needed
                         hideOrShowSubtrack(this);
                     });
                 });
@@ -116,7 +116,7 @@ function matSubCbClick(subCB)
         subCB.checked = true;
         fauxDisable(subCB,false,""); // enable and get rid of message
     }
-    matSubCBsetShadow(subCB);
+    matSubCBsetShadow(subCB,false);
     hideOrShowSubtrack(subCB);
     // When subCBs are clicked, 3-state matCBs may need to be set
     var classes = matViewClasses('hidden');
@@ -199,8 +199,8 @@ function _matSetMatrixCheckBoxes(state)
     $( subCbs ).each( function (i) {
         if (this.checked != state) {
             this.checked = state;
-            $(this).change() // NOTE: if "subCfg" then 'change' event will update it
-            matSubCBsetShadow(this);
+            matSubCBsetShadow(this,false);
+            $(this).change();  // NOTE: if "subCfg" then 'change' event will update it
         }
     });
     if(state)
@@ -292,7 +292,7 @@ function matSubCBsEnable(state)
             fauxDisable(this,true, 'view is hidden');
             $(this).parent().attr('cursor','pointer');
         }
-        matSubCBsetShadow(this);    // will update "subCfg" if needed
+        matSubCBsetShadow(this,true);    // will update "subCfg" if needed
         hideOrShowSubtrack(this);
     });
 
@@ -304,13 +304,13 @@ function matSubCBcheckOne(subCB,state)
 // setting a single subCB may cause it to appear/disappear
     if (subCB.checked != state) {
         subCB.checked = state;
+        matSubCBsetShadow(subCB,false);
         $(subCB).change();  // NOTE: if "subCfg" then 'change' event will update it
-        matSubCBsetShadow(subCB);
         hideOrShowSubtrack(subCB);
     }
 }
 
-function matSubCBsetShadow(subCB)
+function matSubCBsetShadow(subCB,triggerChange)
 {
 // Since CBs only get into cart when enabled/checked, the shadow control enables cart to know other states
 //  will update "subCfg" if needed
@@ -320,7 +320,7 @@ function matSubCBsetShadow(subCB)
     //if(subCB.disabled)
     if (isFauxDisabled(subCB,true))
         shadowState -= 2;
-    var fourWay = normed($("input.fourWay[name='boolshad\\."+subCB.name+"']"));
+    var fourWay = normed($("input.cbShadow[name='boolshad\\."+subCB.name+"']"));
     if (fourWay == undefined && subCB.name != undefined) {
         fourWay = normed($("input.cbShadow#boolshad_-"+subCB.id));  // subCfg noname version specific
         if (fourWay == undefined)
@@ -334,7 +334,8 @@ function matSubCBsetShadow(subCB)
         $(fourWay).val(shadowState);
         if (typeof(subCfg) !== "undefined") {
             subCfg.enableCfg(subCB,null,(shadowState == 1));
-            /////$(subCB).change(); // 'change' event will update "subCfg"  // FIXME: Is this needed??
+            if (triggerChange)
+                $(subCB).change(); // 'change' event will update "subCfg"  // FIXME: Is this needed?  YES.  But not on direct cb click
         }
     }
 }

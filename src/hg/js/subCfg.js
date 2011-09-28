@@ -34,6 +34,7 @@
 // - DECIDED: Make vis changes "reshape" composite!  NOTE: Do we want to do this???   I am against this as too disruptive.  We may want to end reshaping in CGIs as well!
 // - DECIDED: Decide on a name (scm, subCfg, ? ) and then make a module file like ddcl.js.
 // - SOLVED: subtrack selected count is wrong!
+// - SOLVED: matCb unclick leaves vis/wrench enabled.  Vis/Wrench is usually only enabled for checked and visible.
 //  - Non-configurable will need to show/change vis independently! (separate vis control but no wrench)
 //  - Speed up massive composites!  HAIB TFBS SYDH TFBS
 //  - Verify all composites work (conservation and SNPs are likely failures)
@@ -364,7 +365,7 @@ var subCfg = { // subtrack config module.
         else
             fauxDisable(subCb,true, "View is hidden");
         subCfg.markChange(null,subCb);
-        subCfg.enableCfg(subCb,undefined,check);
+        subCfg.enableCfg(subCb,check);
         matSubCbClick(subCb); // needed to mark matCBs, shadow and show/hide
     },
 
@@ -387,8 +388,8 @@ var subCfg = { // subtrack config module.
             });
         } else {// selects and inputs are easy
             var parentVal = $(parentObj).val();
-            var updateDdcl = ($(parentObj).hasClass('filterBy') || $(parentObj).hasClass('filterComp'));
-            $(children).each(function (i) {
+            var updateDdcl = ($(parentObj).hasClass('filterBy'));// || $(parentObj).hasClass('filterComp'));
+            $(children).each(function (i) {                      // Should never be filterComp
                 $(this).val(parentVal);
                 subCfg.clearChange(this);
                 if (updateDdcl)
@@ -613,12 +614,9 @@ var subCfg = { // subtrack config module.
         $(cfg).css({ width: myWidth+'px',position: 'relative', left: shiftLeft + 'px' });
 
         // Setting up filterBys must follow show because sizing requires visibility
-        $(cfg).find('.filterBy,.filterComp').each( function(i) {
+        $(cfg).find('.filterBy').each( function(i) { // Should never be filterComp
             this.id = this.name.replace(/\./g,'_-'); // Must have id unique to page!
-            if ($(this).hasClass('filterComp'))
-                ddcl.setup(this);
-            else
-                ddcl.setup(this, 'noneIsAll');
+            ddcl.setup(this, 'noneIsAll');
         });
     },
 
@@ -691,20 +689,8 @@ var subCfg = { // subtrack config module.
         }
     },
 
-    enableCfg: function (subCb,subtrack,setTo)
+    enableCfg: function (subCb,setTo)
     { // Enables or disables subVis and wrench
-        if (subCb == undefined) {
-            if (subtrack == undefined || subtrack.length == 0) {
-                warn("DEBUG: subCfg.enableCfg() called without CB or subtrack.");
-                return false;
-            }
-            subCb = normed($("input[name='"+subtrack+"'_sel]"));
-            if (subCb == undefined) {
-                warn("DEBUG: subCfg.enableCfg() could not find CB for subtrack: "+subtrack);
-                return false;
-            }
-        }
-
         var td = normed($(subCb).parent('td'));
         if (td == undefined) {
             warn("DEBUG: subCfg.enableCfg() could not find TD for CB: "+subCb.name);
@@ -766,7 +752,7 @@ var subCfg = { // subtrack config module.
     },
 
     viewInit: function (viewTag)
-    { // unnames all view controls
+    { // sets up view controls for propagation
         // iterate through all matching controls and unname
         var tr = normed($('tr#tr_cfg_'+viewTag));
         if (tr == undefined) {
@@ -826,7 +812,10 @@ var subCfg = { // subtrack config module.
 
         // SubCBs will get renamed and on change will name them back.
         var subCbs = $('input.subCB');
-        $(subCbs).change( subCfg.markChange );
+        $(subCbs).change( function (e) {
+            subCfg.enableCfg(this, (this.checked && !isFauxDisabled(this, true)));
+            subCfg.markChange(e,this);
+        });
 
         // iterate through views
         var viewVis = $('select.viewDD');
@@ -846,7 +835,7 @@ var subCfg = { // subtrack config module.
         // Tricky for composite level controls.  Could wrap cfg controls in new div.
         // DO THIS AFTER Views
         // NOTE: excluding sortOrder and showCfg which are special cases we don't care about in subCfg
-        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']").not(".allOrOnly");
+        var compObjs = $('select,input').filter("[name^='"+subCfg.compositeName+"\\.'],[name^='"+subCfg.compositeName+"_']").not(".viewDD");
         if (compObjs.length > 0) {
             $(compObjs).each(function (i) {
                 if (this.type != 'hidden') {
