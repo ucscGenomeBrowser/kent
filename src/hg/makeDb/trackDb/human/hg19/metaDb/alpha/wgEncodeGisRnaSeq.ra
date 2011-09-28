@@ -16,7 +16,7 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000269
 expId 269
-fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam,wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.bai
 geoSampleAccession GSM672834
 grant Gingeras
 lab GIS
@@ -154,7 +154,7 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000270
 expId 270
-fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
+fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam,wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam.bai
 geoSampleAccession GSM672836
 grant Gingeras
 lab GIS
@@ -265,7 +265,7 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000271
 expId 271
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam,wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam.bai
 geoSampleAccession GSM672833
 grant Gingeras
 lab GIS
@@ -293,7 +293,7 @@ dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 dccAccession wgEncodeEH000271
 expId 271
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam,wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam.bai
 geoSampleAccession GSM672835
 grant Gingeras
 lab GIS
