@@ -61,7 +61,7 @@ function _matSelectViewForSubTracks(obj,view)
                     // Check the subCBs that belong to this view and checked matCBs
                     subCBsMatching.each( function (i) {
                         this.checked = true;
-                        matSubCBsetShadow(this);  // will update "scm" if needed
+                        matSubCBsetShadow(this);  // will update "subCfg" if needed
                         hideOrShowSubtrack(this);
                     });
                 });
@@ -111,8 +111,8 @@ function matSubCbClick(subCB)
 // Clicking/unclicking the corresponding matrix CB.  Also the
 // subtrack may be hidden as a result.
 
-    // NOTE: if "scm" then 'change' event will update it
-    if (isFauxDisabled(subCB,false)) { // disabled subCB is still clickable when "scm"
+    // NOTE: if "subCfg" then 'change' event will update it
+    if (isFauxDisabled(subCB,false)) { // disabled subCB is still clickable when "subCfg"
         subCB.checked = true;
         fauxDisable(subCB,false,""); // enable and get rid of message
     }
@@ -199,7 +199,7 @@ function _matSetMatrixCheckBoxes(state)
     $( subCbs ).each( function (i) {
         if (this.checked != state) {
             this.checked = state;
-            $(this).change() // NOTE: if "scm" then 'change' event will update it
+            $(this).change() // NOTE: if "subCfg" then 'change' event will update it
             matSubCBsetShadow(this);
         }
     });
@@ -292,7 +292,7 @@ function matSubCBsEnable(state)
             fauxDisable(this,true, 'view is hidden');
             $(this).parent().attr('cursor','pointer');
         }
-        matSubCBsetShadow(this);    // will update "scm" if needed
+        matSubCBsetShadow(this);    // will update "subCfg" if needed
         hideOrShowSubtrack(this);
     });
 
@@ -304,7 +304,7 @@ function matSubCBcheckOne(subCB,state)
 // setting a single subCB may cause it to appear/disappear
     if (subCB.checked != state) {
         subCB.checked = state;
-        $(subCB).change();  // NOTE: if "scm" then 'change' event will update it
+        $(subCB).change();  // NOTE: if "subCfg" then 'change' event will update it
         matSubCBsetShadow(subCB);
         hideOrShowSubtrack(subCB);
     }
@@ -313,16 +313,16 @@ function matSubCBcheckOne(subCB,state)
 function matSubCBsetShadow(subCB)
 {
 // Since CBs only get into cart when enabled/checked, the shadow control enables cart to know other states
-//  will update "scm" if needed
+//  will update "subCfg" if needed
     var shadowState = 0;
     if(subCB.checked)
         shadowState = 1;
     //if(subCB.disabled)
     if (isFauxDisabled(subCB,true))
         shadowState -= 2;
-    var fourWay = normed($("input.fourWay#boolshad_-"+subCB.id));
+    var fourWay = normed($("input.fourWay[name='boolshad\\."+subCB.name+"']"));
     if (fourWay == undefined && subCB.name != undefined) {
-        fourWay = normed($("input.fourWay[name='boolshad\\."+subCB.name+"']"));
+        fourWay = normed($("input.cbShadow#boolshad_-"+subCB.id));  // subCfg noname version specific
         if (fourWay == undefined)
             fourWay = normed($("#"+subCB.name+"_4way"));  // FIXME: obsolete as soon as subCfg is working
     }
@@ -332,9 +332,9 @@ function matSubCBsetShadow(subCB)
     }
     if ($(fourWay).val() != shadowState.toString()) {
         $(fourWay).val(shadowState);
-        if (typeof(scm) !== "undefined") {
-            scm.enableCfg(subCB,null,(shadowState == 1));
-            $(subCB).change(); // 'change' event will update "scm"
+        if (typeof(subCfg) !== "undefined") {
+            subCfg.enableCfg(subCB,null,(shadowState == 1));
+            /////$(subCB).change(); // 'change' event will update "subCfg"  // FIXME: Is this needed??
         }
     }
 }
@@ -494,8 +494,8 @@ function matSubCBsSelected()
 // Displays visible and checked track count
     var counter = $('.subCBcount');
     if(counter != undefined) {
-        var subCBs =  $("input.subCB");
-        $(counter).text($(subCBs).filter(":enabled:checked").length + " of " +$(subCBs).length+ " selected");
+        var subCBs =  $("input.subCB");                   // subCfg uses fauxDisabled
+        $(counter).text($(subCBs).filter(":enabled:checked").not('.disabled').length + " of " +$(subCBs).length+ " selected");
     }
 }
 
@@ -1119,7 +1119,7 @@ function fauxDisable(obj,disable,title)
 {// Makes an obj appear disabled, but it isn't
  //  span.disabled & input.disabled is opacity 0.5
  //   div.disabled is border-color: gray; color: gray;
-    if ($(obj).hasClass('subCB') == false || typeof(scm) !== "undefined") {
+    if ($(obj).hasClass('subCB') == false || typeof(subCfg) !== "undefined") {
         if(disable) {
             if ($.browser.msie)
                 $(obj).css('opacity', '0.5');
@@ -1152,8 +1152,8 @@ $(document).ready(function()
 
         // If divs with class 'subCfg' then initialize the subtrack cfg code
         // NOTE: must be before any ddcl setup
-        if (typeof(scm) !== "undefined" && normed($("div.subCfg")) != undefined) {
-            scm.initialize();
+        if (typeof(subCfg) !== "undefined" && normed($("div.subCfg")) != undefined) {
+            subCfg.initialize();
         }
     }
 

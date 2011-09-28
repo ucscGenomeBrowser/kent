@@ -1530,7 +1530,12 @@ function tableSetPositions(table)
     var inputs = $(table).find("input.trPos");
     $( inputs ).each( function(i) {
         var tr = $( this ).closest('tr')[0];
-        $( this ).val( $(tr).attr('rowIndex') );
+        var trIx = $( tr ).attr('rowIndex').toString();
+        if ($( this ).val() != trIx) {
+            $( this ).val( trIx );
+            if (typeof(subCfg) !== "undefined")  // NOTE: couldn't get $(this).change() to work.
+                subCfg.markChange(null,this);    //       probably because this is input type=hidden!
+        }
     });
 }
 

@@ -3816,7 +3816,11 @@ int dimCount=0,di;
 for(di=0;di<membersForAll->dimMax;di++) { if (membersForAll->members[di]) dimCount++; }
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
+#ifdef SUBTRACK_CFG
+boolean useDragAndDrop = (sortOrder == NULL); // Only support drag and drop when not sortable table
+#else///ifndef SUBTRACK_CFG
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
+#endif///ndef SUBTRACK_CFG
 char buffer[SMALLBUF];
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
@@ -4079,11 +4083,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD %s",(visibleCB ? "":" disabled"),view); // view should be last!
         else
             safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",(visibleCB ? "":" disabled"));
-        #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='%s' style='width:65px;' onclick='return scm.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
+        #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='%s' style='width:65px;' onclick='return subCfg.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
         printf(SUBTRACK_CFG_VIS,subtrack->track,classList,subtrack->track,hStringFromTv(vis));
     if (cType != cfgNone)  // make a wrench
         {
-        #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return scm.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
+        #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return subCfg.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
         printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" disabled"),subtrack->track);
         }
 #endif///def SUBTRACK_CFG
