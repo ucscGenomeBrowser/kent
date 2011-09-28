@@ -1077,13 +1077,14 @@ wgEncode 1
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878Pol2StdPk
-        parent wgEncodeSydhTfbsViewPeaks on 
-        shortLabel GM78 Pol2 Std
-        longLabel GM12878 Pol2 Standard ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=POL2 cellType=1GM12878 control=std treatment=aNone
-        type narrowPeak
-        color 153,38,0
+        #pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878Pol2StdPk
+        #parent wgEncodeSydhTfbsViewPeaks on 
+        #shortLabel GM78 Pol2 Std
+        #longLabel GM12878 Pol2 Standard ChIP-Seq Peaks from ENCODE/SYDH
+        #subGroups view=Peaks factor=POL2 cellType=1GM12878 control=std treatment=aNone
+        #type narrowPeak
+        #color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsGm12878Pol3StdPk
@@ -1866,22 +1867,24 @@ wgEncode 1
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878NfkbIggrabPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 NKB IgR
-        longLabel GM12878 NFKB IgG-rab ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
-        type narrowPeak
-        color 153,38,0
+        #pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878NfkbIggrabPk
+        #parent wgEncodeSydhTfbsViewPeaks off
+        #shortLabel GM78 NKB IgR
+        #longLabel GM12878 NFKB IgG-rab ChIP-Seq Peaks from ENCODE/SYDH
+        #subGroups view=Peaks factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
+        #type narrowPeak
+        #color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 TNF NKB IgR
-        longLabel GM12878 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=NFKB cellType=1GM12878 control=IGGRAB treatment=TNFa
-        type narrowPeak
-        color 153,38,0
+        # pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
+        #parent wgEncodeSydhTfbsViewPeaks off
+        #shortLabel GM78 TNF NKB IgR
+        #longLabel GM12878 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
+        #subGroups view=Peaks factor=NFKB cellType=1GM12878 control=IGGRAB treatment=TNFa
+        #type narrowPeak
+        #color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
         # was wgEncodeSydhTfbsGm12878NfkbTnfaStdPk wong Wed Jul 13 12:02:10 2011
 
@@ -3440,41 +3443,45 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878NfkbIggrabSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 NKB IgR
-        longLabel GM12878 NFKB IgG-rab ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
-        type bigWig 0.000000 9094.099609
-        color 153,38,0
+        #pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878NfkbIggrabSig
+        #parent wgEncodeSydhTfbsViewSignal off
+        #shortLabel GM78 NKB IgR
+        #longLabel GM12878 NFKB IgG-rab ChIP-Seq Signal from ENCODE/SYDH
+        #subGroups view=Signal factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
+        #type bigWig 0.000000 9094.099609
+        #color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 TNF NKB IgR
-        longLabel GM12878 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=NFKB cellType=1GM12878 control=IGGRAB treatment=TNFa
-        type bigWig 0.000000 6696.200195
-        color 153,38,0
+        #pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
+        #parent wgEncodeSydhTfbsViewSignal off
+        #shortLabel GM78 TNF NKB IgR
+        #longLabel GM12878 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
+        #subGroups view=Signal factor=NFKB cellType=1GM12878 control=IGGRAB treatment=TNFa
+        #type bigWig 0.000000 6696.200195
+        #color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm12878NfkbTnfaStdSig wong Wed Jul 13 12:02:10 2011
 
-        track wgEncodeSydhTfbsGm12878Pol2IggmusSig
-        parent wgEncodeSydhTfbsViewSignal on 
-        shortLabel GM78 Pol2 IgM
-        longLabel GM12878 Pol2 IgG-mus ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=POL2 cellType=1GM12878 control=IGGMUS treatment=aNone
-        type bigWig 0.000000 21303.699219
-        color 153,38,0
+        #pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878Pol2IggmusSig
+        #parent wgEncodeSydhTfbsViewSignal on 
+        #shortLabel GM78 Pol2 IgM
+        #longLabel GM12878 Pol2 IgG-mus ChIP-Seq Signal from ENCODE/SYDH
+        #subGroups view=Signal factor=POL2 cellType=1GM12878 control=IGGMUS treatment=aNone
+        #type bigWig 0.000000 21303.699219
+        #color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878Pol2StdSig
-        parent wgEncodeSydhTfbsViewSignal on
-        shortLabel GM78 Pol2 Std
-        longLabel GM12878 Pol2 Standard ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=POL2 cellType=1GM12878 control=std treatment=aNone
-        type bigWig 0.000000 26789.000000
-        color 153,38,0
+        #pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878Pol2StdSig
+        #parent wgEncodeSydhTfbsViewSignal on
+        #shortLabel GM78 Pol2 Std
+        #longLabel GM12878 Pol2 Standard ChIP-Seq Signal from ENCODE/SYDH
+        #subGroups view=Signal factor=POL2 cellType=1GM12878 control=std treatment=aNone
+        #type bigWig 0.000000 26789.000000
+        #color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Pol3StdSig
