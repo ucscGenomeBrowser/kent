@@ -38702,6 +38702,7 @@ fileName wgEncodeSydhTfbsK562JundRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
 md5sum c3d30d5b5858c5ebb83ba80819aa208f
+objStatus revoked - lab requested revoke and replaced dataset with experiment that had a new control, thus no V2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -38727,6 +38728,7 @@ fileName wgEncodeSydhTfbsK562JundRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
 md5sum 217b024ab91a40533d4e50ce4addbc3a
+objStatus revoked - lab requested revoke and replaced dataset with experiment that had a new control, thus no V2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -38754,6 +38756,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum d6cc3d8a7de04fb89e2413675e096697,944e0b58c3915b04262201102fd9b816
+objStatus revoked - lab requested revoke and replaced dataset with experiment that had a new control, thus no V2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -38781,6 +38784,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum 772ef7d8d147921c16c2b1595bf4b9c8,a97bd6442f241bb9c03141c482f1a151
+objStatus revoked - lab requested revoke and replaced dataset with experiment that had a new control, thus no V2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -38806,6 +38810,7 @@ fileName wgEncodeSydhTfbsK562JundStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
 md5sum e071ba93971c9ec43b46ab6e69d10b6f
+objStatus revoked - lab requested revoke and replaced dataset with experiment that had a new control, thus no V2
 origAssembly hg18
 project wgEncode
 setType exp
@@ -38831,6 +38836,7 @@ fileName wgEncodeSydhTfbsK562JundStdSig.bigWig
 grant Snyder
 lab Yale
 md5sum 10463c5095a8a51d0a0f679bf35ae513
+objStatus revoked - lab requested revoke and replaced dataset with experiment that had a new control, thus no V2
 origAssembly hg18
 project wgEncode
 setType exp
@@ -49715,4 +49721,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1367963357
+# MAGIC: 1629185463
