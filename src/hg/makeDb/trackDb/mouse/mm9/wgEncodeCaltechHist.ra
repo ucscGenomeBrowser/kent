@@ -39,6 +39,7 @@ noInherit on
 	scoreFilterLimits 1:1000
 	scoreFilter 0
 	scoreMin 0
+	minGrayLevel 5
 
         track wgEncodeCaltechHistC2c12H3ac06599FCntrl32bMyc24hPcr2xPkRep1
         parent wgEncodeCaltechHistViewPeaks off
@@ -156,10 +157,9 @@ noInherit on
 	visibility full
 	#viewUi on
 	subTrack wgEncodeCaltechHist
-	viewLimits 0.2:15
+	viewLimits 0:1
 	autoScale off
 	maxHeightPixels 100:32:0
-	configurable on
 	windowingFunction mean+whiskers
 
         track wgEncodeCaltechHistC2c12H3ac06599FCntrl32bMyc24hPcr2xSigRep1

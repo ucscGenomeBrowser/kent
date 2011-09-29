@@ -39,6 +39,7 @@ noInherit on
     scoreFilterLimits 1:1000
     scoreFilter 0
     scoreMin 0
+	minGrayLevel 5
 
         track wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMybPcr1xPkRep1
         parent wgEncodeCaltechTfbsViewPeaks off
@@ -263,10 +264,9 @@ noInherit on
 	visibility full
 	#viewUi on
 	subTrack wgEncodeCaltechTfbs
-	viewLimits 0.2:15
+	viewLimits 0:1
 	autoScale off
 	maxHeightPixels 100:32:0
-	configurable on
 	windowingFunction mean+whiskers
 
         track wgEncodeCaltechTfbsC2c12Usf1FCntrl50bMybPcr1xSigRep1
