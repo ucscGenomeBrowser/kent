@@ -9715,12 +9715,12 @@ if (url != NULL && url[0] != 0)
           "select distinct locusLinkId from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
 	  itemName, chrom, chromStart, chromEnd);
     sr = sqlMustGetResult(conn, query);
-    if (sr != NULL)
+    row = sqlNextRow(sr);
+    if (row != NULL)
     	{
     	char *geneId;
-    	row = sqlNextRow(sr);
     	geneId = strdup(row[0]);
-    	sqlFreeResult(&sr);
+        sqlFreeResult(&sr);
 
     	safef(query, sizeof(query),
               "select distinct l.mrnaAcc from refLink l where locusLinkId = '%s' order by mrnaAcc asc", geneId);
@@ -9741,13 +9741,9 @@ if (url != NULL && url[0] != 0)
 	        }
             if (printedCnt >= 1) printf("<BR>\n");
 	    }
+        sqlFreeResult(&sr);
         }
-    else
-    	{
-	// skip if no RefSeq found
-    	sqlFreeResult(&sr);
-    	}
-
+    
     // show Related UCSC Gene links
     safef(query, sizeof(query),
           "select distinct kgId from kgXref x, refLink l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
