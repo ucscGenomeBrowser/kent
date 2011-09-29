@@ -11,12 +11,11 @@ subGroup5 control Control CNTRL32B=Control_32bp CNTRL36B=Control_36bp CNTRL50B=C
 subGroup6 treatment Treatment MYB=Myoblast MYC24H=Myocyte_24h MYC60H=Myocyte_60h MYC5D=Myocyte_5d MYC7D=Myocyte_7d
 subGroup7 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x
 subGroup8 rep Rep rep1=1 rep2=2 rep3=3
-dimensions dimensionX=cellType dimensionY=factor dimensionA=control dimensionB=treatment dimensionC=protocol dimensionD=rep
+dimensions dimensionX=cellType dimensionY=factor dimensionA=control dimensionB=treatment dimensionC=rep
 dimensionAchecked CNTRL32B,CNTRL50B,CNTRL36B
 dimensionBchecked MYB,MYC24H
-dimensionCchecked PCR1X,PCR2X
-dimensionDchecked rep1,rep2,rep3
-filterComposite dimensionA=multi dimensionB=multi dimensionC=multi dimensionD=multi
+dimensionCchecked rep1
+filterComposite dimensionA=multi dimensionB=multi dimensionC=multi 
 sortOrder cellType=+ factor=+ control=+ treatment=+ protocol=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control treatment=Treatment protocol=Protocol replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType factor sex control treatment protocol
