@@ -6,7 +6,9 @@ The composite track is wgEncodeUncBsuProt
 2 - table wgEncodeUncBsuProtK562MitoRaw does not exist, from filetype peptideMapping
 3 - table wgEncodeUncBsuProtK562NucleusRaw does not exist, from filetype peptideMapping
 4 - table wgEncodeUncBsuProtK562CytosolRaw does not exist, from filetype peptideMapping
-5 - table wgEncodeUncBsuProtK562MembranefractionRaw does not exist, from filetype peptideMapping
+5 - table wgEncodeUncBsuProtGm12878MitoRaw does not exist, from filetype peptideMapping
+6 - table wgEncodeUncBsuProtGm12878MembranefractionRaw does not exist, from filetype peptideMapping
+7 - table wgEncodeUncBsuProtK562MembranefractionRaw does not exist, from filetype peptideMapping
 ############################################################
 
 Categories of tables and files('):
@@ -18,8 +20,8 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 5
-    Files: 13
+    Tables: 7
+    Files: 17
     Gbdbs: 0
 
 A) Untouched Tables (0):
@@ -30,19 +32,25 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (5):
+C) New tables (7):
+wgEncodeUncBsuProtGm12878MembranefractionSig
+wgEncodeUncBsuProtGm12878MitoSig
 wgEncodeUncBsuProtGm12878NucleusSig
 wgEncodeUncBsuProtK562CytosolSig
 wgEncodeUncBsuProtK562MembranefractionSig
 wgEncodeUncBsuProtK562MitoSig
 wgEncodeUncBsuProtK562NucleusSig
 
-C') New files (10 downloadables, 0 gbdbs):
+C') New files (14 downloadables, 0 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/
     NOT on RR but must be placed in:
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/
 
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878MembranefractionRaw.peptideMapping.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878MembranefractionSig.peptideMapping.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878MitoRaw.peptideMapping.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878MitoSig.peptideMapping.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878NucleusRaw.peptideMapping.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtGm12878NucleusSig.peptideMapping.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUncBsuProt/release1/wgEncodeUncBsuProtK562CytosolRaw.peptideMapping.gz
