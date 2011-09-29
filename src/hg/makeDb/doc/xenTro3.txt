@@ -1743,3 +1743,259 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# phyloP for 7-way (DONE - 2011-09-29 - Hiram)
+    # run phyloP with score=LRT 
+    ssh encodek
+    mkdir /cluster/data/xenTro3/bed/multiz9way/consPhyloP
+    cd /cluster/data/xenTro3/bed/multiz9way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.495
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.495 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod 
+    #	BACKGROUND: 0.252500 0.247500 0.247500 0.252500 
+
+    #	following the pattern from panTro3 with grp: "all" (no other grp)
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/xenTro3/bed/multiz9way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$file1.wigFix $out
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$cName
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	5690 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/all
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise.  Either run on one of the small
+    #	klusters or use the -ram=8g on the para create
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+    para time > run.time
+# Completed: 5690 of 5690 jobs
+# CPU time in finished jobs:       9670s     161.17m     2.69h    0.11d  0.000 y
+# IO & Wait Time:                 38146s     635.76m    10.60h    0.44d  0.001 y
+# Average job time:                   8s       0.14m     0.00h    0.00d
+# Longest finished job:              63s       1.05m     0.02h    0.00d
+# Submission to last job:          2448s      40.80m     0.68h    0.03d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP9way.wigFix.gz) &
+    #	real    5m28.973s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP9way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/xenTro3/chrom.sizes \
+	phyloP9way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    # pid=17458: VmPeak:     2219472 kB
+    #	real    2m53.180s
+
+    bigWigInfo phyloP9way.bw 
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 366,163,491
+# primaryIndexSize: 14,137,652
+# zoomLevels: 10
+# chromCount: 5690
+# basesCovered: 202,032,632
+# mean: 0.447745
+# min: -3.316000
+# max: 2.298000
+# std: 0.772169
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP9way.wigFix.gz \
+	| wigEncode stdin phyloP9way.wig phyloP9way.wib) &
+    #	Converted stdin, upper limit 2.30, lower limit -3.32
+    #	real    1m3.694s
+
+    du -hsc *.wi?
+    #	193M    phyloP9way.wib
+    #	43M     phyloP9way.wig
+    #	236M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP9way.wib /gbdb/xenTro3/multiz9way/phyloP9way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/xenTro3/multiz9way xenTro3 \
+	phyloP9way phyloP9way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh xenTro3 phyloP9way
+# db.table      min max mean count sumData stdDev viewLimits
+# xenTro3.phyloP9way      -3.316 2.298 0.447745 202032632 9.04591e+07 0.772169
+# viewLimits=-3.316:2.298
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=xenTro3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phyloP9way > histogram.data 2>&1
+    #	real    0m19.396s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000240
+# median 0.000383
+# Q3 0.000726
+# average 0.001000
+# min 0.000107
+# max 0.041706
+# count 1000
+# total 1.000011
+# standard deviation 0.002765
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " X. tropicalis xenTro3 Histogram phyloP9way track"
+set xlabel " phyloP9way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.007]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# download data for 7-way (DONE - 2011-09-29 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/phastCons9way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/phastCons9way
+    ln -s \
+/hive/data/genomes/xenTro3/bed/multiz9way/cons/all/downloads/phastCons9way.wigFix.gz \
+	./phastCons9way.wigFix.gz
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/cons/all/phastCons9way.bw \
+	./phastCons9way.bw
+
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/cons/all/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from anoCar2
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/cons
+    cp -p /hive/data/genomes/anoCar2/bed/multiz7way/cons/README.txt .
+XXX - need to edit
+
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/cons/README.txt .
+    md5sum * > /hive/data/genomes/xenTro3/bed/multiz9way/cons/md5sum.txt
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/cons/md5sum.txt .
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/phyloP9way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/phyloP9way
+    ln -s \
+/hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/all/downloads/phyloP9way.wigFix.gz \
+	./phyloP9way.wigFix.gz
+    ln -s \
+/hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/all/phyloP9way.bw \
+	./phyloP9way.bw
+    ln -s \
+/hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/run.phyloP/all.mod \
+	./vertebrate.mod
+    # use a README from a recent multiz like this, this one is from anoCar2
+    /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP
+    cp /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/README.txt .
+XXX - need to edit
+
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/README.txt .
+    md5sum * > /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/xenTro3/bed/multiz9way/downloads
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/downloads
+    # this was already done elsewhere:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > 9way.nh
+    /cluster/bin/phast/tree_doctor --rename \
+"xenTro3->X_tropicalis; hg19->Human; mm9->Mouse; rn4->Rat; monDom5->Opossum; melGal1->Turkey; galGal3->Chicken; anoCar2->Lizard; danRer7->Zebrafish" \
+9way.nh > xenTro3.commonNames.9way.nh
+
+    time cp -p ../anno/xenTro3.9way.maf ./multiz9way.maf
+    #	real    1m13.654s
+    time gzip multiz9way.maf
+    #	real    7m12.108s
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/multiz9way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/multiz9way
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/downloads/9way.nh .
+    ln -s \
+/hive/data/genomes/xenTro3/bed/multiz9way/downloads/xenTro3.commonNames.9way.nh .
+    ln -s \
+/hive/data/genomes/xenTro3/bed/multiz9way/downloads/multiz9way.maf.gz .
+
+    # use a README from a recent multiz like this, this one is from danRer7
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/downloads
+    cp -p /hive/data/genomes/anoCar2/bed/multiz7way/downloads/README.txt .
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/multiz9way
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/downloads/README.txt .
+XXX - need to edit
+
+    md5sum *.nh *.gz *.txt \
+	> /hive/data/genomes/xenTro3/bed/multiz9way/downloads/md5sum.txt
+    ln -s /hive/data/genomes/xenTro3/bed/multiz9way/downloads/md5sum.txt .
+
+#############################################################################
