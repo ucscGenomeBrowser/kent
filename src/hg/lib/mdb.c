@@ -464,12 +464,18 @@ char *cloneVars = cloneString(varPairs);
         {
         if(*words[ix] == '#')
             break;
-        if(strchr(words[ix], '=') == NULL)
-            errAbort("This is not formatted var=val pairs: '%s'\n\t%s\n",words[ix],varPairs);
 
         AllocVar(mdbVar);
-        mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
-        mdbVar->val = cloneString(words[ix]);
+        if(strchr(words[ix], '=') == NULL) // treat this the same as "var="
+            {
+            mdbVar->var = cloneString(words[ix]);
+            mdbVar->val = NULL;
+            }
+        else
+            {
+            mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
+            mdbVar->val = cloneString(words[ix]);
+            }
         verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
         struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
         if(oldVar)
