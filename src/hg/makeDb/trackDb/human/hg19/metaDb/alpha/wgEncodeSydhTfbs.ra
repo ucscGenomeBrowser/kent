@@ -34942,7 +34942,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -34963,7 +34963,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -34984,7 +34984,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35006,7 +35006,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35027,7 +35027,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35048,7 +35048,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35224,7 +35224,7 @@ antibody CTCF_(SC-15914)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35245,7 +35245,7 @@ antibody CTCF_(SC-15914)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35266,7 +35266,7 @@ antibody CTCF_(SC-15914)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35288,7 +35288,7 @@ antibody CTCF_(SC-15914)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35309,7 +35309,7 @@ antibody CTCF_(SC-15914)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -35330,7 +35330,7 @@ antibody CTCF_(SC-15914)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-28
@@ -38563,7 +38563,7 @@ antibody JunD
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -38571,6 +38571,7 @@ dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562JundIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
+md5sum 3b03d916e103943359eb4a69904a98a1
 project wgEncode
 replicate 1
 setType exp
@@ -38584,7 +38585,7 @@ antibody JunD
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -38592,6 +38593,7 @@ dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562JundIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
+md5sum 022146308a81871af81efe1e70bdf212
 project wgEncode
 replicate 2
 setType exp
@@ -38605,7 +38607,7 @@ antibody JunD
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -38614,6 +38616,7 @@ fileName wgEncodeSydhTfbsK562JundIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum ab5e64ba56a9a195b2d841a044d1d435
 project wgEncode
 setType exp
 subId 4926
@@ -38627,7 +38630,7 @@ antibody JunD
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -38635,6 +38638,7 @@ dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562JundIggrabRawDataRep1.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 714884d4ec2aea1432bbda55f3fc087f
 project wgEncode
 replicate 1
 setType exp
@@ -38648,7 +38652,7 @@ antibody JunD
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -38656,6 +38660,7 @@ dateUnrestricted 2012-06-28
 fileName wgEncodeSydhTfbsK562JundIggrabRawDataRep2.fastq.tgz
 grant Snyder
 lab Stanford
+md5sum 37b1d55e4f9cdd6279d8ef5a3a287564
 project wgEncode
 replicate 2
 setType exp
@@ -38669,7 +38674,7 @@ antibody JunD
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -38678,6 +38683,7 @@ fileName wgEncodeSydhTfbsK562JundIggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
+md5sum c1a576be5d1311db7427473ae4d825e6
 project wgEncode
 setType exp
 subId 4926
@@ -38999,7 +39005,7 @@ antibody MafF_(M8194)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -39020,7 +39026,7 @@ antibody MafF_(M8194)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -39041,7 +39047,7 @@ antibody MafF_(M8194)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -39063,7 +39069,7 @@ antibody MafF_(M8194)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -39084,7 +39090,7 @@ antibody MafF_(M8194)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -39105,7 +39111,7 @@ antibody MafF_(M8194)
 cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId K562/None/Input/IgG-rab
+controlId wgEncodeEH001795
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
@@ -49721,4 +49727,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1629185463
+# MAGIC: -1606595670
