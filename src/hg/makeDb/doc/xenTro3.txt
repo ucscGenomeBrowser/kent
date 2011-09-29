@@ -1495,3 +1495,251 @@ rm -f $c.gp $c.maf $c.ss
     # it actually looks pretty good as a tree estimate ...
 
 #########################################################################
+# phastCons 9-way (DONE - 2011-09-29 - Hiram)
+
+    # split 9way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh encodek
+    mkdir -p /hive/data/genomes/xenTro3/bed/multiz9way/cons/SS
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/cons/SS
+    mkdir result done
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/xenTro3/bed/multiz9way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/xenTro3/bed/multiz9way/cons/SS/result/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(root1) {check out line+ done/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../../anno/result | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 9202 of 9202 jobs
+# CPU time in finished jobs:        816s      13.60m     0.23h    0.01d  0.000 y
+# IO & Wait Time:                 24389s     406.49m     6.77h    0.28d  0.001 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:          1276s      21.27m     0.35h    0.01d
+
+    # not all of them produce results
+    #	 there isn't much aligned in these MAF files
+    find ./result -type f | wc
+    #	 5690    5690  214806
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh encodek
+    mkdir -p /hive/data/genomes/xenTro3/bed/multiz9way/cons/run.cons
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/cons/run.cons
+
+    #	there are going to be only one phastCons run using
+    #	this same script.  It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is:
+    #	all 
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/xenTro3/bed/multiz9way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/SS/result/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS -type f | grep ".ss$" | sed -e 's/.ss$//' > ss.list
+    wc -l ss.list
+    #	3291 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ...
+    para push
+# Completed: 5690 of 5690 jobs
+# CPU time in finished jobs:       2411s      40.18m     0.67h    0.03d  0.000 y
+# IO & Wait Time:                 37365s     622.76m    10.38h    0.43d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              20s       0.33m     0.01h    0.00d
+# Submission to last job:          2030s      33.83m     0.56h    0.02d
+
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/cons/all
+
+    find ./bed -type f | grep ".bed$" | xargs cat | sort -k1,1 -k2,2n \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	    > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    time nice -n +19 hgLoadBed xenTro3 phastConsElements9way mostConserved.bed
+    #	Loaded 827762 elements of size 5
+    #	real    0m4.880s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov 
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    featureBits xenTro3 -enrichment ensGene:cds phastConsElements9way
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+# ensGene:cds 2.244%, phastConsElements9way 10.055%, both 1.669%, cover 74.39%, enrich 7.40x
+    featureBits xenTro3 -enrichment mgcGenes:cds phastConsElements9way
+# mgcGenes:cds 0.741%, phastConsElements9way 10.055%, both 0.619%, cover 83.53%, enrich 8.31x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/xenTro3/bed/multiz9way/cons/all
+    mkdir downloads
+
+    find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phastCons9way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons9way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/xenTro3/chrom.sizes \
+	    phastCons9way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    #	pid=32277: VmPeak:     2219472 kB
+    #	real    2m45.147s
+
+    bigWigInfo phastCons9way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 489,270,288
+# primaryIndexSize: 14,137,652
+# zoomLevels: 10
+# chromCount: 5690
+# basesCovered: 202,032,632
+# mean: 0.630799
+# min: 0.000000
+# max: 1.000000
+# std: 0.378048
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons9way.wigFix.gz \
+	| wigEncode stdin phastCons9way.wig phastCons9way.wib)
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    1m2.832s
+
+    du -hsc *.wi?
+    #	193M    phastCons9way.wib
+    #	43M     phastCons9way.wig
+    #	236M    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons9way.wib /gbdb/xenTro3/multiz9way/phastCons9way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/xenTro3/multiz9way \
+	xenTro3 phastCons9way phastCons9way.wig
+    #	real    0m4.207s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh xenTro3 phastCons9way
+# db.table      min max mean count sumData stdDev viewLimits
+#xenTro3.phastCons9way    0 1 0.630799 202032632 1.27442e+08 0.378048 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=xenTro3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons9way > histogram.data 2>&1
+    #	real    0m42.544s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " X. tropicalis xenTro3 Histogram phastCons9way track"
+set xlabel " phastCons9way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
