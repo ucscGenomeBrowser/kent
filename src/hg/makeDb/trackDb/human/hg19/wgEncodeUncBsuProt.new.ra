@@ -26,7 +26,7 @@ visibility hide
         	track wgEncodeUncBsuProtGm12878NucleusSig
         	parent wgEncodeUncBsuProt
         	shortLabel GM12878 nucleus
-        	longLabel GM12878 nuclear Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
+        	longLabel GM12878 nucleus Proteogenomic Mapping Hits from ENCODE/UNC/BSU
         	subGroups  cellType=1GM12878 localization=nucleus
 		visibility full
         	type peptideMapping
