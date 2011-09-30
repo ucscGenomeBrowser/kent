@@ -1940,7 +1940,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     # use a README from a recent multiz like this, this one is from anoCar2
     cd /hive/data/genomes/xenTro3/bed/multiz9way/cons
     cp -p /hive/data/genomes/anoCar2/bed/multiz7way/cons/README.txt .
-XXX - need to edit
+    # need to edit this to finish it off
 
     ln -s /hive/data/genomes/xenTro3/bed/multiz9way/cons/README.txt .
     md5sum * > /hive/data/genomes/xenTro3/bed/multiz9way/cons/md5sum.txt
@@ -1960,7 +1960,7 @@ XXX - need to edit
     # use a README from a recent multiz like this, this one is from anoCar2
     /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP
     cp /hive/data/genomes/anoCar2/bed/multiz7way/consPhyloP/README.txt .
-XXX - need to edit
+    # need to edit this to finish it off
 
     ln -s /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/README.txt .
     md5sum * > /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/md5sum.txt
@@ -1990,9 +1990,9 @@ XXX - need to edit
     # use a README from a recent multiz like this, this one is from danRer7
     cd /hive/data/genomes/xenTro3/bed/multiz9way/downloads
     cp -p /hive/data/genomes/anoCar2/bed/multiz7way/downloads/README.txt .
+    # need to edit this to finish it off
     cd /usr/local/apache/htdocs-hgdownload/goldenPath/xenTro3/multiz9way
     ln -s /hive/data/genomes/xenTro3/bed/multiz9way/downloads/README.txt .
-XXX - need to edit
 
     md5sum *.nh *.gz *.txt \
 	> /hive/data/genomes/xenTro3/bed/multiz9way/downloads/md5sum.txt
