@@ -10949,7 +10949,7 @@ tag DCCREP
 type typeOfTerm
 label UCSC replicate number
 description This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
-serchable yes
+searchable yes
 cvDefined off
 validate integer
 hidden no
@@ -11435,6 +11435,13 @@ priority 985
 
 term uniqueness
 tag UNIQUENESS
+type typeOfTerm
+label Mapability Distinctions
+description Degree of region uniqueness or mapability disctinctions
+searchable no
+cvDefined no
+validate none
+priority 590
 # Used in hg19 mapability only
 # It does not vary at all, it was on the possible retire list (11/3/10)
 
