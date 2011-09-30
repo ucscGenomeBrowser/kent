@@ -88,7 +88,8 @@ struct trackDb
 #define COMPOSITE_VIEW_NODE(nodeType)    ((nodeType) & COMPOSITE_VIEW_MASK)
 #define MULTI_TRACK_CHILD_NODE(nodeType) ((nodeType) & MULTI_TRACK_CHILD_MASK)
 #define CONTAINER_CHILD_NODE(nodeType)   ((nodeType) & (MULTI_TRACK_CHILD_MASK | COMPOSITE_CHILD_MASK))
-#define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
+#define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK) == 0 )
+#define SOLO_NODE(nodeType)             (((nodeType) & TREETYPE_MASK) <= FOLDER_CHILD_MASK)
 //#define tdbIsParent(tdb)              ((tdb)->subtracks)
 //#define tdbIsChild(tdb)               ((tdb)->parent   )
 //#define tdbIsTreeLeaf(tdb)            ( CHILD_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb))
@@ -245,6 +246,18 @@ for ( ; parent != NULL && !tdbIsContainer(parent); parent = parent->parent)
      ;
 return parent;
 }
+
+// Solo (or stand alone) tracks are non-containers which may only be contained by folders
+INLINE boolean tdbIsSoloTrack(struct trackDb *tdb)
+// Is this trackDb struct marked as a solo so it should have data
+{
+return tdb && SOLO_NODE(tdb->treeNodeType);
+}
+#define tdbIsStandAlone(tdb) tdbIsSoloTrack(tdb)
+
+// TrackUi Top level means composite, multitrack or solo
+// These are not folders, views or subtracks.
+#define tdbIsTrackUiTopLevel(tdb) (tdbIsContainer(tdb) || tdbIsSoloTrack(tdb))
 
 #define DOWNLOADS_ONLY_TYPE  "downloadsOnly"
 INLINE boolean tdbIsDownloadsOnly(struct trackDb *tdb)
