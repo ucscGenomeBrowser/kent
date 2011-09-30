@@ -42021,62 +42021,6 @@ tableName wgEncodeSydhTfbsK562Rpc155StdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep1
-objType file
-antibody SETDB1
-cell K562
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562/MNaseD/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-dccAccession wgEncodeEH000769
-dccInternalNotes release2
-expId 769
-fileName wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep1.fastq.gz
-grant Snyder
-lab USC
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-md5sum 186b16c6759852eeccbe0ebefe8db856
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view RawData
-
-metaObject wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep2
-objType file
-antibody SETDB1
-cell K562
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562/MNaseD/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-dccAccession wgEncodeEH000769
-dccInternalNotes release2
-expId 769
-fileName wgEncodeSydhTfbsK562Setdb1MnaseRawDataRep2.fastq.gz
-grant Snyder
-lab USC
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-md5sum bb37596bcf734e679432d00c7288f220
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view RawData
-
 metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdAlnRep1
 objType file
 antibody SETDB1
@@ -42158,6 +42102,62 @@ subId 4165
 tableName wgEncodeSydhTfbsK562Setdb1MnasedUcdPk
 treatment MNaseD
 view Peaks
+
+metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdRawDataRep1
+objType file
+antibody SETDB1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/MNaseD/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000769
+dccInternalNotes release2
+expId 769
+fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdRawDataRep1.fastq.gz
+grant Snyder
+lab USC
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+md5sum 186b16c6759852eeccbe0ebefe8db856
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdRawDataRep2
+objType file
+antibody SETDB1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/MNaseD/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+dccAccession wgEncodeEH000769
+dccInternalNotes release2
+expId 769
+fileName wgEncodeSydhTfbsK562Setdb1MnasedUcdRawDataRep2.fastq.gz
+grant Snyder
+lab USC
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+md5sum bb37596bcf734e679432d00c7288f220
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view RawData
 
 metaObject wgEncodeSydhTfbsK562Setdb1MnasedUcdSig
 objType table
@@ -49787,4 +49787,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -230455646
+# MAGIC: 834899106
