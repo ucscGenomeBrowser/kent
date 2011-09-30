@@ -8,7 +8,7 @@ subGroup2 cellType Cell_Line C2C12=C2C12
 subGroup3 factor Factor H3AC06599=H3ac_(06-599) H3K27ME3=H3K27me3 H3K36ME3=H3K36me3 AB32356=H3K4me2_(ab32356) H3K04ME3=H3K4me3 AB3594=H3K79me2_(ab3594) AB2621=H3K79me3_(ab2621) INPUT=Input
 subGroup4 sex Sex F=F
 subGroup5 control Control CNTRL32B=Control_32bp CNTRL36B=Control_36bp CNTRL50B=Control_50bp
-subGroup6 treatment Treatment MYB=Myoblast MYC24H=Myocyte_24h MYC60H=Myocyte_60h MYC5D=Myocyte_5d MYC7D=Myocyte_7d
+subGroup6 treatment Treatment MYB=None MYC24H=EqS_2.0pct_24h MYC60H=EqS_2.0pct_60h MYC5D=EqS_2.0pct_5d MYC7D=EqS_2.0pct_7d
 subGroup7 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x
 subGroup8 rep Rep rep1=1 rep2=2
 dimensions dimensionX=treatment dimensionY=factor dimensionA=control dimensionB=rep

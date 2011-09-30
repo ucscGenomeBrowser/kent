@@ -8,7 +8,7 @@ subGroup2 cellType Cell_Line C2C12=C2C12
 subGroup3 factor Factor CEBPB=CEBPB CTCF=CTCF E2F4=E2F4 FOSL1SC605=FOSL1_(sc-605) MAX=MAX SC32758=MyoD_(sc-32758) SC12732=Myogenin_(sc-12732) NRSF=NRSF POL2=POL2 POL2S2=Pol2(phosphoS2) SRF=SRF TCF3=TCF3_(SC-349) TCF12=TCF12 USF1=USF-1 INPUT=Input
 subGroup4 sex Sex F=F
 subGroup5 control Control CNTRL32B=Control_32bp CNTRL36B=Control_36bp CNTRL50B=Control_50bp
-subGroup6 treatment Treatment MYB=Myoblast MYC24H=Myocyte_24h MYC60H=Myocyte_60h MYC5D=Myocyte_5d MYC7D=Myocyte_7d
+subGroup6 treatment Treatment MYB=None MYC24H=EqS_2.0pct_24h MYC60H=EqS_2.0pct_60h MYC5D=EqS_2.0pct_5d MYC7D=EqS_2.0pct_7d
 subGroup7 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x
 subGroup8 rep Rep rep1=1 rep2=2 rep3=3
 dimensions dimensionX=treatment dimensionY=factor dimensionA=control dimensionB=rep
