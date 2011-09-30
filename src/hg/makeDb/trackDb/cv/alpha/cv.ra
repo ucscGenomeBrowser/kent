@@ -1,4 +1,4 @@
-# Controlled vocabulary from ENCODE
+# Controlled vocabularry from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
 
@@ -5047,6 +5047,21 @@ targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation missing
 
+term BTF3_(SC-166093)
+tag BTF3SC166093
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against amino acids 1-206 representing full length BTF3a of human origin.
+target BTF3
+targetDescription This gene encodes the basic transcription factor 3. This protein forms a stable complex with RNA polymerase IIB and is required for transcriptional initiation. Alternative splicing results in multiple transcript variants encoding different isoforms. This gene has multiple pseudogenes. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-166093
+orderUrl http://www.scbt.com/datasheet-166093-btf3a-b-a-5-antibody.html
+lab Myers
+lots G2209
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
+validation BTF3_(SC-166093)(missing):human_BTF3_SC-166093_validation_Myers.pdf
+
 term c-Fos
 tag CFOS
 type Antibody
@@ -6593,8 +6608,6 @@ targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 
-
-
 term NELFe
 tag NELFE
 type Antibody
@@ -6608,6 +6621,21 @@ lab Struhl
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
 validation missing
+
+term NFIC_(SC-81335)
+tag NFICSC81335
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of NF-1 of human origin.
+target NFIC
+targetDescription Recognizes and binds the palindromic sequence 5'-TTGGCNNNNNGCCAA-3' present in viral and cellular promoters and in the origin of replication of adenovirus type 2. These proteins are individually capable of activating transcription and replication.
+vendorName Santa Cruz Biotech
+vendorId sc-81335
+orderUrl http://www.scbt.com/datasheet-81335-nf-1-nfi5i299-antibody.html
+lab Myers
+lots L0808
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
+validation NFIC_(SC-81335)(missing):human_NFIC_SC-81335_validation_Myers.pdf
 
 term NF-E2
 tag NFE2
@@ -7053,6 +7081,21 @@ targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_200-401-194_validation_Snyder.pdf
 
+term RUNX3_(SC-101553)
+tag RUNX3SC101553
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against amino acids 191-300 of recombinant RUNX3 of human origin.
+target RUNX3
+targetDescription This gene encodes a member of the runt domain-containing family of transcription factors. A heterodimer of this protein and a beta subunit forms a complex that binds to the core DNA sequence 5'-PYGPYGGT-3' found in a number of enhancers and promoters, and can either activate or suppress transcription. It also interacts with other transcription factors.  It functions as a tumor suppressor, and the gene is frequently deleted or transcriptionally silenced in cancer.  Multiple transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq)
+vendorName Santa Cruz Biotech 
+vendorId sc-101553
+orderUrl http://www.scbt.com/datasheet-101553-runx3-r3-5g4-antibody.html
+lab Myers
+lots B0909
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
+validation RUNX3_(SC-101553)(missing):human_RUNX3_SC-101553_validation_Myers.pdf
+
 term RXRA
 tag RXRA
 type Antibody
@@ -7298,6 +7341,21 @@ targetId GeneCard:STAT3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT3
 validation STAT3(Western_blot,Immunoprecipitation):human_STAT3_validation_Snyder.pdf
 
+term STAT5A_(SC-74442)
+tag STAT5ASC74442
+type Antibody
+antibodyDescription Mouse monoclonal IgG, recommended for the detection of Stat5a and Stat5b of human origin by WB, IP, IF and ELISA.
+target STAT5A
+targetDescription The protein encoded by this gene is a member of the STAT family of transcription factors. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo- or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein is activated by, and mediates the responses of many cell ligands, such as IL2, IL3, IL7 GM-CSF, erythropoietin, thrombopoietin, and different growth hormones. Activation of this protein in myeloma and lymphoma associated with a TEL/JAK2 gene fusion is independent of cell stimulus and has been shown to be essential for the tumorigenesis. The mouse counterpart of this gene is found to induce the expression of BCL2L1/BCL-X(L), which suggests the antiapoptotic function of this gene in cells. (provided by RefSeq)
+vendorName Santa Cruz Biotech 
+vendorId sc-74442
+orderUrl http://www.scbt.com/datasheet-74442-stat5-a-9-antibody.html
+lab Myers
+lots G0208
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
+validation STAT5A_(SC-74442)(missing):human_STAT5A_SC-74442_validation_Myers.pdf
+
 term SUZ12
 tag SUZ12
 type Antibody
@@ -7439,6 +7497,21 @@ lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
 validation missing
+
+term TEAD4_(SC-101184)
+tag TEAD4SC101184
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against recombinant protein TEF-3 (TEAD4) of human origin.
+target TEAD4
+targetDescription Member of the transcriptional enhancer factor (TEF) family of transcription factors, which contain the TEA/ATTS DNA-binding domain. It is preferentially expressed in the skeletal muscle, and binds to the M-CAT regulatory element found in promoters of muscle-specific genes to direct their gene expression.
+vendorName Santa Cruz Biotech
+vendorId sc-101184
+orderUrl http://www.scbt.com/datasheet-101184-tef-3-n-g2-antibody.html
+lab Myers
+lots A1811
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
+validation TEAD4_(SC-101184)(missing):human_TEAD4_SC-101184_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term TFIIB
@@ -8160,6 +8233,13 @@ tag TH1014
 type mapAlgorithm
 description TopHat v1.0.14
 
+term TH131
+tag TH131
+type mapAlgorithm
+description TopHat v1.3.1 Provisional
+
+
+
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -8610,13 +8690,11 @@ tag DEX500PM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
-
 term DMSO_0.02pct
 #tag DMSO2
 tag DM002P1H
 description 1 h with 0.02% DMSO (Myers)
 type treatment
-
 
 term DMSO_0.02pct_24hr
 #tag DMSO224H
@@ -8645,6 +8723,11 @@ type treatment
 term Estradiol_10nM
 tag EST10NM1H
 description  1 h with 10 nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_10nM_30m
+tag EST10NM30M
+description 30 min with 10nM 7b-Estradiol (Crawford)
 type treatment
 
 term Estradiol_10nM_24hr
@@ -8810,15 +8893,19 @@ term 4OHTAM_1uM_36hr
 tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
-#label 4-hydroxytamoxifen 1uM 36hr # proposed
 label 4-OHTAM_1uM_36hr
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
 description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
 type treatment
-#label 4-hydroxytamoxifen 20uM 72hr # proposed
 label 4-OHTAM_20nM_72hr
+
+term 4OHTAM_100nM_30m
+tag TAM10030
+description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
+type treatment
+label 4-OHTAM_100nM_30m
 
 term TGFb
 tag TGFB
@@ -11333,13 +11420,6 @@ priority 985
 
 term uniqueness
 tag UNIQUENESS
-type typeOfTerm
-label Mapability Distinctions
-description Degree of region uniqueness or mapability disctinctions
-searchable no
-cvDefined no
-validate none
-priority 590
 # Used in hg19 mapability only
 # It does not vary at all, it was on the possible retire list (11/3/10)
 

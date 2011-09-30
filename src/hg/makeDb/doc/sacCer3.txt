@@ -1185,6 +1185,8 @@ doEstimate.sh $(root1) {check out line+ LOG/$(root1).log} TREES/$(root1)
 # Submission to last job:           195s       3.25m     0.05h    0.00d
 
     # Now combine parameter estimates.  
+    # XXX - these phyloBoot processes did not complete after several weeks
+    #	of run time.
     ls TREES/*.cons.mod > cons.txt
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloBoot \
 	--read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt

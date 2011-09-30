@@ -13,9 +13,9 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 548
-    Files: 2443
-    Gbdbs: 305
+    Tables: 571
+    Files: 2559
+    Gbdbs: 317
 
 A) Untouched Tables (0):
 
@@ -25,7 +25,7 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (548):
+C) New tables (571):
 wgEncodeSydhTfbsGm10847InputIggmusSig
 wgEncodeSydhTfbsGm10847InputTnfaIggrabSig
 wgEncodeSydhTfbsGm10847NfkbTnfaIggrabPk
@@ -60,12 +60,24 @@ wgEncodeSydhTfbsGm12878Mxi1IggmusPk
 wgEncodeSydhTfbsGm12878Mxi1IggmusSig
 wgEncodeSydhTfbsGm12878Nfe2sc22827StdPk
 wgEncodeSydhTfbsGm12878Nfe2sc22827StdSig
+wgEncodeSydhTfbsGm12878NfkbIggrabPk
+wgEncodeSydhTfbsGm12878NfkbIggrabSig
+wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
+wgEncodeSydhTfbsGm12878NfyaIggmusPk
+wgEncodeSydhTfbsGm12878NfyaIggmusSig
+wgEncodeSydhTfbsGm12878NfybIggmusPk
+wgEncodeSydhTfbsGm12878NfybIggmusSig
 wgEncodeSydhTfbsGm12878Nrf1IggmusPk
 wgEncodeSydhTfbsGm12878Nrf1IggmusSig
 wgEncodeSydhTfbsGm12878P300bStdPk
 wgEncodeSydhTfbsGm12878P300bStdSig
 wgEncodeSydhTfbsGm12878P300sc584IggmusPk
 wgEncodeSydhTfbsGm12878P300sc584IggmusSig
+wgEncodeSydhTfbsGm12878Pol2IggmusPk
+wgEncodeSydhTfbsGm12878Pol2IggmusSig
+wgEncodeSydhTfbsGm12878Pol2StdPk
+wgEncodeSydhTfbsGm12878Pol2StdSig
 wgEncodeSydhTfbsGm12878Pol2s2IggmusPk
 wgEncodeSydhTfbsGm12878Pol2s2IggmusSig
 wgEncodeSydhTfbsGm12878Pol3StdPk
@@ -246,6 +258,10 @@ wgEncodeSydhTfbsHelas3MaxStdPk
 wgEncodeSydhTfbsHelas3MaxStdSig
 wgEncodeSydhTfbsHelas3Mxi1af4185IggrabPk
 wgEncodeSydhTfbsHelas3Mxi1af4185IggrabSig
+wgEncodeSydhTfbsHelas3NfyaIggrabPk
+wgEncodeSydhTfbsHelas3NfyaIggrabSig
+wgEncodeSydhTfbsHelas3NfybIggrabPk
+wgEncodeSydhTfbsHelas3NfybIggrabSig
 wgEncodeSydhTfbsHelas3Nrf1IggmusPk
 wgEncodeSydhTfbsHelas3Nrf1IggmusSig
 wgEncodeSydhTfbsHelas3P300sc584sc584IggrabPk
@@ -272,6 +288,8 @@ wgEncodeSydhTfbsHelas3Stat3IggrabPk
 wgEncodeSydhTfbsHelas3Stat3IggrabSig
 wgEncodeSydhTfbsHelas3TbpIggrabPk
 wgEncodeSydhTfbsHelas3TbpIggrabSig
+wgEncodeSydhTfbsHelas3Tcf4UcdPk
+wgEncodeSydhTfbsHelas3Tcf4UcdSig
 wgEncodeSydhTfbsHelas3Tf3c110StdPk
 wgEncodeSydhTfbsHelas3Tf3c110StdSig
 wgEncodeSydhTfbsHelas3Tr4StdPk
@@ -319,8 +337,6 @@ wgEncodeSydhTfbsHepg2Mafkab50322IggrabPk
 wgEncodeSydhTfbsHepg2Mafkab50322IggrabSig
 wgEncodeSydhTfbsHepg2Mafksc477IggrabPk
 wgEncodeSydhTfbsHepg2Mafksc477IggrabSig
-wgEncodeSydhTfbsHepg2Mxi1StdPk
-wgEncodeSydhTfbsHepg2Mxi1StdSig
 wgEncodeSydhTfbsHepg2Nrf1IggrabPk
 wgEncodeSydhTfbsHepg2Nrf1IggrabSig
 wgEncodeSydhTfbsHepg2P300sc582IggrabPk
@@ -517,6 +533,8 @@ wgEncodeSydhTfbsK562Znf263UcdPk
 wgEncodeSydhTfbsK562Znf263UcdSig
 wgEncodeSydhTfbsK562Znf274UcdPk
 wgEncodeSydhTfbsK562Znf274UcdSig
+wgEncodeSydhTfbsK562Znf274m01UcdPk
+wgEncodeSydhTfbsK562Znf274m01UcdSig
 wgEncodeSydhTfbsMcf10aesInputEtoh01bStdSig
 wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig
 wgEncodeSydhTfbsMcf10aesInputStdSig
@@ -537,6 +555,8 @@ wgEncodeSydhTfbsMcf7Gata3UcdSig
 wgEncodeSydhTfbsMcf7Hae2f1UcdPk
 wgEncodeSydhTfbsMcf7Hae2f1UcdSig
 wgEncodeSydhTfbsMcf7InputUcdSig
+wgEncodeSydhTfbsMcf7Tcf4UcdPk
+wgEncodeSydhTfbsMcf7Tcf4UcdSig
 wgEncodeSydhTfbsMcf7Znf217UcdPk
 wgEncodeSydhTfbsMcf7Znf217UcdSig
 wgEncodeSydhTfbsNb4CmycStdPk
@@ -553,6 +573,9 @@ wgEncodeSydhTfbsNt2d1Yy1UcdPk
 wgEncodeSydhTfbsNt2d1Yy1UcdSig
 wgEncodeSydhTfbsNt2d1Znf274UcdPk
 wgEncodeSydhTfbsNt2d1Znf274UcdSig
+wgEncodeSydhTfbsPanc1InputUcdSig
+wgEncodeSydhTfbsPanc1Tcf4UcdPk
+wgEncodeSydhTfbsPanc1Tcf4UcdSig
 wgEncodeSydhTfbsPbdeGata1UcdPk
 wgEncodeSydhTfbsPbdeGata1UcdSig
 wgEncodeSydhTfbsPbdeInputUcdSig
@@ -575,7 +598,7 @@ wgEncodeSydhTfbsU2osKap1UcdSig
 wgEncodeSydhTfbsU2osSetdb1UcdPk
 wgEncodeSydhTfbsU2osSetdb1UcdSig
 
-C') New files (2440 downloadables, 305 gbdbs):
+C') New files (2556 downloadables, 317 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/
     NOT on RR but must be placed in:
@@ -741,6 +764,50 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Nfe2sc22827StdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Nfe2sc22827StdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Nfe2sc22827StdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfyaIggmusSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878NfybIggmusSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep2.bam
@@ -765,6 +832,37 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878P300sc584IggmusRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878P300sc584IggmusRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878P300sc584IggmusSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep5.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep5.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep6.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep6.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep7.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep7.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep5.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep6.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep7.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2IggmusSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2RawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2RawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2StdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2StdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2StdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2StdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2StdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2StdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep2.bam
@@ -1642,6 +1740,22 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NakeddnaRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NakeddnaRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NakeddnaRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfyaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3NfybIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep2.bam
@@ -1748,6 +1862,14 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3TbpIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3TbpIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3TbpIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tcf4UcdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep2.bam
@@ -1951,17 +2073,6 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mafksc477IggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mafksc477IggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mafksc477IggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdRawDataRep1.fastq.tgz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdRawDataRep2.fastq.tgz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdRawDataRep3.fastq.tgz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Mxi1StdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep2.bam
@@ -2787,6 +2898,14 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274UcdAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274UcdPk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsK562Znf274m01UcdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf10aesInputEtoh01bStdRawData.fastq.gz
@@ -2870,6 +2989,14 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7InputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Tcf4UcdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsMcf7Znf217UcdAlnRep2.bam
@@ -2937,6 +3064,18 @@ C') New files (2440 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsNt2d1Znf274UcdRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsNt2d1Znf274UcdRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsNt2d1Znf274UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1InputUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1InputUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1InputUcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1InputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPanc1Tcf4UcdSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPbdeGata1UcdAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPbdeGata1UcdAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsPbdeGata1UcdAlnRep2.bam
@@ -3042,9 +3181,15 @@ C') New files (2440 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878MaxStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Mxi1IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Nfe2sc22827StdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878NfkbIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878NfyaIggmusSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878NfybIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Nrf1IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878P300bStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878P300sc584IggmusSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Pol2IggmusSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Pol2StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Pol2s2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Pol3StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Rad21IggrabSig.bigWig
@@ -3150,6 +3295,8 @@ C') New files (2440 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3JundIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3MaxStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Mxi1af4185IggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3NfyaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3NfybIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Nrf1IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3P300sc584sc584IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Pol2StdSig.bigWig
@@ -3163,6 +3310,7 @@ C') New files (2440 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Stat1Ifng30StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Stat3IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3TbpIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Tcf4UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Tf3c110StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Tr4StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHelas3Usf2IggmusSig.bigWig
@@ -3189,7 +3337,6 @@ C') New files (2440 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHepg2Maffm8194IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHepg2Mafkab50322IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHepg2Mafksc477IggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsHepg2Mxi1StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHepg2Nrf1IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHepg2P300sc582IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsHepg2Pgc1aForsklnStdSig.bigWig
@@ -3293,6 +3440,7 @@ C') New files (2440 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Znf143IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Znf263UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Znf274UcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsK562Znf274m01UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf10aesInputEtoh01bStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf10aesInputStdSig.bigWig
@@ -3305,6 +3453,7 @@ C') New files (2440 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf7Gata3UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf7Hae2f1UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf7InputUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsMcf7Tcf4UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsMcf7Znf217UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsNb4CmycStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsNb4InputStdSig.bigWig
@@ -3314,6 +3463,8 @@ C') New files (2440 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsNt2d1Suz12UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsNt2d1Yy1UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsNt2d1Znf274UcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsPanc1InputUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsPanc1Tcf4UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsPbdeGata1UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsPbdeInputUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsPbdePol2UcdSig.bigWig

@@ -228,8 +228,17 @@ struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 struct dnaSeq *hChromSeq(char *db, char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
 
+struct dnaSeq *hChromSeqFromPath(char *nibPath, char *db, char *chrom, 
+				 int start, int end);
+/* Return lower case DNA from chromosome. */
+
 struct dnaSeq *hChromSeqMixed(char *db, char *chrom, int start, int end);
 /* Return mixed case (repeats in lower case) DNA from chromosome. */
+
+struct dnaSeq *hChromSeqMixedFromPath(char *nibPath, char *db, char *chrom, 
+				      int start, int end);
+/* Return mixed case (repeats in lower case) DNA from chromosome, given an
+ * input nib path. */
 
 struct dnaSeq *hSeqForBed(char *db, struct bed *bed);
 /* Get the sequence associated with a particular bed concatenated together. */
@@ -259,6 +268,10 @@ struct dnaSeq *hLoadChrom(char *db, char *chromName);
 
 void hNibForChrom(char *db, char *chromName, char retNibName[HDB_MAX_PATH_STRING]);
 /* Get .nib file associated with chromosome. */
+
+void hNibForChromFromPath(char *nibPath, char *db, char *chromName, 
+			  char retNibName[HDB_MAX_PATH_STRING]);
+/* Get .nib file associated with chromosome, given a nib file path. */
 
 struct slName *hAllChromNames(char *db);
 /* Get list of all chromosomes in database. */

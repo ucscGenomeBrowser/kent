@@ -418,7 +418,7 @@ return crc;
 
 // -------------- Sort primitives --------------
 int mdbObjCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
+// Compare mdbObj to sort on obj name, case-insensitive.
 {
 const struct mdbObj *a = *((struct mdbObj **)va);
 const struct mdbObj *b = *((struct mdbObj **)vb);
@@ -426,7 +426,7 @@ return strcasecmp(a->obj, b->obj);
 }
 
 int mdbVarCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
+// Compare mdbVar to sort on var name, case-insensitive.
 {
 const struct mdbVar *a = *((struct mdbVar **)va);
 const struct mdbVar *b = *((struct mdbVar **)vb);
@@ -464,12 +464,18 @@ char *cloneVars = cloneString(varPairs);
         {
         if(*words[ix] == '#')
             break;
-        if(strchr(words[ix], '=') == NULL)
-            errAbort("This is not formatted var=val pairs: '%s'\n\t%s\n",words[ix],varPairs);
 
         AllocVar(mdbVar);
-        mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
-        mdbVar->val = cloneString(words[ix]);
+        if(strchr(words[ix], '=') == NULL) // treat this the same as "var="
+            {
+            mdbVar->var = cloneString(words[ix]);
+            mdbVar->val = NULL;
+            }
+        else
+            {
+            mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
+            mdbVar->val = cloneString(words[ix]);
+            }
         verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
         struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
         if(oldVar)
@@ -2429,7 +2435,7 @@ return mdbObjsDropped;
 }
 
 struct mdbObj *mdbObjIntersection(struct mdbObj **pA, struct mdbObj *b)
-// return duplicate objs from an intersection of two mdbObj lists.
+// return objs removed from pA while making an intersection of two mdbObj lists.
 // List b is untouched but pA will contain the resulting intersection
 {
 struct mdbObj *mdbObj;

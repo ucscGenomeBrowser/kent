@@ -953,6 +953,25 @@ else
     }
 }
 
+void hNibForChromFromPath(char *nibPath, char *db, char *chromName,
+			  char retNibName[HDB_MAX_PATH_STRING])
+/* Get .nib file associated with chromosome, given a nib file path. */
+{
+safef(retNibName, HDB_MAX_PATH_STRING, "%s/%s.2bit", nibPath, db);
+if (!fileExists(retNibName))
+    {
+    /* if 2bit file isn't there, try up one directory */
+    safef(retNibName, HDB_MAX_PATH_STRING, "%s/../%s.2bit",
+	  nibPath, db);
+    if (!fileExists(retNibName))
+	{
+	/* still no 2bit, let's just try to find a nib */
+	safef(retNibName, HDB_MAX_PATH_STRING, "%s/%s.nib",
+	      nibPath, chromName);
+	}
+    }
+}
+
 static struct dnaSeq *fetchTwoBitSeq(char *fileName, char *seqName, int start, int end)
 /* fetch a sequence from a 2bit, caching open of the file */
 {
@@ -996,11 +1015,30 @@ hNibForChrom(db, chrom, fileName);
 return hFetchSeqMixed(fileName, chrom, start, end);
 }
 
+struct dnaSeq *hChromSeqMixedFromPath(char *nibPath, char *db, char *chrom,
+				      int start, int end)
+/* Return mixed case (repeats in lower case) DNA from chromosome, given an
+ * input nib path. */
+{
+char fileName[HDB_MAX_PATH_STRING];
+hNibForChromFromPath(nibPath, db, chrom, fileName);
+return hFetchSeqMixed(fileName, chrom, start, end);
+}
+
 struct dnaSeq *hChromSeq(char *db, char *chrom, int start, int end)
 /* Return lower case DNA from chromosome. */
 {
 char fileName[HDB_MAX_PATH_STRING];
 hNibForChrom(db, chrom, fileName);
+return hFetchSeq(fileName, chrom, start, end);
+}
+
+struct dnaSeq *hChromSeqFromPath(char *nibPath, char *db, char *chrom,
+				 int start, int end)
+/* Return lower case DNA from chromosome. */
+{
+char fileName[HDB_MAX_PATH_STRING];
+hNibForChromFromPath(nibPath, db, chrom, fileName);
 return hFetchSeq(fileName, chrom, start, end);
 }
 
@@ -3794,6 +3832,7 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
+#define HGAPI_NEEDS_THIS
 #ifdef HGAPI_NEEDS_THIS
 if (isHubTrack(track))
     return tdbForTrack(db, track,NULL);
