@@ -103,7 +103,7 @@ or can set up, display, and share their own track hubs.
 <P>
 The data underlying the tracks in a hub reside on the remote 
 server of the data provider rather than at UCSC. 
-The data are stored in compressed binary indexed files in bigBed, bigWig or BAM 
+The data are stored in compressed binary indexed files in bigBed, bigWig, BAM or VCF
 format that contain the data at several resolutions.
 When a hub track is displayed in the Genome Browser, only the
 relevant data needed to support the view of the current genomic region are 
@@ -256,7 +256,7 @@ To create your own hub you will need:</p>
 <UL>
 <LI>
 one or more data sets formatted in one of the compressed binary index formats
-supported by the Genome Browser: bigBed, bigWig, or BAM
+supported by the Genome Browser: bigBed, bigWig, BAM or VCF
 <LI>
 a set of text files that specify properties for the track hub and for each of
 the data tracks within it
@@ -321,8 +321,9 @@ myHub/ - directory containing track hub files
 The data tracks provided by a hub must be formatted in one of the 
 compressed binary index formats supported by the Genome Browser: 
 <A HREF="bigWig.html">bigWig</A>, 
-<A HREF="bigBed.html">bigBed</A>, or 
-<A HREF="bam.html">BAM</A>.</p>
+<A HREF="bigBed.html">bigBed</A>,
+<A HREF="bam.html">BAM</A> or
+<A HREF="vcf.html">VCF</A>.</p>
 
 <P><em>bigWig</em> - 
 The bigWig format is best for displaying continuous value plot data,
@@ -355,6 +356,22 @@ expects to be in the same directory with the same root name as the BAM file
 with the addition of a <em>.bai</em> suffix.  
 See the <A HREF="bam.html">BAM Track Format</A> help page for 
 more information.</p>
+
+<P><em>VCF</em> -
+VCF (Variant Call Format) files can contain annotations of single nucleotide
+variants, insertions/deletions, copy number variants, structural variants
+and other types of genomic variation.  When a VCF file is compressed and
+indexed using
+<A HREF="http://samtools.sourceforge.net/tabix.shtml" TARGET=BLANK>tabix</A>
+(available <A HREF="http://sourceforge.net/projects/samtools/files/tabix/"
+TARGET=_BLANK>here</A>),
+it can be used as a data track file.
+Unlike bigWig and bigBed formats, the
+tabix index is in a separate file, which the track hub
+expects to be in the same directory with the same root name as the VCF file
+with the addition of a <em>.tbi</em> suffix.
+See the <A HREF="vcf.html">VCF Track Format</A> help page for
+more information.</P>
 
 <HR>
 
@@ -511,7 +528,7 @@ displayed in the configuration and track settings, and on the
 details pages. Suggested maximum length is 80 characters.</p>
  
 <P><em>type</em> - the format of the file specified by bigDataUrl. Must be either 
-<em>bigWig</em>, <em>bigBed</em>, or <em>bam</em>.</p>
+<em>bigWig</em>, <em>bigBed</em>, <em>bam</em> or <em>vcfTabix</em>.</p>
 
 <P><B><em>Example 4:</em></B> Sample trackDb.txt file containing two simple tracks.</p>
 
