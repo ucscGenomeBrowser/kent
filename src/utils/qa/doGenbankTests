@@ -185,7 +185,8 @@ echo -e "${HOST}:$sanityPath/misc/$filename"
 # need to run in a subshell, since gbSanity wants to be run from this dir
 (cd $sanityPath && bin/x86_64/gbSanity $db >& misc/$filename) || allOk=no
 echo -e "The last line of the gbSanity output gives a summary of errors. 
-Here is the last line of the file. If there are errors, consult Mark Diekhans:\n"
+Here is the last line of the file. If there are errors, consult Mark Diekhans
+and Brian Raney:\n"
 tail -1 $sanityPath/misc/$filename
 echo
 
