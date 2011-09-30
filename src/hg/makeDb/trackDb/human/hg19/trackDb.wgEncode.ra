@@ -9,8 +9,8 @@ include wgEncodeGencodeV4.ra
 include wgEncodeGencodeV7.ra
 
 # UNC/BSU Proteogenomics (wrangler: cline,cricket)
-include wgEncodeUncBsuProt.ra beta
-include wgEncodeUncBsuProt.new.ra alpha
+include wgEncodeUncBsuProt.ra
+include wgEncodeUncBsuProtFasp.ra alpha
 
 # Integrated Regulation (wrangler: kent)
 include wgEncodeReg.ra
@@ -20,7 +20,7 @@ include wgEncodeReg.ra
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra alpha
+include wgEncodeGisRnaPet.ra 
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -123,8 +123,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra alpha
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra public
-include wgEncodeHaibMethylRrbs.new.ra alpha,beta
+include wgEncodeHaibMethylRrbs.ra
+
 
 
 
@@ -163,7 +163,7 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.ra beta,public
 include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.new.ra
+include wgEncodeSydhTfbs.ra
 #include wgEncodeSydhTfbs.ra beta,public
 
 # U Chicago TFBS (wrangler: Venkat)

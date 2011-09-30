@@ -4125,12 +4125,24 @@ include decode.rmap.ra
 track geneReviewsBB
 shortLabel GeneReviews
 longLabel GeneReviews   
-group  phenDis 
+group x 
 priority 155
 visibility hide
 color 0, 80, 0
 type bigBed 4 +
 nonBedFieldsLabel  
 html geneReviews
+
+#geneReviews track
+track geneReviews
+shortLabel GeneReviews
+longLabel GeneReviews
+group  phenDis
+priority 155
+visibility hide
+color 0, 80, 0
+type bed 4
+html geneReviews
+
 
 
