@@ -2443,146 +2443,120 @@ void specificUi(struct trackDb *tdb, struct trackDb *tdbList, struct customTrack
 /* Draw track specific parts of UI. */
 {
 char *track = tdb->track;
+// Ideally check cfgTypeFromTdb()/cfgByCfgType() first, but with all these special cases already in
+//    place, lets be cautious at this time.
+// NOTE: Developer, please try to use cfgTypeFromTdb()/cfgByCfgType().
 
-eCfgType cType = cfgTypeFromTdb(tdb,FALSE);
-if (ajax && cType != cfgNone)
-    cfgByCfgType(cType,database,cart,tdb,tdb->track,NULL,FALSE);
-else if (sameString(track, "stsMap"))
-        stsMapUi(tdb);
+if (sameString(track, "stsMap"))
+    stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
     affyTxnPhase2Ui(tdb);
 else if (sameString(track, "cgapSage"))
     cgapSageUi(tdb);
 else if (sameString(track, "stsMapMouseNew"))
-        stsMapMouseUi(tdb);
+    stsMapMouseUi(tdb);
 else if (sameString(track, "stsMapRat"))
-        stsMapRatUi(tdb);
+    stsMapRatUi(tdb);
 else if (sameString(track, "snpMap"))
-        snpMapUi(tdb);
+    snpMapUi(tdb);
 else if (sameString(track, "snp"))
-        snpUi(tdb);
+    snpUi(tdb);
 else if (snpVersion(track) >= 125)
-	snp125Ui(tdb);
-else if (sameString(track, "rertyHumanDiversityLd") ||
-	 startsWith("hapmapLd", track) ||
-	 sameString(tdb->type, "ld2"))
-        ldUi(tdb);
+    snp125Ui(tdb);
+else if (sameString(track, "rertyHumanDiversityLd")
+     ||	 startsWith("hapmapLd", track)
+     ||	 sameString(tdb->type, "ld2"))
+    ldUi(tdb);
 else if (sameString(track, "cbr_waba"))
-        cbrWabaUi(tdb);
+    cbrWabaUi(tdb);
 else if (sameString(track, "fishClones"))
-        fishClonesUi(tdb);
+    fishClonesUi(tdb);
 else if (sameString(track, "recombRate"))
-        recombRateUi(tdb);
+    recombRateUi(tdb);
 else if (sameString(track, "recombRateRat"))
-        recombRateRatUi(tdb);
+    recombRateRatUi(tdb);
 else if (sameString(track, "recombRateMouse"))
-        recombRateMouseUi(tdb);
+    recombRateMouseUi(tdb);
 else if (sameString(track, "cghNci60"))
-        cghNci60Ui(tdb);
-else if (sameString(track, "xenoRefGene"))
-        refGeneUI(tdb);
+    cghNci60Ui(tdb);
+else if (sameString(track, "xenoRefGene")
+     ||  sameString(track, "refGene"))
+    refGeneUI(tdb);
 else if (startsWith("transMapAln", track))
-        transMapUI(tdb);
-else if (sameString(track, "refGene"))
-        refGeneUI(tdb);
+    transMapUI(tdb);
 else if (sameString(track, "rgdGene2"))
-        rgdGene2UI(tdb);
+    rgdGene2UI(tdb);
 else if (sameString(track, "knownGene"))
-        knownGeneUI(tdb);
+    knownGeneUI(tdb);
 else if (sameString(track, "omimLocation"))
-        omimLocationUI(tdb);
+    omimLocationUI(tdb);
 else if (sameString(track, "omimGene2"))
-        omimGene2UI(tdb);
+    omimGene2UI(tdb);
 else if (sameString(track, "omimGene"))
-        omimGeneUI(tdb);
+    omimGeneUI(tdb);
 else if (sameString(track, "hg17Kg"))
-        hg17KgUI(tdb);
-else if (startsWith("ucscRetro", track) || startsWith("retroMrnaInfo", track))
-        retroGeneUI(tdb);
+    hg17KgUI(tdb);
+else if (startsWith("ucscRetro", track)
+     ||  startsWith("retroMrnaInfo", track))
+    retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
-        ensemblNonCodingUI(tdb);
+    ensemblNonCodingUI(tdb);
 else if (sameString(track, "vegaGeneComposite"))
-        vegaGeneUI(tdb);
-else if (sameString(track, "all_mrna"))
+    vegaGeneUI(tdb);
+else if (sameString(track, "all_mrna")
+     ||  sameString(track, "mrna")
+     ||  sameString(track, "all_est")
+     ||  sameString(track, "est")
+     ||  sameString(track, "tightMrna")
+     ||  sameString(track, "tightEst")
+     ||  sameString(track, "intronEst"))
     mrnaUi(tdb, FALSE);
-else if (sameString(track, "mrna"))
-    mrnaUi(tdb, FALSE);
-else if (sameString(track, "splicesP"))
-    bedUi(tdb, cart, "", FALSE);
-else if(sameString(track,"FantomCageBedForward") || sameString(track,"FantomCageBedReverse") ||
-	sameString(track,"FantomCageReadForward") || sameString(track,"FantomCageReadReverse"))
-    bedUi(tdb, cart, "", FALSE);
-else if (sameString(track, "all_est"))
-        mrnaUi(tdb, FALSE);
-else if (sameString(track, "est"))
-        mrnaUi(tdb, FALSE);
-else if (sameString(track, "tightMrna"))
-        mrnaUi(tdb, FALSE);
-else if (sameString(track, "tightEst"))
-        mrnaUi(tdb, FALSE);
-else if (sameString(track, "intronEst"))
-        mrnaUi(tdb, FALSE);
-else if (sameString(track, "xenoMrna"))
-        mrnaUi(tdb, TRUE);
-else if (sameString(track, "xenoEst"))
-        mrnaUi(tdb, TRUE);
+else if (sameString(track, "xenoMrna")
+     ||  sameString(track, "xenoEst"))
+    mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
-        rosettaUi(tdb);
+    rosettaUi(tdb);
 else if (startsWith("blastDm", track))
-        blastFBUi(tdb);
+    blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))
-        blastSGUi(tdb);
-else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG")
-        || sameString(track, "blastCe3WB") || sameString(track, "blastHg18KG")
-        || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
-        blastUi(tdb);
+    blastSGUi(tdb);
+else if (sameString(track, "blastHg17KG")
+     ||  sameString(track, "blastHg16KG")
+     ||  sameString(track, "blastCe3WB")
+     ||  sameString(track, "blastHg18KG")
+     ||  sameString(track, "blatzHg17KG")
+     ||  startsWith("mrnaMap", track)
+     ||  startsWith("mrnaXeno", track))
+    blastUi(tdb);
 else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
-else if (startsWith("bedGraph", tdb->type) || startsWith("bigWig", tdb->type))
-    wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
-else if (startsWith("bamWig", tdb->type))
-    wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
-else if (startsWith("wig", tdb->type))
-        {
-        if (startsWith("wigMaf", tdb->type))
-            wigMafCfgUi(cart, tdb, tdb->track, NULL, FALSE, database);
-        else
-            wigCfgUi(cart,tdb,tdb->track, NULL, FALSE);
-        }
 else if (startsWith("chromGraph", tdb->type))
-        chromGraphUi(tdb);
-/* else if (sameString(track, "affyHumanExon")) */
-/*         affyAllExonUi(tdb); */
+    chromGraphUi(tdb);
 else if (sameString(track, "ancientR"))
-        ancientRUi(tdb);
+    ancientRUi(tdb);
 else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
-         zooWiggleUi(tdb);
-else if (sameString(track, "humMusL") ||
-         sameString( track, "musHumL") ||
-         sameString( track, "regpotent") ||
-         sameString( track, "mm3Rn2L" )	 ||
-         sameString( track, "mm3Hg15L" ) ||
-         sameString( track, "hg15Mm3L" ))
-            humMusUi(tdb,7);
-/* NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
- * add explicitly here only if track has another type (bed, chain).
- * For crossSpeciesUi, the
- * default for chrom coloring is "on", unless track setting
- * colorChromDefault is set to "off" */
-else if (startsWith("net", track))
-    netAlignCfgUi(database, cart, tdb, tdb->track, NULL, FALSE);
-else if (startsWith("chain", track) || endsWith("chainSelf", track))
+    zooWiggleUi(tdb);
+else if (sameString(track, "humMusL")
+     ||  sameString( track, "musHumL")
+     ||  sameString( track, "regpotent")
+     ||  sameString( track, "mm3Rn2L" )
+     ||  sameString( track, "mm3Hg15L" )
+     ||  sameString( track, "hg15Mm3L" ))
+    humMusUi(tdb,7);
+else if (startsWith("chain", track)
+     || endsWith("chainSelf", track))
     chainColorUi(tdb);
-else if (sameString(track, "orthoTop4"))
-    /* still used ?? */
-    crossSpeciesUi(tdb);
-else if (sameString(track, "mouseOrtho"))
-    crossSpeciesUi(tdb);
-else if (sameString(track, "mouseSyn"))
+else if (sameString(track, "orthoTop4") // still used ??
+     ||  sameString(track, "mouseOrtho")
+     ||  sameString(track, "mouseSyn"))
+    // NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
+    // add explicitly here only if track has another type (bed, chain).
+    // For crossSpeciesUi, the
+    // default for chrom coloring is "on", unless track setting
+    // colorChromDefault is set to "off"
     crossSpeciesUi(tdb);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
-
 else if (startsWith("sample", tdb->type))
     genericWiggleUi(tdb,7);
 else if (sameString(track, WIKI_TRACK_TABLE))
@@ -2609,78 +2583,50 @@ else if (startsWith("hapmapSnps", track))
     hapmapSnpsUi(tdb);
 else if (sameString(track, "switchDbTss"))
     switchDbScoreUi(tdb);
-else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track[4])))
+else if (sameString(track, "dgv")
+     || (startsWith("dgvV", track) && isdigit(track[4])))
     dgvUi(tdb);
-#ifdef USE_BAM
-else if (sameString(tdb->type, "bam"))
-    bamCfgUi(cart, tdb, track, NULL, FALSE);
-#endif
-else if (sameString(tdb->type, "vcfTabix"))
-    vcfCfgUi(cart, tdb, track, NULL, FALSE);
-else if (tdb->type != NULL)
-    {
-    /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
-    char *typeLine = cloneString(tdb->type);
-    char *words[8];
-    int wordCount = 0;
-    wordCount = chopLine(typeLine, words);
-    if (wordCount > 0)
+else
+    {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
+        //  When you do, then multi-view cfg and subtrack cfg will work.
+    eCfgType cType = cfgTypeFromTdb(tdb,FALSE);
+    if (cType != cfgNone)
         {
-	if (sameWord(words[0], "genePred"))
+        boolean boxed = trackDbSettingClosestToHomeOn(tdb, "boxedCfg");
+        cfgByCfgType(cType,database, cart, tdb,tdb->track, NULL, boxed);
+        }
+    else if (tdb->type != NULL)
+        {
+        /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
+        char *typeLine = cloneString(tdb->type);
+        char *words[8];
+        int wordCount = 0;
+        wordCount = chopLine(typeLine, words);
+        if (wordCount > 0)
             {
-            genePredCfgUi(cart,tdb,tdb->track,NULL,FALSE);
-            }
-        else if(sameWord(words[0], "encodePeak") || sameWord(words[0], "narrowPeak")
-             || sameWord(words[0], "broadPeak")  || sameWord(words[0], "gappedPeak"))
-	       {
-	       encodePeakUi(tdb, ct);
-	       }
-        else if (sameWord(words[0], "expRatio"))
-	       {
-	       expRatioUi(tdb);
-	       }
-        else if (sameWord(words[0], "array")) /* not quite the same as an "expRatio" type (custom tracks) */
-            {
-            expRatioCtUi(tdb);
-            }
-        /* if bed has score then show optional filter based on score */
-        else if (sameWord(words[0], "bed") && wordCount == 3)
-            {
-            /* Note: jaxQTL3 is a bed 8 format track because of
-                thickStart/thickStart, but there is no valid score.
-                Similarly, the score field for wgRna track is no long used either.
-                It originally was usd to depict different RNA types.  But the new
-                wgRna table has a new field 'type', which is used to store RNA
-                type info and from which to determine the display color of each entry.
-            */
-            int bedFieldCount = atoi(words[1]);
-            if ((bedFieldCount >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
-            &&  !sameString(track, "jaxQTL3") && !sameString(track, "wgRna")
-            &&  !startsWith("encodeGencodeIntron", track))
+            if (sameWord(words[0], "expRatio"))
+                expRatioUi(tdb);
+            else if (sameWord(words[0], "array")) /* not quite the same as an "expRatio" type (custom tracks) */
+                expRatioCtUi(tdb);
+            else if (sameWord(words[0], "psl"))
                 {
-                cfgByCfgType(cfgBedScore,database, cart, tdb,tdb->track, NULL, trackDbSettingClosestToHomeOn(tdb, "boxedCfg"));
+                if (wordCount == 3)
+                if (sameWord(words[1], "xeno"))
+                    crossSpeciesUi(tdb);
+                baseColorDrawOptDropDown(cart, tdb);
+                indelShowOptions(cart, tdb);
+                }
+            else if (sameWord(words[0], "factorSource"))
+                {
+                printf("<BR><B>Cell Abbreviations:</B><BR>\n");
+                char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
+                struct sqlConnection *conn = hAllocConn(database);
+                hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
+                hFreeConn(&conn);
                 }
             }
-        else if (sameWord(words[0], "bed5FloatScore") || sameWord(words[0], "bed5FloatScoreWithFdr"))
-            scoreCfgUi(database, cart,tdb,tdb->track,NULL,1000,FALSE);
-        else if (sameWord(words[0], "psl"))
-            {
-            if (wordCount == 3)
-            if (sameWord(words[1], "xeno"))
-                crossSpeciesUi(tdb);
-            baseColorDrawOptDropDown(cart, tdb);
-	    indelShowOptions(cart, tdb);
-            }
-	else if (sameWord(words[0], "factorSource"))
-	    {
-	    printf("<BR><B>Cell Abbreviations:</B><BR>\n");
-	    char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
-	    struct sqlConnection *conn = hAllocConn(database);
-	    hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
-	    hFreeConn(&conn);
-	    }
+            freeMem(typeLine);
         }
-        freeMem(typeLine);
     }
 if (tdbIsSuperTrack(tdb))
     {

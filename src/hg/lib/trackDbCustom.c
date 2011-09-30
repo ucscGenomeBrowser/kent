@@ -685,6 +685,8 @@ eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary)
 {
 eCfgType cType = cfgNone;
 char *type = tdb->type;
+assert(type != NULL);
+
 if(startsWith("wigMaf", type))
     cType = cfgWigMaf;
 else if(startsWith("wig", type))
@@ -693,11 +695,9 @@ else if(startsWith("bigWig", type))
     cType = cfgWig;
 else if(startsWith("bedGraph", type))
     cType = cfgWig;
-else if(startsWith("netAlign", type))
-    {
+else if(startsWith("netAlign", type)
+     || startsWith("net", tdb->track)) // SPECIAL CASE from hgTrackUi which might not be needed
     cType = cfgNetAlign;
-    warnIfNecessary = FALSE;
-    }
 else if(sameWord("bed5FloatScore",       type)
      || sameWord("bed5FloatScoreWithFdr",type))
     cType = cfgBedScore;
@@ -706,27 +706,37 @@ else if(sameWord("narrowPeak",type)
      || sameWord("encodePeak",type)
      || sameWord("gappedPeak",type))
     cType = cfgPeak;
-else if(sameWord("genePred",type))
+else if(startsWithWord("genePred",type))
         cType = cfgGenePred;
-else if(sameWord("bedLogR",type) || sameWord("peptideMapping", type))
+else if(sameWord("bedLogR",type)
+     || sameWord("peptideMapping", type))
     cType = cfgBedScore;
-else if(startsWith("bed ", type))
+else if(startsWithWord("bed", type))
     {
     char *words[3];
-    chopLine(cloneString( type), words);
+    int wordCount = chopLine(cloneString( type), words);
     if (trackDbSetting(tdb, "bedFilter") != NULL)
-        cType = cfgBedFilt;
-    else if (trackDbSettingClosestToHome(tdb, "filterBy") != NULL)
+	   cType = cfgBedFilt;
+    else if ((atoi(words[1]) >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
+         && (wordCount == 3 || !tdbIsTrackUiTopLevel(tdb))) // Historically needed 'bed n .'
+        {
         cType = cfgBedScore;
-    else if (atoi(words[1]) >= 5 && trackDbSettingClosestToHome(tdb, "noScoreFilter") == NULL)
-        cType = cfgBedScore;
+
+        // FIXME: UGLY SPECIAL CASE should be handled in trackDb!
+        if (startsWith("encodeGencodeIntron", tdb->track))
+            cType = cfgNone;
+        }
     }
 else if(startsWith("chain",type))
     cType = cfgChain;
+else if (startsWith("bamWig", type))
+    cType = cfgWig;
 else if (startsWith("bam", type))
     cType = cfgBam;
 else if (startsWith("psl", type))
     cType = cfgPsl;
+else if (sameWord("vcfTabix",type))
+    cType = cfgVcf;
 // TODO: Only these are configurable so far
 
 if(cType == cfgNone && warnIfNecessary)
