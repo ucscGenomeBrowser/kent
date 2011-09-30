@@ -23874,6 +23874,8 @@ int i;
 char *clickMsg = "Click link(s) below to search GeneReviews and GeneTests";
 boolean firstTime = TRUE;
 
+if (!sqlTablesExist(conn, "geneReviewsRefGene")) return;
+
 safef(query, sizeof(query), "select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -23906,7 +23908,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     }  /* end while */
  printf("</TT></PRE>");
- //printf("<BR>");
  sqlFreeResult(&sr);
 } /* end of prGeneReviews */
 
@@ -23918,6 +23919,8 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 boolean firstTime = TRUE;
+
+if (!sqlTablesExist(conn, "geneReviewsRefGene")) return;
 
 safef(query, sizeof(query), "select grShort, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
 sr = sqlGetResult(conn, query);
@@ -23933,18 +23936,12 @@ while ((row = sqlNextRow(sr)) != NULL)
        printf(" (");                        
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
        printf(")");
-
-//          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-//          printf(" (%s) ", diseaseName);
         } else {
           printf(", ");
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
        printf(" (");
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
        printf(")");
-
-//          printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
-//          printf(" (%s) ", diseaseName);
         }
      }
      printf("<BR>");
