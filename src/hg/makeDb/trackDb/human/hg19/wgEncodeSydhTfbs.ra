@@ -210,17 +210,15 @@ wgEncode 1
 	    subGroups view=Peaks factor=ZNF274 cellType=2HEPG2 control=UCD treatment=aNone
 	    type narrowPeak
 	    color 189,0,157
-	    #metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=2HEPG2 antibody=ZNF274 setType=exp treatment=None inputType=HEPG2/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdPk fileName=wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 	    # was wgEncodeSydhTfbsHepg2bZnf274UcdPk wong Wed Jul  6 14:40:17 2011
 
         track wgEncodeSydhTfbsGm12878Znf274StdPk
-        subTrack wgEncodeSydhTfbsViewPeaks off
+        subTrack wgEncodeSydhTfbsViewPeaks on 
         shortLabel GM78 Z274 Std
         longLabel GM12878 ZNF274 Standard ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=ZNF274 cellType=1GM12878 control=std treatment=aNone
         type narrowPeak
         color 153,38,0
-        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=1GM12878 antibody=ZNF274 setType=exp treatment=None inputType=GM12878/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1203 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878Znf274UcdPk fileName=wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
         # was wgEncodeSydhTfbsGm12878Znf274UcdPk wong Wed Jul 13 16:46:04 2011
 
         track wgEncodeSydhTfbsHuvecGata2UcdPk
@@ -1791,7 +1789,7 @@ wgEncode 1
         # was wgEncodeSydhTfbsK562bZnf263UcdPk wong Fri Jul  1 12:16:27 2011
 
         track wgEncodeSydhTfbsK562Znf274UcdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 Z274 UCD
         longLabel K562 ZNF274 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=ZNF274 cellType=1K562 control=UCD treatment=aNone
@@ -1859,13 +1857,14 @@ wgEncode 1
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878Pol2IggmusPk
-        parent wgEncodeSydhTfbsViewPeaks on 
-        shortLabel GM78 Pol2 IgM
-        longLabel GM12878 Pol2 IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=POL2 cellType=1GM12878 control=IGGMUS treatment=aNone
-        type narrowPeak
-        color 153,38,0
+	#pushed to release 2, bad bams
+        #track wgEncodeSydhTfbsGm12878Pol2IggmusPk
+        #parent wgEncodeSydhTfbsViewPeaks on 
+        #shortLabel GM78 Pol2 IgM
+        #longLabel GM12878 Pol2 IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
+        #subGroups view=Peaks factor=POL2 cellType=1GM12878 control=IGGMUS treatment=aNone
+        #type narrowPeak
+        #color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
         #pushed to release 2, bad bams
@@ -2777,7 +2776,7 @@ wgEncode 1
         # was wgEncodeSydhTfbsHepg2bZnf274UcdSig wong Wed Jul  6 14:40:17 2011
 
         track wgEncodeSydhTfbsGm12878Znf274StdSig
-        subTrack wgEncodeSydhTfbsViewSignal off
+        subTrack wgEncodeSydhTfbsViewSignal on
         shortLabel GM78 Z274 Std
         longLabel GM12878 ZNF274 Standard ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=ZNF274 cellType=1GM12878 control=std treatment=aNone
@@ -4813,7 +4812,7 @@ wgEncode 1
         # was wgEncodeSydhTfbsK562bZnf263UcdSig wong Fri Jul  1 12:16:27 2011
 
         track wgEncodeSydhTfbsK562Znf274UcdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 Z274 UCD
         longLabel K562 ZNF274 UC Davis ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=ZNF274 cellType=1K562 control=UCD treatment=aNone
