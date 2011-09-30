@@ -5180,6 +5180,21 @@ targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
 validation CEBPD_(SC-636)(Missing)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
 
+term CHD1_(A301-218A)
+tag CHD1A301218A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target CHD1
+targetDescription CHD1 is a member of the CHD (chromodomain-helicase-DNA-binding) family of proteins that interacts with nucleosomes and plays a role in chromatin remodeling to modulate transcription. The members of the CHD family of proteins possess 3 common structural and functional domains: a chromodomain (chromatin organization modifier), an SNF2-like helicase/ATPase domain, and a C-terminal DNA-binding domain. CHD1 has been shown to interact with the transcriptional corepressor NCoR and histone deacetylase 1 indicating a role in transcriptional regulation. CHD1 has also been shown to interact with the Paf1 complex and Rtf1 implicating an additional role in transcriptional elongation. Alternate names for CHD1 include chromodomain-helicase-DNA-binding protein 1, ATP-dependent helicase CHD1, and DKFZp686E2337.
+vendorName Bethyl Laboratories
+vendorId A301-218A
+orderUrl http://www.bethyl.com/product/A301-218A
+lab Crawford
+lots A301-218A-1
+targetId GeneCards:CHD1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
+validation missing
+
 term CHD2_(AB68301)
 tag CHD2
 type Antibody
@@ -5549,6 +5564,21 @@ lots A1608
 lab Myers
 validation ETS1(Immunoprecipitation-WesternBlot,MassSpec):human_ETS1_validation_Myers.pdf
 
+term EZH2_(39875)
+tag EZH239875
+type Antibody
+antibodyDescription This EZH2 antibody was raised against a recombinant protein corresponding to amino acids 353-451 of human EZH2.
+target EZH2
+targetDescription EZH2(Enhancer of Zeste homolog 2, also designated Enx1 and SETDB1)is a human homolog of theDrosophilaPolycomb-group protein Enhancer of Zeste protein. It contains a SET domain that catalyzes the methylation of histone H3 at lysine 27 (Histone H3 Lys27monomethylated,dimethylated and trimethylated). Polycomb-group proteins repress gene expression by binding to chromatin and locally altering chromatin structure.EZH2, BMI-1 andSuz12are present in the PRC2 and PRC3 protein complexes that function as mediators of epigenetic transcriptional silencing.EZH2associates with the embryonic ectoderm development protein, the VAV1 oncoprotein, and the X-linked nuclear protein.EZH2may play a role in the hematopoietic and central nervous systems. Deregulation ofEZH2is linked to a variety of cancers.
+vendorName Active Motif
+vendorId 39875
+orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
+lab Crawford
+lots 27210001
+targetId GeneCards:EZH2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
+validation missing
+
 term  FOSL1_(SC-183)
 tag  FOSL1
 type Antibody
@@ -5768,8 +5798,6 @@ lots A1404
 targetId GeneCards:Genecard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:GATA3
 validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
-
-
 
 term GCN5
 tag GCN5
@@ -6211,6 +6239,36 @@ targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
+term HDAC1_(SC-6298)
+tag HDAC1SC6298
+type Antibody
+antibodyDescription goat polyclonal IgG, 200 ug/ml
+target HDAC1
+targetDescription Histone deacetylase 1 (HDAC1) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC1 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC1 include RPD3L1, HD1, GON-10, and DKFZp686H12203.
+vendorName Santa Cruz Biotechnology
+vendorId SC6298
+orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
+lab Crawford
+lots H0509
+targetId GeneCards:HDAC1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
+validation missing
+
+term HDAC2_(A300-705A)
+tag HDAC2A300705A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target HDAC2
+targetDescription Histone deacetylase 2 (HDAC2) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC2 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC2 include HD2, RPD3, and YAF1.
+vendorName Bethyl Laboratories 
+vendorId A300-705A
+orderUrl http://www.bethyl.com/product/A300-705A
+lab Crawford
+lots A300-705A-1
+targetId GeneCards:HDAC2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
+validation missing
+
 term  HDAC2_(SC-6296)
 tag  HDAC2SC6296
 type Antibody
@@ -6314,6 +6372,21 @@ targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation missing
 
+term IKZF1_(IkN)_(UCLA)
+tag IKZF1IKNUCLA
+type Antibody
+antibodyDescription Rabbit polyclonal antibody raised against a recombinant protein encompassing the amino-terminus of the murine IKZF1 protein.
+target IKZF1
+targetDescription IKAROS family zinc finger 1 (Ikaros or IKZF1) is a C2H2 zinc finger transcription factor that is associated with various chromatin-modifying complexes and is suggested to play a role in the development of lymphocytes, B- and T-cells.
+vendorName From the laboratory of Stephen Smale,
+vendorId UCLA
+orderUrl http://people.healthsciences.ucla.edu/institution/personnel?personnel_id=45693
+lab Farnham
+lots N/A
+targetId GeneCards:GeneCard:IKZF1]
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GeneCard:IKZF1]
+validation IKZF1_(IkN)_(UCLA)(missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
+
 term Ini1
 tag INI1
 type Antibody
@@ -6385,6 +6458,21 @@ lots A1111
 targetId GeneCard:IRF9
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF9
 validation IRF9_(SC-496)(WesternBlot,IP-MassSpec):human_IRF9_SC-496_sc-496_validation_Myers.pdf
+
+term JARID1A_(ab26049)
+tag JARID1AAB26049
+type Antibody
+antibodyDescription Rabbit polyclonal to KDM5A / Jarid1A / RBBP2
+target JARID1A
+targetDescription Histone demethylase that specifically demethylates
+vendorName Abcam
+vendorId ab26049 
+orderUrl http://www.abcam.com/KDM5A-Jarid1A-RBBP2-antibody-ab26049.html
+lab Crawford
+lots 910477
+targetId GeneCards:JARID1A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JARID1A
+validation missing
 
 term JunD
 tag JUND
@@ -6894,6 +6982,21 @@ targetId GeneCard:PPARGC1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PPARGC1A
 validation missing
 
+term PHF8_(A301-772A)
+tag PHF8A301772A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target PHF8
+targetDescription PHF8 (PHD finger protein 8) is a member of the jumonji family of proteins and contains a jumonji C (JmjC) domain. The JmjC proteins are predicted to be metalloenzymes that play a role a chromatin remodeling and histone demethylation. PHF8 also bears a PHD (plant homeodomain)- type zinc-finger, a domain also found to be involved in chromatin remodeling and transcriptional regulation. Truncating mutations in PHF8 are associated with X-linked mental retardation and cleft lip/cleft palate. PHF8 is also known as ZNF422 and KIAA1111.
+vendorName Bethyl Laboratories
+vendorId A301-772A
+orderUrl http://www.bethyl.com/product/A301-772A
+lab Crawford
+lots A301-772A-1
+targetId GeneCards:PHF8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
+validation missing
+
 term PITX1_(SC-81979)
 tag PITX1
 type Antibody
@@ -6908,6 +7011,21 @@ lots J0109
 targetId GeneCards:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
 validation PITX1_(SC-81979)(Immunoprecipitation-WesternBlot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
+
+term PLU1
+tag PLU1
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target PLU1
+targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
+vendorName missing
+vendorId missing
+orderUrl missing
+lab Crawford
+lots missing
+targetId GeneCards:PLU1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PLU1
+validation missing
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7068,6 +7186,21 @@ targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
 validation RAD21(Immunoblot):human_RAD21_validation_Myers.pdf
 
+term RBBP5_(A300-109A)
+tag RBBP5A300109A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target RBBP5
+targetDescription Retinoblastoma binding protein 5 (RbBP5) is a subunit of a human Set1-like histone methyltransferase (HMT) complex. The Set-1 like complexes are responsible for mono-, di-, and tri-methylation of histone H3 K4. RbBP5 associates with a multitude of proteins in a number of Set1-like complexes which include various combinations of MLL, MLL2, MLL3, MLL4, ASH2L,WDR5, hDPY-30, hSwd2, CXXC1, HCF1, Menin, PTIP, PA1, NCOA6, and UTX. RbBP5 is also one of many proteins that bind the Retinoblastoma tumor suppressor protein, pRb. Alternate names for RbBP5 are RBQ3 and SWD1.
+vendorName Bethyl Laboratories
+vendorId A300-109A
+orderUrl http://www.bethyl.com/product/A300-109A
+lab Crawford
+lots A300-109A-2
+targetId GeneCards:RBBP5
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
+validation missing
+
 term RPC155
 tag RPC155
 type Antibody
@@ -7124,6 +7257,21 @@ lab Myers
 targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
 validation RXRA(Immunoprecipitation-WesternBlot,MassSpec):human_RXRA_validation_Myers.pdf
+
+term SAP30_(39731)
+tag SAP3039731
+type Antibody
+antibodyDescription This SAP30 antibody (pAb) was raised against recombinant full length human SAP30 protein.
+target SAP30
+targetDescription SAP30, also known asSin3A-associated protein, 30kDa, is part of the SIN3 corepressor complex, that also includes SIN3, SAP18,HDAC1,HDAC2,RbAp46andRbAp48. SAP30 is involved in the functional recruitment of the Sin3-histone deacetylase complex to a specific subset of N-CoR corepressor complexes.
+vendorName Active Motif 
+vendorId 39731
+orderUrl http://www.activemotif.com/catalog/details/39731.html
+lab Crawford
+lots 4710001
+targetId GeneCards:SAP30
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
+validation missing
 
 term SETDB1
 tag SETDB1
@@ -7370,6 +7518,21 @@ lots G0208
 targetId GeneCard
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
 validation STAT5A_(SC-74442)(missing):human_STAT5A_SC-74442_validation_Myers.pdf
+
+term SUZ12_(05-1317)
+tag SUZ12051317
+type Antibody
+antibodyDescription Recombinant protein corresponding to human SUZ12.
+target SUZ12
+targetDescription SUZ12 is a polycomb group (PcG) protein. PcG proteins act by forming multiprotein complexes, which are required to maintain the transcriptionally repressive state of homeotic genes throughout development. PcG proteins are not required to initiate repression, but to maintain it during later stages of development. They probably act via the methylation of histones, rendering chromatin heritably changed in its expressibility. This protein is component of the PRC2 complex, which methylates
+vendorName Millipore 
+vendorId 05-1317 
+orderUrl http://www.millipore.com/catalogue/item/05-1317&open&cid=BIOS-A-BIOC-2538-1102-RC
+lab Crawford
+lots NRG1665726
+targetId GeneCards:SUZ12
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
+validation missing
 
 term SUZ12
 tag SUZ12
