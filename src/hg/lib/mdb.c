@@ -418,7 +418,7 @@ return crc;
 
 // -------------- Sort primitives --------------
 int mdbObjCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
+// Compare mdbObj to sort on obj name, case-insensitive.
 {
 const struct mdbObj *a = *((struct mdbObj **)va);
 const struct mdbObj *b = *((struct mdbObj **)vb);
@@ -426,7 +426,7 @@ return strcasecmp(a->obj, b->obj);
 }
 
 int mdbVarCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
+// Compare mdbVar to sort on var name, case-insensitive.
 {
 const struct mdbVar *a = *((struct mdbVar **)va);
 const struct mdbVar *b = *((struct mdbVar **)vb);
@@ -2435,7 +2435,7 @@ return mdbObjsDropped;
 }
 
 struct mdbObj *mdbObjIntersection(struct mdbObj **pA, struct mdbObj *b)
-// return duplicate objs from an intersection of two mdbObj lists.
+// return objs removed from pA while making an intersection of two mdbObj lists.
 // List b is untouched but pA will contain the resulting intersection
 {
 struct mdbObj *mdbObj;

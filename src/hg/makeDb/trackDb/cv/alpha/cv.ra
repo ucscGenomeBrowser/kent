@@ -1,4 +1,4 @@
-# Controlled vocabulary from ENCODE
+# Controlled vocabularry from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
 
@@ -8233,6 +8233,13 @@ tag TH1014
 type mapAlgorithm
 description TopHat v1.0.14
 
+term TH131
+tag TH131
+type mapAlgorithm
+description TopHat v1.3.1 Provisional
+
+
+
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -11413,13 +11420,6 @@ priority 985
 
 term uniqueness
 tag UNIQUENESS
-type typeOfTerm
-label Mapability Distinctions
-description Degree of region uniqueness or mapability disctinctions
-searchable no
-cvDefined no
-validate none
-priority 590
 # Used in hg19 mapability only
 # It does not vary at all, it was on the possible retire list (11/3/10)
 
