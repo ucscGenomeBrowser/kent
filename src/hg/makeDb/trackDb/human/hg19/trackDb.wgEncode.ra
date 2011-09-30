@@ -123,8 +123,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra alpha
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra public
-include wgEncodeHaibMethylRrbs.new.ra alpha,beta
+include wgEncodeHaibMethylRrbs.ra
+
 
 
 
