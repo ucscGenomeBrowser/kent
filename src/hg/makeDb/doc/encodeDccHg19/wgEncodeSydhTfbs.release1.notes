@@ -13,9 +13,9 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 565
+    Tables: 563
     Files: 2506
-    Gbdbs: 314
+    Gbdbs: 313
 
 A) Untouched Tables (0):
 
@@ -25,7 +25,7 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (565):
+C) New tables (563):
 wgEncodeSydhTfbsGm10847InputIggmusSig
 wgEncodeSydhTfbsGm10847InputTnfaIggrabSig
 wgEncodeSydhTfbsGm10847NfkbTnfaIggrabPk
@@ -445,8 +445,6 @@ wgEncodeSydhTfbsK562Irf1Ifng6hStdPk
 wgEncodeSydhTfbsK562Irf1Ifng6hStdSig
 wgEncodeSydhTfbsK562JundIggrabPk
 wgEncodeSydhTfbsK562JundIggrabSig
-wgEncodeSydhTfbsK562JundStdPk
-wgEncodeSydhTfbsK562JundStdSig
 wgEncodeSydhTfbsK562Kap1UcdPk
 wgEncodeSydhTfbsK562Kap1UcdSig
 wgEncodeSydhTfbsK562Mafkab50322IggrabPk
@@ -592,7 +590,7 @@ wgEncodeSydhTfbsU2osKap1UcdSig
 wgEncodeSydhTfbsU2osSetdb1UcdPk
 wgEncodeSydhTfbsU2osSetdb1UcdSig
 
-C') New files (2503 downloadables, 314 gbdbs):
+C') New files (2503 downloadables, 313 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/
     NOT on RR but must be placed in:
@@ -3337,7 +3335,6 @@ C') New files (2503 downloadables, 314 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Irf1Ifna30StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Irf1Ifng6hStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562JundIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsK562JundStdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Kap1UcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562Mafkab50322IggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsK562MaxStdSig.bigWig
