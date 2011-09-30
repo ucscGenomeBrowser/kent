@@ -5194,6 +5194,21 @@ targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation missing
 
+term CREB1_(SC-240)
+tag CREB1SC240
+type Antibody
+antibodyDescription Mouse monoclonal IgG1; raised against amino acids 254-327 mapping within the DNA binding and dimerization domain of human CREB-1
+target CREB1
+targetDescription This gene encodes a transcription factor that is a member of the leucine zipper family of DNA binding proteins. This protein binds as a homodimer to the cAMP-responsive element, an octameric palindrome. The protein is phosphorylated by several protein kinases, and induces transcription of genes in response to hormonal stimulation of the cAMP pathway.  Alternate splicing of this gene results in two transcript variants encoding different isoforms. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-240
+orderUrl http://www.scbt.com/datasheet-240-creb-1-x-12-antibody.html
+lab Myers
+lots C2306
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
+validation CREB1_(SC-240)(missing):human_CREB1_SC-240_sc-240_validation_Myers.pdf
+
 term CTCF
 tag CTCF
 type Antibody
