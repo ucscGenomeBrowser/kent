@@ -5,7 +5,7 @@ antibody H3K79me3_(ab2621)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -33,7 +33,7 @@ antibody H3K79me3_(ab2621)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -62,7 +62,7 @@ antibody H3K79me3_(ab2621)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -90,7 +90,7 @@ antibody H3K79me3_(ab2621)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -119,7 +119,7 @@ antibody H3K4me2_(ab32356)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -147,7 +147,7 @@ antibody H3K4me2_(ab32356)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -176,7 +176,7 @@ antibody H3K4me2_(ab32356)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -204,7 +204,7 @@ antibody H3K4me2_(ab32356)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -233,7 +233,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -261,7 +261,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -290,7 +290,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -318,7 +318,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -347,7 +347,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -375,7 +375,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -404,7 +404,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -432,7 +432,7 @@ antibody H3K79me2_(ab3594)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -461,7 +461,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myoblast/Input/PCR2x/Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -489,7 +489,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myoblast/Input/PCR2x/Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -518,7 +518,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myoblast/Input/PCR2x/Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -546,7 +546,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myoblast/Input/PCR2x/Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -575,7 +575,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+controlId 10007
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -603,7 +603,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+controlId 10007
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -632,7 +632,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+controlId 10007
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -660,7 +660,7 @@ antibody H3ac_(06-599)
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+controlId 10007
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -689,7 +689,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -717,7 +717,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -746,7 +746,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -774,7 +774,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -803,7 +803,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -831,7 +831,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -860,7 +860,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -888,7 +888,7 @@ antibody H3K4me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -916,8 +916,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myoblast/Input/PCR2x/None
+control Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -944,8 +944,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myoblast/Input/PCR2x/None
+control Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -973,8 +973,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myoblast/Input/PCR2x/None
+control Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1001,8 +1001,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myoblast/Input/PCR2x/None
+control Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1030,8 +1030,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myocyte_60h/Input/PCR2x/None
+control Control_32bp
+controlId 10194
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -1058,8 +1058,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myocyte_60h/Input/PCR2x/None
+control Control_32bp
+controlId 10194
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -1087,8 +1087,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myocyte_60h/Input/PCR2x/None
+control Control_32bp
+controlId 10194
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -1115,8 +1115,8 @@ age immortalized
 antibody H3K27me3
 cell C2C12
 composite wgEncodeCaltechHist
-control None
-controlId C2C12/Myocyte_60h/Input/PCR2x/None
+control Control_32bp
+controlId 10194
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
@@ -1145,7 +1145,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1173,7 +1173,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1202,7 +1202,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1230,7 +1230,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1259,7 +1259,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1287,7 +1287,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1316,7 +1316,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1344,7 +1344,7 @@ antibody H3K36me3
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
@@ -1373,7 +1373,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myoblast/Input/PCR2x/Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1401,7 +1401,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myoblast/Input/PCR2x/Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1429,7 +1429,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myoblast/Input/PCR2x/Control_32bp
+controlId 10135
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1458,7 +1458,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+controlId 10007
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1486,7 +1486,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+controlId 10007
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1514,7 +1514,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_24h/Input/PCR2x/Control_32bp
+controlId 10007
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1543,7 +1543,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_60h/Input/PCR2x/Control_32bp
+controlId 10194
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1571,7 +1571,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_60h/Input/PCR2x/Control_32bp
+controlId 10194
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1599,7 +1599,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_32bp
-controlId C2C12/Myocyte_60h/Input/PCR2x/Control_32bp
+controlId 10194
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1628,7 +1628,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1656,7 +1656,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1684,7 +1684,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myoblast/Input/PCR1x/Control_50bp
+controlId 11612
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1713,7 +1713,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1741,7 +1741,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1769,7 +1769,7 @@ antibody Input
 cell C2C12
 composite wgEncodeCaltechHist
 control Control_50bp
-controlId C2C12/Myocyte_60h/Input/PCR1x/Control_50bp
+controlId 11610
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
@@ -1791,4 +1791,4 @@ tableName wgEncodeCaltechHistC2c12InputFCntrl50bMyc60hPcr1xSigRep1
 treatment Myocyte_60h
 view Signal
 
-# MAGIC: -587292236
+# MAGIC: 693822155
