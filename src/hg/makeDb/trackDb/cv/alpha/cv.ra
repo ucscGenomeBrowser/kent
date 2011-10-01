@@ -5671,15 +5671,16 @@ term FOXP2
 tag FOXP2
 type Antibody
 target FOXP2
-targetDescription transcriptional repressor, involved in development of speech
-antibodyDescription rabbit polyclonal
+antibodyDescription (updating validation documents, antibody description, target description, lot number, vendor) Rabbit polyclonal, raised against C-terminal 127 amino acids of FOXP2 of human origin
+targetDescription This gene encodes a member of the forkhead/winged-helix (FOX) family of transcription factors.  Transcriptional repressor, involved in the development of speech
 vendorName Abcam
 vendorId ab16046
 orderUrl http://www.abcam.com/index.html?datasheet=16046
+lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation missing
+validation FOXP2(missing):human_FOXP2_custom_validation_Myers.pdf
 
 term GABP
 tag GABP
