@@ -1999,3 +1999,58 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ln -s /hive/data/genomes/xenTro3/bed/multiz9way/downloads/md5sum.txt .
 
 #############################################################################
+# hgPal downloads (DONE braney 2011-09-30)
+#   FASTA from 9way for ensGene
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/xenTro3/bed/multiz9way/pal
+    mkdir /cluster/data/xenTro3/bed/multiz9way/pal
+    cd /cluster/data/xenTro3/bed/multiz9way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+    mz=multiz9way
+    gp=ensGene
+    db=xenTro3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+# real    29m58.498s
+# user    8m8.312s
+# sys     6m7.591s
+
+    mz=multiz9way
+    gp=ensGene
+    db=xenTro3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz9way
+    gp=ensGene
+    db=xenTro3
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
