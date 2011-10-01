@@ -49,6 +49,7 @@
                 		<LI><A HREF="#format8">.nib format</A>
                 		<LI><A HREF="#format9">GenePred table format</A>
 				<LI><A HREF="#format10">Personal Genome SNP format</A>
+				<LI><A HREF="#format10.1">VCF format</A>
                                 <LI><A HREF="#format11">ENCODE RNA elements format</A>
 				<LI><A HREF="#format12">narrowPeak format</A>
 				<LI><A HREF="#format13">broadPeak format</A>
@@ -1414,6 +1415,57 @@ chr21	31812879	31812880	C	1	0	0
         <BR>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
+
+<!--Content Table-->
+<A NAME="format10.1"></A>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>
+	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
+	        <TR><TD>
+	        <!--cheap trick to get background on row to be continuous-->
+		<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+		    <FONT SIZE="4"><b>&nbsp; VCF format</b></FONT></TD>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+	        </TABLE>
+	        </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+<P>
+<A HREF="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
+TARGET=_BLANK>Variant Call Format (VCF)</A> is a flexible and extendable
+format for variation data such as single nucleotide variants,
+insertions/deletions, copy number variants and structural variants.
+When a VCF file is compressed and indexed using
+<A HREF="http://samtools.sourceforge.net/tabix.shtml"
+TARGET=_BLANK>tabix</A>, and made web-accesible,
+the Genome Browser can fetch only the portions of the file necessary
+to display items in the viewed region.
+This makes it possible to display alignments from files that
+are so large that the connection to UCSC would time out when
+attempting to upload the whole file to UCSC.
+Both the compressed VCF file and its tabix index file remain on your
+web-accessible server (http or ftp), not on the UCSC server.
+UCSC temporarily caches the accessed portions of the files to speed up
+interactive display.
+</P><P>
+Click <A HREF="../goldenPath/help/vcf.html">here</A> for more information
+about VCF custom tracks.</P>
+<P></P>
+			    </TD><TD WIDTH=15></TD></TR>
+			</TABLE><BR>
+		     </TD></TR>
+		</TABLE>
+	     </TD></TR>
+	</TABLE>
+	<BR>
 
 <!--content table-->
 <a name="format11"></a>

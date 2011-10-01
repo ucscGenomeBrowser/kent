@@ -3622,6 +3622,22 @@ if (!psOutput)
         }
     }
 
+if (!psOutput)
+    {
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
+        cartSessionId(cart), "PDF/PS");
+    }
+
+if (!psOutput)
+    {
+    if (wikiLinkEnabled())
+        {
+        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
+        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
+        cartSessionVarName(), cartSessionId(cart));
+        }
+    }
+
 char ensVersionString[256];
 char ensDateReference[256];
 ensGeneTrackVersion(database, ensVersionString, ensDateReference,
@@ -3808,22 +3824,6 @@ if (!psOutput)
 
 for(link = links; link != NULL; link = link->next)
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s\" TARGET=\"_blank\" class=\"topbar\" id=\"%s\">%s</A>&nbsp;&nbsp;</TD>\n", link->url, link->id, link->name);
-
-if (!psOutput)
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
-        cartSessionId(cart), "PDF/PS");
-    }
-
-if (!psOutput)
-    {
-    if (wikiLinkEnabled())
-        {
-        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
-        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
-        cartSessionVarName(), cartSessionId(cart));
-        }
-    }
 
 if (hIsGisaidServer())
     {
