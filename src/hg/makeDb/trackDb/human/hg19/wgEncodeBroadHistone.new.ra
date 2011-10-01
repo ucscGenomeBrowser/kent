@@ -62,7 +62,7 @@ longLabel Histone Modifications by ChIP-seq from ENCODE/Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHDFa=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTBL=Osteobl
-subGroup3 factor Antibody CTCF=CTCF H2AZ=H2A.Z H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K09me3=H3K9me3 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K79me2=H3K79me2 H4K20me1=H4K20me1 P300=P300 POL2B=Pol2(b) zCTRL=Input_Control
+subGroup3 factor Antibody CHD1A301218A=CHD1_(A301-218A) CTCF=CTCF EZH239875=EZH2_(39875) H2AZ=H2A.Z H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K09me3=H3K9me3 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K79me2=H3K79me2 H4K20me1=H4K20me1 HDAC1SC6298=HDAC1_(SC-6298) HDAC2A300705A=HDAC2_(A300-705A) P300=P300 PHF8A301772A=PHF8_(A301-772A) PLU1=PLU1 POL2B=Pol2(b) RBBP5A300109A=RBBP5_(A300-109A) SAP3039731=SAP30_(39731) zCTRL=Input_Control
 dimensions dimensionY=cellType dimensionX=factor
 sortOrder cellType=+ factor=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
