@@ -17,7 +17,6 @@ grant Stam
 lab UW
 labExpId DS12374
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4883
 view Alignments
@@ -35,7 +34,6 @@ grant Stam
 lab UW
 labExpId DS12374
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4883
 tableName wgEncodeUwDgfAg10803Hotspots
@@ -54,7 +52,6 @@ grant Stam
 lab UW
 labExpId DS12374
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4883
 tableName wgEncodeUwDgfAg10803Pk
@@ -73,7 +70,6 @@ grant Stam
 lab UW
 labExpId DS12374
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4883
 tableName wgEncodeUwDgfAg10803Raw
@@ -91,7 +87,6 @@ fileName wgEncodeUwDgfAg10803RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12374
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4883
 view RawData
@@ -108,7 +103,6 @@ fileName wgEncodeUwDgfAg10803Sig.bigWig
 grant Stam
 lab UW
 labExpId DS12374
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4883
 tableName wgEncodeUwDgfAg10803Sig
@@ -249,7 +243,6 @@ grant Stam
 lab UW
 labExpId DS18208
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4884
 view Alignments
@@ -267,7 +260,6 @@ grant Stam
 lab UW
 labExpId DS18208
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4884
 tableName wgEncodeUwDgfCd20Hotspots
@@ -286,7 +278,6 @@ grant Stam
 lab UW
 labExpId DS18208
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4884
 tableName wgEncodeUwDgfCd20Pk
@@ -305,7 +296,6 @@ grant Stam
 lab UW
 labExpId DS18208
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4884
 tableName wgEncodeUwDgfCd20Raw
@@ -323,7 +313,6 @@ fileName wgEncodeUwDgfCd20RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18208
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4884
 view RawData
@@ -340,7 +329,6 @@ fileName wgEncodeUwDgfCd20Sig.bigWig
 grant Stam
 lab UW
 labExpId DS18208
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4884
 tableName wgEncodeUwDgfCd20Sig
@@ -492,7 +480,6 @@ grant Stam
 lab UW
 labExpId DS12436
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4886
 view Alignments
@@ -510,7 +497,6 @@ grant Stam
 lab UW
 labExpId DS12436
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4886
 tableName wgEncodeUwDgfGm12865Hotspots
@@ -529,7 +515,6 @@ grant Stam
 lab UW
 labExpId DS12436
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4886
 tableName wgEncodeUwDgfGm12865Pk
@@ -548,7 +533,6 @@ grant Stam
 lab UW
 labExpId DS12436
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4886
 tableName wgEncodeUwDgfGm12865Raw
@@ -566,7 +550,6 @@ fileName wgEncodeUwDgfGm12865RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12436
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4886
 view RawData
@@ -583,7 +566,6 @@ fileName wgEncodeUwDgfGm12865Sig.bigWig
 grant Stam
 lab UW
 labExpId DS12436
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4886
 tableName wgEncodeUwDgfGm12865Sig
@@ -860,7 +842,6 @@ grant Stam
 lab UW
 labExpId DS15192
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4895
 view Alignments
@@ -878,7 +859,6 @@ grant Stam
 lab UW
 labExpId DS15192
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4895
 tableName wgEncodeUwDgfHahHotspots
@@ -897,7 +877,6 @@ grant Stam
 lab UW
 labExpId DS15192
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4895
 tableName wgEncodeUwDgfHahPk
@@ -916,7 +895,6 @@ grant Stam
 lab UW
 labExpId DS15192
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4895
 tableName wgEncodeUwDgfHahRaw
@@ -934,7 +912,6 @@ fileName wgEncodeUwDgfHahRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15192
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4895
 view RawData
@@ -951,7 +928,6 @@ fileName wgEncodeUwDgfHahSig.bigWig
 grant Stam
 lab UW
 labExpId DS15192
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4895
 tableName wgEncodeUwDgfHahSig
@@ -970,7 +946,6 @@ grant Stam
 lab UW
 labExpId DS12501
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4887
 view Alignments
@@ -988,7 +963,6 @@ grant Stam
 lab UW
 labExpId DS12501
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4887
 tableName wgEncodeUwDgfHcfHotspots
@@ -1007,7 +981,6 @@ grant Stam
 lab UW
 labExpId DS12501
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4887
 tableName wgEncodeUwDgfHcfPk
@@ -1026,7 +999,6 @@ grant Stam
 lab UW
 labExpId DS12501
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4887
 tableName wgEncodeUwDgfHcfRaw
@@ -1044,7 +1016,6 @@ fileName wgEncodeUwDgfHcfRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12501
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4887
 view RawData
@@ -1061,7 +1032,6 @@ fileName wgEncodeUwDgfHcfSig.bigWig
 grant Stam
 lab UW
 labExpId DS12501
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4887
 tableName wgEncodeUwDgfHcfSig
@@ -1080,7 +1050,6 @@ grant Stam
 lab UW
 labExpId DS12599
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4899
 view Alignments
@@ -1098,7 +1067,6 @@ grant Stam
 lab UW
 labExpId DS12599
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4899
 tableName wgEncodeUwDgfHcmHotspots
@@ -1117,7 +1085,6 @@ grant Stam
 lab UW
 labExpId DS12599
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4899
 tableName wgEncodeUwDgfHcmPk
@@ -1136,7 +1103,6 @@ grant Stam
 lab UW
 labExpId DS12599
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4899
 tableName wgEncodeUwDgfHcmRaw
@@ -1154,7 +1120,6 @@ fileName wgEncodeUwDgfHcmRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12599
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4899
 view RawData
@@ -1171,7 +1136,6 @@ fileName wgEncodeUwDgfHcmSig.bigWig
 grant Stam
 lab UW
 labExpId DS12599
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4899
 tableName wgEncodeUwDgfHcmSig
@@ -1319,7 +1283,6 @@ grant Stam
 lab UW
 labExpId DS12763
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4898
 view Alignments
@@ -1337,7 +1300,6 @@ grant Stam
 lab UW
 labExpId DS12763
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4898
 tableName wgEncodeUwDgfHeeHotspots
@@ -1356,7 +1318,6 @@ grant Stam
 lab UW
 labExpId DS12763
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4898
 tableName wgEncodeUwDgfHeePk
@@ -1375,7 +1336,6 @@ grant Stam
 lab UW
 labExpId DS12763
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4898
 tableName wgEncodeUwDgfHeeRaw
@@ -1393,7 +1353,6 @@ fileName wgEncodeUwDgfHeeRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12763
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4898
 view RawData
@@ -1410,7 +1369,6 @@ fileName wgEncodeUwDgfHeeSig.bigWig
 grant Stam
 lab UW
 labExpId DS12763
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4898
 tableName wgEncodeUwDgfHeeSig
@@ -1562,7 +1520,6 @@ grant Stam
 lab UW
 labExpId DS15115
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4892
 view Alignments
@@ -1580,7 +1537,6 @@ grant Stam
 lab UW
 labExpId DS15115
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4892
 tableName wgEncodeUwDgfHffHotspots
@@ -1599,7 +1555,6 @@ grant Stam
 lab UW
 labExpId DS15115
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4892
 tableName wgEncodeUwDgfHffPk
@@ -1618,7 +1573,6 @@ grant Stam
 lab UW
 labExpId DS15115
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4892
 tableName wgEncodeUwDgfHffRaw
@@ -1636,7 +1590,6 @@ fileName wgEncodeUwDgfHffRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS15115
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4892
 view RawData
@@ -1653,7 +1606,6 @@ fileName wgEncodeUwDgfHffSig.bigWig
 grant Stam
 lab UW
 labExpId DS15115
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4892
 tableName wgEncodeUwDgfHffSig
@@ -1672,7 +1624,6 @@ grant Stam
 lab UW
 labExpId DS12684
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4888
 view Alignments
@@ -1690,7 +1641,6 @@ grant Stam
 lab UW
 labExpId DS12684
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4888
 tableName wgEncodeUwDgfHipeHotspots
@@ -1709,7 +1659,6 @@ grant Stam
 lab UW
 labExpId DS12684
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4888
 tableName wgEncodeUwDgfHipePk
@@ -1728,7 +1677,6 @@ grant Stam
 lab UW
 labExpId DS12684
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4888
 tableName wgEncodeUwDgfHipeRaw
@@ -1746,7 +1694,6 @@ fileName wgEncodeUwDgfHipeRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12684
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4888
 view RawData
@@ -1763,7 +1710,6 @@ fileName wgEncodeUwDgfHipeSig.bigWig
 grant Stam
 lab UW
 labExpId DS12684
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4888
 tableName wgEncodeUwDgfHipeSig
@@ -1911,7 +1857,6 @@ grant Stam
 lab UW
 labExpId DS13185
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4891
 view Alignments
@@ -1929,7 +1874,6 @@ grant Stam
 lab UW
 labExpId DS13185
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4891
 tableName wgEncodeUwDgfHmvecbHotspots
@@ -1948,7 +1892,6 @@ grant Stam
 lab UW
 labExpId DS13185
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4891
 tableName wgEncodeUwDgfHmvecbPk
@@ -1967,7 +1910,6 @@ grant Stam
 lab UW
 labExpId DS13185
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4891
 tableName wgEncodeUwDgfHmvecbRaw
@@ -1985,7 +1927,6 @@ fileName wgEncodeUwDgfHmvecbRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13185
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4891
 view RawData
@@ -2002,7 +1943,6 @@ fileName wgEncodeUwDgfHmvecbSig.bigWig
 grant Stam
 lab UW
 labExpId DS13185
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4891
 tableName wgEncodeUwDgfHmvecbSig
@@ -2021,7 +1961,6 @@ grant Stam
 lab UW
 labExpId DS13242
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4890
 view Alignments
@@ -2039,7 +1978,6 @@ grant Stam
 lab UW
 labExpId DS13242
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4890
 tableName wgEncodeUwDgfHmvecdHotspots
@@ -2058,7 +1996,6 @@ grant Stam
 lab UW
 labExpId DS13242
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4890
 tableName wgEncodeUwDgfHmvecdPk
@@ -2077,7 +2014,6 @@ grant Stam
 lab UW
 labExpId DS13242
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4890
 tableName wgEncodeUwDgfHmvecdRaw
@@ -2095,7 +2031,6 @@ fileName wgEncodeUwDgfHmvecdRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13242
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4890
 view RawData
@@ -2112,7 +2047,6 @@ fileName wgEncodeUwDgfHmvecdSig.bigWig
 grant Stam
 lab UW
 labExpId DS13242
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4890
 tableName wgEncodeUwDgfHmvecdSig
@@ -2260,7 +2194,6 @@ grant Stam
 lab UW
 labExpId DS13150
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4889
 view Alignments
@@ -2278,7 +2211,6 @@ grant Stam
 lab UW
 labExpId DS13150
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4889
 tableName wgEncodeUwDgfHmvecfHotspots
@@ -2297,7 +2229,6 @@ grant Stam
 lab UW
 labExpId DS13150
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4889
 tableName wgEncodeUwDgfHmvecfPk
@@ -2316,7 +2247,6 @@ grant Stam
 lab UW
 labExpId DS13150
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4889
 tableName wgEncodeUwDgfHmvecfRaw
@@ -2334,7 +2264,6 @@ fileName wgEncodeUwDgfHmvecfRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13150
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4889
 view RawData
@@ -2351,7 +2280,6 @@ fileName wgEncodeUwDgfHmvecfSig.bigWig
 grant Stam
 lab UW
 labExpId DS13150
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4889
 tableName wgEncodeUwDgfHmvecfSig
@@ -2858,7 +2786,6 @@ grant Stam
 lab UW
 labExpId DS14426
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4894
 view Alignments
@@ -2876,7 +2803,6 @@ grant Stam
 lab UW
 labExpId DS14426
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4894
 tableName wgEncodeUwDgfHsmmHotspots
@@ -2895,7 +2821,6 @@ grant Stam
 lab UW
 labExpId DS14426
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4894
 tableName wgEncodeUwDgfHsmmPk
@@ -2914,7 +2839,6 @@ grant Stam
 lab UW
 labExpId DS14426
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4894
 tableName wgEncodeUwDgfHsmmRaw
@@ -2932,7 +2856,6 @@ fileName wgEncodeUwDgfHsmmRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14426
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4894
 view RawData
@@ -2949,7 +2872,6 @@ fileName wgEncodeUwDgfHsmmSig.bigWig
 grant Stam
 lab UW
 labExpId DS14426
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4894
 tableName wgEncodeUwDgfHsmmSig
@@ -2968,7 +2890,6 @@ grant Stam
 lab UW
 labExpId DS13981
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4896
 view Alignments
@@ -2986,7 +2907,6 @@ grant Stam
 lab UW
 labExpId DS13981
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4896
 tableName wgEncodeUwDgfHvmfHotspots
@@ -3005,7 +2925,6 @@ grant Stam
 lab UW
 labExpId DS13981
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4896
 tableName wgEncodeUwDgfHvmfPk
@@ -3024,7 +2943,6 @@ grant Stam
 lab UW
 labExpId DS13981
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4896
 tableName wgEncodeUwDgfHvmfRaw
@@ -3042,7 +2960,6 @@ fileName wgEncodeUwDgfHvmfRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS13981
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4896
 view RawData
@@ -3059,7 +2976,6 @@ fileName wgEncodeUwDgfHvmfSig.bigWig
 grant Stam
 lab UW
 labExpId DS13981
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4896
 tableName wgEncodeUwDgfHvmfSig
@@ -3211,7 +3127,6 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4885
 view Alignments
@@ -3229,7 +3144,6 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4885
 tableName wgEncodeUwDgfMonocd14Hotspots
@@ -3248,7 +3162,6 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4885
 tableName wgEncodeUwDgfMonocd14Pk
@@ -3267,7 +3180,6 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4885
 tableName wgEncodeUwDgfMonocd14Raw
@@ -3285,7 +3197,6 @@ fileName wgEncodeUwDgfMonocd14RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16508
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4885
 view RawData
@@ -3302,7 +3213,6 @@ fileName wgEncodeUwDgfMonocd14Sig.bigWig
 grant Stam
 lab UW
 labExpId DS16508
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4885
 tableName wgEncodeUwDgfMonocd14Sig
@@ -3321,7 +3231,6 @@ grant Stam
 lab UW
 labExpId DS12543
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4893
 view Alignments
@@ -3339,7 +3248,6 @@ grant Stam
 lab UW
 labExpId DS12543
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4893
 tableName wgEncodeUwDgfNb4Hotspots
@@ -3358,7 +3266,6 @@ grant Stam
 lab UW
 labExpId DS12543
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4893
 tableName wgEncodeUwDgfNb4Pk
@@ -3377,7 +3284,6 @@ grant Stam
 lab UW
 labExpId DS12543
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4893
 tableName wgEncodeUwDgfNb4Raw
@@ -3395,7 +3301,6 @@ fileName wgEncodeUwDgfNb4RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12543
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4893
 view RawData
@@ -3412,7 +3317,6 @@ fileName wgEncodeUwDgfNb4Sig.bigWig
 grant Stam
 lab UW
 labExpId DS12543
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4893
 tableName wgEncodeUwDgfNb4Sig
@@ -3682,7 +3586,6 @@ grant Stam
 lab UW
 labExpId DS11923
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4897
 view Alignments
@@ -3700,7 +3603,6 @@ grant Stam
 lab UW
 labExpId DS11923
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4897
 tableName wgEncodeUwDgfNhdfneoHotspots
@@ -3719,7 +3621,6 @@ grant Stam
 lab UW
 labExpId DS11923
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4897
 tableName wgEncodeUwDgfNhdfneoPk
@@ -3738,7 +3639,6 @@ grant Stam
 lab UW
 labExpId DS11923
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4897
 tableName wgEncodeUwDgfNhdfneoRaw
@@ -3756,7 +3656,6 @@ fileName wgEncodeUwDgfNhdfneoRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS11923
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4897
 view RawData
@@ -3773,7 +3672,6 @@ fileName wgEncodeUwDgfNhdfneoSig.bigWig
 grant Stam
 lab UW
 labExpId DS11923
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4897
 tableName wgEncodeUwDgfNhdfneoSig
@@ -3792,7 +3690,6 @@ grant Stam
 lab UW
 labExpId DS12829
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4900
 view Alignments
@@ -3810,7 +3707,6 @@ grant Stam
 lab UW
 labExpId DS12829
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4900
 tableName wgEncodeUwDgfNhlfHotspots
@@ -3829,7 +3725,6 @@ grant Stam
 lab UW
 labExpId DS12829
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4900
 tableName wgEncodeUwDgfNhlfPk
@@ -3848,7 +3743,6 @@ grant Stam
 lab UW
 labExpId DS12829
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4900
 tableName wgEncodeUwDgfNhlfRaw
@@ -3866,7 +3760,6 @@ fileName wgEncodeUwDgfNhlfRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS12829
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4900
 view RawData
@@ -3883,7 +3776,6 @@ fileName wgEncodeUwDgfNhlfSig.bigWig
 grant Stam
 lab UW
 labExpId DS12829
-origAssembly Illumina_HiSeq_2000
 project wgEncode
 subId 4900
 tableName wgEncodeUwDgfNhlfSig
