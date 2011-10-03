@@ -8796,6 +8796,11 @@ tag STD
 type control
 description Standard input signal for most experiments.
 
+term IgG-goat
+tag IGGGOAT
+type control
+description Input signal from Normal Goat IgG ChIP-seq.
+
 term IgG-mus
 tag IGGMUS
 type control
