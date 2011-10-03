@@ -200,6 +200,7 @@ identifier goDbXrefId external=GO
 identifier UniProtId external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) display ID."
      uniProt.displayId.val
+     $rn.rgdGene2ToUniProt.value minCheck=0.8
      proteome.uniProtAlias.alias minCheck=0.2
      proteome.spOldNew.newDisplayId minCheck=0.3
      proteome.spOldNew.oldDisplayId minCheck=0.3
@@ -2193,6 +2194,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $ensGeneDb.ensemblToGeneName.name minCheck=0.97
     $ensGeneDb.ensemblSource.name minCheck=0.97
     $kgDb.knownToEnsembl.value chopAfter=.
+    $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
     $danRer.ceBlastTab.query
@@ -2295,6 +2297,7 @@ identifier keggMapId external=KEGG
     $gbd.keggMapDesc.mapID dupeOk
     $gbd.keggPathway.mapID
     $gbd.knownToKeggEntrez.value
+    $gbd.rgdGene2ToKeggEntrez.value
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"

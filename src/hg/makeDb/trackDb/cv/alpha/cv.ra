@@ -5189,7 +5189,7 @@ targetDescription CHD1 is a member of the CHD (chromodomain-helicase-DNA-binding
 vendorName Bethyl Laboratories
 vendorId A301-218A
 orderUrl http://www.bethyl.com/product/A301-218A
-lab Crawford
+lab Bernstein
 lots A301-218A-1
 targetId GeneCards:CHD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
@@ -5573,7 +5573,7 @@ targetDescription EZH2(Enhancer of Zeste homolog 2, also designated Enx1 and SET
 vendorName Active Motif
 vendorId 39875
 orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
-lab Crawford
+lab Bernstein
 lots 27210001
 targetId GeneCards:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
@@ -6249,7 +6249,7 @@ targetDescription Histone deacetylase 1 (HDAC1) is a class I histone deacetylase
 vendorName Santa Cruz Biotechnology
 vendorId SC6298
 orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
-lab Crawford
+lab Bernstein
 lots H0509
 targetId GeneCards:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
@@ -6264,7 +6264,7 @@ targetDescription Histone deacetylase 2 (HDAC2) is a class I histone deacetylase
 vendorName Bethyl Laboratories 
 vendorId A300-705A
 orderUrl http://www.bethyl.com/product/A300-705A
-lab Crawford
+lab Bernstein
 lots A300-705A-1
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
@@ -6469,7 +6469,7 @@ targetDescription Histone demethylase that specifically demethylates
 vendorName Abcam
 vendorId ab26049 
 orderUrl http://www.abcam.com/KDM5A-Jarid1A-RBBP2-antibody-ab26049.html
-lab Crawford
+lab Bernstein
 lots 910477
 targetId GeneCards:JARID1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JARID1A
@@ -6992,7 +6992,7 @@ targetDescription PHF8 (PHD finger protein 8) is a member of the jumonji family 
 vendorName Bethyl Laboratories
 vendorId A301-772A
 orderUrl http://www.bethyl.com/product/A301-772A
-lab Crawford
+lab Bernstein
 lots A301-772A-1
 targetId GeneCards:PHF8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
@@ -7022,7 +7022,7 @@ targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of
 vendorName missing
 vendorId missing
 orderUrl missing
-lab Crawford
+lab Bernstein
 lots missing
 targetId GeneCards:PLU1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PLU1
@@ -7196,7 +7196,7 @@ targetDescription Retinoblastoma binding protein 5 (RbBP5) is a subunit of a hum
 vendorName Bethyl Laboratories
 vendorId A300-109A
 orderUrl http://www.bethyl.com/product/A300-109A
-lab Crawford
+lab Bernstein
 lots A300-109A-2
 targetId GeneCards:RBBP5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
@@ -7268,7 +7268,7 @@ targetDescription SAP30, also known asSin3A-associated protein, 30kDa, is part o
 vendorName Active Motif 
 vendorId 39731
 orderUrl http://www.activemotif.com/catalog/details/39731.html
-lab Crawford
+lab Bernstein
 lots 4710001
 targetId GeneCards:SAP30
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
@@ -7529,7 +7529,7 @@ targetDescription SUZ12 is a polycomb group (PcG) protein. PcG proteins act by f
 vendorName Millipore 
 vendorId 05-1317 
 orderUrl http://www.millipore.com/catalogue/item/05-1317&open&cid=BIOS-A-BIOC-2538-1102-RC
-lab Crawford
+lab Bernstein
 lots NRG1665726
 targetId GeneCards:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
