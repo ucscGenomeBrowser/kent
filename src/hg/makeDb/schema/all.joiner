@@ -3108,6 +3108,14 @@ identifier ceuBcellRNASeqId
 "ID of ceuBcellRNASeq"
     $hg.ceuBcellRNASeq.name dupeOk
 
+identifier geneReviewsId
+"GeneReviews article ID"
+    hg18,hg19.kgXref.geneSymbol dupeOk 
+
+identifier geneReviewsRefGeneId
+"ID of GeneReviewsRefGene"
+    hg18,hg19.kgXref.geneSymbol dupeOk
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
