@@ -8303,6 +8303,75 @@ subId 4368
 tableName wgEncodeUwHistoneHacH3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneHacInputStdAlnRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneHacInputStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS18311
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4634
+view Alignments
+
+metaObject wgEncodeUwHistoneHacInputStdRawDataRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneHacInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18311
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4634
+view RawData
+
+metaObject wgEncodeUwHistoneHacInputStdRawRep1
+objType table
+antibody Input
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneHacInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18311
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4634
+tableName wgEncodeUwHistoneHacInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneHaspH3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -24652,6 +24721,51 @@ subId 4380
 tableName wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneWerirb1InputStdAlnRep1
+objType file
+antibody Input
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 4633
+view Alignments
+
+metaObject wgEncodeUwHistoneWerirb1InputStdRawRep1
+objType table
+antibody Input
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneWerirb1InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 4633
+tableName wgEncodeUwHistoneWerirb1InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1
 objType file
 antibody H3K4me3
@@ -25336,4 +25450,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -2056391426
+# MAGIC: 1730114698

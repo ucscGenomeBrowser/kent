@@ -200,6 +200,7 @@ identifier goDbXrefId external=GO
 identifier UniProtId external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) display ID."
      uniProt.displayId.val
+     $rn.rgdGene2ToUniProt.value minCheck=0.8
      proteome.uniProtAlias.alias minCheck=0.2
      proteome.spOldNew.newDisplayId minCheck=0.3
      proteome.spOldNew.oldDisplayId minCheck=0.3
@@ -265,6 +266,7 @@ identifier UniProtAccession external=UniProt
      $sacCer.sgdToSwissProt.value minCheck=0.9
      go.goaPart.dbObjectId minCheck=0.99
      visiGene.gene.uniProt
+     $rn.rgdGene2ToUniProt.value minCheck=0.8
 
 identifier UniProtAuthor
 "Author ID in UniProt (just use inside UCSC Relationalized UniProt)"
@@ -1467,6 +1469,7 @@ identifier refSeqId typeOf=mrnaAccession
     hg17.dupSpMrna.mrnaID minCheck=0.40
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.37
+    $rn.rgdGene2ToRefSeq.value minCheck=0.95
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
@@ -1879,6 +1882,7 @@ identifier hugoName external=HUGO fuzzy
     $hg.jaxOrtholog.humanSymbol
     $hg.omimMorbidMap.geneSymbols
     visiGene.gene.name
+    $rn.rgdGeneXref3.geneSymbol
 
 identifier kgGeneSymbol
 "UCSC Genes Gene Symbol"
@@ -2193,6 +2197,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $ensGeneDb.ensemblToGeneName.name minCheck=0.97
     $ensGeneDb.ensemblSource.name minCheck=0.97
     $kgDb.knownToEnsembl.value chopAfter=.
+    $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
     $danRer.ensZfishBlastTab.target
     $danRer.ceBlastTab.query
@@ -2295,6 +2300,7 @@ identifier keggMapId external=KEGG
     $gbd.keggMapDesc.mapID dupeOk
     $gbd.keggPathway.mapID
     $gbd.knownToKeggEntrez.value
+    $gbd.rgdGene2ToKeggEntrez.value
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"
@@ -2490,6 +2496,7 @@ identifier locusLinkId external=LocusLink
     $kgDb,!hg16,!mm8.knownToLocusLink.value minCheck=0.98
     hg16,mm8.knownToLocusLink.value minCheck=0.96
     $hg.omim2gene.geneId minCheck=0.60
+    $rn.rgdGene2ToLocusLink.value minCheck=0.70
 
 identifier omimLocationId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) Location ID"
