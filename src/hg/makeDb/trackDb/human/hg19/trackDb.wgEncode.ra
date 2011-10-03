@@ -20,7 +20,7 @@ include wgEncodeReg.ra
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra alpha
+include wgEncodeGisRnaPet.ra 
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -49,7 +49,8 @@ include wgEncodeUw5C.ra alpha
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.ra
+include wgEncodeUwAffyExonArray.ra beta,public
+include wgEncodeUwAffyExonArray.new.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.ra beta,public
@@ -163,8 +164,8 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.ra beta,public
 include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.ra
-#include wgEncodeSydhTfbs.ra beta,public
+include wgEncodeSydhTfbs.new.ra alpha
+include wgEncodeSydhTfbs.ra beta,public
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra 
