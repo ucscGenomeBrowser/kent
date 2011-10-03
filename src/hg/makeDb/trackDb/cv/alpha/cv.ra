@@ -3541,6 +3541,22 @@ sex U
 tier 3
 protocol Stam:RPTEC_Stam_protocol.pdf
 
+term RWPE1
+tag RWPE1
+type Cell Line
+organism human
+description Prostate epithelial
+tissue Prostate
+vendorName ATCC
+vendorId CRL-11609
+karyotype normal
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-11609&Template=cellBiology
+termId BTO:0002397
+termUrl missing
+sex M
+tier 3
+protocol Crawford:RWPE_protocol.pdf
+
 term SAEC
 tag SAEC
 type Cell Line
@@ -6575,7 +6591,7 @@ lab Myers
 lots  J0809
 targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_validation_Myers.pdf
+validation MAX(Immunoprecipitation-WesternBlot,MassSpec):human_Max_validation_Myers.pdf
 
 term MBD4_(SC-271530)
 tag MBD4SC271530
@@ -6917,7 +6933,7 @@ term PAX5-C20
 tag PAX5
 type Antibody
 target PAX5
-antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
+antibodyDescription Goat polyclonal IgG, 200 micro grams/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
 vendorId sc-1974
@@ -6925,13 +6941,13 @@ orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-C20(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5_C-20_validation_Myers.pdf
+validation PAX5-C20(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-C20_validation_Myers.pdf
 
 term PAX5-N19
 tag PAX5b
 type Antibody
 target PAX5
-antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
+antibodyDescription Goat polyclonal IgG, 200 micro grams /ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
 vendorId sc-1975
@@ -6939,7 +6955,7 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5_N-19_validation_Myers.pdf
+validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-N19_validation_Myers.pdf
 
 term PAX5_(N-15)
 tag PAX5c
@@ -7315,7 +7331,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
 targetId GeneCard:SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Sin3Ak-20(Immunoprecipitation-WesternBlot,MassSpec):human_Sin3A_K-20_validation_Myers.pdf
+validation Sin3Ak-20(Immunoprecipitation-WesternBlot,MassSpec):human_Sin3Ak-20_validation_Myers.pdf
 
 term SIRT6
 tag SIRT6
@@ -7385,8 +7401,8 @@ vendorId sc-643
 orderUrl http://www.scbt.com/datasheet-643-sp2-k-20-antibody.html
 lab Myers
 lots K1803
-targetId GeneCards:TAF7
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
+targetId GeneCards:SP2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP2
 validation missing
 
 term SP4_(V-20)
