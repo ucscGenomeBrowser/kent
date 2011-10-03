@@ -26781,6 +26781,70 @@ tableName wgEncodeSydhTfbsHepg2InputForsklnStdSig
 treatment forskolin
 view Signal
 
+metaObject wgEncodeSydhTfbsHepg2InputIgggoatAlnRep1
+objType file
+antibody Input
+cell HepG2
+composite wgEncodeSydhTfbs
+control IgG-goat
+controlId HepG2/None/Input/IgG-goat
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-28
+fileName wgEncodeSydhTfbsHepg2InputIgggoatAlnRep1.bam
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType input
+subId 4925
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2InputIgggoatRawDataRep1
+objType file
+antibody Input
+cell HepG2
+composite wgEncodeSydhTfbs
+control IgG-goat
+controlId HepG2/None/Input/IgG-goat
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-28
+fileName wgEncodeSydhTfbsHepg2InputIgggoatRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+project wgEncode
+replicate 1
+setType input
+subId 4925
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2InputIgggoatSig
+objType table
+antibody Input
+cell HepG2
+composite wgEncodeSydhTfbs
+control IgG-goat
+controlId HepG2/None/Input/IgG-goat
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-28
+fileName wgEncodeSydhTfbsHepg2InputIgggoatSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 4925
+tableName wgEncodeSydhTfbsHepg2InputIgggoatSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsHepg2InputIggrabAln
 objType file
 antibody Input
@@ -49787,4 +49851,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 834899106
+# MAGIC: 737674003
