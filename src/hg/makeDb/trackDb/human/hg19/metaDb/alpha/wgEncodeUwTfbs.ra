@@ -8939,6 +8939,75 @@ subId 4686
 tableName wgEncodeUwTfbsHacCtcfStdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwTfbsHacInputStdAlnRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwTfbs
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwTfbsHacInputStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS18311
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4635
+view Alignments
+
+metaObject wgEncodeUwTfbsHacInputStdRawDataRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwTfbs
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwTfbsHacInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18311
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4635
+view RawData
+
+metaObject wgEncodeUwTfbsHacInputStdRawRep1
+objType table
+antibody Input
+cell HAc
+composite wgEncodeUwTfbs
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwTfbsHacInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18311
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4635
+tableName wgEncodeUwTfbsHacInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwTfbsHaspCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -19550,4 +19619,4 @@ subId 4365
 tableName wgEncodeUwTfbsWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1966228826
+# MAGIC: -2045328186
