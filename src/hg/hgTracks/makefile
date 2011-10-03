@@ -5,6 +5,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTracks
+RENDERA = hgRenderTracks
 
 COMMONO = altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWarn.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
@@ -18,6 +19,8 @@ COMMONO = altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWar
 	wiki.o wikiTrack.o imageV2.o
 
 O = mainMain.o ${COMMONO} 
+
+export RENDERO = renderMain.o ${COMMONO}
 
 include ../../inc/cgi_build_rules.mk
 
@@ -37,26 +40,13 @@ endif
 mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
-RENDERO = renderMain.o ${COMMONO}
-RENDERA = ./hgRenderTracks
-
-# when it is time to deliver hgRenderTracks, remove the rm and echo below
-compile: compileMain
-	@rm -f ${RENDERA}
-	@echo "run 'make hgRenderTracks' to obtain that binary"
+compile: compileMain ${RENDERA}
 
 compileMain: $O
 	${CC} ${CFLAGS} -o $A $O ${MYLIBS} ${L}
 
 ${RENDERA}: ${RENDERO}
-	${CC} ${CFLAGS} -o ${RENDERA} ${RENDERO} ${MYLIBS} ${L}
-
-# install of RENDERA is not enabled yet.
-#	When it is desired, would need three different targets:
-#	my:: - for personal browser into ${CGI_BIN}-${USER}
-#	alpha:: - for browser into ${CGI_BIN}
-#	beta:: - for browser into ${CGI_BIN}-beta
-#	install:: - into DESTDIR/CGI_BIN
+	${MAKE} -f makefile.hgRenderTracks ${MAKECMDGOALS}
 
 wigTrack.o:	wigCommon.h
 bedGraph.o:	wigCommon.h

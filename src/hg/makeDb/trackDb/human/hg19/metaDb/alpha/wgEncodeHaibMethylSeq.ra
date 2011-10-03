@@ -13,7 +13,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000279
 expId 279
-fileName wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam,wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL84
@@ -76,7 +76,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000280
 expId 280
-fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam,wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL111
@@ -98,7 +98,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000280
 expId 280
-fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam,wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL112
@@ -202,7 +202,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000294
 expId 294
-fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam,wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL296
@@ -224,7 +224,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000294
 expId 294
-fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam,wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL297
@@ -288,7 +288,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000294
 expId 294
-fileName wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam,wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL298
@@ -310,7 +310,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000294
 expId 294
-fileName wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam
+fileName wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam,wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL299
@@ -414,7 +414,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000300
 expId 300
-fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam,wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL832
@@ -436,7 +436,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000300
 expId 300
-fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam,wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL833
@@ -500,7 +500,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000300
 expId 300
-fileName wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam,wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL828
@@ -522,7 +522,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000300
 expId 300
-fileName wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam
+fileName wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam,wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL829
@@ -626,7 +626,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000303
 expId 303
-fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam,wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL834
@@ -648,7 +648,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000303
 expId 303
-fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam,wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL835
@@ -712,7 +712,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000303
 expId 303
-fileName wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam,wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL830
@@ -734,7 +734,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000303
 expId 303
-fileName wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam
+fileName wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam,wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL831
@@ -838,7 +838,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000306
 expId 306
-fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam,wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL605
@@ -860,7 +860,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000306
 expId 306
-fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam,wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL659
@@ -928,7 +928,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000306
 expId 306
-fileName wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam,wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL604
@@ -950,7 +950,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000306
 expId 306
-fileName wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam
+fileName wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam,wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL658
@@ -1058,7 +1058,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000281
 expId 281
-fileName wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam,wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL26
@@ -1121,7 +1121,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH000283
 expId 283
-fileName wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam,wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL43
@@ -1163,7 +1163,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH000282
 expId 282
-fileName wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam,wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL42
@@ -1226,7 +1226,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000284
 expId 284
-fileName wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam,wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL46
@@ -1289,7 +1289,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000285
 expId 285
-fileName wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam,wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL24
@@ -1352,7 +1352,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH000286
 expId 286
-fileName wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam,wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL44
@@ -1394,7 +1394,7 @@ dateSubmitted 2010-11-15
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH000287
 expId 287
-fileName wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam,wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL86
@@ -1457,7 +1457,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000288
 expId 288
-fileName wgEncodeHaibMethylSeqHalHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHalHpaAlnRep1.bam,wgEncodeHaibMethylSeqHalHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL37
@@ -1520,7 +1520,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000289
 expId 289
-fileName wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam,wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL8
@@ -1542,7 +1542,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000289
 expId 289
-fileName wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam,wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL33
@@ -1585,7 +1585,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000289
 expId 289
-fileName wgEncodeHaibMethylSeqHct116MspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHct116MspAlnRep1.bam,wgEncodeHaibMethylSeqHct116MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL10
@@ -1646,7 +1646,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000309
 expId 309
-fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam,wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL577
@@ -1668,7 +1668,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000309
 expId 309
-fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam,wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL603
@@ -1736,7 +1736,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000309
 expId 309
-fileName wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam,wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL574
@@ -1758,7 +1758,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000309
 expId 309
-fileName wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam
+fileName wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam,wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL602
@@ -1866,7 +1866,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000312
 expId 312
-fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam,wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL578
@@ -1888,7 +1888,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000312
 expId 312
-fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam,wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL579
@@ -1956,7 +1956,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000312
 expId 312
-fileName wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam,wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL575
@@ -1978,7 +1978,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000312
 expId 312
-fileName wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam
+fileName wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam,wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL576
@@ -2086,7 +2086,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-164
 dccAccession wgEncodeEH000290
 expId 290
-fileName wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam,wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL113
@@ -2149,7 +2149,7 @@ dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 dccAccession wgEncodeEH000291
 expId 291
-fileName wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam,wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL114
@@ -2212,7 +2212,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000297
 expId 297
-fileName wgEncodeHaibMethylSeqK562HpaAlnRep1.bam
+fileName wgEncodeHaibMethylSeqK562HpaAlnRep1.bam,wgEncodeHaibMethylSeqK562HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL229
@@ -2234,7 +2234,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000297
 expId 297
-fileName wgEncodeHaibMethylSeqK562HpaAlnRep2.bam
+fileName wgEncodeHaibMethylSeqK562HpaAlnRep2.bam,wgEncodeHaibMethylSeqK562HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL231
@@ -2298,7 +2298,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000297
 expId 297
-fileName wgEncodeHaibMethylSeqK562MspAlnRep1.bam
+fileName wgEncodeHaibMethylSeqK562MspAlnRep1.bam,wgEncodeHaibMethylSeqK562MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL230
@@ -2320,7 +2320,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000297
 expId 297
-fileName wgEncodeHaibMethylSeqK562MspAlnRep2.bam
+fileName wgEncodeHaibMethylSeqK562MspAlnRep2.bam,wgEncodeHaibMethylSeqK562MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labExpId SL232

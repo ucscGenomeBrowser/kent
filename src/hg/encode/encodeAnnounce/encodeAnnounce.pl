@@ -51,7 +51,7 @@ my @releases;
 while (@row = $sth->fetchrow_array()) {
     my ($track, $longLabel, $qadate, $url) = @row;
     push @tracks, $track;
-    $url =~ s|^.*cgi-bin|http://$publicHost/cgi-bin/|;
+    $url =~ s|^.*cgi-bin/|http://$publicHost/cgi-bin/|;
     my %release = ("track" => $track, "longLabel" => $longLabel, 
                    "date" => $qadate, "url" => $url);
     push @releases, \%release;

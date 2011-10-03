@@ -36,8 +36,6 @@ class CvFile(ra.RaFile):
 		self.protocolPath = protocolPath
 		if protocolPath == None:
 			self.protocolPath == os.path.expanduser('~/htdocsExtras/ENCODE/')
-			if not os.path.isdir(self.protocolPath):
-				self.protocolPath = None
 		
 		self.read(filePath)
 

@@ -1932,10 +1932,6 @@ foreach my $ddfLine (@ddfLines) {
     
     
     my $metadata = "project=wgEncode grant=$daf->{grant} lab=$lab";
-    if (defined($labs{$lab}) && $labs{$lab}->{pi} ne $labs{$lab}->{grant}) {
-        # add co-PI name
-        $metadata .= "($labs{$lab}->{pi})";
-    }
     $metadata .= " dataType=$daf->{dataType}";
     $metadata .= " cell=$ddfLine->{cell}" if $ddfLine->{cell}; # force some order
     $metadata .= " antibody=$ddfLine->{antibody}" if $ddfLine->{antibody};

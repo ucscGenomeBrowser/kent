@@ -4120,15 +4120,15 @@ termiRegex HSA_NumtS_*
 include decode.rmap.ra
 
 #geneReviews track
-track geneReviewsBB
+track geneReviews
 shortLabel GeneReviews
-longLabel GeneReviews   
-group  phenDis 
+longLabel GeneReviews
+group  phenDis
 priority 155
 visibility hide
 color 0, 80, 0
-type bigBed 4 +
-nonBedFieldsLabel  
+type bed 4
 html geneReviews
+
 
 
