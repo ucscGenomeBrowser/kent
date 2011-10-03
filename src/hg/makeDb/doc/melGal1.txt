@@ -22,7 +22,7 @@ Assembly Accession:	GCA_000146605.1
 
 # Meleagris gallopavo (NCBI Project ID: 10805, Accession: GCA_000146605.1)
 #    by Turkey Genome Consortium
-#    sequence: 
+#    sequence:
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Meleagris_gallopavo/Turkey_2.01/
 
 ##########################################################################
@@ -37,7 +37,7 @@ Assembly Accession:	GCA_000146605.1
     # FINISHED --2010-10-22 08:28:53--
     # Downloaded: 243 files, 611M in 9m 19s (1.09 MB/s)
 
-    # Read ASSEMBLY_INFO 
+    # Read ASSEMBLY_INFO
 
     mkdir ucscChr
     # stay at genbank directory
@@ -62,7 +62,7 @@ do
     zcat ${S}/FASTA/chr${C}.fa.gz | grep -v "^>" >> ucscChr/chr${C}.fa
     gzip ucscChr/chr${C}.fa &
 done
-   # Check them with faSize 
+   # Check them with faSize
     faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
     #   2784748484 bases (1600136831 N's 1184611653 real 1184611653 upper
     #   0 lower) in 27 sequences in 27 files
@@ -940,3 +940,116 @@ chainOne $(path1)
     hgsql -Ne 'select name from nscanGene' melGal1 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
 
 ############################################################################
+# lastz  Turkey vs Frog xenTro3 (DONE - 2011-09-22 - Hiram)
+    # This was repeated below with different lastz parameters that
+    # give a bit higher coverage
+    mkdir /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22
+    cd /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22
+
+    cat << '_EOF_' > DEF
+# Turkey vs. Frog
+
+# TARGET: Turkey melGal1
+SEQ1_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs 
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    648m6.498s
+    cat fb.melGal1.chainXenTro3Link.txt 
+    #	35993896 bases of 935922386 (3.846%) in intersection
+
+    cd  /hive/data/genomes/melGal1/bed
+    ln -s lastzXenTro3.2011-09-22 lastz.xenTro3
+    
+    #   running the swap 
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #	real    3m29.407s
+
+    cat fb.xenTro3.chainMelGal1Link.txt 
+    #	42384698 bases of 1358334882 (3.120%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+#######################################################################
+# lastz  Turkey vs Frog xenTro3 (DONE - 2011-09-27 - Hiram)
+    mkdir /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-27
+    cd /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-27
+
+    cat << '_EOF_' > DEF
+# Turkey vs. Frog
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Turkey melGal1
+SEQ1_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ1_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-27
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    537m35.283s
+    cat fb.melGal1.chainXenTro3Link.txt
+    #	49081729 bases of 935922386 (5.244%) in intersection
+
+    cd  /hive/data/genomes/melGal1/bed
+    ln -s lastzXenTro3.2011-09-27 lastz.xenTro3
+
+    #   running the swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.melGal1.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/melGal1/bed/lastzXenTro3.2011-09-27/DEF \
+        -swap \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1
+    #	real    4m9.023s
+
+    cat fb.xenTro3.chainMelGal1Link.txt
+    #	57087653 bases of 1358334882 (4.203%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.melGal1.swap lastz.melGal1
+
+#######################################################################

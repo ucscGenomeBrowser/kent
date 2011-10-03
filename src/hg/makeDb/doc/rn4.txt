@@ -5523,6 +5523,13 @@ hgsql rn4 -N -e\
 doRgdGene2Col rn4 ensembl_id rgdGene2ToEnsembl.txt
 hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToEnsembl -lookup=rgdGene2ToEnsembl.txt
 
+# transcript ID instead of gene ID should be used.  Fix it here.  (Fan, 9/27/2011)
+
+hgsql rn4 -N -e 'select r.name, gtp.transcript from ensGtp gtp,
+rgdGene2ToEnsembl r where r.value=gtp.gene' >rgdGene2ToEnsTranscript.tab
+hgsql rn4 -e 'delete from rgdGene2ToEnsembl'
+hgsql rn4 -e 'load data local infile "rgdGene2ToEnsTranscript.tab" into table rgdGene2ToEnsembl'
+
 # build rgdGene2ToLocusLink table
 
 doRgdGene2Col rn4 entrez_gene rgdGene2ToLl.txt
@@ -5758,3 +5765,113 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn4.swap lastz.rn4
 
 #############################################################################
+# lastz Frog xenTro3 (WORKING - 2011-09-22 - Hiram)
+    mkdir /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
+    cd /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
+    cat << '_EOF_' > DEF
+# rat vs. frog
+# Mammal to non-mammal, with threshold of 8000 as in mm8-xenTro1
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Rat rn4
+SEQ1_DIR=/scratch/data/rn4/rn4.2bit
+SEQ1_LEN=/scratch/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+
+BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
+'_EOF_'
+    # << emacs
+
+    screen # manage long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	real    549m35.173s
+    cat fb.rn4.chainXenTro3Link.txt 
+    #	66202042 bases of 2571531505 (2.574%) in intersection
+
+    cd /hive/data/genomes/rn4/bed
+    ln -s lastzXenTro3.2011-09-22 lastz.xenTro3
+
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.rn4.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.rn4.swap
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	Elapsed time: 20m33s
+
+    cat fb.xenTro3.chainRn4Link.txt 
+    #	70846825 bases of 1358334882 (5.216%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.rn4.swap lastz.rn4
+
+#############################################################################
+# hgPal downloads (DONE braney 2011-09-30)
+#   FASTA from 9way for rgdGene2
+
+    ssh hgwdev
+    screen
+    bash
+    rm -rf /cluster/data/rn4/bed/multiz9way/pal
+    mkdir /cluster/data/rn4/bed/multiz9way/pal
+    cd /cluster/data/rn4/bed/multiz9way/pal
+    for i in `cat ../species.lst`; do echo $i; done > order.lst
+
+    mz=multiz9way
+    gp=rgdGene2
+    db=rn4
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+    mz=multiz9way
+    gp=rgdGene2
+    db=rn4
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz9way
+    gp=rgdGene2
+    db=rn4
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+

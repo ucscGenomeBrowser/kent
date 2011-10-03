@@ -21,7 +21,7 @@
 # type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
 # organism (used in many ways.  Should correspond to a "type organism" stanza. required)
 # description (human-readable description of cell type, for cell type cellTypes.html. required)
-# tissue (general tissue type, for categorizing cell types, 
+# tissue (general tissue type, for categorizing cell types,
 #          all words uppercase, space separated, optional)
 # vendorName (name of vendor or lab that provides these cells. required)
 # vendorId (the ID of the cell type in the vendor's catalog. optional)
@@ -80,8 +80,7 @@ tag K562b
 type Cell Line
 organism human
 tier 1
-description OBSOLETE, K562b is identical to K562
-#oldDescription leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
+description leukemia (UCDavis alternate), "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 deprecated same as K562
 sex F
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-243&Template=cellBiology
@@ -119,9 +118,8 @@ term HepG2b
 tag HEPG2b
 type Cell Line
 organism human
-description OBSOLETE, HepG2b is identical to HepG2
-deprecated same as HepG2 
-#oldDescription liver carcinoma (UCDavis alternate)
+description liver carcinoma (UCDavis alternate)
+deprecated same as HepG2
 tissue Liver
 vendorName ATCC
 vendorId HB-8065
@@ -374,7 +372,7 @@ tag ASTRO
 type Cell Line
 organism human
 description normal human astrocytes, Astrocy is the same as cell line NH-A 
-# deprecated same as NH-A 
+deprecated same as NH-A 
 tissue Brain
 lineage ectoderm
 vendorName Lonza
@@ -2183,8 +2181,7 @@ term HEK293(b)
 tag HEK293b
 type Cell Line
 organism human
-description OBSOLETE, HEK293(b) is identical to HEK293
-#oldDescription embryonic kidney (alternate protocol). (PMID: 11967234)
+description embryonic kidney (alternate protocol). (PMID: 11967234)
 deprecated same as HEK293
 vendorName ATCC
 vendorId CRL-1573
@@ -2203,7 +2200,7 @@ tag HEK293T
 type Cell Line
 tier 3
 organism human
-description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line 
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor, HEK293 (ATCC number CRL-1573) is the parental cell line
 lineage mesoderm
 karyotype cancer, hypotriploid, XXX
 derivedFrom HEK293
@@ -2897,7 +2894,7 @@ description  induced pluripotent stem cell derived from skin fibroblast
 lineage  induced pluripotent stem cell derived from skin fibroblast
 karyotype  Unknown
 sex B
-tissue Induced Pluripotent Stem Cell 
+tissue Induced Pluripotent Stem Cell
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
@@ -3134,7 +3131,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Monocytes-CD14+_RO01746
-tag MONOCD14
+tag MONOCD14RO1746
 type Cell Line
 #tier 2
 tier 3
@@ -3544,6 +3541,22 @@ sex U
 tier 3
 protocol Stam:RPTEC_Stam_protocol.pdf
 
+term RWPE1
+tag RWPE1
+type Cell Line
+organism human
+description Prostate epithelial
+tissue Prostate
+vendorName ATCC
+vendorId CRL-11609
+karyotype normal
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-11609&Template=cellBiology
+termId BTO:0002397
+termUrl missing
+sex M
+tier 3
+protocol Crawford:RWPE_protocol.pdf
+
 term SAEC
 tag SAEC
 type Cell Line
@@ -3833,14 +3846,14 @@ tier 3
 organism human
 description Chordoma cell line
 lineage ectoderm
-karyotype cancer 
+karyotype cancer
 sex M
 tissue Chordoma
 vendorName Chordoma Research
 vendorId Foundation
 orderUrl http://www.chordomafoundation.org/research/
 termId BTO:0001768
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001768&termName=notochord 
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001768&termName=notochord
 lab Crawford
 protocol Crawford(Missing):UCH1_Crawford_protocol.pdf
 
@@ -4182,7 +4195,7 @@ tissue Blood
 category primaryCells
 age ageUnknown
 strain Unknown
-description Erythroblast, ter119+ cells from liver 
+description Erythroblast, ter119+ cells from liver
 vendorName Mitch Weiss lab
 vendorId Erythroblast
 orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
@@ -5050,6 +5063,21 @@ targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation missing
 
+term BTF3_(SC-166093)
+tag BTF3SC166093
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against amino acids 1-206 representing full length BTF3a of human origin.
+target BTF3
+targetDescription This gene encodes the basic transcription factor 3. This protein forms a stable complex with RNA polymerase IIB and is required for transcriptional initiation. Alternative splicing results in multiple transcript variants encoding different isoforms. This gene has multiple pseudogenes. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-166093
+orderUrl http://www.scbt.com/datasheet-166093-btf3a-b-a-5-antibody.html
+lab Myers
+lots G2209
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
+validation BTF3_(SC-166093)(missing):human_BTF3_SC-166093_validation_Myers.pdf
+
 term c-Fos
 tag CFOS
 type Antibody
@@ -5144,7 +5172,7 @@ type Antibody
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of CEBPB of rat origin.
 target CEBPB
 targetDescription The protein encoded by this intronless gene is a bZIP transcription factor which can bind as a homodimer to certain DNA regulatory regions.  It can also form heterodimers with the related proteins CEBP-alpha, CEBP-delta, and CEBP-gamma.  The encoded protein is important in the regulation of genes involved in immune and inflammatory responses and has been shown to bind to the IL-1 response element in the IL-6 gene, as well as to regulatory regions of several acute-phase and cytokine genes.  In addition, the encoded protein can bind the promoter and upstream element and stimulate the expression of the collagen type I gene (provided by RefSeq).
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId sc-150
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 lab Myers
@@ -5168,6 +5196,21 @@ targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
 validation CEBPD_(SC-636)(Missing)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
 
+term CHD1_(A301-218A)
+tag CHD1A301218A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target CHD1
+targetDescription CHD1 is a member of the CHD (chromodomain-helicase-DNA-binding) family of proteins that interacts with nucleosomes and plays a role in chromatin remodeling to modulate transcription. The members of the CHD family of proteins possess 3 common structural and functional domains: a chromodomain (chromatin organization modifier), an SNF2-like helicase/ATPase domain, and a C-terminal DNA-binding domain. CHD1 has been shown to interact with the transcriptional corepressor NCoR and histone deacetylase 1 indicating a role in transcriptional regulation. CHD1 has also been shown to interact with the Paf1 complex and Rtf1 implicating an additional role in transcriptional elongation. Alternate names for CHD1 include chromodomain-helicase-DNA-binding protein 1, ATP-dependent helicase CHD1, and DKFZp686E2337.
+vendorName Bethyl Laboratories
+vendorId A301-218A
+orderUrl http://www.bethyl.com/product/A301-218A
+lab Bernstein
+lots A301-218A-1
+targetId GeneCards:CHD1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
+validation missing
+
 term CHD2_(AB68301)
 tag CHD2
 type Antibody
@@ -5181,6 +5224,21 @@ lab Snyder
 targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation missing
+
+term CREB1_(SC-240)
+tag CREB1SC240
+type Antibody
+antibodyDescription Mouse monoclonal IgG1; raised against amino acids 254-327 mapping within the DNA binding and dimerization domain of human CREB-1
+target CREB1
+targetDescription This gene encodes a transcription factor that is a member of the leucine zipper family of DNA binding proteins. This protein binds as a homodimer to the cAMP-responsive element, an octameric palindrome. The protein is phosphorylated by several protein kinases, and induces transcription of genes in response to hormonal stimulation of the cAMP pathway.  Alternate splicing of this gene results in two transcript variants encoding different isoforms. (provided by RefSeq)
+vendorName Santa Cruz Biotech
+vendorId sc-240
+orderUrl http://www.scbt.com/datasheet-240-creb-1-x-12-antibody.html
+lab Myers
+lots C2306
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
+validation CREB1_(SC-240)(missing):human_CREB1_SC-240_sc-240_validation_Myers.pdf
 
 term CTCF
 tag CTCF
@@ -5522,6 +5580,21 @@ lots A1608
 lab Myers
 validation ETS1(Immunoprecipitation-WesternBlot,MassSpec):human_ETS1_validation_Myers.pdf
 
+term EZH2_(39875)
+tag EZH239875
+type Antibody
+antibodyDescription This EZH2 antibody was raised against a recombinant protein corresponding to amino acids 353-451 of human EZH2.
+target EZH2
+targetDescription EZH2(Enhancer of Zeste homolog 2, also designated Enx1 and SETDB1)is a human homolog of theDrosophilaPolycomb-group protein Enhancer of Zeste protein. It contains a SET domain that catalyzes the methylation of histone H3 at lysine 27 (Histone H3 Lys27monomethylated,dimethylated and trimethylated). Polycomb-group proteins repress gene expression by binding to chromatin and locally altering chromatin structure.EZH2, BMI-1 andSuz12are present in the PRC2 and PRC3 protein complexes that function as mediators of epigenetic transcriptional silencing.EZH2associates with the embryonic ectoderm development protein, the VAV1 oncoprotein, and the X-linked nuclear protein.EZH2may play a role in the hematopoietic and central nervous systems. Deregulation ofEZH2is linked to a variety of cancers.
+vendorName Active Motif
+vendorId 39875
+orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
+lab Bernstein
+lots 27210001
+targetId GeneCards:EZH2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
+validation missing
+
 term  FOSL1_(SC-183)
 tag  FOSL1
 type Antibody
@@ -5614,15 +5687,16 @@ term FOXP2
 tag FOXP2
 type Antibody
 target FOXP2
-targetDescription transcriptional repressor, involved in development of speech
-antibodyDescription rabbit polyclonal
+antibodyDescription (updating validation documents, antibody description, target description, lot number, vendor) Rabbit polyclonal, raised against C-terminal 127 amino acids of FOXP2 of human origin
+targetDescription This gene encodes a member of the forkhead/winged-helix (FOX) family of transcription factors.  Transcriptional repressor, involved in the development of speech
 vendorName Abcam
 vendorId ab16046
 orderUrl http://www.abcam.com/index.html?datasheet=16046
+lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation missing
+validation FOXP2(missing):human_FOXP2_custom_validation_Myers.pdf
 
 term GABP
 tag GABP
@@ -5741,8 +5815,6 @@ lots A1404
 targetId GeneCards:Genecard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:GATA3
 validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
-
-
 
 term GCN5
 tag GCN5
@@ -6184,6 +6256,36 @@ targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
+term HDAC1_(SC-6298)
+tag HDAC1SC6298
+type Antibody
+antibodyDescription goat polyclonal IgG, 200 ug/ml
+target HDAC1
+targetDescription Histone deacetylase 1 (HDAC1) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC1 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC1 include RPD3L1, HD1, GON-10, and DKFZp686H12203.
+vendorName Santa Cruz Biotechnology
+vendorId SC6298
+orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
+lab Bernstein
+lots H0509
+targetId GeneCards:HDAC1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
+validation missing
+
+term HDAC2_(A300-705A)
+tag HDAC2A300705A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target HDAC2
+targetDescription Histone deacetylase 2 (HDAC2) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC2 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC2 include HD2, RPD3, and YAF1.
+vendorName Bethyl Laboratories 
+vendorId A300-705A
+orderUrl http://www.bethyl.com/product/A300-705A
+lab Bernstein
+lots A300-705A-1
+targetId GeneCards:HDAC2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
+validation missing
+
 term  HDAC2_(SC-6296)
 tag  HDAC2SC6296
 type Antibody
@@ -6287,6 +6389,21 @@ targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation missing
 
+term IKZF1_(IkN)_(UCLA)
+tag IKZF1IKNUCLA
+type Antibody
+antibodyDescription Rabbit polyclonal antibody raised against a recombinant protein encompassing the amino-terminus of the murine IKZF1 protein.
+target IKZF1
+targetDescription IKAROS family zinc finger 1 (Ikaros or IKZF1) is a C2H2 zinc finger transcription factor that is associated with various chromatin-modifying complexes and is suggested to play a role in the development of lymphocytes, B- and T-cells.
+vendorName From the laboratory of Stephen Smale,
+vendorId UCLA
+orderUrl http://people.healthsciences.ucla.edu/institution/personnel?personnel_id=45693
+lab Farnham
+lots N/A
+targetId GeneCards:GeneCard:IKZF1]
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GeneCard:IKZF1]
+validation IKZF1_(IkN)_(UCLA)(missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
+
 term Ini1
 tag INI1
 type Antibody
@@ -6358,6 +6475,21 @@ lots A1111
 targetId GeneCard:IRF9
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF9
 validation IRF9_(SC-496)(WesternBlot,IP-MassSpec):human_IRF9_SC-496_sc-496_validation_Myers.pdf
+
+term JARID1A_(ab26049)
+tag JARID1AAB26049
+type Antibody
+antibodyDescription Rabbit polyclonal to KDM5A / Jarid1A / RBBP2
+target JARID1A
+targetDescription Histone demethylase that specifically demethylates
+vendorName Abcam
+vendorId ab26049 
+orderUrl http://www.abcam.com/KDM5A-Jarid1A-RBBP2-antibody-ab26049.html
+lab Bernstein
+lots 910477
+targetId GeneCards:JARID1A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JARID1A
+validation missing
 
 term JunD
 tag JUND
@@ -6459,7 +6591,7 @@ lab Myers
 lots  J0809
 targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_validation_Myers.pdf
+validation MAX(Immunoprecipitation-WesternBlot,MassSpec):human_Max_validation_Myers.pdf
 
 term MBD4_(SC-271530)
 tag MBD4SC271530
@@ -6596,8 +6728,6 @@ targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 
-
-
 term NELFe
 tag NELFE
 type Antibody
@@ -6611,6 +6741,21 @@ lab Struhl
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
 validation missing
+
+term NFIC_(SC-81335)
+tag NFICSC81335
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against a recombinant protein corresponding to an internal region of NF-1 of human origin.
+target NFIC
+targetDescription Recognizes and binds the palindromic sequence 5'-TTGGCNNNNNGCCAA-3' present in viral and cellular promoters and in the origin of replication of adenovirus type 2. These proteins are individually capable of activating transcription and replication.
+vendorName Santa Cruz Biotech
+vendorId sc-81335
+orderUrl http://www.scbt.com/datasheet-81335-nf-1-nfi5i299-antibody.html
+lab Myers
+lots L0808
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
+validation NFIC_(SC-81335)(missing):human_NFIC_SC-81335_validation_Myers.pdf
 
 term NF-E2
 tag NFE2
@@ -6788,7 +6933,7 @@ term PAX5-C20
 tag PAX5
 type Antibody
 target PAX5
-antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
+antibodyDescription Goat polyclonal IgG, 200 micro grams/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
 vendorId sc-1974
@@ -6796,13 +6941,13 @@ orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-C20(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5_C-20_validation_Myers.pdf
+validation PAX5-C20(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-C20_validation_Myers.pdf
 
 term PAX5-N19
 tag PAX5b
 type Antibody
 target PAX5
-antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
+antibodyDescription Goat polyclonal IgG, 200 micro grams /ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
 vendorId sc-1975
@@ -6810,7 +6955,7 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5_N-19_validation_Myers.pdf
+validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-N19_validation_Myers.pdf
 
 term PAX5_(N-15)
 tag PAX5c
@@ -6854,6 +6999,21 @@ targetId GeneCard:PPARGC1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PPARGC1A
 validation missing
 
+term PHF8_(A301-772A)
+tag PHF8A301772A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target PHF8
+targetDescription PHF8 (PHD finger protein 8) is a member of the jumonji family of proteins and contains a jumonji C (JmjC) domain. The JmjC proteins are predicted to be metalloenzymes that play a role a chromatin remodeling and histone demethylation. PHF8 also bears a PHD (plant homeodomain)- type zinc-finger, a domain also found to be involved in chromatin remodeling and transcriptional regulation. Truncating mutations in PHF8 are associated with X-linked mental retardation and cleft lip/cleft palate. PHF8 is also known as ZNF422 and KIAA1111.
+vendorName Bethyl Laboratories
+vendorId A301-772A
+orderUrl http://www.bethyl.com/product/A301-772A
+lab Bernstein
+lots A301-772A-1
+targetId GeneCards:PHF8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
+validation missing
+
 term PITX1_(SC-81979)
 tag PITX1
 type Antibody
@@ -6868,6 +7028,21 @@ lots J0109
 targetId GeneCards:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
 validation PITX1_(SC-81979)(Immunoprecipitation-WesternBlot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
+
+term PLU1
+tag PLU1
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target PLU1
+targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
+vendorName missing
+vendorId missing
+orderUrl missing
+lab Bernstein
+lots missing
+targetId GeneCards:PLU1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PLU1
+validation missing
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7028,6 +7203,21 @@ targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
 validation RAD21(Immunoblot):human_RAD21_validation_Myers.pdf
 
+term RBBP5_(A300-109A)
+tag RBBP5A300109A
+type Antibody
+antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+target RBBP5
+targetDescription Retinoblastoma binding protein 5 (RbBP5) is a subunit of a human Set1-like histone methyltransferase (HMT) complex. The Set-1 like complexes are responsible for mono-, di-, and tri-methylation of histone H3 K4. RbBP5 associates with a multitude of proteins in a number of Set1-like complexes which include various combinations of MLL, MLL2, MLL3, MLL4, ASH2L,WDR5, hDPY-30, hSwd2, CXXC1, HCF1, Menin, PTIP, PA1, NCOA6, and UTX. RbBP5 is also one of many proteins that bind the Retinoblastoma tumor suppressor protein, pRb. Alternate names for RbBP5 are RBQ3 and SWD1.
+vendorName Bethyl Laboratories
+vendorId A300-109A
+orderUrl http://www.bethyl.com/product/A300-109A
+lab Bernstein
+lots A300-109A-2
+targetId GeneCards:RBBP5
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
+validation missing
+
 term RPC155
 tag RPC155
 type Antibody
@@ -7056,6 +7246,21 @@ targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_200-401-194_validation_Snyder.pdf
 
+term RUNX3_(SC-101553)
+tag RUNX3SC101553
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against amino acids 191-300 of recombinant RUNX3 of human origin.
+target RUNX3
+targetDescription This gene encodes a member of the runt domain-containing family of transcription factors. A heterodimer of this protein and a beta subunit forms a complex that binds to the core DNA sequence 5'-PYGPYGGT-3' found in a number of enhancers and promoters, and can either activate or suppress transcription. It also interacts with other transcription factors.  It functions as a tumor suppressor, and the gene is frequently deleted or transcriptionally silenced in cancer.  Multiple transcript variants encoding different isoforms have been found for this gene. (provided by RefSeq)
+vendorName Santa Cruz Biotech 
+vendorId sc-101553
+orderUrl http://www.scbt.com/datasheet-101553-runx3-r3-5g4-antibody.html
+lab Myers
+lots B0909
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
+validation RUNX3_(SC-101553)(missing):human_RUNX3_SC-101553_validation_Myers.pdf
+
 term RXRA
 tag RXRA
 type Antibody
@@ -7069,6 +7274,21 @@ lab Myers
 targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
 validation RXRA(Immunoprecipitation-WesternBlot,MassSpec):human_RXRA_validation_Myers.pdf
+
+term SAP30_(39731)
+tag SAP3039731
+type Antibody
+antibodyDescription This SAP30 antibody (pAb) was raised against recombinant full length human SAP30 protein.
+target SAP30
+targetDescription SAP30, also known asSin3A-associated protein, 30kDa, is part of the SIN3 corepressor complex, that also includes SIN3, SAP18,HDAC1,HDAC2,RbAp46andRbAp48. SAP30 is involved in the functional recruitment of the Sin3-histone deacetylase complex to a specific subset of N-CoR corepressor complexes.
+vendorName Active Motif 
+vendorId 39731
+orderUrl http://www.activemotif.com/catalog/details/39731.html
+lab Bernstein
+lots 4710001
+targetId GeneCards:SAP30
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
+validation missing
 
 term SETDB1
 tag SETDB1
@@ -7111,7 +7331,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
 targetId GeneCard:SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Sin3Ak-20(Immunoprecipitation-WesternBlot,MassSpec):human_Sin3A_K-20_validation_Myers.pdf
+validation Sin3Ak-20(Immunoprecipitation-WesternBlot,MassSpec):human_Sin3Ak-20_validation_Myers.pdf
 
 term SIRT6
 tag SIRT6
@@ -7181,8 +7401,8 @@ vendorId sc-643
 orderUrl http://www.scbt.com/datasheet-643-sp2-k-20-antibody.html
 lab Myers
 lots K1803
-targetId GeneCards:TAF7
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
+targetId GeneCards:SP2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP2
 validation missing
 
 term SP4_(V-20)
@@ -7300,6 +7520,36 @@ lab Snyder
 targetId GeneCard:STAT3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT3
 validation STAT3(Western_blot,Immunoprecipitation):human_STAT3_validation_Snyder.pdf
+
+term STAT5A_(SC-74442)
+tag STAT5ASC74442
+type Antibody
+antibodyDescription Mouse monoclonal IgG, recommended for the detection of Stat5a and Stat5b of human origin by WB, IP, IF and ELISA.
+target STAT5A
+targetDescription The protein encoded by this gene is a member of the STAT family of transcription factors. In response to cytokines and growth factors, STAT family members are phosphorylated by the receptor associated kinases, and then form homo- or heterodimers that translocate to the cell nucleus where they act as transcription activators. This protein is activated by, and mediates the responses of many cell ligands, such as IL2, IL3, IL7 GM-CSF, erythropoietin, thrombopoietin, and different growth hormones. Activation of this protein in myeloma and lymphoma associated with a TEL/JAK2 gene fusion is independent of cell stimulus and has been shown to be essential for the tumorigenesis. The mouse counterpart of this gene is found to induce the expression of BCL2L1/BCL-X(L), which suggests the antiapoptotic function of this gene in cells. (provided by RefSeq)
+vendorName Santa Cruz Biotech 
+vendorId sc-74442
+orderUrl http://www.scbt.com/datasheet-74442-stat5-a-9-antibody.html
+lab Myers
+lots G0208
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
+validation STAT5A_(SC-74442)(missing):human_STAT5A_SC-74442_validation_Myers.pdf
+
+term SUZ12_(05-1317)
+tag SUZ12051317
+type Antibody
+antibodyDescription Recombinant protein corresponding to human SUZ12.
+target SUZ12
+targetDescription SUZ12 is a polycomb group (PcG) protein. PcG proteins act by forming multiprotein complexes, which are required to maintain the transcriptionally repressive state of homeotic genes throughout development. PcG proteins are not required to initiate repression, but to maintain it during later stages of development. They probably act via the methylation of histones, rendering chromatin heritably changed in its expressibility. This protein is component of the PRC2 complex, which methylates
+vendorName Millipore 
+vendorId 05-1317 
+orderUrl http://www.millipore.com/catalogue/item/05-1317&open&cid=BIOS-A-BIOC-2538-1102-RC
+lab Bernstein
+lots NRG1665726
+targetId GeneCards:SUZ12
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
+validation missing
 
 term SUZ12
 tag SUZ12
@@ -7442,6 +7692,21 @@ lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
 validation missing
+
+term TEAD4_(SC-101184)
+tag TEAD4SC101184
+type Antibody
+antibodyDescription Mouse monoclonal IgG, raised against recombinant protein TEF-3 (TEAD4) of human origin.
+target TEAD4
+targetDescription Member of the transcriptional enhancer factor (TEF) family of transcription factors, which contain the TEA/ATTS DNA-binding domain. It is preferentially expressed in the skeletal muscle, and binds to the M-CAT regulatory element found in promoters of muscle-specific genes to direct their gene expression.
+vendorName Santa Cruz Biotech
+vendorId sc-101184
+orderUrl http://www.scbt.com/datasheet-101184-tef-3-n-g2-antibody.html
+lab Myers
+lots A1811
+targetId GeneCard
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
+validation TEAD4_(SC-101184)(missing):human_TEAD4_SC-101184_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term TFIIB
@@ -7731,7 +7996,7 @@ orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782
 lab Farnham
 lots 060729QCS1
 targetId GeneCard:ZNF274
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274 
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274
 validation ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
 
 term ZNF274_(M01)
@@ -8163,6 +8428,13 @@ tag TH1014
 type mapAlgorithm
 description TopHat v1.0.14
 
+term TH131
+tag TH131
+type mapAlgorithm
+description TopHat v1.3.1 Provisional
+
+
+
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -8264,6 +8536,7 @@ type localization
 description Whole cell
 termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
+#label Whole cell # proposed
 label whole_cell
 
 term nucleus
@@ -8334,18 +8607,21 @@ term total
 tag TOTAL
 type rnaExtract
 description Total RNA extract (longer than 200 nt)
+#label Total RNA  # proposed
 label Total_RNA
 
 term shortPolyA
 tag SHORTPOLYA
 type rnaExtract
 description Rna shorter than 200 nt that is Poly Adenalyated
+#label Short PolyA RNA # proposed
 label short_PolyA_RNA
 
 term shortTotal
 tag SHORTTOTAL
 type rnaExtract
 description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
+#label Short Total RNA # proposed
 label short_Total_RNA
 
 term longPolyA
@@ -8371,6 +8647,7 @@ term nonPolyARRna
 tag NONPOLYARRNA
 type rnaExtract
 description Depleted Poly(A) RNA and rRNA
+#label PolyA- rRNA # proposed
 label PolyARRna-
 
 term nonPolyA
@@ -8470,17 +8747,17 @@ description This data represents a control being compared to experiments using a
 term Control_32bp
 tag CNTRL32B
 type control
-description This data represents a control being compared to experiments using read length of 32 bp 
+description This data represents a control being compared to experiments using read length of 32 bp
 
 term Control_36bp
 tag CNTRL36B
 type control
-description This data represents a control being compared to experiments using read length of 36 bp 
+description This data represents a control being compared to experiments using read length of 36 bp
 
 term Control_50bp
 tag CNTRL50B
 type control
-description This data represents a control being compared to experiments using read length of 50 bp 
+description This data represents a control being compared to experiments using read length of 50 bp
 
 term Input
 tag INPUT
@@ -8608,13 +8885,11 @@ tag DEX500PM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
-
 term DMSO_0.02pct
 #tag DMSO2
 tag DM002P1H
 description 1 h with 0.02% DMSO (Myers)
 type treatment
-
 
 term DMSO_0.02pct_24hr
 #tag DMSO224H
@@ -8645,6 +8920,11 @@ tag EST10NM1H
 description  1 h with 10 nM Estradiol  (Myers)
 type treatment
 
+term Estradiol_10nM_30m
+tag EST10NM30M
+description 30 min with 10nM 7b-Estradiol (Crawford)
+type treatment
+
 term Estradiol_10nM_24hr
 tag EST10NM24H
 description  24 hr with 10 nM Estradiol  (Myers)
@@ -8664,6 +8944,7 @@ term estrogen
 tag ESTRO
 description 45 min with 100 nM Estradiol (Crawford)
 type treatment
+#label Estradiol 100nM # proposed
 label Estradiol_100nM
 
 term EtOH_0.01pct
@@ -8746,16 +9027,17 @@ term MNaseD
 tag MNASED
 description Fragmented using micrococcal nuclease digestion
 type treatment
+#label Micrococcal nuclease # proposed
 label MNase
 
 term Myoblast
 tag MYB
-description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold) 
+description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold)
 type treatment
 
 term Myocyte_24h
 tag MYC24H
-description Myocytes differentiated from myoblasts for 24 hours (Wold) 
+description Myocytes differentiated from myoblasts for 24 hours (Wold)
 type treatment
 
 term Myocyte_60h
@@ -8765,7 +9047,7 @@ type treatment
 
 term Myocyte_5d
 tag MYC5D
-description Myocytes differentiated from myoblasts for 5 days (Wold) 
+description Myocytes differentiated from myoblasts for 5 days (Wold)
 type treatment
 
 term Myocyte_7d
@@ -8806,6 +9088,7 @@ term 4OHTAM_1uM_36hr
 tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
+label 4-OHTAM_1uM_36hr
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
@@ -8813,15 +9096,23 @@ description 72 hours with 20 nM 4-hydroxytamoxifen (Stam)
 type treatment
 label 4-OHTAM_20nM_72hr
 
+term 4OHTAM_100nM_30m
+tag TAM10030
+description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
+type treatment
+label 4-OHTAM_100nM_30m
+
 term TGFb
 tag TGFB
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
 type treatment
+label TGF-beta
 
 term TNFa
 tag TNFA
 description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
 type treatment
+label TNF-alpha
 
 term  UT189
 tag UT189
@@ -8975,7 +9266,7 @@ description Shows individual reads mapped to the genome and indicates where base
 term Base_Overlap_Signal
 tag  SIGBO
 type view
-label Base_Overlap_Signal
+label Base overlap signal
 description An alternative version of the F-Seq Density Signal track annotation that provides a higher resolution view of the raw sequence data. This track also includes the combined set of sequences from all replicates. For each sequence, the aligned read is extended 5 bp in both directions from its 5' aligned end where DNase cut the DNA. The score at each base pair represents the number of extended fragments that overlap the base pair.
 
 term Clusters
@@ -9067,7 +9358,7 @@ term GeneDeNovo
 tag GENEDENO
 type view
 label Genes De Novo
-description 'De novo' genes defined by Cufflinks with FPKM. 
+description 'De novo' genes defined by Cufflinks with FPKM.
 
 term GeneGencV7
 tag GENEGENCV7
@@ -9116,7 +9407,7 @@ description Interaction files in matrix format. The number of sequences mapped t
 term MinusRawSignal
 tag MINUSRAWSIG
 type view
-label Minus Raw Signal
+label Raw signal -
 description Graphs the base-by-base density of tags on the minus strand
 
 term Peaks
@@ -9129,13 +9420,13 @@ term PeakSeqConservPeaks
 tag PSCPEAKS
 type view
 label PeakSeq Conserved Peaks
-description Regions of conserved enriched signal in experiment performed by PeakSeq 
+description Regions of conserved enriched signal in experiment performed by PeakSeq
 
 term PeakSeqOptimalPeak
 tag PSOPEAKS
 type view
 label PeakSeq Optimal Peaks
-description Regions of optimal enriched signal in experiment performed by PeakSeq 
+description Regions of optimal enriched signal in experiment performed by PeakSeq
 
 term PeptideMapping
 tag PEPTIDEMAP
@@ -9152,7 +9443,7 @@ description Percentage-normalized Signal (PROVISIONAL)
 term PlusRawSignal
 tag PLUSRAWSIG
 type view
-label Plus Raw Signal
+label Raw signal +
 description Graphs the base-by-base density of tags on the plus strand
 
 #snippet for UW5c's primer view
@@ -9184,19 +9475,19 @@ description Qual5p
 term RawData
 tag RAW
 type view
-label Raw_Data
+label Raw data
 description Sequence and quality files
 
 term RawData2
 tag RAW2
 type view
-label Raw Data 2
+label Raw data 2
 description Sequence and quality files
 
 term RawSignal
 tag RAWSIG
 type view
-label Raw Signal
+label Raw signal
 description Shows the density of mapped reads on the plus and minus strands (wiggle format)
 
 term RbpAssocRna
@@ -9269,7 +9560,7 @@ term SppOptimalPeaks
 tag SOPPEAKS
 type view
 label SPP Optimal Peaks
-description Regions of conserved enriched signal in experiment performed by SPP 
+description Regions of conserved enriched signal in experiment performed by SPP
 
 term SumSignal
 tag SUMSIG
@@ -9280,7 +9571,7 @@ description Shows summed densities of all phases combined (PROVISIONAL)
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
-label TranscriptDeNovo
+label Transcripts De novo
 description 'De novo' transcripts with FPKM produced by Cufflinks
 
 term TranscriptGencV7
@@ -9317,7 +9608,7 @@ term UniformSignal
 tag UNISIG
 type view
 label Uniform Signal by AWG
-description Uniform Signal 
+description Uniform Signal
 
 term Uniqueness
 tag UNQ
@@ -9366,8 +9657,8 @@ description Affymetrix Exon Array
 term Bip
 tag BIP
 type dataType
-label BIP
-description Bi-directional Promoters
+label Bi-dir Promoters
+description Bidirectional Promoters
 
 term Cage
 tag CAGE
@@ -9801,17 +10092,17 @@ description Unknown
 term revoked
 tag REVOKED
 type objStatus
-description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research. 
+description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research.
 
 term replaced
 tag REPLACED
 type objStatus
-description This file has been REPLACED by the submitting laboratory with an improved version. 
+description This file has been REPLACED by the submitting laboratory with an improved version.
 
 term renamed
 tag RENAMED
 type objStatus
-description This file has been RENAMED by the submitting laboratory for some reason. Please see updated file for newest metadata. (PROVISIONAL) 
+description This file has been RENAMED by the submitting laboratory for some reason. Please see updated file for newest metadata. (PROVISIONAL)
 
 ## Organisms
 term human
@@ -9998,7 +10289,7 @@ organism human
 term GIS-Ruan
 tag GISRUAN
 type lab
-label Ruan - Genome Institute of Singapore (Chia)
+label Ruan - GIS (Chia)
 description Ruan - Genome Institute of Singapore (Chia)
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
@@ -10009,7 +10300,7 @@ organism human
 term Sanger
 tag SANGER
 type lab
-label Hubbard - GENCODE at Sanger Institute
+label Hubbard - GENCODE at Sanger
 description Hubbard - GENCODE at Sanger Institute
 labInst Gencode
 labPi Hubbard
@@ -10042,7 +10333,7 @@ organism human
 term UW
 tag UW
 type lab
-label Stamatoyannopoulous - University of Washington
+label Stamatoyannopoulous - UW
 description Stamatoyannopoulous - University of Washington
 labInst University of Washington
 labPi Stam
@@ -10068,7 +10359,7 @@ organism human
 term UT-A
 tag UT-A
 type lab
-label Iyer - University of Texas at Austin
+label Iyer - UT Austin
 description Iyer - University of Texas at Austin
 labInst University of Texas at Austin
 labPi Iyer
@@ -10079,7 +10370,7 @@ organism human
 term UNC
 tag UNC
 type lab
-label Lieb - University of North Carolina
+label Lieb - UNC
 description Lieb - University of North Carolina
 labInst Univeristy of North Carolina
 labPi Lieb
@@ -10093,7 +10384,7 @@ organism human
 term Caltech
 tag CALTECH
 type lab
-label Wold - California Institute of Technology
+label Wold - CalTech
 description Wold - California Institute of Technology
 #grantInst California Institute of Technology (Wold Lab)
 labInst California Institute of Technology
@@ -10105,7 +10396,7 @@ organism human
 term HudsonAlpha
 tag HAIB
 type lab
-label Myers - Hudson Alpha Institute for Biotechnology
+label Myers - Hudson Alpha
 description Myers - Hudson Alpha Institute for Biotechnology
 labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
@@ -10119,7 +10410,7 @@ organism human
 term NHGRI-Elnitski
 tag NHGRI-ELNITSKI
 type lab
-label Elnitski - National Human Genome Research Institute
+label Elnitski - NHGRI
 description Elnitski - National Human Genome Research Institute
 labInst National Human Genome Research Institute
 labPi Elnitski
@@ -10130,7 +10421,7 @@ organism human
 term NHGRI-Margulies
 tag NHGRI-MARGULIES
 type lab
-label Margulies - National Human Genome Research Institute
+label Margulies - NHGRI
 description Margulies - National Human Genome Research Institute
 labInst National Human Genome Research Institute
 labPi Margulies
@@ -10146,7 +10437,7 @@ term CSHL
 tag CSHL
 type lab
 #project Transcriptome (should this be projectName?)
-label Gingeras - Cold Spring Harbor Laboratory
+label Gingeras - CSHL
 description Gingeras - Cold Spring Harbor Laboratory
 labInst Cold Spring Harbor Laboratory
 labPi Gingeras
@@ -10157,7 +10448,7 @@ organism human
 term GIS
 tag  GIS
 type lab
-label Ruan - Genome Institute of Singapore
+label Ruan - GIS
 description Ruan - Genome Institute of Singapore
 labInst Genome Institute of Singapore
 labPi Ruan
@@ -10168,7 +10459,7 @@ organism human
 term Helicos
 tag HELICOS
 type lab
-label Kapranov - Helicos BioScience Corporation
+label Kapranov - Helicos
 description Kapranov - Helicos BioScience Corporation
 labInst Helicos BioScience Corporation
 labPi Kapranov
@@ -10190,7 +10481,7 @@ organism human
 term RIKEN
 tag  RIKEN
 type lab
-label Carninci - RIKEN Omics Science Center
+label Carninci - RIKEN
 labInst Riken Omics Science Center
 description Carninci - RIKEN Omics Science Center
 #labName Riken
@@ -10206,7 +10497,7 @@ organism human
 term UMass-Dekker
 tag UMASS-DEKKER
 type lab
-label Dekker - University of Massachusettes
+label Dekker - UMass
 description Dekker - University of Massachusettes
 labInst UMass
 labPi Dekker
@@ -10217,7 +10508,7 @@ organism human
 term UMass-Weng
 tag UMASS-WENG
 type lab
-label Weng - University of Massachusettes
+label Weng - UMass
 description Weng - University of Massachusettes
 labInst UMass
 labPi Weng
@@ -10232,7 +10523,7 @@ organism human
 term Stanford
 tag STANFORD
 type lab
-label Snyder - Stanford University
+label Snyder - Stanford
 description Snyder - Stanford University
 labInst Stanford
 labPi Snyder
@@ -10243,7 +10534,7 @@ organism human
 term Yale
 tag  YALE
 type lab
-label Snyder - Yale University
+label Snyder - Yale
 description Snyder - Yale University
 labInst Yale
 labPi Snyder
@@ -10254,7 +10545,7 @@ organism human
 term Yale-Weissman
 tag  YALEWEIS
 type lab
-label Weissman - Yale University
+label Weissman - Yale
 description Weissman - Yale University
 labInst Yale
 labPi Weissman
@@ -10265,7 +10556,7 @@ organism human
 term Harvard
 tag  HARVARD
 type lab
-label Struhl - Harvard University
+label Struhl - Harvard
 description Struhl - Harvard University
 labInst Harvard
 labPi Struhl
@@ -10287,7 +10578,7 @@ organism human
 term USC
 tag USC
 type lab
-label Farnham - University of Southern California
+label Farnham - USC
 description Farnham - University of Southern California
 labPi Farnham
 labInst USC
@@ -10300,7 +10591,7 @@ organism human
 term UNC/BSU
 tag UNCBSU
 type lab
-label Giddings - University of North Carolina and Boise State University
+label Giddings - UNC and Boise
 description Giddings - University of North Carolina and Boise State University
 labInst University of North Carolina / Boise State University
 labPi Giddings
@@ -10311,7 +10602,7 @@ organism human
 term UChicago
 tag UCHICAGO
 type lab
-label White - University of Chicago
+label White - UChicago
 description White - University of Chicago
 labInst University of Chicago
 labPi White
@@ -10327,7 +10618,7 @@ organism human
 term LICR-m
 tag LICRm
 type lab
-label Ren - Ludwig Institue for Cancer Research
+label Ren - LICR
 description Ren - Ludwig Institue for Cancer Research
 labInst Ludwig Institue for Cancer Research
 labPi Ren
@@ -10338,7 +10629,7 @@ organism mouse
 term Caltech-m
 tag CALTECHm
 type lab
-label Wold - Califonia Institute of Technology
+label Wold - CalTech
 description Wold - Califonia Institute of Technology
 labInst Caltech
 labPi Wold
@@ -10349,7 +10640,7 @@ organism mouse
 term UMass-m
 tag  UMASSm
 type lab
-label Dekker - University of Massachusettes
+label Dekker - UMass
 description Dekker - University of Massachusettes
 labInst University of Massachusettes
 labPi Dekker
@@ -10360,7 +10651,7 @@ organism mouse
 term Duke-m
 tag DUKEm
 type lab
-label Crawford - Duke University
+label Crawford - Duke
 description Crawford - Duke University
 labInst Duke University
 labPi Crawford
@@ -10371,7 +10662,7 @@ organism mouse
 term PSU-m
 tag PSUm
 type lab
-label Hardison - Penn State University
+label Hardison - PSU
 description Hardison - Penn State University
 labInst PSU
 labPi Hardison
@@ -10383,7 +10674,7 @@ organism mouse
 term UW-m
 tag UWm
 type lab
-label Stamatoyannopoulous - University of Washington
+label Stamatoyannopoulous - UW
 description Stamatoyannopoulous - University of Washington
 labInst University of Washington
 labPi Stam
@@ -10394,7 +10685,7 @@ organism mouse
 term Stanford-m
 tag  STANFORDm
 type lab
-label Snyder - Stanford University
+label Snyder - Stanford
 description Snyder - Stanford University
 labInst Stanford
 labPi Snyder
@@ -10405,7 +10696,7 @@ organism mouse
 term Yale-m
 tag  YALEm
 type lab
-label Weissman - Yale University
+label Weissman - Yale
 description Weissman - Yale University
 labInst Yale
 labPi Weissman
@@ -10418,7 +10709,7 @@ organism mouse
 term DAC-Stanford
 tag  DACSTANF
 type lab
-label Batzoglou & Sidow - Stanford University
+label Batzoglou & Sidow - Stanford
 description Batzoglou & Sidow - Stanford University
 labInst Stanford
 labPi Birney
@@ -10838,7 +11129,7 @@ tag DCCREP
 type typeOfTerm
 label UCSC replicate number
 description This replicate number is based on submission to the UCSC browser, it may not reflect the replicate number assigned by the contributing lab.
-serchable yes
+searchable yes
 cvDefined off
 validate integer
 hidden no
@@ -11021,7 +11312,7 @@ label md5sum
 description The md5sum for the file associated with the object.
 searchable no
 cvDefined no
-validate regex: ^[0-9a-f]\{32\}$\|^bam=[0-9a-f]\{32\},bai=[0-9a-f]\{32\}$
+validate regex: ^\([0-9a-f]\{32\},\)*[0-9a-f]\{32\}$
 priority 999
 #This can either be a valid md5sum 920afe925b7f7b4d7617ef538160579c with 32 digits
 #in the case of bam files, it can be a pair bam=2aac07f3f113b5bd708915081eb1a11d,bai=0da3b2adf4f21d5bb50e7cae31b91f2c
@@ -11031,7 +11322,7 @@ term objStatus
 tag OBJSTAT
 type typeOfTerm
 label Object Status
-description The status of the file or table object (revoked, replaced, etc)  
+description The status of the file or table object (revoked, replaced, etc)
 searchable no
 hidden no
 cvDefined no

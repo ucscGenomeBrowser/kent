@@ -4,6 +4,88 @@ composite wgEncodeUncBsuProt
 expVars lab,dataType,cell,localization
 protocol SDS-Page
 
+metaObject wgEncodeUncBsuProtGm12878MembranefractionRaw
+objType file
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-15
+dateUnrestricted 2012-05-15
+dccAccession wgEncodeEH002073
+expId 2073
+fileName wgEncodeUncBsuProtGm12878MembranefractionRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+md5sum 39d3b579d474f4c7ea4c5beaee740f3e
+project wgEncode
+subId 4775
+view RawSignal
+
+metaObject wgEncodeUncBsuProtGm12878MembranefractionSig
+objType table
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-11
+dateUnrestricted 2012-05-11
+dccAccession wgEncodeEH002073
+expId 2073
+fileName wgEncodeUncBsuProtGm12878MembranefractionSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+md5sum b28328193a2c17a9ee964e9690b7440a
+project wgEncode
+subId 4773
+tableName wgEncodeUncBsuProtGm12878MembranefractionSig
+view Signal
+
+metaObject wgEncodeUncBsuProtGm12878MitoRaw
+objType file
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-15
+dateUnrestricted 2012-05-15
+dccAccession wgEncodeEH002074
+expId 2074
+fileName wgEncodeUncBsuProtGm12878MitoRaw.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+md5sum 7a84440f858ec21ed71ee1054ef5ffbc
+project wgEncode
+subId 4774
+view RawSignal
+
+metaObject wgEncodeUncBsuProtGm12878MitoSig
+objType table
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-11
+dateUnrestricted 2012-05-11
+dccAccession wgEncodeEH002074
+expId 2074
+fileName wgEncodeUncBsuProtGm12878MitoSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.1Da,msMsMassTolerance=0.5Da
+localization mitochondria
+md5sum 18bf0967bfa56f3fd5472b5639f6c7a8
+project wgEncode
+subId 4771
+tableName wgEncodeUncBsuProtGm12878MitoSig
+view Signal
+
 metaObject wgEncodeUncBsuProtGm12878NucleusRaw
 objType file
 cell GM12878
@@ -221,4 +303,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -1868474173
+# MAGIC: -805847425

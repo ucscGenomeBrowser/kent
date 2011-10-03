@@ -17,11 +17,8 @@ set debug="false"
 
 if ($#argv != 1) then
   echo
-  echo "  script to check for most /gbdb files missing after reboot."
-  echo "    checks assemblies and hgFixed."
-  echo "    checks for missing files on hgnfs1."
+  echo "  script to check for missing /gbdb files after reboot."
   echo "    uses existing list of /gbdb files - in dev:qa/test-results."
-  echo "    ignores scaffolds, axtNetDp1, ci1, zoo, /sacCer1/sam."
   echo
   echo '      usage:  go|override'
   echo '        where "override" regenerates the file for today'
@@ -49,7 +46,7 @@ if ($mode == "override" ) then
 endif
 
 if (! -e $outpath/gbdb.all.$todayDate) then
-  getGbdbBeta.csh all > /dev/null
+  ssh hgwbeta find /gbdb -type f -print | sort > $outpath/gbdb.all.$todayDate
 endif
 
 set twoFiles=`ls -ltr $outpath | grep all | tail -2 | awk '{print $NF}'`
@@ -72,6 +69,9 @@ endif
 
 # remove files a year old
 set lastYear=`getMonthLastYear.csh go | sed "s/-//"`
-rm -f $outpath/gbdb*${lastYear}*
+# throw away output below because rm complains about no match for
+# the globbing character during most of the month
+rm -f $outpath/gbdb*${lastYear} >& /dev/null
 
 exit
+

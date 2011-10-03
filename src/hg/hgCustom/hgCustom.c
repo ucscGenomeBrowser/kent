@@ -113,7 +113,7 @@ if (hIsGsidServer())
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
   " line attributes as described in the \n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-  " URLs for data in the bigBed, bigWig and BAM formats must be embedded in a track\n"
+  " URLs for data in the bigBed, bigWig BAM and VCF formats must be embedded in a track\n"
   " line in the box below.\n"
   );
   }
@@ -131,6 +131,7 @@ else
   " <A TARGET=_BLANK HREF='../goldenPath/help/bam.html'>BAM</A>,\n"
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1.7'>BED detail</A>,\n"
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
+  " <A TARGET=_BLANK HREF='../goldenPath/help/vcf.html'>VCF</A>,\n"
   " or <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#PSL'>PSL</A>\n"
   " formats. To configure the display, set\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
@@ -1054,11 +1055,11 @@ getDbAndGenome(cart, &database, &organism, oldVars);
 setUdcCacheDir();
 customFactoryEnableExtraChecking(TRUE);
 
-#if (defined USE_BAM && defined KNETFILE_HOOKS)
+#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
 knetUdcInstall();
 if (udcCacheTimeout() < 300)
     udcSetCacheTimeout(300);
-#endif//def USE_BAM && KNETFILE_HOOKS
+#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 if (sameString(initialDb, "0"))
     {

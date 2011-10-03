@@ -267,7 +267,7 @@ dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
 dccAccession wgEncodeEH000242
 expId 242
-fileName wgEncodeGisDnaPetGm12878F10kAln.bam
+fileName wgEncodeGisDnaPetGm12878F10kAln.bam,wgEncodeGisDnaPetGm12878F10kAln.bam.bai
 fragSize 10k
 geoSampleAccession GSM714697
 grant Gingeras
@@ -290,7 +290,7 @@ dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
 dccAccession wgEncodeEH000245
 expId 245
-fileName wgEncodeGisDnaPetGm12878F1kAln.bam
+fileName wgEncodeGisDnaPetGm12878F1kAln.bam,wgEncodeGisDnaPetGm12878F1kAln.bam.bai
 fragSize 1k
 geoSampleAccession GSM714695
 grant Gingeras
@@ -313,7 +313,7 @@ dateSubmitted 2009-04-03
 dateUnrestricted 2010-01-03
 dccAccession wgEncodeEH000246
 expId 246
-fileName wgEncodeGisDnaPetGm12878F5kAln.bam
+fileName wgEncodeGisDnaPetGm12878F5kAln.bam,wgEncodeGisDnaPetGm12878F5kAln.bam.bai
 fragSize 5k
 geoSampleAccession GSM714692
 grant Gingeras
@@ -588,7 +588,7 @@ dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
 dccAccession wgEncodeEH000243
 expId 243
-fileName wgEncodeGisDnaPetK562F10kAln.bam
+fileName wgEncodeGisDnaPetK562F10kAln.bam,wgEncodeGisDnaPetK562F10kAln.bam.bai
 fragSize 10k
 geoSampleAccession GSM714698
 grant Gingeras
@@ -611,7 +611,7 @@ dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
 dccAccession wgEncodeEH000244
 expId 244
-fileName wgEncodeGisDnaPetK562F1kAln.bam
+fileName wgEncodeGisDnaPetK562F1kAln.bam,wgEncodeGisDnaPetK562F1kAln.bam.bai
 fragSize 1k
 geoSampleAccession GSM714693
 grant Gingeras
@@ -634,7 +634,7 @@ dateSubmitted 2010-04-05
 dateUnrestricted 2011-01-05
 dccAccession wgEncodeEH000247
 expId 247
-fileName wgEncodeGisDnaPetK562F20kAln.bam
+fileName wgEncodeGisDnaPetK562F20kAln.bam,wgEncodeGisDnaPetK562F20kAln.bam.bai
 fragSize 20k
 geoSampleAccession GSM714696
 grant Gingeras

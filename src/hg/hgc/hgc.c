@@ -8861,15 +8861,15 @@ lf = lineFileOpen("/gbdb/hg17/omim/omim.txt", TRUE);
 lineFileSeek(lf,(size_t)(iAvDescStartPos), 0);
 lineFileNext(lf, &line, &lineSize);
 printf("<h4>");
-printf(".%s %s ", avSubFdId, line);fflush(stdout);
+printf(".%s %s ", avSubFdId, line);
 lineFileNext(lf, &line, &lineSize);
-printf("[%s]\n", line);fflush(stdout);
+printf("[%s]\n", line);
 printf("</h4>");
 
 while ((lf->lineStart + lf->bufOffsetInFile) < (iAvDescStartPos + iAvDescLen))
     {
     lineFileNext(lf, &line, &lineSize);
-    printf("%s\n", line);fflush(stdout);
+    printf("%s\n", line);
     }
 
 htmlHorizontalLine();
@@ -9280,14 +9280,11 @@ if (row != NULL)
     safef(query2, sizeof(query2), 
       "select sum(examined_samples) from cosmicRaw where cosmic_mutation_id='%s'",
       itemName);
-//printf("<br>%s\n", query2);fflush(stdout);
     sr2 = sqlMustGetResult(conn2, query2);
     row2 = sqlNextRow(sr2);
     if (row2 != NULL)
     	{
     	printf("<BR><B>Total Examined Samples:</B> %s\n", row2[0]);
-	//printf("%s", row2[0]);
-	//fflush(stdout);
 	}
     sqlFreeResult(&sr2);
     safef(query2, sizeof(query2), 
@@ -9394,7 +9391,7 @@ if (row != NULL)
 	    printf("<LI>");
             printf("<A HREF=\"%s%s\" target=_blank>","./hgGene\?hgg_chrom=none&hgg_gene=", row2[1]);
             printf("%s (%s)</A> ", row2[0], row2[1]);
-	    printf(" %s", row2[2]);fflush(stdout);
+	    printf(" %s", row2[2]);
 	    }
         sqlFreeResult(&sr2);
 	row = sqlNextRow(sr);
@@ -9515,7 +9512,7 @@ if (url != NULL && url[0] != 0)
     	    sqlFreeResult(&sr);
     	    }
 	}
-    printf("<B>OMIM Database ");fflush(stdout);
+    printf("<B>OMIM Database ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
 
@@ -9625,7 +9622,7 @@ chromEnd   = cartOptionalString(cart, "t");
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM: ");fflush(stdout);
+    printf("<B>OMIM: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -9718,12 +9715,12 @@ if (url != NULL && url[0] != 0)
           "select distinct locusLinkId from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
 	  itemName, chrom, chromStart, chromEnd);
     sr = sqlMustGetResult(conn, query);
-    if (sr != NULL)
+    row = sqlNextRow(sr);
+    if (row != NULL)
     	{
     	char *geneId;
-    	row = sqlNextRow(sr);
     	geneId = strdup(row[0]);
-    	sqlFreeResult(&sr);
+        sqlFreeResult(&sr);
 
     	safef(query, sizeof(query),
               "select distinct l.mrnaAcc from refLink l where locusLinkId = '%s' order by mrnaAcc asc", geneId);
@@ -9744,13 +9741,9 @@ if (url != NULL && url[0] != 0)
 	        }
             if (printedCnt >= 1) printf("<BR>\n");
 	    }
+        sqlFreeResult(&sr);
         }
-    else
-    	{
-	// skip if no RefSeq found
-    	sqlFreeResult(&sr);
-    	}
-
+    
     // show Related UCSC Gene links
     safef(query, sizeof(query),
           "select distinct kgId from kgXref x, refLink l, omim2gene g where x.refseq = mrnaAcc and l.omimId=%s and g.omimId=l.omimId and g.entryType='gene'",
@@ -9773,6 +9766,24 @@ if (url != NULL && url[0] != 0)
         if (printedCnt >= 1) printf("<BR>\n");
 	}
     sqlFreeResult(&sr);
+
+    // show GeneReviews  link(s)
+    if (sqlTablesExist(conn, "geneReviewsRefGene"))
+        {
+        safef(query, sizeof(query),
+          "select distinct r.name2 from refLink l, omim2gene g, refGene r where l.omimId=%s and g.geneId=l.locusLinkId and g.entryType='gene' and chrom='%s' and txStart = %s and txEnd= %s",
+        itemName, chrom, chromStart, chromEnd);
+        sr = sqlMustGetResult(conn, query);
+        if (sr != NULL)
+            {
+            while ((row = sqlNextRow(sr)) != NULL)
+                {
+                prGRShortRefGene(row[0]);
+                }
+            }
+        sqlFreeResult(&sr);
+        }
+
     }
 
 printf("<HR>");
@@ -9805,7 +9816,7 @@ omimId = itemName;
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM: ");fflush(stdout);
+    printf("<B>OMIM: ");
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -10126,7 +10137,6 @@ if (url != NULL && url[0] != 0)
 	       "../cgi-bin/hgc?g=snp132&i=", dbSnpId);
 	    }
     	printf("%s</A></B>", dbSnpId);
-	fflush(stdout);
 	}
     }
 
@@ -10797,6 +10807,8 @@ if (startsWith("hg", database))
     printf("%s</A><BR>\n", rl->name);
     }
 printStanSource(rl->mrnaAcc, "mrna");
+prGRShortRefGene(rl->name);
+
 }
 
 void prKnownGeneInfo(struct sqlConnection *conn, char *rnaName,
@@ -23829,7 +23841,108 @@ if (sameString("hg18", database))
  printTrackHtml(tdb);
  hFreeConn(&conn);
 }
+void doGeneReviews(struct trackDb *tdb, char *itemName)
+/* generate the detail page for geneReviews */
+{
+struct sqlConnection *conn = hAllocConn(database);
+//char *table = tdb->table;
+int start = cartInt(cart, "o");
+int num = 4;
 
+ genericHeader(tdb, itemName);
+ genericBedClick(conn, tdb, itemName, start, num);
+ prGeneReviews(conn, itemName);
+ printf("<BR>");
+ printTrackHtml(tdb);
+ hFreeConn(&conn);
+}
+
+void prGeneReviews(struct sqlConnection *conn, char *itemName)
+/* print GeneReviews associated to this item
+   Note: this print function has been replaced by addGeneReviewToBed.pl
+         which print the same information to the field 5 of bigBed file
+*/
+{
+struct sqlResult *sr;
+char **row;
+char query[512];
+int i;
+char *clickMsg = "Click link(s) below to search GeneReviews and GeneTests";
+boolean firstTime = TRUE;
+
+if (!sqlTablesExist(conn, "geneReviewsRefGene")) return;
+
+safef(query, sizeof(query), "select  grShort, diseaseID, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+        char *grShort = *row++;
+        char *diseaseID = *row++;
+        char *diseaseName = *row++;
+
+
+        if (firstTime)
+        {
+          printf("<BR><B> GeneReview(s) available for %s:</B> (%s)<BR>",itemName,clickMsg);
+          firstTime = FALSE;
+          printf("<PRE><TT>");
+              // #1234567890123456789012345678901234567890
+          printf("Short name    Disease ID     GeneTests disease name<BR>");
+          printf("-----------------------------------------------------------");
+          printf("-----------------------------------------------------------");
+          printf("----------------------------------<BR>");
+        }
+        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+        if (strlen(grShort) <= 15) {
+          for (i = 0; i <  15-strlen(grShort); i ++ )
+             {
+                printf("%s", " " );
+             }
+           }
+         printf("%-10s    ", diseaseID);
+        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
+
+    }  /* end while */
+ printf("</TT></PRE>");
+ sqlFreeResult(&sr);
+} /* end of prGeneReviews */
+
+void prGRShortRefGene(char *itemName)
+/* print GeneReviews short label associated to this refGene item */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[512];
+boolean firstTime = TRUE;
+
+if (!sqlTablesExist(conn, "geneReviewsRefGene")) return;
+
+safef(query, sizeof(query), "select grShort, diseaseName from geneReviewsRefGene where geneSymbol='%s'", itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+        char *grShort = *row++;
+        char *diseaseName = *row++;
+        if (firstTime)
+        {
+          printf("<B>Related GeneReview(s) and GeneTests disease(s): </B>");
+          firstTime = FALSE;
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+       printf(" (");                        
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf(")");
+        } else {
+          printf(", ");
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
+       printf(" (");
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf(")");
+        }
+     }
+     printf("<BR>");
+     sqlFreeResult(&sr);
+} /* end of prGRShortRefGene */
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -25043,6 +25156,10 @@ else if (startsWith("numtS", table))
 else if (startsWith("cosmic", table))
     {
     doCosmic(tdb, item);
+    }
+else if (sameString("geneReviews", table))
+    {
+    doGeneReviews(tdb, item);
     }
 else if (tdb != NULL)
     {
