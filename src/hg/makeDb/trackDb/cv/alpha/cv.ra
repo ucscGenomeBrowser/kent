@@ -5687,7 +5687,7 @@ term FOXP2
 tag FOXP2
 type Antibody
 target FOXP2
-antibodyDescription (updating validation documents, antibody description, target description, lot number, vendor) Rabbit polyclonal, raised against C-terminal 127 amino acids of FOXP2 of human origin
+antibodyDescription Rabbit polyclonal, raised against C-terminal 127 amino acids of FOXP2 of human origin
 targetDescription This gene encodes a member of the forkhead/winged-helix (FOX) family of transcription factors.  Transcriptional repressor, involved in the development of speech
 vendorName Abcam
 vendorId ab16046
@@ -5696,7 +5696,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(missing):human_FOXP2_custom_validation_Myers.pdf
+validation FOXP2(missing):human_FOXP2_validation_Myers.pdf
 
 term GABP
 tag GABP
@@ -5795,11 +5795,11 @@ targetDescription  This gene encodes a protein which belongs to the GATA family 
 vendorName Santa Cruz Biotech
 vendorId sc-268
 orderUrl http://www.scbt.com/datasheet-268-gata-3-hg3-31-antibody.html
-lab Myers
+lab Farnham
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(ChIP,MassSpec):human_GATA3-SC268_validation_Myers.pdf
+validation GATA3_SC-268(ChIP,MassSpec):human_GATA3-SC-268_validation_Farnham.pdf
 
 term GATA3_(SC-269)
 tag GATA3SC269
@@ -7648,7 +7648,7 @@ orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 lab Myers
 targetId GeneCard:TCF12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
-validation TCF12(Immunoprecipitation-WesternBlot,MassSpec):human_TCF12_A-20_validation_Myers.pdf
+validation TCF12(Immunoprecipitation-WesternBlot,MassSpec):human_TCF12_validation_Myers.pdf
 
 term TCF3_(SC-349)
 tag TCF3
@@ -7782,7 +7782,7 @@ targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
 validation TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 
-term USF-1
+term USF1_(SC-229)
 tag USF1
 type Antibody
 target USF1
@@ -7794,7 +7794,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=229
 lab Myers
 targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF-1(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_validation_Myers.pdf
+validation USF1_SC-229(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_SC-229_validation_Myers.pdf
 
 term USF1_(SC-8983)
 tag USF1b
@@ -7838,7 +7838,7 @@ lab Myers
 lots  J0908
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
-validation USF2_C-20(Immunoblot):human_USF2_C-20_validation_Myers.pdf
+validation USF2_(C-20)(Immunoblot):human_USF2_C-20_validation_Myers.pdf
 
 term WHIP
 tag WHIP
