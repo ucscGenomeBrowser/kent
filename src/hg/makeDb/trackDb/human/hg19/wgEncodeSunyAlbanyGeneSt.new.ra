@@ -13,7 +13,6 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
 wgEncode 1
-#noInherit on
 origAssembly hg18
 type broadPeak
 boxedCfg on
@@ -23,7 +22,6 @@ scoreFilter 2
 scoreFilterLimits 1:1000
 pValueFilter 0.0
 pValueFilterLimits 0:0.5
-minGrayLevel 11%
 html wgEncodeSunyAlbanyGeneSt.new
 
 	track wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
