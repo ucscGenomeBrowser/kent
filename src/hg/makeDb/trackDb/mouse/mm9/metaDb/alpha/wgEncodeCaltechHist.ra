@@ -910,7 +910,7 @@ tableName wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xAlnRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xAlnRep1
 objType file
 age immortalized
 antibody H3K27me3
@@ -922,7 +922,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xAlnRep1.bam
 grant Hardison
 lab Caltech-m
 labExpId 10536
@@ -938,7 +938,7 @@ subId 4734
 treatment EqS_2.0pct_60hr
 view Alignments
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xPkRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xPkRep1
 objType table
 age immortalized
 antibody H3K27me3
@@ -950,7 +950,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xPkRep1.narrowPeak.gz
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
 labExpId 10536
@@ -963,11 +963,11 @@ setType exp
 sex F
 strain C3H
 subId 4734
-tableName wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xPkRep1
+tableName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xPkRep1
 treatment EqS_2.0pct_60hr
 view Peaks
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xRawDataRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xRawDataRep1
 objType file
 age immortalized
 antibody H3K27me3
@@ -979,7 +979,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xRawDataRep1.fastq.tgz
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
 labExpId 10536
@@ -995,7 +995,7 @@ subId 4734
 treatment EqS_2.0pct_60hr
 view RawData
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xSigRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xSigRep1
 objType table
 age immortalized
 antibody H3K27me3
@@ -1007,7 +1007,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xSigRep1.bigWig
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
 labExpId 10536
@@ -1020,11 +1020,11 @@ setType exp
 sex F
 strain C3H
 subId 4734
-tableName wgEncodeCaltechHistC2c12H3k27me3FE2p60hPcr2xSigRep1
+tableName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xSigRep1
 treatment EqS_2.0pct_60hr
 view Signal
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FPcr2xAlnRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xAlnRep1
 objType file
 age immortalized
 antibody H3K27me3
@@ -1036,7 +1036,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FPcr2xAlnRep1.bam
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xAlnRep1.bam
 grant Hardison
 lab Caltech-m
 labExpId 10502
@@ -1052,7 +1052,7 @@ subId 4733
 treatment None
 view Alignments
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FPcr2xPkRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xPkRep1
 objType table
 age immortalized
 antibody H3K27me3
@@ -1064,7 +1064,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FPcr2xPkRep1.narrowPeak.gz
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xPkRep1.narrowPeak.gz
 grant Hardison
 lab Caltech-m
 labExpId 10502
@@ -1077,11 +1077,11 @@ setType exp
 sex F
 strain C3H
 subId 4733
-tableName wgEncodeCaltechHistC2c12H3k27me3FPcr2xPkRep1
+tableName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xPkRep1
 treatment None
 view Peaks
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FPcr2xRawDataRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xRawDataRep1
 objType file
 age immortalized
 antibody H3K27me3
@@ -1093,7 +1093,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FPcr2xRawDataRep1.fastq.tgz
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xRawDataRep1.fastq.tgz
 grant Hardison
 lab Caltech-m
 labExpId 10502
@@ -1109,7 +1109,7 @@ subId 4733
 treatment None
 view RawData
 
-metaObject wgEncodeCaltechHistC2c12H3k27me3FPcr2xSigRep1
+metaObject wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xSigRep1
 objType table
 age immortalized
 antibody H3K27me3
@@ -1121,7 +1121,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeCaltechHistC2c12H3k27me3FPcr2xSigRep1.bigWig
+fileName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
 labExpId 10502
@@ -1134,7 +1134,7 @@ setType exp
 sex F
 strain C3H
 subId 4733
-tableName wgEncodeCaltechHistC2c12H3k27me3FPcr2xSigRep1
+tableName wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xSigRep1
 treatment None
 view Signal
 
@@ -1791,4 +1791,4 @@ tableName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: -625023222
+# MAGIC: -557900078
