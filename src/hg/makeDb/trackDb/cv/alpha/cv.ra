@@ -7782,7 +7782,7 @@ targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
 validation TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 
-term USF1_(SC-229)
+term USF-1
 tag USF1
 type Antibody
 target USF1
