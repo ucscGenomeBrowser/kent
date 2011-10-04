@@ -5074,7 +5074,7 @@ vendorId sc-166093
 orderUrl http://www.scbt.com/datasheet-166093-btf3a-b-a-5-antibody.html
 lab Myers
 lots G2209
-targetId GeneCard
+targetId GeneCard:BTF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
 validation BTF3_(SC-166093)(missing):human_BTF3_SC-166093_validation_Myers.pdf
 
@@ -5236,7 +5236,7 @@ vendorId sc-240
 orderUrl http://www.scbt.com/datasheet-240-creb-1-x-12-antibody.html
 lab Myers
 lots C2306
-targetId GeneCard
+targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
 validation CREB1_(SC-240)(missing):human_CREB1_SC-240_sc-240_validation_Myers.pdf
 
@@ -6410,13 +6410,13 @@ type Antibody
 antibodyDescription Rabbit polyclonal antibody raised against a recombinant protein encompassing the amino-terminus of the murine IKZF1 protein.
 target IKZF1
 targetDescription IKAROS family zinc finger 1 (Ikaros or IKZF1) is a C2H2 zinc finger transcription factor that is associated with various chromatin-modifying complexes and is suggested to play a role in the development of lymphocytes, B- and T-cells.
-vendorName From the laboratory of Stephen Smale,
-vendorId UCLA
+vendorName From the laboratory of Stephen Smale, UCLA
+vendorId IKZF1_(IkN)
 orderUrl http://people.healthsciences.ucla.edu/institution/personnel?personnel_id=45693
 lab Farnham
 lots N/A
-targetId GeneCards:GeneCard:IKZF1]
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GeneCard:IKZF1]
+targetId GeneCard:IKZF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IKZF1
 validation IKZF1_(IkN)_(UCLA)(missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
 
 term Ini1
@@ -6502,7 +6502,7 @@ vendorId ab26049
 orderUrl http://www.abcam.com/KDM5A-Jarid1A-RBBP2-antibody-ab26049.html
 lab Bernstein
 lots 910477
-targetId GeneCards:JARID1A
+targetId GeneCard:JARID1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JARID1A
 validation JARID1A_(ab26049)(ChIP-String, ChIP-Seq):human_JARID1A_validation_Bernstein.pdf
 
@@ -6768,7 +6768,7 @@ vendorId sc-81335
 orderUrl http://www.scbt.com/datasheet-81335-nf-1-nfi5i299-antibody.html
 lab Myers
 lots L0808
-targetId GeneCard
+targetId GeneCard:NFIC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
 validation NFIC_(SC-81335)(missing):human_NFIC_SC-81335_validation_Myers.pdf
 
@@ -7273,7 +7273,7 @@ vendorId sc-101553
 orderUrl http://www.scbt.com/datasheet-101553-runx3-r3-5g4-antibody.html
 lab Myers
 lots B0909
-targetId GeneCard
+targetId GeneCard:RUNX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
 validation RUNX3_(SC-101553)(missing):human_RUNX3_SC-101553_validation_Myers.pdf
 
@@ -7548,7 +7548,7 @@ vendorId sc-74442
 orderUrl http://www.scbt.com/datasheet-74442-stat5-a-9-antibody.html
 lab Myers
 lots G0208
-targetId GeneCard
+targetId GeneCard:STAT5A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
 validation STAT5A_(SC-74442)(missing):human_STAT5A_SC-74442_validation_Myers.pdf
 
@@ -7557,7 +7557,7 @@ tag SUZ12051317
 type Antibody
 antibodyDescription Recombinant protein corresponding to human SUZ12.
 target SUZ12
-targetDescription SUZ12 is a polycomb group (PcG) protein. PcG proteins act by forming multiprotein complexes, which are required to maintain the transcriptionally repressive state of homeotic genes throughout development. PcG proteins are not required to initiate repression, but to maintain it during later stages of development. They probably act via the methylation of histones, rendering chromatin heritably changed in its expressibility. This protein is component of the PRC2 complex, which methylates
+targetDescription SUZ12 is a polycomb group (PcG) protein. PcG proteins act by forming multiprotein complexes, which are required to maintain the transcriptionally repressive state of homeotic genes throughout development. PcG proteins are not required to initiate repression, but to maintain it during later stages of development. They probably act via the methylation of histones, rendering chromatin heritably changed in its expressibility. This protein is component of the PRC2 complex, which methylates Lys-9 and Lys-27 residues of histone H3.
 vendorName Millipore 
 vendorId 05-1317 
 orderUrl http://www.millipore.com/catalogue/item/05-1317&open&cid=BIOS-A-BIOC-2538-1102-RC
@@ -7720,7 +7720,7 @@ vendorId sc-101184
 orderUrl http://www.scbt.com/datasheet-101184-tef-3-n-g2-antibody.html
 lab Myers
 lots A1811
-targetId GeneCard
+targetId GeneCard:TEAD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
 validation TEAD4_(SC-101184)(missing):human_TEAD4_SC-101184_validation_Myers.pdf
 
