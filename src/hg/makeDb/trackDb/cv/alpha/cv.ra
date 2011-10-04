@@ -8936,6 +8936,26 @@ tag DM002P4H
 description 4 hr with 0.02% DMSO (Myers)
 type treatment
 
+term EqS_2.0pct_24hr
+tag E2P24H
+description 24 h with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+type treatment 
+
+term EqS_2.0pct_60hr
+tag E2P60H
+description 60 h with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+type treatment
+
+term EqS_2.0pct_5d
+tag E2P5D
+description 5 d with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+type treatment
+
+term EqS_2.0pct_7d
+tag E2P7D
+description 7 d with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+type treatment
+
 term Estradiol_10nM
 tag EST10NM1H
 description  1 h with 10 nM Estradiol  (Myers)
@@ -9246,16 +9266,15 @@ tag ENR
 type region
 description ENCODE pilot randomly-selected regions (http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/referenceSequences/encodePilotRegions.hg19.bed)
 
-#removed per Redmine #222
-#term UW-5C-Myc-Region
-#tag UW5CMYC
-#type region
-#description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
+term UW-5C-Myc-Region
+tag UW5CMYC
+type region
+description Myc upstream gene desert region used in UW 5C experiments (hg19 chr8:126445818-130737929)
 
-#term UW-5C-Gene-Regions
-#tag UW5CGENE
-#type region
-#description Set of 25 regions interrogated in UW 5C gene-targeted experiments
+term UW-5C-Gene-Regions
+tag UW5CGENE
+type region
+description Set of 25 regions interrogated in UW 5C gene-targeted experiments
 
 
 ### restrictionEnzyme
