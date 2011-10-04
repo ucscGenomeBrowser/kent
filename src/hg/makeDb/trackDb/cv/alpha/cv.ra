@@ -5696,7 +5696,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(missing):human_FOXP2_validation_Myers.pdf
+validation FOXP2(Western blot, siRNA):human_FOXP2_validation_Myers.pdf
 
 term GABP
 tag GABP
@@ -7574,7 +7574,7 @@ target SUZ12
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 antibodyDescription rabbit polyclonal
 vendorName Antibody made by Farnham lab
-vendorId   ;
+vendorId SUZ12 
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 lab Farnham
 targetId GeneCard:SUZ12
