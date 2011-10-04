@@ -22,7 +22,6 @@ scoreFilter 2
 scoreFilterLimits 1:1000
 pValueFilter 0.0
 pValueFilterLimits 0:0.5
-html wgEncodeSunyAlbanyGeneSt.new
 
 	track wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneSt off
