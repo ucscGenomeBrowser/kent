@@ -5209,7 +5209,7 @@ lab Bernstein
 lots A301-218A-1
 targetId GeneCards:CHD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
-validation missing
+validation CHD1_(A301-218A)(ChIP-String, ChIP-Seq):human_CHD1_validation_Bernstein.pdf 
 
 term CHD2_(AB68301)
 tag CHD2
@@ -5593,7 +5593,7 @@ lab Bernstein
 lots 27210001
 targetId GeneCards:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
-validation missing
+validation EZH2_(39875)(ChIP-String, ChIP-Seq):human_EZH2_validation_Bernstein.pdf 
 
 term  FOSL1_(SC-183)
 tag  FOSL1
@@ -5696,7 +5696,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(missing):human_FOXP2_validation_Myers.pdf
+validation FOXP2(Western blot, siRNA):human_FOXP2_validation_Myers.pdf
 
 term GABP
 tag GABP
@@ -5785,6 +5785,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
 lots E2708
 validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
+
+term GATA2_(SC-9008)
+tag GATA2SC9008
+type Antibody
+antibodyDescription Rabbit polyclonal antibody raised against amino acids 120-235 of GATA-2 of human origin
+target GATA2
+targetDescription The GATA family of transcription factors share a conserved zinc finger DNA-binding domain and are capable of binding the WGATAR consensus sequence. GATA1 is erythroid-specific and is essential for normal erythropeisis. By comparison, GATA2 is expressed at high levels in hematopoeitic progenitors, including early erythroid cells, but is strong repressed during erythroblast differentiaion.
+vendorName Santa Cruz Biotech
+vendorId sc-9008
+orderUrl
+lab Hardison
+lots J2108
+targetId GeneCard: GATA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
+validation GATA2_(SC-9008)(missing):human_GATA2_SC-9008_validation_Hardison.pdf
 
 term  GATA3_(SC-268)
 tag  GATA3
@@ -6259,7 +6274,7 @@ validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_val
 term HDAC1_(SC-6298)
 tag HDAC1SC6298
 type Antibody
-antibodyDescription goat polyclonal IgG, 200 ug/ml
+antibodyDescription goat polyclonal IgG, 200 micrograms/ml
 target HDAC1
 targetDescription Histone deacetylase 1 (HDAC1) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC1 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC1 include RPD3L1, HD1, GON-10, and DKFZp686H12203.
 vendorName Santa Cruz Biotechnology
@@ -6269,7 +6284,7 @@ lab Bernstein
 lots H0509
 targetId GeneCards:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
-validation missing
+validation HDAC1_(SC-6298)(ChIP-String, ChIP-Seq):human_HDAC1_validation_Bernstein.pdf 
 
 term HDAC2_(A300-705A)
 tag HDAC2A300705A
@@ -6284,7 +6299,7 @@ lab Bernstein
 lots A300-705A-1
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation missing
+validation HDAC2_(A300-705A)(ChIP-String, ChIP-Seq):human_HDAC2_validation_Bernstein.pdf
 
 term  HDAC2_(SC-6296)
 tag  HDAC2SC6296
@@ -6489,7 +6504,7 @@ lab Bernstein
 lots 910477
 targetId GeneCards:JARID1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JARID1A
-validation missing
+validation JARID1A_(ab26049)(ChIP-String, ChIP-Seq):human_JARID1A_validation_Bernstein.pdf
 
 term JunD
 tag JUND
@@ -6523,7 +6538,7 @@ term LEF1_(SC-8592)
 tag LEF1
 type Antibody
 target LEF1
-antibodyDescription 	 Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
+antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
 targetDescription This gene encodes a transcription factor belonging to a family of proteins that share homology with the high mobility group protein-1. The proteins encoded by this gene can bind to a functionally important site in the T-cell receptor-alpha enhancer, thereby conferring maximal enhancer activity (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-8592
@@ -6933,7 +6948,7 @@ term PAX5-C20
 tag PAX5
 type Antibody
 target PAX5
-antibodyDescription Goat polyclonal IgG, 200 micro grams/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
+antibodyDescription Goat polyclonal IgG, 200 micrograms/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
 vendorId sc-1974
@@ -6947,7 +6962,7 @@ term PAX5-N19
 tag PAX5b
 type Antibody
 target PAX5
-antibodyDescription Goat polyclonal IgG, 200 micro grams /ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
+antibodyDescription Goat polyclonal IgG, 200 micrograms /ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
 vendorId sc-1975
@@ -7012,7 +7027,7 @@ lab Bernstein
 lots A301-772A-1
 targetId GeneCards:PHF8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
-validation missing
+validation PHF8_(A301-772A)(ChIP-String, ChIP-Seq):human_PHF8_validation_Bernstein.pdf
 
 term PITX1_(SC-81979)
 tag PITX1
@@ -7035,14 +7050,15 @@ type Antibody
 antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 target PLU1
 targetDescription JARID1B (Jumonji AT-rich interactive domain 1B) is a member of the JARID 1 family of proteins that catalyze the demethylation of histones on lysine. The Jarid 1 family members include JARID1A, JARID1B, JARID1C and JARID1D. The members of this family possess a Jumonji C (JmjC) and Jumonji N (JmjN) domain as well as one ARID (AT-rich interactive domain) and three PHD-type zinc fingers. As histone demethylases, JARID 1 proteins function as transcriptional repressors. JARID1B expression is largely restricted to testis and may play a critical role in tumorigenesis as it has been found to be upregulated in prostate and breast cancer. Alternative names for JARID1B include retinoblastoma-binding protein 2 homolog 1, RBP2-H1, cancer/testis antigen 31, CT31, PLU-1, PUT1, and KDM5B.
-vendorName missing
-vendorId missing
-orderUrl missing
+vendorName YangShi lab
+vendorId PLU1
+orderUrl http://www.shilab.info/ShiLab/Welcome.html
 lab Bernstein
 lots missing
-targetId GeneCards:PLU1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PLU1
-validation missing
+targetId GeneCards:KDM5B
+#PLU1 is a alias for KDM5B ~Jeff
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
+validation PLU1(ChIP-String, ChIP-Seq):human_PLU1_validation_Bernstein.pdf
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7216,7 +7232,7 @@ lab Bernstein
 lots A300-109A-2
 targetId GeneCards:RBBP5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
-validation missing
+validation RBBP5_(A300-109A)(ChIP-String, ChIP-Seq):human_RBBP5_validation_Bernstein.pdf 
 
 term RPC155
 tag RPC155
@@ -7288,7 +7304,7 @@ lab Bernstein
 lots 4710001
 targetId GeneCards:SAP30
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
-validation missing
+validation SAP30_(39731)(ChIP-String, ChIP-Seq):human_SAP30_validation_Bernstein.pdf
 
 term SETDB1
 tag SETDB1
@@ -7549,7 +7565,7 @@ lab Bernstein
 lots NRG1665726
 targetId GeneCards:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
-validation missing
+validation SUZ12_(05-1317)(ChIP-String, ChIP-Seq):human_SUZ12_validation_Bernstein.pdf
 
 term SUZ12
 tag SUZ12
@@ -7558,7 +7574,7 @@ target SUZ12
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 antibodyDescription rabbit polyclonal
 vendorName Antibody made by Farnham lab
-vendorId   ;
+vendorId SUZ12 
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 lab Farnham
 targetId GeneCard:SUZ12
@@ -7782,7 +7798,7 @@ targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
 validation TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 
-term USF1_(SC-229)
+term USF-1
 tag USF1
 type Antibody
 target USF1

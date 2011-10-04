@@ -2121,6 +2121,11 @@ identifier rgdSslpId external=RGD
 
 # New RGD Genes Family Identifiers
 
+identifier rgdGene2IdRaw external=RGD
+"Raw RGD Genes ID"
+    $rn.rgdGene2.name chopBefore=RGD:
+    $rn.genes_rat.gene_rgd_id minCheck=0.40 
+
 identifier rgdGene2Id external=RGD
 "RGD Genes ID"
     $rn.rgdGene2.name
