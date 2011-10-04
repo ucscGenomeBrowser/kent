@@ -230,15 +230,15 @@ subId 3191
 tableName wgEncodeUwDgfAoafSig
 view Signal
 
-metaObject wgEncodeUwDgfCd20Aln
+metaObject wgEncodeUwDgfCd20ro01778Aln
 objType file
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Aln.bam
+fileName wgEncodeUwDgfCd20ro01778Aln.bam
 grant Stam
 lab UW
 labExpId DS18208
@@ -247,69 +247,69 @@ project wgEncode
 subId 4884
 view Alignments
 
-metaObject wgEncodeUwDgfCd20Hotspots
+metaObject wgEncodeUwDgfCd20ro01778Hotspots
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Hotspots.broadPeak.gz
+fileName wgEncodeUwDgfCd20ro01778Hotspots.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS18208
 labVersion Hotspot-v5.2
 project wgEncode
 subId 4884
-tableName wgEncodeUwDgfCd20Hotspots
+tableName wgEncodeUwDgfCd20ro01778Hotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfCd20Pk
+metaObject wgEncodeUwDgfCd20ro01778Pk
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Pk.narrowPeak.gz
+fileName wgEncodeUwDgfCd20ro01778Pk.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS18208
 labVersion lmax-v1.0
 project wgEncode
 subId 4884
-tableName wgEncodeUwDgfCd20Pk
+tableName wgEncodeUwDgfCd20ro01778Pk
 view Peaks
 
-metaObject wgEncodeUwDgfCd20Raw
+metaObject wgEncodeUwDgfCd20ro01778Raw
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Raw.bigWig
+fileName wgEncodeUwDgfCd20ro01778Raw.bigWig
 grant Stam
 lab UW
 labExpId DS18208
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 subId 4884
-tableName wgEncodeUwDgfCd20Raw
+tableName wgEncodeUwDgfCd20ro01778Raw
 view RawSignal
 
-metaObject wgEncodeUwDgfCd20RawData
+metaObject wgEncodeUwDgfCd20ro01778RawData
 objType file
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20RawData.fastq.tgz
+fileName wgEncodeUwDgfCd20ro01778RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18208
@@ -317,21 +317,21 @@ project wgEncode
 subId 4884
 view RawData
 
-metaObject wgEncodeUwDgfCd20Sig
+metaObject wgEncodeUwDgfCd20ro01778Sig
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Sig.bigWig
+fileName wgEncodeUwDgfCd20ro01778Sig.bigWig
 grant Stam
 lab UW
 labExpId DS18208
 project wgEncode
 subId 4884
-tableName wgEncodeUwDgfCd20Sig
+tableName wgEncodeUwDgfCd20ro01778Sig
 view Signal
 
 metaObject wgEncodeUwDgfGm06990Aln
@@ -4298,4 +4298,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 1480695177
+# MAGIC: 1981370453
