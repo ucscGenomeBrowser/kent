@@ -3114,15 +3114,15 @@ subId 1815
 tableName wgEncodeUwDgfK562Sig
 view Signal
 
-metaObject wgEncodeUwDgfMonocd14Aln
+metaObject wgEncodeUwDgfMonocd14ro1746Aln
 objType file
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Aln.bam
+fileName wgEncodeUwDgfMonocd14ro1746Aln.bam
 grant Stam
 lab UW
 labExpId DS16508
@@ -3131,69 +3131,69 @@ project wgEncode
 subId 4885
 view Alignments
 
-metaObject wgEncodeUwDgfMonocd14Hotspots
+metaObject wgEncodeUwDgfMonocd14ro1746Hotspots
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Hotspots.broadPeak.gz
+fileName wgEncodeUwDgfMonocd14ro1746Hotspots.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS16508
 labVersion Hotspot-v5.2
 project wgEncode
 subId 4885
-tableName wgEncodeUwDgfMonocd14Hotspots
+tableName wgEncodeUwDgfMonocd14ro1746Hotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfMonocd14Pk
+metaObject wgEncodeUwDgfMonocd14ro1746Pk
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Pk.narrowPeak.gz
+fileName wgEncodeUwDgfMonocd14ro1746Pk.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS16508
 labVersion lmax-v1.0
 project wgEncode
 subId 4885
-tableName wgEncodeUwDgfMonocd14Pk
+tableName wgEncodeUwDgfMonocd14ro1746Pk
 view Peaks
 
-metaObject wgEncodeUwDgfMonocd14Raw
+metaObject wgEncodeUwDgfMonocd14ro1746Raw
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Raw.bigWig
+fileName wgEncodeUwDgfMonocd14ro1746Raw.bigWig
 grant Stam
 lab UW
 labExpId DS16508
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 subId 4885
-tableName wgEncodeUwDgfMonocd14Raw
+tableName wgEncodeUwDgfMonocd14ro1746Raw
 view RawSignal
 
-metaObject wgEncodeUwDgfMonocd14RawData
+metaObject wgEncodeUwDgfMonocd14ro1746RawData
 objType file
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14RawData.fastq.tgz
+fileName wgEncodeUwDgfMonocd14ro1746RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16508
@@ -3201,21 +3201,21 @@ project wgEncode
 subId 4885
 view RawData
 
-metaObject wgEncodeUwDgfMonocd14Sig
+metaObject wgEncodeUwDgfMonocd14ro1746Sig
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Sig.bigWig
+fileName wgEncodeUwDgfMonocd14ro1746Sig.bigWig
 grant Stam
 lab UW
 labExpId DS16508
 project wgEncode
 subId 4885
-tableName wgEncodeUwDgfMonocd14Sig
+tableName wgEncodeUwDgfMonocd14ro1746Sig
 view Signal
 
 metaObject wgEncodeUwDgfNb4Aln
@@ -4298,4 +4298,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 1981370453
+# MAGIC: 1019396307

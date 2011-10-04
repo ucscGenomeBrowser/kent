@@ -2401,7 +2401,7 @@ tableName wgEncodeUwDnaseCaco2RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeUwDnaseCd20PosAlnRep2
+metaObject wgEncodeUwDnaseCd20ro01778AlnRep2
 objType file
 cell CD20+
 composite wgEncodeUwDnase
@@ -2411,7 +2411,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
 expId 1884
-fileName wgEncodeUwDnaseCd20PosAlnRep2.bam,wgEncodeUwDnaseCd20PosAlnRep2.bam.bai
+fileName wgEncodeUwDnaseCd20ro01778AlnRep2.bam,wgEncodeUwDnaseCd20ro01778AlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2423,7 +2423,7 @@ subId 4400
 treatment None
 view Alignments
 
-metaObject wgEncodeUwDnaseCd20PosHotspotsRep2
+metaObject wgEncodeUwDnaseCd20ro01778HotspotsRep2
 objType table
 cell CD20+
 composite wgEncodeUwDnase
@@ -2433,7 +2433,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
 expId 1884
-fileName wgEncodeUwDnaseCd20PosHotspotsRep2.broadPeak.gz
+fileName wgEncodeUwDnaseCd20ro01778HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
@@ -2442,11 +2442,11 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 4400
-tableName wgEncodeUwDnaseCd20PosHotspotsRep2
+tableName wgEncodeUwDnaseCd20ro01778HotspotsRep2
 treatment None
 view Hotspots
 
-metaObject wgEncodeUwDnaseCd20PosPkRep2
+metaObject wgEncodeUwDnaseCd20ro01778PkRep2
 objType table
 cell CD20+
 composite wgEncodeUwDnase
@@ -2456,7 +2456,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
 expId 1884
-fileName wgEncodeUwDnaseCd20PosPkRep2.narrowPeak.gz
+fileName wgEncodeUwDnaseCd20ro01778PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -2465,11 +2465,11 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 4400
-tableName wgEncodeUwDnaseCd20PosPkRep2
+tableName wgEncodeUwDnaseCd20ro01778PkRep2
 treatment None
 view Peaks
 
-metaObject wgEncodeUwDnaseCd20PosRawDataRep2
+metaObject wgEncodeUwDnaseCd20ro01778RawDataRep2
 objType file
 cell CD20+
 composite wgEncodeUwDnase
@@ -2479,7 +2479,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
 expId 1884
-fileName wgEncodeUwDnaseCd20PosRawDataRep2.fastq.tgz
+fileName wgEncodeUwDnaseCd20ro01778RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 md5sum a1b640317b4f6ac1dcc29e3b4b7445fc
@@ -2490,7 +2490,7 @@ subId 4400
 treatment None
 view RawData
 
-metaObject wgEncodeUwDnaseCd20PosRawRep2
+metaObject wgEncodeUwDnaseCd20ro01778RawRep2
 objType table
 cell CD20+
 composite wgEncodeUwDnase
@@ -2500,7 +2500,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
 expId 1884
-fileName wgEncodeUwDnaseCd20PosRawRep2.bigWig
+fileName wgEncodeUwDnaseCd20ro01778RawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -2509,7 +2509,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 4400
-tableName wgEncodeUwDnaseCd20PosRawRep2
+tableName wgEncodeUwDnaseCd20ro01778RawRep2
 treatment None
 view RawSignal
 
@@ -19204,4 +19204,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 298803959
+# MAGIC: 1512501187
