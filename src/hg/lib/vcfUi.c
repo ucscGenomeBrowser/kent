@@ -232,8 +232,12 @@ else
 //   by filter column
 // color bases like pgSnp or some better palette?
 
+puts("</TD>");
+if (boxed && fileExists(hHelpFile("hgVcfTrackHelp")))
+    printf("<TD style='text-align:right'><A HREF=\"../goldenPath/help/hgVcfTrackHelp.html\" "
+           "TARGET=_BLANK>VCF configuration help</A></TD>");
 
-printf("</TD></TR></TABLE>");
+printf("</TR></TABLE>");
 
 if (!boxed && fileExists(hHelpFile("hgVcfTrackHelp")))
     printf("<P><A HREF=\"../goldenPath/help/hgVcfTrackHelp.html\" TARGET=_BLANK>VCF "
