@@ -1,3 +1,8 @@
+metaObject wgEncodePsuHistone
+objType composite
+composite wgEncodePsuHistone
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bAlnRep1
 objType file
 age immortalized
@@ -710,4 +715,4 @@ strain 129
 subId 4875
 view RawData
 
-# MAGIC: -149917779
+# MAGIC: -176320101
