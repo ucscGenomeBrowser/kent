@@ -16,6 +16,16 @@ See the Methods and References sections below for more details.
 
 <H2>Display Conventions and Configuration</H2>
 
+<P>
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>). For each view, there are multiple subtracks that display
+individually on the browser. Instructions for configuring multi-view tracks
+are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+Color differences among the views are arbitrary. They provide a 
+visual cue for distinguishing between the different cell types and 
+compartments.
+</P>
+
 <P>In the graphical display, the ends are represented by blocks connected by a 
 horizontal line. In full and packed display modes, the arrowheads on the 
 horizontal line represent the direction of transcription, and an ID of the 
@@ -29,12 +39,6 @@ transcripts. PETs that mapped to multiple locations may represent low
 complexity or repetitive sequences.
 </P>
 
-<P>To show only selected subtracks, uncheck the boxes next to the tracks that 
-you wish to hide.</P>
- 
-<P>Color differences among the views are arbitrary. They provide a 
-visual cue for 
-distinguishing between the different cell types and compartments.</P>
 
 <DL>
 <DT><i>Clusters</i>
@@ -67,7 +71,7 @@ The cloning-free RNA-PET libraries were generated from polyA mRNA samples and co
 </P>
 <P>
 <B>Data:</B>
-Data: The sequenced RNA-PETs are unified in 25/25 bp length from each end of a cDNA. After filtering out redundant and noise tags, the unique PETs will proceed to analysis pipeline. Initially, the orientation of each tag will be screened out by the barcode built in the sequencing-template, then paired into a given orientation-PET.  The orientation-determined RNA-PET is mapped onto reference genome allowing up to two mismatches. Majority of PETs are mapped on the known transcripts, or splice variants. A small portion of misaligned PETs, defined as discordant PETs, are mapped either too far from each tag, have wrong orientations, or mapped in different chromosomes, indicating exist some transcription variations which could be caused by genome structure variations: such as fusion, deletion, insertion, inversion, tandem repeat and translocation; or RNA trans-splicing etc. 
+The sequenced RNA-PETs are unified in 25/25 bp length from each end of a cDNA. After filtering out redundant and noise tags, the unique PETs will proceed to analysis pipeline. Initially, the orientation of each tag will be screened out by the barcode built in the sequencing-template, then paired into a given orientation-PET.  The orientation-determined RNA-PET is mapped onto reference genome allowing up to two mismatches. Majority of PETs are mapped on the known transcripts, or splice variants. A small portion of misaligned PETs, defined as discordant PETs, are mapped either too far from each tag, have wrong orientations, or mapped in different chromosomes, indicating exist some transcription variations which could be caused by genome structure variations: such as fusion, deletion, insertion, inversion, tandem repeat and translocation; or RNA trans-splicing etc. 
 </P>
 
 <h3>Cloning-based RNA-PET (34 bp reads, 18 bp and 16 bp tag for each of the 5' and 3' ends)</h3>
