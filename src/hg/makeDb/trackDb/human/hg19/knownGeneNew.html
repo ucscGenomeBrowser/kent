@@ -1,15 +1,18 @@
 <H2>Description</H2>
 <P>
-The UCSC Genes track shows gene predictions based on data
-from RefSeq, Genbank, CCDS and UniProt. This is a moderately conservative set of
-predictions, requiring the support of one tRNA prediction from the tRNA track,
-one Rfam prediction, one RefSeq RNA, or one GenBank RNA sequence plus
-at least one additional line of evidence. The track includes both protein-coding
-and putative non-coding transcripts. Some of these non-coding transcripts may 
-actually code for protein, but the evidence for the associated protein is weak
-at best. Compared to RefSeq, this gene set has generally about 10% more 
-protein-coding genes, approximately four times as many putative non-coding 
-genes, and about twice as many splice variants.</P>
+The UCSC Genes track is a set of gene predictions based on data from
+RefSeq, Genbank, CCDS, UniProt, Rfam, and the tRNA Genes track.  The
+track includes both protein-coding genes and non-coding RNA genes.
+Both types of genes can produce noncoding transcripts, but non-coding
+RNA genes do not produce protein-coding transcripts. This is a
+moderately conservative set of predictions.  Transcripts of
+protein-coding genes require the support of one RefSeq RNA, or one
+GenBank RNA sequence plus at least one additional line of evidence.
+Transcripts of non-coding RNA genes require the support of one Rfam or
+tRNA prediction.  Compared to RefSeq, this gene set has generally
+about 10% more protein-coding genes, approximately four times as many
+putative non-coding genes, and about twice as many splice
+variants.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -81,8 +84,48 @@ any frame upstream of the predicted start codon. For RefSeq transcripts
 the RefSeq protein prediction is used directly instead of this procedure.  For CCDS proteins 
 the CCDS protein is used directly.
 <LI>The corresponding UniProt protein is found, if any.
-<LI>The transcript is assigned a permanent "uc" accession.
+<LI>The transcript is assigned a permanent "uc" accession.  If the
+transcript was not in the previous release of UCSC Genes, the
+accession ends with the suffix ".1" indicating that this is the first
+version of this transcript.  If the transcript was in the previous
+release of UCSC Genes, the accession from the previous version is
+re-used with the version number incremented.
 </OL>
+
+<H2>Related Data</H2>
+<P>
+The UCSC Genes transcripts are annotated in numerous tables, each of
+which is also available as a downloadable file.  These include tables
+that link UCSC Genes transcripts to external datasets (such
+as <I>knownToLocusLink</I>, which maps UCSC Genes transcripts to Locus
+Link identifiers), and tables that detail some property of UCSC Genes
+transcript sequences (such as <I>knownToPfam</I>, which identifies any
+Pfam domains found in the UCSC Genes protein-coding transcripts).  One
+can see a full list of the associated tables in the Table Browser by
+selecting UCSC Genes at the <B>track</B> menu; this list is then
+available at the <B>table</B> menu.  Note that some of these tables
+refer to UCSC Genes by its former name of <I>Known Genes</I>,
+sometimes abbreviated as <I>known</I> or <I>kg</I>.  While the
+complete set of annotation tables is too long to describe, some of the
+more important tables are described below.
+<UL>
+<LI> <B>kgXref</B> identifies the RefSeq, SwissProt, Rfam, or tRNA
+sequences (if any) on which each each transcript was based.
+<LI> <B>knownGeneMrna</B> contains the mRNA sequence that represents
+each UCSC Genes transcript.  If the transcript is based on a RefSeq
+transcript, then this table contains the RefSeq transcript, including
+any portions that do not align to the genome.
+<LI> <B>knownGeneTxMrna</B> contains mRNA sequences for each UCSC Genes
+transcripts.  In contrast to the sequencess in knownGeneMrna, these sequences
+are derived from obtaining the sequences for each exon from the reference genome 
+and concatenating these exonic sequences.
+<LI> <B>knownGenePep</B> contains the protein sequences derived from
+the knownGeneMrna transcript sequences.  Any protein-level annotations,
+such as the contents of the knownToPfam table, are based on these sequences.
+<LI> <B>knownGeneTxPep</B> contains the protein translation (if any) of
+each mRNA sequence in knownGeneTxMrna.
+</UL>
+<P>
 
 <H2>Credits</H2>
 <P>
