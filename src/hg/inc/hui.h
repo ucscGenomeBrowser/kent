@@ -1014,6 +1014,9 @@ void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed);
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
+void crossSpeciesCfgUi(struct cart *cart, struct trackDb *tdb);
+// Put up UI for selecting rainbow chromosome color or intensity score.
+
 void pslCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
 /* Put up UI for psl tracks */
 

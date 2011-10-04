@@ -4974,10 +4974,50 @@ if (scoreCtString != NULL)
 cfgEndBox(boxed);
 }
 
+// Moved from hgTrackUi for consistency
+static void filterByChromCfgUi(struct cart *cart, struct trackDb *tdb)
+{
+char *filterSetting;
+char filterVar[256];
+char *filterVal = "";
+
+printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
+snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->track);
+filterSetting = cartUsualString(cart, filterVar, filterVal);
+cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
+}
+
+// Moved from hgTrackUi for consistency
+void crossSpeciesCfgUi(struct cart *cart, struct trackDb *tdb)
+// Put up UI for selecting rainbow chromosome color or intensity score.
+{
+char colorVar[256];
+char *colorSetting;
+// initial value of chromosome coloring option is "on", unless
+// overridden by the colorChromDefault setting in the track
+char *colorDefault = trackDbSettingOrDefault(tdb, "colorChromDefault", "on");
+
+printf("<p><b>Color track based on chromosome:</b> ");
+snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->track);
+colorSetting = cartUsualString(cart, colorVar, colorDefault);
+cgiMakeRadioButton(colorVar, "on", sameString(colorSetting, "on"));
+printf(" on ");
+cgiMakeRadioButton(colorVar, "off", sameString(colorSetting, "off"));
+printf(" off ");
+printf("<br><br>");
+filterByChromCfgUi(cart,tdb);
+}
+
 void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for psl tracks */
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+
+char *typeLine = cloneString(tdb->type);
+char *words[8];
+int wordCount = wordCount = chopLine(typeLine, words);
+if (wordCount == 3 && sameWord(words[1], "xeno"))
+    crossSpeciesCfgUi(cart,tdb);
 baseColorDropLists(cart, tdb, name);
 indelShowOptionsWithName(cart, tdb, name);
 cfgEndBox(boxed);
@@ -6025,7 +6065,8 @@ char javascript[JBUFSIZE];
 #define CFG_LINK  "<B><A HREF=\"#a_cfg_%s\" onclick=\"return (showConfigControls('%s') == false);\" title=\"%s Configuration\">%s</A><INPUT TYPE=HIDDEN NAME='%s.%s.showCfg' value='%s'></B>"
 #define MAKE_CFG_LINK(name,title,tbl,open) printf(CFG_LINK, (name),(name),(title),(title),(tbl),(name),((open)?"on":"off"))
 
-members_t *membersOfView = subgroupMembersGet(parentTdb,"view");
+membersForAll_t *membersForAll = membersForAllSubGroupsGet(parentTdb, cart); // membersForAll is generated once per track, then cached
+members_t *membersOfView = membersForAll->members[dimV];
 if(membersOfView == NULL)
     return FALSE;
 
@@ -6033,16 +6074,16 @@ char configurable[membersOfView->count];
 memset(configurable,cfgNone,sizeof(configurable));
 int firstOpened = -1;
 boolean makeCfgRows = FALSE;
-struct trackDb **matchedSubtracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
+struct trackDb **matchedViewTracks = needMem(sizeof(struct trackDb *)*membersOfView->count);
 
 for (ix = 0; ix < membersOfView->count; ix++)
     {
     char *viewName = membersOfView->tags[ix];
-    struct trackDb *view = rFindView(parentTdb->subtracks, viewName);
-    if (view != NULL)
+    if (membersOfView->subtrackList != NULL && membersOfView->subtrackList[ix] != NULL)
         {
-        matchedSubtracks[ix] = view;
-        configurable[ix] = (char)cfgTypeFromTdb(view->subtracks, TRUE);
+        struct trackDb *subtrack = membersOfView->subtrackList[ix]->val;
+        matchedViewTracks[ix] = subtrack->parent;
+        configurable[ix] = (char)cfgTypeFromTdb(subtrack, TRUE);
         if(configurable[ix] != cfgNone)
             {
             if(firstOpened == -1)
@@ -6062,9 +6103,8 @@ printf("<TABLE><TR style='text-align:left;'>\n");
 // Make row of vis drop downs
 for (ix = 0; ix < membersOfView->count; ix++)
     {
-    struct trackDb *view = matchedSubtracks[ix];
     char *viewName = membersOfView->tags[ix];
-    if (view != NULL)
+    if (matchedViewTracks[ix] != NULL)
         {
         printf("<TD>");
         if(configurable[ix] != cfgNone)
@@ -6095,7 +6135,7 @@ if(makeCfgRows)
     puts("</TABLE><TABLE>");
     for (ix = 0; ix < membersOfView->count; ix++)
         {
-        struct trackDb *view = matchedSubtracks[ix];
+        struct trackDb *view = matchedViewTracks[ix];
         if (view != NULL)
             {
             char *viewName = membersOfView->tags[ix];
@@ -6121,8 +6161,7 @@ if(makeCfgRows)
         }
     }
 puts("</TABLE>");
-subgroupMembersFree(&membersOfView);
-freeMem(matchedSubtracks);
+freeMem(matchedViewTracks);
 return TRUE;
 }
 

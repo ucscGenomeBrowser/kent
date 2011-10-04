@@ -1711,39 +1711,6 @@ indelShowOptions(cart, tdb);
 }
 
 
-
-static void filterByChrom(struct trackDb *tdb)
-{
-char *filterSetting;
-char filterVar[256];
-char *filterVal = "";
-
-printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
-snprintf(filterVar, sizeof(filterVar), "%s.chromFilter", tdb->track);
-filterSetting = cartUsualString(cart, filterVar, filterVal);
-cgiMakeTextVar(filterVar, cartUsualString(cart, filterVar, ""), 15);
-}
-
-void crossSpeciesUi(struct trackDb *tdb)
-/* Put up UI for selecting rainbow chromosome color or intensity score. */
-{
-char colorVar[256];
-char *colorSetting;
-/* initial value of chromosome coloring option is "on", unless
- * overridden by the colorChromDefault setting in the track */
-char *colorDefault = trackDbSettingOrDefault(tdb, "colorChromDefault", "on");
-
-printf("<p><b>Color track based on chromosome:</b> ");
-snprintf(colorVar, sizeof(colorVar), "%s.color", tdb->track);
-colorSetting = cartUsualString(cart, colorVar, colorDefault);
-cgiMakeRadioButton(colorVar, "on", sameString(colorSetting, "on"));
-printf(" on ");
-cgiMakeRadioButton(colorVar, "off", sameString(colorSetting, "off"));
-printf(" off ");
-printf("<br><br>");
-filterByChrom(tdb);
-}
-
 void transRegCodeUi(struct trackDb *tdb)
 /* Put up UI for transcriptional regulatory code - not
  * much more than score UI. */
@@ -1859,7 +1826,7 @@ if (compositeTrack)
 else if (normScoreAvailable)
     chainCfgUi(database, cart, tdb, tdb->track, NULL, FALSE, chromosome);
 else
-    crossSpeciesUi(tdb);
+    crossSpeciesCfgUi(cart,tdb);
 }
 
 void chromGraphUi(struct trackDb *tdb)
@@ -2367,6 +2334,15 @@ cgiMakeCheckboxGroupWithVals(cartVarName, labelArr, valueArr, refCount, checked,
 hFreeConn(&conn);
 }
 
+static void factorSourceUi(char *db,struct trackDb *tdb)
+{
+printf("<BR><B>Cell Abbreviations:</B><BR>\n");
+char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
+struct sqlConnection *conn = hAllocConn(db);
+hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
+hFreeConn(&conn);
+}
+
 #ifdef UNUSED
 static boolean isInTrackList(struct trackDb *tdbList, struct trackDb *target)
 /* Return TRUE if target is in tdbList. */
@@ -2447,7 +2423,14 @@ char *track = tdb->track;
 //    place, lets be cautious at this time.
 // NOTE: Developer, please try to use cfgTypeFromTdb()/cfgByCfgType().
 
-if (sameString(track, "stsMap"))
+// UI precedence:
+// 1) supers to get them out of the way: they have no controls
+// 2) special cases based upon track name (developer please avoid)
+// 3) cfgTypeFromTdb()/cfgByCfgType() <== prefered method
+// 4) special cases falling through the cracks but based upon type
+if (tdbIsSuperTrack(tdb))
+    superTrackUi(tdb, tdbList);
+else if (sameString(track, "stsMap"))
     stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
     affyTxnPhase2Ui(tdb);
@@ -2530,8 +2513,6 @@ else if (sameString(track, "blastHg17KG")
     blastUi(tdb);
 else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
-else if (startsWith("chromGraph", tdb->type))
-    chromGraphUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
 else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
@@ -2549,16 +2530,14 @@ else if (startsWith("chain", track)
 else if (sameString(track, "orthoTop4") // still used ??
      ||  sameString(track, "mouseOrtho")
      ||  sameString(track, "mouseSyn"))
-    // NOTE: type psl xeno <otherDb> tracks use crossSpeciesUi, so
+    // NOTE: type psl xeno <otherDb> tracks use crossSpeciesCfgUi, so
     // add explicitly here only if track has another type (bed, chain).
-    // For crossSpeciesUi, the
+    // For crossSpeciesCfgUi, the
     // default for chrom coloring is "on", unless track setting
     // colorChromDefault is set to "off"
-    crossSpeciesUi(tdb);
+    crossSpeciesCfgUi(cart,tdb);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
-else if (startsWith("sample", tdb->type))
-    genericWiggleUi(tdb,7);
 else if (sameString(track, WIKI_TRACK_TABLE))
     wikiTrackUi(tdb);
 else if (sameString(track, RULER_TRACK_NAME))
@@ -2586,7 +2565,7 @@ else if (sameString(track, "switchDbTss"))
 else if (sameString(track, "dgv")
      || (startsWith("dgvV", track) && isdigit(track[4])))
     dgvUi(tdb);
-else
+else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.
     eCfgType cType = cfgTypeFromTdb(tdb,FALSE);
@@ -2595,49 +2574,26 @@ else
         boolean boxed = trackDbSettingClosestToHomeOn(tdb, "boxedCfg");
         cfgByCfgType(cType,database, cart, tdb,tdb->track, NULL, boxed);
         }
-    else if (tdb->type != NULL)
-        {
-        /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */
-        char *typeLine = cloneString(tdb->type);
-        char *words[8];
-        int wordCount = 0;
-        wordCount = chopLine(typeLine, words);
-        if (wordCount > 0)
-            {
-            if (sameWord(words[0], "expRatio"))
-                expRatioUi(tdb);
-            else if (sameWord(words[0], "array")) /* not quite the same as an "expRatio" type (custom tracks) */
-                expRatioCtUi(tdb);
-            else if (sameWord(words[0], "psl"))
-                {
-                if (wordCount == 3)
-                if (sameWord(words[1], "xeno"))
-                    crossSpeciesUi(tdb);
-                baseColorDrawOptDropDown(cart, tdb);
-                indelShowOptions(cart, tdb);
-                }
-            else if (sameWord(words[0], "factorSource"))
-                {
-                printf("<BR><B>Cell Abbreviations:</B><BR>\n");
-                char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
-                struct sqlConnection *conn = hAllocConn(database);
-                hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
-                hFreeConn(&conn);
-                }
-            }
-            freeMem(typeLine);
-        }
+    // NOTE: these cases that fall through the cracks should probably get folded into cfgByCfgType()
+    else if (startsWithWord("expRatio", tdb->type))
+        expRatioUi(tdb);
+    else if (startsWith("chromGraph", tdb->type))
+        chromGraphUi(tdb);
+    else if (startsWith("sample", tdb->type))
+        genericWiggleUi(tdb,7);
+    else if (startsWithWord("array",tdb->type)) /* not quite the same as an "expRatio" type (custom tracks) */
+        expRatioCtUi(tdb);
+    else if (startsWithWord("factorSource",tdb->type))
+        factorSourceUi(database,tdb);
     }
-if (tdbIsSuperTrack(tdb))
+
+if (!ajax) // ajax asks for a simple cfg dialog for right-click popup or hgTrackUi subtrack cfg
     {
-    superTrackUi(tdb, tdbList);
-    }
-else if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
-    {
-    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
-    }
-if (!ajax)
-    {
+    // Composites *might* have had their top level controls just printed, but almost certainly have additional controls
+    if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
+        hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
+
+    // Additional special case navigation links may be added
     previewLinks(database, tdb);
     extraUiLinks(database,tdb, trackHash);
     }
