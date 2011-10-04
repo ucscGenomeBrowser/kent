@@ -1,3 +1,8 @@
+metaObject wgEncodeCaltechTfbs
+objType composite
+composite wgEncodeCaltechTfbs
+expVars lab,dataType,cell,antibody,control,treatment
+
 metaObject wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep1
 objType file
 age immortalized
@@ -1192,7 +1197,7 @@ tableName wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xSigRep2
 treatment EqS_2.0pct_60hr
 view Signal
 
-metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xAlnRep1
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xAlnRep1
 objType file
 age immortalized
 antibody Input
@@ -1204,7 +1209,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xAlnRep1.bam
 grant Hardison
 lab Caltech-m
 labExpId 11612
@@ -1220,7 +1225,7 @@ subId 4448
 treatment None
 view Alignments
 
-metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xRawDataRep1
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xRawDataRep1
 objType file
 age immortalized
 antibody Input
@@ -1232,7 +1237,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xRawDataRep1.fastq.gz
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
 labExpId 11612
@@ -1247,35 +1252,6 @@ strain C3H
 subId 4448
 treatment None
 view RawData
-
-metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep1
-objType table
-age immortalized
-antibody Input
-cell C2C12
-composite wgEncodeCaltechTfbs
-control Control_50bp
-controlId 11612
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-05
-dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep1.bigWig
-grant Hardison
-lab Caltech-m
-labExpId 11612
-labVersion Myoblast
-md5sum 3001478b347637f5d62b9e40d073617c
-project wgEncode
-protocol PCR1x
-replicate 1
-setType input
-sex F
-strain C3H
-subId 4448
-tableName wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep1
-treatment None
-view Signal
 
 metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xRawDataRep2
 objType file
@@ -1332,6 +1308,35 @@ strain C3H
 subId 4717
 treatment None
 view RawData
+
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep1
+objType table
+age immortalized
+antibody Input
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_50bp
+controlId 11612
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-05
+dateUnrestricted 2012-05-05
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep1.bigWig
+grant Hardison
+lab Caltech-m
+labExpId 11612
+labVersion Myoblast
+md5sum 3001478b347637f5d62b9e40d073617c
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+sex F
+strain C3H
+subId 4448
+tableName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep1
+treatment None
+view Signal
 
 metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep2
 objType table
@@ -3415,4 +3420,4 @@ tableName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: -1720279043
+# MAGIC: 325843777
