@@ -25,6 +25,7 @@ maxLimit 25183
 viewLimits 0:30
 autoScale off
 windowingFunction mean
+html wgEncodeUwAffyExonArray.new
 
         track wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1
         parent wgEncodeUwAffyExonArray off
