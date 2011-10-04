@@ -8408,9 +8408,9 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 9/2/11 angie)
+# NHGRI GWAS CATALOG (DONE 10/3/11 angie)
 # NEXT TIME: use snp134 and squelch multiple-mappers!
-# Updated 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
+# Updated 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
@@ -8431,7 +8431,11 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 7096 elements of size 22
+#Loaded 7351 elements of size 22
+#Warning 1366 Incorrect integer value: '' for column 'pubMedID' at row 470
+#Warning 1265 Data truncated for column 'initSample' at row 1901
+    # See hg18.txt for notes on those warnings. Apply same pubMedID fix:
+    hgsql hg19 -e 'update gwasCatalog set pubmedId = 15761122 where name="rs380390" and pubmedId=0;'
 
 
 ######################################################################## 
@@ -17092,3 +17096,110 @@ CREATE TABLE geneReviewsBB (
 
 
 ##############################################################################
+# hgPal downloads redone for new knownGene (DONE 2011-09-29 braney)
+#   FASTA from 46way for  knownGene, knownCanonical 
+
+    ssh hgwdev
+    screen
+    bash
+#    rm -rf /cluster/data/hg19/bed/multiz46way/pal
+#    mkdir /cluster/data/hg19/bed/multiz46way/pal
+    cd /cluster/data/hg19/bed/multiz46way/pal
+    for i in `cat ../species.list`; do echo $i; done > order.lst
+
+
+    mz=multiz46way
+    gp=knownGene
+    db=hg19
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+#    real    207m5.662s
+#    user    37m6.928s
+#    sys     6m24.152s
+
+    mz=multiz46way
+    gp=knownGene
+    db=hg19
+
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz46way
+    gp=knownGene
+    db=hg19
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    # now do the canonical set
+    cd /cluster/data/hg19/bed/multiz46way/pal
+    mz=multiz46way
+    gp=knownCanonical
+    db=hg19
+    for j in `awk '{print $1}' /cluster/data/hg19/chrom.sizes`
+    do
+	echo "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
+    done
+
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -geneBeds=$j.known.bed  $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -geneBeds=$j.known.bed -exons $db $mz knownGene order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+# real    302m20.489s
+# user    27m31.179s
+# sys     5m30.071s
+
+
+    rm *.known.bed
+    mz=multiz46way
+    gp=knownCanonical
+    db=hg19
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz46way
+    gp=knownCanonical
+    db=hg19
+    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz

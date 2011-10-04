@@ -1702,6 +1702,262 @@ tableName wgEncodeSydhHistoneNt2d1InputUcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep1
+objType file
+antibody H3K4me1_(pAb-037-050)
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4838
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep2
+objType file
+antibody H3K4me1_(pAb-037-050)
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4838
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePanc1H3k04me1bUcdPk
+objType table
+antibody H3K4me1_(pAb-037-050)
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4838
+tableName wgEncodeSydhHistonePanc1H3k04me1bUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep1
+objType file
+antibody H3K4me1_(pAb-037-050)
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4838
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep2
+objType file
+antibody H3K4me1_(pAb-037-050)
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4838
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePanc1H3k04me1bUcdSig
+objType table
+antibody H3K4me1_(pAb-037-050)
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4838
+tableName wgEncodeSydhHistonePanc1H3k04me1bUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistonePanc1H3k27acUcdAlnRep1
+objType file
+antibody H3K27ac
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k27acUcdAlnRep1.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4837
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePanc1H3k27acUcdAlnRep2
+objType file
+antibody H3K27ac
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k27acUcdAlnRep2.bam
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4837
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePanc1H3k27acUcdPk
+objType table
+antibody H3K27ac
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k27acUcdPk.narrowPeak.gz
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4837
+tableName wgEncodeSydhHistonePanc1H3k27acUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep1
+objType file
+antibody H3K27ac
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 1
+setType exp
+subId 4837
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep2
+objType file
+antibody H3K27ac
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep2.fastq.tgz
+grant Snyder
+lab USC
+project wgEncode
+replicate 2
+setType exp
+subId 4837
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePanc1H3k27acUcdSig
+objType table
+antibody H3K27ac
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId PANC-1/None/Input/UCDavis
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
+fileName wgEncodeSydhHistonePanc1H3k27acUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 4837
+tableName wgEncodeSydhHistonePanc1H3k27acUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1
 objType file
 antibody H3K4me3B
@@ -2770,4 +3026,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 20631143
+# MAGIC: -1862615029
