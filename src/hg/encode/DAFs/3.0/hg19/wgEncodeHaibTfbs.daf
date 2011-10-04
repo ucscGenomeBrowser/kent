@@ -1,8 +1,7 @@
 # Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.10 $
 
-
 # The header for the associated DDF should look like this:
-# files	view	cell	treatment	antibody	protocol	setType	controlId	labExpId	replicate	origAssembly	seqPlatform	softwareVersion	labVersion
+# files	view	cell	treatment	antibody	protocol	setType	controlId	labExpId	replicate	softwareVersion	labVersion
 
 #Explanation of DDF terms
 #files: The name of the files to be associated with this data
@@ -15,12 +14,8 @@
 #controlId: The unique identification of experiments. The control ID gerneated from the lab.
 #labExpId; A unique lab identification number for an experiment.
 #replicate: The Replicate number. The replication number of a given experiment.
-#origAssembly: The assembly that the data was originally released on (hg18 or hg19)
-#seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #softwareVersion: Free text for the lab to keep track of software used in processed data
 #labVersion: Free text for the lab to keep track of any other data
-
-
 
 
 
@@ -39,21 +34,21 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=3
 view             Peaks
 type             broadPeak
 hasReplicates    yes
-required         no
+#required         no
 
 view             Alignments
 type             bam
 hasReplicates    yes
-required         no
+#required         no
 
 view             RawSignal
 type             wig
 hasReplicates    yes
-required         no
+#required         no
 
 view		 RawData
 type             fastq
 hasReplicates    yes
-required         no
+#required         no
 
 

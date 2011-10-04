@@ -14,7 +14,7 @@ dateSubmitted 2011-01-04
 dateUnrestricted 2011-10-04
 dccAccession wgEncodeEH001180
 expId 1180
-fileName wgEncodeUwDnaseA549AlnRep1.bam
+fileName wgEncodeUwDnaseA549AlnRep1.bam,wgEncodeUwDnaseA549AlnRep1.bam.bai
 geoSampleAccession GSM736580
 grant Stam
 lab UW
@@ -37,7 +37,7 @@ dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-04
 dccAccession wgEncodeEH001180
 expId 1180
-fileName wgEncodeUwDnaseA549AlnRep2.bam
+fileName wgEncodeUwDnaseA549AlnRep2.bam,wgEncodeUwDnaseA549AlnRep2.bam.bai
 geoSampleAccession GSM736506
 grant Stam
 lab UW
@@ -249,7 +249,7 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
 dccAccession wgEncodeEH000505
 expId 505
-fileName wgEncodeUwDnaseAg04449AlnRep1.bam
+fileName wgEncodeUwDnaseAg04449AlnRep1.bam,wgEncodeUwDnaseAg04449AlnRep1.bam.bai
 geoSampleAccession GSM736562
 grant Stam
 lab UW
@@ -273,7 +273,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000505
 expId 505
-fileName wgEncodeUwDnaseAg04449AlnRep2.bam
+fileName wgEncodeUwDnaseAg04449AlnRep2.bam,wgEncodeUwDnaseAg04449AlnRep2.bam.bai
 geoSampleAccession GSM736590
 grant Stam
 lab UW
@@ -491,7 +491,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000506
 expId 506
-fileName wgEncodeUwDnaseAg04450AlnRep1.bam
+fileName wgEncodeUwDnaseAg04450AlnRep1.bam,wgEncodeUwDnaseAg04450AlnRep1.bam.bai
 geoSampleAccession GSM736514
 grant Stam
 lab UW
@@ -515,7 +515,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000506
 expId 506
-fileName wgEncodeUwDnaseAg04450AlnRep2.bam
+fileName wgEncodeUwDnaseAg04450AlnRep2.bam,wgEncodeUwDnaseAg04450AlnRep2.bam.bai
 geoSampleAccession GSM736563
 grant Stam
 lab UW
@@ -733,7 +733,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000507
 expId 507
-fileName wgEncodeUwDnaseAg09309AlnRep1.bam
+fileName wgEncodeUwDnaseAg09309AlnRep1.bam,wgEncodeUwDnaseAg09309AlnRep1.bam.bai
 geoSampleAccession GSM736551
 grant Stam
 lab UW
@@ -757,7 +757,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000507
 expId 507
-fileName wgEncodeUwDnaseAg09309AlnRep2.bam
+fileName wgEncodeUwDnaseAg09309AlnRep2.bam,wgEncodeUwDnaseAg09309AlnRep2.bam.bai
 geoSampleAccession GSM736616
 grant Stam
 lab UW
@@ -975,7 +975,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000508
 expId 508
-fileName wgEncodeUwDnaseAg09319AlnRep1.bam
+fileName wgEncodeUwDnaseAg09319AlnRep1.bam,wgEncodeUwDnaseAg09319AlnRep1.bam.bai
 geoSampleAccession GSM736531
 grant Stam
 lab UW
@@ -999,7 +999,7 @@ dateSubmitted 2010-01-07
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000508
 expId 508
-fileName wgEncodeUwDnaseAg09319AlnRep2.bam
+fileName wgEncodeUwDnaseAg09319AlnRep2.bam,wgEncodeUwDnaseAg09319AlnRep2.bam.bai
 geoSampleAccession GSM736619
 grant Stam
 lab UW
@@ -1217,7 +1217,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000509
 expId 509
-fileName wgEncodeUwDnaseAg10803AlnRep1.bam
+fileName wgEncodeUwDnaseAg10803AlnRep1.bam,wgEncodeUwDnaseAg10803AlnRep1.bam.bai
 geoSampleAccession GSM736598
 grant Stam
 lab UW
@@ -1241,7 +1241,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000509
 expId 509
-fileName wgEncodeUwDnaseAg10803AlnRep2.bam
+fileName wgEncodeUwDnaseAg10803AlnRep2.bam,wgEncodeUwDnaseAg10803AlnRep2.bam.bai
 geoSampleAccession GSM736633
 grant Stam
 lab UW
@@ -1458,7 +1458,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001161
 expId 1161
-fileName wgEncodeUwDnaseAoafAlnRep1.bam
+fileName wgEncodeUwDnaseAoafAlnRep1.bam,wgEncodeUwDnaseAoafAlnRep1.bam.bai
 geoSampleAccession GSM736583
 grant Stam
 lab UW
@@ -1481,7 +1481,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH001161
 expId 1161
-fileName wgEncodeUwDnaseAoafAlnRep2.bam
+fileName wgEncodeUwDnaseAoafAlnRep2.bam,wgEncodeUwDnaseAoafAlnRep2.bam.bai
 geoSampleAccession GSM736505
 grant Stam
 lab UW
@@ -1692,7 +1692,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001181
 expId 1181
-fileName wgEncodeUwDnaseBe2cAlnRep1.bam
+fileName wgEncodeUwDnaseBe2cAlnRep1.bam,wgEncodeUwDnaseBe2cAlnRep1.bam.bai
 geoSampleAccession GSM736508
 grant Stam
 lab UW
@@ -1715,7 +1715,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001181
 expId 1181
-fileName wgEncodeUwDnaseBe2cAlnRep2.bam
+fileName wgEncodeUwDnaseBe2cAlnRep2.bam,wgEncodeUwDnaseBe2cAlnRep2.bam.bai
 geoSampleAccession GSM736622
 grant Stam
 lab UW
@@ -1927,7 +1927,7 @@ dateSubmitted 2010-06-19
 dateUnrestricted 2011-03-19
 dccAccession wgEncodeEH000487
 expId 487
-fileName wgEncodeUwDnaseBjAlnRep1.bam
+fileName wgEncodeUwDnaseBjAlnRep1.bam,wgEncodeUwDnaseBjAlnRep1.bam.bai
 geoSampleAccession GSM736518
 grant Stam
 lab UW
@@ -1951,7 +1951,7 @@ dateSubmitted 2010-06-06
 dateUnrestricted 2011-03-06
 dccAccession wgEncodeEH000487
 expId 487
-fileName wgEncodeUwDnaseBjAlnRep2.bam
+fileName wgEncodeUwDnaseBjAlnRep2.bam,wgEncodeUwDnaseBjAlnRep2.bam.bai
 geoSampleAccession GSM736596
 grant Stam
 lab UW
@@ -2170,7 +2170,7 @@ dateSubmitted 2009-04-24
 dateUnrestricted 2010-01-24
 dccAccession wgEncodeEH000486
 expId 486
-fileName wgEncodeUwDnaseCaco2AlnRep1.bam
+fileName wgEncodeUwDnaseCaco2AlnRep1.bam,wgEncodeUwDnaseCaco2AlnRep1.bam.bai
 geoSampleAccession GSM736500
 grant Stam
 lab UW
@@ -2194,7 +2194,7 @@ dateSubmitted 2009-07-01
 dateUnrestricted 2010-03-30
 dccAccession wgEncodeEH000486
 expId 486
-fileName wgEncodeUwDnaseCaco2AlnRep2.bam
+fileName wgEncodeUwDnaseCaco2AlnRep2.bam,wgEncodeUwDnaseCaco2AlnRep2.bam.bai
 geoSampleAccession GSM736587
 grant Stam
 lab UW
@@ -2411,7 +2411,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
 expId 1884
-fileName wgEncodeUwDnaseCd20PosAlnRep2.bam
+fileName wgEncodeUwDnaseCd20PosAlnRep2.bam,wgEncodeUwDnaseCd20PosAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2523,7 +2523,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001885
 expId 1885
-fileName wgEncodeUwDnaseCd34mobilizedAlnRep1.bam
+fileName wgEncodeUwDnaseCd34mobilizedAlnRep1.bam,wgEncodeUwDnaseCd34mobilizedAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -2636,7 +2636,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000510
 expId 510
-fileName wgEncodeUwDnaseCmkAlnRep1.bam
+fileName wgEncodeUwDnaseCmkAlnRep1.bam,wgEncodeUwDnaseCmkAlnRep1.bam.bai
 geoSampleAccession GSM736607
 grant Stam
 lab UW
@@ -2757,7 +2757,7 @@ dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
 dccAccession wgEncodeEH000481
 expId 481
-fileName wgEncodeUwDnaseGm06990AlnRep1.bam
+fileName wgEncodeUwDnaseGm06990AlnRep1.bam,wgEncodeUwDnaseGm06990AlnRep1.bam.bai
 geoSampleAccession GSM736558
 grant Stam
 lab UW
@@ -2781,7 +2781,7 @@ dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000481
 expId 481
-fileName wgEncodeUwDnaseGm06990AlnRep2.bam
+fileName wgEncodeUwDnaseGm06990AlnRep2.bam,wgEncodeUwDnaseGm06990AlnRep2.bam.bai
 geoSampleAccession GSM736635
 grant Stam
 lab UW
@@ -2998,7 +2998,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001182
 expId 1182
-fileName wgEncodeUwDnaseGm12864AlnRep1.bam
+fileName wgEncodeUwDnaseGm12864AlnRep1.bam,wgEncodeUwDnaseGm12864AlnRep1.bam.bai
 geoSampleAccession GSM736525
 grant Stam
 lab UW
@@ -3116,7 +3116,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000520
 expId 520
-fileName wgEncodeUwDnaseGm12865AlnRep1.bam
+fileName wgEncodeUwDnaseGm12865AlnRep1.bam,wgEncodeUwDnaseGm12865AlnRep1.bam.bai
 geoSampleAccession GSM736512
 grant Stam
 lab UW
@@ -3140,7 +3140,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000520
 expId 520
-fileName wgEncodeUwDnaseGm12865AlnRep2.bam
+fileName wgEncodeUwDnaseGm12865AlnRep2.bam,wgEncodeUwDnaseGm12865AlnRep2.bam.bai
 geoSampleAccession GSM736561
 grant Stam
 lab UW
@@ -3358,7 +3358,7 @@ dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000492
 expId 492
-fileName wgEncodeUwDnaseGm12878AlnRep1.bam
+fileName wgEncodeUwDnaseGm12878AlnRep1.bam,wgEncodeUwDnaseGm12878AlnRep1.bam.bai
 geoSampleAccession GSM736496
 grant Stam
 lab UW
@@ -3382,7 +3382,7 @@ dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000492
 expId 492
-fileName wgEncodeUwDnaseGm12878AlnRep2.bam
+fileName wgEncodeUwDnaseGm12878AlnRep2.bam,wgEncodeUwDnaseGm12878AlnRep2.bam.bai
 geoSampleAccession GSM736620
 grant Stam
 lab UW
@@ -3600,7 +3600,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-18
 dccAccession wgEncodeEH000496
 expId 496
-fileName wgEncodeUwDnaseH1hescAlnRep1.bam
+fileName wgEncodeUwDnaseH1hescAlnRep1.bam,wgEncodeUwDnaseH1hescAlnRep1.bam.bai
 geoSampleAccession GSM736582
 grant Stam
 lab UW
@@ -3721,7 +3721,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000511
 expId 511
-fileName wgEncodeUwDnaseH7esAlnRep1.bam
+fileName wgEncodeUwDnaseH7esAlnRep1.bam,wgEncodeUwDnaseH7esAlnRep1.bam.bai
 geoSampleAccession GSM736638
 grant Stam
 lab UW
@@ -3744,7 +3744,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000511
 expId 511
-fileName wgEncodeUwDnaseH7esAlnRep2.bam
+fileName wgEncodeUwDnaseH7esAlnRep2.bam,wgEncodeUwDnaseH7esAlnRep2.bam.bai
 geoSampleAccession GSM736610
 grant Stam
 lab UW
@@ -3958,7 +3958,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001192
 expId 1192
-fileName wgEncodeUwDnaseHacAlnRep1.bam
+fileName wgEncodeUwDnaseHacAlnRep1.bam,wgEncodeUwDnaseHacAlnRep1.bam.bai
 geoSampleAccession GSM736586
 grant Stam
 lab UW
@@ -3981,7 +3981,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001192
 expId 1192
-fileName wgEncodeUwDnaseHacAlnRep2.bam
+fileName wgEncodeUwDnaseHacAlnRep2.bam,wgEncodeUwDnaseHacAlnRep2.bam.bai
 geoSampleAccession GSM736538
 grant Stam
 lab UW
@@ -4193,7 +4193,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000512
 expId 512
-fileName wgEncodeUwDnaseHaeAlnRep1.bam
+fileName wgEncodeUwDnaseHaeAlnRep1.bam,wgEncodeUwDnaseHaeAlnRep1.bam.bai
 geoSampleAccession GSM736631
 grant Stam
 lab UW
@@ -4217,7 +4217,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000512
 expId 512
-fileName wgEncodeUwDnaseHaeAlnRep2.bam
+fileName wgEncodeUwDnaseHaeAlnRep2.bam,wgEncodeUwDnaseHaeAlnRep2.bam.bai
 geoSampleAccession GSM736606
 grant Stam
 lab UW
@@ -4434,7 +4434,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001191
 expId 1191
-fileName wgEncodeUwDnaseHahAlnRep1.bam
+fileName wgEncodeUwDnaseHahAlnRep1.bam,wgEncodeUwDnaseHahAlnRep1.bam.bai
 geoSampleAccession GSM736594
 grant Stam
 lab UW
@@ -4457,7 +4457,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001191
 expId 1191
-fileName wgEncodeUwDnaseHahAlnRep2.bam
+fileName wgEncodeUwDnaseHahAlnRep2.bam,wgEncodeUwDnaseHahAlnRep2.bam.bai
 geoSampleAccession GSM736535
 grant Stam
 lab UW
@@ -4668,7 +4668,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001183
 expId 1183
-fileName wgEncodeUwDnaseHaspAlnRep1.bam
+fileName wgEncodeUwDnaseHaspAlnRep1.bam,wgEncodeUwDnaseHaspAlnRep1.bam.bai
 geoSampleAccession GSM736537
 grant Stam
 lab UW
@@ -4691,7 +4691,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001183
 expId 1183
-fileName wgEncodeUwDnaseHaspAlnRep2.bam
+fileName wgEncodeUwDnaseHaspAlnRep2.bam,wgEncodeUwDnaseHaspAlnRep2.bam.bai
 geoSampleAccession GSM736625
 grant Stam
 lab UW
@@ -4902,7 +4902,7 @@ dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 dccAccession wgEncodeEH001178
 expId 1178
-fileName wgEncodeUwDnaseHbmecAlnRep1.bam
+fileName wgEncodeUwDnaseHbmecAlnRep1.bam,wgEncodeUwDnaseHbmecAlnRep1.bam.bai
 geoSampleAccession GSM736509
 grant Stam
 lab UW
@@ -4925,7 +4925,7 @@ dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 dccAccession wgEncodeEH001178
 expId 1178
-fileName wgEncodeUwDnaseHbmecAlnRep2.bam
+fileName wgEncodeUwDnaseHbmecAlnRep2.bam,wgEncodeUwDnaseHbmecAlnRep2.bam.bai
 geoSampleAccession GSM736554
 grant Stam
 lab UW
@@ -5137,7 +5137,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000513
 expId 513
-fileName wgEncodeUwDnaseHcfAlnRep1.bam
+fileName wgEncodeUwDnaseHcfAlnRep1.bam,wgEncodeUwDnaseHcfAlnRep1.bam.bai
 geoSampleAccession GSM736568
 grant Stam
 lab UW
@@ -5161,7 +5161,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000513
 expId 513
-fileName wgEncodeUwDnaseHcfAlnRep2.bam
+fileName wgEncodeUwDnaseHcfAlnRep2.bam,wgEncodeUwDnaseHcfAlnRep2.bam.bai
 geoSampleAccession GSM736540
 grant Stam
 lab UW
@@ -5378,7 +5378,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001164
 expId 1164
-fileName wgEncodeUwDnaseHcfaaAlnRep1.bam
+fileName wgEncodeUwDnaseHcfaaAlnRep1.bam,wgEncodeUwDnaseHcfaaAlnRep1.bam.bai
 geoSampleAccession GSM736494
 grant Stam
 lab UW
@@ -5401,7 +5401,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001164
 expId 1164
-fileName wgEncodeUwDnaseHcfaaAlnRep2.bam
+fileName wgEncodeUwDnaseHcfaaAlnRep2.bam,wgEncodeUwDnaseHcfaaAlnRep2.bam.bai
 geoSampleAccession GSM736601
 grant Stam
 lab UW
@@ -5613,7 +5613,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000519
 expId 519
-fileName wgEncodeUwDnaseHcmAlnRep1.bam
+fileName wgEncodeUwDnaseHcmAlnRep1.bam,wgEncodeUwDnaseHcmAlnRep1.bam.bai
 geoSampleAccession GSM736516
 grant Stam
 lab UW
@@ -5637,7 +5637,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000519
 expId 519
-fileName wgEncodeUwDnaseHcmAlnRep2.bam
+fileName wgEncodeUwDnaseHcmAlnRep2.bam,wgEncodeUwDnaseHcmAlnRep2.bam.bai
 geoSampleAccession GSM736504
 grant Stam
 lab UW
@@ -5854,7 +5854,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001165
 expId 1165
-fileName wgEncodeUwDnaseHconfAlnRep1.bam
+fileName wgEncodeUwDnaseHconfAlnRep1.bam,wgEncodeUwDnaseHconfAlnRep1.bam.bai
 geoSampleAccession GSM736547
 grant Stam
 lab UW
@@ -5877,7 +5877,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001165
 expId 1165
-fileName wgEncodeUwDnaseHconfAlnRep2.bam
+fileName wgEncodeUwDnaseHconfAlnRep2.bam,wgEncodeUwDnaseHconfAlnRep2.bam.bai
 geoSampleAccession GSM736515
 grant Stam
 lab UW
@@ -6089,7 +6089,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000514
 expId 514
-fileName wgEncodeUwDnaseHcpeAlnRep1.bam
+fileName wgEncodeUwDnaseHcpeAlnRep1.bam,wgEncodeUwDnaseHcpeAlnRep1.bam.bai
 geoSampleAccession GSM736569
 grant Stam
 lab UW
@@ -6113,7 +6113,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000514
 expId 514
-fileName wgEncodeUwDnaseHcpeAlnRep2.bam
+fileName wgEncodeUwDnaseHcpeAlnRep2.bam,wgEncodeUwDnaseHcpeAlnRep2.bam.bai
 geoSampleAccession GSM736597
 grant Stam
 lab UW
@@ -6330,7 +6330,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH001162
 expId 1162
-fileName wgEncodeUwDnaseHct116AlnRep1.bam
+fileName wgEncodeUwDnaseHct116AlnRep1.bam,wgEncodeUwDnaseHct116AlnRep1.bam.bai
 geoSampleAccession GSM736600
 grant Stam
 lab UW
@@ -6353,7 +6353,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH001162
 expId 1162
-fileName wgEncodeUwDnaseHct116AlnRep2.bam
+fileName wgEncodeUwDnaseHct116AlnRep2.bam,wgEncodeUwDnaseHct116AlnRep2.bam.bai
 geoSampleAccession GSM736493
 grant Stam
 lab UW
@@ -6565,7 +6565,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000515
 expId 515
-fileName wgEncodeUwDnaseHeeAlnRep1.bam
+fileName wgEncodeUwDnaseHeeAlnRep1.bam,wgEncodeUwDnaseHeeAlnRep1.bam.bai
 geoSampleAccession GSM736585
 grant Stam
 lab UW
@@ -6589,7 +6589,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000515
 expId 515
-fileName wgEncodeUwDnaseHeeAlnRep2.bam
+fileName wgEncodeUwDnaseHeeAlnRep2.bam,wgEncodeUwDnaseHeeAlnRep2.bam.bai
 geoSampleAccession GSM736532
 grant Stam
 lab UW
@@ -6807,7 +6807,7 @@ dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000495
 expId 495
-fileName wgEncodeUwDnaseHelas3AlnRep1.bam
+fileName wgEncodeUwDnaseHelas3AlnRep1.bam,wgEncodeUwDnaseHelas3AlnRep1.bam.bai
 geoSampleAccession GSM736564
 grant Stam
 lab UW
@@ -6831,7 +6831,7 @@ dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000495
 expId 495
-fileName wgEncodeUwDnaseHelas3AlnRep2.bam
+fileName wgEncodeUwDnaseHelas3AlnRep2.bam,wgEncodeUwDnaseHelas3AlnRep2.bam.bai
 geoSampleAccession GSM736510
 grant Stam
 lab UW
@@ -7049,7 +7049,7 @@ dateSubmitted 2008-11-19
 dateUnrestricted 2009-08-18
 dccAccession wgEncodeEH000482
 expId 482
-fileName wgEncodeUwDnaseHepg2AlnRep1.bam
+fileName wgEncodeUwDnaseHepg2AlnRep1.bam,wgEncodeUwDnaseHepg2AlnRep1.bam.bai
 geoSampleAccession GSM736637
 grant Stam
 lab UW
@@ -7073,7 +7073,7 @@ dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000482
 expId 482
-fileName wgEncodeUwDnaseHepg2AlnRep2.bam
+fileName wgEncodeUwDnaseHepg2AlnRep2.bam,wgEncodeUwDnaseHepg2AlnRep2.bam.bai
 geoSampleAccession GSM736639
 grant Stam
 lab UW
@@ -7290,7 +7290,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001193
 expId 1193
-fileName wgEncodeUwDnaseHffAlnRep1.bam
+fileName wgEncodeUwDnaseHffAlnRep1.bam,wgEncodeUwDnaseHffAlnRep1.bam.bai
 geoSampleAccession GSM736602
 grant Stam
 lab UW
@@ -7313,7 +7313,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001193
 expId 1193
-fileName wgEncodeUwDnaseHffAlnRep2.bam
+fileName wgEncodeUwDnaseHffAlnRep2.bam,wgEncodeUwDnaseHffAlnRep2.bam.bai
 geoSampleAccession GSM736572
 grant Stam
 lab UW
@@ -7524,7 +7524,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001194
 expId 1194
-fileName wgEncodeUwDnaseHffmycAlnRep1.bam
+fileName wgEncodeUwDnaseHffmycAlnRep1.bam,wgEncodeUwDnaseHffmycAlnRep1.bam.bai
 geoSampleAccession GSM736524
 grant Stam
 lab UW
@@ -7547,7 +7547,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001194
 expId 1194
-fileName wgEncodeUwDnaseHffmycAlnRep2.bam
+fileName wgEncodeUwDnaseHffmycAlnRep2.bam,wgEncodeUwDnaseHffmycAlnRep2.bam.bai
 geoSampleAccession GSM736605
 grant Stam
 lab UW
@@ -7759,7 +7759,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000504
 expId 504
-fileName wgEncodeUwDnaseHgfAlnRep1.bam
+fileName wgEncodeUwDnaseHgfAlnRep1.bam,wgEncodeUwDnaseHgfAlnRep1.bam.bai
 geoSampleAccession GSM736579
 grant Stam
 lab UW
@@ -7783,7 +7783,7 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000504
 expId 504
-fileName wgEncodeUwDnaseHgfAlnRep2.bam
+fileName wgEncodeUwDnaseHgfAlnRep2.bam,wgEncodeUwDnaseHgfAlnRep2.bam.bai
 geoSampleAccession GSM736576
 grant Stam
 lab UW
@@ -8000,7 +8000,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001184
 expId 1184
-fileName wgEncodeUwDnaseHipeAlnRep1.bam
+fileName wgEncodeUwDnaseHipeAlnRep1.bam,wgEncodeUwDnaseHipeAlnRep1.bam.bai
 geoSampleAccession GSM736589
 grant Stam
 lab UW
@@ -8023,7 +8023,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001184
 expId 1184
-fileName wgEncodeUwDnaseHipeAlnRep2.bam
+fileName wgEncodeUwDnaseHipeAlnRep2.bam,wgEncodeUwDnaseHipeAlnRep2.bam.bai
 geoSampleAccession GSM736615
 grant Stam
 lab UW
@@ -8235,7 +8235,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000489
 expId 489
-fileName wgEncodeUwDnaseHl60AlnRep1.bam
+fileName wgEncodeUwDnaseHl60AlnRep1.bam,wgEncodeUwDnaseHl60AlnRep1.bam.bai
 geoSampleAccession GSM736626
 grant Stam
 lab UW
@@ -8259,7 +8259,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
 dccAccession wgEncodeEH000489
 expId 489
-fileName wgEncodeUwDnaseHl60AlnRep2.bam
+fileName wgEncodeUwDnaseHl60AlnRep2.bam,wgEncodeUwDnaseHl60AlnRep2.bam.bai
 geoSampleAccession GSM736595
 grant Stam
 lab UW
@@ -8478,7 +8478,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000503
 expId 503
-fileName wgEncodeUwDnaseHmecAlnRep1.bam
+fileName wgEncodeUwDnaseHmecAlnRep1.bam,wgEncodeUwDnaseHmecAlnRep1.bam.bai
 geoSampleAccession GSM736634
 grant Stam
 lab UW
@@ -8501,7 +8501,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH000503
 expId 503
-fileName wgEncodeUwDnaseHmecAlnRep2.bam
+fileName wgEncodeUwDnaseHmecAlnRep2.bam,wgEncodeUwDnaseHmecAlnRep2.bam.bai
 geoSampleAccession GSM736552
 grant Stam
 lab UW
@@ -8715,7 +8715,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001166
 expId 1166
-fileName wgEncodeUwDnaseHmfAlnRep1.bam
+fileName wgEncodeUwDnaseHmfAlnRep1.bam,wgEncodeUwDnaseHmfAlnRep1.bam.bai
 geoSampleAccession GSM736628
 grant Stam
 lab UW
@@ -8738,7 +8738,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001166
 expId 1166
-fileName wgEncodeUwDnaseHmfAlnRep2.bam
+fileName wgEncodeUwDnaseHmfAlnRep2.bam,wgEncodeUwDnaseHmfAlnRep2.bam.bai
 geoSampleAccession GSM736541
 grant Stam
 lab UW
@@ -8949,7 +8949,7 @@ dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
 expId 1889
-fileName wgEncodeUwDnaseHmvecdadAlnRep1.bam
+fileName wgEncodeUwDnaseHmvecdadAlnRep1.bam,wgEncodeUwDnaseHmvecdadAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -8971,7 +8971,7 @@ dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
 expId 1889
-fileName wgEncodeUwDnaseHmvecdadAlnRep2.bam
+fileName wgEncodeUwDnaseHmvecdadAlnRep2.bam,wgEncodeUwDnaseHmvecdadAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -9173,7 +9173,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001168
 expId 1168
-fileName wgEncodeUwDnaseHmvecdbladAlnRep1.bam
+fileName wgEncodeUwDnaseHmvecdbladAlnRep1.bam,wgEncodeUwDnaseHmvecdbladAlnRep1.bam.bai
 geoSampleAccession GSM736609
 grant Stam
 lab UW
@@ -9196,7 +9196,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001168
 expId 1168
-fileName wgEncodeUwDnaseHmvecdbladAlnRep2.bam
+fileName wgEncodeUwDnaseHmvecdbladAlnRep2.bam,wgEncodeUwDnaseHmvecdbladAlnRep2.bam.bai
 geoSampleAccession GSM736523
 grant Stam
 lab UW
@@ -9407,7 +9407,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001169
 expId 1169
-fileName wgEncodeUwDnaseHmvecdblneoAlnRep1.bam
+fileName wgEncodeUwDnaseHmvecdblneoAlnRep1.bam,wgEncodeUwDnaseHmvecdblneoAlnRep1.bam.bai
 geoSampleAccession GSM736571
 grant Stam
 lab UW
@@ -9430,7 +9430,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001169
 expId 1169
-fileName wgEncodeUwDnaseHmvecdblneoAlnRep2.bam
+fileName wgEncodeUwDnaseHmvecdblneoAlnRep2.bam,wgEncodeUwDnaseHmvecdblneoAlnRep2.bam.bai
 geoSampleAccession GSM736521
 grant Stam
 lab UW
@@ -9641,7 +9641,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001170
 expId 1170
-fileName wgEncodeUwDnaseHmvecdlyadAlnRep1.bam
+fileName wgEncodeUwDnaseHmvecdlyadAlnRep1.bam,wgEncodeUwDnaseHmvecdlyadAlnRep1.bam.bai
 geoSampleAccession GSM736599
 grant Stam
 lab UW
@@ -9664,7 +9664,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001170
 expId 1170
-fileName wgEncodeUwDnaseHmvecdlyadAlnRep2.bam
+fileName wgEncodeUwDnaseHmvecdlyadAlnRep2.bam,wgEncodeUwDnaseHmvecdlyadAlnRep2.bam.bai
 geoSampleAccession GSM736591
 grant Stam
 lab UW
@@ -9875,7 +9875,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001171
 expId 1171
-fileName wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam
+fileName wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam,wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam.bai
 geoSampleAccession GSM736577
 grant Stam
 lab UW
@@ -9898,7 +9898,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001171
 expId 1171
-fileName wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam
+fileName wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam,wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam.bai
 geoSampleAccession GSM736573
 grant Stam
 lab UW
@@ -10109,7 +10109,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001172
 expId 1172
-fileName wgEncodeUwDnaseHmvecdneoAlnRep1.bam
+fileName wgEncodeUwDnaseHmvecdneoAlnRep1.bam,wgEncodeUwDnaseHmvecdneoAlnRep1.bam.bai
 geoSampleAccession GSM736611
 grant Stam
 lab UW
@@ -10132,7 +10132,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001172
 expId 1172
-fileName wgEncodeUwDnaseHmvecdneoAlnRep2.bam
+fileName wgEncodeUwDnaseHmvecdneoAlnRep2.bam,wgEncodeUwDnaseHmvecdneoAlnRep2.bam.bai
 geoSampleAccession GSM736624
 grant Stam
 lab UW
@@ -10343,7 +10343,7 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 dccAccession wgEncodeEH001163
 expId 1163
-fileName wgEncodeUwDnaseHmveclblAlnRep1.bam
+fileName wgEncodeUwDnaseHmveclblAlnRep1.bam,wgEncodeUwDnaseHmveclblAlnRep1.bam.bai
 geoSampleAccession GSM736542
 grant Stam
 lab UW
@@ -10366,7 +10366,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001163
 expId 1163
-fileName wgEncodeUwDnaseHmveclblAlnRep2.bam
+fileName wgEncodeUwDnaseHmveclblAlnRep2.bam,wgEncodeUwDnaseHmveclblAlnRep2.bam.bai
 geoSampleAccession GSM736511
 grant Stam
 lab UW
@@ -10577,7 +10577,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001167
 expId 1167
-fileName wgEncodeUwDnaseHmvecllyAlnRep1.bam
+fileName wgEncodeUwDnaseHmvecllyAlnRep1.bam,wgEncodeUwDnaseHmvecllyAlnRep1.bam.bai
 geoSampleAccession GSM736507
 grant Stam
 lab UW
@@ -10600,7 +10600,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001167
 expId 1167
-fileName wgEncodeUwDnaseHmvecllyAlnRep2.bam
+fileName wgEncodeUwDnaseHmvecllyAlnRep2.bam,wgEncodeUwDnaseHmvecllyAlnRep2.bam.bai
 geoSampleAccession GSM736627
 grant Stam
 lab UW
@@ -10812,7 +10812,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000516
 expId 516
-fileName wgEncodeUwDnaseHnpceAlnRep1.bam
+fileName wgEncodeUwDnaseHnpceAlnRep1.bam,wgEncodeUwDnaseHnpceAlnRep1.bam.bai
 geoSampleAccession GSM736621
 grant Stam
 lab UW
@@ -10836,7 +10836,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 dccAccession wgEncodeEH000516
 expId 516
-fileName wgEncodeUwDnaseHnpceAlnRep2.bam
+fileName wgEncodeUwDnaseHnpceAlnRep2.bam,wgEncodeUwDnaseHnpceAlnRep2.bam.bai
 geoSampleAccession GSM736550
 grant Stam
 lab UW
@@ -11053,7 +11053,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001886
 expId 1886
-fileName wgEncodeUwDnaseHpaecAlnRep1.bam
+fileName wgEncodeUwDnaseHpaecAlnRep1.bam,wgEncodeUwDnaseHpaecAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -11165,7 +11165,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001173
 expId 1173
-fileName wgEncodeUwDnaseHpafAlnRep1.bam
+fileName wgEncodeUwDnaseHpafAlnRep1.bam,wgEncodeUwDnaseHpafAlnRep1.bam.bai
 geoSampleAccession GSM736555
 grant Stam
 lab UW
@@ -11188,7 +11188,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001173
 expId 1173
-fileName wgEncodeUwDnaseHpafAlnRep2.bam
+fileName wgEncodeUwDnaseHpafAlnRep2.bam,wgEncodeUwDnaseHpafAlnRep2.bam.bai
 geoSampleAccession GSM736614
 grant Stam
 lab UW
@@ -11399,7 +11399,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001175
 expId 1175
-fileName wgEncodeUwDnaseHpdlfAlnRep1.bam
+fileName wgEncodeUwDnaseHpdlfAlnRep1.bam,wgEncodeUwDnaseHpdlfAlnRep1.bam.bai
 geoSampleAccession GSM736632
 grant Stam
 lab UW
@@ -11422,7 +11422,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001175
 expId 1175
-fileName wgEncodeUwDnaseHpdlfAlnRep2.bam
+fileName wgEncodeUwDnaseHpdlfAlnRep2.bam,wgEncodeUwDnaseHpdlfAlnRep2.bam.bai
 geoSampleAccession GSM736528
 grant Stam
 lab UW
@@ -11633,7 +11633,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001174
 expId 1174
-fileName wgEncodeUwDnaseHpfAlnRep1.bam
+fileName wgEncodeUwDnaseHpfAlnRep1.bam,wgEncodeUwDnaseHpfAlnRep1.bam.bai
 geoSampleAccession GSM736574
 grant Stam
 lab UW
@@ -11656,7 +11656,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001174
 expId 1174
-fileName wgEncodeUwDnaseHpfAlnRep2.bam
+fileName wgEncodeUwDnaseHpfAlnRep2.bam,wgEncodeUwDnaseHpfAlnRep2.bam.bai
 geoSampleAccession GSM736503
 grant Stam
 lab UW
@@ -11868,7 +11868,7 @@ dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000493
 expId 493
-fileName wgEncodeUwDnaseHrceAlnRep1.bam
+fileName wgEncodeUwDnaseHrceAlnRep1.bam,wgEncodeUwDnaseHrceAlnRep1.bam.bai
 geoSampleAccession GSM736549
 grant Stam
 lab UW
@@ -11892,7 +11892,7 @@ dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000493
 expId 493
-fileName wgEncodeUwDnaseHrceAlnRep2.bam
+fileName wgEncodeUwDnaseHrceAlnRep2.bam,wgEncodeUwDnaseHrceAlnRep2.bam.bai
 geoSampleAccession GSM736557
 grant Stam
 lab UW
@@ -12110,7 +12110,7 @@ dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000494
 expId 494
-fileName wgEncodeUwDnaseHreAlnRep1.bam
+fileName wgEncodeUwDnaseHreAlnRep1.bam,wgEncodeUwDnaseHreAlnRep1.bam.bai
 geoSampleAccession GSM736527
 grant Stam
 lab UW
@@ -12134,7 +12134,7 @@ dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 dccAccession wgEncodeEH000494
 expId 494
-fileName wgEncodeUwDnaseHreAlnRep2.bam
+fileName wgEncodeUwDnaseHreAlnRep2.bam,wgEncodeUwDnaseHreAlnRep2.bam.bai
 geoSampleAccession GSM736548
 grant Stam
 lab UW
@@ -12351,7 +12351,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001195
 expId 1195
-fileName wgEncodeUwDnaseHrgecAlnRep1.bam
+fileName wgEncodeUwDnaseHrgecAlnRep1.bam,wgEncodeUwDnaseHrgecAlnRep1.bam.bai
 geoSampleAccession GSM736499
 grant Stam
 lab UW
@@ -12374,7 +12374,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001195
 expId 1195
-fileName wgEncodeUwDnaseHrgecAlnRep2.bam
+fileName wgEncodeUwDnaseHrgecAlnRep2.bam,wgEncodeUwDnaseHrgecAlnRep2.bam.bai
 geoSampleAccession GSM736618
 grant Stam
 lab UW
@@ -12586,7 +12586,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000517
 expId 517
-fileName wgEncodeUwDnaseHrpeAlnRep1.bam
+fileName wgEncodeUwDnaseHrpeAlnRep1.bam,wgEncodeUwDnaseHrpeAlnRep1.bam.bai
 geoSampleAccession GSM736630
 grant Stam
 lab UW
@@ -12610,7 +12610,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000517
 expId 517
-fileName wgEncodeUwDnaseHrpeAlnRep2.bam
+fileName wgEncodeUwDnaseHrpeAlnRep2.bam,wgEncodeUwDnaseHrpeAlnRep2.bam.bai
 geoSampleAccession GSM736623
 grant Stam
 lab UW
@@ -12827,7 +12827,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001185
 expId 1185
-fileName wgEncodeUwDnaseHsmmAlnRep1.bam
+fileName wgEncodeUwDnaseHsmmAlnRep1.bam,wgEncodeUwDnaseHsmmAlnRep1.bam.bai
 geoSampleAccession GSM736560
 grant Stam
 lab UW
@@ -12850,7 +12850,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001185
 expId 1185
-fileName wgEncodeUwDnaseHsmmAlnRep2.bam
+fileName wgEncodeUwDnaseHsmmAlnRep2.bam,wgEncodeUwDnaseHsmmAlnRep2.bam.bai
 geoSampleAccession GSM736553
 grant Stam
 lab UW
@@ -13061,7 +13061,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001186
 expId 1186
-fileName wgEncodeUwDnaseHsmmtAlnRep1.bam
+fileName wgEncodeUwDnaseHsmmtAlnRep1.bam,wgEncodeUwDnaseHsmmtAlnRep1.bam.bai
 geoSampleAccession GSM736530
 grant Stam
 lab UW
@@ -13084,7 +13084,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001186
 expId 1186
-fileName wgEncodeUwDnaseHsmmtAlnRep2.bam
+fileName wgEncodeUwDnaseHsmmtAlnRep2.bam,wgEncodeUwDnaseHsmmtAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -13291,7 +13291,7 @@ dateSubmitted 2009-04-27
 dateUnrestricted 2010-01-27
 dccAccession wgEncodeEH000488
 expId 488
-fileName wgEncodeUwDnaseHuvecAlnRep1.bam
+fileName wgEncodeUwDnaseHuvecAlnRep1.bam,wgEncodeUwDnaseHuvecAlnRep1.bam.bai
 geoSampleAccession GSM736575
 grant Stam
 lab UW
@@ -13314,7 +13314,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH000488
 expId 488
-fileName wgEncodeUwDnaseHuvecAlnRep2.bam
+fileName wgEncodeUwDnaseHuvecAlnRep2.bam,wgEncodeUwDnaseHuvecAlnRep2.bam.bai
 geoSampleAccession GSM736533
 grant Stam
 lab UW
@@ -13528,7 +13528,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001176
 expId 1176
-fileName wgEncodeUwDnaseHvmfAlnRep1.bam
+fileName wgEncodeUwDnaseHvmfAlnRep1.bam,wgEncodeUwDnaseHvmfAlnRep1.bam.bai
 geoSampleAccession GSM736534
 grant Stam
 lab UW
@@ -13551,7 +13551,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001176
 expId 1176
-fileName wgEncodeUwDnaseHvmfAlnRep2.bam
+fileName wgEncodeUwDnaseHvmfAlnRep2.bam,wgEncodeUwDnaseHvmfAlnRep2.bam.bai
 geoSampleAccession GSM736491
 grant Stam
 lab UW
@@ -13762,7 +13762,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH000497
 expId 497
-fileName wgEncodeUwDnaseJurkatAlnRep1.bam
+fileName wgEncodeUwDnaseJurkatAlnRep1.bam,wgEncodeUwDnaseJurkatAlnRep1.bam.bai
 geoSampleAccession GSM736501
 grant Stam
 lab UW
@@ -13785,7 +13785,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH000497
 expId 497
-fileName wgEncodeUwDnaseJurkatAlnRep2.bam
+fileName wgEncodeUwDnaseJurkatAlnRep2.bam,wgEncodeUwDnaseJurkatAlnRep2.bam.bai
 geoSampleAccession GSM736492
 grant Stam
 lab UW
@@ -13999,7 +13999,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000484
 expId 484
-fileName wgEncodeUwDnaseK562AlnRep1.bam
+fileName wgEncodeUwDnaseK562AlnRep1.bam,wgEncodeUwDnaseK562AlnRep1.bam.bai
 geoSampleAccession GSM736629
 grant Stam
 lab UW
@@ -14023,7 +14023,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000484
 expId 484
-fileName wgEncodeUwDnaseK562AlnRep2.bam
+fileName wgEncodeUwDnaseK562AlnRep2.bam,wgEncodeUwDnaseK562AlnRep2.bam.bai
 geoSampleAccession GSM736566
 grant Stam
 lab UW
@@ -14240,7 +14240,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001187
 expId 1187
-fileName wgEncodeUwDnaseLncapAlnRep1.bam
+fileName wgEncodeUwDnaseLncapAlnRep1.bam,wgEncodeUwDnaseLncapAlnRep1.bam.bai
 geoSampleAccession GSM736565
 grant Stam
 lab UW
@@ -14263,7 +14263,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001187
 expId 1187
-fileName wgEncodeUwDnaseLncapAlnRep2.bam
+fileName wgEncodeUwDnaseLncapAlnRep2.bam,wgEncodeUwDnaseLncapAlnRep2.bam.bai
 geoSampleAccession GSM736603
 grant Stam
 lab UW
@@ -14475,7 +14475,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000502
 expId 502
-fileName wgEncodeUwDnaseMcf7AlnRep1.bam
+fileName wgEncodeUwDnaseMcf7AlnRep1.bam,wgEncodeUwDnaseMcf7AlnRep1.bam.bai
 geoSampleAccession GSM736581
 grant Stam
 lab UW
@@ -14499,7 +14499,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000502
 expId 502
-fileName wgEncodeUwDnaseMcf7AlnRep2.bam
+fileName wgEncodeUwDnaseMcf7AlnRep2.bam,wgEncodeUwDnaseMcf7AlnRep2.bam.bai
 geoSampleAccession GSM736588
 grant Stam
 lab UW
@@ -14717,7 +14717,7 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 dccInternalNotes 'oldGEO=GSM736513'
 expId 1196
-fileName wgEncodeUwDnaseMonocd14AlnRep1V2.bam
+fileName wgEncodeUwDnaseMonocd14AlnRep1V2.bam,wgEncodeUwDnaseMonocd14AlnRep1V2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14740,7 +14740,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
 expId 1196
-fileName wgEncodeUwDnaseMonocd14AlnRep2.bam
+fileName wgEncodeUwDnaseMonocd14AlnRep2.bam,wgEncodeUwDnaseMonocd14AlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14951,7 +14951,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
 dccAccession wgEncodeEH000498
 expId 498
-fileName wgEncodeUwDnaseNb4AlnRep1.bam
+fileName wgEncodeUwDnaseNb4AlnRep1.bam,wgEncodeUwDnaseNb4AlnRep1.bam.bai
 geoSampleAccession GSM736604
 grant Stam
 lab UW
@@ -14975,7 +14975,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000498
 expId 498
-fileName wgEncodeUwDnaseNb4AlnRep2.bam
+fileName wgEncodeUwDnaseNb4AlnRep2.bam,wgEncodeUwDnaseNb4AlnRep2.bam.bai
 geoSampleAccession GSM736529
 grant Stam
 lab UW
@@ -15193,7 +15193,7 @@ dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 dccAccession wgEncodeEH001179
 expId 1179
-fileName wgEncodeUwDnaseNhaAlnRep1.bam
+fileName wgEncodeUwDnaseNhaAlnRep1.bam,wgEncodeUwDnaseNhaAlnRep1.bam.bai
 geoSampleAccession GSM736544
 grant Stam
 lab UW
@@ -15216,7 +15216,7 @@ dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 dccAccession wgEncodeEH001179
 expId 1179
-fileName wgEncodeUwDnaseNhaAlnRep2.bam
+fileName wgEncodeUwDnaseNhaAlnRep2.bam,wgEncodeUwDnaseNhaAlnRep2.bam.bai
 geoSampleAccession GSM736584
 grant Stam
 lab UW
@@ -15427,7 +15427,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001177
 expId 1177
-fileName wgEncodeUwDnaseNhdfadAlnRep1.bam
+fileName wgEncodeUwDnaseNhdfadAlnRep1.bam,wgEncodeUwDnaseNhdfadAlnRep1.bam.bai
 geoSampleAccession GSM736567
 grant Stam
 lab UW
@@ -15450,7 +15450,7 @@ dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 dccAccession wgEncodeEH001177
 expId 1177
-fileName wgEncodeUwDnaseNhdfadAlnRep2.bam
+fileName wgEncodeUwDnaseNhdfadAlnRep2.bam,wgEncodeUwDnaseNhdfadAlnRep2.bam.bai
 geoSampleAccession GSM736520
 grant Stam
 lab UW
@@ -15662,7 +15662,7 @@ dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000518
 expId 518
-fileName wgEncodeUwDnaseNhdfneoAlnRep1.bam
+fileName wgEncodeUwDnaseNhdfneoAlnRep1.bam,wgEncodeUwDnaseNhdfneoAlnRep1.bam.bai
 geoSampleAccession GSM736498
 grant Stam
 lab UW
@@ -15686,7 +15686,7 @@ dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 dccAccession wgEncodeEH000518
 expId 518
-fileName wgEncodeUwDnaseNhdfneoAlnRep2.bam
+fileName wgEncodeUwDnaseNhdfneoAlnRep2.bam,wgEncodeUwDnaseNhdfneoAlnRep2.bam.bai
 geoSampleAccession GSM736546
 grant Stam
 lab UW
@@ -15904,7 +15904,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
 dccAccession wgEncodeEH000499
 expId 499
-fileName wgEncodeUwDnaseNhekAlnRep1.bam
+fileName wgEncodeUwDnaseNhekAlnRep1.bam,wgEncodeUwDnaseNhekAlnRep1.bam.bai
 geoSampleAccession GSM736545
 grant Stam
 lab UW
@@ -15927,7 +15927,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH000499
 expId 499
-fileName wgEncodeUwDnaseNhekAlnRep2.bam
+fileName wgEncodeUwDnaseNhekAlnRep2.bam,wgEncodeUwDnaseNhekAlnRep2.bam.bai
 geoSampleAccession GSM736556
 grant Stam
 lab UW
@@ -16142,7 +16142,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000521
 expId 521
-fileName wgEncodeUwDnaseNhlfAlnRep1.bam
+fileName wgEncodeUwDnaseNhlfAlnRep1.bam,wgEncodeUwDnaseNhlfAlnRep1.bam.bai
 geoSampleAccession GSM736612
 grant Stam
 lab UW
@@ -16166,7 +16166,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 dccAccession wgEncodeEH000521
 expId 521
-fileName wgEncodeUwDnaseNhlfAlnRep2.bam
+fileName wgEncodeUwDnaseNhlfAlnRep2.bam,wgEncodeUwDnaseNhlfAlnRep2.bam.bai
 geoSampleAccession GSM736536
 grant Stam
 lab UW
@@ -16383,7 +16383,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
 expId 1887
-fileName wgEncodeUwDnaseNt2d1AlnRep1.bam
+fileName wgEncodeUwDnaseNt2d1AlnRep1.bam,wgEncodeUwDnaseNt2d1AlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -16405,7 +16405,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
 expId 1887
-fileName wgEncodeUwDnaseNt2d1AlnRep2.bam
+fileName wgEncodeUwDnaseNt2d1AlnRep2.bam,wgEncodeUwDnaseNt2d1AlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -16608,7 +16608,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
 dccAccession wgEncodeEH000500
 expId 500
-fileName wgEncodeUwDnasePanc1AlnRep1.bam
+fileName wgEncodeUwDnasePanc1AlnRep1.bam,wgEncodeUwDnasePanc1AlnRep1.bam.bai
 geoSampleAccession GSM736517
 grant Stam
 lab UW
@@ -16632,7 +16632,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
 dccAccession wgEncodeEH000500
 expId 500
-fileName wgEncodeUwDnasePanc1AlnRep2.bam
+fileName wgEncodeUwDnasePanc1AlnRep2.bam,wgEncodeUwDnasePanc1AlnRep2.bam.bai
 geoSampleAccession GSM736519
 grant Stam
 lab UW
@@ -16849,7 +16849,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
 expId 1888
-fileName wgEncodeUwDnasePrecAlnRep1.bam
+fileName wgEncodeUwDnasePrecAlnRep1.bam,wgEncodeUwDnasePrecAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -16871,7 +16871,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
 expId 1888
-fileName wgEncodeUwDnasePrecAlnRep2.bam
+fileName wgEncodeUwDnasePrecAlnRep2.bam,wgEncodeUwDnasePrecAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -17073,7 +17073,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001188
 expId 1188
-fileName wgEncodeUwDnaseRptecAlnRep1.bam
+fileName wgEncodeUwDnaseRptecAlnRep1.bam,wgEncodeUwDnaseRptecAlnRep1.bam.bai
 geoSampleAccession GSM736543
 grant Stam
 lab UW
@@ -17096,7 +17096,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001188
 expId 1188
-fileName wgEncodeUwDnaseRptecAlnRep2.bam
+fileName wgEncodeUwDnaseRptecAlnRep2.bam,wgEncodeUwDnaseRptecAlnRep2.bam.bai
 geoSampleAccession GSM736539
 grant Stam
 lab UW
@@ -17308,7 +17308,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
 dccAccession wgEncodeEH000501
 expId 501
-fileName wgEncodeUwDnaseSaecAlnRep1.bam
+fileName wgEncodeUwDnaseSaecAlnRep1.bam,wgEncodeUwDnaseSaecAlnRep1.bam.bai
 geoSampleAccession GSM736608
 grant Stam
 lab UW
@@ -17332,7 +17332,7 @@ dateSubmitted 2009-09-19
 dateUnrestricted 2010-06-19
 dccAccession wgEncodeEH000501
 expId 501
-fileName wgEncodeUwDnaseSaecAlnRep2.bam
+fileName wgEncodeUwDnaseSaecAlnRep2.bam,wgEncodeUwDnaseSaecAlnRep2.bam.bai
 geoSampleAccession GSM736617
 grant Stam
 lab UW
@@ -17550,7 +17550,7 @@ dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
 dccAccession wgEncodeEH000490
 expId 490
-fileName wgEncodeUwDnaseSkmcAlnRep1.bam
+fileName wgEncodeUwDnaseSkmcAlnRep1.bam,wgEncodeUwDnaseSkmcAlnRep1.bam.bai
 geoSampleAccession GSM736593
 grant Stam
 lab UW
@@ -17574,7 +17574,7 @@ dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-26
 dccAccession wgEncodeEH000490
 expId 490
-fileName wgEncodeUwDnaseSkmcAlnRep2.bam
+fileName wgEncodeUwDnaseSkmcAlnRep2.bam,wgEncodeUwDnaseSkmcAlnRep2.bam.bai
 geoSampleAccession GSM736497
 grant Stam
 lab UW
@@ -17793,7 +17793,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001189
 expId 1189
-fileName wgEncodeUwDnaseSknmcAlnRep1.bam
+fileName wgEncodeUwDnaseSknmcAlnRep1.bam,wgEncodeUwDnaseSknmcAlnRep1.bam.bai
 geoSampleAccession GSM736522
 grant Stam
 lab UW
@@ -17816,7 +17816,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001189
 expId 1189
-fileName wgEncodeUwDnaseSknmcAlnRep2.bam
+fileName wgEncodeUwDnaseSknmcAlnRep2.bam,wgEncodeUwDnaseSknmcAlnRep2.bam.bai
 geoSampleAccession GSM736570
 grant Stam
 lab UW
@@ -18028,7 +18028,7 @@ dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 dccAccession wgEncodeEH000485
 expId 485
-fileName wgEncodeUwDnaseSknshraAlnRep1.bam
+fileName wgEncodeUwDnaseSknshraAlnRep1.bam,wgEncodeUwDnaseSknshraAlnRep1.bam.bai
 geoSampleAccession GSM736559
 grant Stam
 lab UW
@@ -18052,7 +18052,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000485
 expId 485
-fileName wgEncodeUwDnaseSknshraAlnRep2.bam
+fileName wgEncodeUwDnaseSknshraAlnRep2.bam,wgEncodeUwDnaseSknshraAlnRep2.bam.bai
 geoSampleAccession GSM736578
 grant Stam
 lab UW
@@ -18271,7 +18271,7 @@ dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
 dccAccession wgEncodeEH000483
 expId 483
-fileName wgEncodeUwDnaseTh1AlnRep1.bam
+fileName wgEncodeUwDnaseTh1AlnRep1.bam,wgEncodeUwDnaseTh1AlnRep1.bam.bai
 geoSampleAccession GSM736592
 grant Stam
 lab UW
@@ -18392,7 +18392,7 @@ dateSubmitted 2009-04-29
 dateUnrestricted 2010-01-29
 dccAccession wgEncodeEH000491
 expId 491
-fileName wgEncodeUwDnaseTh2AlnRep1.bam
+fileName wgEncodeUwDnaseTh2AlnRep1.bam,wgEncodeUwDnaseTh2AlnRep1.bam.bai
 geoSampleAccession GSM736502
 grant Stam
 lab UW
@@ -18512,7 +18512,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001190
 expId 1190
-fileName wgEncodeUwDnaseWerirb1AlnRep1.bam
+fileName wgEncodeUwDnaseWerirb1AlnRep1.bam,wgEncodeUwDnaseWerirb1AlnRep1.bam.bai
 geoSampleAccession GSM736495
 grant Stam
 lab UW
@@ -18535,7 +18535,7 @@ dateSubmitted 2011-01-06
 dateUnrestricted 2011-10-06
 dccAccession wgEncodeEH001190
 expId 1190
-fileName wgEncodeUwDnaseWerirb1AlnRep2.bam
+fileName wgEncodeUwDnaseWerirb1AlnRep2.bam,wgEncodeUwDnaseWerirb1AlnRep2.bam.bai
 geoSampleAccession GSM736636
 grant Stam
 lab UW
@@ -18746,7 +18746,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001197
 expId 1197
-fileName wgEncodeUwDnaseWi38AlnRep1.bam
+fileName wgEncodeUwDnaseWi38AlnRep1.bam,wgEncodeUwDnaseWi38AlnRep1.bam.bai
 geoSampleAccession GSM736613
 grant Stam
 lab UW
@@ -18769,7 +18769,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001197
 expId 1197
-fileName wgEncodeUwDnaseWi38AlnRep2.bam
+fileName wgEncodeUwDnaseWi38AlnRep2.bam,wgEncodeUwDnaseWi38AlnRep2.bam.bai
 geoSampleAccession GSM736526
 grant Stam
 lab UW
@@ -18840,7 +18840,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001198
 expId 1198
-fileName wgEncodeUwDnaseWi38OhtamAlnRep1.bam
+fileName wgEncodeUwDnaseWi38OhtamAlnRep1.bam,wgEncodeUwDnaseWi38OhtamAlnRep1.bam.bai
 geoSampleAccession GSM736613
 grant Stam
 lab UW
@@ -18863,7 +18863,7 @@ dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001198
 expId 1198
-fileName wgEncodeUwDnaseWi38OhtamAlnRep2.bam
+fileName wgEncodeUwDnaseWi38OhtamAlnRep2.bam,wgEncodeUwDnaseWi38OhtamAlnRep2.bam.bai
 geoSampleAccession GSM736526
 grant Stam
 lab UW
@@ -19204,4 +19204,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -611474009
+# MAGIC: 298803959

@@ -266,6 +266,12 @@ for (i = 0;  i < core->n_cigar;  i++)
 	case 'M': // match or mismatch (gapless aligned block)
 	    printf("%d (mis)Match", n);
 	    break;
+	case '=': // match
+	    printf("%d Match", n);
+	    break;
+	case 'X': // mismatch
+	    printf("%d Mismatch", n);
+	    break;
 	case 'I': // inserted in query
 	    printf("%d Insertion", n);
 	    break;
@@ -340,6 +346,8 @@ for (i = 0;  i < core->n_cigar;  i++)
     switch (op)
 	{
 	case 'M': // match or mismatch (gapless aligned block)
+	case '=': // match
+	case 'X': // mismatch
 	    tLength += n;
 	    break;
 	case 'I': // inserted in query

@@ -18,7 +18,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH000037
 expId 37
-fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam,wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733742
 grant Bernstein
 lab Broad
@@ -45,7 +45,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH000037
 expId 37
-fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam,wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733742
 grant Bernstein
 lab Broad
@@ -150,7 +150,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000029
 expId 29
-fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep1.bam,wgEncodeBroadHistoneGm12878CtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733752
 grant Bernstein
 lab Broad
@@ -177,7 +177,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000029
 expId 29
-fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep2.bam,wgEncodeBroadHistoneGm12878CtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733752
 grant Bernstein
 lab Broad
@@ -307,7 +307,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
-fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep1.bam,wgEncodeBroadHistoneGm12878H2azStdAlnRep1.bam.bai
 geoSampleAccession GSM733767
 grant Bernstein
 lab Broad
@@ -332,7 +332,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001033
 expId 1033
-fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H2azStdAlnRep2.bam,wgEncodeBroadHistoneGm12878H2azStdAlnRep2.bam.bai
 geoSampleAccession GSM733767
 grant Bernstein
 lab Broad
@@ -460,7 +460,7 @@ dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
 expId 33
-fileName wgEncodeBroadHistoneGm12878H3k04me1StdAlnRep1V2.bam
+fileName wgEncodeBroadHistoneGm12878H3k04me1StdAlnRep1V2.bam,wgEncodeBroadHistoneGm12878H3k04me1StdAlnRep1V2.bam.bai
 grant Bernstein
 lab Broad
 md5sum 643b2e292c47652540947eb980a2d434,e119865d3f09402299d960afb3bfdc62
@@ -562,7 +562,7 @@ dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
 expId 28
-fileName wgEncodeBroadHistoneGm12878H3k04me3StdAlnRep2V2.bam
+fileName wgEncodeBroadHistoneGm12878H3k04me3StdAlnRep2V2.bam,wgEncodeBroadHistoneGm12878H3k04me3StdAlnRep2V2.bam.bai
 grant Bernstein
 lab Broad
 md5sum feff6d4ef1504ac76f754c515ba44bc1,1bbb2d3986545f79fadcd4c5c7784e46
@@ -665,7 +665,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000030
 expId 30
-fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733771
 grant Bernstein
 lab Broad
@@ -692,7 +692,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000030
 expId 30
-fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733771
 grant Bernstein
 lab Broad
@@ -824,7 +824,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
 expId 31
-fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733758
 grant Bernstein
 lab Broad
@@ -851,7 +851,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
 expId 31
-fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733758
 grant Bernstein
 lab Broad
@@ -877,7 +877,7 @@ dateSubmitted 2011-06-09
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000031
 expId 31
-fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep3V2.bam
+fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep3V2.bam,wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep3V2.bam.bai
 grant Bernstein
 lab Broad
 md5sum eef6496540ccee3f6c9459cf3584e02c,45466328e1212a5d9766e868d6dfc0f6
@@ -1032,7 +1032,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000032
 expId 32
-fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733679
 grant Bernstein
 lab Broad
@@ -1059,7 +1059,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000032
 expId 32
-fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733679
 grant Bernstein
 lab Broad
@@ -1191,7 +1191,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000033
 expId 33
-fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733772
 grant Bernstein
 lab Broad
@@ -1244,7 +1244,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000034
 expId 34
-fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733769
 grant Bernstein
 lab Broad
@@ -1271,7 +1271,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000034
 expId 34
-fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733769
 grant Bernstein
 lab Broad
@@ -1403,7 +1403,7 @@ dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
 dccAccession wgEncodeEH000028
 expId 28
-fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733708
 grant Bernstein
 lab Broad
@@ -1455,7 +1455,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001034
 expId 1034
-fileName wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733736
 grant Bernstein
 lab Broad
@@ -1480,7 +1480,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001034
 expId 1034
-fileName wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k79me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733736
 grant Bernstein
 lab Broad
@@ -1609,7 +1609,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000035
 expId 35
-fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733677
 grant Bernstein
 lab Broad
@@ -1636,7 +1636,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000035
 expId 35
-fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733677
 grant Bernstein
 lab Broad
@@ -1767,7 +1767,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
-fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733664
 grant Bernstein
 lab Broad
@@ -1792,7 +1792,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
-fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733664
 grant Bernstein
 lab Broad
@@ -1817,7 +1817,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001035
 expId 1035
-fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep3.bam
+fileName wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep3.bam,wgEncodeBroadHistoneGm12878H3k9me3StdAlnRep3.bam.bai
 geoSampleAccession GSM733664
 grant Bernstein
 lab Broad
@@ -1972,7 +1972,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000036
 expId 36
-fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733642
 grant Bernstein
 lab Broad
@@ -1999,7 +1999,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000036
 expId 36
-fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733642
 grant Bernstein
 lab Broad
@@ -2117,6 +2117,135 @@ subId 2808
 tableName wgEncodeBroadHistoneGm12878H4k20me1StdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep1
+objType file
+antibody CHD1_(A301-218A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4943
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep2
+objType file
+antibody CHD1_(A301-218A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4943
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescChd1a301218aStdPk
+objType table
+antibody CHD1_(A301-218A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4943
+tableName wgEncodeBroadHistoneH1hescChd1a301218aStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneH1hescChd1a301218aStdRawDataRep1
+objType file
+antibody CHD1_(A301-218A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4943
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescChd1a301218aStdRawDataRep2
+objType file
+antibody CHD1_(A301-218A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4943
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescChd1a301218aStdSig
+objType table
+antibody CHD1_(A301-218A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescChd1a301218aStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4943
+tableName wgEncodeBroadHistoneH1hescChd1a301218aStdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneH1hescControlStdAlnRep1
 objType file
 antibody Input
@@ -2131,7 +2260,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000088
 expId 88
-fileName wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam,wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733770
 grant Bernstein
 lab Broad
@@ -2158,7 +2287,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000088
 expId 88
-fileName wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam,wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733770
 grant Bernstein
 lab Broad
@@ -2263,7 +2392,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000085
 expId 85
-fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep1.bam,wgEncodeBroadHistoneH1hescCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733672
 grant Bernstein
 lab Broad
@@ -2290,7 +2419,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000085
 expId 85
-fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep2.bam,wgEncodeBroadHistoneH1hescCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733672
 grant Bernstein
 lab Broad
@@ -2419,9 +2548,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
-fileName wgEncodeBroadHistoneH1hescH2azStdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH2azStdAlnRep1.bam,wgEncodeBroadHistoneH1hescH2azStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
+md5sum d3d322d59c3db225e5e240d31ce5bed2,54c68a60a15b42cc76ef39db16cc350f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2440,9 +2570,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-04
 dateUnrestricted 2012-05-04
-fileName wgEncodeBroadHistoneH1hescH2azStdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH2azStdAlnRep2.bam,wgEncodeBroadHistoneH1hescH2azStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
+md5sum 1538d25fea036a93e2b92381074de8ab,6aff1cf7195330842c402034fd440c10
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2464,6 +2595,7 @@ dateUnrestricted 2012-05-04
 fileName wgEncodeBroadHistoneH1hescH2azStdPk.broadPeak.gz
 grant Bernstein
 lab Broad
+md5sum d5c2ba1bf69ac2c8a6e485dbe4cec178
 origAssembly hg19
 project wgEncode
 setType exp
@@ -2487,6 +2619,7 @@ fileName wgEncodeBroadHistoneH1hescH2azStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum 17e9e5ee17ac6363858cf770d28a3bc1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2509,6 +2642,7 @@ fileName wgEncodeBroadHistoneH1hescH2azStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum c63f62bdc2038df8edfa0d7402ddbf69
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2530,6 +2664,7 @@ dateUnrestricted 2012-05-04
 fileName wgEncodeBroadHistoneH1hescH2azStdSig.bigWig
 grant Bernstein
 lab Broad
+md5sum 06fa53887585b3780b2a2d031e3c5e2f
 origAssembly hg19
 project wgEncode
 setType exp
@@ -2548,9 +2683,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
+md5sum 6306470da4fb22f2f1b2e0c8e12b1a7b,1c306a835d86f8e61bf1b17dae04b4dc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2569,9 +2705,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k09me3StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
+md5sum 258fee14ca9f6b4a6bb5a4f819d87539,4588122591f2c5ab7321b329b250250a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2593,6 +2730,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeBroadHistoneH1hescH3k09me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
+md5sum c6fea42d0a92ec055af4cb53c89b5ad3
 origAssembly hg19
 project wgEncode
 setType exp
@@ -2616,6 +2754,7 @@ fileName wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum 9a7eb5f352b049c4b70942434e7fdfc1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2638,6 +2777,7 @@ fileName wgEncodeBroadHistoneH1hescH3k09me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum 1959da40d994e574757b3f134421695d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2659,6 +2799,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeBroadHistoneH1hescH3k09me3StdSig.bigWig
 grant Bernstein
 lab Broad
+md5sum b3c13cd56ff63c8843ad11dbccc1a225
 origAssembly hg19
 project wgEncode
 setType exp
@@ -2680,7 +2821,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000997
 expId 997
-fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733718
 grant Bernstein
 lab Broad
@@ -2707,7 +2848,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000997
 expId 997
-fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733718
 grant Bernstein
 lab Broad
@@ -2839,7 +2980,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000074
 expId 74
-fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733748
 grant Bernstein
 lab Broad
@@ -2866,7 +3007,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000074
 expId 74
-fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733748
 grant Bernstein
 lab Broad
@@ -2998,7 +3139,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000107
 expId 107
-fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733725
 grant Bernstein
 lab Broad
@@ -3025,7 +3166,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000107
 expId 107
-fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733725
 grant Bernstein
 lab Broad
@@ -3157,7 +3298,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000106
 expId 106
-fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733782
 grant Bernstein
 lab Broad
@@ -3184,7 +3325,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000106
 expId 106
-fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733782
 grant Bernstein
 lab Broad
@@ -3316,7 +3457,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000108
 expId 108
-fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733670
 grant Bernstein
 lab Broad
@@ -3343,7 +3484,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000108
 expId 108
-fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733670
 grant Bernstein
 lab Broad
@@ -3475,7 +3616,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000086
 expId 86
-fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733657
 grant Bernstein
 lab Broad
@@ -3502,7 +3643,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000086
 expId 86
-fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733657
 grant Bernstein
 lab Broad
@@ -3631,9 +3772,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
+md5sum a7bd7677cddc701baa400bca7c000a5f,62e44e182715343ebd25a1b311cc2046
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3652,9 +3794,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k79me2StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
+md5sum ffb8011e3373f348ef93ee80fc7c93e2,ca7f750791c00adad22c855859fe9cda
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3676,6 +3819,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeBroadHistoneH1hescH3k79me2StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
+md5sum be827edd0d687b154613658dc012523e
 origAssembly hg19
 project wgEncode
 setType exp
@@ -3699,6 +3843,7 @@ fileName wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum 8de8bdc7f34ded8805eccb29a5b014a9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3721,6 +3866,7 @@ fileName wgEncodeBroadHistoneH1hescH3k79me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum 3bc7b24d58d4a9f3f7923ac82f572cf0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3742,6 +3888,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeBroadHistoneH1hescH3k79me2StdSig.bigWig
 grant Bernstein
 lab Broad
+md5sum 43a8b8ecd3162f3b0d793745f5baa85f
 origAssembly hg19
 project wgEncode
 setType exp
@@ -3763,7 +3910,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000109
 expId 109
-fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733773
 grant Bernstein
 lab Broad
@@ -3790,7 +3937,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000109
 expId 109
-fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733773
 grant Bernstein
 lab Broad
@@ -3922,7 +4069,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000087
 expId 87
-fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733687
 grant Bernstein
 lab Broad
@@ -3949,7 +4096,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000087
 expId 87
-fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733687
 grant Bernstein
 lab Broad
@@ -4067,6 +4214,264 @@ subId 2817
 tableName wgEncodeBroadHistoneH1hescH4k20me1StdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep1
+objType file
+antibody JARID1A_(ab26049)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4944
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep2
+objType file
+antibody JARID1A_(ab26049)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4944
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescJarid1aab26049StdPk
+objType table
+antibody JARID1A_(ab26049)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4944
+tableName wgEncodeBroadHistoneH1hescJarid1aab26049StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneH1hescJarid1aab26049StdRawDataRep1
+objType file
+antibody JARID1A_(ab26049)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4944
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescJarid1aab26049StdRawDataRep2
+objType file
+antibody JARID1A_(ab26049)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4944
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescJarid1aab26049StdSig
+objType table
+antibody JARID1A_(ab26049)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescJarid1aab26049StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4944
+tableName wgEncodeBroadHistoneH1hescJarid1aab26049StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep1
+objType file
+antibody RBBP5_(A300-109A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4754
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep2
+objType file
+antibody RBBP5_(A300-109A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4754
+view Alignments
+
+metaObject wgEncodeBroadHistoneH1hescRbbp5a300109aStdPk
+objType table
+antibody RBBP5_(A300-109A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4754
+tableName wgEncodeBroadHistoneH1hescRbbp5a300109aStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneH1hescRbbp5a300109aStdRawDataRep1
+objType file
+antibody RBBP5_(A300-109A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4754
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescRbbp5a300109aStdRawDataRep2
+objType file
+antibody RBBP5_(A300-109A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4754
+view RawData
+
+metaObject wgEncodeBroadHistoneH1hescRbbp5a300109aStdSig
+objType table
+antibody RBBP5_(A300-109A)
+cell H1-hESC
+composite wgEncodeBroadHistone
+control std
+controlId H1-hESC/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneH1hescRbbp5a300109aStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4754
+tableName wgEncodeBroadHistoneH1hescRbbp5a300109aStdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneHelas3ControlStdAlnRep1
 objType file
 antibody Input
@@ -4081,7 +4486,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001013
 expId 1013
-fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam,wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733659
 grant Bernstein
 lab Broad
@@ -4108,7 +4513,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001013
 expId 1013
-fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam,wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733659
 grant Bernstein
 lab Broad
@@ -4213,7 +4618,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001012
 expId 1012
-fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep1.bam,wgEncodeBroadHistoneHelas3CtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733785
 grant Bernstein
 lab Broad
@@ -4240,7 +4645,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001012
 expId 1012
-fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep2.bam,wgEncodeBroadHistoneHelas3CtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733785
 grant Bernstein
 lab Broad
@@ -4371,7 +4776,7 @@ dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
-fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
 md5sum 2cbf5aba58a3a25621e88c0bbb3e951c,dbfe678feb24137f68ab82b43546ff65
@@ -4395,7 +4800,7 @@ dateSubmitted 2011-06-14
 dateUnrestricted 2012-03-14
 dccAccession wgEncodeEH001750
 expId 1750
-fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k04me1StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
 md5sum 5047977b1b2a4817d2032596b31f25fc,1733fd6e936a0fa84dcf2861abee6457
@@ -4519,7 +4924,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001014
 expId 1014
-fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733684
 grant Bernstein
 lab Broad
@@ -4546,7 +4951,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001014
 expId 1014
-fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733684
 grant Bernstein
 lab Broad
@@ -4677,7 +5082,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001037
 expId 1037
-fileName wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733696
 grant Bernstein
 lab Broad
@@ -4702,7 +5107,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001037
 expId 1037
-fileName wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733696
 grant Bernstein
 lab Broad
@@ -4831,7 +5236,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001015
 expId 1015
-fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733711
 grant Bernstein
 lab Broad
@@ -4858,7 +5263,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001015
 expId 1015
-fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733711
 grant Bernstein
 lab Broad
@@ -4990,7 +5395,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001016
 expId 1016
-fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733734
 grant Bernstein
 lab Broad
@@ -5017,7 +5422,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001016
 expId 1016
-fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733734
 grant Bernstein
 lab Broad
@@ -5149,7 +5554,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001017
 expId 1017
-fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733682
 grant Bernstein
 lab Broad
@@ -5176,7 +5581,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001017
 expId 1017
-fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733682
 grant Bernstein
 lab Broad
@@ -5308,7 +5713,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001018
 expId 1018
-fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733669
 grant Bernstein
 lab Broad
@@ -5335,7 +5740,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001018
 expId 1018
-fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733669
 grant Bernstein
 lab Broad
@@ -5467,7 +5872,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001019
 expId 1019
-fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1.bam,wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733756
 grant Bernstein
 lab Broad
@@ -5494,7 +5899,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001019
 expId 1019
-fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2.bam,wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733756
 grant Bernstein
 lab Broad
@@ -5626,7 +6031,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001020
 expId 1020
-fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733689
 grant Bernstein
 lab Broad
@@ -5653,7 +6058,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001020
 expId 1020
-fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733689
 grant Bernstein
 lab Broad
@@ -5785,7 +6190,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001021
 expId 1021
-fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1.bam,wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1.bam.bai
 geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
@@ -5812,7 +6217,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001021
 expId 1021
-fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2.bam,wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2.bam.bai
 geoSampleAccession GSM733759
 grant Bernstein
 lab Broad
@@ -5944,7 +6349,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000084
 expId 84
-fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam,wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733732
 grant Bernstein
 lab Broad
@@ -5971,7 +6376,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000084
 expId 84
-fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam,wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733732
 grant Bernstein
 lab Broad
@@ -6076,7 +6481,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000080
 expId 80
-fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep1.bam,wgEncodeBroadHistoneHepg2CtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733645
 grant Bernstein
 lab Broad
@@ -6103,7 +6508,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000080
 expId 80
-fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep2.bam,wgEncodeBroadHistoneHepg2CtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733645
 grant Bernstein
 lab Broad
@@ -6235,7 +6640,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001022
 expId 1022
-fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep1.bam,wgEncodeBroadHistoneHepg2H2azStdAlnRep1.bam.bai
 geoSampleAccession GSM733774
 grant Bernstein
 lab Broad
@@ -6262,7 +6667,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001022
 expId 1022
-fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep2.bam,wgEncodeBroadHistoneHepg2H2azStdAlnRep2.bam.bai
 geoSampleAccession GSM733774
 grant Bernstein
 lab Broad
@@ -6393,7 +6798,7 @@ dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
-fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
 md5sum bdeabafdedd09747e8104ec103631c65,e1bb1ca9d37fcd95d72e86d3f33197ca
@@ -6417,7 +6822,7 @@ dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-09
 dccAccession wgEncodeEH001749
 expId 1749
-fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k04me1StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
 md5sum 17847371fcf423c9473d5ea4b54c51f9,8b1f3e3be71b1e8d121d27310021757a
@@ -6541,7 +6946,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000094
 expId 94
-fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733743
 grant Bernstein
 lab Broad
@@ -6568,7 +6973,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000094
 expId 94
-fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733743
 grant Bernstein
 lab Broad
@@ -6700,7 +7105,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001023
 expId 1023
-fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733754
 grant Bernstein
 lab Broad
@@ -6727,7 +7132,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001023
 expId 1023
-fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733754
 grant Bernstein
 lab Broad
@@ -6859,7 +7264,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000081
 expId 81
-fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733685
 grant Bernstein
 lab Broad
@@ -6886,7 +7291,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000081
 expId 81
-fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733685
 grant Bernstein
 lab Broad
@@ -7018,7 +7423,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000082
 expId 82
-fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733693
 grant Bernstein
 lab Broad
@@ -7045,7 +7450,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000082
 expId 82
-fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733693
 grant Bernstein
 lab Broad
@@ -7177,7 +7582,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000095
 expId 95
-fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733737
 grant Bernstein
 lab Broad
@@ -7204,7 +7609,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000095
 expId 95
-fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733737
 grant Bernstein
 lab Broad
@@ -7336,7 +7741,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001024
 expId 1024
-fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733641
 grant Bernstein
 lab Broad
@@ -7363,7 +7768,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001024
 expId 1024
-fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733641
 grant Bernstein
 lab Broad
@@ -7495,7 +7900,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000083
 expId 83
-fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1.bam,wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733638
 grant Bernstein
 lab Broad
@@ -7522,7 +7927,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000083
 expId 83
-fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2.bam,wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733638
 grant Bernstein
 lab Broad
@@ -7654,7 +8059,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000096
 expId 96
-fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733694
 grant Bernstein
 lab Broad
@@ -7681,7 +8086,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000096
 expId 96
-fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733694
 grant Bernstein
 lab Broad
@@ -7813,7 +8218,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000093
 expId 93
-fileName wgEncodeBroadHistoneHmecControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecControlStdAlnRep1.bam,wgEncodeBroadHistoneHmecControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733668
 grant Bernstein
 lab Broad
@@ -7840,7 +8245,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000093
 expId 93
-fileName wgEncodeBroadHistoneHmecControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecControlStdAlnRep2.bam,wgEncodeBroadHistoneHmecControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733668
 grant Bernstein
 lab Broad
@@ -7944,7 +8349,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
 dccAccession wgEncodeEH000075
 expId 75
-fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep1.bam,wgEncodeBroadHistoneHmecCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733724
 grant Bernstein
 lab Broad
@@ -7971,7 +8376,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
 dccAccession wgEncodeEH000075
 expId 75
-fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep2.bam,wgEncodeBroadHistoneHmecCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733724
 grant Bernstein
 lab Broad
@@ -8103,7 +8508,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000076
 expId 76
-fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneHmecH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733660
 grant Bernstein
 lab Broad
@@ -8130,7 +8535,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000076
 expId 76
-fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneHmecH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733660
 grant Bernstein
 lab Broad
@@ -8262,7 +8667,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000077
 expId 77
-fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733722
 grant Bernstein
 lab Broad
@@ -8289,7 +8694,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000077
 expId 77
-fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733722
 grant Bernstein
 lab Broad
@@ -8421,7 +8826,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000078
 expId 78
-fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733707
 grant Bernstein
 lab Broad
@@ -8448,7 +8853,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000078
 expId 78
-fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733707
 grant Bernstein
 lab Broad
@@ -8580,7 +8985,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000089
 expId 89
-fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733705
 grant Bernstein
 lab Broad
@@ -8607,7 +9012,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000089
 expId 89
-fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733705
 grant Bernstein
 lab Broad
@@ -8739,7 +9144,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000090
 expId 90
-fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733654
 grant Bernstein
 lab Broad
@@ -8766,7 +9171,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000090
 expId 90
-fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733654
 grant Bernstein
 lab Broad
@@ -8898,7 +9303,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000091
 expId 91
-fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733712
 grant Bernstein
 lab Broad
@@ -8925,7 +9330,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000091
 expId 91
-fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733712
 grant Bernstein
 lab Broad
@@ -9057,7 +9462,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000079
 expId 79
-fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneHmecH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733713
 grant Bernstein
 lab Broad
@@ -9084,7 +9489,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000079
 expId 79
-fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneHmecH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733713
 grant Bernstein
 lab Broad
@@ -9215,7 +9620,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000092
 expId 92
-fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733647
 grant Bernstein
 lab Broad
@@ -9242,7 +9647,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000092
 expId 92
-fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733647
 grant Bernstein
 lab Broad
@@ -9373,7 +9778,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000119
 expId 119
-fileName wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam,wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733663
 grant Bernstein
 lab Broad
@@ -9400,7 +9805,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000119
 expId 119
-fileName wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam,wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733663
 grant Bernstein
 lab Broad
@@ -9505,7 +9910,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000110
 expId 110
-fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep1.bam,wgEncodeBroadHistoneHsmmCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733762
 grant Bernstein
 lab Broad
@@ -9532,7 +9937,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000110
 expId 110
-fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep2.bam,wgEncodeBroadHistoneHsmmCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733762
 grant Bernstein
 lab Broad
@@ -9663,7 +10068,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
-fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep1.bam,wgEncodeBroadHistoneHsmmH2azStdAlnRep1.bam.bai
 geoSampleAccession GSM733760
 grant Bernstein
 lab Broad
@@ -9688,7 +10093,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001036
 expId 1036
-fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH2azStdAlnRep2.bam,wgEncodeBroadHistoneHsmmH2azStdAlnRep2.bam.bai
 geoSampleAccession GSM733760
 grant Bernstein
 lab Broad
@@ -9817,7 +10222,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000111
 expId 111
-fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733755
 grant Bernstein
 lab Broad
@@ -9844,7 +10249,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000111
 expId 111
-fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733755
 grant Bernstein
 lab Broad
@@ -9976,7 +10381,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000112
 expId 112
-fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733667
 grant Bernstein
 lab Broad
@@ -10003,7 +10408,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000112
 expId 112
-fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733667
 grant Bernstein
 lab Broad
@@ -10135,7 +10540,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000113
 expId 113
-fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733702
 grant Bernstein
 lab Broad
@@ -10162,7 +10567,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000113
 expId 113
-fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733702
 grant Bernstein
 lab Broad
@@ -10294,7 +10699,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000114
 expId 114
-fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733761
 grant Bernstein
 lab Broad
@@ -10321,7 +10726,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000114
 expId 114
-fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733761
 grant Bernstein
 lab Broad
@@ -10453,7 +10858,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000115
 expId 115
-fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733768
 grant Bernstein
 lab Broad
@@ -10480,7 +10885,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000115
 expId 115
-fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733768
 grant Bernstein
 lab Broad
@@ -10612,7 +11017,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000116
 expId 116
-fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733637
 grant Bernstein
 lab Broad
@@ -10639,7 +11044,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000116
 expId 116
-fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733637
 grant Bernstein
 lab Broad
@@ -10771,7 +11176,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000998
 expId 998
-fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733741
 grant Bernstein
 lab Broad
@@ -10798,7 +11203,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000998
 expId 998
-fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733741
 grant Bernstein
 lab Broad
@@ -10930,7 +11335,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000117
 expId 117
-fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733775
 grant Bernstein
 lab Broad
@@ -10957,7 +11362,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000117
 expId 117
-fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733775
 grant Bernstein
 lab Broad
@@ -11089,7 +11494,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000999
 expId 999
-fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733730
 grant Bernstein
 lab Broad
@@ -11116,7 +11521,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000999
 expId 999
-fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733730
 grant Bernstein
 lab Broad
@@ -11248,7 +11653,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000118
 expId 118
-fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733676
 grant Bernstein
 lab Broad
@@ -11275,7 +11680,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000118
 expId 118
-fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733676
 grant Bernstein
 lab Broad
@@ -11407,7 +11812,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001001
 expId 1001
-fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam,wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733648
 grant Bernstein
 lab Broad
@@ -11434,7 +11839,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001001
 expId 1001
-fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam,wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733648
 grant Bernstein
 lab Broad
@@ -11539,7 +11944,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001000
 expId 1000
-fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1.bam,wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733783
 grant Bernstein
 lab Broad
@@ -11566,7 +11971,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001000
 expId 1000
-fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2.bam,wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733783
 grant Bernstein
 lab Broad
@@ -11698,7 +12103,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001002
 expId 1002
-fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH2azStdAlnRep1.bam.bai
 geoSampleAccession GSM733746
 grant Bernstein
 lab Broad
@@ -11725,7 +12130,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001002
 expId 1002
-fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH2azStdAlnRep2.bam.bai
 geoSampleAccession GSM733746
 grant Bernstein
 lab Broad
@@ -11857,7 +12262,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001003
 expId 1003
-fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733666
 grant Bernstein
 lab Broad
@@ -11884,7 +12289,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001003
 expId 1003
-fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733666
 grant Bernstein
 lab Broad
@@ -12016,7 +12421,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001004
 expId 1004
-fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733717
 grant Bernstein
 lab Broad
@@ -12043,7 +12448,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001004
 expId 1004
-fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733717
 grant Bernstein
 lab Broad
@@ -12175,7 +12580,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001005
 expId 1005
-fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733661
 grant Bernstein
 lab Broad
@@ -12202,7 +12607,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001005
 expId 1005
-fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733661
 grant Bernstein
 lab Broad
@@ -12334,7 +12739,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001006
 expId 1006
-fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733700
 grant Bernstein
 lab Broad
@@ -12361,7 +12766,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001006
 expId 1006
-fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733700
 grant Bernstein
 lab Broad
@@ -12493,7 +12898,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001007
 expId 1007
-fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733738
 grant Bernstein
 lab Broad
@@ -12520,7 +12925,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001007
 expId 1007
-fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733738
 grant Bernstein
 lab Broad
@@ -12652,7 +13057,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001008
 expId 1008
-fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733727
 grant Bernstein
 lab Broad
@@ -12679,7 +13084,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001008
 expId 1008
-fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733727
 grant Bernstein
 lab Broad
@@ -12811,7 +13216,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001009
 expId 1009
-fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733639
 grant Bernstein
 lab Broad
@@ -12838,7 +13243,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001009
 expId 1009
-fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733639
 grant Bernstein
 lab Broad
@@ -12970,7 +13375,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001010
 expId 1010
-fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733644
 grant Bernstein
 lab Broad
@@ -12997,7 +13402,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH001010
 expId 1010
-fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733644
 grant Bernstein
 lab Broad
@@ -13129,7 +13534,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000060
 expId 60
-fileName wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam,wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733715
 grant Bernstein
 lab Broad
@@ -13156,7 +13561,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000060
 expId 60
-fileName wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam,wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733715
 grant Bernstein
 lab Broad
@@ -13183,7 +13588,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000060
 expId 60
-fileName wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam,wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam.bai
 geoSampleAccession GSM733715
 grant Bernstein
 lab Broad
@@ -13314,7 +13719,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000054
 expId 54
-fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep1.bam,wgEncodeBroadHistoneHuvecCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733716
 grant Bernstein
 lab Broad
@@ -13341,7 +13746,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000054
 expId 54
-fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep2.bam,wgEncodeBroadHistoneHuvecCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733716
 grant Bernstein
 lab Broad
@@ -13368,7 +13773,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000054
 expId 54
-fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam,wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam.bai
 geoSampleAccession GSM733716
 grant Bernstein
 lab Broad
@@ -13526,7 +13931,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000055
 expId 55
-fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733691
 grant Bernstein
 lab Broad
@@ -13553,7 +13958,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000055
 expId 55
-fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733691
 grant Bernstein
 lab Broad
@@ -13580,7 +13985,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000055
 expId 55
-fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam,wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam.bai
 geoSampleAccession GSM733691
 grant Bernstein
 lab Broad
@@ -13738,7 +14143,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000038
 expId 38
-fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733688
 grant Bernstein
 lab Broad
@@ -13765,7 +14170,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000038
 expId 38
-fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733688
 grant Bernstein
 lab Broad
@@ -13897,7 +14302,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000056
 expId 56
-fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733757
 grant Bernstein
 lab Broad
@@ -13924,7 +14329,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000056
 expId 56
-fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733757
 grant Bernstein
 lab Broad
@@ -13951,7 +14356,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000056
 expId 56
-fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam,wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam.bai
 geoSampleAccession GSM733757
 grant Bernstein
 lab Broad
@@ -14108,7 +14513,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000039
 expId 39
-fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733690
 grant Bernstein
 lab Broad
@@ -14135,7 +14540,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000039
 expId 39
-fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733690
 grant Bernstein
 lab Broad
@@ -14162,7 +14567,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000039
 expId 39
-fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam,wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam.bai
 geoSampleAccession GSM733690
 grant Bernstein
 lab Broad
@@ -14320,7 +14725,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000040
 expId 40
-fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733683
 grant Bernstein
 lab Broad
@@ -14347,7 +14752,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000040
 expId 40
-fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733683
 grant Bernstein
 lab Broad
@@ -14479,7 +14884,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000041
 expId 41
-fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733673
 grant Bernstein
 lab Broad
@@ -14506,7 +14911,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000041
 expId 41
-fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733673
 grant Bernstein
 lab Broad
@@ -14533,7 +14938,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000041
 expId 41
-fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam,wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam.bai
 geoSampleAccession GSM733673
 grant Bernstein
 lab Broad
@@ -14691,7 +15096,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000057
 expId 57
-fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733735
 grant Bernstein
 lab Broad
@@ -14718,7 +15123,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000057
 expId 57
-fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733735
 grant Bernstein
 lab Broad
@@ -14745,7 +15150,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000057
 expId 57
-fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam,wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam.bai
 geoSampleAccession GSM733735
 grant Bernstein
 lab Broad
@@ -14903,7 +15308,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000058
 expId 58
-fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1.bam,wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733703
 grant Bernstein
 lab Broad
@@ -14930,7 +15335,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000058
 expId 58
-fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2.bam,wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733703
 grant Bernstein
 lab Broad
@@ -14957,7 +15362,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000058
 expId 58
-fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam,wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam.bai
 geoSampleAccession GSM733703
 grant Bernstein
 lab Broad
@@ -15115,7 +15520,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000059
 expId 59
-fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733640
 grant Bernstein
 lab Broad
@@ -15142,7 +15547,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000059
 expId 59
-fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733640
 grant Bernstein
 lab Broad
@@ -15169,7 +15574,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000059
 expId 59
-fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam,wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam.bai
 geoSampleAccession GSM733640
 grant Bernstein
 lab Broad
@@ -15327,7 +15732,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000061
 expId 61
-fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep1.bam
+fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep1.bam,wgEncodeBroadHistoneHuvecPol2bStdAlnRep1.bam.bai
 geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
@@ -15354,7 +15759,7 @@ dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 dccAccession wgEncodeEH000061
 expId 61
-fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep2.bam
+fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep2.bam,wgEncodeBroadHistoneHuvecPol2bStdAlnRep2.bam.bai
 geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
@@ -15381,7 +15786,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000061
 expId 61
-fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam
+fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam,wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam.bai
 geoSampleAccession GSM733749
 grant Bernstein
 lab Broad
@@ -15525,6 +15930,135 @@ subId 2882
 tableName wgEncodeBroadHistoneHuvecPol2bStdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep1
+objType file
+antibody CHD1_(A301-218A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4755
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep2
+objType file
+antibody CHD1_(A301-218A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4755
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Chd1a301218aStdPk
+objType table
+antibody CHD1_(A301-218A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4755
+tableName wgEncodeBroadHistoneK562Chd1a301218aStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Chd1a301218aStdRawDataRep1
+objType file
+antibody CHD1_(A301-218A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4755
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Chd1a301218aStdRawDataRep2
+objType file
+antibody CHD1_(A301-218A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4755
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Chd1a301218aStdSig
+objType table
+antibody CHD1_(A301-218A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Chd1a301218aStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4755
+tableName wgEncodeBroadHistoneK562Chd1a301218aStdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneK562ControlStdAlnRep1
 objType file
 antibody Input
@@ -15539,7 +16073,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000052
 expId 52
-fileName wgEncodeBroadHistoneK562ControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562ControlStdAlnRep1.bam,wgEncodeBroadHistoneK562ControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733780
 grant Bernstein
 lab Broad
@@ -15618,7 +16152,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000042
 expId 42
-fileName wgEncodeBroadHistoneK562CtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562CtcfStdAlnRep1.bam,wgEncodeBroadHistoneK562CtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733719
 grant Bernstein
 lab Broad
@@ -15645,7 +16179,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000042
 expId 42
-fileName wgEncodeBroadHistoneK562CtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562CtcfStdAlnRep2.bam,wgEncodeBroadHistoneK562CtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733719
 grant Bernstein
 lab Broad
@@ -15762,6 +16296,135 @@ subId 2884
 tableName wgEncodeBroadHistoneK562CtcfStdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneK562Ezh239875StdAlnRep1
+objType file
+antibody EZH2_(39875)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Ezh239875StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4756
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Ezh239875StdAlnRep2
+objType file
+antibody EZH2_(39875)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Ezh239875StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4756
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Ezh239875StdPk
+objType table
+antibody EZH2_(39875)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Ezh239875StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4756
+tableName wgEncodeBroadHistoneK562Ezh239875StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Ezh239875StdRawDataRep1
+objType file
+antibody EZH2_(39875)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Ezh239875StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4756
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Ezh239875StdRawDataRep2
+objType file
+antibody EZH2_(39875)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Ezh239875StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4756
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Ezh239875StdSig
+objType table
+antibody EZH2_(39875)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Ezh239875StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4756
+tableName wgEncodeBroadHistoneK562Ezh239875StdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneK562H2azStdAlnRep1
 objType file
 antibody H2A.Z
@@ -15775,7 +16438,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
-fileName wgEncodeBroadHistoneK562H2azStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H2azStdAlnRep1.bam,wgEncodeBroadHistoneK562H2azStdAlnRep1.bam.bai
 geoSampleAccession GSM733786
 grant Bernstein
 lab Broad
@@ -15800,7 +16463,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001038
 expId 1038
-fileName wgEncodeBroadHistoneK562H2azStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H2azStdAlnRep2.bam,wgEncodeBroadHistoneK562H2azStdAlnRep2.bam.bai
 geoSampleAccession GSM733786
 grant Bernstein
 lab Broad
@@ -15929,7 +16592,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000043
 expId 43
-fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep1.bam,wgEncodeBroadHistoneK562H3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733656
 grant Bernstein
 lab Broad
@@ -15956,7 +16619,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000043
 expId 43
-fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep2.bam,wgEncodeBroadHistoneK562H3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733656
 grant Bernstein
 lab Broad
@@ -16087,7 +16750,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000044
 expId 44
-fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733658
 grant Bernstein
 lab Broad
@@ -16114,7 +16777,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000044
 expId 44
-fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneK562H3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733658
 grant Bernstein
 lab Broad
@@ -16246,7 +16909,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000045
 expId 45
-fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733714
 grant Bernstein
 lab Broad
@@ -16273,7 +16936,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000045
 expId 45
-fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneK562H3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733714
 grant Bernstein
 lab Broad
@@ -16404,7 +17067,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000046
 expId 46
-fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733692
 grant Bernstein
 lab Broad
@@ -16431,7 +17094,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000046
 expId 46
-fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneK562H3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733692
 grant Bernstein
 lab Broad
@@ -16562,7 +17225,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000047
 expId 47
-fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733651
 grant Bernstein
 lab Broad
@@ -16589,7 +17252,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000047
 expId 47
-fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneK562H3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733651
 grant Bernstein
 lab Broad
@@ -16720,7 +17383,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000048
 expId 48
-fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733680
 grant Bernstein
 lab Broad
@@ -16747,7 +17410,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000048
 expId 48
-fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneK562H3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733680
 grant Bernstein
 lab Broad
@@ -16878,7 +17541,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001039
 expId 1039
-fileName wgEncodeBroadHistoneK562H3k79me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k79me2StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k79me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733653
 grant Bernstein
 lab Broad
@@ -16903,7 +17566,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001039
 expId 1039
-fileName wgEncodeBroadHistoneK562H3k79me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k79me2StdAlnRep2.bam,wgEncodeBroadHistoneK562H3k79me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733653
 grant Bernstein
 lab Broad
@@ -17032,7 +17695,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000049
 expId 49
-fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep1.bam,wgEncodeBroadHistoneK562H3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733778
 grant Bernstein
 lab Broad
@@ -17059,7 +17722,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000049
 expId 49
-fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep2.bam,wgEncodeBroadHistoneK562H3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733778
 grant Bernstein
 lab Broad
@@ -17191,7 +17854,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000050
 expId 50
-fileName wgEncodeBroadHistoneK562H3k9me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k9me1StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k9me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733777
 grant Bernstein
 lab Broad
@@ -17296,7 +17959,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
-fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep1.bam,wgEncodeBroadHistoneK562H3k9me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733776
 grant Bernstein
 lab Broad
@@ -17321,7 +17984,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-05-05
 dccAccession wgEncodeEH001040
 expId 1040
-fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H3k9me3StdAlnRep2.bam,wgEncodeBroadHistoneK562H3k9me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733776
 grant Bernstein
 lab Broad
@@ -17450,7 +18113,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000051
 expId 51
-fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneK562H4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733675
 grant Bernstein
 lab Broad
@@ -17477,7 +18140,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000051
 expId 51
-fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneK562H4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733675
 grant Bernstein
 lab Broad
@@ -17594,6 +18257,264 @@ subId 2893
 tableName wgEncodeBroadHistoneK562H4k20me1StdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep1
+objType file
+antibody HDAC1_(SC-6298)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4757
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep2
+objType file
+antibody HDAC1_(SC-6298)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4757
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Hdac1sc6298StdPk
+objType table
+antibody HDAC1_(SC-6298)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4757
+tableName wgEncodeBroadHistoneK562Hdac1sc6298StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Hdac1sc6298StdRawDataRep1
+objType file
+antibody HDAC1_(SC-6298)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4757
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Hdac1sc6298StdRawDataRep2
+objType file
+antibody HDAC1_(SC-6298)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4757
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Hdac1sc6298StdSig
+objType table
+antibody HDAC1_(SC-6298)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac1sc6298StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4757
+tableName wgEncodeBroadHistoneK562Hdac1sc6298StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep1
+objType file
+antibody HDAC2_(A300-705A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4758
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep2
+objType file
+antibody HDAC2_(A300-705A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4758
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Hdac2a300705aStdPk
+objType table
+antibody HDAC2_(A300-705A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4758
+tableName wgEncodeBroadHistoneK562Hdac2a300705aStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Hdac2a300705aStdRawDataRep1
+objType file
+antibody HDAC2_(A300-705A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4758
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Hdac2a300705aStdRawDataRep2
+objType file
+antibody HDAC2_(A300-705A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4758
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Hdac2a300705aStdSig
+objType table
+antibody HDAC2_(A300-705A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Hdac2a300705aStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4758
+tableName wgEncodeBroadHistoneK562Hdac2a300705aStdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneK562P300StdAlnRep1
 objType file
 antibody p300
@@ -17605,9 +18526,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeBroadHistoneK562P300StdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562P300StdAlnRep1.bam,wgEncodeBroadHistoneK562P300StdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
+md5sum b6cbf7813d9df075b56f27862ef55e91,f62046aa1ca5359084b6b3f78a81cbad
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17626,9 +18548,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
-fileName wgEncodeBroadHistoneK562P300StdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562P300StdAlnRep2.bam,wgEncodeBroadHistoneK562P300StdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
+md5sum fda8f9d149261bd982d95c4ac3551692,431e32f9470d73e781d91af96576bdc3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17650,6 +18573,7 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeBroadHistoneK562P300StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
+md5sum a5435044c396204582db6ab525faaac8
 origAssembly hg19
 project wgEncode
 setType exp
@@ -17673,6 +18597,7 @@ fileName wgEncodeBroadHistoneK562P300StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum 5960a3548d91b010a6b55f4d97c86d54
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17695,6 +18620,7 @@ fileName wgEncodeBroadHistoneK562P300StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
+md5sum 878ee26ed33bbe1c4278d439194eca68
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17716,11 +18642,270 @@ dateUnrestricted 2012-05-10
 fileName wgEncodeBroadHistoneK562P300StdSig.bigWig
 grant Bernstein
 lab Broad
+md5sum 12858762d292cd5356e29592bc61f910
 origAssembly hg19
 project wgEncode
 setType exp
 subId 4764
 tableName wgEncodeBroadHistoneK562P300StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep1
+objType file
+antibody PHF8_(A301-772A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4760
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep2
+objType file
+antibody PHF8_(A301-772A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4760
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Phf8a301772aStdPk
+objType table
+antibody PHF8_(A301-772A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4760
+tableName wgEncodeBroadHistoneK562Phf8a301772aStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Phf8a301772aStdRawDataRep1
+objType file
+antibody PHF8_(A301-772A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4760
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Phf8a301772aStdRawDataRep2
+objType file
+antibody PHF8_(A301-772A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4760
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Phf8a301772aStdSig
+objType table
+antibody PHF8_(A301-772A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Phf8a301772aStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4760
+tableName wgEncodeBroadHistoneK562Phf8a301772aStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneK562Plu1StdAlnRep1
+objType file
+antibody PLU1
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562Plu1StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4761
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Plu1StdAlnRep2
+objType file
+antibody PLU1
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562Plu1StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4761
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Plu1StdPk
+objType table
+antibody PLU1
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562Plu1StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4761
+tableName wgEncodeBroadHistoneK562Plu1StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Plu1StdRawDataRep1
+objType file
+antibody PLU1
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562Plu1StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4761
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Plu1StdRawDataRep2
+objType file
+antibody PLU1
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562Plu1StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4761
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Plu1StdSig
+objType table
+antibody PLU1
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-10
+dateUnrestricted 2012-05-10
+fileName wgEncodeBroadHistoneK562Plu1StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4761
+tableName wgEncodeBroadHistoneK562Plu1StdSig
 view Signal
 
 metaObject wgEncodeBroadHistoneK562Pol2bStdAlnRep1
@@ -17737,7 +18922,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000053
 expId 53
-fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam
+fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam,wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam.bai
 geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
@@ -17764,7 +18949,7 @@ dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 dccAccession wgEncodeEH000053
 expId 53
-fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep2.bam
+fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep2.bam,wgEncodeBroadHistoneK562Pol2bStdAlnRep2.bam.bai
 geoSampleAccession GSM733643
 grant Bernstein
 lab Broad
@@ -17881,6 +19066,264 @@ subId 2894
 tableName wgEncodeBroadHistoneK562Pol2bStdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep1
+objType file
+antibody RBBP5_(A300-109A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4762
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep2
+objType file
+antibody RBBP5_(A300-109A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4762
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Rbbp5a300109aStdPk
+objType table
+antibody RBBP5_(A300-109A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4762
+tableName wgEncodeBroadHistoneK562Rbbp5a300109aStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Rbbp5a300109aStdRawDataRep1
+objType file
+antibody RBBP5_(A300-109A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4762
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Rbbp5a300109aStdRawDataRep2
+objType file
+antibody RBBP5_(A300-109A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4762
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Rbbp5a300109aStdSig
+objType table
+antibody RBBP5_(A300-109A)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Rbbp5a300109aStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4762
+tableName wgEncodeBroadHistoneK562Rbbp5a300109aStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneK562Sap3039731StdAlnRep1
+objType file
+antibody SAP30_(39731)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Sap3039731StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4763
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Sap3039731StdAlnRep2
+objType file
+antibody SAP30_(39731)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Sap3039731StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4763
+view Alignments
+
+metaObject wgEncodeBroadHistoneK562Sap3039731StdPk
+objType table
+antibody SAP30_(39731)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Sap3039731StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 4763
+tableName wgEncodeBroadHistoneK562Sap3039731StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneK562Sap3039731StdRawDataRep1
+objType file
+antibody SAP30_(39731)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Sap3039731StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4763
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Sap3039731StdRawDataRep2
+objType file
+antibody SAP30_(39731)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Sap3039731StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4763
+view RawData
+
+metaObject wgEncodeBroadHistoneK562Sap3039731StdSig
+objType table
+antibody SAP30_(39731)
+cell K562
+composite wgEncodeBroadHistone
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-30
+fileName wgEncodeBroadHistoneK562Sap3039731StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 4763
+tableName wgEncodeBroadHistoneK562Sap3039731StdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneNhaControlStdAlnRep1
 objType file
 antibody Input
@@ -17895,7 +19338,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001027
 expId 1027
-fileName wgEncodeBroadHistoneNhaControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaControlStdAlnRep1.bam,wgEncodeBroadHistoneNhaControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733678
 grant Bernstein
 lab Broad
@@ -17922,7 +19365,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001027
 expId 1027
-fileName wgEncodeBroadHistoneNhaControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaControlStdAlnRep2.bam,wgEncodeBroadHistoneNhaControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733678
 grant Bernstein
 lab Broad
@@ -18027,7 +19470,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001026
 expId 1026
-fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep1.bam,wgEncodeBroadHistoneNhaCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733765
 grant Bernstein
 lab Broad
@@ -18054,7 +19497,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001026
 expId 1026
-fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep2.bam,wgEncodeBroadHistoneNhaCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733765
 grant Bernstein
 lab Broad
@@ -18186,7 +19629,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001028
 expId 1028
-fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneNhaH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733763
 grant Bernstein
 lab Broad
@@ -18213,7 +19656,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001028
 expId 1028
-fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneNhaH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733763
 grant Bernstein
 lab Broad
@@ -18345,7 +19788,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001029
 expId 1029
-fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733729
 grant Bernstein
 lab Broad
@@ -18372,7 +19815,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001029
 expId 1029
-fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733729
 grant Bernstein
 lab Broad
@@ -18504,7 +19947,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001030
 expId 1030
-fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733751
 grant Bernstein
 lab Broad
@@ -18531,7 +19974,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001030
 expId 1030
-fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733751
 grant Bernstein
 lab Broad
@@ -18665,7 +20108,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001031
 expId 1031
-fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733710
 grant Bernstein
 lab Broad
@@ -18692,7 +20135,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001031
 expId 1031
-fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733710
 grant Bernstein
 lab Broad
@@ -18824,7 +20267,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001032
 expId 1032
-fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733747
 grant Bernstein
 lab Broad
@@ -18851,7 +20294,7 @@ dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 dccAccession wgEncodeEH001032
 expId 1032
-fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733747
 grant Bernstein
 lab Broad
@@ -18982,7 +20425,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001055
 expId 1055
-fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam,wgEncodeBroadHistoneNhdfadControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733750
 grant Bernstein
 lab Broad
@@ -19007,7 +20450,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001055
 expId 1055
-fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam,wgEncodeBroadHistoneNhdfadControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733750
 grant Bernstein
 lab Broad
@@ -19109,7 +20552,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001048
 expId 1048
-fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep1.bam,wgEncodeBroadHistoneNhdfadCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733744
 grant Bernstein
 lab Broad
@@ -19134,7 +20577,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001048
 expId 1048
-fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep2.bam,wgEncodeBroadHistoneNhdfadCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733744
 grant Bernstein
 lab Broad
@@ -19262,7 +20705,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001049
 expId 1049
-fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733662
 grant Bernstein
 lab Broad
@@ -19287,7 +20730,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001049
 expId 1049
-fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733662
 grant Bernstein
 lab Broad
@@ -19415,7 +20858,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001050
 expId 1050
-fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733745
 grant Bernstein
 lab Broad
@@ -19440,7 +20883,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001050
 expId 1050
-fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733745
 grant Bernstein
 lab Broad
@@ -19568,7 +21011,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001051
 expId 1051
-fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733733
 grant Bernstein
 lab Broad
@@ -19593,7 +21036,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001051
 expId 1051
-fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733733
 grant Bernstein
 lab Broad
@@ -19721,7 +21164,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001052
 expId 1052
-fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733753
 grant Bernstein
 lab Broad
@@ -19746,7 +21189,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001052
 expId 1052
-fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733753
 grant Bernstein
 lab Broad
@@ -19874,7 +21317,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001053
 expId 1053
-fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733650
 grant Bernstein
 lab Broad
@@ -19899,7 +21342,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001053
 expId 1053
-fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733650
 grant Bernstein
 lab Broad
@@ -20027,7 +21470,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001054
 expId 1054
-fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733709
 grant Bernstein
 lab Broad
@@ -20052,7 +21495,7 @@ dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 dccAccession wgEncodeEH001054
 expId 1054
-fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733709
 grant Bernstein
 lab Broad
@@ -20181,7 +21624,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000072
 expId 72
-fileName wgEncodeBroadHistoneNhekControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekControlStdAlnRep1.bam,wgEncodeBroadHistoneNhekControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733740
 grant Bernstein
 lab Broad
@@ -20208,7 +21651,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000072
 expId 72
-fileName wgEncodeBroadHistoneNhekControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekControlStdAlnRep2.bam,wgEncodeBroadHistoneNhekControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733740
 grant Bernstein
 lab Broad
@@ -20313,7 +21756,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000063
 expId 63
-fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep1.bam,wgEncodeBroadHistoneNhekCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733636
 grant Bernstein
 lab Broad
@@ -20340,7 +21783,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000063
 expId 63
-fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep2.bam,wgEncodeBroadHistoneNhekCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733636
 grant Bernstein
 lab Broad
@@ -20367,7 +21810,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000063
 expId 63
-fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam,wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam.bai
 geoSampleAccession GSM733636
 grant Bernstein
 lab Broad
@@ -20525,7 +21968,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000064
 expId 64
-fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733674
 grant Bernstein
 lab Broad
@@ -20552,7 +21995,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000064
 expId 64
-fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733674
 grant Bernstein
 lab Broad
@@ -20579,7 +22022,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000064
 expId 64
-fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam.bai
 geoSampleAccession GSM733674
 grant Bernstein
 lab Broad
@@ -20737,7 +22180,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000065
 expId 65
-fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733701
 grant Bernstein
 lab Broad
@@ -20764,7 +22207,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000065
 expId 65
-fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733701
 grant Bernstein
 lab Broad
@@ -20791,7 +22234,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000065
 expId 65
-fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam.bai
 geoSampleAccession GSM733701
 grant Bernstein
 lab Broad
@@ -20949,7 +22392,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000066
 expId 66
-fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733726
 grant Bernstein
 lab Broad
@@ -20976,7 +22419,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000066
 expId 66
-fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733726
 grant Bernstein
 lab Broad
@@ -21003,7 +22446,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000066
 expId 66
-fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam.bai
 geoSampleAccession GSM733726
 grant Bernstein
 lab Broad
@@ -21161,7 +22604,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000062
 expId 62
-fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733698
 grant Bernstein
 lab Broad
@@ -21188,7 +22631,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000062
 expId 62
-fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733698
 grant Bernstein
 lab Broad
@@ -21215,7 +22658,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000062
 expId 62
-fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam.bai
 geoSampleAccession GSM733698
 grant Bernstein
 lab Broad
@@ -21373,7 +22816,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000067
 expId 67
-fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733686
 grant Bernstein
 lab Broad
@@ -21400,7 +22843,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000067
 expId 67
-fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733686
 grant Bernstein
 lab Broad
@@ -21427,7 +22870,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000067
 expId 67
-fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam.bai
 geoSampleAccession GSM733686
 grant Bernstein
 lab Broad
@@ -21585,7 +23028,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000068
 expId 68
-fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733720
 grant Bernstein
 lab Broad
@@ -21612,7 +23055,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000068
 expId 68
-fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733720
 grant Bernstein
 lab Broad
@@ -21639,7 +23082,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000068
 expId 68
-fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam.bai
 geoSampleAccession GSM733720
 grant Bernstein
 lab Broad
@@ -21797,7 +23240,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000069
 expId 69
-fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733665
 grant Bernstein
 lab Broad
@@ -21824,7 +23267,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000069
 expId 69
-fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733665
 grant Bernstein
 lab Broad
@@ -21851,7 +23294,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000069
 expId 69
-fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam.bai
 geoSampleAccession GSM733665
 grant Bernstein
 lab Broad
@@ -22009,7 +23452,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000070
 expId 70
-fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1.bam,wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733655
 grant Bernstein
 lab Broad
@@ -22036,7 +23479,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000070
 expId 70
-fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2.bam,wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733655
 grant Bernstein
 lab Broad
@@ -22063,7 +23506,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000070
 expId 70
-fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam,wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam.bai
 geoSampleAccession GSM733655
 grant Bernstein
 lab Broad
@@ -22221,7 +23664,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000071
 expId 71
-fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733728
 grant Bernstein
 lab Broad
@@ -22248,7 +23691,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000071
 expId 71
-fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733728
 grant Bernstein
 lab Broad
@@ -22275,7 +23718,7 @@ dateSubmitted 2010-10-26
 dateUnrestricted 2011-07-26
 dccAccession wgEncodeEH000071
 expId 71
-fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam
+fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam,wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam.bai
 geoSampleAccession GSM733728
 grant Bernstein
 lab Broad
@@ -22433,7 +23876,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000073
 expId 73
-fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep1.bam,wgEncodeBroadHistoneNhekPol2bStdAlnRep1.bam.bai
 geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
@@ -22460,7 +23903,7 @@ dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 dccAccession wgEncodeEH000073
 expId 73
-fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep2.bam,wgEncodeBroadHistoneNhekPol2bStdAlnRep2.bam.bai
 geoSampleAccession GSM733671
 grant Bernstein
 lab Broad
@@ -22592,7 +24035,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000105
 expId 105
-fileName wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam,wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733731
 grant Bernstein
 lab Broad
@@ -22619,7 +24062,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000105
 expId 105
-fileName wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam,wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733731
 grant Bernstein
 lab Broad
@@ -22724,7 +24167,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000120
 expId 120
-fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep1.bam,wgEncodeBroadHistoneNhlfCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733695
 grant Bernstein
 lab Broad
@@ -22751,7 +24194,7 @@ dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 dccAccession wgEncodeEH000120
 expId 120
-fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep2.bam,wgEncodeBroadHistoneNhlfCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733695
 grant Bernstein
 lab Broad
@@ -22883,7 +24326,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000097
 expId 97
-fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733646
 grant Bernstein
 lab Broad
@@ -22910,7 +24353,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000097
 expId 97
-fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733646
 grant Bernstein
 lab Broad
@@ -23042,7 +24485,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000098
 expId 98
-fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1.bam,wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733764
 grant Bernstein
 lab Broad
@@ -23069,7 +24512,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000098
 expId 98
-fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2.bam,wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733764
 grant Bernstein
 lab Broad
@@ -23201,7 +24644,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000099
 expId 99
-fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733699
 grant Bernstein
 lab Broad
@@ -23228,7 +24671,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000099
 expId 99
-fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733699
 grant Bernstein
 lab Broad
@@ -23360,7 +24803,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000100
 expId 100
-fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733649
 grant Bernstein
 lab Broad
@@ -23387,7 +24830,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000100
 expId 100
-fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733649
 grant Bernstein
 lab Broad
@@ -23519,7 +24962,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000101
 expId 101
-fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733781
 grant Bernstein
 lab Broad
@@ -23546,7 +24989,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000101
 expId 101
-fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733781
 grant Bernstein
 lab Broad
@@ -23678,7 +25121,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000102
 expId 102
-fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1.bam,wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733723
 grant Bernstein
 lab Broad
@@ -23705,7 +25148,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000102
 expId 102
-fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2.bam,wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733723
 grant Bernstein
 lab Broad
@@ -23837,7 +25280,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000103
 expId 103
-fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1.bam,wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1.bam.bai
 geoSampleAccession GSM733652
 grant Bernstein
 lab Broad
@@ -23864,7 +25307,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000103
 expId 103
-fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2.bam,wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2.bam.bai
 geoSampleAccession GSM733652
 grant Bernstein
 lab Broad
@@ -23996,7 +25439,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000104
 expId 104
-fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1.bam,wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733706
 grant Bernstein
 lab Broad
@@ -24023,7 +25466,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000104
 expId 104
-fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2.bam,wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733706
 grant Bernstein
 lab Broad
@@ -24154,7 +25597,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001056
 expId 1056
-fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam,wgEncodeBroadHistoneOsteoblControlStdAlnRep1.bam.bai
 geoSampleAccession GSM733697
 grant Bernstein
 lab Broad
@@ -24179,7 +25622,7 @@ dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
 dccAccession wgEncodeEH001056
 expId 1056
-fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam,wgEncodeBroadHistoneOsteoblControlStdAlnRep2.bam.bai
 geoSampleAccession GSM733697
 grant Bernstein
 lab Broad
@@ -24281,7 +25724,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001041
 expId 1041
-fileName wgEncodeBroadHistoneOsteoblCtcfStdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblCtcfStdAlnRep1.bam,wgEncodeBroadHistoneOsteoblCtcfStdAlnRep1.bam.bai
 geoSampleAccession GSM733784
 grant Bernstein
 lab Broad
@@ -24306,7 +25749,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001041
 expId 1041
-fileName wgEncodeBroadHistoneOsteoblCtcfStdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblCtcfStdAlnRep2.bam,wgEncodeBroadHistoneOsteoblCtcfStdAlnRep2.bam.bai
 geoSampleAccession GSM733784
 grant Bernstein
 lab Broad
@@ -24434,7 +25877,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001042
 expId 1042
-fileName wgEncodeBroadHistoneOsteoblH2azStdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblH2azStdAlnRep1.bam,wgEncodeBroadHistoneOsteoblH2azStdAlnRep1.bam.bai
 geoSampleAccession GSM733766
 grant Bernstein
 lab Broad
@@ -24459,7 +25902,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001042
 expId 1042
-fileName wgEncodeBroadHistoneOsteoblH2azStdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblH2azStdAlnRep2.bam,wgEncodeBroadHistoneOsteoblH2azStdAlnRep2.bam.bai
 geoSampleAccession GSM733766
 grant Bernstein
 lab Broad
@@ -24587,7 +26030,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001043
 expId 1043
-fileName wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep1.bam,wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep1.bam.bai
 geoSampleAccession GSM733739
 grant Bernstein
 lab Broad
@@ -24612,7 +26055,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001043
 expId 1043
-fileName wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep2.bam,wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep2.bam.bai
 geoSampleAccession GSM733739
 grant Bernstein
 lab Broad
@@ -24740,7 +26183,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001044
 expId 1044
-fileName wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep1.bam,wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733721
 grant Bernstein
 lab Broad
@@ -24765,7 +26208,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001044
 expId 1044
-fileName wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep2.bam,wgEncodeBroadHistoneOsteoblH3k36me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733721
 grant Bernstein
 lab Broad
@@ -24893,7 +26336,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001045
 expId 1045
-fileName wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep1.bam,wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep1.bam.bai
 geoSampleAccession GSM733704
 grant Bernstein
 lab Broad
@@ -24918,7 +26361,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001045
 expId 1045
-fileName wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep2.bam,wgEncodeBroadHistoneOsteoblH3k4me1StdAlnRep2.bam.bai
 geoSampleAccession GSM733704
 grant Bernstein
 lab Broad
@@ -25046,7 +26489,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001046
 expId 1046
-fileName wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep1.bam,wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep1.bam.bai
 geoSampleAccession GSM733779
 grant Bernstein
 lab Broad
@@ -25071,7 +26514,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001046
 expId 1046
-fileName wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep2.bam,wgEncodeBroadHistoneOsteoblH3k4me2StdAlnRep2.bam.bai
 geoSampleAccession GSM733779
 grant Bernstein
 lab Broad
@@ -25199,7 +26642,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001047
 expId 1047
-fileName wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep1.bam
+fileName wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep1.bam,wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep1.bam.bai
 geoSampleAccession GSM733681
 grant Bernstein
 lab Broad
@@ -25224,7 +26667,7 @@ dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 dccAccession wgEncodeEH001047
 expId 1047
-fileName wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep2.bam
+fileName wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep2.bam,wgEncodeBroadHistoneOsteoblH3k9me3StdAlnRep2.bam.bai
 geoSampleAccession GSM733681
 grant Bernstein
 lab Broad
@@ -25339,4 +26782,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: 1632407075
+# MAGIC: 411362588

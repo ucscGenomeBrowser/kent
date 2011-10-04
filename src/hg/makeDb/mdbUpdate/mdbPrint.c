@@ -43,7 +43,6 @@ errAbort(
   "             'var!=val' 'var!=v%%' 'var!=' 'var!=val1,val2' are all supported.\n"
   "    -obj={objName}  Request a single object.  Can be narrowed by var and val.\n"
   "    -var={varName}  Request a single variable.  Can be narrowed by val.\n"
-  "    -composite={}   Special commonly used var=val pair replaces -vars=\"composite=wgEn...\".\n"
   "There are two basic views of the data: by objects and by variables.  The default view "
   "is by object.  Each object will print out in an RA style stanza (by default) or as "
   "a single line of output containing all var=val pairs. In 'byVar' view, each RA style "
@@ -81,6 +80,7 @@ static struct optionSpec optionSpecs[] = {
     {"experimentify",OPTION_BOOLEAN},// Validate Experiments as defined in the hgFixed.encodeExp table
     {"encodeExp",OPTION_STRING},     // Optionally tell which encodeExp to use
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
+    {"or",       OPTION_STRING},// or var1=val1 var2=val2...
     {"order",    OPTION_STRING}, // comma delimited list of vars to order result by
     {"separator",OPTION_STRING}, // Optional separator used with order
     {"header",   OPTION_BOOLEAN},// Optional inclusion of header used with order
@@ -97,17 +97,20 @@ void specialHelp()
 /* Explain usage and exit. */
 {
 errAbort(
-  "mdbPrint - Prints specialty output from metadata objects and variables.\n"
+  "mdbPrint - Extra help for specialty selectors and output for metadata.\n"
   "usage:\n"
-  "   mdbPrint {db} [-table=] -vars=\"var1=val1 var2=val2...\"\n"
+  "   mdbPrint {db} [-table=] -composite={} -vars=\"var1=val1 || var1=val2...\" [-or=\"var3=val3...\" ]\n"
   "            -order={var1,var2,...} [-separator={\"any string\"} [-header]\n"
   "            -updDB={db} -updMdb={metaDb} -updSelect=var1,var2,... -updVars=varA,varB,...\n"
   "Options:\n"
   "    {db}     Database to query metadata from.  This argument is required.\n"
   "    -table   Table to query metadata from.  Default is the sandbox version of\n"
   "             '" MDB_DEFAULT_NAME "'.\n"
+  "    -composite={}   Special commonly used var=val pair replaces -vars=\"composite=wgEn...\".\n"
   "    -vars={var=val...}  Request a combination of var=val pairs.\n"
-  "                    Use of 'var!=val', 'var=v%%' and 'var=?' are supported.\n"
+  "             Use of 'var!=val' 'var=v%%', 'var=v1,v2' and 'var=v1 || var=v2' are supported (last 2 are equivalent).\n"
+  "    -or={var=val...}  When selecting by -obj or -vars can add orthoganal 'or' condition.\n"
+  "             Useful for more complex selections. Note -composite will be common to both queries.\n"
   "Special functions:\n"
   "  Print ordered vars:\n"
   "    -order       Prints only vars named and in the order named (comma delimited).\n"
@@ -277,6 +280,7 @@ if(argc < 2)
 char *db        = argv[1];
 char *table     = optionVal("table",NULL);
 char *order     = optionVal("order",NULL);
+char *orVars    = NULL;
 boolean raStyle = TRUE;
 if(optionExists("line") && !optionExists("ra"))
     raStyle = FALSE;
@@ -312,7 +316,14 @@ else if(optionExists("obj"))
     }
 else if(optionExists("vars"))
     {
-    mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
+    char *vars = optionVal("vars", NULL);
+    orVars = strstr(vars," || ");
+    if (orVars != NULL)
+        {
+        *orVars = '\0';
+        orVars += 4;
+        }
+    mdbByVars = mdbByVarsLineParse(vars);
     if (optionExists("composite"))
         mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
     if (optionExists("var"))
@@ -332,6 +343,21 @@ else if(optionExists("var"))
     }
 else
     usage();
+
+if(optionExists("or") || orVars != NULL)
+    {
+    if(byVar)
+        errAbort("Unsupported to use -or with -byVar.\n");
+    if(optionExists("or"))
+        {
+        if(!optionExists("vars") && !optionExists("obj"))
+            errAbort("Incompatible to use -or without -vars or -obj'.\n");
+        if (orVars != NULL)
+            errAbort("Incompatible to use -or and ' || ' in -vars.\n");
+        else
+            orVars = optionVal("or", NULL);
+        }
+    }
 
 struct sqlConnection *conn = sqlConnect(db);
 
@@ -379,6 +405,46 @@ else
         // Requested a single obj
         queryResults = mdbObjQuery(conn,table,mdbObjs);
         }
+
+    boolean resort = FALSE;
+    while(orVars != NULL)
+        {
+        char *vars = orVars;
+        orVars = strstr(vars," || ");
+        if (orVars != NULL)
+            {
+            *orVars = '\0';
+            orVars += 4;
+            }
+        struct mdbByVar * orByVars = orByVars = mdbByVarsLineParse(vars);
+        if (optionExists("composite"))
+            mdbByVarAppend(orByVars,"composite", optionVal("composite", NULL),FALSE);
+        if (optionExists("var"))
+            mdbByVarAppend(orByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
+        struct mdbObj * orResults = mdbObjsQueryByVars(conn,table,orByVars);
+        if (orResults != NULL)
+            {
+            // Merge be removing dups from orResults and cating together.
+            orResults = mdbObjIntersection(&orResults,queryResults);
+            queryResults = slCat(queryResults,orResults);
+            resort = TRUE;
+            }
+        }
+    if (resort)
+        slSort(&queryResults,&mdbObjCmp); // Need to be returned to obj order
+    //if(optionExists("or"))
+    //    {
+    //    struct mdbByVar * orByVars = orByVars = mdbByVarsLineParse(optionVal("or", NULL));
+    //    if (optionExists("composite"))
+    //        mdbByVarAppend(orByVars,"composite", optionVal("composite", NULL),FALSE);
+    //    if (optionExists("var"))
+    //        mdbByVarAppend(orByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
+    //    struct mdbObj * orResults = mdbObjsQueryByVars(conn,table,orByVars);
+    //    // Merge be removing dups from orResults and cating together.
+    //    orResults = mdbObjIntersection(&orResults,queryResults);
+    //    queryResults = slCat(queryResults,orResults);
+    //    slSort(&queryResults,&mdbObjCmp); // Need to be returned to obj order
+    //    }
 
     if(queryResults == NULL)
         {

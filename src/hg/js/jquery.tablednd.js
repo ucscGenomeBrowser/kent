@@ -147,30 +147,30 @@ jQuery.tableDnD = {
                     if (config.onDragStart) {
                         // Call the onDrop method if there is one
                         config.onDragStart(ev, table, this.parentNode);
-
-                        /////// UCSC
-                        // Initialize oldY to avoid movingDown as first action
-                        jQuery.tableDnD.oldY = jQuery.tableDnD.mouseCoords(ev).y - jQuery.tableDnD.mouseOffset.y;
-
-                        // Capture the mouse move events only if dragStart
-                        jQuery(document)
-                            .bind('mousemove', jQuery.tableDnD.mousemove)
-                            .bind('mouseup', jQuery.tableDnD.mouseup);
-
-                        config.downOffset = 0;
-                        config.upOffset = 0;
-                        if (config.dragObjects.length > 1) {
-                            for(var ix = 0; ix < config.dragObjects.length; ix++) {
-                                var row = config.dragObjects[ix];
-                                var rowIx = $(row).attr('rowIndex');
-                                if (rowIx < config.dragStartIndex)
-                                    config.upOffset -= $(row).height();
-                                else if (rowIx > config.dragStartIndex)
-                                    config.downOffset += $(row).height();
-                            }
-                        }
-                        /////// UCSC
                     }
+
+                    /////// UCSC
+                    // Initialize oldY to avoid movingDown as first action
+                    jQuery.tableDnD.oldY = jQuery.tableDnD.mouseCoords(ev).y - jQuery.tableDnD.mouseOffset.y;
+
+                    // Capture the mouse move events only if dragStart
+                    jQuery(document)
+                        .bind('mousemove', jQuery.tableDnD.mousemove)
+                        .bind('mouseup', jQuery.tableDnD.mouseup);
+
+                    config.downOffset = 0;
+                    config.upOffset = 0;
+                    if (config.dragObjects.length > 1) {
+                        for(var ix = 0; ix < config.dragObjects.length; ix++) {
+                            var row = config.dragObjects[ix];
+                            var rowIx = $(row).attr('rowIndex');
+                            if (rowIx < config.dragStartIndex)
+                                config.upOffset -= $(row).height();
+                            else if (rowIx > config.dragStartIndex)
+                                config.downOffset += $(row).height();
+                        }
+                    }
+                    /////// UCSC
                     return false;
                 });
             })

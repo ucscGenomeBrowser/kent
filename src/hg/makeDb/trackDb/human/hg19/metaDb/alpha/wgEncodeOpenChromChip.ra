@@ -3,6 +3,341 @@ objType composite
 composite wgEncodeOpenChromChip
 expVars lab,dataType,cell,treatment,antibody
 
+metaObject wgEncodeOpenChromChipA549CtcfAlnRep1
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549CtcfAlnRep1.bam
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 4935
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549CtcfAlnRep2
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549CtcfAlnRep2.bam
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 4935
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
+objType table
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 4935
+tableName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipA549CtcfPkRep1
+objType table
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549CtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 4935
+tableName wgEncodeOpenChromChipA549CtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipA549CtcfRawDataRep1
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 4935
+view RawData
+
+metaObject wgEncodeOpenChromChipA549CtcfRawDataRep2
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 4935
+view RawData
+
+metaObject wgEncodeOpenChromChipA549CtcfSig
+objType table
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549CtcfSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_A549
+project wgEncode
+setType exp
+subId 4935
+tableName wgEncodeOpenChromChipA549CtcfSig
+view Signal
+
+metaObject wgEncodeOpenChromChipA549InputAln
+objType file
+antibody Input
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-27
+dateUnrestricted 2012-06-27
+fileName wgEncodeOpenChromChipA549InputAln.bam
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+setType input
+subId 4906
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549InputRawData
+objType file
+antibody Input
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-27
+dateUnrestricted 2012-06-27
+fileName wgEncodeOpenChromChipA549InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 4906
+view RawData
+
+metaObject wgEncodeOpenChromChipA549InputSig
+objType table
+antibody Input
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-27
+dateUnrestricted 2012-06-27
+fileName wgEncodeOpenChromChipA549InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 4906
+tableName wgEncodeOpenChromChipA549InputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipA549Pol2AlnRep1
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549Pol2AlnRep1.bam
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 4934
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549Pol2AlnRep2
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549Pol2AlnRep2.bam
+grant Crawford
+lab UT-A
+labVersion  align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 4934
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 4934
+tableName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipA549Pol2PkRep1
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549Pol2PkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 4934
+tableName wgEncodeOpenChromChipA549Pol2PkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipA549Pol2RawDataRep1
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549Pol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 4934
+view RawData
+
+metaObject wgEncodeOpenChromChipA549Pol2RawDataRep2
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549Pol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 4934
+view RawData
+
+metaObject wgEncodeOpenChromChipA549Pol2Sig
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+fileName wgEncodeOpenChromChipA549Pol2Sig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_A549
+project wgEncode
+setType exp
+subId 4934
+tableName wgEncodeOpenChromChipA549Pol2Sig
+view Signal
+
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep1
 objType file
 antibody CTCF
@@ -15,7 +350,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
-fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam,wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -40,7 +375,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
-fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam,wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -140,7 +475,7 @@ dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 dccAccession wgEncodeEH001128
 expId 1128
-fileName wgEncodeOpenChromChipFibroblInputAln.bam
+fileName wgEncodeOpenChromChipFibroblInputAln.bam,wgEncodeOpenChromChipFibroblInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -189,7 +524,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
-fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam,wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -213,7 +548,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
-fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam,wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -355,7 +690,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
 expId 1129
-fileName wgEncodeOpenChromChipGlioblaInputAln.bam
+fileName wgEncodeOpenChromChipGlioblaInputAln.bam,wgEncodeOpenChromChipGlioblaInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -424,7 +759,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
-fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam,wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -448,7 +783,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
-fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam
+fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam,wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -591,7 +926,7 @@ dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
-fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam,wgEncodeOpenChromChipGm12878CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -616,7 +951,7 @@ dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
-fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam,wgEncodeOpenChromChipGm12878CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -784,7 +1119,7 @@ dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
-fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -808,7 +1143,7 @@ dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
-fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -832,7 +1167,7 @@ dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
-fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
+fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1024,7 +1359,7 @@ dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
 expId 528
-fileName wgEncodeOpenChromChipGm12878InputAln.bam
+fileName wgEncodeOpenChromChipGm12878InputAln.bam,wgEncodeOpenChromChipGm12878InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1095,7 +1430,7 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
-fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam,wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1120,7 +1455,7 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
-fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam,wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1289,7 +1624,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
-fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1314,7 +1649,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
-fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1460,7 +1795,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
-fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1485,7 +1820,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
-fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1631,7 +1966,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
-fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1656,7 +1991,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
-fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1802,7 +2137,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
-fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1827,7 +2162,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
-fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1973,7 +2308,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
-fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -1998,7 +2333,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
-fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2144,7 +2479,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
 expId 596
-fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam
+fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam,wgEncodeOpenChromChipH1hescCmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2266,7 +2601,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
 expId 560
-fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam,wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2388,7 +2723,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
 expId 563
-fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam,wgEncodeOpenChromChipH1hescPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2510,7 +2845,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
-fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam,wgEncodeOpenChromChipHelas3CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2535,7 +2870,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
-fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam,wgEncodeOpenChromChipHelas3CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2707,7 +3042,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
-fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam,wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2732,7 +3067,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
-fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam,wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2904,7 +3239,7 @@ dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
 expId 539
-fileName wgEncodeOpenChromChipHelas3InputAln.bam
+fileName wgEncodeOpenChromChipHelas3InputAln.bam,wgEncodeOpenChromChipHelas3InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -2976,7 +3311,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
-fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam,wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3001,7 +3336,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
-fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam,wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3172,7 +3507,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam,wgEncodeOpenChromChipHepg2CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3197,7 +3532,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam,wgEncodeOpenChromChipHepg2CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3222,7 +3557,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam,wgEncodeOpenChromChipHepg2CmycAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3418,7 +3753,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
-fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam,wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3443,7 +3778,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
-fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam,wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3615,7 +3950,7 @@ dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
 expId 538
-fileName wgEncodeOpenChromChipHepg2InputAln.bam
+fileName wgEncodeOpenChromChipHepg2InputAln.bam,wgEncodeOpenChromChipHepg2InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3687,7 +4022,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3712,7 +4047,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3737,7 +4072,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -3931,7 +4266,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
 expId 561
-fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam
+fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam,wgEncodeOpenChromChipHuvecCmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4054,7 +4389,7 @@ dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
-fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam,wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4079,7 +4414,7 @@ dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
-fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam,wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4249,7 +4584,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
 expId 550
-fileName wgEncodeOpenChromChipHuvecInputAln.bam
+fileName wgEncodeOpenChromChipHuvecInputAln.bam,wgEncodeOpenChromChipHuvecInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4320,7 +4655,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
-fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam,wgEncodeOpenChromChipHuvecPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4345,7 +4680,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
-fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam
+fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam,wgEncodeOpenChromChipHuvecPol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4491,7 +4826,7 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
-fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam,wgEncodeOpenChromChipK562CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4516,7 +4851,7 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
-fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam,wgEncodeOpenChromChipK562CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4541,7 +4876,7 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
-fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam
+fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam,wgEncodeOpenChromChipK562CmycAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4736,7 +5071,7 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
-fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam,wgEncodeOpenChromChipK562CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4761,7 +5096,7 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
-fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam,wgEncodeOpenChromChipK562CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4786,7 +5121,7 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
-fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam
+fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam,wgEncodeOpenChromChipK562CtcfAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -4981,7 +5316,7 @@ dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
 expId 529
-fileName wgEncodeOpenChromChipK562InputAln.bam
+fileName wgEncodeOpenChromChipK562InputAln.bam,wgEncodeOpenChromChipK562InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5053,7 +5388,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
-fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam,wgEncodeOpenChromChipK562Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5078,7 +5413,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
-fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam,wgEncodeOpenChromChipK562Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5246,7 +5581,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
-fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5271,7 +5606,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
-fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5468,7 +5803,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
-fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5493,7 +5828,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
-fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5642,7 +5977,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
-fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5667,7 +6002,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
-fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5716,7 +6051,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
-fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5741,7 +6076,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
-fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -5985,7 +6320,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
-fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6010,7 +6345,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
-fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6159,7 +6494,7 @@ dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
 expId 589
-fileName wgEncodeOpenChromChipMcf7InputAln.bam
+fileName wgEncodeOpenChromChipMcf7InputAln.bam,wgEncodeOpenChromChipMcf7InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6229,7 +6564,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
-fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6253,7 +6588,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
-fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6395,7 +6730,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001137
 expId 1137
-fileName wgEncodeOpenChromChipMonocd14InputAln.bam
+fileName wgEncodeOpenChromChipMonocd14InputAln.bam,wgEncodeOpenChromChipMonocd14InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6465,7 +6800,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
-fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam,wgEncodeOpenChromChipNhekCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6490,7 +6825,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
-fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam,wgEncodeOpenChromChipNhekCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6636,7 +6971,7 @@ dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
-fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam,wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6662,7 +6997,7 @@ dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
-fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam,wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6767,7 +7102,7 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000593
 expId 593
-fileName wgEncodeOpenChromChipProgfibInputAln.bam
+fileName wgEncodeOpenChromChipProgfibInputAln.bam,wgEncodeOpenChromChipProgfibInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6818,7 +7153,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
-fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam,wgEncodeOpenChromChipProgfibPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6844,7 +7179,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
-fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam
+fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam,wgEncodeOpenChromChipProgfibPol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
@@ -6936,4 +7271,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -167092005
+# MAGIC: 1956219629
