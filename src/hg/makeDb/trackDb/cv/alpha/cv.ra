@@ -5696,7 +5696,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(missing):human_FOXP2_validation_Myers.pdf
+validation FOXP2(Western blot, siRNA):human_FOXP2_validation_Myers.pdf
 
 term GABP
 tag GABP
@@ -5785,6 +5785,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
 lots E2708
 validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
+
+term GATA2_(SC-9008)
+tag GATA2SC9008
+type Antibody
+antibodyDescription Rabbit polyclonal antibody raised against amino acids 120-235 of GATA-2 of human origin
+target GATA2
+targetDescription The GATA family of transcription factors share a conserved zinc finger DNA-binding domain and are capable of binding the WGATAR consensus sequence. GATA1 is erythroid-specific and is essential for normal erythropeisis. By comparison, GATA2 is expressed at high levels in hematopoeitic progenitors, including early erythroid cells, but is strong repressed during erythroblast differentiaion.
+vendorName Santa Cruz Biotech
+vendorId sc-9008
+orderUrl
+lab Hardison
+lots J2108
+targetId GeneCard: GATA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
+validation GATA2_(SC-9008)(missing):human_GATA2_SC-9008_validation_Hardison.pdf
 
 term  GATA3_(SC-268)
 tag  GATA3
@@ -6269,7 +6284,7 @@ lab Bernstein
 lots H0509
 targetId GeneCards:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
-validation HDAC1_(SC-6298)(ChIP-String, ChIP-Seq):human_HDAC1_validation_BernsteinVer2.pdf 
+validation HDAC1_(SC-6298)(ChIP-String, ChIP-Seq):human_HDAC1_validation_Bernstein.pdf 
 
 term HDAC2_(A300-705A)
 tag HDAC2A300705A
@@ -6523,7 +6538,7 @@ term LEF1_(SC-8592)
 tag LEF1
 type Antibody
 target LEF1
-antibodyDescription 	 Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
+antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
 targetDescription This gene encodes a transcription factor belonging to a family of proteins that share homology with the high mobility group protein-1. The proteins encoded by this gene can bind to a functionally important site in the T-cell receptor-alpha enhancer, thereby conferring maximal enhancer activity (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-8592
@@ -7040,8 +7055,9 @@ vendorId PLU1
 orderUrl http://www.shilab.info/ShiLab/Welcome.html
 lab Bernstein
 lots missing
-targetId GeneCards:PLU1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PLU1
+targetId GeneCards:KDM5B
+#PLU1 is a alias for KDM5B ~Jeff
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation PLU1(ChIP-String, ChIP-Seq):human_PLU1_validation_Bernstein.pdf
 
 term PML_(SC-71910)
@@ -7558,7 +7574,7 @@ target SUZ12
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 antibodyDescription rabbit polyclonal
 vendorName Antibody made by Farnham lab
-vendorId   ;
+vendorId SUZ12 
 orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 lab Farnham
 targetId GeneCard:SUZ12
@@ -8918,6 +8934,26 @@ term DMSO_4hr
 #tag DMSO4hr
 tag DM002P4H
 description 4 hr with 0.02% DMSO (Myers)
+type treatment
+
+term EqS_2.0pct_24hr
+tag E2P24H
+description 24 h with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+type treatment 
+
+term EqS_2.0pct_60hr
+tag E2P60H
+description 60 h with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+type treatment
+
+term EqS_2.0pct_5d
+tag E2P5D
+description 5 d with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+type treatment
+
+term EqS_2.0pct_7d
+tag E2P7D
+description 7 d with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
 type treatment
 
 term Estradiol_10nM

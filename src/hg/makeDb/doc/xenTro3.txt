@@ -1372,6 +1372,38 @@ done
     time hgLoadMafFrames xenTro3 multiz9wayFrames multiz9way.mafFrames.gz
     #	real    0m21.425s
 
+############################################################################
+# creating upstream mafs (DONE - 2011-10-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/xenTro3/goldenPath/multiz9way
+    cd /hive/data/genomes/xenTro3/goldenPath/multiz9way
+    # run this bash script
+    cat << '_EOF_' > mkUpstream.sh
+DB=xenTro3
+GENE=ensGene
+NWAY=multiz9way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.${GENE}.maf"
+    echo "featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout"
+    featureBits ${DB} ${GENE}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} stdin stdout \
+                -orgs=/hive/data/genomes/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.${GENE}.maf.gz
+    echo "done upstream${S}.${GENE}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUpstream.sh
+    time ./mkUpstream.sh
+    #	real    17m4.037s
+
+    # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
+    #	upstream automatic generation
+
 #########################################################################
 # Phylogenetic tree from 9-way (DONE - 2011-09-28 - Hiram)
     # this is a chancy operation with this business.  These alignments are
