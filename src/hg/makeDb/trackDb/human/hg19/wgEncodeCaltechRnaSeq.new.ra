@@ -5,15 +5,15 @@ shortLabel Caltech RNA-seq
 longLabel RNA-seq from ENCODE/Caltech
 group expression
 subGroup1 view Views Signal=Raw_Signal PlusSignal=Plus_Raw_Signal MinusSignal=Minus_Raw_Signal  Splices=Splice_Sites Aligns=Alignments 
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=Hep-G2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) GM12891=GM12891 GM12892=GM12892 HSMM=HSMM HCT116=HCT-116 LHCNM2=LHCN-M2_Cycling LHCNM2D=LHCN-M2_Differentiated MCF7=MCF-7 NHEK=NHEK NHLF=NHLF
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=Hep-G2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) GM12891=GM12891 GM12892=GM12892 HSMM=HSMM HCT116=HCT-116 LHCNM2=LHCN-M2_Myoblast LHCNM2D=LHCN-M2_Myocyte_7d MCF7=MCF-7 NHEK=NHEK NHLF=NHLF
 subGroup3 readType Read_Type r1x75=Single_75nt r1x75D=Single_Strand-Specific_75nt r2x75=Paired_75nt_(200_bp) r2x75400=Paired_75nt_(400_bp)
 subGroup4 insertLength Insert_Length il200=200 il400=400 ilNa=NA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 dimensions dimensionX=readType dimensionY=cellType dimensionA=rep
 dimensionAchecked rep1
 sortOrder cellType=+ readType=+ view=+ rep=+
-fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep mapAlgorithm=Map_Algorithm labExpId=Lab_Exp_ID dccAccession=UCSC_Accession geoAccession=GEO_Accession origAssembly=Original_Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
-controlledVocabulary encode/cv.ra cellType=cell readType=readType insertLength=insertLength
+fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length treatment=Treatment view=View replicate=Rep labExpId=Lab_Exp_ID dccAccession=UCSC_Accession geoAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
+controlledVocabulary encode/cv.ra cellType=cell readType=readType insertLength=insertLength treatment=Treatment
 dragAndDrop subTracks
 priority 0
 type bed 3
@@ -446,7 +446,7 @@ html wgEncodeCaltechRnaSeq.new
 
 		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2
 		parent wgEncodeCaltechRnaSeqViewSplices off
-		longLabel LHCN-M2 cycling paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
+		longLabel LHCN-M2 myoblast paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
                 shortLabel LHCN 2x75 Sp 1
 		subGroups view=Splices cellType=LHCNM2 insertLength=il200 readType=r2x75 rep=rep1
 		type bam
@@ -454,7 +454,7 @@ html wgEncodeCaltechRnaSeq.new
 
 		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
 		parent wgEncodeCaltechRnaSeqViewSplices off
-		longLabel LHCN-M2 7 days paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
+		longLabel LHCN-M2 myocyte 7 days paired read RNA-seq Splices Rep 1 from ENCODE/Caltech
                 shortLabel LHCND 2x75 Sp 1
 		subGroups view=Splices cellType=LHCNM2D insertLength=il200 readType=r2x75 rep=rep1
 		type bam
@@ -918,7 +918,7 @@ html wgEncodeCaltechRnaSeq.new
 
 		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2
 		parent wgEncodeCaltechRnaSeqViewAligns off
-		longLabel LHCN-M2 cycling paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
+		longLabel LHCN-M2 myoblast paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
                 shortLabel LHCN 2x75 A 1
 		subGroups view=Aligns cellType=LHCNM2 insertLength=il200 readType=r2x75 rep=rep1
 		type bam
@@ -927,7 +927,7 @@ html wgEncodeCaltechRnaSeq.new
 
 		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
 		parent wgEncodeCaltechRnaSeqViewAligns off
-		longLabel LHCN-M2 7 days paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
+		longLabel LHCN-M2 myocyte 7 days paired read RNA-seq Alignments Rep 1 from ENCODE/Caltech
                 shortLabel LHCND 2x75 A 1
 		subGroups view=Aligns cellType=LHCNM2D insertLength=il200 readType=r2x75 rep=rep1
 		type bam
@@ -1509,7 +1509,7 @@ html wgEncodeCaltechRnaSeq.new
 
 		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1
 		parent wgEncodeCaltechRnaSeqViewSignal off
-		longLabel LHCN-M2 7 days paired read RNA-seq Signal Rep 1 from ENCODE/Caltech 
+		longLabel LHCN-M2 myocyte 7 days paired read RNA-seq Signal Rep 1 from ENCODE/Caltech 
                 shortLabel LHCND 2x75 Sg 1
 		subGroups view=Signal cellType=LHCNM2D insertLength=il200 readType=r2x75 rep=rep1
 		type bigWig 1.000000 287591.000000
@@ -1518,7 +1518,7 @@ html wgEncodeCaltechRnaSeq.new
 
 		track wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
 		parent wgEncodeCaltechRnaSeqViewSignal off
-		longLabel LHCN-M2 cycling paired read RNA-seq Signal Rep 1 from ENCODE/Caltech 
+		longLabel LHCN-M2 myoblast paired read RNA-seq Signal Rep 1 from ENCODE/Caltech 
                 shortLabel LHCN 2x75 Sg 1
 		subGroups view=Signal cellType=LHCNM2 insertLength=il200 readType=r2x75 rep=rep1
 		type bigWig 1.000000 286185.000000
