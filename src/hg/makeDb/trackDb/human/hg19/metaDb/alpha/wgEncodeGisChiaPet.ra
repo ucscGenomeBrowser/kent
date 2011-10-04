@@ -1,3 +1,8 @@
+metaObject wgEncodeGisChiaPet
+objType composite
+composite wgEncodeGisChiaPet
+expVars lab,dataType,cell,antibody
+
 metaObject wgEncodeGisChiaPetHct116Pol2AlnRep1
 objType file
 antibody Pol2
@@ -7,6 +12,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001427
+expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2AlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -25,6 +32,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001427
+expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2FastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -43,6 +52,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001427
+expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2FastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -61,6 +72,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001427
+expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2InteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -80,6 +93,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001427
+expId 1427
 fileName wgEncodeGisChiaPetHct116Pol2SigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -99,6 +114,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001426
+expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2AlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -117,6 +134,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001426
+expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2FastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -135,6 +154,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001426
+expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2FastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -153,6 +174,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001426
+expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2InteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -172,6 +195,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001426
+expId 1426
 fileName wgEncodeGisChiaPetHelas3Pol2SigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -191,6 +216,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002075
+expId 2075
 fileName wgEncodeGisChiaPetK562CtcfAlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -209,6 +236,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002075
+expId 2075
 fileName wgEncodeGisChiaPetK562CtcfFastqRd1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -226,6 +255,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002075
+expId 2075
 fileName wgEncodeGisChiaPetK562CtcfFastqRd2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -243,6 +274,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002075
+expId 2075
 fileName wgEncodeGisChiaPetK562CtcfInteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -262,6 +295,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002075
+expId 2075
 fileName wgEncodeGisChiaPetK562CtcfSigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -282,6 +317,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2AlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -301,6 +338,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2AlnRep2.bam
 grant Ruan
 lab GIS-Ruan
@@ -320,6 +359,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -339,6 +380,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd1Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -358,6 +401,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -377,6 +422,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2FastqRd2Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -396,6 +443,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2InteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -416,6 +465,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2InteractionsRep2.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -436,6 +487,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2SigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -456,6 +509,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
+dccAccession wgEncodeEH001428
+expId 1428
 fileName wgEncodeGisChiaPetK562Pol2SigRep2.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -475,6 +530,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfAlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -493,6 +550,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfAlnRep2.bam
 grant Ruan
 lab GIS-Ruan
@@ -511,6 +570,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -529,6 +590,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd1Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -547,6 +610,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -565,6 +630,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfFastqRd2Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -583,6 +650,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfInteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -602,6 +671,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfInteractionsRep2.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -621,6 +692,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfSigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -640,6 +713,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
+dccAccession wgEncodeEH002076
+expId 2076
 fileName wgEncodeGisChiaPetMcf7CtcfSigRep2.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -659,6 +734,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaAlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -677,6 +754,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaAlnRep2.bam
 grant Ruan
 lab GIS-Ruan
@@ -695,6 +774,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaAlnRep3.bam
 grant Ruan
 lab GIS-Ruan
@@ -713,6 +794,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -731,6 +814,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -749,6 +834,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd1Rep3.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -767,6 +854,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -785,6 +874,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -803,6 +894,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaFastqRd2Rep3.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -821,6 +914,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -840,6 +935,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep2.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -859,6 +956,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaInteractionsRep3.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -878,6 +977,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -897,6 +998,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep2.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -916,6 +1019,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001429
+expId 1429
 fileName wgEncodeGisChiaPetMcf7EraaSigRep3.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -935,6 +1040,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2AlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -953,6 +1060,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2AlnRep2.bam
 grant Ruan
 lab GIS-Ruan
@@ -971,6 +1080,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2AlnRep3.bam
 grant Ruan
 lab GIS-Ruan
@@ -989,6 +1100,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2AlnRep4.bam
 grant Ruan
 lab GIS-Ruan
@@ -1007,6 +1120,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1025,6 +1140,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1043,6 +1160,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep3.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1061,6 +1180,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd1Rep4.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1079,6 +1200,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1097,6 +1220,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1115,6 +1240,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep3.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1133,6 +1260,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2FastqRd2Rep4.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1151,6 +1280,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -1170,6 +1301,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -1189,6 +1322,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep3.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -1208,6 +1343,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep4.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -1227,6 +1364,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -1246,6 +1385,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep2.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -1265,6 +1406,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep3.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -1284,6 +1427,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH001430
+expId 1430
 fileName wgEncodeGisChiaPetMcf7Pol2SigRep4.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -1303,6 +1448,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001431
+expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2AlnRep1.bam
 grant Ruan
 lab GIS-Ruan
@@ -1321,6 +1468,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001431
+expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2FastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1339,6 +1488,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001431
+expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2FastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
@@ -1357,6 +1508,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001431
+expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2InteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
@@ -1376,6 +1529,8 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEH001431
+expId 1431
 fileName wgEncodeGisChiaPetNb4Pol2SigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
@@ -1386,4 +1541,4 @@ subId 4873
 tableName wgEncodeGisChiaPetNb4Pol2SigRep1
 view Signal
 
-# MAGIC: -2130524945
+# MAGIC: 991376878

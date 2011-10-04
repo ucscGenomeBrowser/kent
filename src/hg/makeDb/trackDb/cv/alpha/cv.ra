@@ -7782,7 +7782,7 @@ targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
 validation TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
 
-term USF1_(SC-229)
+term USF-1
 tag USF1
 type Antibody
 target USF1
@@ -9035,29 +9035,32 @@ type treatment
 #label Micrococcal nuclease # proposed
 label MNase
 
-term Myoblast
-tag MYB
-description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold)
-type treatment
+# DEAR CV MAVEN, we are retiring these for now.  The treatment is being applied to cells that do not differentiate. 
+# Mouse and human are having different treatments.
 
-term Myocyte_24h
-tag MYC24H
-description Myocytes differentiated from myoblasts for 24 hours (Wold)
-type treatment
+#term Myoblast
+#tag MYB
+#description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold)
+#type treatment
 
-term Myocyte_60h
-tag MYC60H
-description Myocytes differentiated from myoblasts for 60 hours (Wold)
-type treatment
+#term Myocyte_24h
+#tag MYC24H
+#description Myocytes differentiated from myoblasts for 24 hours (Wold)
+#type treatment
 
-term Myocyte_5d
-tag MYC5D
-description Myocytes differentiated from myoblasts for 5 days (Wold)
-type treatment
+#term Myocyte_60h
+#tag MYC60H
+#description Myocytes differentiated from myoblasts for 60 hours (Wold)
+#type treatment
 
-term Myocyte_7d
-tag MYC7D
-description Myocytes differentiated from myoblasts for 7 days (Wold)
+#term Myocyte_5d
+#tag MYC5D
+#description Myocytes differentiated from myoblasts for 5 days (Wold)
+#type treatment
+
+term DIFF_7d
+tag DIFF7D
+description Myocytes differentiated from myoblasts for 7 days. See specific cell protocol for treatment details. (Wold)
 type treatment
 
 

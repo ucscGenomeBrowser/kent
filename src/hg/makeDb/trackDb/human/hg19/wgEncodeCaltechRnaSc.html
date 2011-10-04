@@ -2,36 +2,41 @@
 
 <P>This track is produced as part of the ENCODE Project. 
 Describe the project here.
- </P>
+A major goal of the ENCODE project is the complete characterization and understanding of the regulation and dynamics of the human transcriptome.
+High-throughput sequencing of reverse-transcribed RNA molecules (RNA-seq) has revolutionized work in this area by providing a genome-wide digital readout of transcription at base-pair resolution.
+However, such measurements are typically performed on population consisting of a large number of cells thus the readout is the average of the transcriptome profiles of individual cells.
+This masks potentially important cell-to-cell variation in transcript abundance, allele expression bias, dynamic response to external stimuli, etc. In order to adress these issues,
+we have generated single-cell RNA-seq measurements for invidual cells from ENCODE cell lines.
+</P>
  
 
 <H2>Display Conventions and Configuration</H2>
+<H2>Display Conventions and Configuration</H2>
 <P>
-This track is a multi-view composite track that contains multiple data 
-<EM>views</EM>.  For each view, there are multiple subtracks that
+This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
 display individually on the browser.  Instructions for configuring multi-view
-tracks are <A href="http://genome.ucsc.edu/goldenPath/help/multiView.html" target="_BLANK">here</A>.
+tracks are <A href="http://genome-test.cse.ucsc.edu/goldenPath/help/multiView.html" target="_BLANK">here</A>.
 The following views are in this track:
+</P><DL>
+<DT><I>Raw Signal</I>
+</DT><DD>Density graph (wiggle) of read coverage.
+</DD></DL></DT>
+
+<H2>Downloadable Files</H2>
+
+<P>The following files can be found on the <A target="_BLANK" href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechSCRnaSeq/">downloads page</A>.
 </P>
 
-<DL>
-<DT><I>Alignments</I></DT>
-<DD>The Alignments view shows reads aligned to the genome. Alignments are colored by cell type.  
-The tags used in this file are: INSERT YOUR TAGS HERE. 
-See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> 
-for more information about the SAM Bowtie output (including other tags) and the 
-<a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on 
-the SAM/BAM file format.</DD>
-</DL>
-<DL>
-<DT><I>Plus Raw Signal (WILL YOU HAVE THESE VIEWS)</I></DT>
-<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (Read Per Million, RPM) for reads aligning to the forward strand.
-<DT><I>Minus Raw Signal</I></DT>
-<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (Read Per Million, RPM) for reads aligning to the reverse strand.
-</DL>
-<DT><I>Splice Sites (WILL YOU HAVE THIS VIEW)</I></DT>
-<DD>Subset of aligned reads that crosses splice junctions.</DD>
-</DL>
+<P>
+<H3>Raw Reads, Alignments and Coverage Tracks:</H3>
+<DD><b>*.fastq</b> - raw sequence files in fastq format with phred33 quality scores<br></DD>
+<DD><b>*.BigWig</b> - read density files (<I>RawSignal</I> view, BigWig format; "plus" and "minus" versions provided for stranded data)<br></DD>
+<DD><b>*.bam</b> - all alignments in <A target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf">SAM/BAM format</A> (<I>Alignments</I> view)<br></DD>
+
+<H3>Expression Estimates and Transcript Models (Cufflinks): </H3>
+<DD><b>*.genes.FPKM</b> - expression level estimates for GENCODE CRCh37.v7 genes in FPKM (Fragments Per Kilobase per Million fragments)<br></DD>
+</DT>
 
 <H2>Methods</H2>
 
@@ -39,26 +44,10 @@ the SAM/BAM file format.</DD>
 
 <P> 
 Cells were grown according to the approved <A href="http://genome.ucsc.edu/ENCODE/protocols/cell" target="_BLANK">ENCODE cell culture protocols</A> 
-
+Single GM12878 cells from suspension culture are aspirated with a micropipette.  The cell is deposited into a cell lysis/dT priming solution under visual observation to confirm the presence of a single cell.  The lysate is then frozen on dry ice and stored at -80C until processing.  After denaturation at 70C, first strand reverse transcription is performed with a template switching enzyme (Clontech).  18 cycles of PCR are used to amplify the cDNA into a double stranded library.  The amplified library is fragmented using transposome-mediated “tagmentation” (Epicentre), which simultaneously fragments and attaches Illumina sequencing primer sequences to the cDNA.  The fragmented cDNA (average size 300 bp) is amplified for an additional 9 cycles using primers which incorporate bridge PCR sequences and multiplex bar codes.  The final product is cleaned up using SPRI beads and submitted for bridge PCR cluster formation on an Illumina flow cell. 
+</P>
 <H3>Data Processing and Analysis</H3>
  
-
-<H2>Downloadable Files</H2>
-
-<P>The following files can be found on the <A target="_BLANK" href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeCaltechSCRnaSeq/">downloads page</A>.
-IS THIS LIST ACCURATE?
-</P>
-
-<dl>
-<DD><b>.fastq</b> - raw sequence files in fastq format with phred33 quality scores.<br></DD>
-<DD><b>Junctions.bedRnaElements</b> - bed file containing TopHat-defined splice junctions.<br></DD>
-<DD><b>TranscriptDeNovo.gtf</b> - a gtf file containing transcript models and expression estimates in FPKM (Fragments Per Kilobase per Million reads) produced by Cufflinks in de novo mode<br></DD>
-<DD><b>TranscriptGencV3c.gtf</b> - expression level estimates at the transcript level for the GENCODE CRCh37.v3c annotation in gtf format  <br></DD>
-<DD><b>GenesDeNovo.gtf</b> - expression estimates for genes defined by Cufflinks in de novo mode in gtf format<br></DD>
-<DD><b>GeneGencV3c.gtf</b> - expression level estimates at the gene level for the GENCODE CRCh37.v3c annotation in gtf format <br></DD>
-<DD><b>ExonGencV3c.gtf</b> - expression level estimates for GENCODE CRCh37.v3c exons in gtf format derived by summing the expression levels in FPKM for all transcripts containing a given exon. <br></DD>
-<DD><b>TSS.gtf</b> - expression level estimates for GENCODE CRCh37.v3c transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS. <br></DD>
-</dl>
 
 <H2>Verification</H2>
 

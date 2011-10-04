@@ -342,6 +342,7 @@ lab SunyAlbany
 labVersion SC_5261 antibody
 md5sum bf0e53d650d511ad6c07739bc6c35ceb
 objStatus replaced
+origAssembly hg18
 project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
@@ -363,6 +364,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 md5sum cf0e4f737f34a8220d4ef1a71e8ec899
+origAssembly hg18
 project wgEncode
 subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
@@ -386,6 +388,7 @@ lab SunyAlbany
 labVersion Input
 md5sum b71a86f0bcdcf76688cee5279f498c71
 objStatus replaced
+origAssembly hg18
 project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
@@ -407,6 +410,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 md5sum 56bc3f4b1ed9b7339a19448da6146d9b
+origAssembly hg18
 project wgEncode
 subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
@@ -430,6 +434,7 @@ lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 md5sum a2f9f597d81cbac4a22ab3f3bfb15a75
 objStatus replaced
+origAssembly hg18
 project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
@@ -451,6 +456,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 md5sum 1a9849cf46a24b768f2be246b290c77b
+origAssembly hg18
 project wgEncode
 subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
@@ -1101,4 +1107,4 @@ submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Val
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 view RbpAssocRna
 
-# MAGIC: -2088375313
+# MAGIC: -1243231951
