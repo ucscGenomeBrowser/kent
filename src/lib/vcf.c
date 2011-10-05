@@ -314,10 +314,10 @@ else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
     boolean isFilter = startsWith("##FILTER", line);
     if (regexMatchSubstr(line, filterOrAltRegex, substrs, ArraySize(substrs)))
 	{
-	// substrs[2] is ID/key, substrs[3] is Description.
+	// substrs[2] is ID/key, substrs[4] is Description.
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
 	def->key = vcfFileCloneSubstr(vcff, line, substrs[2]);
-	def->description = vcfFileCloneSubstr(vcff, line, substrs[3]);
+	def->description = vcfFileCloneSubstr(vcff, line, substrs[4]);
 	slAddHead((isFilter ? &(vcff->filterDefs) : &(vcff->altDefs)), def);
 	}
     else
