@@ -13,10 +13,12 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
 fileName wgEncodeOpenChromChipA549CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 setType exp
@@ -33,10 +35,12 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
 fileName wgEncodeOpenChromChipA549CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 setType exp
@@ -53,6 +57,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
 fileName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -73,6 +79,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
 fileName wgEncodeOpenChromChipA549CtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -94,6 +102,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
 fileName wgEncodeOpenChromChipA549CtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -113,6 +123,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
 fileName wgEncodeOpenChromChipA549CtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -132,6 +144,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
 fileName wgEncodeOpenChromChipA549CtcfSig.bigWig
 grant Crawford
 lab UT-A
@@ -152,10 +166,12 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH002077
+expId 2077
 fileName wgEncodeOpenChromChipA549InputAln.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 setType input
 subId 4906
@@ -171,6 +187,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH002077
+expId 2077
 fileName wgEncodeOpenChromChipA549InputRawData.fastq.gz
 grant Crawford
 lab UT-A
@@ -189,6 +207,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH002077
+expId 2077
 fileName wgEncodeOpenChromChipA549InputSig.bigWig
 grant Crawford
 lab UT-A
@@ -209,10 +229,12 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
 fileName wgEncodeOpenChromChipA549Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 setType exp
@@ -229,10 +251,12 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
 fileName wgEncodeOpenChromChipA549Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 setType exp
@@ -249,6 +273,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
 fileName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
@@ -269,6 +295,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
 fileName wgEncodeOpenChromChipA549Pol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
@@ -290,6 +318,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
 fileName wgEncodeOpenChromChipA549Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
@@ -309,6 +339,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
 fileName wgEncodeOpenChromChipA549Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
@@ -328,6 +360,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
 fileName wgEncodeOpenChromChipA549Pol2Sig.bigWig
 grant Crawford
 lab UT-A
@@ -7271,4 +7305,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 1956219629
+# MAGIC: -1222874610
