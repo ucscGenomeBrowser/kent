@@ -2148,6 +2148,9 @@ names endometrial_cancer_tumor_cells_-_5,skin_cancer_tumor_cells_-_7,pancreatic_
 name lincRNAsExpGroups
 type groupings
 all lincRNAsExpAll
+combine lincRNAsExpByTissueMedian
+combine.default  lincRNAsExpByTissueMedian
+
 
 name lincRNAsExpAll
 type all
@@ -2155,4 +2158,11 @@ description All Arrays
 expIds 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,
 groupSizes 1,1,1,1,1,1,1,1,1,1,1 ,1,1,1,1,1,1,1,1,1,1,1,
 names adipose,adrenal,brain,breast,colon,heart,kidney,liver,lung,lymphNode,ovary,prostate,skeletalMuscle,whiteBloodCell,testes,thyroid,testes_R,brain_R,placenta_R,foreskin_R,hLF_r2,hLF_r1,
+
+name lincRNAsExpByTissueMedian
+type combine median
+description Arrays Grouped By Tissue Median
+expIds 0,1,2,18,3, 4,5,6,7,8,9,10,11,12,13, 14,16,  15,17,19,   20,21,
+groupSizes 1,1,2,1, 1,1,1,1,1,1,1,1,1,1,      2,     1,1,1,      2,
+names adipose,adrenal,brain,breast, colon,heart,kidney,liver,lung,lymphNode,ovary,prostate,skeletalMuscle,whiteBloodCell,  testes,   thyroid,placenta_R,foreskin_R,   hLF,
 
