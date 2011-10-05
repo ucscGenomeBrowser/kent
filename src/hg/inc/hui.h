@@ -1054,8 +1054,6 @@ struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
             uses:  defaultLimits: function param if no tdb limits settings found)
    The 'and' param allows stringing multiple where clauses together */
 
-#define ALL_SCORE_FILTERS_LOGIC
-#ifdef ALL_SCORE_FILTERS_LOGIC
 struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and);
 /* creates the where clause condition to gather together all random double filters
    Filters are expected to follow
@@ -1065,7 +1063,9 @@ struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, st
         {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
             uses:  defaultLimits: function param if no tdb limits settings found)
    The 'and' param and dyString in/out allows stringing multiple where clauses together */
-#endif///def ALL_SCORE_FILTERS_LOGIC
+
+boolean encodePeakHasCfgUi(struct trackDb *tdb);
+// Confirms that this track has encode Peak cfgUI
 
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */

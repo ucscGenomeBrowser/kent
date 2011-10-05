@@ -4015,6 +4015,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     boolean checkedCB = fourStateChecked(fourState);
     boolean enabledCB = fourStateEnabled(fourState);
     boolean visibleCB = fourStateVisible(fourState);
+    membership_t *membership = subgroupMembershipGet(subtrack);
     eCfgType cType = cfgTypeFromTdb(subtrack,FALSE);
     if (cType != cfgNone)
         {
@@ -4024,12 +4025,22 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         ||  regexMatch(subtrack->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
         ||  regexMatch(subtrack->track, "^multiz")
         ||  SETTING_IS_OFF(trackDbSettingClosestToHome(subtrack, "configureByPopup")))
+            cType = cfgNone;
+        else if (membersForAll->members[dimV])
+            {
+            if (-1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
+                {  // Don't make a configurable subtrack if there is only one in the view (assumes view is configurable)
+                if (slCount(membersForAll->members[dimV]->subtrackList[ix]) < 2)
+                    cType = cfgNone;
+                }
+            }
+        else if (slCount(parentTdb->subtracks) < 2 && cfgTypeFromTdb(parentTdb,FALSE) != cfgNone)
+            cType = cfgNone;  // don't bother if there is a single subtrack but the composite is configurable.
     #else///ifndef SUBTRACK_CFG
         if (trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
-    #endif///ndef SUBTRACK_CFG
             cType = cfgNone;
+    #endif///ndef SUBTRACK_CFG
         }
-    membership_t *membership = subgroupMembershipGet(subtrack);
 
     if (sortOrder == NULL && !useDragAndDrop)
         {
@@ -4813,7 +4824,6 @@ return FALSE;
 }
 
 
-#ifdef ALL_SCORE_FILTERS_LOGIC
 static int numericFiltersShowAll(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
                                boolean compositeLevel,char *name, char *title)
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
@@ -4831,7 +4841,7 @@ if (filterSettings)
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
-        if (differentString(filter->name,"noScoreFilter") && differentString(filter->name,"scoreFilter")) // TODO: scoreFilter could be included
+        if (differentString(filter->name,NO_SCORE_FILTER) && differentString(filter->name,SCORE_FILTER)) // TODO: scoreFilter could be included
             {
             char *field = cloneString(filter->name);
             int ix = strlen(field) - strlen("Filter");
@@ -4868,7 +4878,6 @@ if (count > 0)
     puts("</TABLE>");
 return count;
 }
-#endif///def ALL_SCORE_FILTERS_LOGIC
 
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
@@ -4879,12 +4888,10 @@ boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 boolean skipScoreFilter = FALSE;
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 
-#ifdef ALL_SCORE_FILTERS_LOGIC
 // Numeric filters are first
 boolean isBoxOpened = FALSE;
 if (numericFiltersShowAll(cart, tdb, &isBoxOpened, boxed, compositeLevel, name, title) > 0)
     skipScoreFilter = TRUE;
-#endif///def ALL_SCORE_FILTERS_LOGIC
 
 // Add any multi-selects next
 if(filterBySet != NULL)
@@ -4903,10 +4910,8 @@ if(filterBySet != NULL)
 // FIXME scoreFilter should be implemented inside numericFilters and is currently specificly excluded to avoid unexpected changes
 if (skipScoreFilter)
     {
-    #ifdef ALL_SCORE_FILTERS_LOGIC
     if (isBoxOpened)
         cfgEndBox(boxed);
-    #endif///def ALL_SCORE_FILTERS_LOGIC
 
     return; // Cannot have both '*filter' and 'scoreFilter'
     }
@@ -5274,7 +5279,6 @@ if(setting)
 return extraWhere;
 }
 
-#ifdef ALL_SCORE_FILTERS_LOGIC
 struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and)
 /* creates the where clause condition to gather together all random double filters
    Filters are expected to follow
@@ -5309,7 +5313,24 @@ if (filterSettings)
     }
 return extraWhere;
 }
-#endif///def ALL_SCORE_FILTERS_LOGIC
+
+boolean encodePeakHasCfgUi(struct trackDb *tdb)
+// Confirms that this track has encode Peak cfgUI
+{
+if (sameWord("narrowPeak",tdb->type)
+||  sameWord("broadPeak", tdb->type)
+||  sameWord("encodePeak",tdb->type)
+||  sameWord("gappedPeak",tdb->type))
+    {
+    return (trackDbSettingClosestToHome(tdb, SCORE_FILTER )
+        ||  trackDbSettingClosestToHome(tdb, SIGNAL_FILTER)
+        ||  trackDbSettingClosestToHome(tdb, PVALUE_FILTER)
+        ||  trackDbSettingClosestToHome(tdb, QVALUE_FILTER)
+        ||  trackDbSettingClosestToHome(tdb, SCORE_FILTER ));
+    }
+    return FALSE;
+}
+
 
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */

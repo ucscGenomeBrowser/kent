@@ -701,10 +701,7 @@ else if(startsWith("netAlign", type)
 else if(sameWord("bed5FloatScore",       type)
      || sameWord("bed5FloatScoreWithFdr",type))
     cType = cfgBedScore;
-else if(sameWord("narrowPeak",type)
-     || sameWord("broadPeak", type)
-     || sameWord("encodePeak",type)
-     || sameWord("gappedPeak",type))
+else if(encodePeakHasCfgUi(tdb))
     cType = cfgPeak;
 else if(startsWithWord("genePred",type))
         cType = cfgGenePred;
