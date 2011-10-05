@@ -1487,7 +1487,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4401 dateSubmitted=2011-06-25
 
-        track wgEncodeUwDnaseCd20PosHotspotsRep2
+        track wgEncodeUwDnaseCd20ro01778HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel CD20+ Hspt 2
         longLabel CD20+ DNaseI HS Hotspots Rep 2 from ENCODE/UW
@@ -1495,6 +1495,8 @@ wgEncode 1
         type broadPeak
         origAssembly hg19
         # subId=4400 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseCd20PosHotspotsRep2 wong Tue Oct  4 16:34:48 2011
+        # was wgEncodeUwDnaseCD20ro01778HotspotsRep2 wong Tue Oct  4 16:39:34 2011
 
         track wgEncodeUwDnaseMonocd14HotspotsRep1V2
         parent wgEncodeUwDnaseViewHot off
@@ -2980,7 +2982,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4401 dateSubmitted=2011-06-25
 
-        track wgEncodeUwDnaseCd20PosPkRep2
+        track wgEncodeUwDnaseCd20ro01778PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD20+ Pk 2
         longLabel CD20+ DNaseI HS Peaks Rep 2 from ENCODE/UW
@@ -2988,6 +2990,8 @@ wgEncode 1
         type narrowPeak
         origAssembly hg19
         # subId=4400 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseCd20PosPkRep2 wong Tue Oct  4 16:34:48 2011
+        # was wgEncodeUwDnaseCD20ro01778PkRep2 wong Tue Oct  4 16:39:34 2011
 
         track wgEncodeUwDnaseMonocd14PkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
@@ -4475,7 +4479,7 @@ wgEncode 1
         origAssembly hg19
         # subId=4401 dateSubmitted=2011-06-25
 
-        track wgEncodeUwDnaseCd20PosRawRep2
+        track wgEncodeUwDnaseCd20ro01778RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CD20+ Sig 2
         longLabel CD20+ DNaseI HS Raw Signal Rep 2 from ENCODE/UW
@@ -4483,6 +4487,8 @@ wgEncode 1
         type bigWig 1.000000 31470.000000
         origAssembly hg19
         # subId=4400 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseCd20PosRawRep2 wong Tue Oct  4 16:34:48 2011
+        # was wgEncodeUwDnaseCD20ro01778RawRep2 wong Tue Oct  4 16:39:34 2011
 
         track wgEncodeUwDnaseMonocd14RawRep1V2
         parent wgEncodeUwDnaseViewzRaw off

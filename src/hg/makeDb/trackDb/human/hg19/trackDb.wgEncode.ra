@@ -174,8 +174,8 @@ include wgEncodeUchicagoTfbs.ra
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra public
-include wgEncodeSunyAlbanyGeneSt.new.ra alpha,beta
+include wgEncodeSunyAlbanyGeneSt.ra beta,public
+include wgEncodeSunyAlbanyGeneSt.new.ra alpha
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra
