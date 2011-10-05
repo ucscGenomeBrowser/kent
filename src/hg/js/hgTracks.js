@@ -2335,14 +2335,19 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
-            if(selectedMenuItem && rec && rec["configureBy"] != 'none') {
+            if(selectedMenuItem && rec) {
                 // Add cfg options at just shy of end...
+                // configureBy==none,         subtracks get folder, stand-alones get nothing
+                // configureBy==clickThrough, subtracks get folder, stand-alones get wrench but it will not be a popup
+                // configureBy==popup         subtracks get wrench and folder, stand-alones get wrench as popup
                 var o = new Object();
                 if(tdbIsLeaf(rec)) {
-                    o[makeImgTag("wrench.png") + " Configure " + rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+                    if ( rec["configureBy"] != 'none'
+                    &&  (rec["configureBy"] != 'clickThrough' || rec.parentTrack == undefined))
+                        o[makeImgTag("wrench.png") + " Configure " + rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
                     if(rec.parentTrack != undefined)
                         o[makeImgTag("folderWrench.png") + " Configure " + rec.parentLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-                } else
+                } else if (rec["configureBy"] != 'none')
                     o[makeImgTag("folderWrench.png") + " Configure " + rec.shortLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
                 if(jQuery.floatMgr) {
                     o[(selectedMenuItem.id == floatingMenuItem ? selectedImg : blankImg) + " float"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "float"); return true; }};
@@ -2520,16 +2525,9 @@ function handleTrackUi(response, status)
     // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
     // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
     var cleanHtml = response;
-    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
-    var jsFiles = cleanHtml.match(shlurpPattern);
-    cleanHtml = cleanHtml.replace(shlurpPattern,"");
-    shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
-    var jsEmbeded = cleanHtml.match(shlurpPattern);
-    cleanHtml = cleanHtml.replace(shlurpPattern,"");
-    //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
-    shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
-    var cssFiles = cleanHtml.match(shlurpPattern);
-    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+    cleanHtml = stripJsFiles(cleanHtml,   false);   // true means show error msg
+    cleanHtml = stripCssFiles(cleanHtml,  false);
+    cleanHtml = stripJsEmbedded(cleanHtml,false);// NOTE: embeded warnBox msgs will be put into the warnbox
 
     $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>" + cleanHtml + "</div>");
 
@@ -2540,21 +2538,6 @@ function handleTrackUi(response, status)
     // - embedded js should not be in the popup box.
     // - Somethings should be in a popup.ready() function, and this is emulated below, as soon as the cleanHtml is added
     //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
-
-    /* //in open ?  Will load of css work this way?
-    $(cssFiles).each(function (i) {
-        bix = "<LINK rel='STYLESHEET' href='".length;
-        eix = this.lastIndexOf("' TYPE='text/css' />");
-        file = this.substring(bix,eix);
-        $.getScript(file); // Should protect against already loaded files.
-    }); */
-    /* //in open ?  Loads fine, but then dialog gets confused
-    $(jsFiles).each(function (i) {
-        bix = "<script type='text/javascript' SRC='".length;
-        eix = this.lastIndexOf("'></script>");
-        file = this.substring(bix,eix);
-        //$.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
-    });*/
 
     if( ! popUpTrackDescriptionOnly ) {
         var subtrack = tdbIsSubtrack(hgTracks.trackDb[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ

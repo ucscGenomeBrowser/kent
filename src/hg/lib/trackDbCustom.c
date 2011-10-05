@@ -15,6 +15,7 @@
 #include "obscure.h"
 #include "hgMaf.h"
 #include "customTrack.h"
+#include "regexHelper.h"
 
 static char const rcsid[] = "$Id: trackDbCustom.c,v 1.90 2010/05/18 22:37:36 kent Exp $";
 
@@ -700,28 +701,38 @@ else if(startsWith("netAlign", type)
     cType = cfgNetAlign;
 else if(sameWord("bed5FloatScore",       type)
      || sameWord("bed5FloatScoreWithFdr",type))
-    cType = cfgBedScore;
+    {
+    if (bedScoreHasCfgUi(tdb))
+        cType = cfgBedScore;
+    }
 else if(encodePeakHasCfgUi(tdb))
     cType = cfgPeak;
-else if(startsWithWord("genePred",type))
-        cType = cfgGenePred;
+else if(startsWithWord("genePred",type)
+     && !startsWith("encodeGencodeRaceFrags", tdb->track))  // SPECIAL CASE should be handled in trackDb!
+    cType = cfgGenePred;
 else if(sameWord("bedLogR",type)
      || sameWord("peptideMapping", type))
     cType = cfgBedScore;
 else if(startsWithWord("bed", type))
     {
-    char *words[3];
-    int wordCount = chopLine(cloneString( type), words);
     if (trackDbSetting(tdb, "bedFilter") != NULL)
-	   cType = cfgBedFilt;
-    else if ((atoi(words[1]) >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
-         && (wordCount == 3 || !tdbIsTrackUiTopLevel(tdb))) // Historically needed 'bed n .'
+           cType = cfgBedFilt;
+    else
         {
-        cType = cfgBedScore;
+       char *words[3];
+        int wordCount = chopLine(cloneString( type), words);
+        if ((atoi(words[1]) >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
+        && (wordCount >= 3)) // Historically needed 'bed n .'
+            {
+            cType = cfgBedScore;
 
-        // FIXME: UGLY SPECIAL CASE should be handled in trackDb!
-        if (startsWith("encodeGencodeIntron", tdb->track))
-            cType = cfgNone;
+            if (!bedScoreHasCfgUi(tdb))
+                cType = cfgNone;
+
+            // FIXME: UGLY SPECIAL CASE should be handled in trackDb!
+            else if (startsWith("encodeGencodeIntron", tdb->track))
+                cType = cfgNone;
+            }
         }
     }
 else if(startsWith("chain",type))
@@ -743,6 +754,27 @@ if(cType == cfgNone && warnIfNecessary)
         warn("Track type \"%s\" is not yet supported in multi-view composites for %s.",type,tdb->track);
     }
 return cType;
+}
+
+int configurableByPopup(struct trackDb *tdb, eCfgType cfgTypeIfKnown)
+// Is this track configurable by right-click popup, or in hgTrackUi subCfg?
+// returns 0 = no; <0=explicitly blocked;  >0=allowed and will be cfgType
+{
+int ctPopup = (int)cfgTypeIfKnown;
+if (!ctPopup)
+    ctPopup = (int)cfgTypeFromTdb(tdb,FALSE);
+
+if (ctPopup > 0)
+{
+    if (regexMatch(tdb->track, "^snp[0-9]+")     // Special cases to be removed
+    ||  regexMatch(tdb->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
+    ||  regexMatch(tdb->track, "^multiz")
+    ||  startsWith("hapmapSnps", tdb->track)
+    ||  startsWith("hapmapAlleles", tdb->track)
+    ||  SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configureByPopup")))
+        ctPopup *= -1;
+}
+return ctPopup;
 }
 
 char *trackDbSetting(struct trackDb *tdb, char *name)

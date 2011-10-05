@@ -67,6 +67,8 @@ int flatTracksCmp(const void *va, const void *vb)
 {
 const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
+if (a->order == b->order)
+    return tgCmpPriority(a->track,b->track);
 return (a->order - b->order);
 }
 
@@ -291,10 +293,10 @@ if (kindOfChild != kocOrphan)
 jsonHashAddNumber(ele, "hasChildren", slCount(track->tdb->subtracks));
 
 // Configuring?
-if (!configurable || track->hasUi == FALSE)
+int cfgByPopup = configurableByPopup(track->tdb,0);
+if (!configurable || track->hasUi == FALSE || cfgByPopup == 0)
     jsonHashAddString(ele, "configureBy", "none");
-else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
-    regexMatch(track->track, "^snp[0-9]+") || regexMatch(track->track, "^cons[0-9]+way") || regexMatch(track->track, "^multiz") ? "off" : "on"), "off"))
+else if (cfgByPopup < 0)
     jsonHashAddString(ele, "configureBy", "clickThrough");
 else
     jsonHashAddString(ele, "configureBy", "popup");

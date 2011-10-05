@@ -525,29 +525,11 @@ var subCfg = { // subtrack config module.
         var cfg = subCfg.currentCfg;
         subCfg.currentCfg = undefined;
         var cleanHtml = content;
-        var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
-        // DEBUG -------------
-            var jsFiles = cleanHtml.match(shlurpPattern);
-            if (jsFiles && jsFiles.length > 0)
-                alert("jsFiles:'"+jsFiles+"'\n---------------\n"+cleanHtml); // warn() interprets html, etc.
-        // DEBUG -------------
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-        shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
-        // DEBUG -------------
-            var jsEmbeded = cleanHtml.match(shlurpPattern);
-            if (jsEmbeded && jsEmbeded.length > 0)
-                alert("jsEmbeded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
-        // DEBUG -------------
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-        shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
-        // DEBUG -------------
-            var cssFiles = cleanHtml.match(shlurpPattern);
-            if (cssFiles && cssFiles.length > 0)
-                alert("cssFiles:'"+cssFiles+"'\n---------------\n"+cleanHtml);
-        // DEBUG -------------
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
+        cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
+        cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
+        cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true
         if (subCfg.visIndependent) {
-            ix = cleanHtml.indexOf('</SELECT>');
+            var ix = cleanHtml.indexOf('</SELECT>');
             if (ix > 0)
                 cleanHtml = cleanHtml.substring(ix+'</SELECT>'.length);
             while(cleanHtml.length > 0) {

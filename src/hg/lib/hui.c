@@ -4021,10 +4021,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         {
     #ifdef SUBTRACK_CFG
         // Turn off configuring for certain track type or if explicitly turned off
-        if (regexMatch(subtrack->track, "^snp[0-9]+")     // Special cases to be removed
-        ||  regexMatch(subtrack->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
-        ||  regexMatch(subtrack->track, "^multiz")
-        ||  SETTING_IS_OFF(trackDbSettingClosestToHome(subtrack, "configureByPopup")))
+        int cfgSubterack = configurableByPopup(subtrack,cType);
+        if (cfgSubterack <= 0)
             cType = cfgNone;
         else if (membersForAll->members[dimV])
             {
@@ -4880,6 +4878,44 @@ return count;
 }
 
 
+boolean bedScoreHasCfgUi(struct trackDb *tdb)
+// Confirms that this track has a bedScore Cfg UI
+{
+// Assumes that cfgType == cfgBedScore
+if (trackDbSettingClosestToHome(tdb, FILTER_BY))
+    return TRUE;
+if (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN))
+    return TRUE;
+boolean blocked = FALSE;
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+if (filterSettings != NULL)
+    {
+    boolean one = FALSE;
+    struct slName *oneFilter = filterSettings;
+    for (;oneFilter != NULL;oneFilter=oneFilter->next)
+        {
+        if (sameWord(NO_SCORE_FILTER,oneFilter->name))
+            {
+            blocked = TRUE;
+            continue;
+            }
+        if (differentString(oneFilter->name,SCORE_FILTER)) // scoreFilter is implicit but could be blocked
+            {
+            one = TRUE;
+            break;
+            }
+        }
+    slNameFreeList(&filterSettings);
+    if (one)
+        return TRUE;
+    }
+if (!blocked)  // scoreFilter is implicit unless NO_SCORE_FILTER
+    return TRUE;
+
+return FALSE;
+}
+
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
@@ -5391,7 +5427,6 @@ void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *tit
 char varName[64];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 char *geneLabel = cartUsualStringClosestToHome(cart, tdb,compositeLevel, "label", "gene");
-
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 if (sameString(name, "acembly"))

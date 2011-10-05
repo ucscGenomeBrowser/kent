@@ -1011,6 +1011,9 @@ void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var, struct cart 
 void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed);
 /* Put up UI for an bed track with filters. */
 
+boolean bedScoreHasCfgUi(struct trackDb *tdb);
+// Confirms that this track has a bedScore Cfg UI
+
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 

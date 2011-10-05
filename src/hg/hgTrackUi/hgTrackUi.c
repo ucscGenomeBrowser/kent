@@ -2515,14 +2515,15 @@ else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (sameString(track, "ancientR"))
     ancientRUi(tdb);
-else if (sameString(track, "zoo") || sameString(track, "zooNew" ))
+else if (sameString(track, "zoo")
+     ||  sameString(track, "zooNew" ))
     zooWiggleUi(tdb);
 else if (sameString(track, "humMusL")
-     ||  sameString( track, "musHumL")
-     ||  sameString( track, "regpotent")
-     ||  sameString( track, "mm3Rn2L" )
-     ||  sameString( track, "mm3Hg15L" )
-     ||  sameString( track, "hg15Mm3L" ))
+     ||  sameString(track, "musHumL")
+     ||  sameString(track, "regpotent")
+     ||  sameString(track, "mm3Rn2L" )
+     ||  sameString(track, "mm3Hg15L" )
+     ||  sameString(track, "hg15Mm3L" ))
     humMusUi(tdb,7);
 else if (startsWith("chain", track)
      || endsWith("chainSelf", track))

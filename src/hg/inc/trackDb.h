@@ -411,6 +411,10 @@ eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
 /* determine what kind of track specific configuration is needed,
    warn if not multi-view compatible */
 
+int configurableByPopup(struct trackDb *tdb, eCfgType cfgTypeIfKnown);
+// Is this track configurable by right-click popup, or in hgTrackUi subCfg?
+// returns 0 = no; <0=explicitly blocked;  >0=allowed and will be cfgType
+
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
 /* apply an trackOverride trackDb entry to a trackDb entry */
 

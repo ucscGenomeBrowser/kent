@@ -1066,6 +1066,65 @@ function codonColoringChanged(name)
 }
 
 
+function stripJsFiles(returnedHtml,showError)
+{ // strips javascript files from html returned by ajax
+    var cleanHtml = returnedHtml;
+    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
+    if (showError) {
+        var jsFiles = cleanHtml.match(shlurpPattern);
+        if (jsFiles && jsFiles.length > 0)
+            alert("jsFiles:'"+jsFiles+"'\n---------------\n"+cleanHtml); // warn() interprets html, etc.
+    }
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+
+    return cleanHtml;
+}
+
+function stripCssFiles(returnedHtml,showError)
+{ // strips csst files from html returned by ajax
+    var cleanHtml = returnedHtml;
+    var shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
+    if (showError) {
+        var cssFiles = cleanHtml.match(shlurpPattern);
+        if (cssFiles && cssFiles.length > 0)
+            alert("cssFiles:'"+cssFiles+"'\n---------------\n"+cleanHtml);
+    }
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+
+    return cleanHtml;
+}
+
+function stripJsEmbedded(returnedHtml,showError)
+{ // strips embedded javascript from html returned by ajax
+  // NOTE: any warnBox style errors will be put into the warnBox
+    var cleanHtml = returnedHtml;
+    // embedded javascript?
+    while(cleanHtml.length > 0) {
+        var ix = cleanHtml.search(/\<script type=\'text\/javascript\'\>/i);
+        if (ix == -1)
+            break;
+        var ix2 = cleanHtml.search(/\<\/script\>/i);
+        if (ix2 == -1)
+            break;
+        var jsEmbeded = cleanHtml.slice(ix,ix2+"</script>".length);
+        if (jsEmbeded && jsEmbeded.length > 0) {
+            // ignore warnBoxes
+            if(-1 == jsEmbeded.indexOf("showWarnBox")) {
+                if (showError)
+                    alert("jsEmbedded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
+            } else {
+                var ix3 = cleanHtml.indexOf('<P>',ix);
+                var ix4 = cleanHtml.indexOf('</P>',ix);
+                var warnMsg = cleanHtml.slice(ix3+3,ix4-1);
+                cleanHtml = cleanHtml.slice(0,ix3) + cleanHtml.slice(ix4+4);
+                warn(warnMsg);
+            }
+        }
+        cleanHtml = cleanHtml.slice(0,ix) + cleanHtml.slice(ix2+"</script>".length);
+    }
+    return cleanHtml;
+}
+
 //////////// Drag and Drop ////////////
 function tableDragAndDropRegister(thisTable)
 {// Initialize a table with tableWithDragAndDrop
