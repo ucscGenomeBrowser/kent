@@ -18,15 +18,44 @@
 
 #ifdef USE_TABIX
 
-static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
+static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues)
+/* Return TRUE and set retValues if cart contains FILTER column values to exclude */
+{
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.exclude_filterColumn", tdb->track);
+if (cartListVarExists(cart, cartVar))
+    {
+    struct slName *selectedValues = cartOptionalSlNameList(cart, cartVar);
+    if (retValues != NULL)
+	*retValues = selectedValues;
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean excludeRecord(struct vcfRecord *record, struct slName *filterValues)
+/* Return TRUE if record's FILTER column value(s) matches one of filterValues (from cart). */
+{
+int i;
+for (i = 0;  i < record->filterCount;  i++)
+    if (slNameInList(filterValues, record->filters[i]))
+	return TRUE;
+return FALSE;
+}
+
+static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
 {
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
 int maxLen = 33;
+struct slName *filterValues = NULL;
+boolean gotFilter = getFilterValues(tdb, &filterValues);
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
+    if (gotFilter && excludeRecord(rec, filterValues))
+	continue;
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     // Insertion sequences can be quite long; abbreviate here for display.
     int len = strlen(pgs->name);
@@ -762,7 +791,7 @@ if (errCatchStart(errCatch))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
 	    {
-	    tg->items = vcfFileToPgSnp(vcff);
+	    tg->items = vcfFileToPgSnp(vcff, tg->tdb);
 	    // pgSnp bases coloring/display decision on count of items:
 	    tg->customInt = slCount(tg->items);
 	    }
