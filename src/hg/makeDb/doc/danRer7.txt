@@ -1022,6 +1022,38 @@ done
     cd /hive/data/genomes/danRer7/bed/multiz8way/frames
     nice hgLoadMafFrames danRer7 multiz8wayFrames multiz8way.mafFrames.gz
 
+############################################################################
+# creating upstream mafs (DONE - 2011-10-04 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer7/goldenPath/multiz8way
+    cd /hive/data/genomes/danRer7/goldenPath/multiz8way
+    # run this bash script
+    cat << '_EOF_' > mkUpstream.sh
+DB=danRer7
+GENE=ensGene
+NWAY=multiz8way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.${GENE}.maf"
+    echo "featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout"
+    featureBits ${DB} ${GENE}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} stdin stdout \
+                -orgs=/hive/data/genomes/${DB}/bed/${NWAY}/species.lst \
+        | gzip -c > upstream${S}.${GENE}.maf.gz
+    echo "done upstream${S}.${GENE}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUpstream.sh
+    time ./mkUpstream.sh
+    #	real    61m16.030s
+
+    # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
+    #	upstream automatic generation
+
 #######################################################################
 # Phylogenetic tree from 8-way (DONE - 2011-01-19 - Hiram)
 # 	We need one tree for all chroms
