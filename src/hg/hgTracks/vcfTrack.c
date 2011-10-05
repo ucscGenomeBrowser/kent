@@ -43,6 +43,25 @@ for (i = 0;  i < record->filterCount;  i++)
 return FALSE;
 }
 
+static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
+/* If a filter is specified in the cart, remove any records that don't pass filter. */
+{
+struct slName *filterValues = NULL;
+boolean gotFilter = getFilterValues(tdb, &filterValues);
+if (!gotFilter)
+    return;
+
+struct vcfRecord *rec, *nextRec, *newList = NULL;
+for (rec = vcff->records;  rec != NULL;  rec = nextRec)
+    {
+    nextRec = rec->next;
+    if (!excludeRecord(rec, filterValues))
+	slAddHead(&newList, rec);
+    }
+slReverse(&newList);
+vcff->records = newList;
+}
+
 static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
@@ -50,12 +69,8 @@ static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
 int maxLen = 33;
-struct slName *filterValues = NULL;
-boolean gotFilter = getFilterValues(tdb, &filterValues);
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
-    if (gotFilter && excludeRecord(rec, filterValues))
-	continue;
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     // Insertion sequences can be quite long; abbreviate here for display.
     int len = strlen(pgs->name);
@@ -786,6 +801,7 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
     if (vcff != NULL)
 	{
+	filterRecords(vcff, tg->tdb);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
