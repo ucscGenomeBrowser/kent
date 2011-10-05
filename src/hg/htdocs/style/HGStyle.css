@@ -53,17 +53,17 @@ A:active IMG {  border-width: 0px; padding: 0px; margin: 0px;}
                 white-space:nowrap; text-indent:10px; padding-top:2px; }
 
 /* OVERALL DEFINITIONS */
-P	{	line-height: 1.1;
-		text-align: justify;
+P	{	line-height: 1.2;
+		text-align: left;
 		color: black;
 		margin-left: 0px;
 }
 P.two	{	line-height: 1.6;
-		text-align: justify;
+		text-align: left;
 		color: black;
 		margin-left: 15px;
 }
-P.leftjustify{	line-height: 1.1;
+P.leftjustify{	line-height: 1.2;
 		text-align: left;
 		color: black;
 		margin-left: 0px;
