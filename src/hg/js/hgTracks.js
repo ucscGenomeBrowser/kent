@@ -1486,44 +1486,30 @@ $(document).ready(function()
         if(jQuery.fn.Watermark) {
             $('#suggest').Watermark("gene");
         }
-        if(newJQuery) {
-            $('input#suggest').autocomplete({
-                                                delay: 500,
-                                                minLength: 2,
-                                                source: ajaxGet(function () {return getDb();}, new Object, true),
-                                                open: function(event, ui) {
-                                                    var pos = $(this).offset().top + $(this).height();
-                                                    if (!isNaN(pos)) {
-                                                        var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
-                                                        var auto = $('.ui-autocomplete');
-                                                        var curHeight = $(auto).children().length * 21;
-                                                        if (curHeight > maxHeight)
-                                                            $(auto).css({maxHeight: maxHeight+'px',overflow:'scroll'});
-                                                        else
-                                                            $(auto).css({maxHeight: 'none',overflow:'hidden'});
-                                                    }
-                                                },
-                                                select: function (event, ui) {
-                                                        setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
-                                                        makeSureSuggestTrackIsVisible();
-                                                        // jQuery('body').css('cursor', 'wait');
-                                                        // document.TrackHeaderForm.submit();
-                                                    }
-                                            });
+        $('input#suggest').autocomplete({
+            delay: 500,
+            minLength: 2,
+            source: ajaxGet(function () {return getDb();}, new Object),
+            open: function(event, ui) {
+                var pos = $(this).offset().top + $(this).height();
+                if (!isNaN(pos)) {
+                    var maxHeight = $(window).height() - pos - 30;  // take off a little more because IE needs it
+                    var auto = $('.ui-autocomplete');
+                    var curHeight = $(auto).children().length * 21;
+                    if (curHeight > maxHeight)
+                        $(auto).css({maxHeight: maxHeight+'px',overflow:'scroll'});
+                    else
+                        $(auto).css({maxHeight: 'none',overflow:'hidden'});
+                }
+            },
+            select: function (event, ui) {
+                    setPosition(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
+                    makeSureSuggestTrackIsVisible();
+                    // jQuery('body').css('cursor', 'wait');
+                    // document.TrackHeaderForm.submit();
+                }
+        });
 
-        } else {
-            $('input#suggest').autocomplete({
-                                                delay: 500,
-                                                minchars: 2,
-                                                ajax_get: ajaxGet(function () {return db;}, new Object, false),
-                                                callback: function (obj) {
-                                                    setPosition(obj.id, commify(getSizeFromCoordinates(obj.id)));
-                                                    makeSureSuggestTrackIsVisible();
-                                                    // jQuery('body').css('cursor', 'wait');
-                                                    // document.TrackHeaderForm.submit();
-                                                }
-                                            });
-        }
         // I want to set focus to the suggest element, but unforunately that prevents PgUp/PgDn from
         // working, which is a major annoyance.
         // $('input#suggest').focus();
@@ -2575,15 +2561,6 @@ function handleTrackUi(response, status)
         popSaveAllVars = getAllVars( $('#hgTrackUiDialog'), subtrack );  // Saves the vars that may get changed by the popup cfg.
 
         // -- popup.ready() -- Here is the place to do things that might otherwise go into a $('#pop').ready() routine!
-        if (!newJQuery) {
-            $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
-                $(this).dropdownchecklist({ firstItemChecksAll: true,
-                        noneIsAll: $(this).hasClass('filterBy'),
-                        maxDropHeight: filterByMaxHeight(this),
-                        emptyText: "Please select ...",
-                        textFormatFunction: ddclTextFormatter });
-            });
-        }
     }
 
     // Searching for some selblance of size suitability
@@ -2619,15 +2596,13 @@ function handleTrackUi(response, status)
                                //     popSaveAllVars = getAllVars( $('#pop'), subtrack );
                                //},
                                open: function () {
-                                    if (newJQuery) {
-                                        if( ! popUpTrackDescriptionOnly ) {
-                                            $('#hgTrackUiDialog').find('.filterBy,.filterComp').each( function(i) {
-                                                if ($(this).hasClass('filterComp'))
-                                                    ddcl.setup(this);
-                                                else
-                                                    ddcl.setup(this, 'noneIsAll');
-                                            });
-                                        }
+                                    if( ! popUpTrackDescriptionOnly ) {
+                                        $('#hgTrackUiDialog').find('.filterBy,.filterComp').each( function(i) {
+                                            if ($(this).hasClass('filterComp'))
+                                                ddcl.setup(this);
+                                            else
+                                                ddcl.setup(this, 'noneIsAll');
+                                        });
                                     }
                                },
                                close: function() {

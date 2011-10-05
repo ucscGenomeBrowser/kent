@@ -177,12 +177,7 @@ var ddcl = {
             }
             $(multiSelect).dropdownchecklist("destroy");
             $(multiSelect).show(); // necessary to get dimensions
-            if (newJQuery)
-                ddcl.setup(multiSelect,'noneIsAll');
-            else
-                $(multiSelect).dropdownchecklist({ firstItemChecksAll: true,
-                                                   noneIsAll: true,
-                                                   maxDropHeight: filterByMaxHeight(multiSelect) });
+            ddcl.setup(multiSelect,'noneIsAll');
         });
     },
 
