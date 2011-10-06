@@ -146,9 +146,7 @@ include wgEncodeUwHistone.new.ra alpha
 include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra public
-include wgEncodeSydhHistone.new.ra alpha,beta
-
+include wgEncodeSydhHistone.ra
 
 # ENCODE TFBS -------------------------------------------
 
