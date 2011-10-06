@@ -1,0 +1,7 @@
+table rgdGene2KeggPathway
+"KEGG pathway cross reference for RGD Genes"
+   (
+   string kgID; 	"Known Gene ID"
+   string locusID; 	"LocusLink ID"
+   string mapID; 	"KEGG pathway map ID"
+   )
