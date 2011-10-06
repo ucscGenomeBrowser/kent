@@ -71,6 +71,16 @@ genotype columns for at least two samples (four haplotypes):
     </UL>
 </UL>
 </P>
+<P><B>Exclude items with QUAL score less than <em>N</em>:</B>
+If the checkbox is checked, then all records whose QUAL column has a
+non-numeric value (e.g. &quot;.&quot;) or a value less than <em>N</em>
+are excluded from display. By default, the checkbox is not checked
+and <em>N</em> is 0.</P>
+<P><B>Exclude items with these FILTER values:</B>
+If the VCF header defines any FILTER codes, then there is a checkbox
+for each code. If checked, then all records with that code in the FILTER
+column are excluded from display. By default, no checkboxes are
+checked, so all records are displayed regardless of FILTER column values.</P>
 <P>
 When you have finished making your configuration changes, click the
 <em>Submit</em> button to return to the annotation track display

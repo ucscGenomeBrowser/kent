@@ -10,7 +10,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.13
+set dir = $genomes/hg19/bed/ucsc.13.2
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -104,6 +104,8 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 
 
@@ -160,19 +162,14 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 # Get the Rfams that overlap with blocks that are syntenic to $Xdb
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
-bedIntersect -aHitAny rfam/rfam.all.bed ${db}.${xdb}.syn.bed rfam/rfam.syntenic.bed
-cat rfam/rfam.syntenic.bed |awk '{ print $4}' > rfam/rfam.syntenic.hits.txt
-pslSomeRecords ${rfam}/${db}/Rfam.human.bestHits.psl \
-    rfam/rfam.syntenic.hits.txt  rfam/rfam.syntenic.psl
-
+bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
+bedToPsl ${db}/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
  
 # Create directories full of alignments split by chromosome.
-mkdir -p est refSeq mrna trna
+mkdir -p est refSeq mrna 
 pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
-bedSplitOnChrom trna.bed trna
-bedSplitOnChrom rfam/rfam.syntenic.bed rfam
 
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
@@ -252,7 +249,7 @@ end
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
-    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna trna/$c.bed trna rfam/$c.bed rfam \
+    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna  \
 	bedToGraph/$c.txg
 end
 
@@ -266,8 +263,6 @@ end
 cat > trim.weights <<end
 refSeq  100
 ccds    50
-trna    50
-rfam    20
 mrna    2
 txOrtho 1
 exoniphy 1
@@ -646,10 +641,13 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
-# Merge back in antibodies
-cat txWalk.bed antibody.bed > abWalk.bed
+# Merge back in antibodies, and add the small, noncoding genes that are not well-represented
+# in GenBank (Rfam, tRNA)
+cat txWalk.bed antibody.bed trna.bed rfam.syntenic.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
-cat txWalk.fa antibody.fa > abWalk.fa
+sequenceForBed -db=$db -bedIn=trna.bed -fastaOut=stdout -upCase -keepName > trna.fa
+sequenceForBed -db=$db -bedIn=rfam.syntenic.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.fa
+cat txWalk.fa antibody.fa trna.fa rfam.syntenic.fa > abWalk.fa
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -660,7 +658,7 @@ txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
 # Create gene info table. Takes 8 seconds
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
-cat mrna/*.psl refSeq/*.psl rfam/*psl trna.psl \
+cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.psl \
       | txInfoAssemble pick.bed pick.tce cdsEvidence/txCdsPredict.tce \
 	altSplice.bed abWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
 
@@ -849,6 +847,11 @@ hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
+
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -1288,6 +1291,9 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
@@ -1313,8 +1319,9 @@ sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
+# move this exit statement to the end of the section to be done next
+#exit $status # BRACKET
+
 
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
@@ -1328,12 +1335,6 @@ ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 
-# Build known genes list for google
-# make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
-
-    cd $genomes/$db/bed
-    rm -rf knownGeneList/$db
-
 # Run hgKnownGeneList to generate the tree of HTML pages
 # under ./knownGeneList/$db 
 
@@ -1345,9 +1346,6 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms

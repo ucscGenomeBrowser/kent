@@ -1498,7 +1498,7 @@ wgEncode 1
         # was wgEncodeUwDnaseCd20PosHotspotsRep2 wong Tue Oct  4 16:34:48 2011
         # was wgEncodeUwDnaseCD20ro01778HotspotsRep2 wong Tue Oct  4 16:39:34 2011
 
-        track wgEncodeUwDnaseMonocd14HotspotsRep1V2
+        track wgEncodeUwDnaseMonocd14ro1746HotspotsRep1V2
         parent wgEncodeUwDnaseViewHot off
         shortLabel Mono-CD14+ Hspt 1
         longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 1 from ENCODE/UW
@@ -1506,8 +1506,9 @@ wgEncode 1
         type broadPeak
         origAssembly hg19
         # subId=4398 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseMonocd14HotspotsRep1V2 wong Wed Oct  5 23:59:20 2011
 
-        track wgEncodeUwDnaseMonocd14HotspotsRep2
+        track wgEncodeUwDnaseMonocd14ro1746HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
         shortLabel Mono-CD14+ Hspt 2
         longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 2 from ENCODE/UW
@@ -1515,6 +1516,7 @@ wgEncode 1
         type broadPeak
         origAssembly hg19
         # subId=4399 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseMonocd14HotspotsRep2 wong Wed Oct  5 23:59:20 2011
 
         track wgEncodeUwDnaseNt2d1HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
@@ -2993,7 +2995,7 @@ wgEncode 1
         # was wgEncodeUwDnaseCd20PosPkRep2 wong Tue Oct  4 16:34:48 2011
         # was wgEncodeUwDnaseCD20ro01778PkRep2 wong Tue Oct  4 16:39:34 2011
 
-        track wgEncodeUwDnaseMonocd14PkRep1V2
+        track wgEncodeUwDnaseMonocd14ro1746PkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Mono-CD14+ Pk 1
         longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 1 from ENCODE/UW
@@ -3001,8 +3003,9 @@ wgEncode 1
         type narrowPeak
         origAssembly hg19
         # subId=4398 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseMonocd14PkRep1V2 wong Wed Oct  5 23:59:20 2011
 
-        track wgEncodeUwDnaseMonocd14PkRep2
+        track wgEncodeUwDnaseMonocd14ro1746PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Mono-CD14+ Pk 2
         longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 2 from ENCODE/UW
@@ -3010,6 +3013,7 @@ wgEncode 1
         type narrowPeak
         origAssembly hg19
         # subId=4399 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseMonocd14PkRep2 wong Wed Oct  5 23:59:20 2011
 
         track wgEncodeUwDnaseNt2d1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
@@ -4490,7 +4494,7 @@ wgEncode 1
         # was wgEncodeUwDnaseCd20PosRawRep2 wong Tue Oct  4 16:34:48 2011
         # was wgEncodeUwDnaseCD20ro01778RawRep2 wong Tue Oct  4 16:39:34 2011
 
-        track wgEncodeUwDnaseMonocd14RawRep1V2
+        track wgEncodeUwDnaseMonocd14ro1746RawRep1V2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Mono-CD14+ Sig 1
         longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 1 from ENCODE/UW
@@ -4498,8 +4502,9 @@ wgEncode 1
         type bigWig 1.000000 41303.000000
         origAssembly hg19
         # subId=4398 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseMonocd14RawRep1V2 wong Wed Oct  5 23:59:21 2011
 
-        track wgEncodeUwDnaseMonocd14RawRep2
+        track wgEncodeUwDnaseMonocd14ro1746RawRep2
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Mono-CD14+ Sig 2
         longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 2 from ENCODE/UW
@@ -4507,6 +4512,7 @@ wgEncode 1
         type bigWig 1.000000 36131.000000
         origAssembly hg19
         # subId=4399 dateSubmitted=2011-06-25
+        # was wgEncodeUwDnaseMonocd14RawRep2 wong Wed Oct  5 23:59:21 2011
 
         track wgEncodeUwDnaseNt2d1RawRep1
         parent wgEncodeUwDnaseViewzRaw off
