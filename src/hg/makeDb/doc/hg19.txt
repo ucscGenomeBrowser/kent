@@ -13783,23 +13783,28 @@ rm bed.tab
 
 
 #################################################################################
-# Rfam (2011-06-01 Melissa Cline)
+# Rfam (2011-10-05 Melissa Cline)
 #
 # This contains genomic alignments of Rfam sequences, from the Rfam group.
 #
 # This data is used in building UCSC Genes.
 #
-#Manual steps:
-#1. Downloaded from http://rfam.sanger.ac.uk/genome/9606#tabview=tab1
-#2. Copied and pasted data from the screen to build an accessionmapping
-#   filethat maps EMBL accessions to familiar chromosome names
-#
-#More-automated steps:
+cd /hive/data/outside/Rfam
+mkdir 111005
+cd 111005
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/Rfam.fasta.gz
+gunzip Rfam.fasta.gz
+grep -i "Homo Sapiens" Rfam.fasta |awk '{ print $1}' |sed 's/^>//' \
+    > human.sequenceIds.txt
+faSomeRecords Rfam.fasta human.sequenceIds.txt Rfam.human.fasta
+gzip Rfam.fasta
+mkdir -p hg19
+blat -q=rna -minIdentity=100 /hive/data/genomes/hg19/hg19.2bit \
+    Rfam.human.fasta hg19/Rfam.human.psl
+pslCDnaFilter -globalNearBest=0.01 -minCover=1.0 hg19/Rfam.human.psl \
+    hg19/Rfam.human.bestHits.psl
+pslToBed hg19/Rfam.human.bestHits.psl hg19/Rfam.human.bestHits.bed
 
-cat accession.mapping.txt     \
-  |awk '{ print " cat asDownloaded/" $1 ".gff |sed " ,
-               sprintf("%c", 39) "s/" $1 "/" $2 "/" sprintf("%c", 39) }' \
-  |bash > Rfam.hg19.gff
 
 
 

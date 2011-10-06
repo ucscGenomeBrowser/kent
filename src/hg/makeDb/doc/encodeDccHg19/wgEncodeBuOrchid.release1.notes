@@ -31,7 +31,7 @@ C') New files (2 downloadables, 2 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/release1/
     NOT on RR but must be placed in:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/
 
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/release1/wgEncodeBuOrchidV1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/release1/wgEncodeBuOrchidV2.bigWig
@@ -43,7 +43,7 @@ D) Additional items:
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/release1/
     should be placed on the RR in (overwritting any existing copy):
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/
 
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/release1/index.html
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBuOrchid/release1/files.txt
