@@ -2,6 +2,7 @@ metaObject wgEncodeSunyAlbanyGeneSt
 objType composite
 composite wgEncodeSunyAlbanyGeneSt
 expVars lab,dataType,cell,antibody
+geoSeriesAccession GSE31724
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 objType table
@@ -25,6 +26,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787549
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2
 objType table
@@ -48,6 +50,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787549
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 objType table
@@ -71,6 +74,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787543
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2
 objType table
@@ -94,6 +98,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787543
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
 objType table
@@ -117,6 +122,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787555
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2
 objType table
@@ -140,6 +146,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787555
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
 objType table
@@ -163,6 +170,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787546
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2
 objType table
@@ -186,6 +194,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787546
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
 objType table
@@ -209,6 +218,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787540
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 objType table
@@ -232,6 +242,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787540
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
 objType table
@@ -255,6 +266,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787552
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2
 objType table
@@ -278,6 +290,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787552
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
 objType table
@@ -301,6 +314,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787537
 
 metaObject wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2
 objType table
@@ -324,6 +338,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787537
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 objType table
@@ -347,6 +362,7 @@ project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787626
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
 objType table
@@ -370,6 +386,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787626
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 objType table
@@ -393,6 +410,7 @@ project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787623
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
 objType table
@@ -416,6 +434,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787623
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 objType table
@@ -439,6 +458,7 @@ project wgEncode
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787620
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
 objType table
@@ -462,6 +482,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787620
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
 objType table
@@ -485,6 +506,7 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787602
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2
 objType table
@@ -508,6 +530,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787602
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna
 objType table
@@ -531,6 +554,7 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787605
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2
 objType table
@@ -554,6 +578,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787605
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
 objType table
@@ -577,6 +602,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787599
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2
 objType table
@@ -600,6 +626,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787599
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
 objType table
@@ -623,6 +650,7 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787596
 
 metaObject wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2
 objType table
@@ -646,6 +674,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787596
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
 objType table
@@ -669,6 +698,7 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787614
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2
 objType table
@@ -692,6 +722,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787614
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
 objType table
@@ -715,6 +746,7 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787617
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2
 objType table
@@ -738,6 +770,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787617
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
 objType table
@@ -761,6 +794,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787611
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2
 objType table
@@ -784,6 +818,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787611
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
 objType table
@@ -807,6 +842,7 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787608
 
 metaObject wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2
 objType table
@@ -830,6 +866,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787608
 
 metaObject wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
 objType table
@@ -853,6 +890,7 @@ project wgEncode
 subId 1613
 tableName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787570
 
 metaObject wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2
 objType table
@@ -876,6 +914,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787570
 
 metaObject wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
 objType table
@@ -899,6 +938,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787564
 
 metaObject wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2
 objType table
@@ -922,6 +962,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787564
 
 metaObject wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
 objType table
@@ -945,6 +986,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787567
 
 metaObject wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2
 objType table
@@ -968,6 +1010,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787567
 
 metaObject wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 objType table
@@ -991,6 +1034,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787561
 
 metaObject wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2
 objType table
@@ -1014,6 +1058,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787561
 
 metaObject wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 objType table
@@ -1037,6 +1082,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787573
 
 metaObject wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2
 objType table
@@ -1060,6 +1106,7 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787573
 
 metaObject wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 objType table
@@ -1083,6 +1130,7 @@ project wgEncode
 subId 1237
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 view RbpAssocRna
+geoSampleAccession GSM787558
 
 metaObject wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 objType table
@@ -1106,5 +1154,6 @@ subId 4790
 submittedDataVersion V2 - P and Q values are now -log10 and scores reflect p Values
 tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 view RbpAssocRna
+geoSampleAccession GSM787558
 
 # MAGIC: -1243231951
