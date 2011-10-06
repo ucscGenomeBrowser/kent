@@ -2547,4 +2547,5 @@ expStep 0.5
 expDrawExons on
 expTable lincRNAsExpAll
 groupings lincRNAsExpGroups
+html lincRNAs
 
