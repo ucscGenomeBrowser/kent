@@ -14706,7 +14706,27 @@ tableName wgEncodeUwDnaseMcf7RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeUwDnaseMonocd14AlnRep1V2
+metaObject wgEncodeUwDnaseMonocd14ro1746AlnRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14ro1746AlnRep1.bam
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+objStatus replaced - lab replaced this version with a V2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseMonocd14ro1746AlnRep1V2
 objType file
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14717,7 +14737,7 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 dccInternalNotes 'oldGEO=GSM736513'
 expId 1196
-fileName wgEncodeUwDnaseMonocd14AlnRep1V2.bam,wgEncodeUwDnaseMonocd14AlnRep1V2.bam.bai
+fileName wgEncodeUwDnaseMonocd14ro1746AlnRep1V2.bam,wgEncodeUwDnaseMonocd14ro1746AlnRep1V2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14730,7 +14750,7 @@ submittedDataVersion V2 - replaces earlier version
 treatment None
 view Alignments
 
-metaObject wgEncodeUwDnaseMonocd14AlnRep2
+metaObject wgEncodeUwDnaseMonocd14ro1746AlnRep2
 objType file
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14740,7 +14760,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
 expId 1196
-fileName wgEncodeUwDnaseMonocd14AlnRep2.bam,wgEncodeUwDnaseMonocd14AlnRep2.bam.bai
+fileName wgEncodeUwDnaseMonocd14ro1746AlnRep2.bam,wgEncodeUwDnaseMonocd14ro1746AlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
@@ -14752,7 +14772,28 @@ subId 4399
 treatment None
 view Alignments
 
-metaObject wgEncodeUwDnaseMonocd14HotspotsRep1V2
+metaObject wgEncodeUwDnaseMonocd14ro1746HotspotsRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14ro1746HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+objStatus replaced - lab replaced this version with a V2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseMonocd14ro1746HotspotsRep1V2
 objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14763,7 +14804,7 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 dccInternalNotes 'oldGEO=GSM736513'
 expId 1196
-fileName wgEncodeUwDnaseMonocd14HotspotsRep1V2.broadPeak.gz
+fileName wgEncodeUwDnaseMonocd14ro1746HotspotsRep1V2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
@@ -14773,11 +14814,11 @@ project wgEncode
 replicate 1
 subId 4398
 submittedDataVersion V2 - replaces earlier version
-tableName wgEncodeUwDnaseMonocd14HotspotsRep1V2
+tableName wgEncodeUwDnaseMonocd14ro1746HotspotsRep1V2
 treatment None
 view Hotspots
 
-metaObject wgEncodeUwDnaseMonocd14HotspotsRep2
+metaObject wgEncodeUwDnaseMonocd14ro1746HotspotsRep2
 objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14787,7 +14828,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
 expId 1196
-fileName wgEncodeUwDnaseMonocd14HotspotsRep2.broadPeak.gz
+fileName wgEncodeUwDnaseMonocd14ro1746HotspotsRep2.broadPeak.gz
 grant Stam
 lab UW
 labVersion Hotspot-v5.2
@@ -14796,11 +14837,32 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 4399
-tableName wgEncodeUwDnaseMonocd14HotspotsRep2
+tableName wgEncodeUwDnaseMonocd14ro1746HotspotsRep2
 treatment None
 view Hotspots
 
-metaObject wgEncodeUwDnaseMonocd14PkRep1V2
+metaObject wgEncodeUwDnaseMonocd14ro1746PkRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14ro1746PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+objStatus replaced - lab replaced this version with a V2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseMonocd14ro1746PkRep1V2
 objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14811,7 +14873,7 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 dccInternalNotes 'oldGEO=GSM736513'
 expId 1196
-fileName wgEncodeUwDnaseMonocd14PkRep1V2.narrowPeak.gz
+fileName wgEncodeUwDnaseMonocd14ro1746PkRep1V2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -14821,11 +14883,11 @@ project wgEncode
 replicate 1
 subId 4398
 submittedDataVersion V2 - replaces earlier version
-tableName wgEncodeUwDnaseMonocd14PkRep1V2
+tableName wgEncodeUwDnaseMonocd14ro1746PkRep1V2
 treatment None
 view Peaks
 
-metaObject wgEncodeUwDnaseMonocd14PkRep2
+metaObject wgEncodeUwDnaseMonocd14ro1746PkRep2
 objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14835,7 +14897,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
 expId 1196
-fileName wgEncodeUwDnaseMonocd14PkRep2.narrowPeak.gz
+fileName wgEncodeUwDnaseMonocd14ro1746PkRep2.narrowPeak.gz
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -14844,11 +14906,30 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 4399
-tableName wgEncodeUwDnaseMonocd14PkRep2
+tableName wgEncodeUwDnaseMonocd14ro1746PkRep2
 treatment None
 view Peaks
 
-metaObject wgEncodeUwDnaseMonocd14RawDataRep1V2
+metaObject wgEncodeUwDnaseMonocd14ro1746RawDataRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14ro1746RawDataRep1.fastq.gz
+grant Stam
+lab UW
+objStatus replaced - lab replaced this version with a V2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseMonocd14ro1746RawDataRep1V2
 objType file
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14859,7 +14940,7 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 dccInternalNotes 'oldGEO=GSM736513'
 expId 1196
-fileName wgEncodeUwDnaseMonocd14RawDataRep1V2.fastq.tgz
+fileName wgEncodeUwDnaseMonocd14ro1746RawDataRep1V2.fastq.tgz
 grant Stam
 lab UW
 md5sum aa36e2238abb647a8d84f76cd024568c
@@ -14871,7 +14952,7 @@ submittedDataVersion V2 - replaces earlier version
 treatment None
 view RawData
 
-metaObject wgEncodeUwDnaseMonocd14RawDataRep2
+metaObject wgEncodeUwDnaseMonocd14ro1746RawDataRep2
 objType file
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14881,7 +14962,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
 expId 1196
-fileName wgEncodeUwDnaseMonocd14RawDataRep2.fastq.tgz
+fileName wgEncodeUwDnaseMonocd14ro1746RawDataRep2.fastq.tgz
 grant Stam
 lab UW
 md5sum 78d8e1ba6db9f928cae4befb49f4d56d
@@ -14892,7 +14973,28 @@ subId 4399
 treatment None
 view RawData
 
-metaObject wgEncodeUwDnaseMonocd14RawRep1V2
+metaObject wgEncodeUwDnaseMonocd14ro1746RawRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14ro1746RawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+objStatus replaced - lab replaced this version with a V2
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwDnaseMonocd14ro1746RawRep1V2
 objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14903,7 +15005,7 @@ dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
 dccInternalNotes 'oldGEO=GSM736513'
 expId 1196
-fileName wgEncodeUwDnaseMonocd14RawRep1V2.bigWig
+fileName wgEncodeUwDnaseMonocd14ro1746RawRep1V2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -14913,11 +15015,11 @@ project wgEncode
 replicate 1
 subId 4398
 submittedDataVersion V2 - replaces earlier version
-tableName wgEncodeUwDnaseMonocd14RawRep1V2
+tableName wgEncodeUwDnaseMonocd14ro1746RawRep1V2
 treatment None
 view RawSignal
 
-metaObject wgEncodeUwDnaseMonocd14RawRep2
+metaObject wgEncodeUwDnaseMonocd14ro1746RawRep2
 objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
@@ -14927,7 +15029,7 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
 expId 1196
-fileName wgEncodeUwDnaseMonocd14RawRep2.bigWig
+fileName wgEncodeUwDnaseMonocd14ro1746RawRep2.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -14936,7 +15038,7 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 4399
-tableName wgEncodeUwDnaseMonocd14RawRep2
+tableName wgEncodeUwDnaseMonocd14ro1746RawRep2
 treatment None
 view RawSignal
 
@@ -19204,4 +19306,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1512501187
+# MAGIC: -2110293989
