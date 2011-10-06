@@ -2,432 +2,6 @@
 This is a release2 of the "ENCODE wgEncodeUwHistone"
 The composite track is wgEncodeUwHistone
 # WARNINGS #################################################
-1 - could not find None.bai file for wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam
-2 - table wgEncodeUwHistoneHpfH3k4me3StdAlnRep2 does not exist, from filetype bam
-3 - could not find None.bai file for wgEncodeUwHistoneHl60InputStdAlnRep1.bam
-4 - table wgEncodeUwHistoneHl60InputStdAlnRep1 does not exist, from filetype bam
-5 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
-6 - table wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2 does not exist, from filetype bam
-7 - could not find None.bai file for wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
-8 - table wgEncodeUwHistoneBjH3k27me3StdAlnRep1 does not exist, from filetype bam
-9 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
-10 - table wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2 does not exist, from filetype bam
-11 - could not find None.bai file for wgEncodeUwHistoneAg10803InputStdAlnRep1.bam
-12 - table wgEncodeUwHistoneAg10803InputStdAlnRep1 does not exist, from filetype bam
-13 - could not find None.bai file for wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam
-14 - table wgEncodeUwHistoneHaspH3k4me3StdAlnRep2 does not exist, from filetype bam
-15 - could not find None.bai file for wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
-16 - table wgEncodeUwHistoneHreH3k27me3StdAlnRep1 does not exist, from filetype bam
-17 - could not find None.bai file for wgEncodeUwHistoneHbmecInputStdAlnRep1.bam
-18 - table wgEncodeUwHistoneHbmecInputStdAlnRep1 does not exist, from filetype bam
-19 - could not find None.bai file for wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
-20 - table wgEncodeUwHistoneSknshraInputStdAlnRep1 does not exist, from filetype bam
-21 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
-22 - table wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2 does not exist, from filetype bam
-23 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
-24 - table wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1 does not exist, from filetype bam
-25 - could not find None.bai file for wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam
-26 - table wgEncodeUwHistoneHaspH3k4me3StdAlnRep1 does not exist, from filetype bam
-27 - could not find None.bai file for wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam
-28 - table wgEncodeUwHistoneH7esH3k36me3StdAlnRep1 does not exist, from filetype bam
-29 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
-30 - table wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2 does not exist, from filetype bam
-31 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
-32 - table wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2 does not exist, from filetype bam
-33 - could not find None.bai file for wgEncodeUwHistoneHmfInputStdAlnRep1.bam
-34 - table wgEncodeUwHistoneHmfInputStdAlnRep1 does not exist, from filetype bam
-35 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
-36 - table wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1 does not exist, from filetype bam
-37 - could not find None.bai file for wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam
-38 - table wgEncodeUwHistoneNb4H3k4me3StdAlnRep1 does not exist, from filetype bam
-39 - could not find None.bai file for wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam
-40 - table wgEncodeUwHistoneH7esH3k4me3StdAlnRep1 does not exist, from filetype bam
-41 - could not find None.bai file for wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
-42 - table wgEncodeUwHistoneSaecH3k27me3StdAlnRep1 does not exist, from filetype bam
-43 - could not find None.bai file for wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam
-44 - table wgEncodeUwHistoneHmecH3k4me3StdAlnRep2 does not exist, from filetype bam
-45 - could not find None.bai file for wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
-46 - table wgEncodeUwHistoneK562H3k27me3StdAlnRep2 does not exist, from filetype bam
-47 - could not find None.bai file for wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
-48 - table wgEncodeUwHistoneHuvecInputStdAlnRep1 does not exist, from filetype bam
-49 - could not find None.bai file for wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
-50 - table wgEncodeUwHistoneK562H3k36me3StdAlnRep1 does not exist, from filetype bam
-51 - could not find None.bai file for wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam
-52 - table wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2 does not exist, from filetype bam
-53 - could not find None.bai file for wgEncodeUwHistoneHpfInputStdAlnRep1.bam
-54 - table wgEncodeUwHistoneHpfInputStdAlnRep1 does not exist, from filetype bam
-55 - could not find None.bai file for wgEncodeUwHistoneHpafInputStdAlnRep1.bam
-56 - table wgEncodeUwHistoneHpafInputStdAlnRep1 does not exist, from filetype bam
-57 - could not find None.bai file for wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
-58 - table wgEncodeUwHistoneHreH3k27me3StdAlnRep2 does not exist, from filetype bam
-59 - could not find None.bai file for wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
-60 - table wgEncodeUwHistoneSaecH3k4me3StdAlnRep2 does not exist, from filetype bam
-61 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
-62 - table wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2 does not exist, from filetype bam
-63 - could not find None.bai file for wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
-64 - table wgEncodeUwHistoneNhekH3k4me3StdAlnRep1 does not exist, from filetype bam
-65 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam
-66 - table wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2 does not exist, from filetype bam
-67 - could not find None.bai file for wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam
-68 - table wgEncodeUwHistoneHcfH3k4me3StdAlnRep1 does not exist, from filetype bam
-69 - could not find None.bai file for wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam
-70 - table wgEncodeUwHistoneHpfH3k4me3StdAlnRep1 does not exist, from filetype bam
-71 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
-72 - table wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1 does not exist, from filetype bam
-73 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
-74 - table wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2 does not exist, from filetype bam
-75 - could not find None.bai file for wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam
-76 - table wgEncodeUwHistoneHek293H3k4me3StdAlnRep1 does not exist, from filetype bam
-77 - could not find None.bai file for wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam
-78 - table wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1 does not exist, from filetype bam
-79 - could not find None.bai file for wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
-80 - table wgEncodeUwHistoneK562H3k4me3StdAlnRep1 does not exist, from filetype bam
-81 - could not find None.bai file for wgEncodeUwHistoneHmecInputStdAlnRep1.bam
-82 - table wgEncodeUwHistoneHmecInputStdAlnRep1 does not exist, from filetype bam
-83 - could not find None.bai file for wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
-84 - table wgEncodeUwHistoneSaecH3k36me3StdAlnRep1 does not exist, from filetype bam
-85 - could not find None.bai file for wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam
-86 - table wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1 does not exist, from filetype bam
-87 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
-88 - table wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1 does not exist, from filetype bam
-89 - could not find None.bai file for wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam
-90 - table wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2 does not exist, from filetype bam
-91 - could not find None.bai file for wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
-92 - table wgEncodeUwHistoneK562H3k36me3StdAlnRep2 does not exist, from filetype bam
-93 - could not find None.bai file for wgEncodeUwHistoneHcmInputStdAlnRep1.bam
-94 - table wgEncodeUwHistoneHcmInputStdAlnRep1 does not exist, from filetype bam
-95 - could not find None.bai file for wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam
-96 - table wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2 does not exist, from filetype bam
-97 - could not find None.bai file for wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
-98 - table wgEncodeUwHistoneHl60H3k4me3StdAlnRep1 does not exist, from filetype bam
-99 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
-100 - table wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1 does not exist, from filetype bam
-101 - could not find None.bai file for wgEncodeUwHistoneAg04450InputStdAlnRep1.bam
-102 - table wgEncodeUwHistoneAg04450InputStdAlnRep1 does not exist, from filetype bam
-103 - could not find None.bai file for wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
-104 - table wgEncodeUwHistoneBjH3k36me3StdAlnRep1 does not exist, from filetype bam
-105 - could not find None.bai file for wgEncodeUwHistoneHrpeInputStdAlnRep1.bam
-106 - table wgEncodeUwHistoneHrpeInputStdAlnRep1 does not exist, from filetype bam
-107 - could not find None.bai file for wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam
-108 - table wgEncodeUwHistoneH7esH3k4me3StdAlnRep2 does not exist, from filetype bam
-109 - could not find None.bai file for wgEncodeUwHistoneHvmfInputStdAlnRep1.bam
-110 - table wgEncodeUwHistoneHvmfInputStdAlnRep1 does not exist, from filetype bam
-111 - could not find None.bai file for wgEncodeUwHistoneSaecInputStdAlnRep1.bam
-112 - table wgEncodeUwHistoneSaecInputStdAlnRep1 does not exist, from filetype bam
-113 - could not find None.bai file for wgEncodeUwHistoneHcfInputStdAlnRep1.bam
-114 - table wgEncodeUwHistoneHcfInputStdAlnRep1 does not exist, from filetype bam
-115 - could not find None.bai file for wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam
-116 - table wgEncodeUwHistoneHmecH3k4me3StdAlnRep1 does not exist, from filetype bam
-117 - could not find None.bai file for wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam
-118 - table wgEncodeUwHistoneAoafH3k4me3StdAlnRep1 does not exist, from filetype bam
-119 - could not find None.bai file for wgEncodeUwHistoneAg04449InputStdAlnRep1.bam
-120 - table wgEncodeUwHistoneAg04449InputStdAlnRep1 does not exist, from filetype bam
-121 - could not find None.bai file for wgEncodeUwHistoneHeeInputStdAlnRep1.bam
-122 - table wgEncodeUwHistoneHeeInputStdAlnRep1 does not exist, from filetype bam
-123 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
-124 - table wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2 does not exist, from filetype bam
-125 - could not find None.bai file for wgEncodeUwHistoneHreInputStdAlnRep1.bam
-126 - table wgEncodeUwHistoneHreInputStdAlnRep1 does not exist, from filetype bam
-127 - could not find None.bai file for wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
-128 - table wgEncodeUwHistoneBjH3k4me3StdAlnRep2 does not exist, from filetype bam
-129 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
-130 - table wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2 does not exist, from filetype bam
-131 - could not find None.bai file for wgEncodeUwHistoneJurkatInputStdAlnRep1.bam
-132 - table wgEncodeUwHistoneJurkatInputStdAlnRep1 does not exist, from filetype bam
-133 - could not find None.bai file for wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam
-134 - table wgEncodeUwHistoneHcmH3k4me3StdAlnRep2 does not exist, from filetype bam
-135 - could not find None.bai file for wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
-136 - table wgEncodeUwHistoneHepg2InputStdAlnRep1 does not exist, from filetype bam
-137 - could not find None.bai file for wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
-138 - table wgEncodeUwHistoneK562H3k27me3StdAlnRep1 does not exist, from filetype bam
-139 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
-140 - table wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1 does not exist, from filetype bam
-141 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
-142 - table wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1 does not exist, from filetype bam
-143 - could not find None.bai file for wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
-144 - table wgEncodeUwHistoneSaecH3k36me3StdAlnRep2 does not exist, from filetype bam
-145 - could not find None.bai file for wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
-146 - table wgEncodeUwHistoneNhekH3k4me3StdAlnRep2 does not exist, from filetype bam
-147 - could not find None.bai file for wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam
-148 - table wgEncodeUwHistoneHeeH3k4me3StdAlnRep2 does not exist, from filetype bam
-149 - could not find None.bai file for wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam
-150 - table wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2 does not exist, from filetype bam
-151 - could not find None.bai file for wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam
-152 - table wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1 does not exist, from filetype bam
-153 - could not find None.bai file for wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
-154 - table wgEncodeUwHistoneBjH3k36me3StdAlnRep2 does not exist, from filetype bam
-155 - could not find None.bai file for wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam
-156 - table wgEncodeUwHistoneH7esH3k27me3StdAlnRep2 does not exist, from filetype bam
-157 - could not find None.bai file for wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
-158 - table wgEncodeUwHistoneCaco2InputStdAlnRep1 does not exist, from filetype bam
-159 - could not find None.bai file for wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam
-160 - table wgEncodeUwHistoneHct116H3k4me3StdAlnRep1 does not exist, from filetype bam
-161 - could not find None.bai file for wgEncodeUwHistoneHct116InputStdAlnRep1.bam
-162 - table wgEncodeUwHistoneHct116InputStdAlnRep1 does not exist, from filetype bam
-163 - could not find None.bai file for wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam
-164 - table wgEncodeUwHistoneHpafH3k4me3StdAlnRep2 does not exist, from filetype bam
-165 - could not find None.bai file for wgEncodeUwHistoneHek293InputStdAlnRep1.bam
-166 - table wgEncodeUwHistoneHek293InputStdAlnRep1 does not exist, from filetype bam
-167 - could not find None.bai file for wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam
-168 - table wgEncodeUwHistoneH7esH3k27me3StdAlnRep1 does not exist, from filetype bam
-169 - could not find None.bai file for wgEncodeUwHistoneAoafInputStdAlnRep1.bam
-170 - table wgEncodeUwHistoneAoafInputStdAlnRep1 does not exist, from filetype bam
-171 - could not find None.bai file for wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam
-172 - table wgEncodeUwHistoneHek293H3k4me3StdAlnRep2 does not exist, from filetype bam
-173 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
-174 - table wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1 does not exist, from filetype bam
-175 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
-176 - table wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2 does not exist, from filetype bam
-177 - could not find None.bai file for wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam
-178 - table wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2 does not exist, from filetype bam
-179 - could not find None.bai file for wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
-180 - table wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1 does not exist, from filetype bam
-181 - could not find None.bai file for wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam
-182 - table wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2 does not exist, from filetype bam
-183 - could not find None.bai file for wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam
-184 - table wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1 does not exist, from filetype bam
-185 - could not find None.bai file for wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
-186 - table wgEncodeUwHistoneBjH3k4me3StdAlnRep1 does not exist, from filetype bam
-187 - could not find None.bai file for wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam
-188 - table wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1 does not exist, from filetype bam
-189 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
-190 - table wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1 does not exist, from filetype bam
-191 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
-192 - table wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1 does not exist, from filetype bam
-193 - could not find None.bai file for wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam
-194 - table wgEncodeUwHistoneHcfaaInputStdAlnRep1 does not exist, from filetype bam
-195 - could not find None.bai file for wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam
-196 - table wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2 does not exist, from filetype bam
-197 - could not find None.bai file for wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam
-198 - table wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1 does not exist, from filetype bam
-199 - could not find None.bai file for wgEncodeUwHistoneMcf7InputStdAlnRep1.bam
-200 - table wgEncodeUwHistoneMcf7InputStdAlnRep1 does not exist, from filetype bam
-201 - could not find None.bai file for wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
-202 - table wgEncodeUwHistoneNhekH3k27me3StdAlnRep1 does not exist, from filetype bam
-203 - could not find None.bai file for wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
-204 - table wgEncodeUwHistoneK562H3k4me3StdAlnRep2 does not exist, from filetype bam
-205 - could not find None.bai file for wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam
-206 - table wgEncodeUwHistoneAoafH3k4me3StdAlnRep2 does not exist, from filetype bam
-207 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
-208 - table wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2 does not exist, from filetype bam
-209 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
-210 - table wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2 does not exist, from filetype bam
-211 - could not find None.bai file for wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam
-212 - table wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1 does not exist, from filetype bam
-213 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
-214 - table wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2 does not exist, from filetype bam
-215 - could not find None.bai file for wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
-216 - table wgEncodeUwHistoneNhekH3k27me3StdAlnRep2 does not exist, from filetype bam
-217 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
-218 - table wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2 does not exist, from filetype bam
-219 - could not find None.bai file for wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam
-220 - table wgEncodeUwHistoneHeeH3k4me3StdAlnRep1 does not exist, from filetype bam
-221 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
-222 - table wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2 does not exist, from filetype bam
-223 - could not find None.bai file for wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
-224 - table wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1 does not exist, from filetype bam
-225 - could not find None.bai file for wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam
-226 - table wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1 does not exist, from filetype bam
-227 - could not find None.bai file for wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
-228 - table wgEncodeUwHistoneSaecH3k27me3StdAlnRep2 does not exist, from filetype bam
-229 - could not find None.bai file for wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
-230 - table wgEncodeUwHistoneHreH3k36me3StdAlnRep2 does not exist, from filetype bam
-231 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
-232 - table wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1 does not exist, from filetype bam
-233 - could not find None.bai file for wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
-234 - table wgEncodeUwHistoneHreH3k4me3StdAlnRep1 does not exist, from filetype bam
-235 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
-236 - table wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1 does not exist, from filetype bam
-237 - could not find None.bai file for wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam
-238 - table wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2 does not exist, from filetype bam
-239 - could not find None.bai file for wgEncodeUwHistoneHaspInputStdAlnRep1.bam
-240 - table wgEncodeUwHistoneHaspInputStdAlnRep1 does not exist, from filetype bam
-241 - could not find None.bai file for wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
-242 - table wgEncodeUwHistoneHelas3InputStdAlnRep1 does not exist, from filetype bam
-243 - could not find None.bai file for wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam
-244 - table wgEncodeUwHistoneHpafH3k4me3StdAlnRep1 does not exist, from filetype bam
-245 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
-246 - table wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2 does not exist, from filetype bam
-247 - could not find None.bai file for wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
-248 - table wgEncodeUwHistoneNhekH3k36me3StdAlnRep1 does not exist, from filetype bam
-249 - could not find None.bai file for wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
-250 - table wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1 does not exist, from filetype bam
-251 - could not find None.bai file for wgEncodeUwHistoneNb4InputStdAlnRep1.bam
-252 - table wgEncodeUwHistoneNb4InputStdAlnRep1 does not exist, from filetype bam
-253 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
-254 - table wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2 does not exist, from filetype bam
-255 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
-256 - table wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1 does not exist, from filetype bam
-257 - could not find None.bai file for wgEncodeUwHistoneNhekInputStdAlnRep1.bam
-258 - table wgEncodeUwHistoneNhekInputStdAlnRep1 does not exist, from filetype bam
-259 - could not find None.bai file for wgEncodeUwHistoneAg09309InputStdAlnRep1.bam
-260 - table wgEncodeUwHistoneAg09309InputStdAlnRep1 does not exist, from filetype bam
-261 - could not find None.bai file for wgEncodeUwHistoneAg09319InputStdAlnRep1.bam
-262 - table wgEncodeUwHistoneAg09319InputStdAlnRep1 does not exist, from filetype bam
-263 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
-264 - table wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2 does not exist, from filetype bam
-265 - could not find None.bai file for wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam
-266 - table wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2 does not exist, from filetype bam
-267 - could not find None.bai file for wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
-268 - table wgEncodeUwHistoneNhekH3k36me3StdAlnRep2 does not exist, from filetype bam
-269 - could not find None.bai file for wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
-270 - table wgEncodeUwHistoneGm12878InputStdAlnRep1 does not exist, from filetype bam
-271 - could not find None.bai file for wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam
-272 - table wgEncodeUwHistoneHcmH3k4me3StdAlnRep1 does not exist, from filetype bam
-273 - could not find None.bai file for wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam
-274 - table wgEncodeUwHistoneHcfH3k4me3StdAlnRep2 does not exist, from filetype bam
-275 - could not find None.bai file for wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
-276 - table wgEncodeUwHistoneGm06990InputStdAlnRep1 does not exist, from filetype bam
-277 - could not find None.bai file for wgEncodeUwHistoneHcpeInputStdAlnRep1.bam
-278 - table wgEncodeUwHistoneHcpeInputStdAlnRep1 does not exist, from filetype bam
-279 - could not find None.bai file for wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam
-280 - table wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2 does not exist, from filetype bam
-281 - could not find None.bai file for wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam
-282 - table wgEncodeUwHistoneHct116H3k4me3StdAlnRep2 does not exist, from filetype bam
-283 - could not find None.bai file for wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
-284 - table wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1 does not exist, from filetype bam
-285 - could not find None.bai file for wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
-286 - table wgEncodeUwHistoneBjH3k27me3StdAlnRep2 does not exist, from filetype bam
-287 - could not find None.bai file for wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam
-288 - table wgEncodeUwHistoneHmfH3k4me3StdAlnRep1 does not exist, from filetype bam
-289 - could not find None.bai file for wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam
-290 - table wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2 does not exist, from filetype bam
-291 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
-292 - table wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1 does not exist, from filetype bam
-293 - could not find None.bai file for wgEncodeUwHistoneH7esInputStdAlnRep1.bam
-294 - table wgEncodeUwHistoneH7esInputStdAlnRep1 does not exist, from filetype bam
-295 - could not find None.bai file for wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
-296 - table wgEncodeUwHistoneHmecH3k27me3StdAlnRep1 does not exist, from filetype bam
-297 - could not find None.bai file for wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
-298 - table wgEncodeUwHistoneHreH3k36me3StdAlnRep1 does not exist, from filetype bam
-299 - could not find None.bai file for wgEncodeUwHistoneBjInputStdAlnRep1.bam
-300 - table wgEncodeUwHistoneBjInputStdAlnRep1 does not exist, from filetype bam
-301 - could not find None.bai file for wgEncodeUwHistoneK562InputStdAlnRep1.bam
-302 - table wgEncodeUwHistoneK562InputStdAlnRep1 does not exist, from filetype bam
-303 - could not find None.bai file for wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam
-304 - table wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1 does not exist, from filetype bam
-305 - could not find None.bai file for wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam
-306 - table wgEncodeUwHistoneNhdfneoInputStdAlnRep1 does not exist, from filetype bam
-307 - could not find None.bai file for wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam
-308 - table wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1 does not exist, from filetype bam
-309 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
-310 - table wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2 does not exist, from filetype bam
-311 - could not find None.bai file for wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam
-312 - table wgEncodeUwHistoneH7esH3k36me3StdAlnRep2 does not exist, from filetype bam
-313 - could not find None.bai file for wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
-314 - table wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1 does not exist, from filetype bam
-315 - could not find None.bai file for wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
-316 - table wgEncodeUwHistoneSaecH3k4me3StdAlnRep1 does not exist, from filetype bam
-317 - could not find None.bai file for wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
-318 - table wgEncodeUwHistoneHreH3k4me3StdAlnRep2 does not exist, from filetype bam
-319 - could not find None.bai file for wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam
-320 - table wgEncodeUwHistoneHmfH3k4me3StdAlnRep2 does not exist, from filetype bam
-321 - could not find None.bai file for wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
-322 - table wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1 does not exist, from filetype bam
-323 - could not find None.bai file for wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam
-324 - table wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1 does not exist, from filetype bam
-325 - could not find None.bai file for wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam
-326 - table wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1 does not exist, from filetype bam
-327 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
-328 - table wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1 does not exist, from filetype bam
-329 - could not find None.bai file for wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam
-330 - table wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1 does not exist, from filetype bam
-331 - could not find None.bai file for wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
-332 - table wgEncodeUwHistoneHl60H3k4me3StdAlnRep2 does not exist, from filetype bam
-333 - could not find None.bai file for wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
-334 - table wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2 does not exist, from filetype bam
-335 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38InputStdAlnRep1
-336 - table wgEncodeUwHistoneWi38InputStdAlnRep1 does not exist, from filetype bam
-337 - could not find gbdb path in table hg19.wgEncodeUwHistoneLncapH3k04me3StdAlnRep2
-338 - table wgEncodeUwHistoneLncapH3k04me3StdAlnRep2 does not exist, from filetype bam
-339 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1
-340 - table wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1 does not exist, from filetype bam
-341 - could not find gbdb path in table hg19.wgEncodeUwHistoneLncapH3k04me3StdAlnRep1
-342 - table wgEncodeUwHistoneLncapH3k04me3StdAlnRep1 does not exist, from filetype bam
-343 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffInputStdAlnRep1
-344 - table wgEncodeUwHistoneHffInputStdAlnRep1 does not exist, from filetype bam
-345 - could not find gbdb path in table hg19.wgEncodeUwHistoneWerirb1InputStdAlnRep1
-346 - table wgEncodeUwHistoneWerirb1InputStdAlnRep1 does not exist, from filetype bam
-347 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2
-348 - table wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2 does not exist, from filetype bam
-349 - could not find gbdb path in table hg19.wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1
-350 - table wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1 does not exist, from filetype bam
-351 - could not find gbdb path in table hg19.wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2
-352 - table wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2 does not exist, from filetype bam
-353 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38H3k04me3StdAlnRep1
-354 - table wgEncodeUwHistoneWi38H3k04me3StdAlnRep1 does not exist, from filetype bam
-355 - could not find gbdb path in table hg19.wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2
-356 - table wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2 does not exist, from filetype bam
-357 - could not find gbdb path in table hg19.wgEncodeUwHistoneHacInputStdAlnRep1
-358 - table wgEncodeUwHistoneHacInputStdAlnRep1 does not exist, from filetype bam
-359 - could not find gbdb path in table hg19.wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1
-360 - table wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1 does not exist, from filetype bam
-361 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffmycInputStdAlnRep1
-362 - table wgEncodeUwHistoneHffmycInputStdAlnRep1 does not exist, from filetype bam
-363 - could not find gbdb path in table hg19.wgEncodeUwHistonePanc1InputStdAlnRep1
-364 - table wgEncodeUwHistonePanc1InputStdAlnRep1 does not exist, from filetype bam
-365 - could not find gbdb path in table hg19.wgEncodeUwHistoneNhlfInputStdAlnRep1
-366 - table wgEncodeUwHistoneNhlfInputStdAlnRep1 does not exist, from filetype bam
-367 - could not find gbdb path in table hg19.wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1
-368 - table wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1 does not exist, from filetype bam
-369 - could not find gbdb path in table hg19.wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2
-370 - table wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2 does not exist, from filetype bam
-371 - could not find gbdb path in table hg19.wgEncodeUwHistoneA549InputStdAlnRep1
-372 - table wgEncodeUwHistoneA549InputStdAlnRep1 does not exist, from filetype bam
-373 - could not find gbdb path in table hg19.wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2
-374 - table wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2 does not exist, from filetype bam
-375 - could not find gbdb path in table hg19.wgEncodeUwHistoneHacH3k04me3StdAlnRep2
-376 - table wgEncodeUwHistoneHacH3k04me3StdAlnRep2 does not exist, from filetype bam
-377 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2
-378 - table wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2 does not exist, from filetype bam
-379 - could not find gbdb path in table hg19.wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1
-380 - table wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1 does not exist, from filetype bam
-381 - could not find gbdb path in table hg19.wgEncodeUwHistoneRptecH3k04me3StdAlnRep1
-382 - table wgEncodeUwHistoneRptecH3k04me3StdAlnRep1 does not exist, from filetype bam
-383 - could not find gbdb path in table hg19.wgEncodeUwHistoneRptecInputStdAlnRep1
-384 - table wgEncodeUwHistoneRptecInputStdAlnRep1 does not exist, from filetype bam
-385 - could not find gbdb path in table hg19.wgEncodeUwHistoneBe2cInputStdAlnRep1
-386 - table wgEncodeUwHistoneBe2cInputStdAlnRep1 does not exist, from filetype bam
-387 - could not find gbdb path in table hg19.wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2
-388 - table wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2 does not exist, from filetype bam
-389 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1
-390 - table wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1 does not exist, from filetype bam
-391 - could not find gbdb path in table hg19.wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1
-392 - table wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1 does not exist, from filetype bam
-393 - could not find gbdb path in table hg19.wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1
-394 - table wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1 does not exist, from filetype bam
-395 - could not find gbdb path in table hg19.wgEncodeUwHistoneHffH3k04me3StdAlnRep1
-396 - table wgEncodeUwHistoneHffH3k04me3StdAlnRep1 does not exist, from filetype bam
-397 - could not find gbdb path in table hg19.wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2
-398 - table wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2 does not exist, from filetype bam
-399 - could not find gbdb path in table hg19.wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1
-400 - table wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1 does not exist, from filetype bam
-401 - could not find gbdb path in table hg19.wgEncodeUwHistoneLncapInputStdAlnRep1
-402 - table wgEncodeUwHistoneLncapInputStdAlnRep1 does not exist, from filetype bam
-403 - could not find gbdb path in table hg19.wgEncodeUwHistoneHacH3k04me3StdAlnRep1
-404 - table wgEncodeUwHistoneHacH3k04me3StdAlnRep1 does not exist, from filetype bam
-405 - could not find gbdb path in table hg19.wgEncodeUwHistoneA549H3k04me3StdAlnRep1
-406 - table wgEncodeUwHistoneA549H3k04me3StdAlnRep1 does not exist, from filetype bam
-407 - could not find gbdb path in table hg19.wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2
-408 - table wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2 does not exist, from filetype bam
-409 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38InputOhtamStdAlnRep1
-410 - table wgEncodeUwHistoneWi38InputOhtamStdAlnRep1 does not exist, from filetype bam
-411 - could not find gbdb path in table hg19.wgEncodeUwHistonePanc1H3k04me3StdAlnRep1
-412 - table wgEncodeUwHistonePanc1H3k04me3StdAlnRep1 does not exist, from filetype bam
-413 - could not find gbdb path in table hg19.wgEncodeUwHistoneRptecH3k04me3StdAlnRep2
-414 - table wgEncodeUwHistoneRptecH3k04me3StdAlnRep2 does not exist, from filetype bam
-415 - could not find gbdb path in table hg19.wgEncodeUwHistonePanc1H3k04me3StdAlnRep2
-416 - table wgEncodeUwHistonePanc1H3k04me3StdAlnRep2 does not exist, from filetype bam
-417 - could not find gbdb path in table hg19.wgEncodeUwHistoneWi38H3k04me3StdAlnRep2
-418 - table wgEncodeUwHistoneWi38H3k04me3StdAlnRep2 does not exist, from filetype bam
-419 - could not find gbdb path in table hg19.wgEncodeUwHistoneSknmcInputStdAlnRep1
-420 - table wgEncodeUwHistoneSknmcInputStdAlnRep1 does not exist, from filetype bam
-421 - could not find gbdb path in table hg19.wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1
-422 - table wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1 does not exist, from filetype bam
-423 - could not find gbdb path in table hg19.wgEncodeUwHistoneA549H3k04me3StdAlnRep2
-424 - table wgEncodeUwHistoneA549H3k04me3StdAlnRep2 does not exist, from filetype bam
-425 - could not find gbdb path in table hg19.wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1
-426 - table wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1 does not exist, from filetype bam
 ############################################################
 
 Categories of tables and files('):
@@ -439,9 +13,9 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release2 (new+untouched):
-    Tables: 535
-    Files: 1176
-    Gbdbs: 213
+    Tables: 553
+    Files: 1218
+    Gbdbs: 221
 
 A) Untouched Tables (423):
 wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep1
@@ -1979,7 +1553,7 @@ B') Deprecated files (0 downloadables, 0 gbdbs):
 
 
 
-C) New tables (112):
+C) New tables (130):
 wgEncodeUwHistoneA549H3k04me3StdHotspotsRep1
 wgEncodeUwHistoneA549H3k04me3StdHotspotsRep2
 wgEncodeUwHistoneA549H3k04me3StdPkRep1
@@ -1994,6 +1568,17 @@ wgEncodeUwHistoneBe2cH3k04me3StdPkRep2
 wgEncodeUwHistoneBe2cH3k04me3StdRawRep1
 wgEncodeUwHistoneBe2cH3k04me3StdRawRep2
 wgEncodeUwHistoneBe2cInputStdRawRep1
+wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1
+wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2
+wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1
+wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2
+wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1
+wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2
+wgEncodeUwHistoneCd20ro01778InputStdRawRep1
+wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3
+wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3
+wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3
+wgEncodeUwHistoneCd20ro01794InputStdRawRep1
 wgEncodeUwHistoneGm12864H3k04me3StdHotspotsRep1
 wgEncodeUwHistoneGm12864H3k04me3StdHotspotsRep2
 wgEncodeUwHistoneGm12864H3k04me3StdPkRep1
@@ -2037,6 +1622,13 @@ wgEncodeUwHistoneLncapInputStdRawRep1
 wgEncodeUwHistoneMcf7H3k04me3StdHotspotsRep2
 wgEncodeUwHistoneMcf7H3k04me3StdPkRep2
 wgEncodeUwHistoneMcf7H3k04me3StdRawRep2
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1
+wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1
 wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep1
 wgEncodeUwHistoneNhlfH3k04me3StdHotspotsRep2
 wgEncodeUwHistoneNhlfH3k04me3StdPkRep1
@@ -2093,7 +1685,7 @@ wgEncodeUwHistoneWi38H3k04me3StdRawRep2
 wgEncodeUwHistoneWi38InputOhtamStdRawRep1
 wgEncodeUwHistoneWi38InputStdRawRep1
 
-C') New files (249 downloadables, 46 gbdbs):
+C') New files (291 downloadables, 54 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/release2/
     NOT on RR but must be placed in:
@@ -2131,6 +1723,32 @@ wgEncodeUwHistoneBe2cInputStdAlnRep1.bam
 wgEncodeUwHistoneBe2cInputStdAlnRep1.bam.bai
 wgEncodeUwHistoneBe2cInputStdRawDataRep1.fastq.gz
 wgEncodeUwHistoneBe2cInputStdRawRep1.bigWig
+wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep2.bam
+wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep2.bam.bai
+wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2.broadPeak.gz
+wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2.narrowPeak.gz
+wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep2.fastq.gz
+wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneCd20ro01778InputStdAlnRep1.bam
+wgEncodeUwHistoneCd20ro01778InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneCd20ro01778InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneCd20ro01778InputStdRawRep1.bigWig
+wgEncodeUwHistoneCd20ro01794H3k04me3StdAlnRep3.bam
+wgEncodeUwHistoneCd20ro01794H3k04me3StdAlnRep3.bam.bai
+wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3.broadPeak.gz
+wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3.narrowPeak.gz
+wgEncodeUwHistoneCd20ro01794H3k04me3StdRawDataRep3.fastq.gz
+wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3.bigWig
+wgEncodeUwHistoneCd20ro01794InputStdAlnRep1.bam
+wgEncodeUwHistoneCd20ro01794InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneCd20ro01794InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneCd20ro01794InputStdRawRep1.bigWig
 wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam
 wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam.bai
 wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2.bam
@@ -2225,6 +1843,22 @@ wgEncodeUwHistoneMcf7H3k04me3StdHotspotsRep2.broadPeak.gz
 wgEncodeUwHistoneMcf7H3k04me3StdPkRep2.narrowPeak.gz
 wgEncodeUwHistoneMcf7H3k04me3StdRawDataRep2.fastq.gz
 wgEncodeUwHistoneMcf7H3k04me3StdRawRep2.bigWig
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdAlnRep1.bam
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1.bigWig
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdAlnRep1.bam
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdAlnRep1.bam.bai
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1.broadPeak.gz
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1.narrowPeak.gz
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawDataRep1.fastq.gz
+wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1.bigWig
+wgEncodeUwHistoneMonocd14ro1746InputStdAlnRep1.bam
+wgEncodeUwHistoneMonocd14ro1746InputStdAlnRep1.bam.bai
+wgEncodeUwHistoneMonocd14ro1746InputStdRawDataRep1.fastq.gz
+wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1.bigWig
 wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam
 wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam.bai
 wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam
@@ -2355,6 +1989,11 @@ wgEncodeUwHistoneWi38InputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneBe2cH3k04me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneBe2cH3k04me3StdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneBe2cInputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCd20ro01778InputStdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneCd20ro01794InputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneGm12864H3k04me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneGm12864H3k04me3StdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneGm12865H3k04me3StdRawRep1.bigWig
@@ -2372,6 +2011,9 @@ wgEncodeUwHistoneWi38InputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneLncapH3k04me3StdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneLncapInputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneMcf7H3k04me3StdRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneNhlfH3k04me3StdRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneNhlfH3k04me3StdRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwHistoneNhlfInputStdRawRep1.bigWig
@@ -2402,6 +2044,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/
 
-README.txt
-files.txt
 md5sum.txt
+files.txt
+README.txt
