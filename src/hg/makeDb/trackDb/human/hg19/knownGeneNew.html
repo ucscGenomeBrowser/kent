@@ -87,43 +87,52 @@ the CCDS protein is used directly.
 <LI>The transcript is assigned a permanent "uc" accession.  If the
 transcript was not in the previous release of UCSC Genes, the
 accession ends with the suffix ".1" indicating that this is the first
-version of this transcript.  If the transcript was in the previous
-release of UCSC Genes, the accession from the previous version is
-re-used with the version number incremented.
+version of this transcript.  If the transcript is identical to some
+transcript in the previous release of UCSC Genes, the accession is
+re-used with the same version number.  If the transcript is not
+identical to any transcript in the previous release, but if it
+overlaps a similar transcript with a compatible structure, the
+previous accession is re-used with the version number incremented.
 </OL>
 
 <H2>Related Data</H2>
 <P>
 The UCSC Genes transcripts are annotated in numerous tables, each of
 which is also available as a downloadable file.  These include tables
-that link UCSC Genes transcripts to external datasets (such
-as <I>knownToLocusLink</I>, which maps UCSC Genes transcripts to Locus
-Link identifiers), and tables that detail some property of UCSC Genes
-transcript sequences (such as <I>knownToPfam</I>, which identifies any
-Pfam domains found in the UCSC Genes protein-coding transcripts).  One
-can see a full list of the associated tables in the Table Browser by
-selecting UCSC Genes at the <B>track</B> menu; this list is then
-available at the <B>table</B> menu.  Note that some of these tables
-refer to UCSC Genes by its former name of <I>Known Genes</I>,
-sometimes abbreviated as <I>known</I> or <I>kg</I>.  While the
-complete set of annotation tables is too long to describe, some of the
-more important tables are described below.
-<UL>
+that link UCSC Genes transcripts to external datasets (such as
+<I>knownToLocusLink</I>, which maps UCSC Genes transcripts to Entrez
+identifiers, previously know as Locus Link identifiers), and tables
+that detail some property of UCSC Genes transcript sequences (such as
+<I>knownToPfam</I>, which identifies any Pfam domains found in the
+UCSC Genes protein-coding transcripts).  One can see a full list of
+the associated tables in the Table Browser by selecting UCSC Genes at
+the <B>track</B> menu; this list is then available at the <B>table</B>
+menu.  Note that some of these tables refer to UCSC Genes by its
+former name of <I>Known Genes</I>, sometimes abbreviated as
+<I>known</I> or <I>kg</I>.  While the complete set of annotation
+tables is too long to describe, some of the more important tables are
+described below.  
+<UL> 
 <LI> <B>kgXref</B> identifies the RefSeq, SwissProt, Rfam, or tRNA
 sequences (if any) on which each each transcript was based.
 <LI> <B>knownGeneMrna</B> contains the mRNA sequence that represents
 each UCSC Genes transcript.  If the transcript is based on a RefSeq
 transcript, then this table contains the RefSeq transcript, including
 any portions that do not align to the genome.
-<LI> <B>knownGeneTxMrna</B> contains mRNA sequences for each UCSC Genes
-transcripts.  In contrast to the sequencess in knownGeneMrna, these sequences
-are derived from obtaining the sequences for each exon from the reference genome 
-and concatenating these exonic sequences.
+<LI> <B>knownGeneTxMrna</B> contains mRNA sequences for each UCSC
+Genes transcripts.  In contrast to the sequencess in knownGeneMrna,
+these sequences are derived from obtaining the sequences for each exon
+from the reference genome and concatenating these exonic sequences.
 <LI> <B>knownGenePep</B> contains the protein sequences derived from
-the knownGeneMrna transcript sequences.  Any protein-level annotations,
-such as the contents of the knownToPfam table, are based on these sequences.
-<LI> <B>knownGeneTxPep</B> contains the protein translation (if any) of
-each mRNA sequence in knownGeneTxMrna.
+the knownGeneMrna transcript sequences.  Any protein-level
+annotations, such as the contents of the knownToPfam table, are based
+on these sequences.
+<LI> <B>knownGeneTxPep</B> contains the protein translation (if any)
+of each mRNA sequence in knownGeneTxMrna.  
+<LI> <B>knownIsoforms</B> maps each transcript to a <EM>cluster
+ID</EM>, a cluster of isoforms of the same gene.
+<LI> <B>knownCanonical</B> identifies the canonical isoform of each
+cluster ID, or gene. Generally, this is the longest isoform.
 </UL>
 <P>
 

@@ -18,7 +18,82 @@
 
 #ifdef USE_TABIX
 
-static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
+static boolean getMinQual(struct trackDb *tdb, double *retMinQual, boolean compositeLevel)
+/* Return TRUE and set retMinQual id cart contains minimum QUAL filter */
+{
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s."VCF_APPLY_MIN_QUAL_VAR, tdb->track);
+if (cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
+				  VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL))
+    {
+    if (retMinQual != NULL)
+	*retMinQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
+						   VCF_DEFAULT_MIN_QUAL);
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean minQualFail(struct vcfRecord *record, double minQual)
+/* Return TRUE if record's QUAL column value is non-numeric or is less than minQual. */
+{
+if (isEmpty(record->qual) ||
+    (record->qual[0] != '-' && !isdigit(record->qual[0])) ||
+    atof(record->qual) < minQual)
+    return TRUE;
+return FALSE;
+}
+
+static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues,
+			       boolean compositeLevel)
+/* Return TRUE and set retValues if cart contains FILTER column values to exclude */
+{
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, tdb->track);
+if (cartListVarExists(cart, cartVar))
+    {
+    struct slName *selectedValues = cartOptionalSlNameList(cart, cartVar);
+    if (retValues != NULL)
+	*retValues = selectedValues;
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean filterColumnFail(struct vcfRecord *record, struct slName *filterValues)
+/* Return TRUE if record's FILTER column value(s) matches one of filterValues (from cart). */
+{
+int i;
+for (i = 0;  i < record->filterCount;  i++)
+    if (slNameInList(filterValues, record->filters[i]))
+	return TRUE;
+return FALSE;
+}
+
+static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
+/* If a filter is specified in the cart, remove any records that don't pass filter. */
+{
+boolean compositeLevel = isNameAtCompositeLevel(tdb, tdb->track);
+double minQual = 0;
+struct slName *filterValues = NULL;
+boolean gotQualFilter = getMinQual(tdb, &minQual, compositeLevel);
+boolean gotFilterFilter = getFilterValues(tdb, &filterValues, compositeLevel);
+if (! (gotQualFilter || gotFilterFilter) )
+    return;
+
+struct vcfRecord *rec, *nextRec, *newList = NULL;
+for (rec = vcff->records;  rec != NULL;  rec = nextRec)
+    {
+    nextRec = rec->next;
+    if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
+	   (gotFilterFilter && filterColumnFail(rec, filterValues))) )
+	slAddHead(&newList, rec);
+    }
+slReverse(&newList);
+vcff->records = newList;
+}
+
+static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
 {
@@ -757,12 +832,13 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
     if (vcff != NULL)
 	{
+	filterRecords(vcff, tg->tdb);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
 	    {
-	    tg->items = vcfFileToPgSnp(vcff);
+	    tg->items = vcfFileToPgSnp(vcff, tg->tdb);
 	    // pgSnp bases coloring/display decision on count of items:
 	    tg->customInt = slCount(tg->items);
 	    }

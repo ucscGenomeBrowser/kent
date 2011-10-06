@@ -146,8 +146,8 @@ include wgEncodeUwHistone.new.ra alpha
 include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra beta,public
-include wgEncodeSydhHistone.new.ra alpha
+include wgEncodeSydhHistone.ra public
+include wgEncodeSydhHistone.new.ra alpha,beta
 
 
 # ENCODE TFBS -------------------------------------------
@@ -174,8 +174,7 @@ include wgEncodeUchicagoTfbs.ra
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra beta,public
-include wgEncodeSunyAlbanyGeneSt.new.ra alpha
+include wgEncodeSunyAlbanyGeneSt.ra
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra

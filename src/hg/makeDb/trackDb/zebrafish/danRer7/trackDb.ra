@@ -49,7 +49,7 @@ priority 103.29
 	type wigMaf 0.0 1.0
 	speciesCodonDefault danRer7
 	speciesGroups fish vertebrate
-	sGroup_fish gasAcu1 oryLat2 tetNig2 fr2
+	sGroup_fish oryLat2 gasAcu1 tetNig2 fr2
 	sGroup_vertebrate xenTro2 mm9 hg19
         itemFirstCharCase noChange
 	treeImage phylo/danRer7_8way.png

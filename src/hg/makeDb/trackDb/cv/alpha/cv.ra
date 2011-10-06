@@ -3282,7 +3282,7 @@ tag NT2D1
 type Cell Line
 organism human
 tissue Testis
-description malignant pluripotent embryonal carcinoma (Ntera2), "The NTERA-2 cl.D1 cell line is a pluripotent human testicular embryonal carcinoma cell line derived by cloning the NTERA-2 cell line." - ATCC. (PMID: 6694356)
+description malignant pluripotent embryonal carcinoma (NTera-2), "The NTERA-2 cl.D1 cell line is a pluripotent human testicular embryonal carcinoma cell line derived by cloning the NTERA-2 cell line." - ATCC. (PMID: 6694356)
 vendorName ATCC
 vendorId CRL-1973
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1973&Template=cellBiology
