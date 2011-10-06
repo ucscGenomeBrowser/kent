@@ -28,12 +28,9 @@ struct hubConnectStatus
     {
     struct hubConnectStatus *next;
     unsigned id;	/* Hub ID */
-    char *shortLabel;	/* Hub short label. */
-    char *longLabel;	/* Hub long label. */
     char *hubUrl;	/* URL to hub.ra file. */
     char *errorMessage;	/* If non-empty hub has an error and this describes it. */
-    unsigned dbCount;	/* Number of databases hub has data for. */
-    char **dbArray;	/* Array of databases hub has data for. */
+    struct trackHub *trackHub; /* pointer to structure that describes hub */
     unsigned  status;   /* 1 if private */
     };
 
@@ -110,16 +107,16 @@ void hubDisconnect(struct cart *cart, char *url);
 /* drop the information about this url from the hubStatus table, and 
  * the cart variable the references this hub */
 
-unsigned hubCheckForNew(char *database, struct cart *cart);
-/* see if the user just typed in a new hub url, return hubId if so */
+void hubCheckForNew(char *database, struct cart *cart);
+/* see if the user just typed in a new hub url, add to cart and hubStatus */
 
 struct trackHub *trackHubFromId(unsigned hubId);
 /* Given a hub ID number, return corresponding trackHub structure. 
  * ErrAbort if there's a problem. */
 
-void hubSetErrorMessage(char *errorMessage, unsigned id);
+void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub);
 /* set the error message in the hubStatus table */
 
-boolean hubHasDatabase(struct hubConnectStatus *hub, char *database) ;
+boolean trackHubHasDatabase(struct trackHub *hub, char *database) ;
 /* Return TRUE if hub has contents for database */
 #endif /* HUBCONNECT_H */
