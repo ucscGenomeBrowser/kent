@@ -54,7 +54,7 @@ for (i=0; i<size; ++i)
     }
 
 if (isBlue)
-    fprintf(f, "</FONT>");
+    fprintf(f, "</span>");
 }
 
 void initSummaryLine(char *summaryLine, int size, int val)
@@ -837,7 +837,7 @@ for (i=0; i<size; i=i+step)
     }
 
 if (isBlue)
-    fprintf(f, "</FONT>");
+    fprintf(f, "</span>");
 }
 
 void mafPrettyOutGsid(FILE *f, struct mafAli *maf, int lineSize,
