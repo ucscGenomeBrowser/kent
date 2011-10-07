@@ -3466,9 +3466,9 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
         errCatchEnd(errCatch);
         if (errCatch->gotError)
-	    hubSetErrorMessage( errCatch->message->string, hub->id);
+	    hubUpdateStatus( errCatch->message->string, hub);
 	else
-	    hubSetErrorMessage(NULL, hub->id);
+	    hubUpdateStatus(NULL, hub);
         errCatchFree(&errCatch);
 	}
     }
