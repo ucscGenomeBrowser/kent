@@ -39,7 +39,7 @@ objType table
 composite wgEncodeRegTfbsClustered
 dataType Cluster
 dateUnrestricted 2011-10-21
-fileName wgEncodeRegTfbsCells.tab.gz
+fileName wgEncodeRegTfbsClusteredCells
 grant Kent
 lab UCSC
 project wgEncode
