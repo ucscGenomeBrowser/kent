@@ -316,6 +316,9 @@ melGal1.refseq.mrna.xeno.loadDesc  = yes
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad melGal1 &
     #    logFile: var/dbload/hgwdev/logs/2011.02.16-12:45:15.dbload.log
     #   real    23m10.935s
+    # Re-run load step 2011-10-07:
+    #  logFile: var/dbload/hgwdev/logs/2011.10.07-13:51:01.dbload.log
+    #   real    26m31.902s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
