@@ -272,7 +272,7 @@ static void tryHubOpen(unsigned id)
 /* try opening this again to reset error */
 struct sqlConnection *conn = hConnectCentral();
 struct errCatch *errCatch = errCatchNew();
-struct hubConnectStatus *hub;
+struct hubConnectStatus *hub = NULL;
 if (errCatchStart(errCatch))
     hub = hubConnectStatusForId(conn, id);
 errCatchEnd(errCatch);
