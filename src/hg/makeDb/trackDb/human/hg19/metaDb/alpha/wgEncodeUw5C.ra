@@ -2,6 +2,7 @@ metaObject wgEncodeUw5C
 objType composite
 composite wgEncodeUw5C
 expVars lab,dataType,cell,region
+table wgEncodeUw5C
 
 metaObject wgEncodeUw5CBjUw5cgeneMatrixRep1
 objType file
@@ -763,4 +764,4 @@ replicate 1
 subId 3813
 view Primer
 
-# MAGIC: -172475242
+# MAGIC: 462199370
