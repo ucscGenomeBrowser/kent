@@ -255,6 +255,10 @@ taxId 9103
 
 ########################################################################
 # GENBANK AUTO UPDATE (DONE - 201w1-02-16 - Chin)
+# 2011-10-07 Note: Re-configure per Mark's comments:
+# genbank should not have native refseq enabled for this genome, as there are
+# no native refseqs. Xeno refseqs should be enabled. Please fix configuration
+# file and do a drop and reload.
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -267,14 +271,12 @@ melGal1.clusterGenome = /scratch/data/melGal1/melGal1.2bit
 melGal1.ooc = /scratch/data/melGal1/melGal1.11.ooc
 melGal1.lift = no
 melGal1.perChromTables = no
-melGal1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
 melGal1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 melGal1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
 melGal1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
 melGal1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 melGal1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 melGal1.downloadDir = melGal1
-melGal1.refseq.mrna.native.load  = yes
 melGal1.refseq.mrna.xeno.load = yes
 melGal1.refseq.mrna.xeno.loadDesc  = yes
 
