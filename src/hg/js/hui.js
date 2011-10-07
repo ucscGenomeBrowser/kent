@@ -333,7 +333,7 @@ function matSubCBsetShadow(subCB,triggerChange)
     if ($(fourWay).val() != shadowState.toString()) {
         $(fourWay).val(shadowState);
         if (typeof(subCfg) !== "undefined") {
-            subCfg.enableCfg(subCB,null,(shadowState == 1));
+            subCfg.enableCfg(subCB,(shadowState == 1));
             if (triggerChange)
                 $(subCB).change(); // 'change' event will update "subCfg"  // FIXME: Is this needed?  YES.  But not on direct cb click
         }

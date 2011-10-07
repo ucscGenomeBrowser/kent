@@ -294,7 +294,9 @@ jsonHashAddNumber(ele, "hasChildren", slCount(track->tdb->subtracks));
 
 // Configuring?
 int cfgByPopup = configurableByPopup(track->tdb,0);
-if (!configurable || track->hasUi == FALSE || cfgByPopup == 0)
+if (!configurable
+||  track->hasUi == FALSE
+||  (cfgByPopup == 0 && tdbIsCompositeSubtrack(track->tdb)))
     jsonHashAddString(ele, "configureBy", "none");
 else if (cfgByPopup < 0)
     jsonHashAddString(ele, "configureBy", "clickThrough");

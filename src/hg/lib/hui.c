@@ -2486,16 +2486,12 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     char *belongsTo =NULL;
     if(subgroupFind(subtrack,members->groupTag,&belongsTo))
         {
-        for(ixIn=0;ixIn<members->count;ixIn++)
+        if (-1 != (ixIn = stringArrayIx(belongsTo, members->tags, members->count)))
             {
-            if(sameString(members->tags[ixIn],belongsTo))
-                {
-                members->subtrackCount[ixIn]++;
-                if(cart && fourStateVisible(subtrackFourStateChecked(subtrack,cart)))
-                    members->currentlyVisible[ixIn]++;
-                refAdd(&(members->subtrackList[ixIn]), subtrack);
-                break;
-                }
+            members->subtrackCount[ixIn]++;
+            if(cart && fourStateVisible(subtrackFourStateChecked(subtrack,cart)))
+                members->currentlyVisible[ixIn]++;
+            refAdd(&(members->subtrackList[ixIn]), subtrack);
             }
         }
     }
@@ -2657,7 +2653,8 @@ if(membersForAll != NULL)
 
 int ix;
 membersForAll = needMem(sizeof(membersForAll_t));
-membersForAll->members[dimV]=subgroupMembersGet(parentTdb,"view");
+if (tdbIsCompositeView(parentTdb->subtracks))  // view must have viewInMidle tdb in tree
+    membersForAll->members[dimV]=subgroupMembersGet(parentTdb,"view");
 membersForAll->letters[dimV]='V';
 membersForAll->dimMax=dimA;  // This can expand, depending upon ABC dimensions
 membersForAll->dimensions = dimensionSettingsGet(parentTdb);
@@ -3817,10 +3814,6 @@ for(di=0;di<membersForAll->dimMax;di++) { if (membersForAll->members[di]) dimCou
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
-#ifdef SUBTRACK_CFG
-if (useDragAndDrop)
-    useDragAndDrop = (sortOrder == NULL); // Only support drag and drop when not sortable table
-#endif///def SUBTRACK_CFG
 char buffer[SMALLBUF];
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
@@ -4008,7 +4001,7 @@ printf("\n<!-- ----- subtracks list ----- -->\n");
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
     subtrack = subtrackRef->val;
-    int ix;
+    int ix,ix2;
 
     // Determine whether subtrack is checked, visible, configurable, has group membership, etc.
     int fourState = subtrackFourStateChecked(subtrack,cart);
@@ -4016,7 +4009,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     boolean enabledCB = fourStateEnabled(fourState);
     boolean visibleCB = fourStateVisible(fourState);
     membership_t *membership = subgroupMembershipGet(subtrack);
-    eCfgType cType = cfgTypeFromTdb(subtrack,FALSE);
+    eCfgType cType = cfgNone;
+    if (!tdbIsMultiTrack(parentTdb))  // MultiTracks never have configurable subtracks!
+        cType = cfgTypeFromTdb(subtrack,FALSE);
     if (cType != cfgNone)
         {
     #ifdef SUBTRACK_CFG
@@ -4024,15 +4019,18 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         int cfgSubterack = configurableByPopup(subtrack,cType);
         if (cfgSubterack <= 0)
             cType = cfgNone;
-        else if (membersForAll->members[dimV])
-            {
+        else if (membersForAll->members[dimV]) // subtrack only configurable if more than one subtrack in view
+            {                                  // find "view" in subgroup membership: e.g. "signal"
             if (-1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
-                {  // Don't make a configurable subtrack if there is only one in the view (assumes view is configurable)
-                if (slCount(membersForAll->members[dimV]->subtrackList[ix]) < 2)
-                    cType = cfgNone;
+                {                              // find "signal" in set of all views
+                if (-1 != (ix2 = stringArrayIx(membership->membership[ix], membersForAll->members[dimV]->tags, membersForAll->members[dimV]->count)))
+                    {
+                    if (membersForAll->members[dimV]->subtrackCount[ix2] < 2)
+                        cType = cfgNone;
+                    }
                 }
             }
-        else if (slCount(parentTdb->subtracks) < 2 && cfgTypeFromTdb(parentTdb,FALSE) != cfgNone)
+        else if (slCount(subtrackRefList) < 2 && cfgTypeFromTdb(parentTdb,FALSE) != cfgNone)
             cType = cfgNone;  // don't bother if there is a single subtrack but the composite is configurable.
     #else///ifndef SUBTRACK_CFG
         if (trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
@@ -4083,21 +4081,25 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         printf("&nbsp;");
 
 #ifdef SUBTRACK_CFG
-    enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
-    char *view = NULL;
-    if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
-        view = membership->membership[ix];
-        char classList[256];
-        if (view != NULL)
-            safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD %s",(visibleCB ? "":" disabled"),view); // view should be last!
-        else
-            safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",(visibleCB ? "":" disabled"));
-        #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='%s' style='width:65px;' onclick='return subCfg.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
-        printf(SUBTRACK_CFG_VIS,subtrack->track,classList,subtrack->track,hStringFromTv(vis));
-    if (cType != cfgNone)  // make a wrench
+    if (!tdbIsMultiTrack(parentTdb))  // MultiTracks never have independent vis
         {
-        #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return subCfg.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
-        printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" disabled"),subtrack->track);
+        enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
+        char *view = NULL;
+        if (membersForAll->members[dimV]
+        && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
+            view = membership->membership[ix];
+            char classList[256];
+            if (view != NULL)
+                safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD %s",(visibleCB ? "":" disabled"),view); // view should be last!
+            else
+                safef(classList,sizeof(classList),"clickable fauxInput%s subVisDD",(visibleCB ? "":" disabled"));
+            #define SUBTRACK_CFG_VIS "<div id= '%s_faux' class='%s' style='width:65px;' onclick='return subCfg.replaceWithVis(this,\"%s\",true);'>%s</div>\n"
+            printf(SUBTRACK_CFG_VIS,subtrack->track,classList,subtrack->track,hStringFromTv(vis));
+        if (cType != cfgNone)  // make a wrench
+            {
+            #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return subCfg.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
+            printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" disabled"),subtrack->track);
+            }
         }
 #endif///def SUBTRACK_CFG
 
@@ -4980,8 +4982,10 @@ if (scoreFilterOk)
         printf("<b>Show only items with score at or above:</b> ");
         snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
-        printf("&nbsp;&nbsp;(range: %d to %d)", minLimit, maxLimit);
+        printf("&nbsp;&nbsp;(range: %d to %d)\n", minLimit, maxLimit);
         }
+    if (glvlScoreMin)
+        printf("<BR>");
     }
 
 if (glvlScoreMin)
@@ -5466,16 +5470,14 @@ if(!sameString(tdb->track, "tigrGeneIndex")
 && !sameString(tdb->track, "encodeGencodeRaceFrags"))
     baseColorDropLists(cart, tdb, name);
 
-if (cartOptionalString(cart, "ajax") == NULL)
+filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+if(filterBySet != NULL)
     {
-    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-    if(filterBySet != NULL)
-        {
-        printf("<BR>");
-        filterBySetCfgUi(cart,tdb,filterBySet,FALSE);
-        filterBySetFree(&filterBySet);
-        }
+    printf("<BR>");
+    filterBySetCfgUi(cart,tdb,filterBySet,FALSE);
+    filterBySetFree(&filterBySet);
     }
+
 cfgEndBox(boxed);
 }
 
@@ -6048,19 +6050,19 @@ cfgEndBox(boxed);
 }
 #endif//def USE_BAM
 
-struct trackDb *rFindViewInList(struct trackDb *tdbList, char *view)
-/* Return the trackDb on the list (or on any children of the list) that has matching view tag. */
+struct trackDb *rFindView(struct trackDb *forest, char *view)
+// Return the trackDb on the list that matches the view tag. Prefers ancestors before decendents
 {
 struct trackDb *tdb;
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+for (tdb = forest; tdb != NULL; tdb = tdb->next)
     {
     char *viewSetting = trackDbSetting(tdb, "view");
     if (sameOk(viewSetting, view))
         return tdb;
     }
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+for (tdb = forest; tdb != NULL; tdb = tdb->next)
     {
-    struct trackDb *viewTdb = rFindViewInList(tdb->subtracks, view);
+    struct trackDb *viewTdb = rFindView(tdb->subtracks, view);
     if (viewTdb != NULL)
         return viewTdb;
     }
@@ -6075,7 +6077,7 @@ static boolean compositeViewCfgExpandedByDefault(struct trackDb *parentTdb,char 
 boolean expanded = FALSE;
 if ( retVisibility != NULL )
     *retVisibility = cloneString(hStringFromTv(parentTdb->visibility));
-struct trackDb *viewTdb = rFindViewInList(parentTdb->subtracks, view);
+struct trackDb *viewTdb = rFindView(parentTdb->subtracks, view);
 if (viewTdb == NULL)
     return FALSE;
 if (retVisibility != NULL)
@@ -6093,22 +6095,6 @@ compositeViewCfgExpandedByDefault(parentTdb,view,&visibility);
 enum trackVisibility vis = hTvFromString(visibility);
 freeMem(visibility);
 return vis;
-}
-
-struct trackDb *rFindView(struct trackDb *forest, char *viewName)
-/* Find a descendent with given view. */
-{
-struct trackDb *tdb;
-for (tdb = forest; tdb != NULL; tdb = tdb->next)
-    {
-    char *viewSetting = trackDbSetting(tdb, "view");
-    if (sameOk(viewSetting, viewName))
-        return tdb;
-    struct trackDb *view = rFindView(tdb->subtracks, viewName);
-    if (view)
-        return view;
-    }
-return NULL;
 }
 
 static boolean hCompositeDisplayViewDropDowns(char *db, struct cart *cart, struct trackDb *parentTdb)
@@ -6135,7 +6121,8 @@ struct trackDb **matchedViewTracks = needMem(sizeof(struct trackDb *)*membersOfV
 for (ix = 0; ix < membersOfView->count; ix++)
     {
     char *viewName = membersOfView->tags[ix];
-    if (membersOfView->subtrackList != NULL && membersOfView->subtrackList[ix] != NULL)
+    if (membersOfView->subtrackList     != NULL
+    &&  membersOfView->subtrackList[ix] != NULL)
         {
         struct trackDb *subtrack = membersOfView->subtrackList[ix]->val;
         matchedViewTracks[ix] = subtrack->parent;

@@ -53,7 +53,7 @@ var subCfg = { // subtrack config module.
     markChange: function (eventObj, obj)
     { // Marks a control as having been changed by the user.  Naming will send value to cart.
       // Note this is often called directly as the onchange event function
-        if (obj == undefined)
+        if (obj == undefined || $.type(obj) === "string")
             obj = this;
         $(obj).addClass('changed');
 
@@ -694,8 +694,12 @@ var subCfg = { // subtrack config module.
         if (wrench != undefined) {
             if (setTo == true)
                 $(wrench).removeClass('disabled');
-            else
+            else {
                 $(wrench).addClass('disabled');
+                var cfg = normed($(td).parent('tr').find('div.subCfg'));
+                if (cfg != undefined)
+                    $(cfg).hide();
+            }
         }
     },
 

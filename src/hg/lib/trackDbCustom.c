@@ -722,7 +722,8 @@ else if(startsWithWord("bed", type))
        char *words[3];
         int wordCount = chopLine(cloneString( type), words);
         if ((atoi(words[1]) >= 5 || trackDbSetting(tdb, "scoreMin") != NULL)
-        && (wordCount >= 3)) // Historically needed 'bed n .'
+        && ( wordCount >= 3                                                      // Historically needed 'bed n .'
+            || (!tdbIsTrackUiTopLevel(tdb) && trackDbSettingClosestToHome(tdb, "wgEncode")))) // but encode didn't follow bed n .
             {
             cType = cfgBedScore;
 
