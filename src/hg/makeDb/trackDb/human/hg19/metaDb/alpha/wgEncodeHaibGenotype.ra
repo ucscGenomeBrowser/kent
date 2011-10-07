@@ -194,6 +194,7 @@ grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
 md5sum bcc5e51c79a12a026aea4607b25e837c
+objStatus renamed - cell name changed renamed this to wgEncodeHaibGenotypeNhaRegionsRep1
 obtainedBy Duke
 origAssembly hg19
 project wgEncode

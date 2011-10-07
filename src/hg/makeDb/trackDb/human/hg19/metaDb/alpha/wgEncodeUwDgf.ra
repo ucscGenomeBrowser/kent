@@ -18,6 +18,7 @@ lab UW
 labExpId DS12374
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4883
 view Alignments
 
@@ -35,6 +36,7 @@ lab UW
 labExpId DS12374
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4883
 tableName wgEncodeUwDgfAg10803Hotspots
 view Hotspots
@@ -53,6 +55,7 @@ lab UW
 labExpId DS12374
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4883
 tableName wgEncodeUwDgfAg10803Pk
 view Peaks
@@ -71,6 +74,7 @@ lab UW
 labExpId DS12374
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4883
 tableName wgEncodeUwDgfAg10803Raw
 view RawSignal
@@ -88,6 +92,7 @@ grant Stam
 lab UW
 labExpId DS12374
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4883
 view RawData
 
@@ -104,6 +109,7 @@ grant Stam
 lab UW
 labExpId DS12374
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4883
 tableName wgEncodeUwDgfAg10803Sig
 view Signal
@@ -230,108 +236,114 @@ subId 3191
 tableName wgEncodeUwDgfAoafSig
 view Signal
 
-metaObject wgEncodeUwDgfCd20Aln
+metaObject wgEncodeUwDgfCd20ro01778Aln
 objType file
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Aln.bam
+fileName wgEncodeUwDgfCd20ro01778Aln.bam
 grant Stam
 lab UW
 labExpId DS18208
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4884
 view Alignments
 
-metaObject wgEncodeUwDgfCd20Hotspots
+metaObject wgEncodeUwDgfCd20ro01778Hotspots
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Hotspots.broadPeak.gz
+fileName wgEncodeUwDgfCd20ro01778Hotspots.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS18208
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4884
-tableName wgEncodeUwDgfCd20Hotspots
+tableName wgEncodeUwDgfCd20ro01778Hotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfCd20Pk
+metaObject wgEncodeUwDgfCd20ro01778Pk
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Pk.narrowPeak.gz
+fileName wgEncodeUwDgfCd20ro01778Pk.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS18208
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4884
-tableName wgEncodeUwDgfCd20Pk
+tableName wgEncodeUwDgfCd20ro01778Pk
 view Peaks
 
-metaObject wgEncodeUwDgfCd20Raw
+metaObject wgEncodeUwDgfCd20ro01778Raw
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Raw.bigWig
+fileName wgEncodeUwDgfCd20ro01778Raw.bigWig
 grant Stam
 lab UW
 labExpId DS18208
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4884
-tableName wgEncodeUwDgfCd20Raw
+tableName wgEncodeUwDgfCd20ro01778Raw
 view RawSignal
 
-metaObject wgEncodeUwDgfCd20RawData
+metaObject wgEncodeUwDgfCd20ro01778RawData
 objType file
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20RawData.fastq.tgz
+fileName wgEncodeUwDgfCd20ro01778RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS18208
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4884
 view RawData
 
-metaObject wgEncodeUwDgfCd20Sig
+metaObject wgEncodeUwDgfCd20ro01778Sig
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20Sig.bigWig
+fileName wgEncodeUwDgfCd20ro01778Sig.bigWig
 grant Stam
 lab UW
 labExpId DS18208
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4884
-tableName wgEncodeUwDgfCd20Sig
+tableName wgEncodeUwDgfCd20ro01778Sig
 view Signal
 
 metaObject wgEncodeUwDgfGm06990Aln
@@ -481,6 +493,7 @@ lab UW
 labExpId DS12436
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4886
 view Alignments
 
@@ -498,6 +511,7 @@ lab UW
 labExpId DS12436
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4886
 tableName wgEncodeUwDgfGm12865Hotspots
 view Hotspots
@@ -516,6 +530,7 @@ lab UW
 labExpId DS12436
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4886
 tableName wgEncodeUwDgfGm12865Pk
 view Peaks
@@ -534,6 +549,7 @@ lab UW
 labExpId DS12436
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4886
 tableName wgEncodeUwDgfGm12865Raw
 view RawSignal
@@ -551,6 +567,7 @@ grant Stam
 lab UW
 labExpId DS12436
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4886
 view RawData
 
@@ -567,6 +584,7 @@ grant Stam
 lab UW
 labExpId DS12436
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4886
 tableName wgEncodeUwDgfGm12865Sig
 view Signal
@@ -843,6 +861,7 @@ lab UW
 labExpId DS15192
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4895
 view Alignments
 
@@ -860,6 +879,7 @@ lab UW
 labExpId DS15192
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4895
 tableName wgEncodeUwDgfHahHotspots
 view Hotspots
@@ -878,6 +898,7 @@ lab UW
 labExpId DS15192
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4895
 tableName wgEncodeUwDgfHahPk
 view Peaks
@@ -896,6 +917,7 @@ lab UW
 labExpId DS15192
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4895
 tableName wgEncodeUwDgfHahRaw
 view RawSignal
@@ -913,6 +935,7 @@ grant Stam
 lab UW
 labExpId DS15192
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4895
 view RawData
 
@@ -929,6 +952,7 @@ grant Stam
 lab UW
 labExpId DS15192
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4895
 tableName wgEncodeUwDgfHahSig
 view Signal
@@ -947,6 +971,7 @@ lab UW
 labExpId DS12501
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4887
 view Alignments
 
@@ -964,6 +989,7 @@ lab UW
 labExpId DS12501
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4887
 tableName wgEncodeUwDgfHcfHotspots
 view Hotspots
@@ -982,6 +1008,7 @@ lab UW
 labExpId DS12501
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4887
 tableName wgEncodeUwDgfHcfPk
 view Peaks
@@ -1000,6 +1027,7 @@ lab UW
 labExpId DS12501
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4887
 tableName wgEncodeUwDgfHcfRaw
 view RawSignal
@@ -1017,6 +1045,7 @@ grant Stam
 lab UW
 labExpId DS12501
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4887
 view RawData
 
@@ -1033,6 +1062,7 @@ grant Stam
 lab UW
 labExpId DS12501
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4887
 tableName wgEncodeUwDgfHcfSig
 view Signal
@@ -1051,6 +1081,7 @@ lab UW
 labExpId DS12599
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4899
 view Alignments
 
@@ -1068,6 +1099,7 @@ lab UW
 labExpId DS12599
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4899
 tableName wgEncodeUwDgfHcmHotspots
 view Hotspots
@@ -1086,6 +1118,7 @@ lab UW
 labExpId DS12599
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4899
 tableName wgEncodeUwDgfHcmPk
 view Peaks
@@ -1104,6 +1137,7 @@ lab UW
 labExpId DS12599
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4899
 tableName wgEncodeUwDgfHcmRaw
 view RawSignal
@@ -1121,6 +1155,7 @@ grant Stam
 lab UW
 labExpId DS12599
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4899
 view RawData
 
@@ -1137,6 +1172,7 @@ grant Stam
 lab UW
 labExpId DS12599
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4899
 tableName wgEncodeUwDgfHcmSig
 view Signal
@@ -1284,6 +1320,7 @@ lab UW
 labExpId DS12763
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4898
 view Alignments
 
@@ -1301,6 +1338,7 @@ lab UW
 labExpId DS12763
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4898
 tableName wgEncodeUwDgfHeeHotspots
 view Hotspots
@@ -1319,6 +1357,7 @@ lab UW
 labExpId DS12763
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4898
 tableName wgEncodeUwDgfHeePk
 view Peaks
@@ -1337,6 +1376,7 @@ lab UW
 labExpId DS12763
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4898
 tableName wgEncodeUwDgfHeeRaw
 view RawSignal
@@ -1354,6 +1394,7 @@ grant Stam
 lab UW
 labExpId DS12763
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4898
 view RawData
 
@@ -1370,6 +1411,7 @@ grant Stam
 lab UW
 labExpId DS12763
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4898
 tableName wgEncodeUwDgfHeeSig
 view Signal
@@ -1521,6 +1563,7 @@ lab UW
 labExpId DS15115
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4892
 view Alignments
 
@@ -1538,6 +1581,7 @@ lab UW
 labExpId DS15115
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4892
 tableName wgEncodeUwDgfHffHotspots
 view Hotspots
@@ -1556,6 +1600,7 @@ lab UW
 labExpId DS15115
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4892
 tableName wgEncodeUwDgfHffPk
 view Peaks
@@ -1574,6 +1619,7 @@ lab UW
 labExpId DS15115
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4892
 tableName wgEncodeUwDgfHffRaw
 view RawSignal
@@ -1591,6 +1637,7 @@ grant Stam
 lab UW
 labExpId DS15115
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4892
 view RawData
 
@@ -1607,6 +1654,7 @@ grant Stam
 lab UW
 labExpId DS15115
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4892
 tableName wgEncodeUwDgfHffSig
 view Signal
@@ -1625,6 +1673,7 @@ lab UW
 labExpId DS12684
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4888
 view Alignments
 
@@ -1642,6 +1691,7 @@ lab UW
 labExpId DS12684
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4888
 tableName wgEncodeUwDgfHipeHotspots
 view Hotspots
@@ -1660,6 +1710,7 @@ lab UW
 labExpId DS12684
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4888
 tableName wgEncodeUwDgfHipePk
 view Peaks
@@ -1678,6 +1729,7 @@ lab UW
 labExpId DS12684
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4888
 tableName wgEncodeUwDgfHipeRaw
 view RawSignal
@@ -1695,6 +1747,7 @@ grant Stam
 lab UW
 labExpId DS12684
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4888
 view RawData
 
@@ -1711,6 +1764,7 @@ grant Stam
 lab UW
 labExpId DS12684
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4888
 tableName wgEncodeUwDgfHipeSig
 view Signal
@@ -1858,6 +1912,7 @@ lab UW
 labExpId DS13185
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4891
 view Alignments
 
@@ -1875,6 +1930,7 @@ lab UW
 labExpId DS13185
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4891
 tableName wgEncodeUwDgfHmvecbHotspots
 view Hotspots
@@ -1893,6 +1949,7 @@ lab UW
 labExpId DS13185
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4891
 tableName wgEncodeUwDgfHmvecbPk
 view Peaks
@@ -1911,6 +1968,7 @@ lab UW
 labExpId DS13185
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4891
 tableName wgEncodeUwDgfHmvecbRaw
 view RawSignal
@@ -1928,6 +1986,7 @@ grant Stam
 lab UW
 labExpId DS13185
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4891
 view RawData
 
@@ -1944,6 +2003,7 @@ grant Stam
 lab UW
 labExpId DS13185
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4891
 tableName wgEncodeUwDgfHmvecbSig
 view Signal
@@ -1962,6 +2022,7 @@ lab UW
 labExpId DS13242
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4890
 view Alignments
 
@@ -1979,6 +2040,7 @@ lab UW
 labExpId DS13242
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4890
 tableName wgEncodeUwDgfHmvecdHotspots
 view Hotspots
@@ -1997,6 +2059,7 @@ lab UW
 labExpId DS13242
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4890
 tableName wgEncodeUwDgfHmvecdPk
 view Peaks
@@ -2015,6 +2078,7 @@ lab UW
 labExpId DS13242
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4890
 tableName wgEncodeUwDgfHmvecdRaw
 view RawSignal
@@ -2032,6 +2096,7 @@ grant Stam
 lab UW
 labExpId DS13242
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4890
 view RawData
 
@@ -2048,6 +2113,7 @@ grant Stam
 lab UW
 labExpId DS13242
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4890
 tableName wgEncodeUwDgfHmvecdSig
 view Signal
@@ -2195,6 +2261,7 @@ lab UW
 labExpId DS13150
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4889
 view Alignments
 
@@ -2212,6 +2279,7 @@ lab UW
 labExpId DS13150
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4889
 tableName wgEncodeUwDgfHmvecfHotspots
 view Hotspots
@@ -2230,6 +2298,7 @@ lab UW
 labExpId DS13150
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4889
 tableName wgEncodeUwDgfHmvecfPk
 view Peaks
@@ -2248,6 +2317,7 @@ lab UW
 labExpId DS13150
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4889
 tableName wgEncodeUwDgfHmvecfRaw
 view RawSignal
@@ -2265,6 +2335,7 @@ grant Stam
 lab UW
 labExpId DS13150
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4889
 view RawData
 
@@ -2281,6 +2352,7 @@ grant Stam
 lab UW
 labExpId DS13150
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4889
 tableName wgEncodeUwDgfHmvecfSig
 view Signal
@@ -2787,6 +2859,7 @@ lab UW
 labExpId DS14426
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4894
 view Alignments
 
@@ -2804,6 +2877,7 @@ lab UW
 labExpId DS14426
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4894
 tableName wgEncodeUwDgfHsmmHotspots
 view Hotspots
@@ -2822,6 +2896,7 @@ lab UW
 labExpId DS14426
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4894
 tableName wgEncodeUwDgfHsmmPk
 view Peaks
@@ -2840,6 +2915,7 @@ lab UW
 labExpId DS14426
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4894
 tableName wgEncodeUwDgfHsmmRaw
 view RawSignal
@@ -2857,6 +2933,7 @@ grant Stam
 lab UW
 labExpId DS14426
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4894
 view RawData
 
@@ -2873,6 +2950,7 @@ grant Stam
 lab UW
 labExpId DS14426
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4894
 tableName wgEncodeUwDgfHsmmSig
 view Signal
@@ -2891,6 +2969,7 @@ lab UW
 labExpId DS13981
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4896
 view Alignments
 
@@ -2908,6 +2987,7 @@ lab UW
 labExpId DS13981
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4896
 tableName wgEncodeUwDgfHvmfHotspots
 view Hotspots
@@ -2926,6 +3006,7 @@ lab UW
 labExpId DS13981
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4896
 tableName wgEncodeUwDgfHvmfPk
 view Peaks
@@ -2944,6 +3025,7 @@ lab UW
 labExpId DS13981
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4896
 tableName wgEncodeUwDgfHvmfRaw
 view RawSignal
@@ -2961,6 +3043,7 @@ grant Stam
 lab UW
 labExpId DS13981
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4896
 view RawData
 
@@ -2977,6 +3060,7 @@ grant Stam
 lab UW
 labExpId DS13981
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4896
 tableName wgEncodeUwDgfHvmfSig
 view Signal
@@ -3114,108 +3198,114 @@ subId 1815
 tableName wgEncodeUwDgfK562Sig
 view Signal
 
-metaObject wgEncodeUwDgfMonocd14Aln
+metaObject wgEncodeUwDgfMonocd14ro1746Aln
 objType file
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Aln.bam
+fileName wgEncodeUwDgfMonocd14ro1746Aln.bam
 grant Stam
 lab UW
 labExpId DS16508
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4885
 view Alignments
 
-metaObject wgEncodeUwDgfMonocd14Hotspots
+metaObject wgEncodeUwDgfMonocd14ro1746Hotspots
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Hotspots.broadPeak.gz
+fileName wgEncodeUwDgfMonocd14ro1746Hotspots.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS16508
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4885
-tableName wgEncodeUwDgfMonocd14Hotspots
+tableName wgEncodeUwDgfMonocd14ro1746Hotspots
 view Hotspots
 
-metaObject wgEncodeUwDgfMonocd14Pk
+metaObject wgEncodeUwDgfMonocd14ro1746Pk
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Pk.narrowPeak.gz
+fileName wgEncodeUwDgfMonocd14ro1746Pk.narrowPeak.gz
 grant Stam
 lab UW
 labExpId DS16508
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4885
-tableName wgEncodeUwDgfMonocd14Pk
+tableName wgEncodeUwDgfMonocd14ro1746Pk
 view Peaks
 
-metaObject wgEncodeUwDgfMonocd14Raw
+metaObject wgEncodeUwDgfMonocd14ro1746Raw
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Raw.bigWig
+fileName wgEncodeUwDgfMonocd14ro1746Raw.bigWig
 grant Stam
 lab UW
 labExpId DS16508
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4885
-tableName wgEncodeUwDgfMonocd14Raw
+tableName wgEncodeUwDgfMonocd14ro1746Raw
 view RawSignal
 
-metaObject wgEncodeUwDgfMonocd14RawData
+metaObject wgEncodeUwDgfMonocd14ro1746RawData
 objType file
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14RawData.fastq.tgz
+fileName wgEncodeUwDgfMonocd14ro1746RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16508
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4885
 view RawData
 
-metaObject wgEncodeUwDgfMonocd14Sig
+metaObject wgEncodeUwDgfMonocd14ro1746Sig
 objType table
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDgf
 dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14Sig.bigWig
+fileName wgEncodeUwDgfMonocd14ro1746Sig.bigWig
 grant Stam
 lab UW
 labExpId DS16508
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4885
-tableName wgEncodeUwDgfMonocd14Sig
+tableName wgEncodeUwDgfMonocd14ro1746Sig
 view Signal
 
 metaObject wgEncodeUwDgfNb4Aln
@@ -3232,6 +3322,7 @@ lab UW
 labExpId DS12543
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4893
 view Alignments
 
@@ -3249,6 +3340,7 @@ lab UW
 labExpId DS12543
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4893
 tableName wgEncodeUwDgfNb4Hotspots
 view Hotspots
@@ -3267,6 +3359,7 @@ lab UW
 labExpId DS12543
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4893
 tableName wgEncodeUwDgfNb4Pk
 view Peaks
@@ -3285,6 +3378,7 @@ lab UW
 labExpId DS12543
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4893
 tableName wgEncodeUwDgfNb4Raw
 view RawSignal
@@ -3302,6 +3396,7 @@ grant Stam
 lab UW
 labExpId DS12543
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4893
 view RawData
 
@@ -3318,6 +3413,7 @@ grant Stam
 lab UW
 labExpId DS12543
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4893
 tableName wgEncodeUwDgfNb4Sig
 view Signal
@@ -3587,6 +3683,7 @@ lab UW
 labExpId DS11923
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4897
 view Alignments
 
@@ -3604,6 +3701,7 @@ lab UW
 labExpId DS11923
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4897
 tableName wgEncodeUwDgfNhdfneoHotspots
 view Hotspots
@@ -3622,6 +3720,7 @@ lab UW
 labExpId DS11923
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4897
 tableName wgEncodeUwDgfNhdfneoPk
 view Peaks
@@ -3640,6 +3739,7 @@ lab UW
 labExpId DS11923
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4897
 tableName wgEncodeUwDgfNhdfneoRaw
 view RawSignal
@@ -3657,6 +3757,7 @@ grant Stam
 lab UW
 labExpId DS11923
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4897
 view RawData
 
@@ -3673,6 +3774,7 @@ grant Stam
 lab UW
 labExpId DS11923
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4897
 tableName wgEncodeUwDgfNhdfneoSig
 view Signal
@@ -3691,6 +3793,7 @@ lab UW
 labExpId DS12829
 labVersion Bowtie 0.12.7
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4900
 view Alignments
 
@@ -3708,6 +3811,7 @@ lab UW
 labExpId DS12829
 labVersion Hotspot-v5.2
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4900
 tableName wgEncodeUwDgfNhlfHotspots
 view Hotspots
@@ -3726,6 +3830,7 @@ lab UW
 labExpId DS12829
 labVersion lmax-v1.0
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4900
 tableName wgEncodeUwDgfNhlfPk
 view Peaks
@@ -3744,6 +3849,7 @@ lab UW
 labExpId DS12829
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4900
 tableName wgEncodeUwDgfNhlfRaw
 view RawSignal
@@ -3761,6 +3867,7 @@ grant Stam
 lab UW
 labExpId DS12829
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4900
 view RawData
 
@@ -3777,6 +3884,7 @@ grant Stam
 lab UW
 labExpId DS12829
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 4900
 tableName wgEncodeUwDgfNhlfSig
 view Signal
@@ -4298,4 +4406,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 1480695177
+# MAGIC: -239852429

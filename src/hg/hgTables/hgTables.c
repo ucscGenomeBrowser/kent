@@ -231,7 +231,7 @@ AllocVar(grp);
 char name[16];
 safef(name, sizeof(name), "hub_%d", hub->id);
 grp->name = cloneString(name);
-grp->label = cloneString(hub->shortLabel);
+grp->label = cloneString(hub->trackHub->shortLabel);
 return grp;
 }
 

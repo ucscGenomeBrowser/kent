@@ -11,6 +11,7 @@ lab CRG-Guigo
 md5sum a1b1a8c99431fedf6a3b4baef028cca4
 project wgEncode
 size 100mer
+subId 4945
 tableName wgEncodeCrgMapabilityAlign100mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -28,6 +29,7 @@ lab CRG-Guigo
 md5sum ba1c4bb9fb079aa86094572d5a827bb7
 project wgEncode
 size 24mer
+subId 4945
 tableName wgEncodeCrgMapabilityAlign24mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -45,6 +47,7 @@ lab CRG-Guigo
 md5sum debdda148b79a5b5d22ebd13caaf069c
 project wgEncode
 size 36mer
+subId 4945
 tableName wgEncodeCrgMapabilityAlign36mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -62,6 +65,7 @@ lab CRG-Guigo
 md5sum 97d55005d426e4e4a7c304a7a0f3b2a8
 project wgEncode
 size 40mer
+subId 4945
 tableName wgEncodeCrgMapabilityAlign40mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -79,6 +83,7 @@ lab CRG-Guigo
 md5sum 2e73d575594ad4aa3b66e2b436930b8d
 project wgEncode
 size 50mer
+subId 4945
 tableName wgEncodeCrgMapabilityAlign50mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -96,6 +101,7 @@ lab CRG-Guigo
 md5sum 82bbdf76bf5f1df5e73dcbf4480e0f43
 project wgEncode
 size 75mer
+subId 4945
 tableName wgEncodeCrgMapabilityAlign75mer
 uniqueness no more than 2 mismatches
 view Alignability
@@ -179,4 +185,4 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
-# MAGIC: -338169219
+# MAGIC: -337904583

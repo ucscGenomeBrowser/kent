@@ -67,6 +67,8 @@ int flatTracksCmp(const void *va, const void *vb)
 {
 const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
+if (a->order == b->order)
+    return tgCmpPriority(a->track,b->track);
 return (a->order - b->order);
 }
 
