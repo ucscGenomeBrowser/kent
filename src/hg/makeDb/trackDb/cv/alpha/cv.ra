@@ -5076,7 +5076,7 @@ lab Myers
 lots G2209
 targetId GeneCard:BTF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
-validation BTF3_(SC-166093)(missing):human_BTF3_SC-166093_validation_Myers.pdf
+validation BTF3_(SC-166093):human_BTF3_SC-166093_validation_Myers.pdf
 
 term c-Fos
 tag CFOS
@@ -5177,7 +5177,7 @@ vendorId sc-150
 orderUrl http://www.scbt.com/datasheet-150-c-ebp-beta-c-19-antibody.html
 lab Myers
 lots I1010
-targetId GeneCard
+targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 validation CEBPB_(SC-150)(missing):human_CEBPB_SC-150_validation_Myers.pdf
 
@@ -7550,7 +7550,7 @@ lab Myers
 lots G0208
 targetId GeneCard:STAT5A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
-validation STAT5A_(SC-74442)(missing):human_STAT5A_SC-74442_validation_Myers.pdf
+validation STAT5A_(SC-74442):human_STAT5A_SC-74442_validation_Myers.pdf
 
 term SUZ12_(05-1317)
 tag SUZ12051317
@@ -7687,6 +7687,7 @@ type Antibody
 target TCF4
 antibodyDescription Rabbit monoclonal
 targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+deprecated same as TCF7L2
 vendorName Cell Signaling Technology
 vendorId 2569S
 orderUrl http://www.cellsignal.com/products/2569.html
