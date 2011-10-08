@@ -54,7 +54,7 @@ puts(str);
 ourCellEnd();
 }
 
-static void hgHubConnectUnlisted()
+static void hgHubConnectUnlisted(struct hubConnectStatus *hubList)
 /* Put up the list of unlisted hubs and other controls for the page. */
 {
 // put out the top of our page
@@ -73,7 +73,7 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
 
 // count up the number of unlisted hubs we currently have
 int count = 0;
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCartAll(cart);
+struct hubConnectStatus *hub;
 for(hub = hubList; hub; hub = hub->next)
     {
     if (isHubUnlisted(hub) && ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) ))
@@ -384,6 +384,9 @@ makeGenomePrint();
 // check to see if we have any new hubs
 hubCheckForNew(database, cart);
 
+// grab all the hubs that are listed in the cart
+struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
+
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
 cgiMakeHiddenVar("hubUrl", "");
@@ -418,7 +421,7 @@ printf("<div id=\"tabs\">"
        "</ul> ");
 
 hgHubConnectPublic();
-hgHubConnectUnlisted();
+hgHubConnectUnlisted(hubList);
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");
