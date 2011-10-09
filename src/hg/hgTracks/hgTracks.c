@@ -3439,9 +3439,10 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
 	    {
-	    struct trackDb *tdbList = trackHubAddTracks(hub->id, 
-		hub->hubUrl, database, pHubList);
+	    struct trackDb *tdbList = hubAddTracks(hub, database, pHubList);
 	    addTdbListToTrackList(tdbList, NULL, pTrackList);
+	    // we're going to free the hubConnectStatus list
+	    hub->trackHub = NULL; 
 	    }
         errCatchEnd(errCatch);
         if (errCatch->gotError)

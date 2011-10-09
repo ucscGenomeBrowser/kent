@@ -88,9 +88,6 @@ int trackHubCheck(char *hubUrl, struct dyString *errors);
 /* trackHubCheck - Check a track data hub for integrity. Put errors in dyString.
  *      return 0 if hub has no errors, 1 otherwise */
 
-struct trackDb *trackHubAddTracks(int id, char *hubUrl, char *database, struct trackHub **pHubList);
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
 
 #endif /* TRACKHUB_H */
 

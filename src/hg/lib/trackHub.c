@@ -509,28 +509,3 @@ trackHubClose(&hub);
 return retVal;
 }
 
-struct trackDb *trackHubAddTracks(int id, char *hubUrl, char *database,
-	struct trackHub **pHubList)
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
-{
-/* Load trackDb.ra file and make it into proper trackDb tree */
-char hubName[64];
-struct trackDb *tdbList = NULL;
-safef(hubName, sizeof(hubName), "hub_%d",id);
-struct trackHub *hub = trackHubOpen(hubUrl, hubName);
-if (hub != NULL)
-    {
-    struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-    if (hubGenome != NULL)
-	{
-	tdbList = trackHubTracksForGenome(hub, hubGenome);
-	tdbList = trackDbLinkUpGenerations(tdbList);
-	tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	trackDbPrioritizeContainerItems(tdbList);
-	if (tdbList != NULL)
-	    slAddHead(pHubList, hub);
-	}
-    }
-return tdbList;
-}

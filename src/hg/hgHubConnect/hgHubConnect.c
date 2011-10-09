@@ -337,7 +337,7 @@ for(; hub; hub = hub->next)
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	trackHubAddTracks(hub->id, hub->hubUrl, database, &trackHubList);
+	hubAddTracks(hub, database, &trackHubList);
 	}
     errCatchEnd(errCatch);
     if (errCatch->gotError)
