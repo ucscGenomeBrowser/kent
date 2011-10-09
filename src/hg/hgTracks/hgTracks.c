@@ -3426,31 +3426,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-static void addTracksFromTrackHub(int id, char *hubUrl, struct track **pTrackList,
-	struct trackHub **pHubList)
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
-{
-/* Load trackDb.ra file and make it into proper trackDb tree */
-char hubName[8];
-safef(hubName, sizeof(hubName), "hub_%d",id);
-struct trackHub *hub = trackHubOpen(hubUrl, hubName);
-if (hub != NULL)
-    {
-    struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-    if (hubGenome != NULL)
-	{
-	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
-	tdbList = trackDbLinkUpGenerations(tdbList);
-	tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	trackDbPrioritizeContainerItems(tdbList);
-	addTdbListToTrackList(tdbList, NULL, pTrackList);
-	if (tdbList != NULL)
-	    slAddHead(pHubList, hub);
-	}
-    }
-}
-
 void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
@@ -3463,7 +3438,11 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         /* error catching in so it won't just abort  */
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
-	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+	    {
+	    struct trackDb *tdbList = trackHubAddTracks(hub->id, 
+		hub->hubUrl, database, pHubList);
+	    addTdbListToTrackList(tdbList, NULL, pTrackList);
+	    }
         errCatchEnd(errCatch);
         if (errCatch->gotError)
 	    hubUpdateStatus( errCatch->message->string, hub);
