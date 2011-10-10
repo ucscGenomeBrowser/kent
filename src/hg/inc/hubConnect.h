@@ -119,4 +119,9 @@ void hubUpdateStatus(char *errorMessage, struct hubConnectStatus *hub);
 
 boolean trackHubHasDatabase(struct trackHub *hub, char *database) ;
 /* Return TRUE if hub has contents for database */
+
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database, 
+    struct trackHub **pHubList);
+/* Load up stuff from data hub and append to list. The hubUrl points to
+ * a trackDb.ra format file.  */
 #endif /* HUBCONNECT_H */

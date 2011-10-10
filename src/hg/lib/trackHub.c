@@ -29,6 +29,7 @@
 #include "hgBam.h"
 #include "bigWig.h"
 #include "bigBed.h"
+#include "hdb.h"
 
 static boolean hasProtocol(char *urlOrPath)
 /* Return TRUE if it looks like it has http://, ftp:// etc. */
@@ -130,6 +131,8 @@ hub->name = cloneString(hubName);
 hub->settings = hubRa;
 
 /* Fill in required fields from settings. */
+trackHubRequiredSetting(hub, "hub");
+trackHubRequiredSetting(hub, "email");
 hub->shortLabel = trackHubRequiredSetting(hub, "shortLabel");
 hub->longLabel = trackHubRequiredSetting(hub, "longLabel");
 hub->genomesFile = trackHubRequiredSetting(hub, "genomesFile");
@@ -505,3 +508,4 @@ trackHubClose(&hub);
 
 return retVal;
 }
+
