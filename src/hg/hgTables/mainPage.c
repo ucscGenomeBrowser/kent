@@ -967,9 +967,9 @@ hPrintf("%s",
   "<A HREF=\"http://great.stanford.edu\">GREAT</A>. Refer to the "
   "<A HREF=\"../goldenPath/credits.html\">Credits</A> page for the list of "
   "contributors and usage restrictions associated with these data. "
-  "All tables can be downloaded in their entirety from the \""
+  "All tables can be downloaded in their entirety from the "
   "<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html\""
-   "TARGET=_blank>Sequence and Annotation Downloads</A>\" page."
+  ">Sequence and Annotation Downloads</A> page."
    );
 
 hPrintf("<script type=\"text/javascript\">\n");
