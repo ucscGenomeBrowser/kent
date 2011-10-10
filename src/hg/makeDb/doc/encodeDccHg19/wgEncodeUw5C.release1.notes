@@ -11,7 +11,7 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 0
+    Tables: 1
     Files: 41
     Gbdbs: 0
 
@@ -23,7 +23,8 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (0):
+C) New tables (1):
+wgEncodeUw5C
 
 C') New files (38 downloadables, 0 gbdbs):
     current location on alpha:

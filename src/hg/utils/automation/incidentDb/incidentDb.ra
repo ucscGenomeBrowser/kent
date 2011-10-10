@@ -1,0 +1,29 @@
+# configure .ra file for doAutoTrack.pl
+#
+# specify your top-level /hive/data/.../ pathname
+# in which all work should take place:
+
+workDir /hive/data/outside/ncbi/incidentDb/testAuto
+
+# A date-stamped named directory will be constructed under
+# that workDir in which all scripts should do their work.
+# Each script is given that path as an argument.
+# The scripts should go to that directory and construct
+#	whatever hierarchy they would like.
+#
+# Any output from the scripts, to stdout or stderr, will go
+#	into a log file under workDir/log/.../
+#
+# Specify your scripts for each procedure here:
+#
+download /hive/data/outside/ncbi/incidentDb/testAuto/download.sh
+process /hive/data/outside/ncbi/incidentDb/testAuto/process.sh
+load /hive/data/outside/ncbi/incidentDb/testAuto/load.sh
+verify /hive/data/outside/ncbi/incidentDb/testAuto/verify.sh
+push /hive/data/outside/ncbi/incidentDb/testAuto/push.sh
+cleanup /hive/data/outside/ncbi/incidentDb/testAuto/cleanup.sh
+#
+# Each script should be able to determine if it can run due to
+#	output from previous steps.  Return 0 for success,
+#	any non-zero for non-success.  Doing nothing can be success
+#	when appropriate.

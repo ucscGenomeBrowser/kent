@@ -244,7 +244,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (isEmpty(errorMessage))
 	    ourPrintCell(longLabel);
 	else
-	    printf("<TD>ERROR: %s</TD>", errorMessage);
+	    printf("<TD><span class=\"hubError\">ERROR: %s </span>"
+		"<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+		errorMessage);
 
 	ourPrintCell(url);
 	}
@@ -325,6 +327,29 @@ if (id != NULL)
 cartRemove(theCart, "hubId");
 }
 
+static void checkTrackDbs(struct hubConnectStatus *hubList)
+{
+struct hubConnectStatus *hub = hubList;
+struct trackHub *trackHubList = NULL;
+
+for(; hub; hub = hub->next)
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	hubAddTracks(hub, database, &trackHubList);
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	hub->errorMessage = cloneString(errCatch->message->string);
+	hubUpdateStatus( errCatch->message->string, hub);
+	}
+    else
+	hubUpdateStatus(NULL, hub);
+    }
+}
+
 void doMiddle(struct cart *theCart)
 /* Write header and body of html page. */
 {
@@ -386,6 +411,8 @@ hubCheckForNew(database, cart);
 
 // grab all the hubs that are listed in the cart
 struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
+
+checkTrackDbs(hubList);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
