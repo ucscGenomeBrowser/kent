@@ -4001,7 +4001,7 @@ printf("\n<!-- ----- subtracks list ----- -->\n");
 for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
     {
     subtrack = subtrackRef->val;
-    int ix,ix2;
+    int ix;
 
     // Determine whether subtrack is checked, visible, configurable, has group membership, etc.
     int fourState = subtrackFourStateChecked(subtrack,cart);
@@ -4022,7 +4022,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         else if (membersForAll->members[dimV]) // subtrack only configurable if more than one subtrack in view
             {                                  // find "view" in subgroup membership: e.g. "signal"
             if (-1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
-                {                              // find "signal" in set of all views
+                {
+                int ix2;                       // find "signal" in set of all views
                 if (-1 != (ix2 = stringArrayIx(membership->membership[ix], membersForAll->members[dimV]->tags, membersForAll->members[dimV]->count)))
                     {
                     if (membersForAll->members[dimV]->subtrackCount[ix2] < 2)
