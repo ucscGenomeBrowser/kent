@@ -76,7 +76,7 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
-set rfam = /hive/data/outside/Rfam/110710
+set rfam = /hive/data/outside/Rfam/111005
 
 
 # Tracks
@@ -104,8 +104,6 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
 
 
 
@@ -159,11 +157,18 @@ netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
 netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
 
-# Get the Rfams that overlap with blocks that are syntenic to $Xdb
+# Get the Rfams that overlap with blocks that are syntenic to $Xdb.
+# Filter out anything not aligned uniquely, since the later stages of the 
+# pipeline will assume that each aligned sequence is aligned uniquely.  This
+# unique alignment assumption might not make sense in this instance, and 
+# probably should be revisited later, but affects only a few sequences 
+# at this time (10/09/11).
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
 bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
-bedToPsl ${db}/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
+bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
+pslCDnaFilter -uniqueMapped rfam.syntenic.psl rfam.syntenic.uniq.psl
+pslToBed rfam.syntenic.uniq.psl rfam.syntenic.uniq.bed
  
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna 
@@ -188,14 +193,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e ccds/$c.bed) then
 	  echo creating empty ccds/$c.bed
           echo -n "" >ccds/$c.bed
-    endif
-    if (! -e trna/$c.bed) then
-	  echo creating empty trna/$c.bed
-          echo -n "" >trna/$c.bed
-    endif
-    if (! -e rfam/$c.bed) then
-	  echo creating empty rfam/$c.bed
-          echo -n "" >rfam/$c.bed
     endif
 end
 
@@ -641,13 +638,17 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+
+
 # Merge back in antibodies, and add the small, noncoding genes that are not well-represented
 # in GenBank (Rfam, tRNA)
-cat txWalk.bed antibody.bed trna.bed rfam.syntenic.bed > abWalk.bed
+cat txWalk.bed antibody.bed trna.bed rfam.syntenic.uniq.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
 sequenceForBed -db=$db -bedIn=trna.bed -fastaOut=stdout -upCase -keepName > trna.fa
-sequenceForBed -db=$db -bedIn=rfam.syntenic.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.fa
-cat txWalk.fa antibody.fa trna.fa rfam.syntenic.fa > abWalk.fa
+sequenceForBed -db=$db -bedIn=rfam.syntenic.uniq.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.uniq.fa
+cat txWalk.fa antibody.fa trna.fa rfam.syntenic.uniq.fa > abWalk.fa
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -658,7 +659,7 @@ txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
 # Create gene info table. Takes 8 seconds
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
-cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.psl \
+cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.uniq.psl \
       | txInfoAssemble pick.bed pick.tce cdsEvidence/txCdsPredict.tce \
 	altSplice.bed abWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
 
