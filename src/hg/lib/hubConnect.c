@@ -565,3 +565,32 @@ else if (tHub != NULL)
     }
 hDisconnectCentral(&conn);
 }
+
+struct trackDb *hubAddTracks(struct hubConnectStatus *hub, char *database,
+	struct trackHub **pHubList)
+/* Load up stuff from data hub and append to list. The hubUrl points to
+ * a trackDb.ra format file.  */
+{
+/* Load trackDb.ra file and make it into proper trackDb tree */
+struct trackDb *tdbList = NULL;
+struct trackHub *trackHub = hub->trackHub;
+
+if (trackHub != NULL)
+    {
+    char hubName[64];
+    safef(hubName, sizeof(hubName), "hub_%d", hub->id);
+    trackHub->name = cloneString(hubName);
+
+    struct trackHubGenome *hubGenome = trackHubFindGenome(trackHub, database);
+    if (hubGenome != NULL)
+	{
+	tdbList = trackHubTracksForGenome(trackHub, hubGenome);
+	tdbList = trackDbLinkUpGenerations(tdbList);
+	tdbList = trackDbPolishAfterLinkup(tdbList, database);
+	trackDbPrioritizeContainerItems(tdbList);
+	if (tdbList != NULL)
+	    slAddHead(pHubList, trackHub);
+	}
+    }
+return tdbList;
+}
