@@ -10330,7 +10330,7 @@ cartWebStart(cart, database, "%s", tdb->longLabel);
 safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
+    errAbort("Couldn't find %s in refLink table - this accession may no longer be available.", rnaName);
 rl = refLinkLoad(row);
 sqlFreeResult(&sr);
 printf("<H2>Gene %s</H2>\n", rl->name);

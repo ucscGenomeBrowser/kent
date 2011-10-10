@@ -797,6 +797,9 @@ for(; exonStart < lastStart; exonStart++, exonEnd++, frames++)
     struct exonInfo *gi;
     int thisStart = *exonStart;
 
+    if (thisStart > pred->cdsEnd)
+	break;
+
     if (thisStart < pred->cdsStart)
 	thisStart = pred->cdsStart;
 

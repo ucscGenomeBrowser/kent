@@ -2438,9 +2438,10 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
 expId 2081
-fileName wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep1.bam
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep1.bam,wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
+md5sum 926726b5aa567dd91e0964d6ecd06220,c197dcba8494d14cc9850a01ecb261a1
 project wgEncode
 replicate 1
 setType exp
@@ -2461,9 +2462,10 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002081
 expId 2081
-fileName wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep2.bam
+fileName wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep2.bam,wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep2.bam.bai
 grant Snyder
 lab USC
+md5sum cd60309d03896134b96edb8b143dbb72,a17925125276fdf41f4f2f694e7eab02
 project wgEncode
 replicate 2
 setType exp
@@ -2488,6 +2490,7 @@ fileName wgEncodeSydhHistonePanc1H3k04me1bUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 65c6b91294d52a4ed5589ac8361179c5
 project wgEncode
 setType exp
 subId 4838
@@ -2511,6 +2514,7 @@ expId 2081
 fileName wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
+md5sum 055cb3376545a998ca10a87afce26c28
 project wgEncode
 replicate 1
 setType exp
@@ -2534,6 +2538,7 @@ expId 2081
 fileName wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
+md5sum d15dc8a793064ed0ee4638f2cff5fe0b
 project wgEncode
 replicate 2
 setType exp
@@ -2558,6 +2563,7 @@ fileName wgEncodeSydhHistonePanc1H3k04me1bUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 62d5c4e9bac07938fd736a3dedd2c153
 project wgEncode
 setType exp
 subId 4838
@@ -2578,9 +2584,10 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
 expId 2080
-fileName wgEncodeSydhHistonePanc1H3k27acUcdAlnRep1.bam
+fileName wgEncodeSydhHistonePanc1H3k27acUcdAlnRep1.bam,wgEncodeSydhHistonePanc1H3k27acUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
+md5sum 9536cb2c11b72c156a2845071109d633,aa9007632f75ef29ee1a8bceb9bffc6e
 project wgEncode
 replicate 1
 setType exp
@@ -2601,9 +2608,10 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002080
 expId 2080
-fileName wgEncodeSydhHistonePanc1H3k27acUcdAlnRep2.bam
+fileName wgEncodeSydhHistonePanc1H3k27acUcdAlnRep2.bam,wgEncodeSydhHistonePanc1H3k27acUcdAlnRep2.bam.bai
 grant Snyder
 lab USC
+md5sum 7e46e9bf58a197811b00af1ef2fa0207,bc73e40662cfb58f52bff882b2efa26f
 project wgEncode
 replicate 2
 setType exp
@@ -2628,6 +2636,7 @@ fileName wgEncodeSydhHistonePanc1H3k27acUcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum a6b4bfb4a0d0fbd4dd3d7165b3a990cb
 project wgEncode
 setType exp
 subId 4837
@@ -2651,6 +2660,7 @@ expId 2080
 fileName wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
+md5sum fccb42f7e5d674cb4b800cf52501d577
 project wgEncode
 replicate 1
 setType exp
@@ -2674,6 +2684,7 @@ expId 2080
 fileName wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
+md5sum 4547fd9fa73fdb63b760a3323de0772a
 project wgEncode
 replicate 2
 setType exp
@@ -2698,6 +2709,7 @@ fileName wgEncodeSydhHistonePanc1H3k27acUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 70cbcfdfe1bc2cb24ad59c15b88e9ea8
 project wgEncode
 setType exp
 subId 4837
@@ -3773,4 +3785,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 26448502
+# MAGIC: 1908434592
