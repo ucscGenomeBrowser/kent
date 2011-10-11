@@ -11,8 +11,6 @@ if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
 
 hgsqladmin create proteins111004
 
@@ -139,7 +137,7 @@ hgLoadSqlTab proteins111004 spDisease $kent/src/hg/lib/spDisease.sql spDisease.t
 
 cd /hive/data/inside/proteins/111004/build
 # Fetch interpro file, last time like so:
-#  wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz"
+wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz"
 gunzip protein2ipr.dat.gz
 # rearrange col positioin to match the old format
 cut -f 1 protein2ipr.dat >j1
@@ -171,13 +169,16 @@ hgLoadSqlTab proteins111004 pepPi $kent/src/hg/lib/pepPi.sql ./pi111004.tab
 hgsql sp111004 -N -e "select acc, molWeight, aaSize from info" >pepMwAa.tab
 hgLoadSqlTab proteins111004 pepMwAa $kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
 
+
+# Calculate global protein property distributions
 cd /hive/data/inside/proteins/111004/pbGlobal
 nice pbCalDistGlobal sp111004 proteins111004
 
 # Load the tables
 
-# Calculate global protein property distributions
 
+
+cd /hive/data/inside/proteins/111004/pbGlobal
 hgLoadSqlTab proteins111004 pepCCntDist $kent/src/hg/lib/pepCCntDist.sql pepCCntDist.tab
 hgLoadSqlTab proteins111004 pepHydroDist $kent/src/hg/lib/pepHydroDist.sql pepHydroDist.tab
 hgLoadSqlTab proteins111004 pepIPCntDist $kent/src/hg/lib/pepIPCntDist.sql pepIPCntDist.tab
@@ -249,9 +250,11 @@ wget --timestamping ftp://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/do
 cp delac_tr.txt spDeleted.tab
 
 # Edit spDeleted.tab to get rid of other lines except accession numbers
-
 vi spDeleted.tab
 hgLoadSqlTab proteins111004 spDeleted $kent/src/hg/lib/spDeleted.sql ./spDeleted.tab
+
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 # CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING 
 
