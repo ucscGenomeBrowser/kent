@@ -5194,7 +5194,7 @@ lab Myers
 lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation CEBPD_(SC-636)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
+validation CEBPD_(SC-636)(Missing):human_CEBPD_SC-636_validation_Myers.pdf
 
 term CHD1_(A301-218A)
 tag CHD1A301218A
@@ -5696,7 +5696,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(Western blot,siRNA):human_FOXP2_validation_Myers.pdf
+validation FOXP2(WesternBlot,siRNA):human_FOXP2_validation_Myers.pdf
 
 term GABP
 tag GABP
