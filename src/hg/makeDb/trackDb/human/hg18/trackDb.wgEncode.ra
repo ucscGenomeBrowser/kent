@@ -66,8 +66,7 @@ include wgEncodeUwChIPSeq.ra
 include wgEncodeUwDGF.ra
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.new.ra alpha,beta
-include wgEncodeUwDnaseSeq.ra public
+include wgEncodeUwDnaseSeq.ra 
 
 # Yale RNA-seq (wrangler: tdreszer)
 # include wgEncodeYaleRnaSeq.ra
