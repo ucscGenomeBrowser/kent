@@ -5836,6 +5836,46 @@ BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
     for i in `cat ../species.lst`; do echo $i; done > order.lst
 
     mz=multiz9way
+    gp=refGene
+    db=rn4
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+
+    mz=multiz9way
+    gp=refGene
+    db=rn4
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz9way
+    gp=refGene
+    db=rn4
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    mz=multiz9way
     gp=rgdGene2
     db=rn4
     mkdir exonAA exonNuc ppredAA ppredNuc
@@ -5874,4 +5914,56 @@ BASE=/hive/data/genomes/rn4/bed/lastzXenTro3.2011-09-22
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+
+    # now for the canonical set
+    cd /cluster/data/rn4/bed/multiz9way/pal
+    mz=multiz9way
+    cb=rgdGene2Canonical
+    gp=rgdGene2
+    db=rn4
+
+    for j in `awk '{print $1}' /cluster/data/rn4/chrom.sizes`
+    do  
+        echo "select chrom, chromStart, chromEnd, transcript from
+$cb where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
+    done
+
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
+    do  
+        echo "date" 
+        echo "mafGene -geneBeds=$j.known.bed  $db $mz $gp order.lst stdout | \  
+            gzip -c > ppredAA/$j.ppredAA.fa.gz"
+        echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz $gp order.lst stdout | \
+            gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+        echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz $gp order.lst stdout | \
+            gzip -c > exonNuc/$j.exonNuc.fa.gz"
+        echo "mafGene -geneBeds=$j.known.bed -exons $db $mz $gp order.lst stdout | \
+            gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $cb.jobs
+
+    time sh -x $cb.jobs > $cb.jobs.log 2>&1 &
+    sleep 1
+    tail -f $cb.jobs.log
+
+    mz=multiz9way
+    gp=rgdGene2
+    cb=rgdGene2Canonical
+    db=rn4
+    zcat exonAA/*.gz | gzip -c > $cb.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $cb.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $cb.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $cb.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz9way
+    gp=rgdGene2
+    cb=rgdGene2Canonical
+    db=rn4
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$cb.$mz.exonAA.fa.gz $pd/$cb.exonAA.fa.gz
+    ln -s `pwd`/$cb.$mz.exonNuc.fa.gz $pd/$cb.exonNuc.fa.gz
 
