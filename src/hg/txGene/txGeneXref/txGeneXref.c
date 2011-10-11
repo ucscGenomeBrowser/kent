@@ -244,8 +244,7 @@ for (info = infoList; info != NULL; info = info->next)
 	    sprintf(description, "transfer RNA %s (anticodon %s)", &aminoAcid[0], &antiCodon[0]);
 	    }
 	}
-
-    if (ev == NULL)
+    else if (ev == NULL)
 	{
 	mRNA = cloneString("");
 	if (!isAb)
