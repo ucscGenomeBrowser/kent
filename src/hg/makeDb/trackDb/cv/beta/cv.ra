@@ -5591,7 +5591,7 @@ vendorId 39875
 orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
 lab Bernstein
 lots 27210001
-targetId GeneCards:EZH2
+targetId GeneCard:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf 
 
