@@ -5696,7 +5696,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(Western blot,siRNA):human_FOXP2_validation_Myers.pdf
+validation FOXP2(WesternBlot,siRNA):human_FOXP2_validation_Myers.pdf
 
 term GABP
 tag GABP
