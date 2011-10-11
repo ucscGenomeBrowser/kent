@@ -399,21 +399,22 @@ typedef enum _eCfgType
     cfgWigMaf   =3,
     cfgPeak     =4,
     cfgGenePred =5,
-    cfgChain =6,
+    cfgChain    =6,
     cfgNetAlign =7,
     cfgBedFilt  =8,
     cfgBam      =9,
     cfgPsl      =10,
     cfgVcf      =11,
+    cfgUndetermined // Not specifically denied, but not determinable in lib code
 } eCfgType;
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary);
 /* determine what kind of track specific configuration is needed,
    warn if not multi-view compatible */
 
-int configurableByPopup(struct trackDb *tdb, eCfgType cfgTypeIfKnown);
+int configurableByAjax(struct trackDb *tdb, eCfgType cfgTypeIfKnown);
 // Is this track configurable by right-click popup, or in hgTrackUi subCfg?
-// returns 0 = no; <0=explicitly blocked;  >0=allowed and will be cfgType
+// returns 0 = nothing to cfg; <0=blocked via ajax; >0=allowed and will be cfgType if determinable
 
 void trackDbOverride(struct trackDb *td, struct trackDb *overTd);
 /* apply an trackOverride trackDb entry to a trackDb entry */

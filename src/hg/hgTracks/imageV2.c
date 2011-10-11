@@ -293,12 +293,12 @@ if (kindOfChild != kocOrphan)
 jsonHashAddNumber(ele, "hasChildren", slCount(track->tdb->subtracks));
 
 // Configuring?
-int cfgByPopup = configurableByPopup(track->tdb,0);
+int cfgByPopup = configurableByAjax(track->tdb,0);
 if (!configurable
 ||  track->hasUi == FALSE
-||  (cfgByPopup == 0 && tdbIsCompositeSubtrack(track->tdb)))
+||  cfgByPopup == cfgNone)
     jsonHashAddString(ele, "configureBy", "none");
-else if (cfgByPopup < 0)
+else if (cfgByPopup < 0)  // denied via ajax, but allowed via full normal hgTrackUi page
     jsonHashAddString(ele, "configureBy", "clickThrough");
 else
     jsonHashAddString(ele, "configureBy", "popup");

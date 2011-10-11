@@ -757,19 +757,23 @@ if(cType == cfgNone && warnIfNecessary)
 return cType;
 }
 
-int configurableByPopup(struct trackDb *tdb, eCfgType cfgTypeIfKnown)
+int configurableByAjax(struct trackDb *tdb, eCfgType cfgTypeIfKnown)
 // Is this track configurable by right-click popup, or in hgTrackUi subCfg?
-// returns 0 = no; <0=explicitly blocked;  >0=allowed and will be cfgType
+// returns 0 = no; <0=explicitly blocked;  >0=allowed and will be cfgType if determined
 {
+if (tdbIsMultiTrackSubtrack(tdb))
+    return cfgNone; // multitrack subtracks are never allowed to be separately configured.
 int ctPopup = (int)cfgTypeIfKnown;
-if (!ctPopup)
+if (ctPopup <= cfgNone)
     ctPopup = (int)cfgTypeFromTdb(tdb,FALSE);
+if (ctPopup <= cfgNone && !tdbIsSubtrack(tdb)) // subtracks must receive CfgType!
+    ctPopup = cfgUndetermined; // cfgTypeFromTdb() does not work for every case.
 
-if (ctPopup > 0)
+if (ctPopup > cfgNone)
 {
     if (regexMatch(tdb->track, "^snp[0-9]+")     // Special cases to be removed
     ||  regexMatch(tdb->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
-    ||  regexMatch(tdb->track, "^multiz")
+    ||  regexMatch(tdb->track, "^multiz")  // NOTE: wigMaf is using non-standard view level naming methods so isn't configurable by ajax yet
     ||  startsWith("hapmapSnps", tdb->track)
     ||  startsWith("hapmapAlleles", tdb->track)
     ||  SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configureByPopup")))

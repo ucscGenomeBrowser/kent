@@ -3716,6 +3716,27 @@ return cartPriorities;
 void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
 // Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
 {
+#ifdef SUBTRACK_CFG
+// When only one subtrack, then show it's cfg settings instead of composite/view level settings
+// This simplifies the UI where hgTrackUi won't have 2 levels of cfg,
+// while hgTracks still supports rightClick cfg of the subtrack.
+if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we consider this option
+    {
+    if (tdbIsComposite(tdb)                       // called for the composite
+    && !tdbIsCompositeView(tdb->subtracks)        // and there is no view level
+    && slCount(tdb->subtracks) == 1)              // and there is only one subtrack
+        {
+        //warn("What do you mean by having a composite (%s) with only one subtrack (%s) ???",tdb->track,tdb->subtracks->track);
+        tdb = tdb->subtracks; // show subtrack cfg instead
+        prefix = tdb->track;
+        }
+    else if (tdb->parent != NULL
+        && tdbIsCompositeView(tdb->parent)       // subtrack has view
+        && differentString(prefix,tdb->track)    // and this has been called for the view
+        && slCount(tdb->parent->subtracks) == 1) // and there is only one subtrack
+        prefix = tdb->track; // removes reference to view level
+    }
+#endif///def SUBTRACK_CFG
 switch(cType)
     {
     case cfgBedScore:
@@ -3730,7 +3751,8 @@ switch(cType)
                         break;
     case cfgWig:        wigCfgUi(cart,tdb,prefix,title,boxed);
                         break;
-    case cfgWigMaf:     wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
+    case cfgWigMaf:     // NOTE: wigMaf is using non-standard view level naming methods so isn't configurable by ajax
+                        wigMafCfgUi(cart,tdb,prefix,title,boxed, db);
                         break;
     case cfgGenePred:   genePredCfgUi(cart,tdb,prefix,title,boxed);
                         break;
@@ -4016,8 +4038,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         {
     #ifdef SUBTRACK_CFG
         // Turn off configuring for certain track type or if explicitly turned off
-        int cfgSubterack = configurableByPopup(subtrack,cType);
-        if (cfgSubterack <= 0)
+        int cfgSubterack = configurableByAjax(subtrack,cType);
+        if (cfgSubterack <= cfgNone)
             cType = cfgNone;
         else if (membersForAll->members[dimV]) // subtrack only configurable if more than one subtrack in view
             {                                  // find "view" in subgroup membership: e.g. "signal"
@@ -4187,8 +4209,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         safef(buffer,sizeof(buffer),"%s.childShowCfg",subtrack->track);
         boolean open = cartUsualBoolean(cart, buffer,FALSE);
         MAKE_CFG_SUBTRACK_DIV(subtrack->track,buffer,open);
-        safef(buffer,sizeof(buffer),"%s",subtrack->track);
-        cfgByCfgType(cType,db,cart,subtrack,buffer,"Subtrack",TRUE);
+        cfgByCfgType(cType,db,cart,subtrack,subtrack->track,"Subtrack",TRUE);
         printf("</DIV>");
     #endif///ndef SUBTRACK_CFG
         }
@@ -5485,6 +5506,19 @@ cfgEndBox(boxed);
 static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species, char *option, int optionSize, boolean defaultState)
 /* check the cart to see if species is turned off or on (default is defaultState) */
 {
+#ifdef SUBTRACK_CFG
+        // FIXME: works now in configByAjax but affects not seen in track image!!!
+boolean compositeLevel = isNameAtCompositeLevel(tdb,option);
+if (*option == '\0')
+    safef(option, optionSize, "%s.%s", tdb->track, species);
+else
+    {
+    char *suffix = option + strlen(option);
+    int suffixSize = optionSize - strlen(option);
+    safef(suffix,suffixSize,".%s",species);
+    }
+return cartUsualBooleanClosestToHome(cart,tdb, compositeLevel, species,defaultState);
+#else///ifndef SUBTRACK_CFG
 boolean ret = defaultState;
 safef(option, optionSize, "%s.%s", tdb->track, species);
 
@@ -5508,6 +5542,7 @@ else
     }
 
 return ret;
+#endif///ndef SUBTRACK_CFG
 }
 
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt)
@@ -5559,6 +5594,9 @@ for (group = 0; group < *groupCt; group++)
         {
         AllocVar(wmSpecies);
         wmSpecies->name = cloneString(species[i]);
+#ifdef SUBTRACK_CFG
+        *option = '\0'; // signal to look for the lowest level
+#endif///def SUBTRACK_CFG
 	wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option, TRUE);
         wmSpecies->group = group;
         slAddHead(&wmSpeciesList, wmSpecies);
@@ -5745,7 +5783,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
             if (row != NULL)
                 {
                 puts("<TD>");
-                cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, checked),id);
+               cgiMakeCheckBoxWithId(option, cartUsualBoolean(cart, option, checked),id);
                 printf ("%s", label);
                 puts("</TD>");
                 fflush(stdout);
@@ -5762,6 +5800,9 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
 	boolean defaultState = TRUE;
 	if (offHash != NULL)
 	    defaultState = (hashLookup(offHash, wmSpecies->name) == NULL);
+#ifdef SUBTRACK_CFG
+        safecpy(option, sizeof(option), name);
+#endif///def SUBTRACK_CFG
         wmSpecies->on = isSpeciesOn(cart, tdb, wmSpecies->name, option, sizeof option, defaultState );
         cgiMakeCheckBoxWithId(option, wmSpecies->on,id);
     	label = hOrganism(wmSpecies->name);
@@ -5788,7 +5829,10 @@ int i;
 char option[MAX_SP_SIZE];
 char *viewString = NULL;
 
+// FIXME: wigMaf is using non-standard view level naming methods so isn't configurable by ajax
+#ifndef SUBTRACK_CFG
 subgroupFind(tdb, "view", &viewString);
+#endif///ndef SUBTRACK_CFG
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 

@@ -35,9 +35,9 @@
 // - DECIDED: Decide on a name (scm, subCfg, ? ) and then make a module file like ddcl.js.
 // - SOLVED: subtrack selected count is wrong!
 // - SOLVED: matCb unclick leaves vis/wrench enabled.  Vis/Wrench is usually only enabled for checked and visible.
-//  - Non-configurable will need to show/change vis independently! (separate vis control but no wrench)
+// - SOLVED: subCfg tracks going non-visible should have subCfg div closed.
+//  - Verify all composites work (hg19 hg18 mm9 mm8 panTro3 galGal3 braFlo1 dm3 ce10 homPan20 sacCer3 hg19Patch5 tested so far)
 //  - Speed up massive composites!  HAIB TFBS SYDH TFBS
-//  - Verify all composites work (conservation and SNPs are likely failures)
 //  - Remove debug code when ready
 // NOTE:
 // Current implementation relies upon '.' delimiter in name and no '_-' in name.  Nothing breaks rule yet...
