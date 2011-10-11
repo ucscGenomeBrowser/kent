@@ -5623,7 +5623,7 @@ lab Wold
 lots G0109
 targetId Genecard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation missing
+validation FOSL1_(sc-605)(missing):human_FOSL1-SC605_validation_Wold.pdf
 
 term FOSL2
 tag FOSL2
@@ -11056,6 +11056,8 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 110
+# If this is ever changed to term Cell Line, you will also have to modify the cv Validator
+# to not special case the cellType term.
 ### Warning should be "term cell line", but the term here has to be a single
 ### word.  Or, "term cell line" in the cell type definitions should be
 ### "term cellType", but that requires changing a huge amount of existing code.

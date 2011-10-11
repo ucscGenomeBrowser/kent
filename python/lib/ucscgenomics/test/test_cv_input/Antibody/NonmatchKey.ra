@@ -23,3 +23,12 @@ labPiFull Peggy Farnham
 grantPi Snyder
 organism human
 
+term Antibody
+tag ANTIBODY
+type typeOfTerm
+label Antibody or target protein
+description The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
+searchable multiSelect
+cvDefined yes
+validate cv or control
+priority 190

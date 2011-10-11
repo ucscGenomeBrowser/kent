@@ -42,63 +42,15 @@ struct joinedTables
     struct dyString *filter;  /* Filter if any applied. */
     };
 
-static void joinedTablesTabOut(struct joinedTables *joined)
-/* Write out fields. */
-{
-struct joinedRow *jr;
-struct joinerDtf *field;
-int outCount = 0;
-
-/* Print out field names. */
-if (joined->filter)
-    {
-    hPrintf("#filter: %s\n", joined->filter->string);
-    }
-hPrintf("#");
-for (field = joined->fieldList; field != NULL; field = field->next)
-    {
-    hPrintf("%s.%s.%s", field->database, field->table, field->field);
-    if (field->next == NULL)
-        hPrintf("\n");
-    else
-        hPrintf("\t");
-    }
-for (jr = joined->rowList; jr != NULL; jr = jr->next)
-    {
-    int i;
-    if (jr->passedFilter)
-	{
-	for (i=0; i<joined->fieldCount; ++i)
-	    {
-	    struct slName *s;
-	    if (i != 0)
-		hPrintf("\t");
-	    s = jr->fields[i];
-	    if (s == NULL)
-	        hPrintf("n/a");
-	    else if (s->next == NULL)
-	        hPrintf("%s", s->name);
-	    else
-	        {
-		while (s != NULL)
-		    {
-		    hPrintf("%s,", s->name);
-		    s = s->next;
-		    }
-		}
-	    }
-	hPrintf("\n");
-	++outCount;
-	}
-    }
-}
-
 static void joinedTablesTabOutFile(struct joinedTables *joined, FILE *f)
 /* write out fields to file handle */
 {
 struct joinedRow *jr;
 struct joinerDtf *field;
 int outCount = 0;
+
+if (f == NULL)
+    f = stdout;
 
 /* Print out field names. */
 if (joined->filter)
@@ -131,9 +83,12 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
 	        fprintf(f, "%s", s->name);
 	    else
 	        {
+		char *lastS = NULL;
 		while (s != NULL)
 		    {
-		    fprintf(f, "%s,", s->name);
+		    if (lastS == NULL || !sameString(lastS, s->name))
+			fprintf(f, "%s,", s->name);
+		    lastS = s->name;
 		    s = s->next;
 		    }
 		}
@@ -1025,10 +980,7 @@ else
     struct joiner *joiner = allJoiner;
     struct joinedTables *joined = joinedTablesCreate(joiner, 
     	primaryDb, primaryTable, dtfList, filterTables, 1000000, getRegions());
-    if (f == NULL)
-        joinedTablesTabOut(joined);
-    else
-        joinedTablesTabOutFile(joined, f);
+    joinedTablesTabOutFile(joined, f);
     joinedTablesFree(&joined);
     }
 joinerDtfFreeList(&dtfList);
