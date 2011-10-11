@@ -188,18 +188,11 @@ for (info = infoList; info != NULL; info = info->next)
 
        }
 
-    /* If it's an antibody fragment use that as name. */
-    if (isAb)
-        {
-	geneSymbol = cloneString("abParts");
-	description = cloneString("Parts of antibodies, mostly variable regions.");
-	isAb = TRUE;
-	}
     /* If it's an Rfam, split out the tokens from the semicolon-delimited 
      * sourceAcc.  The first token will be the Rfam accession, the second 
      * token will be used as the gene symbol, and the description will be
      * derived from the third symbol (contig ID) and Rfam accession */
-    else if (isRfam(info->sourceAcc)) 
+    if (isRfam(info->sourceAcc)) 
 	{
         struct slName *accessionTokens = slNameListFromString(info->sourceAcc, ';');
 	assert(accessionTokens != NULL);
@@ -229,7 +222,7 @@ for (info = infoList; info != NULL; info = info->next)
 	if (stringIn("Pseudo", tRnaName)) 
 	    {
 	    char antiCodon[4];
-	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + strlen("Pseudo") + 1, 3);
+	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + strlen("Pseudo") + 1,3);
 	    geneSymbol = cloneString("TRNA_Pseudo");
 	    sprintf(description, "transfer RNA pseudogene (anticodon %s)",
 		    &antiCodon[0]);
@@ -241,53 +234,68 @@ for (info = infoList; info != NULL; info = info->next)
 	    (void) strncpy(aminoAcid, strchr(tRnaName, '-') + 1, 3);
 	    (void) strncpy(antiCodon, strchr(tRnaName, '-') + 4, 3);
 	    geneSymbol = catTwoStrings("TRNA_", aminoAcid);
-	    sprintf(description, "transfer RNA %s (anticodon %s)", &aminoAcid[0], &antiCodon[0]);
+	    sprintf(description, "transfer RNA %s (anticodon %s)", 
+		    &aminoAcid[0], &antiCodon[0]);
 	    }
 	}
-    else if (ev == NULL)
+    else 
 	{
-	mRNA = cloneString("");
-	if (!isAb)
+	/* If it's an antibody fragment use that as name. */
+	if (isAb)
 	    {
-	    errAbort("%s is %s but not %s\n", info->name, infoFile, evFile);
+	    geneSymbol = cloneString("abParts");
+	    description = cloneString("Parts of antibodies, mostly variable regions.");
+	    isAb = TRUE;
 	    }
-	}
-    else
-	{
-	mRNA = cloneString(ev->primary);
-	chopSuffix(mRNA);
-	}
-
-    /* Still no joy? Try genbank RNA records. 
-     * First, try to get the symbol and description from 
-     * the same record */
-    if (geneSymbol == NULL || description == NULL)
-	{
-	if (ev != NULL)
+	
+	if (ev == NULL)
 	    {
-	    int i;
-	    for (i=0; i<ev->accCount; ++i)
+	    mRNA = cloneString("");
+	    if (!isAb)
 		{
-		char *acc = ev->accs[i];
-		chopSuffix(acc);
-		if (geneSymbol == NULL || description == NULL)
+		errAbort("%s is %s but not %s\n", info->name, infoFile, evFile);
+		}
+	    }
+	else
+	    {
+	    mRNA = cloneString(ev->primary);
+	    chopSuffix(mRNA);
+	    }
+
+	/* Still no joy? Try genbank RNA records. 
+	 * First, try to get the symbol and description from 
+	 * the same record */
+	if (geneSymbol == NULL || description == NULL)
+	    {
+	    if (ev != NULL)
+		{
+		int i;
+		for (i=0; i<ev->accCount; ++i)
 		    {
-		    safef(query, sizeof(query), 
-			"select geneName.name from gbCdnaInfo,geneName "
-			"where geneName.id=gbCdnaInfo.geneName and geneName.name != 'n/a'"
-                        "and gbCdnaInfo.description > 0 and gbCdnaInfo.acc = '%s'", acc);
-		    geneSymbol = sqlQuickString(gConn, query);
-                    if (geneSymbol != NULL) 
+		    char *acc = ev->accs[i];
+		    chopSuffix(acc);
+		    if (geneSymbol == NULL || description == NULL)
 			{
 			safef(query, sizeof(query), 
-			      "select description.name from gbCdnaInfo,description "
-			      "where description.id=gbCdnaInfo.description "
+			      "select geneName.name from gbCdnaInfo,geneName "
+			      "where geneName.id=gbCdnaInfo.geneName "
+			      "and geneName.name != 'n/a'"
+			      "and gbCdnaInfo.description > 0 "
 			      "and gbCdnaInfo.acc = '%s'", acc);
-			description = sqlQuickString(gConn, query);
-			if (description != NULL) 
+			geneSymbol = sqlQuickString(gConn, query);
+			if (geneSymbol != NULL) 
 			    {
-			    if (sameString(description, "n/a"))
-				description = NULL;
+			    safef(query, sizeof(query), 
+				  "select description.name " 
+				  "from gbCdnaInfo,description "
+				  "where description.id=gbCdnaInfo.description "
+				  "and gbCdnaInfo.acc = '%s'", acc);
+			    description = sqlQuickString(gConn, query);
+			    if (description != NULL) 
+				{
+				if (sameString(description, "n/a"))
+				    description = NULL;
+				}
 			    }
 		        }
 		    }
