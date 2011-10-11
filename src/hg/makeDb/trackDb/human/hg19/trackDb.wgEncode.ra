@@ -43,7 +43,7 @@ include wgEncodeGisChiaPet.ra alpha
 include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
-include wgEncodeUw5C.ra alpha
+include wgEncodeUw5C.ra 
 
 
 # Encode Affy Exon --------------------------------------------
@@ -70,8 +70,8 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.new.ra alpha
-include wgEncodeUwDnase.ra beta,public
+include wgEncodeUwDnase.new.ra alpha,beta
+include wgEncodeUwDnase.ra public
 
 
 #UW DNase DGF (wrangler: Venkat)
@@ -149,7 +149,6 @@ include wgEncodeUwHistone.ra beta,public
 include wgEncodeSydhHistone.ra beta,public
 include wgEncodeSydhHistone.new.ra alpha
 
-
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
@@ -174,8 +173,7 @@ include wgEncodeUchicagoTfbs.ra
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra beta,public
-include wgEncodeSunyAlbanyGeneSt.new.ra alpha
+include wgEncodeSunyAlbanyGeneSt.ra
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra

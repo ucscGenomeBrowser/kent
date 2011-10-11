@@ -6,6 +6,7 @@
 #include "errCatch.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "jsHelper.h"
 #include "vcf.h"
 #include "vcfUi.h"
 #if (defined USE_TABIX && defined KNETFILE_HOOKS)
@@ -159,9 +160,9 @@ static void vcfCfgHapClusterEnable(struct cart *cart, struct trackDb *tdb, char 
 printf("<B>Enable Haplotype sorting display: </B>");
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
 							VCF_HAP_ENABLED_VAR, TRUE);
-char varName[1024];
-safef(varName, sizeof(varName), "%s." VCF_HAP_ENABLED_VAR, name);
-cgiMakeCheckBox(varName, hapClustEnabled);
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s." VCF_HAP_ENABLED_VAR, name);
+cgiMakeCheckBox(cartVar, hapClustEnabled);
 printf("<BR>\n");
 }
 
@@ -197,18 +198,66 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 }
 
 static void vcfCfgHapCluster(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
-			     char *name)
+			     char *name, boolean compositeLevel)
 /* Show controls for haplotype-sorting display, which only makes sense to do when
  * the VCF file describes multiple genotypes. */
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
 vcfCfgHapClusterEnable(cart, tdb, name, compositeLevel);
 vcfCfgHaplotypeCenter(cart, tdb, vcff, NULL, NULL, 0, "mainForm");
 vcfCfgHapClusterColor(cart, tdb, name, compositeLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, compositeLevel);
 //      thicken lines?
 //      outline center variant?
-//      color haplotypes by red/blue or allele bases?
+}
+
+static void vcfCfgMinQual(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
+			  char *name, boolean compositeLevel)
+/* If checkbox is checked, apply minimum value filter to QUAL column. */
+{
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s." VCF_APPLY_MIN_QUAL_VAR, name);
+boolean applyFilter = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
+					VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL);
+cgiMakeCheckBox(cartVar, applyFilter);
+printf("<B>Exclude items with QUAL score less than &nbsp;</B>\n");
+double minQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
+					      VCF_DEFAULT_MIN_QUAL);
+safef(cartVar, sizeof(cartVar), "%s." VCF_MIN_QUAL_VAR, name);
+cgiMakeDoubleVar(cartVar, minQual, 10);
+printf("<BR>\n");
+}
+
+static void vcfCfgFilterColumn(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
+			       char *name, boolean compositeLevel)
+/* Show controls for filtering by value of VCF's FILTER column, which uses values defined
+ * in the header. */
+{
+int filterCount = slCount(vcff->filterDefs);
+if (filterCount < 1)
+    return;
+printf("<B>Exclude items with these FILTER values:</B><BR>\n");
+char cartVar[1024];
+safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, name);
+jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
+puts("&nbsp;");
+jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
+char *values[filterCount];
+char *labels[filterCount];
+int i;
+struct vcfInfoDef *filt;
+for (i=0, filt=vcff->filterDefs;  filt != NULL;  i++, filt = filt->next)
+    {
+    values[i] = filt->key;
+    struct dyString *dy = dyStringNew(0);
+    dyStringAppend(dy, filt->key);
+    if (isNotEmpty(filt->description))
+	dyStringPrintf(dy, " (%s)", filt->description);
+    labels[i] = dyStringCannibalize(&dy);
+    }
+struct slName *selectedValues = NULL;
+if (cartListVarExists(cart, cartVar))
+    selectedValues = cartOptionalSlNameList(cart, cartVar);
+cgiMakeCheckboxGroupWithVals(cartVar, labels, values, filterCount, selectedValues, 1);
 }
 
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
@@ -219,18 +268,16 @@ printf("<TABLE%s><TR><TD>", boxed ? " width='100%'" : "");
 struct vcfFile *vcff = vcfHopefullyOpenHeader(cart, tdb);
 if (vcff != NULL)
     {
+    boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
     if (vcff->genotypeCount > 1)
-	vcfCfgHapCluster(cart, tdb, vcff, name);
+	vcfCfgHapCluster(cart, tdb, vcff, name, compositeLevel);
+    vcfCfgMinQual(cart, tdb, vcff, name, compositeLevel);
+    vcfCfgFilterColumn(cart, tdb, vcff, name, compositeLevel);
     }
 else
     {
     printf("Sorry, couldn't access VCF file.<BR>\n");
     }
-
-// filter:
-//   by qual column
-//   by filter column
-// color bases like pgSnp or some better palette?
 
 puts("</TD>");
 if (boxed && fileExists(hHelpFile("hgVcfTrackHelp")))
