@@ -2728,6 +2728,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-08
 dateUnrestricted 2012-07-07
+dccAccession wgEncodeEH002070
+expId 2070
 fileName wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam,wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
@@ -2750,6 +2752,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-08
 dateUnrestricted 2012-07-07
+dccAccession wgEncodeEH002070
+expId 2070
 fileName wgEncodeSydhHistonePanc1InputUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
@@ -2772,6 +2776,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-08
 dateUnrestricted 2012-07-07
+dccAccession wgEncodeEH002070
+expId 2070
 fileName wgEncodeSydhHistonePanc1InputUcdSig.bigWig
 grant Snyder
 lab USC
@@ -3852,4 +3858,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 1671707204
+# MAGIC: 1110690503
