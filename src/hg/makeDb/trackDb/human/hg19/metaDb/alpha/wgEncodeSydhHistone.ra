@@ -2431,7 +2431,7 @@ antibody H3K4me1_(pAb-037-050)
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2455,7 +2455,7 @@ antibody H3K4me1_(pAb-037-050)
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2479,7 +2479,7 @@ antibody H3K4me1_(pAb-037-050)
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2504,7 +2504,7 @@ antibody H3K4me1_(pAb-037-050)
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2528,7 +2528,7 @@ antibody H3K4me1_(pAb-037-050)
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2552,7 +2552,7 @@ antibody H3K4me1_(pAb-037-050)
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2577,7 +2577,7 @@ antibody H3K27ac
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2601,7 +2601,7 @@ antibody H3K27ac
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2625,7 +2625,7 @@ antibody H3K27ac
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2650,7 +2650,7 @@ antibody H3K27ac
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2674,7 +2674,7 @@ antibody H3K27ac
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2698,7 +2698,7 @@ antibody H3K27ac
 cell PANC-1
 composite wgEncodeSydhHistone
 control UCDavis
-controlId PANC-1/None/Input/UCDavis
+controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-19
@@ -2714,6 +2714,79 @@ project wgEncode
 setType exp
 subId 4837
 tableName wgEncodeSydhHistonePanc1H3k27acUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistonePanc1InputUcdAlnRep1
+objType file
+antibody Input
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH002070
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-08
+dateUnrestricted 2012-07-07
+dccAccession wgEncodeEH002070
+expId 2070
+fileName wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam,wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam.bai
+grant Snyder
+lab USC
+md5sum feedcae54f05be1c822d81175c006553,63d782611ab3a8a2cb1c5182f2c6698b
+project wgEncode
+replicate 1
+setType input
+subId 4946
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistonePanc1InputUcdRawDataRep1
+objType file
+antibody Input
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH002070
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-08
+dateUnrestricted 2012-07-07
+dccAccession wgEncodeEH002070
+expId 2070
+fileName wgEncodeSydhHistonePanc1InputUcdRawDataRep1.fastq.tgz
+grant Snyder
+lab USC
+md5sum 37510351427b2f39c4334685661a4de4
+project wgEncode
+replicate 1
+setType input
+subId 4946
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistonePanc1InputUcdSig
+objType table
+antibody Input
+cell PANC-1
+composite wgEncodeSydhHistone
+control UCDavis
+controlId wgEncodeEH002070
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-08
+dateUnrestricted 2012-07-07
+dccAccession wgEncodeEH002070
+expId 2070
+fileName wgEncodeSydhHistonePanc1InputUcdSig.bigWig
+grant Snyder
+lab USC
+labVersion PeakSeq1.0
+md5sum 316f6e9a265b50cbeb92ae1e72cf8476
+project wgEncode
+setType input
+subId 4946
+tableName wgEncodeSydhHistonePanc1InputUcdSig
 treatment None
 view Signal
 
@@ -3785,4 +3858,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 1908434592
+# MAGIC: 107366140
