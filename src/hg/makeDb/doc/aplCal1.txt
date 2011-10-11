@@ -531,8 +531,10 @@ chainOne $(path1)
 
 ############################################################################
 # Creating the chain/net trackDb.ra entry (DONE - 2010-02-04 - Galt)
+# To Do #1813 remove aplCal1 <-> hg19 chain/nets (2011-10-07 Chin)
+# However, only tables and download files are physically drop/removed
+# All data created stay on hive.
 
-#add simplified lastz symlink to hg19
     cd /hive/data/genomes/hg19/bed
     ln -s lastzAplCal1.2009-06-08/ lastz.aplCal1
     findScores.pl hg19 aplCal1
