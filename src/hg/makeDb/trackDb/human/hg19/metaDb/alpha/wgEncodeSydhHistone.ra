@@ -2728,9 +2728,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-08
 dateUnrestricted 2012-07-07
-fileName wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam
+fileName wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam,wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam.bai
 grant Snyder
 lab USC
+md5sum feedcae54f05be1c822d81175c006553,63d782611ab3a8a2cb1c5182f2c6698b
 project wgEncode
 replicate 1
 setType input
@@ -2752,6 +2753,7 @@ dateUnrestricted 2012-07-07
 fileName wgEncodeSydhHistonePanc1InputUcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
+md5sum 37510351427b2f39c4334685661a4de4
 project wgEncode
 replicate 1
 setType input
@@ -2774,6 +2776,7 @@ fileName wgEncodeSydhHistonePanc1InputUcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
+md5sum 316f6e9a265b50cbeb92ae1e72cf8476
 project wgEncode
 setType input
 subId 4946
@@ -3849,4 +3852,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: -1337970577
+# MAGIC: 1671707204
