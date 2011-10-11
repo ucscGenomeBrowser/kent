@@ -13,7 +13,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 color 153,38,0
 sex F
-protocol GM12878_protocol.pdf
+protocol Foo:GM12878_protocol.pdf
 
 term human
 tag human
@@ -30,4 +30,12 @@ tag 1
 type tier
 description tier 1
 
-
+term cellType
+tag CELLTYPE
+type typeOfTerm
+label Cell, tissue or DNA sample
+description Cell line or tissue used as the source of experimental material.
+searchable multiSelect
+cvDefined yes
+validate cv or None
+priority 110

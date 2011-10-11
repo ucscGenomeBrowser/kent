@@ -258,7 +258,7 @@ hDisconnectCentral(&conn);
 if (status == NULL)
     errAbort("The hubId %d was not found", hubId);
 if (!isEmpty(status->errorMessage))
-    errAbort( status->errorMessage);
+    errAbort("%s", status->errorMessage);
 char hubName[16];
 safef(hubName, sizeof(hubName), "hub_%u", hubId);
 struct trackHub *hub = trackHubOpen(status->hubUrl, hubName);
