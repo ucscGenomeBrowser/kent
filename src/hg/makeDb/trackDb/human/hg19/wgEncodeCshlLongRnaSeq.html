@@ -8,13 +8,13 @@ platform.  Data are available from biological replicates of several
 cell lines.  In addition to profiling Poly-A+ and Poly-A- RNA from
 whole cells, there are also data from various subcellular
 compartments.  In many cases, there are Cap Analysis of Gene
-Expression (CAGE, 
-<A TARGET=_BLANK HREF="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRikenCage">RIKEN CAGE Loc</A>) and
-Small RNA-seq (&lt;200 nucleotides, 
-<A TARGET=_BLANK HREF="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlShortRnaSeq">CSHL Sm RNA-seq</A>) and Pair-End
-di-TAG-RNA (PET-RNA,
+Expression (CAGE, see the
+<A TARGET=_BLANK HREF="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRikenCage">RIKEN CAGE Loc</A> track),
+Small RNA-seq (&lt;200 nucleotides, see the
+<A TARGET=_BLANK HREF="../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlShortRnaSeq">CSHL Sm RNA-seq</A> track) and Pair-End
+di-TAG-RNA (PET-RNA, see the
 <A TARGET=_BLANK
-HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGisRnaPet">GIS RNA PET</A>) datasets available from the same biological replicates.   
+HREF="http://genome-preview.cse.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGisRnaPet">GIS RNA PET</A> track) datasets available from the same biological replicates.   
 
 
 <h2>Display Conventions and Configuration</h2>
@@ -36,7 +36,7 @@ distinguishing between the different cell types and compartments.</p>
 <dt><i>Contigs</i>
 </dt><dd>The Contigs represent blocks of overlapping mapped reads from the pooled biological replicates.
 </dd><dt><i>Raw Signals</i>
-</dt><dd>The Raw Signal view shows the density of mapped reads on the plus and minus strands (wiggle format).
+</dt><dd>The Plus Raw Signal and Minus Raw Signal views show the density of mapped reads on the plus and minus strands (wiggle format), respectively.
 </dd>
 <dt><i>Alignments</i>
 </dt><dd>The Alignments view shows individual reads mapped from pooled biological replicates to the genome and indicates where
@@ -48,7 +48,7 @@ bases may mismatch. Every mapped read is displayed, i.e. uncollapsed.  The align
 
 <P>
 <!--echo var="BROWSER_HOST" -->
-<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQRD1,FASTQRD2,GENEDENO,GENEGENCV7,JUNCTIONS,PRTCL,RAW,SPKNS,TRANSDENOVO,TRANSGENCV7">Additional views and files</A> are available on the Downloads page. 
+Additional <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?tag=EXONGENCV7,FASTQRD1,FASTQRD2,GENEDENO,GENEGENCV7,JUNCTIONS,PRTCL,RAW,SPKNS,TRANSDENOVO,TRANSGENCV7">views</A> are available on the Downloads page. 
 </P>
 
 <H2>Methods</H2>
@@ -66,7 +66,7 @@ cell culture protocols</A>.
 cDNA sequencing protocol</A> was used.  This protocol generates directional libraries
 and reports the transcripts strand of origin.  Exogenous RNA spike-ins
 (Round 5, pool 14), in development at National Institutes Standards
-Technology were added to each endogenous RNA isolate and carried
+Technology, were added to each endogenous RNA isolate and carried
 through library construction and sequencing.  The Illumina PhiX
 control library was also spiked-in at 1&#37; to each completed human
 library just prior to cluster formation.
@@ -79,20 +79,20 @@ in the <A TARGET=_BLANK HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg1
 </P>
 
 <H3>Sequencing and Mapping</H3>
-<P>The libraries are sequenced on the Illumina GAIIx platform to an
+<P>The libraries were sequenced on the Illumina GAIIx platform to an
 average depth of &#126;200 million reads (100 million mate-pairs).
-The data are mapped against hg19 using Spliced Transcript Alignment
+The data were mapped against hg19 using Spliced Transcript Alignment
 and Reconstruction (STAR) written by Alex Dobin (CSHL).  More
 information, about STAR including the parameters used for these data
-can be found at the
+is available from the
 <A TARGET=_BLANK
 HREF="http://gingeraslab.cshl.edu/STAR/">Gineras lab</A>. 
 </P>
 
 <P>
-Additionally, the following processed  &ldquo;elements&rdquo; data files:
- de novo splice junctions, de novo transcripts, and contigs are provided.  
-These elements are assessed for reproducibility using a nonparametric 
+Additionally, the following processed  &ldquo;elements&rdquo; data files are provided:
+de novo splice junctions, de novo transcripts, and contigs.
+These elements were assessed for reproducibility using a nonparametric 
 irreproducible detection (IDR) rate script.  The IDR values for each element
  are included in the files for end-users to use as a threshold. An IDR value of 0.1 means
  that the probability of detecting that element in a third experiment equivalent 
@@ -105,8 +105,8 @@ files is available for download in the
 
 <H2>Verification</H2>
 <P>
-FPKM (fragments per kilobase of exon per million fragments mapped) values are calculated 
-for annotated Gencode exons and Spearman values are compared.  
+FPKM (fragments per kilobase of exon per million fragments mapped) values were calculated 
+for annotated Gencode exons and Spearman values were compared.  
 In general, Rho values are &#62; .90 between biological replicates.   
 Additional quality control metrics for the samples can be found 
 <A TARGET=_BLANK
@@ -115,30 +115,30 @@ HREF="http://genome.crg.es/~jlagarde/encode_RNA_dashboard/">Transcriptome Data P
 
 <H2>Release Notes</H2>
 
-<P> This is Release 1 (Jan 2011) of this track for hg19. It includes data from the
+<P> This is Release 1 (Oct 2011) of this track for hg19. It includes data from the
 hg18 releases that has been remapped to hg19 (GM12878 and K562 Total RNA whole 
 cell and K562 PolyA+ RNA cytosol) as well as novel data from 13 additional cell
 lines and 4 additional cell localizations, as well as some PolyA- samples.  The
 signals are now in bigWig format.  The alignments are in BAM format.  The newer
 data all have Bio Replicate numbers and Protocol ID numbers that can be used to
 link the samples with other experiments. Every experiment has extensive analysis 
-and production data available for downloads only.
+and production data available for download only.
 </P>
 
 <H2>Credits</H2>
 <P>These data were generated and analyzed by the transcriptome group at
-Cold Spring Harbor Laboratories, and the Center for Genomic
+Cold Spring Harbor Laboratories and the Center for Genomic
 Regulation (CRG in Barcelona), who are participants in the ENCODE Transcriptome Group.
 </P>
 Contacts:
-<A HREF="mailto:&#100;a&#118;&#105;s&#99;&#64;&#99;sh&#108;.&#101;&#100;&#117;">Carrie Davis</A> (experimental)
+<A HREF="mailto:&#100;a&#118;&#105;s&#99;&#64;&#99;sh&#108;.&#101;&#100;&#117;">Carrie Davis</A> (experimental),
 <!-- above address is davisc at cshl.edu -->
-<A HREF="mailto:&#100;&#111;&#98;i&#110;&#64;&#99;&#115;&#104;l.&#101;d&#117;">Alex Dobin</A> (computational)
+<A HREF="mailto:&#100;&#111;&#98;i&#110;&#64;&#99;&#115;&#104;l.&#101;d&#117;">Alex Dobin</A> (computational),
 <!-- above address is dobin at cshl.edu -->
 <A HREF="mailto:&#115;&#99;&#104;&#108;&#101;si&#110;&#64;&#99;&#115;&#104;l.e&#100;&#117;">Felix
-Schlesinger</A> (computational)
+Schlesinger</A> (computational),
 <!--above address is schlesin at cshl.edu -->
-<A HREF="mailto:&#103;&#105;&#110;&#103;e&#114;a&#115;&#64;&#99;&#115;&#104;&#108;.&#101;d&#117;">Tom Gingeras</A> (primary investigator)
+<A HREF="mailto:&#103;&#105;&#110;&#103;e&#114;a&#115;&#64;&#99;&#115;&#104;&#108;.&#101;d&#117;">Tom Gingeras</A> (primary investigator), and
 <!--above address is gingeras at cshl.edu -->
 <A HREF="mailto:&#114;&#103;&#117;i&#103;o&#64;&#105;&#109;&#105;m.e&#115;">Roderic Guigo</A>&#146;s group at the
 <A TARGET=_BLANK

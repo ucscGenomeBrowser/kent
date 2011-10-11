@@ -4992,6 +4992,9 @@ XXX - done to here
 
 ##############################################################################
 # LASTZ Sea Hare aplCal1 (STARTING - 2009-06-08 - Galt)
+# To Do #1813 remove aplCal1 <-> hg19 chain/nets (2011-10-07 Chin)
+# However, only tables and download files are physically drop/removed
+# All data created stay on hive.
     mkdir /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08
     cd /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08
 
@@ -17208,3 +17211,31 @@ CREATE TABLE geneReviewsBB (
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+############################################################################
+# UPDATE COSMIC TRACK (DONE 2011-10-11 Fan)
+
+mkdir /hive/data/outside/cosmic/20111011
+# put raw data file, UCSCMutExp_v55_090911.csv, received by email to there.
+
+mkdir /hive/data/genomes/hg19/bed/cosmic/20111011
+cd /hive/data/genomes/hg19/bed/cosmic/20111011
+
+cp -p /hive/data/outside/cosmic/20111011/UCSCMutExp_v55_090911.csv .
+
+cat UCSCMutExp_v55_090911.csv|sed -e 's/\t//g' |sed -e 's/,/\t/g' |\
+grep -v COSMIC_MUTATION_ID |grep -v 'selected'|grep COSM >UCSCMutExp_v55_090911.tab
+
+hgsql hg19 -e 'drop table cosmicRaw'
+hgsql hg19 < ~/kent/src/hg/lib/cosmicRaw.sql
+
+hgLoadSqlTab hg19 cosmicRaw ~/kent/src/hg/lib/cosmicRaw.sql UCSCMutExp_v55_090911.tab
+
+# use  grch37_start-1 for our zero based chromStart and 
+# conver their chr23 and chr24 to chrX and chrY.
+
+hgsql hg19 -N -e 'select "chr", chromosome, grch37_start-1, grch37_stop, cosmic_mutation_id from cosmicRaw' \
+|grep -v NULL |sed -e 's/chr\t/chr/'|sort -u|sed -e 's/chr23/chrX/' |sed -e 's/chr24/chrY/' >cosmic.bed
+
+hgLoadBed -allowStartEqualEnd  hg19 cosmic cosmic.bed
+
+#############################################################################

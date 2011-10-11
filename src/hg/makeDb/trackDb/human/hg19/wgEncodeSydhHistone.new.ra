@@ -505,4 +505,12 @@ html wgEncodeSydhHistone.new
 		type bigWig 1.000000 19459.000000
 		# subId=4838 dateSubmitted=2011-09-19
 
+        track wgEncodeSydhHistonePanc1InputUcdSig
+        parent wgEncodeSydhHistoneViewSignal off
+        shortLabel PANC-1 Input
+        longLabel PANC-1 Input Histone Modifications by ChIP-Seq Sig from ENCODE/SYDH 
+        subGroups view=Signal factor=Input cellType=PANC1 control=UCD treatment=None
+        type bigWig 1.000000 65207.000000
+        # subId=4946 dateSubmitted=2011-10-08
+
 
