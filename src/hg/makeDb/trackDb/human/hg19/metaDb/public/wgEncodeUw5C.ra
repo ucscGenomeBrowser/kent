@@ -2,7 +2,6 @@ metaObject wgEncodeUw5C
 objType composite
 composite wgEncodeUw5C
 expVars lab,dataType,cell,region
-table wgEncodeUw5C
 
 metaObject wgEncodeUw5CBjUw5cgeneMatrixRep1
 objType file

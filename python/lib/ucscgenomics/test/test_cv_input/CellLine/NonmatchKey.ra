@@ -31,4 +31,12 @@ tag 1
 type tier
 description tier 1
 
-
+term cellType
+tag CELLTYPE
+type typeOfTerm
+label Cell, tissue or DNA sample
+description Cell line or tissue used as the source of experimental material.
+searchable multiSelect
+cvDefined yes
+validate cv or None
+priority 110
