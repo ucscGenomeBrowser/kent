@@ -3555,7 +3555,7 @@ termId BTO:0002397
 termUrl missing
 sex M
 tier 3
-protocol Crawford:RWPE_protocol.pdf
+protocol Crawford(missing):RWPE_protocol.pdf
 
 term SAEC
 tag SAEC
@@ -5194,12 +5194,12 @@ lab Myers
 lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation CEBPD_(SC-636)(Missing)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
+validation CEBPD_(SC-636)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
 
 term CHD1_(A301-218A)
 tag CHD1A301218A
 type Antibody
-antibodyDescription Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
+antibodyDescription Rabbit Polyclonal Antigen Affinity Purified, Unconjugated, Liquid
 target CHD1
 targetDescription CHD1 is a member of the CHD (chromodomain-helicase-DNA-binding) family of proteins that interacts with nucleosomes and plays a role in chromatin remodeling to modulate transcription. The members of the CHD family of proteins possess 3 common structural and functional domains: a chromodomain (chromatin organization modifier), an SNF2-like helicase/ATPase domain, and a C-terminal DNA-binding domain. CHD1 has been shown to interact with the transcriptional corepressor NCoR and histone deacetylase 1 indicating a role in transcriptional regulation. CHD1 has also been shown to interact with the Paf1 complex and Rtf1 implicating an additional role in transcriptional elongation. Alternate names for CHD1 include chromodomain-helicase-DNA-binding protein 1, ATP-dependent helicase CHD1, and DKFZp686E2337.
 vendorName Bethyl Laboratories
@@ -5209,7 +5209,7 @@ lab Bernstein
 lots A301-218A-1
 targetId GeneCards:CHD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
-validation CHD1_(A301-218A)(ChIP-String, ChIP-Seq):human_CHD1_validation_Bernstein.pdf 
+validation CHD1_(A301-218A)(ChIP-String,ChIP-seq):human_CHD1_validation_Bernstein.pdf 
 
 term CHD2_(AB68301)
 tag CHD2
@@ -5585,7 +5585,7 @@ tag EZH239875
 type Antibody
 antibodyDescription This EZH2 antibody was raised against a recombinant protein corresponding to amino acids 353-451 of human EZH2.
 target EZH2
-targetDescription EZH2(Enhancer of Zeste homolog 2, also designated Enx1 and SETDB1)is a human homolog of theDrosophilaPolycomb-group protein Enhancer of Zeste protein. It contains a SET domain that catalyzes the methylation of histone H3 at lysine 27 (Histone H3 Lys27monomethylated,dimethylated and trimethylated). Polycomb-group proteins repress gene expression by binding to chromatin and locally altering chromatin structure.EZH2, BMI-1 andSuz12are present in the PRC2 and PRC3 protein complexes that function as mediators of epigenetic transcriptional silencing.EZH2associates with the embryonic ectoderm development protein, the VAV1 oncoprotein, and the X-linked nuclear protein.EZH2may play a role in the hematopoietic and central nervous systems. Deregulation ofEZH2is linked to a variety of cancers.
+targetDescription EZH2 (Enhancer of Zeste homolog 2, also designated Enx1 and SETDB1) is a human homolog of the Drosophila Polycomb-group protein Enhancer of Zeste protein. It contains a SET domain that catalyzes the methylation of histone H3 at lysine 27 (Histone H3 Lys27 monomethylated, dimethylated and trimethylated). Polycomb-group proteins repress gene expression by binding to chromatin and locally altering chromatin structure. EZH2, BMI-1 and Suz12 are present in the PRC2 and PRC3 protein complexes that function as mediators of epigenetic transcriptional silencing. EZH2 associates with the embryonic ectoderm development protein, the VAV1 oncoprotein, and the X-linked nuclear protein. EZH2 may play a role in the hematopoietic and central nervous systems. Deregulation of EZH2 is linked to a variety of cancers.
 vendorName Active Motif
 vendorId 39875
 orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
@@ -5593,7 +5593,7 @@ lab Bernstein
 lots 27210001
 targetId GeneCards:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
-validation EZH2_(39875)(ChIP-String, ChIP-Seq):human_EZH2_validation_Bernstein.pdf 
+validation EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf 
 
 term  FOSL1_(SC-183)
 tag  FOSL1
@@ -5696,7 +5696,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(Western blot, siRNA):human_FOXP2_validation_Myers.pdf
+validation FOXP2(Western blot,siRNA):human_FOXP2_validation_Myers.pdf
 
 term GABP
 tag GABP
@@ -5794,7 +5794,7 @@ target GATA2
 targetDescription The GATA family of transcription factors share a conserved zinc finger DNA-binding domain and are capable of binding the WGATAR consensus sequence. GATA1 is erythroid-specific and is essential for normal erythropeisis. By comparison, GATA2 is expressed at high levels in hematopoeitic progenitors, including early erythroid cells, but is strong repressed during erythroblast differentiaion.
 vendorName Santa Cruz Biotech
 vendorId sc-9008
-orderUrl
+orderUrl http://www.scbt.com/datasheet-9008-gata-2-h-116-antibody.html
 lab Hardison
 lots J2108
 targetId GeneCard: GATA2
@@ -5814,7 +5814,7 @@ lab Farnham
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(ChIP,MassSpec):human_GATA3-SC-268_validation_Farnham.pdf
+validation GATA3_SC-268(missing):human_GATA3-SC-268_validation_Farnham.pdf
 
 term GATA3_(SC-269)
 tag GATA3SC269
@@ -5827,7 +5827,7 @@ vendorId sc-269
 orderUrl http://www.scbt.com/datasheet-269-gata-3-hg3-35-antibody.html
 lab Farnham
 lots A1404
-targetId GeneCards:Genecard:GATA3
+targetId Genecard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:GATA3
 validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
 
@@ -6070,7 +6070,7 @@ vendorName Cell Signaling
 vendorId 9649
 orderUrl http://www.cellsignal.com/products/9649.html
 lab Farnham
-lots Lot#1
+lots 1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9Ac_(9649)(WesternBlot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
@@ -6274,17 +6274,17 @@ validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_val
 term HDAC1_(SC-6298)
 tag HDAC1SC6298
 type Antibody
-antibodyDescription goat polyclonal IgG, 200 micrograms/ml
+antibodyDescription goat polyclonal IgG, 200 micrograms/ml, epitope maps to the C-terminus of human HDAC1
 target HDAC1
 targetDescription Histone deacetylase 1 (HDAC1) is a class I histone deacetylase that catalyzes the removal of the acetyl group on lysine residues of the N-terminus of the core histones H2A, H2B, H3, and H4. HDAC1 is a component of multiple deacetylating complexes such as Sin3, NuRD, and CoRest that function to repress gene transcription. Alternate names for HDAC1 include RPD3L1, HD1, GON-10, and DKFZp686H12203.
-vendorName Santa Cruz Biotechnology
-vendorId SC6298
+vendorName Santa Cruz Biotech
+vendorId sc-6298
 orderUrl http://www.scbt.com/datasheet-6298-hdac1-c-19-antibody.html
 lab Bernstein
 lots H0509
 targetId GeneCards:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
-validation HDAC1_(SC-6298)(ChIP-String, ChIP-Seq):human_HDAC1_validation_Bernstein.pdf 
+validation HDAC1_(SC-6298)(ChIP-String,ChIP-seq):human_HDAC1_validation_Bernstein.pdf 
 
 term HDAC2_(A300-705A)
 tag HDAC2A300705A
@@ -6299,7 +6299,7 @@ lab Bernstein
 lots A300-705A-1
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation HDAC2_(A300-705A)(ChIP-String, ChIP-Seq):human_HDAC2_validation_Bernstein.pdf
+validation HDAC2_(A300-705A)(ChIP-String,ChIP-seq):human_HDAC2_validation_Bernstein.pdf
 
 term  HDAC2_(SC-6296)
 tag  HDAC2SC6296
@@ -6502,9 +6502,10 @@ vendorId ab26049
 orderUrl http://www.abcam.com/KDM5A-Jarid1A-RBBP2-antibody-ab26049.html
 lab Bernstein
 lots 910477
-targetId GeneCard:JARID1A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JARID1A
-validation JARID1A_(ab26049)(ChIP-String, ChIP-Seq):human_JARID1A_validation_Bernstein.pdf
+# JARID1A is an aliase for KDM5A in genecards.org
+targetId GeneCard:KDM5A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5A 
+validation JARID1A_(ab26049)(ChIP-String,ChIP-seq):human_JARID1A_validation_Bernstein.pdf
 
 term JunD
 tag JUND
@@ -7027,7 +7028,7 @@ lab Bernstein
 lots A301-772A-1
 targetId GeneCards:PHF8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
-validation PHF8_(A301-772A)(ChIP-String, ChIP-Seq):human_PHF8_validation_Bernstein.pdf
+validation PHF8_(A301-772A)(ChIP-String,ChIP-seq):human_PHF8_validation_Bernstein.pdf
 
 term PITX1_(SC-81979)
 tag PITX1
@@ -7058,7 +7059,7 @@ lots missing
 targetId GeneCards:KDM5B
 #PLU1 is a alias for KDM5B ~Jeff
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
-validation PLU1(ChIP-String, ChIP-Seq):human_PLU1_validation_Bernstein.pdf
+validation PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7232,7 +7233,7 @@ lab Bernstein
 lots A300-109A-2
 targetId GeneCards:RBBP5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
-validation RBBP5_(A300-109A)(ChIP-String, ChIP-Seq):human_RBBP5_validation_Bernstein.pdf 
+validation RBBP5_(A300-109A)(ChIP-String,ChIP-seq):human_RBBP5_validation_Bernstein.pdf 
 
 term RPC155
 tag RPC155
@@ -7304,7 +7305,7 @@ lab Bernstein
 lots 4710001
 targetId GeneCards:SAP30
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
-validation SAP30_(39731)(ChIP-String, ChIP-Seq):human_SAP30_validation_Bernstein.pdf
+validation SAP30_(39731)(ChIP-String,ChIP-seq):human_SAP30_validation_Bernstein.pdf
 
 term SETDB1
 tag SETDB1
@@ -7331,7 +7332,7 @@ vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 lab Farnham
 #lots
-targetId Genecards:SETDB1
+targetId Genecard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
 validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
 
@@ -7565,7 +7566,7 @@ lab Bernstein
 lots NRG1665726
 targetId GeneCards:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
-validation SUZ12_(05-1317)(ChIP-String, ChIP-Seq):human_SUZ12_validation_Bernstein.pdf
+validation SUZ12_(05-1317)(ChIP-String,ChIP-seq):human_SUZ12_validation_Bernstein.pdf
 
 term SUZ12
 tag SUZ12
@@ -8939,22 +8940,22 @@ type treatment
 
 term EqS_2.0pct_24hr
 tag E2P24H
-description 24 h with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+description 24 h with 2.0% Equine Serum and Insulin (Wold) 
 type treatment 
 
 term EqS_2.0pct_60hr
 tag E2P60H
-description 60 h with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+description 60 h with 2.0% Equine Serum and Insulin (Wold)
 type treatment
 
 term EqS_2.0pct_5d
 tag E2P5D
-description 5 d with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+description 5 d with 2.0% Equine Serum and Insulin (Wold)
 type treatment
 
 term EqS_2.0pct_7d
 tag E2P7D
-description 7 d with 2.0% Equine Serum and Insulin (Wold) PROVISIONAL
+description 7 d with 2.0% Equine Serum and Insulin (Wold)
 type treatment
 
 term Estradiol_10nM
