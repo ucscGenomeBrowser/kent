@@ -244,13 +244,13 @@ static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
     "<ID=([A-Za-z0-9_:-]+),"
-    "Number=(\\.|[0-9-]+),"
+    "Number=(\\.|A|G|[0-9-]+),"
     "Type=([A-Za-z]+),"
-    "Description=\"?([^\"]+)\"?>$";
+    "Description=\"?(.*)\"?>$";
 static const char *filterOrAltRegex =
     "^##(FILTER|ALT)="
     "<ID=([^,]+),"
-    "(Description|Type)=\"([^\"]+)\">$";
+    "(Description|Type)=\"?(.*)\"?>$";
 
 INLINE void nonAsciiWorkaround(char *line)
 // Workaround for annoying 3-byte quote marks included in some 1000 Genomes files:
@@ -297,10 +297,14 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
 	{
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
 	def->key = vcfFileCloneSubstr(vcff, line, substrs[2]);
-	if (sameString(def->key, "."))
+	char *number = vcfFileCloneSubstr(vcff, line, substrs[3]);
+	if (sameString(number, ".") || sameString(number, "A") || sameString(number, "G"))
+	    // A is #alts which varies line-to-line; "G" is #genotypes which we haven't
+	    // yet seen.  Why is there a G here -- shouldn't such attributes go in the
+	    // genotype columns?
 	    def->fieldCount = -1;
 	else
-	    def->fieldCount = atoi(line + substrs[3].rm_so);
+	    def->fieldCount = atoi(number);
 	def->type = vcfInfoTypeFromSubstr(vcff, line, substrs[4]);
 	def->description = vcfFileCloneSubstr(vcff, line, substrs[5]);
 	slAddHead((isInfo ? &(vcff->infoDefs) : &(vcff->gtFormatDefs)), def);
@@ -314,10 +318,10 @@ else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
     boolean isFilter = startsWith("##FILTER", line);
     if (regexMatchSubstr(line, filterOrAltRegex, substrs, ArraySize(substrs)))
 	{
-	// substrs[2] is ID/key, substrs[3] is Description.
+	// substrs[2] is ID/key, substrs[4] is Description.
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
 	def->key = vcfFileCloneSubstr(vcff, line, substrs[2]);
-	def->description = vcfFileCloneSubstr(vcff, line, substrs[3]);
+	def->description = vcfFileCloneSubstr(vcff, line, substrs[4]);
 	slAddHead((isFilter ? &(vcff->filterDefs) : &(vcff->altDefs)), def);
 	}
     else

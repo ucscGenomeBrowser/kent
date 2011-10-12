@@ -22,7 +22,7 @@ else
         set ctimeArg = $3
     endif
     pushd $2
-    find . -type f -ctime $ctimeArg -print > $tmpDir/modifiedFiles.txt
+    find . -type f -ctime -$ctimeArg -print > $tmpDir/modifiedFiles.txt
     cat $tmpDir/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $tmpDir/sizes.new
     popd
     pushd $1

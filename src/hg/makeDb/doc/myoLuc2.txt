@@ -209,8 +209,6 @@ myoLuc2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDna
 myoLuc2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 myoLuc2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
 myoLuc2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-myoLuc2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-myoLuc2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 myoLuc2.downloadDir = myoLuc2
 myoLuc2.refseq.mrna.native.load  = yes
 myoLuc2.refseq.mrna.xeno.load = yes
@@ -256,6 +254,10 @@ myoLuc2.refseq.mrna.xeno.loadDesc  = yes
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad myoLuc2 &
     #   logFile: var/dbload/hgwdev/logs/2011.02.15-10:12:57.dbload.log
     #   real   17m13.500s
+    # rerun load step 2011-10-07 2011-10-11
+    # logFile: var/dbload/hgwdev/logs/2011.10.11-10:45:07.dbload.log
+    #  real    27m47.836s
+
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank

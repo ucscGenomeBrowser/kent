@@ -36,8 +36,6 @@ class CvFile(ra.RaFile):
 		self.protocolPath = protocolPath
 		if protocolPath == None:
 			self.protocolPath == os.path.expanduser('~/htdocsExtras/ENCODE/')
-			if not os.path.isdir(self.protocolPath):
-				self.protocolPath = None
 		
 		self.read(filePath)
 
@@ -164,9 +162,11 @@ class CvStanza(ra.RaStanza):
 		self.checkMandatory(ra, necessary | baseNecessary)
 		self.checkExtraneous(ra, necessary | baseNecessary | optional | baseOptional)
 		
-		if self['type'] != 'Cell Line': # cv, you disgust me with your inconsistencies
-			if len(ra.filter(lambda s: s['term'] == self['type'] and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
-				ra.handler(InvalidTypeError(self, self['type']))
+		temptype = self['type']
+		if self['type'] == 'Cell Line': # cv, you disgust me with your inconsistencies
+			temptype = 'cellType'
+		if len(ra.filter(lambda s: s['term'] == temptype and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
+			ra.handler(InvalidTypeError(self, self['type']))
 
 		self.checkDuplicates(ra)
 		

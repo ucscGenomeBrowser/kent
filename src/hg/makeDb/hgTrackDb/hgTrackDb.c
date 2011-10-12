@@ -112,6 +112,15 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
+    else if (tdbIsDownloadsOnly(tdb))
+        {
+        slAddHead(&newList, tdb);
+        }
+    // We will allow these at some point, but currently(10/10/2011) the table browser still chokes.
+    //else if (trackDbSetting(tdb, "bigDataUrl") != NULL)
+    //    {
+    //    slAddHead(&newList, tdb);
+    //    }
     else
 	verbose(3,"pruneStrict removing track: '%s' no table %s\n", tdb->track, tdb->table);
     }
@@ -136,7 +145,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	    verbose(3,"pruneEmptyContainers: empty track: '%s'\n",
 		tdb->track);
 	}
-    else 
+    else
         {
 	slAddHead(&newList, tdb);
 	}
@@ -195,7 +204,7 @@ while ((tdb = slPopHead(&tdbList)) != NULL)
 	/* we want to include this track, check to see if we already have it */
 	struct hashEl *hel;
 	if ((hel = hashLookup(haveHash, tdb->track)) != NULL)
-	    errAbort("found two copies of table %s: one with release %s, the other %s\n", 
+	    errAbort("found two copies of table %s: one with release %s, the other %s\n",
 		tdb->track, (char *)hel->val, release);
 
 	hashAdd(haveHash, tdb->track, rel);
@@ -496,7 +505,7 @@ for (td = tdbList; td != NULL; td = tdNext)
 return compositeHash;
 }
 
-static void checkOneSubGroups(char *compositeName, 
+static void checkOneSubGroups(char *compositeName,
     struct trackDb *td, struct subGroupData *sgd)
 {
 char *subGroups = trackDbSetting(td, "subGroups");
@@ -509,7 +518,7 @@ if (subGroups && (sgd->nameHash == NULL))
     }
 else if (!subGroups && (sgd->nameHash != NULL))
     {
-    errAbort("subtrack %s is missing subGroups defined in parent %s\n",  
+    errAbort("subtrack %s is missing subGroups defined in parent %s\n",
 	td->track, compositeName);
     }
 
@@ -524,7 +533,7 @@ for (slPair = slPairList; slPair; slPair = slPair->next)
     {
     struct hashEl *hel = hashLookup( sgd->nameHash, slPair->name);
     if (hel == NULL)
-	errAbort("subtrack %s has subGroup (%s) not found in parent\n", 
+	errAbort("subtrack %s has subGroup (%s) not found in parent\n",
 	    td->track, slPair->name);
 
     struct hash *subHash = hel->val;
@@ -532,7 +541,7 @@ for (slPair = slPairList; slPair; slPair = slPair->next)
 
     if (hashLookup(subHash, slPair->val) == NULL)
 	{
-	errAbort("subtrack %s has subGroup (%s) with value (%s) not found in parent\n", 
+	errAbort("subtrack %s has subGroup (%s) with value (%s) not found in parent\n",
 	    td->track, slPair->name, (char *)slPair->val);
 	}
     }
@@ -542,7 +551,7 @@ struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     {
     if (hashLookup(foundHash, hel->name) == NULL)
-	errAbort("subtrack %s is missing required subGroup %s\n", 
+	errAbort("subtrack %s is missing required subGroup %s\n",
 	    td->track, hel->name);
     }
 
@@ -569,9 +578,9 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
 	    /* Look for some ancestor in composite hash and set sgd to it. */
 	    struct subGroupData *sgd =  hashFindVal(compositeHash, tdb->track);
-	    verbose(2, "looking for %s in compositeHash got %p\n", 
+	    verbose(2, "looking for %s in compositeHash got %p\n",
 		tdb->track, sgd);
-	    assert(sgd != NULL);	
+	    assert(sgd != NULL);
 	    checkOneSubGroups(tdb->track, childTdb, sgd);
 	    }
 	}
@@ -678,7 +687,7 @@ return tdbList;
 }
 
 static struct trackDb *flatten(struct trackDb *tdbForest)
-/* Convert our peculiar forest back to a list. 
+/* Convert our peculiar forest back to a list.
  * This for now rescues superTracks from the heavens. */
 {
 struct hash *superTrackHash = hashNew(0);
