@@ -72,7 +72,7 @@ set debug=false
 if ( $debug == "true" ) then
   echo "\ncontacts $contacts"
   echo "contactsReal $contacts"
-  set contacts="larrym kate fan ann Hiram rachel Andy andy bob larry "
+  # set contacts="larrym kate fan ann Hiram rachel Andy andy bob larry "
   echo "contactsDebug $contacts"
 endif
 
@@ -80,23 +80,26 @@ endif
 foreach i ( $counter )
   set contacts=`echo $contacts | sed "s/$alias[$i] /$email[$i] /g"`
   if ( $debug == "true" ) then
-    echo    here5 $i
+    echo    dollarI $i
     echo    $alias[$i]
     echo    $email[$i]
     echo "   contacts $contacts"
     ## send output only to selected people
     # set contacts="ann kuhn pauline rhead"
-    set contacts="kuhn"
-    echo "   contacts $contacts"
-    cat Bfile 
-    exit
   endif 
 end
 
-# add ann to list
-set contacts="$contacts ann "
+if ( $debug == "true" ) then
+  cat Bfile
+  exit
+endif
 
-# cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  "
-cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" 
+# add ann and b0b to list
+set contacts="$contacts ann kuhn"
+echo contacts $contacts
+
+foreach contact ( $contacts )
+  cat Bfile | mail $contact'@soe.ucsc.edu' -s "B-queue alert"
+end
 rm Bfile
 
