@@ -166,9 +166,12 @@ int promoStart = promoPos - proPad, promoEnd = promoPos + proPad;
 struct bed link;
 ZeroVar(&link);
 char nameBuf[256];
+#ifdef OLD
 char *geneNoVersion = cloneStringZ(gene->name, 8);
 safef(nameBuf, sizeof(nameBuf), "e%s->%8s", enh->name+3, geneNoVersion);
 freez(&geneNoVersion);
+#endif /* OLD */
+safef(nameBuf, sizeof(nameBuf), "%s->%s", enh->name, gene->name);
 link.chrom = gene->chrom;
 link.name = nameBuf;
 int chromStarts[2], blockSizes[2];
