@@ -1661,7 +1661,8 @@ function rulerModeToggle (ele)
 function makeMapItem(id)
 {
     // Create a dummy mapItem on the fly (for objects that don't have corresponding entry in the map).
-    if(typeof(hgTracks.trackDb) != "undefined" && hgTracks.trackDb != null) {
+    if(id && id.length > 0
+    && typeof(hgTracks.trackDb) != "undefined" && hgTracks.trackDb != null) {
         var title;
         var rec = hgTracks.trackDb[id];
         if(rec) {
