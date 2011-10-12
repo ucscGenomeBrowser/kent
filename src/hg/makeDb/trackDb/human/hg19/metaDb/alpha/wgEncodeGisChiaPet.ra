@@ -60,10 +60,11 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
-fileName wgEncodeGisChiaPetK562CtcfAlnRep1.bam
+fileName wgEncodeGisChiaPetK562CtcfAlnRep1.bam,wgEncodeGisChiaPetK562CtcfAlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CTCF_K562M_L7
+md5sum 633f8ae2fb2008ceb86f1fcbb3f7ac2a,7d9e8996cc30a569a719245a4123a0a6
 project wgEncode
 subId 4307
 view Alignments
@@ -81,6 +82,7 @@ fileName wgEncodeGisChiaPetK562CtcfInteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CTCF_K562M_L7
+md5sum 278affe33be8614e6bbd653c0d06b475
 project wgEncode
 subId 4307
 tableName wgEncodeGisChiaPetK562CtcfInteractionsRep1
@@ -99,6 +101,7 @@ fileName wgEncodeGisChiaPetK562CtcfSigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
 labVersion CTCF_K562M_L7
+md5sum 08f139c43b36ea16d0e8c39b3516bdfb
 project wgEncode
 replicate 1
 subId 4307
@@ -115,10 +118,11 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-23
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
-fileName wgEncodeGisChiaPetK562Pol2AlnRep1.bam
+fileName wgEncodeGisChiaPetK562Pol2AlnRep1.bam,wgEncodeGisChiaPetK562Pol2AlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane13
+md5sum 11b8dad9b01874f868157426bffd18bd,83dad9c71df582f21f0666ce37079ed4
 project wgEncode
 replicate 1
 subId 4299
@@ -134,10 +138,11 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
-fileName wgEncodeGisChiaPetK562Pol2AlnRep2.bam
+fileName wgEncodeGisChiaPetK562Pol2AlnRep2.bam,wgEncodeGisChiaPetK562Pol2AlnRep2.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane24
+md5sum 551d6875ebb8d793c5c3372c92a6beab,93aa801ed2a5195c83be05c5232971c5
 project wgEncode
 replicate 2
 subId 4300
@@ -157,6 +162,7 @@ fileName wgEncodeGisChiaPetK562Pol2FastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane13
+md5sum f5adf94ec225ea6345f5dea92ba1ba50
 project wgEncode
 replicate 1
 subId 4299
@@ -176,6 +182,7 @@ fileName wgEncodeGisChiaPetK562Pol2FastqRd1Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane24
+md5sum 0596d5d2448b956c1fcef80cf3517ffd
 project wgEncode
 replicate 2
 subId 4300
@@ -195,6 +202,7 @@ fileName wgEncodeGisChiaPetK562Pol2FastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane13
+md5sum 337a9728be5d7ff996a5deffbd0ff747
 project wgEncode
 replicate 1
 subId 4299
@@ -214,6 +222,7 @@ fileName wgEncodeGisChiaPetK562Pol2FastqRd2Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane24
+md5sum 411e63cddcfbaad2cb71fba2d7c0e295
 project wgEncode
 replicate 2
 subId 4300
@@ -233,6 +242,7 @@ fileName wgEncodeGisChiaPetK562Pol2InteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane13
+md5sum b2e00d8ace7accd6774c6243d1a22fa2
 project wgEncode
 replicate 1
 subId 4299
@@ -253,6 +263,7 @@ fileName wgEncodeGisChiaPetK562Pol2InteractionsRep2.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane24
+md5sum 62301d28728cb9b32d3af79d68a5ffb5
 project wgEncode
 replicate 2
 subId 4300
@@ -273,6 +284,7 @@ fileName wgEncodeGisChiaPetK562Pol2SigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane13
+md5sum c92644a2383d92a1e90d100706cb492b
 project wgEncode
 replicate 1
 subId 4299
@@ -293,6 +305,7 @@ fileName wgEncodeGisChiaPetK562Pol2SigRep2.bigWig
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane24
+md5sum c721512fc6fa8333dba329dfc2600479
 project wgEncode
 replicate 2
 subId 4300
@@ -313,12 +326,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005608.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 1r114
 labVersion CHM040
 md5sum d7597ef541e579bfa3e9c12f9338de88
 origAssembly hg19
 project wgEncode
 replicate 1
-run 1r114
 subId 3279
 type fastq
 view FastqRd1
@@ -337,12 +350,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005609.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 1r114
 labVersion CHM040
 md5sum 6bcc0de4d66dbab1087f00e3c7bc6204
 origAssembly hg19
 project wgEncode
 replicate 1
-run 1r114
 subId 3279
 type fastq
 view FastqRd2
@@ -361,12 +374,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005610.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r32
 labVersion CHM040
 md5sum f97ec6446c47ac5a017685bd35f4d60f
 origAssembly hg19
 project wgEncode
 replicate 1
-run 4r32
 subId 3279
 type fastq
 view FastqRd1
@@ -385,12 +398,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005611.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r32
 labVersion CHM040
 md5sum a4ec956f039b0b7c3644b509a5a7dc6a
 origAssembly hg19
 project wgEncode
 replicate 1
-run 4r32
 subId 3279
 type fastq
 view FastqRd2
@@ -433,12 +446,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005629.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r39
 labVersion CHM053
 md5sum ec347887a1ec5e67cff75218d5b8601f
 origAssembly hg19
 project wgEncode
 replicate 2
-run 4r39
 subId 3281
 type fastq
 view FastqRd1
@@ -457,12 +470,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005630.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 4r39
 labVersion CHM053
 md5sum 65f456f70799b4ca1ff6da82c25e0a2d
 origAssembly hg19
 project wgEncode
 replicate 2
-run 4r39
 subId 3281
 type fastq
 view FastqRd2
@@ -481,12 +494,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005631.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 5r35
 labVersion CHM053
 md5sum 7a6fd0e14edbc39e7bba943dda7f6034
 origAssembly hg19
 project wgEncode
 replicate 2
-run 5r35
 subId 3281
 type fastq
 view FastqRd1
@@ -505,12 +518,12 @@ expId 1430
 fileName wgEncodeGisChiaPetMCF7D000005632.fastq.gz
 grant Ruan
 lab GIS-Ruan
+labExpId run 5r35
 labVersion CHM053
 md5sum b151ce940bfe5d56a06bcb0f8b02e497
 origAssembly hg19
 project wgEncode
 replicate 2
-run 5r35
 subId 3281
 type fastq
 view FastqRd2
@@ -664,10 +677,11 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
-fileName wgEncodeGisChiaPetMcf7CtcfAlnRep1.bam
+fileName wgEncodeGisChiaPetMcf7CtcfAlnRep1.bam,wgEncodeGisChiaPetMcf7CtcfAlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM076M
+md5sum 7cf38dde21abf51d95985231d7c3797b,66c6118a726d534ba7112ee113f51df7
 project wgEncode
 replicate 1
 subId 4305
@@ -682,10 +696,11 @@ dataType ChiaPet
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
-fileName wgEncodeGisChiaPetMcf7CtcfAlnRep2.bam
+fileName wgEncodeGisChiaPetMcf7CtcfAlnRep2.bam,wgEncodeGisChiaPetMcf7CtcfAlnRep2.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM077M
+md5sum 1756da2462d91493f02e31313c09bdb9,792ff34417a836b645de40bc0527edd1
 project wgEncode
 replicate 2
 subId 4306
@@ -704,6 +719,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfFastqRd1Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM076M
+md5sum ce48d7b2547f40d0561aadcfe2f1c70b
 project wgEncode
 replicate 1
 subId 4305
@@ -722,6 +738,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfFastqRd1Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM077M
+md5sum 20e2e53f77ef8e11ecdb963de57c224f
 project wgEncode
 replicate 2
 subId 4306
@@ -740,6 +757,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfFastqRd2Rep1.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM076M
+md5sum 71c8de8cad754d23a4e2e8e3d0299901
 project wgEncode
 replicate 1
 subId 4305
@@ -758,6 +776,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfFastqRd2Rep2.fastq.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM077M
+md5sum 4941ab88d2135a628b88a279235cce52
 project wgEncode
 replicate 2
 subId 4306
@@ -776,6 +795,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfInteractionsRep1.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM076M
+md5sum 9f67b2d5bf6fc29519e20a41b1a3031b
 project wgEncode
 replicate 1
 subId 4305
@@ -795,6 +815,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfInteractionsRep2.bed.gz
 grant Ruan
 lab GIS-Ruan
 labVersion CHM077M
+md5sum 3535501126bb760dcd068bec547ee21b
 project wgEncode
 replicate 2
 subId 4306
@@ -814,6 +835,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfSigRep1.bigWig
 grant Ruan
 lab GIS-Ruan
 labVersion CHM076M
+md5sum c0a3cc50b9312d1ca5313a91db3eaf9c
 project wgEncode
 replicate 1
 subId 4305
@@ -833,6 +855,7 @@ fileName wgEncodeGisChiaPetMcf7CtcfSigRep2.bigWig
 grant Ruan
 lab GIS-Ruan
 labVersion CHM077M
+md5sum 0d36919f0e88fd20aedda3957b65f4b4
 project wgEncode
 replicate 2
 subId 4306
@@ -909,4 +932,4 @@ subId 3381
 type bed 12
 view Interactions
 
-# MAGIC: 2142884942
+# MAGIC: 1730412963

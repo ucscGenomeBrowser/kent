@@ -1,0 +1,123 @@
+#!/hive/groups/encode/dcc/bin/python
+import sys, os, shutil, stat, argparse, datetime
+from ucscgenomics.compositetrack.CompositeTrack import *
+from ucscgenomics.rafile.RaFile import *
+from ucscgenomics.softfile.SoftFile import *
+from ucscgenomics.cvfile.CvFile import *
+
+def diff(list1, list2):
+	return list1.difference(list2), list1.intersection(list2), list2.difference(list1)
+	
+def diff2(dict1, dict2):
+	for file in list1.itervalues():
+		if file.name in list2:
+			if file.md5sum == dict2[file.name].md5sum:
+				same.append(file)
+			else:
+				new.append(file)
+		else:
+			dep.append(file)
+	
+	for file in dict2.itervalues():
+		if file.name not in dict1:
+			new.append(file)
+			
+	return new, same, dep
+	
+def main():
+
+	parser = argparse.ArgumentParser(description = 'Prepares a submission to GEO. Creates a soft file and shell script with the correct call to aspera.')
+	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
+	parser.add_argument('-i', '--instrument', help='If specified, expIds without instruments listed will default to this value. Use the no-spacing name eg Illumina_GA2')
+	parser.add_argument('database', help='The database, typically hg19 or mm9')
+	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
+	parser.add_argument('expIds', nargs='*', help='Any number of expIds separated by spaces, you can also specify a range by using a hyphen, "140 150 160-170" for instance, or leave blank to specify the entire file')
+	
+	if len(sys.argv) == 1:
+		parser.print_usage()
+		return
+	
+	args = parser.parse_args(sys.argv[1:])
+		
+	compositeTrack = CompositeTrack(args.database, args.composite, args.trackPath)
+	
+	cvPath = compositeTrack.trackPath + 'cv/alpha/cv.ra'
+	cv = CvFile(cvPath)
+	
+	same = list()
+	new = list()
+	changed = list()
+	dep = list()
+	
+	r1 = 0
+	r2 = 1
+	print len(compositeTrack.releases)
+	
+	for file in compositeTrack.releases[r1].itervalues():
+		if file.name in compositeTrack.releases[r2]:
+			if file.md5sum == compositeTrack.releases[r2][file.name].md5sum:
+				same.append(file)
+			else:
+				new.append(file)
+		else:
+			dep.append(file)
+		
+	for file in compositeTrack.releases[r2].itervalues():
+		if file.name not in compositeTrack.releases[r1]:
+			new.append(file)
+			
+	print 'Same: ' + str(len(same))
+	for file in same:
+		print file.name
+		
+	print 'New: ' + str(len(new))
+	for file in new:
+		print file.name
+		
+	print 'Deprecated: ' + str(len(dep))
+	for file in dep:
+		print file.name
+		
+	alphafiles = compositeTrack.alphaMetaDb.filter(lambda s: 'fileName' in s, lambda s: s['fileName'])
+	publicfiles = compositeTrack.publicMetaDb.filter(lambda s: 'fileName' in s, lambda s: s['fileName'])
+	
+	sameMdb = list()
+	newMdb = list()
+	depMdb = list()
+	
+	for file in alphafiles:
+		if file in publicfiles:
+			sameMdb.append(file)
+		else:
+			depMdb.append(file)
+		
+	for file in publicfiles:
+		if file not in alphafiles:
+			newMdb.append(file)
+			
+	print 'Same Mdb: ' + str(len(same))
+	for file in sameMdb:
+		print file
+		
+	print 'New Mdb: ' + str(len(new))
+	for file in newMdb:
+		print file
+		
+	print 'Deprecated Mdb: ' + str(len(dep))
+	for file in depMdb:
+		print file
+		
+	onlyAlphaMdb = list()
+	bothAlpha = list()
+	onlyAlphaD = list()
+	
+	onlyPublicMdb = list()
+	bothPublic = list()
+	onlyPublicD = list()
+	
+	for file in alphafiles:
+		
+
+	
+if __name__ == '__main__':
+	main()

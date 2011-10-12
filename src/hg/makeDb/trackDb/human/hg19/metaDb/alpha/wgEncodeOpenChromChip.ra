@@ -15,11 +15,11 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
-fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam,wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=73ceacd96d6340593f7063d02d490eb5,bai=b3f5ee7e5dfc381e376866ba813df104
+md5sum 73ceacd96d6340593f7063d02d490eb5,b3f5ee7e5dfc381e376866ba813df104
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -40,11 +40,11 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 dccAccession wgEncodeEH001127
 expId 1127
-fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam,wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4dd6716a0af3d9dd760e665f6c21a90f,bai=40ba37d1a81006d74d7e0d3efa99a739
+md5sum 4dd6716a0af3d9dd760e665f6c21a90f,40ba37d1a81006d74d7e0d3efa99a739
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -140,11 +140,11 @@ dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 dccAccession wgEncodeEH001128
 expId 1128
-fileName wgEncodeOpenChromChipFibroblInputAln.bam
+fileName wgEncodeOpenChromChipFibroblInputAln.bam,wgEncodeOpenChromChipFibroblInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=0508b60fa6b9d866c13d0ed55812d4e6,bai=6478ca3133d4f9dbebca385e1bcfa0c9
+md5sum 0508b60fa6b9d866c13d0ed55812d4e6,6478ca3133d4f9dbebca385e1bcfa0c9
 origAssembly hg19
 privacy noSequence
 project wgEncode
@@ -189,11 +189,11 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
-fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam,wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=cb9ad3b39b54948ca0e0b13de3f9155b,bai=8bd066791f332a1eb187c003555e53be
+md5sum cb9ad3b39b54948ca0e0b13de3f9155b,8bd066791f332a1eb187c003555e53be
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -213,11 +213,11 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 dccAccession wgEncodeEH001135
 expId 1135
-fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam,wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=17cceba0c599059404c86a9b538331f5,bai=8c69c942b7dcb4dfd06f995b086e3c58
+md5sum 17cceba0c599059404c86a9b538331f5,8c69c942b7dcb4dfd06f995b086e3c58
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -355,11 +355,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001129
 expId 1129
-fileName wgEncodeOpenChromChipGlioblaInputAln.bam
+fileName wgEncodeOpenChromChipGlioblaInputAln.bam,wgEncodeOpenChromChipGlioblaInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b09f98aa75167ac425faee948d1fe94f,bai=9888201b3955aa46bbb8fbb30b41c983
+md5sum b09f98aa75167ac425faee948d1fe94f,9888201b3955aa46bbb8fbb30b41c983
 origAssembly hg19
 project wgEncode
 setType input
@@ -424,11 +424,11 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
-fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam,wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e2f98f53ef44d375a9a5fd4c5e6e9512,bai=4261b7f21d61de4bc912c6aeb40ffae0
+md5sum e2f98f53ef44d375a9a5fd4c5e6e9512,4261b7f21d61de4bc912c6aeb40ffae0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -448,11 +448,11 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001136
 expId 1136
-fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam
+fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam,wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7911b09080f688105056bf22c0dcf1b3,bai=1706d39abde8bb827302ca42b794bfe1
+md5sum 7911b09080f688105056bf22c0dcf1b3,1706d39abde8bb827302ca42b794bfe1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -591,11 +591,11 @@ dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
-fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam,wgEncodeOpenChromChipGm12878CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=8ce078f811af718f44a34c2146a3858f,bai=934999b6cc645852fd6b7fb471feed01
+md5sum 8ce078f811af718f44a34c2146a3858f,934999b6cc645852fd6b7fb471feed01
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -616,11 +616,11 @@ dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 dccAccession wgEncodeEH000547
 expId 547
-fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam,wgEncodeOpenChromChipGm12878CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7b15fc2ea3fddb719626d68569432a22,bai=3867e8c1833442c9578ea7e2e0f13960
+md5sum 7b15fc2ea3fddb719626d68569432a22,3867e8c1833442c9578ea7e2e0f13960
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -784,11 +784,11 @@ dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
-fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=49a0bd6730c3950087edd7162a7a286d,bai=335f8c4328e6115b9a169a41cc7d71b1
+md5sum 49a0bd6730c3950087edd7162a7a286d,335f8c4328e6115b9a169a41cc7d71b1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -808,11 +808,11 @@ dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
-fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=24c25b458cd7e472af7cff89b91ce706,bai=0d3119b01481ddbc44e2195460e68bf0
+md5sum 24c25b458cd7e472af7cff89b91ce706,0d3119b01481ddbc44e2195460e68bf0
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -832,11 +832,11 @@ dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000532
 expId 532
-fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
+fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam,wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=c7afb31b2e0b6a6c11c3f7f6793ff9cc,bai=f9115cdb4214f9cffc6fa0d5272823fb
+md5sum c7afb31b2e0b6a6c11c3f7f6793ff9cc,f9115cdb4214f9cffc6fa0d5272823fb
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -1024,11 +1024,11 @@ dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
 dccAccession wgEncodeEH000528
 expId 528
-fileName wgEncodeOpenChromChipGm12878InputAln.bam
+fileName wgEncodeOpenChromChipGm12878InputAln.bam,wgEncodeOpenChromChipGm12878InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=fc01a486efc03b42f259299c64210069,bai=2db851f92ca557f0e0bb8ca52bb97c8a
+md5sum fc01a486efc03b42f259299c64210069,2db851f92ca557f0e0bb8ca52bb97c8a
 origAssembly hg18
 project wgEncode
 setType input
@@ -1095,11 +1095,11 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
-fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam,wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=5aca492cee5a348430c7d65f0bec5adc,bai=6f56f0b134aec743d37fc2dab92dd0ab
+md5sum 5aca492cee5a348430c7d65f0bec5adc,6f56f0b134aec743d37fc2dab92dd0ab
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1120,11 +1120,11 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000592
 expId 592
-fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam,wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ee515d05481406ce25952295920c986d,bai=23b1339750042a5d0b1285c9691fc079
+md5sum ee515d05481406ce25952295920c986d,23b1339750042a5d0b1285c9691fc079
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1289,11 +1289,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
-fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=46fb8c464840ead4f7e4556aa64ca27b,bai=196f5b859ffb0ee0a8dd2dfa5b62fd09
+md5sum 46fb8c464840ead4f7e4556aa64ca27b,196f5b859ffb0ee0a8dd2dfa5b62fd09
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1314,11 +1314,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000569
 expId 569
-fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=fecb5a179c90c42b70d74a980bf20075,bai=acfa4f6f409d22c7dfcde436e89a30cb
+md5sum fecb5a179c90c42b70d74a980bf20075,acfa4f6f409d22c7dfcde436e89a30cb
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1460,11 +1460,11 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
-fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam,wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=63bc5d9187713ebe105eef4228d8483d,bai=16639a67b9768894a9ae49f3e3babce2
+md5sum 63bc5d9187713ebe105eef4228d8483d,16639a67b9768894a9ae49f3e3babce2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1485,11 +1485,11 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000562
 expId 562
-fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam,wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7f1cf674026051df7efe2c06e764db3e,bai=5367ac8c1f2e37eb43a59ffc3a862b1a
+md5sum 7f1cf674026051df7efe2c06e764db3e,5367ac8c1f2e37eb43a59ffc3a862b1a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1631,11 +1631,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
-fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=261bc5471368995fa812d11ad10cdb00,bai=d724e739ede4539b62d9cd36e1d4741f
+md5sum 261bc5471368995fa812d11ad10cdb00,d724e739ede4539b62d9cd36e1d4741f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1656,11 +1656,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000570
 expId 570
-fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=d39f5a80b0557ea8cf7c534adcfb6edf,bai=3b9ce91df82eb05097c2d8606bccd197
+md5sum d39f5a80b0557ea8cf7c534adcfb6edf,3b9ce91df82eb05097c2d8606bccd197
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1802,11 +1802,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
-fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ccb9a29b87e6e2cbce5499f79c2cb8c4,bai=b7cafb68818f905c4af432876581c4d9
+md5sum ccb9a29b87e6e2cbce5499f79c2cb8c4,b7cafb68818f905c4af432876581c4d9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1827,11 +1827,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000571
 expId 571
-fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=866bb0b95cd46b91e20519f20387172a,bai=581be16a8ff1cc7b9ba7287dc3aaf83c
+md5sum 866bb0b95cd46b91e20519f20387172a,581be16a8ff1cc7b9ba7287dc3aaf83c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1973,11 +1973,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
-fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam,wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ca212abe7c98829cb8e7d52576e459d2,bai=43c3a3ac3d8bdcc32689366d82d1b5d4
+md5sum ca212abe7c98829cb8e7d52576e459d2,43c3a3ac3d8bdcc32689366d82d1b5d4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1998,11 +1998,11 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 dccAccession wgEncodeEH000572
 expId 572
-fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam,wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=37f25389cf72fa497dd83156f1ae1520,bai=fe0d1c89b2ad06dec69f505272168d16
+md5sum 37f25389cf72fa497dd83156f1ae1520,fe0d1c89b2ad06dec69f505272168d16
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2144,11 +2144,11 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 dccAccession wgEncodeEH000596
 expId 596
-fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam
+fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam,wgEncodeOpenChromChipH1hescCmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=cf878eea152e6a33a95845a5c6c0365f,bai=97c5f9d1fda1ce2b46cc6fc4fc80b885
+md5sum cf878eea152e6a33a95845a5c6c0365f,97c5f9d1fda1ce2b46cc6fc4fc80b885
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2266,11 +2266,11 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000560
 expId 560
-fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam,wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=da737f64a7e9d1e5c89af9d4e0d0e18d,bai=73f413971720b7930a99497f50090105
+md5sum da737f64a7e9d1e5c89af9d4e0d0e18d,73f413971720b7930a99497f50090105
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2388,11 +2388,11 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 dccAccession wgEncodeEH000563
 expId 563
-fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam,wgEncodeOpenChromChipH1hescPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=c6bf635d2aca79d018b187650ebda162,bai=f8d23b0b281474fb1c8d6f00d7d2a26f
+md5sum c6bf635d2aca79d018b187650ebda162,f8d23b0b281474fb1c8d6f00d7d2a26f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2510,11 +2510,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
-fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam,wgEncodeOpenChromChipHelas3CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7b7e1ee1d1761a9bfce909a3b9457c92,bai=54f8022100d93e7de3563b0d8dd1057c
+md5sum 7b7e1ee1d1761a9bfce909a3b9457c92,54f8022100d93e7de3563b0d8dd1057c
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2535,11 +2535,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000542
 expId 542
-fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam,wgEncodeOpenChromChipHelas3CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=051d25b8dea30181a64ddc9e1088a9dc,bai=325eab0b2936de7c94706c9b97e7b2bf
+md5sum 051d25b8dea30181a64ddc9e1088a9dc,325eab0b2936de7c94706c9b97e7b2bf
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2707,11 +2707,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
-fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam,wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=2b65880e833378cc733a722988a276bd,bai=bfb553a4887e09a3ac0750bf6f288827
+md5sum 2b65880e833378cc733a722988a276bd,bfb553a4887e09a3ac0750bf6f288827
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2732,11 +2732,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000541
 expId 541
-fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam,wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=229c4ad186d379815cd294f20cc8d6ea,bai=568f36edd41c082e85cb210c857606d2
+md5sum 229c4ad186d379815cd294f20cc8d6ea,568f36edd41c082e85cb210c857606d2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2904,11 +2904,11 @@ dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
 dccAccession wgEncodeEH000539
 expId 539
-fileName wgEncodeOpenChromChipHelas3InputAln.bam
+fileName wgEncodeOpenChromChipHelas3InputAln.bam,wgEncodeOpenChromChipHelas3InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e3e3b38e6df3b0ca68360c84ca05373f,bai=ba25f6ea085eb5013657ae90da96aec5
+md5sum e3e3b38e6df3b0ca68360c84ca05373f,ba25f6ea085eb5013657ae90da96aec5
 origAssembly hg18
 project wgEncode
 setType input
@@ -2976,11 +2976,11 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
-fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam,wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=8d8a3c7e5d4608dee152ba15c295d39d,bai=629ad4dabbfe02d89dcf8fe20906adbb
+md5sum 8d8a3c7e5d4608dee152ba15c295d39d,629ad4dabbfe02d89dcf8fe20906adbb
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3001,11 +3001,11 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000597
 expId 597
-fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam,wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=fc36a0db2084920b756ce159d1d4afd9,bai=60a66b66d7e57e4df08a974859b41509
+md5sum fc36a0db2084920b756ce159d1d4afd9,60a66b66d7e57e4df08a974859b41509
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3172,11 +3172,11 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam,wgEncodeOpenChromChipHepg2CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e16628ab15130e6327b04d7d0f94b608,bai=2080405a333e696e9010b14456f9a9c8
+md5sum e16628ab15130e6327b04d7d0f94b608,2080405a333e696e9010b14456f9a9c8
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3197,11 +3197,11 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam,wgEncodeOpenChromChipHepg2CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=0cc72233eef1f2bd1d0d106e1203823c,bai=adbf9c964a6e7c94bb775ee1dfd075de
+md5sum 0cc72233eef1f2bd1d0d106e1203823c,adbf9c964a6e7c94bb775ee1dfd075de
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3222,11 +3222,11 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 dccAccession wgEncodeEH000545
 expId 545
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam,wgEncodeOpenChromChipHepg2CmycAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=e0f9645f7a89419ed198e6cc81f9d740,bai=f3ec1d19cf13fc0e9cfa9f04947c80f4
+md5sum e0f9645f7a89419ed198e6cc81f9d740,f3ec1d19cf13fc0e9cfa9f04947c80f4
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3418,11 +3418,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
-fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam,wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=0421dbb3a39f0fc2450920bd7f96a978,bai=632a1be255d83e4a8d17800df8826fc5
+md5sum 0421dbb3a39f0fc2450920bd7f96a978,632a1be255d83e4a8d17800df8826fc5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3443,11 +3443,11 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 dccAccession wgEncodeEH000543
 expId 543
-fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam,wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b9a0a82095cd5aba8ceb50cac4397c52,bai=90132e85227b1b36ba70f867164ab85f
+md5sum b9a0a82095cd5aba8ceb50cac4397c52,90132e85227b1b36ba70f867164ab85f
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3615,11 +3615,11 @@ dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
 dccAccession wgEncodeEH000538
 expId 538
-fileName wgEncodeOpenChromChipHepg2InputAln.bam
+fileName wgEncodeOpenChromChipHepg2InputAln.bam,wgEncodeOpenChromChipHepg2InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=45a4ec67c0ff64a23bccec6ac8624766,bai=e7fe8c85f567aaddf2df709ca36e0e3e
+md5sum 45a4ec67c0ff64a23bccec6ac8624766,e7fe8c85f567aaddf2df709ca36e0e3e
 origAssembly hg18
 project wgEncode
 setType input
@@ -3687,11 +3687,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=d18a64ffdb81931877c11a0020670ee9,bai=bd7f186c9e8bce81dc8f9f3fc57002a3
+md5sum d18a64ffdb81931877c11a0020670ee9,bd7f186c9e8bce81dc8f9f3fc57002a3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3712,11 +3712,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=1297a5ffc620f1c90726ca6fffa8b0c1,bai=eb31fc1e7053d3d4d70cd2c24c7c1c7b
+md5sum 1297a5ffc620f1c90726ca6fffa8b0c1,eb31fc1e7053d3d4d70cd2c24c7c1c7b
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3737,11 +3737,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam,wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=302e27359693d38d8ffdb3d6e5657381,bai=6fd8f8cd6999504d88ed769f168b51c9
+md5sum 302e27359693d38d8ffdb3d6e5657381,6fd8f8cd6999504d88ed769f168b51c9
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -3931,11 +3931,11 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 dccAccession wgEncodeEH000561
 expId 561
-fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam
+fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam,wgEncodeOpenChromChipHuvecCmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b2253794c1f7fa0a60c442a3b35a96cc,bai=e516956e349fe926654c9b313d7feb77
+md5sum b2253794c1f7fa0a60c442a3b35a96cc,e516956e349fe926654c9b313d7feb77
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4054,11 +4054,11 @@ dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
-fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam,wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=630474c9b8d2e6020f4e77eb71966b50,bai=ed0f1fe793e356f7d199a9aae535698f
+md5sum 630474c9b8d2e6020f4e77eb71966b50,ed0f1fe793e356f7d199a9aae535698f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4079,11 +4079,11 @@ dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 dccAccession wgEncodeEH000551
 expId 551
-fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam,wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ab0804b9fda67f8ad14f6fff793659b6,bai=94fd7c76855cf0ab6e3538c245192249
+md5sum ab0804b9fda67f8ad14f6fff793659b6,94fd7c76855cf0ab6e3538c245192249
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4249,11 +4249,11 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 dccAccession wgEncodeEH000550
 expId 550
-fileName wgEncodeOpenChromChipHuvecInputAln.bam
+fileName wgEncodeOpenChromChipHuvecInputAln.bam,wgEncodeOpenChromChipHuvecInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=1d0b2378e7327fefb5b81a7fe9029251,bai=d459b48986547c7ddd0529f3ed96b8f2
+md5sum 1d0b2378e7327fefb5b81a7fe9029251,d459b48986547c7ddd0529f3ed96b8f2
 origAssembly hg18
 project wgEncode
 setType input
@@ -4320,11 +4320,11 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
-fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam,wgEncodeOpenChromChipHuvecPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=700ce1f6710422d57b69106ee0dd3203,bai=b770c00d83caffdd4df46dc8910c00c4
+md5sum 700ce1f6710422d57b69106ee0dd3203,b770c00d83caffdd4df46dc8910c00c4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4345,11 +4345,11 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 dccAccession wgEncodeEH000552
 expId 552
-fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam
+fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam,wgEncodeOpenChromChipHuvecPol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=2106c8f9eeb67d68b6057d6c9e3f7187,bai=9b6e06f63ecf526e093f75a6ccce568a
+md5sum 2106c8f9eeb67d68b6057d6c9e3f7187,9b6e06f63ecf526e093f75a6ccce568a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4491,11 +4491,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
-fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam
+fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam,wgEncodeOpenChromChipK562CmycAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=9eff836229f83a0cf38614f075b72729,bai=1e25d10dbf7cb56296b5090ddf0eb0bc
+md5sum 9eff836229f83a0cf38614f075b72729,1e25d10dbf7cb56296b5090ddf0eb0bc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4516,11 +4516,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
-fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam
+fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam,wgEncodeOpenChromChipK562CmycAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=987882ebc78baa6bc53babce7e53d439,bai=46900ae534c93255a3080635413e11c3
+md5sum 987882ebc78baa6bc53babce7e53d439,46900ae534c93255a3080635413e11c3
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4541,11 +4541,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000536
 expId 536
-fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam
+fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam,wgEncodeOpenChromChipK562CmycAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=0547986e5dd992de98ab149d8ca2e932,bai=522f4542d9d3b9efffaab5766cc85ec7
+md5sum 0547986e5dd992de98ab149d8ca2e932,522f4542d9d3b9efffaab5766cc85ec7
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4736,11 +4736,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
-fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam,wgEncodeOpenChromChipK562CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=b6f045181f3c736fe61f1115a8f0769f,bai=6cdcec5b93422fb1340edb76824043e1
+md5sum b6f045181f3c736fe61f1115a8f0769f,6cdcec5b93422fb1340edb76824043e1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4761,11 +4761,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
-fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam,wgEncodeOpenChromChipK562CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ffca69645c43876754c54eadf64fbd4a,bai=bb77343bea05e9c408ecd660221d000e
+md5sum ffca69645c43876754c54eadf64fbd4a,bb77343bea05e9c408ecd660221d000e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4786,11 +4786,11 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000535
 expId 535
-fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam
+fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam,wgEncodeOpenChromChipK562CtcfAlnRep3.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=d8c249b29be04638c9b23cc197c7dba1,bai=1e9414d3104dc112e5dbabe958c251b0
+md5sum d8c249b29be04638c9b23cc197c7dba1,1e9414d3104dc112e5dbabe958c251b0
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -4981,11 +4981,11 @@ dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
 dccAccession wgEncodeEH000529
 expId 529
-fileName wgEncodeOpenChromChipK562InputAln.bam
+fileName wgEncodeOpenChromChipK562InputAln.bam,wgEncodeOpenChromChipK562InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=7ff0918d3b3ab1496824af7488de1a17,bai=6dc006badd2f47beb55e0b14517ba4a3
+md5sum 7ff0918d3b3ab1496824af7488de1a17,6dc006badd2f47beb55e0b14517ba4a3
 origAssembly hg18
 project wgEncode
 setType input
@@ -5053,11 +5053,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
-fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam,wgEncodeOpenChromChipK562Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=430800736a44af531dad4f97f89ee865,bai=48be89e0a1bcdbcab50121211570baf5
+md5sum 430800736a44af531dad4f97f89ee865,48be89e0a1bcdbcab50121211570baf5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5078,11 +5078,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000555
 expId 555
-fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam,wgEncodeOpenChromChipK562Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=af9f57932eeb79b4e46b76597b24df2a,bai=07add7b4e318af4cda2ad9db0e520bae
+md5sum af9f57932eeb79b4e46b76597b24df2a,07add7b4e318af4cda2ad9db0e520bae
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5246,11 +5246,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
-fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=594616943fff9d12eeec3b46ea61b3ed,bai=6f9e0041bd107684ce5cd3686224287e
+md5sum 594616943fff9d12eeec3b46ea61b3ed,6f9e0041bd107684ce5cd3686224287e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5271,11 +5271,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001134
 expId 1134
-fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=d1417675a3a73c9f349c09b0ccbdf6df,bai=d6cd1c56b2e1aa2e8f7b6f1b85c495ce
+md5sum d1417675a3a73c9f349c09b0ccbdf6df,d6cd1c56b2e1aa2e8f7b6f1b85c495ce
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5468,11 +5468,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
-fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam,wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=ec57082fd8c8206f6ab158fce21e9a63,bai=b89e86e8a637966d217f945c56f851b9
+md5sum ec57082fd8c8206f6ab158fce21e9a63,b89e86e8a637966d217f945c56f851b9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5493,11 +5493,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001133
 expId 1133
-fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam,wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=2099fab6d38caa9e2572c8a2dd0d2c69,bai=fc95b2fe8b3bb57e2f09d482e8967205
+md5sum 2099fab6d38caa9e2572c8a2dd0d2c69,fc95b2fe8b3bb57e2f09d482e8967205
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5642,11 +5642,11 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
-fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=fe704d42067e1ce265e3eaa8e0d68909,bai=602299fdc3125198929d74342df10dd0
+md5sum fe704d42067e1ce265e3eaa8e0d68909,602299fdc3125198929d74342df10dd0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5667,11 +5667,11 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 dccAccession wgEncodeEH000598
 expId 598
-fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=f1cdeda8b02e54e5a7732af96b2636f5,bai=321e606c1c7ed3a2b9fad17c2730cf82
+md5sum f1cdeda8b02e54e5a7732af96b2636f5,321e606c1c7ed3a2b9fad17c2730cf82
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5716,11 +5716,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
-fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4f37357d3bd4cc180642e03c49ec7a2c,bai=a14446295131c8edf01c127334427954
+md5sum 4f37357d3bd4cc180642e03c49ec7a2c,a14446295131c8edf01c127334427954
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5741,11 +5741,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001131
 expId 1131
-fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=4f9ba92d0a7d65776bdc61a1b5975378,bai=945c7b33ce5ac406fd51087561fee2e4
+md5sum 4f9ba92d0a7d65776bdc61a1b5975378,945c7b33ce5ac406fd51087561fee2e4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5985,11 +5985,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
-fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam,wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=2394c7f6cfc5681ce37eb68b7b6f8d87,bai=46ddbd1c92e5c008fa94b9abc80a95cf
+md5sum 2394c7f6cfc5681ce37eb68b7b6f8d87,46ddbd1c92e5c008fa94b9abc80a95cf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6010,11 +6010,11 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 dccAccession wgEncodeEH001132
 expId 1132
-fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam,wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=82b289023adaad17b34ed589d53c8775,bai=8758c8c2c23d6cb168229c91be4d823e
+md5sum 82b289023adaad17b34ed589d53c8775,8758c8c2c23d6cb168229c91be4d823e
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6159,11 +6159,11 @@ dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000589
 expId 589
-fileName wgEncodeOpenChromChipMcf7InputAln.bam
+fileName wgEncodeOpenChromChipMcf7InputAln.bam,wgEncodeOpenChromChipMcf7InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=af4ee4b58bdfb92878ee0035295474ca,bai=f32cc452beae010fec42c84e9b03d9df
+md5sum af4ee4b58bdfb92878ee0035295474ca,f32cc452beae010fec42c84e9b03d9df
 origAssembly hg18
 project wgEncode
 setType input
@@ -6229,11 +6229,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
-fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam,wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=3fc7a5fc647f75ec15397cbc8e731ffb,bai=9a48914f8ca7f7f3b24954665148552a
+md5sum 3fc7a5fc647f75ec15397cbc8e731ffb,9a48914f8ca7f7f3b24954665148552a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6253,11 +6253,11 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEH001130
 expId 1130
-fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
+fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam,wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=cac2f2ca52dc7f0a6448e3ccf2204205,bai=175e61d3d3d6d100acc23064743f5b32
+md5sum cac2f2ca52dc7f0a6448e3ccf2204205,175e61d3d3d6d100acc23064743f5b32
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6395,11 +6395,11 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 dccAccession wgEncodeEH001137
 expId 1137
-fileName wgEncodeOpenChromChipMonocd14InputAln.bam
+fileName wgEncodeOpenChromChipMonocd14InputAln.bam,wgEncodeOpenChromChipMonocd14InputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=490c5d71e6c847ca77d93b562f173a6a,bai=543d82be8f8ca67f7313949a86733e7d
+md5sum 490c5d71e6c847ca77d93b562f173a6a,543d82be8f8ca67f7313949a86733e7d
 origAssembly hg19
 project wgEncode
 setType input
@@ -6465,11 +6465,11 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
-fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam,wgEncodeOpenChromChipNhekCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=bd3fa70c82f88d94c75de76ceeddd591,bai=c231cdb8dc973cea4584a02a488a1ce3
+md5sum bd3fa70c82f88d94c75de76ceeddd591,c231cdb8dc973cea4584a02a488a1ce3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6490,11 +6490,11 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 dccAccession wgEncodeEH000559
 expId 559
-fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam,wgEncodeOpenChromChipNhekCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=1c5ae1e8842a492830a129065f4f6643,bai=6af0b26a067ea150410d7c05b6540798
+md5sum 1c5ae1e8842a492830a129065f4f6643,6af0b26a067ea150410d7c05b6540798
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6636,11 +6636,11 @@ dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
-fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam
+fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam,wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=77acfa12f34d420e7ec34f6fad5f889c,bai=c6c8bc9285a19b11eb90893955605d09
+md5sum 77acfa12f34d420e7ec34f6fad5f889c,c6c8bc9285a19b11eb90893955605d09
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6662,11 +6662,11 @@ dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 dccAccession wgEncodeEH000600
 expId 600
-fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam
+fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam,wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=92e8605b20e95980ed0bad990f2ee952,bai=5e40a5f387e81ac2055a935a085f6ec9
+md5sum 92e8605b20e95980ed0bad990f2ee952,5e40a5f387e81ac2055a935a085f6ec9
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6767,11 +6767,11 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 dccAccession wgEncodeEH000593
 expId 593
-fileName wgEncodeOpenChromChipProgfibInputAln.bam
+fileName wgEncodeOpenChromChipProgfibInputAln.bam,wgEncodeOpenChromChipProgfibInputAln.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=1a759e20bda9d3191d38fded13bf9c59,bai=65f00f8e614a4aeab2bb871c90337292
+md5sum 1a759e20bda9d3191d38fded13bf9c59,65f00f8e614a4aeab2bb871c90337292
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6818,11 +6818,11 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
-fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam
+fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam,wgEncodeOpenChromChipProgfibPol2AlnRep1.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=05b7208b6d9aef9ad895295d9b620123,bai=6256f52e58c0ab3b07493ac7d397c30f
+md5sum 05b7208b6d9aef9ad895295d9b620123,6256f52e58c0ab3b07493ac7d397c30f
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6844,11 +6844,11 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 dccAccession wgEncodeEH000606
 expId 606
-fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam
+fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam,wgEncodeOpenChromChipProgfibPol2AlnRep2.bam.bai
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
-md5sum bam=14d6eba1644fc4bcb61fdadc4a6543a3,bai=20e151758e6ed2840010cc4c8258be4a
+md5sum 14d6eba1644fc4bcb61fdadc4a6543a3,20e151758e6ed2840010cc4c8258be4a
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -6936,4 +6936,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -167033199
+# MAGIC: -167092005

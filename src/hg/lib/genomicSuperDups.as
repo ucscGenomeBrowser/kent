@@ -10,7 +10,7 @@ table genomicSuperDups
   string otherChrom;   "Other chromosome or scaffold"
   uint otherStart;   "Start in other sequence"
   uint otherEnd;     "End in other sequence"
-  uint otherSize;    "Total size of other sequence (otherEnd - otherStart)"
+  uint otherSize;    "Total size of other chromosome"
   uint uid;       "Unique id shared by the query and subject"
   uint posBasesHit;       "For future use"
   string testResult;       "For future use"

@@ -47,6 +47,7 @@ Options:
        This is from the start of the query in the positive
        direction.
      o qEndTrunc - similary for qEnd
+   If the psl count not be mapped, the mapping* and mapped* columns are empty.
   -mappingPsls=pslFile - write mapping alignments that were used in
    PSL format to this file.  Transformations that were done, such as
    -swapMap, will be reflected in this file.  There will be a one-to-one

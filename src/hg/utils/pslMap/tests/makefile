@@ -42,6 +42,7 @@ mrnaMrnaXMap: mkdirs
 
 # mrna->mm6->hg17, using untranslated mrna->mm6.  At one point this
 # got the strand wrong.
+# also check mapInfo on unmapped entries
 mrnaMapOver: mkdirs
 	${pslMap} -mapInfo=output/$@.mapinfo input/mrnaToMm6.psl input/mm6ToHg17.psl output/$@.psl
 	pslCheck -verbose=0 output/$@.psl

@@ -14,11 +14,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000796
 expId 796
-fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam,wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
-md5sum bam=943107cd2fc437dff04098c604d053e2,bai=ef06c6d83e888e7fbde9ffc8848f0dae
+md5sum 943107cd2fc437dff04098c604d053e2,ef06c6d83e888e7fbde9ffc8848f0dae
 project wgEncode
 replicate 1
 subId 3408
@@ -36,11 +36,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000796
 expId 796
-fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam,wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
-md5sum bam=376b865faa2a124b9825266256b1c26e,bai=27d95f6a12874fc0f7fbc5dcf825d1ac
+md5sum 376b865faa2a124b9825266256b1c26e,27d95f6a12874fc0f7fbc5dcf825d1ac
 project wgEncode
 replicate 2
 subId 3408
@@ -165,11 +165,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000797
 expId 797
-fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam,wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
-md5sum bam=0893917404fc33e60c261cc9588c9732,bai=ba3136f9532b17704b106023a41ac8d6
+md5sum 0893917404fc33e60c261cc9588c9732,ba3136f9532b17704b106023a41ac8d6
 project wgEncode
 replicate 1
 subId 3408
@@ -187,11 +187,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000797
 expId 797
-fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam,wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
-md5sum bam=7bc706622e3e5c18d2517001d39b63c6,bai=759fb8647dba14f586c8d5d54e495891
+md5sum 7bc706622e3e5c18d2517001d39b63c6,759fb8647dba14f586c8d5d54e495891
 project wgEncode
 replicate 2
 subId 3408
@@ -316,10 +316,10 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000798
 expId 798
-fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam,wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
-md5sum bam=520ae680dd974c1cc5e25053f1a4e6dd,bai=c244eebe17cf9fee96014eacca38fae9
+md5sum 520ae680dd974c1cc5e25053f1a4e6dd,c244eebe17cf9fee96014eacca38fae9
 project wgEncode
 replicate 1
 subId 3408
@@ -337,10 +337,10 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000798
 expId 798
-fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam,wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
-md5sum bam=d4bbb373f592be5c808ada966f9c1952,bai=4eba7dc042ad7aac8abe32ade038b83b
+md5sum d4bbb373f592be5c808ada966f9c1952,4eba7dc042ad7aac8abe32ade038b83b
 project wgEncode
 replicate 2
 subId 3408
@@ -460,11 +460,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000799
 expId 799
-fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam,wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
-md5sum bam=e93f1b8f78fb9c35a579567513238557,bai=79e8bcb375ff1a54d0d7e189b08de83b
+md5sum e93f1b8f78fb9c35a579567513238557,79e8bcb375ff1a54d0d7e189b08de83b
 project wgEncode
 replicate 1
 subId 3408
@@ -482,11 +482,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000799
 expId 799
-fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam,wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
-md5sum bam=d64d6a2790ec360bed0b24d1e7705426,bai=cda5c92175b0a98674657f07dfb13da9
+md5sum d64d6a2790ec360bed0b24d1e7705426,cda5c92175b0a98674657f07dfb13da9
 project wgEncode
 replicate 2
 subId 3408
@@ -590,11 +590,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000793
 expId 793
-fileName wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam,wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
-md5sum bam=212f2e7c780b8195bf26383ef5d6283f,bai=56a6d9bbc82aad76c140cd2c2dad271e
+md5sum 212f2e7c780b8195bf26383ef5d6283f,56a6d9bbc82aad76c140cd2c2dad271e
 project wgEncode
 replicate 1
 subId 3407
@@ -612,11 +612,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000793
 expId 793
-fileName wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam,wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
-md5sum bam=1b088a487491d437e49d364943e9db44,bai=bd3294415c3b79e44d4b96fc05f6c4b1
+md5sum 1b088a487491d437e49d364943e9db44,bd3294415c3b79e44d4b96fc05f6c4b1
 project wgEncode
 replicate 2
 subId 3407
@@ -741,11 +741,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000794
 expId 794
-fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam,wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
-md5sum bam=22eca903bbc982a413decb540b556a00,bai=ad0baf1d2d715b28f7f66cd94a56ae68
+md5sum 22eca903bbc982a413decb540b556a00,ad0baf1d2d715b28f7f66cd94a56ae68
 project wgEncode
 replicate 1
 subId 3407
@@ -763,11 +763,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000794
 expId 794
-fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam,wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
-md5sum bam=05f96f4d2c9c0bd411fc16d600c9a4fb,bai=91e4b8bfbe79e6ec4aecde7464695c54
+md5sum 05f96f4d2c9c0bd411fc16d600c9a4fb,91e4b8bfbe79e6ec4aecde7464695c54
 project wgEncode
 replicate 2
 subId 3407
@@ -892,10 +892,10 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000795
 expId 795
-fileName wgEncodeSunyRipSeqK562RipinputAlnRep1.bam
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep1.bam,wgEncodeSunyRipSeqK562RipinputAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
-md5sum bam=b9946f5c231fa041955b56c38f1c3063,bai=9effbe44d0fa0ccbcc3560f76f282024
+md5sum b9946f5c231fa041955b56c38f1c3063,9effbe44d0fa0ccbcc3560f76f282024
 project wgEncode
 replicate 1
 subId 3407
@@ -913,10 +913,10 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000795
 expId 795
-fileName wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep2.bam,wgEncodeSunyRipSeqK562RipinputAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
-md5sum bam=95a97446ee0832de77593175bd94c9ce,bai=01a386791aa4e685777b3fdc292ec3fb
+md5sum 95a97446ee0832de77593175bd94c9ce,01a386791aa4e685777b3fdc292ec3fb
 project wgEncode
 replicate 2
 subId 3407
@@ -1036,11 +1036,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000800
 expId 800
-fileName wgEncodeSunyRipSeqK562T7tagAlnRep1.bam
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep1.bam,wgEncodeSunyRipSeqK562T7tagAlnRep1.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
-md5sum bam=b1af906d167b070ebc67744cce0fb521,bai=bb518ead9dc51a9e0d585d80780deb76
+md5sum b1af906d167b070ebc67744cce0fb521,bb518ead9dc51a9e0d585d80780deb76
 project wgEncode
 replicate 1
 subId 3407
@@ -1058,11 +1058,11 @@ dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
 dccAccession wgEncodeEH000800
 expId 800
-fileName wgEncodeSunyRipSeqK562T7tagAlnRep2.bam
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep2.bam,wgEncodeSunyRipSeqK562T7tagAlnRep2.bam.bai
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
-md5sum bam=2fdefeb9db79da66ac379cb9a22930f1,bai=55a00f8ff474027d96004b5667c378b9
+md5sum 2fdefeb9db79da66ac379cb9a22930f1,55a00f8ff474027d96004b5667c378b9
 project wgEncode
 replicate 2
 subId 3407
@@ -1155,4 +1155,4 @@ subId 3407
 tableName wgEncodeSunyRipSeqK562T7tagSigRep2
 view Signal
 
-# MAGIC: -1302774945
+# MAGIC: -1302786561

@@ -2,1343 +2,6 @@
 This is a release1 of the "ENCODE wgEncodeSydhTfbs"
 The composite track is wgEncodeSydhTfbs
 # WARNINGS #################################################
-1 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2
-2 - table wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2 does not exist, from filetype bam
-3 - could not find gbdb path in table hg19.wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1
-4 - table wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1 does not exist, from filetype bam
-5 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep1
-6 - table wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep1 does not exist, from filetype bam
-7 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951InputIggmusAlnRep1
-8 - table wgEncodeSydhTfbsGm18951InputIggmusAlnRep1 does not exist, from filetype bam
-9 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep2
-10 - table wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-11 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep4
-12 - table wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep4 does not exist, from filetype bam
-13 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecGata2UcdAlnRep1
-14 - table wgEncodeSydhTfbsHuvecGata2UcdAlnRep1 does not exist, from filetype bam
-15 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescMaxUcdAlnRep2
-16 - table wgEncodeSydhTfbsH1hescMaxUcdAlnRep2 does not exist, from filetype bam
-17 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifng30StdAlnRep1
-18 - table wgEncodeSydhTfbsK562Pol2Ifng30StdAlnRep1 does not exist, from filetype bam
-19 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep2
-20 - table wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep2 does not exist, from filetype bam
-21 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Pol2StdAlnRep2
-22 - table wgEncodeSydhTfbsHek293Pol2StdAlnRep2 does not exist, from filetype bam
-23 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep1
-24 - table wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-25 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
-26 - table wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2 does not exist, from filetype bam
-27 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep2
-28 - table wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep2 does not exist, from filetype bam
-29 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892InputIggmusAlnRep1
-30 - table wgEncodeSydhTfbsGm12892InputIggmusAlnRep1 does not exist, from filetype bam
-31 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2
-32 - table wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2 does not exist, from filetype bam
-33 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep2
-34 - table wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-35 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep1
-36 - table wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep1 does not exist, from filetype bam
-37 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep1
-38 - table wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-39 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep2
-40 - table wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep2 does not exist, from filetype bam
-41 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep2
-42 - table wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep2 does not exist, from filetype bam
-43 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562NfybStdAlnRep1
-44 - table wgEncodeSydhTfbsK562NfybStdAlnRep1 does not exist, from filetype bam
-45 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3E2f6StdAlnRep2
-46 - table wgEncodeSydhTfbsHelas3E2f6StdAlnRep2 does not exist, from filetype bam
-47 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep1
-48 - table wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep1 does not exist, from filetype bam
-49 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Zzz3StdAlnRep2
-50 - table wgEncodeSydhTfbsGm12878Zzz3StdAlnRep2 does not exist, from filetype bam
-51 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CfosStdAlnRep3
-52 - table wgEncodeSydhTfbsK562CfosStdAlnRep3 does not exist, from filetype bam
-53 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brf1StdAlnRep3
-54 - table wgEncodeSydhTfbsK562Brf1StdAlnRep3 does not exist, from filetype bam
-55 - could not find gbdb path in table hg19.wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2
-56 - table wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2 does not exist, from filetype bam
-57 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep1
-58 - table wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep1 does not exist, from filetype bam
-59 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputUcdAln
-60 - table wgEncodeSydhTfbsHelas3InputUcdAln does not exist, from filetype bam
-61 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifng30StdAlnRep2
-62 - table wgEncodeSydhTfbsK562Pol2Ifng30StdAlnRep2 does not exist, from filetype bam
-63 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
-64 - table wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2 does not exist, from filetype bam
-65 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Chd2ab68301IggmusAlnRep2
-66 - table wgEncodeSydhTfbsGm12878Chd2ab68301IggmusAlnRep2 does not exist, from filetype bam
-67 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Smc3ab9263IggrabAlnRep1
-68 - table wgEncodeSydhTfbsK562Smc3ab9263IggrabAlnRep1 does not exist, from filetype bam
-69 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Tr4UcdAlnRep2
-70 - table wgEncodeSydhTfbsK562Tr4UcdAlnRep2 does not exist, from filetype bam
-71 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2
-72 - table wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2 does not exist, from filetype bam
-73 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4
-74 - table wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4 does not exist, from filetype bam
-75 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Tr4StdAlnRep1
-76 - table wgEncodeSydhTfbsGm12878Tr4StdAlnRep1 does not exist, from filetype bam
-77 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Tf3c110StdAlnRep2
-78 - table wgEncodeSydhTfbsK562Tf3c110StdAlnRep2 does not exist, from filetype bam
-79 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562TbpIggmusAlnRep2
-80 - table wgEncodeSydhTfbsK562TbpIggmusAlnRep2 does not exist, from filetype bam
-81 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifng6hStdAlnRep1
-82 - table wgEncodeSydhTfbsK562Stat1Ifng6hStdAlnRep1 does not exist, from filetype bam
-83 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Gcn5StdAlnRep2
-84 - table wgEncodeSydhTfbsHelas3Gcn5StdAlnRep2 does not exist, from filetype bam
-85 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Usf2IggrabAlnRep1
-86 - table wgEncodeSydhTfbsK562Usf2IggrabAlnRep1 does not exist, from filetype bam
-87 - table wgEncodeSydhTfbsGm15510NfkbIggrabSig does not exist, from filetype bigWig
-88 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5
-89 - table wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5 does not exist, from filetype bam
-90 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep2
-91 - table wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep2 does not exist, from filetype bam
-92 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep1
-93 - table wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-94 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5
-95 - table wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5 does not exist, from filetype bam
-96 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878TbpIggmusAlnRep2
-97 - table wgEncodeSydhTfbsGm12878TbpIggmusAlnRep2 does not exist, from filetype bam
-98 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep2
-99 - table wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep2 does not exist, from filetype bam
-100 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3TbpIggrabAlnRep1
-101 - table wgEncodeSydhTfbsHelas3TbpIggrabAlnRep1 does not exist, from filetype bam
-102 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputIggmusAlnRep2
-103 - table wgEncodeSydhTfbsHelas3InputIggmusAlnRep2 does not exist, from filetype bam
-104 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdeGata1UcdAlnRep1
-105 - table wgEncodeSydhTfbsPbdeGata1UcdAlnRep1 does not exist, from filetype bam
-106 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562NelfeStdAlnRep2
-107 - table wgEncodeSydhTfbsK562NelfeStdAlnRep2 does not exist, from filetype bam
-108 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Tr4StdAlnRep2
-109 - table wgEncodeSydhTfbsGm12878Tr4StdAlnRep2 does not exist, from filetype bam
-110 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep3
-111 - table wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep3 does not exist, from filetype bam
-112 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1
-113 - table wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1 does not exist, from filetype bam
-114 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Smc3ab9263IggrabAlnRep2
-115 - table wgEncodeSydhTfbsK562Smc3ab9263IggrabAlnRep2 does not exist, from filetype bam
-116 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2
-117 - table wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2 does not exist, from filetype bam
-118 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescRfx5200401194IggrabAlnRep1
-119 - table wgEncodeSydhTfbsH1hescRfx5200401194IggrabAlnRep1 does not exist, from filetype bam
-120 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescJundIggrabAlnRep1
-121 - table wgEncodeSydhTfbsH1hescJundIggrabAlnRep1 does not exist, from filetype bam
-122 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep2
-123 - table wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep2 does not exist, from filetype bam
-124 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3E2f6StdAlnRep1
-125 - table wgEncodeSydhTfbsHelas3E2f6StdAlnRep1 does not exist, from filetype bam
-126 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878P300bStdAlnRep2
-127 - table wgEncodeSydhTfbsGm12878P300bStdAlnRep2 does not exist, from filetype bam
-128 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193InputIggmusAlnRep1
-129 - table wgEncodeSydhTfbsGm19193InputIggmusAlnRep1 does not exist, from filetype bam
-130 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep1
-131 - table wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep1 does not exist, from filetype bam
-132 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep2
-133 - table wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep2 does not exist, from filetype bam
-134 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Pol2StdAlnRep1
-135 - table wgEncodeSydhTfbsHek293Pol2StdAlnRep1 does not exist, from filetype bam
-136 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputMnaseAlnRep1
-137 - table wgEncodeSydhTfbsHelas3InputMnaseAlnRep1 does not exist, from filetype bam
-138 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Znf263UcdAlnRep1
-139 - table wgEncodeSydhTfbsK562Znf263UcdAlnRep1 does not exist, from filetype bam
-140 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecMaxStdAlnRep2
-141 - table wgEncodeSydhTfbsHuvecMaxStdAlnRep2 does not exist, from filetype bam
-142 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep1
-143 - table wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep1 does not exist, from filetype bam
-144 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep2
-145 - table wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep2 does not exist, from filetype bam
-146 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep1
-147 - table wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep1 does not exist, from filetype bam
-148 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Mxi1StdAlnRep3
-149 - table wgEncodeSydhTfbsHepg2Mxi1StdAlnRep3 does not exist, from filetype bam
-150 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Pol2StdAlnRep2
-151 - table wgEncodeSydhTfbsHelas3Pol2StdAlnRep2 does not exist, from filetype bam
-152 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdefetalInputUcdAln
-153 - table wgEncodeSydhTfbsPbdefetalInputUcdAln does not exist, from filetype bam
-154 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep2
-155 - table wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep2 does not exist, from filetype bam
-156 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesInputStdAln
-157 - table wgEncodeSydhTfbsMcf10aesInputStdAln does not exist, from filetype bam
-158 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep3
-159 - table wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-160 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep2
-161 - table wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep2 does not exist, from filetype bam
-162 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep1
-163 - table wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep1 does not exist, from filetype bam
-164 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Smc3ab9263IggmusAlnRep2
-165 - table wgEncodeSydhTfbsGm12878Smc3ab9263IggmusAlnRep2 does not exist, from filetype bam
-166 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescCjunIggrabAlnRep2
-167 - table wgEncodeSydhTfbsH1hescCjunIggrabAlnRep2 does not exist, from filetype bam
-168 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep3
-169 - table wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep3 does not exist, from filetype bam
-170 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep1
-171 - table wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep1 does not exist, from filetype bam
-172 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep2
-173 - table wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep2 does not exist, from filetype bam
-174 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep3
-175 - table wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-176 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputForsklnStdAlnRep1
-177 - table wgEncodeSydhTfbsHepg2InputForsklnStdAlnRep1 does not exist, from filetype bam
-178 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Znf274UcdAlnRep2
-179 - table wgEncodeSydhTfbsK562Znf274UcdAlnRep2 does not exist, from filetype bam
-180 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brg1IggmusAlnRep1
-181 - table wgEncodeSydhTfbsK562Brg1IggmusAlnRep1 does not exist, from filetype bam
-182 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep1
-183 - table wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep1 does not exist, from filetype bam
-184 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Smc3ab9263IggmusAlnRep1
-185 - table wgEncodeSydhTfbsGm12878Smc3ab9263IggmusAlnRep1 does not exist, from filetype bam
-186 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Rfx5IggrabAlnRep1
-187 - table wgEncodeSydhTfbsK562Rfx5IggrabAlnRep1 does not exist, from filetype bam
-188 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2
-189 - table wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2 does not exist, from filetype bam
-190 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep2
-191 - table wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep2 does not exist, from filetype bam
-192 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep1
-193 - table wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep1 does not exist, from filetype bam
-194 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep2
-195 - table wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep2 does not exist, from filetype bam
-196 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Kap1UcdAlnRep1
-197 - table wgEncodeSydhTfbsHek293Kap1UcdAlnRep1 does not exist, from filetype bam
-198 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2ForsklnStdAlnRep1
-199 - table wgEncodeSydhTfbsHepg2Pol2ForsklnStdAlnRep1 does not exist, from filetype bam
-200 - could not find gbdb path in table hg19.wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2
-201 - table wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2 does not exist, from filetype bam
-202 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep2
-203 - table wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep2 does not exist, from filetype bam
-204 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Mxi1IggmusAlnRep2
-205 - table wgEncodeSydhTfbsGm12878Mxi1IggmusAlnRep2 does not exist, from filetype bam
-206 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep1
-207 - table wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep1 does not exist, from filetype bam
-208 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2
-209 - table wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2 does not exist, from filetype bam
-210 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Spt20StdAlnRep1
-211 - table wgEncodeSydhTfbsHelas3Spt20StdAlnRep1 does not exist, from filetype bam
-212 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep3
-213 - table wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-214 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878MaxStdAlnRep1
-215 - table wgEncodeSydhTfbsGm12878MaxStdAlnRep1 does not exist, from filetype bam
-216 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brf2StdAlnRep1
-217 - table wgEncodeSydhTfbsK562Brf2StdAlnRep1 does not exist, from filetype bam
-218 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brf1StdAlnRep1
-219 - table wgEncodeSydhTfbsHelas3Brf1StdAlnRep1 does not exist, from filetype bam
-220 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562NfybStdAlnRep2
-221 - table wgEncodeSydhTfbsK562NfybStdAlnRep2 does not exist, from filetype bam
-222 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Ccnt2StdAlnRep2
-223 - table wgEncodeSydhTfbsK562Ccnt2StdAlnRep2 does not exist, from filetype bam
-224 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878P300sc584IggmusAlnRep1
-225 - table wgEncodeSydhTfbsGm12878P300sc584IggmusAlnRep1 does not exist, from filetype bam
-226 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputUcdAlnRep1
-227 - table wgEncodeSydhTfbsK562InputUcdAlnRep1 does not exist, from filetype bam
-228 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep1
-229 - table wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-230 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293InputStdAlnRep1
-231 - table wgEncodeSydhTfbsHek293InputStdAlnRep1 does not exist, from filetype bam
-232 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4CmycStdAlnRep2
-233 - table wgEncodeSydhTfbsNb4CmycStdAlnRep2 does not exist, from filetype bam
-234 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7Znf217UcdAlnRep2
-235 - table wgEncodeSydhTfbsMcf7Znf217UcdAlnRep2 does not exist, from filetype bam
-236 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878WhipIggmusAlnRep1
-237 - table wgEncodeSydhTfbsGm12878WhipIggmusAlnRep1 does not exist, from filetype bam
-238 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescCjunIggrabAlnRep1
-239 - table wgEncodeSydhTfbsH1hescCjunIggrabAlnRep1 does not exist, from filetype bam
-240 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunStdAlnRep2
-241 - table wgEncodeSydhTfbsK562CjunStdAlnRep2 does not exist, from filetype bam
-242 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099InputIggmusAlnRep2
-243 - table wgEncodeSydhTfbsGm19099InputIggmusAlnRep2 does not exist, from filetype bam
-244 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep1
-245 - table wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep1 does not exist, from filetype bam
-246 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep2
-247 - table wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep2 does not exist, from filetype bam
-248 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2
-249 - table wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2 does not exist, from filetype bam
-250 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep1
-251 - table wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep1 does not exist, from filetype bam
-252 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep2
-253 - table wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-254 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep4
-255 - table wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep4 does not exist, from filetype bam
-256 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3
-257 - table wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3 does not exist, from filetype bam
-258 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep1
-259 - table wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep1 does not exist, from filetype bam
-260 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep2
-261 - table wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep2 does not exist, from filetype bam
-262 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Maffm8194IggrabAlnRep1
-263 - table wgEncodeSydhTfbsHepg2Maffm8194IggrabAlnRep1 does not exist, from filetype bam
-264 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4CmycStdAlnRep1
-265 - table wgEncodeSydhTfbsNb4CmycStdAlnRep1 does not exist, from filetype bam
-266 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4
-267 - table wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4 does not exist, from filetype bam
-268 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep3
-269 - table wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep3 does not exist, from filetype bam
-270 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep2
-271 - table wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep2 does not exist, from filetype bam
-272 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Kap1UcdAlnRep2
-273 - table wgEncodeSydhTfbsK562Kap1UcdAlnRep2 does not exist, from filetype bam
-274 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep1
-275 - table wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep1 does not exist, from filetype bam
-276 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep2
-277 - table wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep2 does not exist, from filetype bam
-278 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep1
-279 - table wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep1 does not exist, from filetype bam
-280 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Elk4UcdAlnRep2
-281 - table wgEncodeSydhTfbsHek293Elk4UcdAlnRep2 does not exist, from filetype bam
-282 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878P300sc584IggmusAlnRep2
-283 - table wgEncodeSydhTfbsGm12878P300sc584IggmusAlnRep2 does not exist, from filetype bam
-284 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep2
-285 - table wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-286 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep1
-287 - table wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep1 does not exist, from filetype bam
-288 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Pol2StdAlnRep3
-289 - table wgEncodeSydhTfbsHek293Pol2StdAlnRep3 does not exist, from filetype bam
-290 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
-291 - table wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1 does not exist, from filetype bam
-292 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Mafkab50322IggrabAlnRep2
-293 - table wgEncodeSydhTfbsHepg2Mafkab50322IggrabAlnRep2 does not exist, from filetype bam
-294 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep1
-295 - table wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep1 does not exist, from filetype bam
-296 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep2
-297 - table wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep2 does not exist, from filetype bam
-298 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecInputUcdAlnRep1
-299 - table wgEncodeSydhTfbsHuvecInputUcdAlnRep1 does not exist, from filetype bam
-300 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep2
-301 - table wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep2 does not exist, from filetype bam
-302 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep5
-303 - table wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep5 does not exist, from filetype bam
-304 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep2
-305 - table wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep2 does not exist, from filetype bam
-306 - table wgEncodeSydhTfbsGm18505NfkbIggrabSig does not exist, from filetype bigWig
-307 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep1
-308 - table wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-309 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Rad21IggrabAlnRep1
-310 - table wgEncodeSydhTfbsGm12878Rad21IggrabAlnRep1 does not exist, from filetype bam
-311 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2CjunIggrabAlnRep2
-312 - table wgEncodeSydhTfbsHepg2CjunIggrabAlnRep2 does not exist, from filetype bam
-313 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Rad21StdAlnRep2
-314 - table wgEncodeSydhTfbsK562Rad21StdAlnRep2 does not exist, from filetype bam
-315 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep2
-316 - table wgEncodeSydhTfbsK562Chd2ab68301IggrabAlnRep2 does not exist, from filetype bam
-317 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHct116Pol2UcdAlnRep1
-318 - table wgEncodeSydhTfbsHct116Pol2UcdAlnRep1 does not exist, from filetype bam
-319 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2s2StdAlnRep2
-320 - table wgEncodeSydhTfbsK562Pol2s2StdAlnRep2 does not exist, from filetype bam
-321 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2StdAlnRep2
-322 - table wgEncodeSydhTfbsK562Pol2StdAlnRep2 does not exist, from filetype bam
-323 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep1
-324 - table wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-325 - table wgEncodeSydhTfbsGm19099NfkbIggrabSig does not exist, from filetype bigWig
-326 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Bdp1StdAlnRep2
-327 - table wgEncodeSydhTfbsHelas3Bdp1StdAlnRep2 does not exist, from filetype bam
-328 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gata1UcdAlnRep2
-329 - table wgEncodeSydhTfbsK562Gata1UcdAlnRep2 does not exist, from filetype bam
-330 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep1
-331 - table wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep1 does not exist, from filetype bam
-332 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891InputIggmusAlnRep1
-333 - table wgEncodeSydhTfbsGm12891InputIggmusAlnRep1 does not exist, from filetype bam
-334 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3E2f4StdAlnRep2
-335 - table wgEncodeSydhTfbsHelas3E2f4StdAlnRep2 does not exist, from filetype bam
-336 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescNrf1IggrabAlnRep2
-337 - table wgEncodeSydhTfbsH1hescNrf1IggrabAlnRep2 does not exist, from filetype bam
-338 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3MaxStdAlnRep2
-339 - table wgEncodeSydhTfbsHelas3MaxStdAlnRep2 does not exist, from filetype bam
-340 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep1
-341 - table wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep1 does not exist, from filetype bam
-342 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878InputIggmusAlnRep2
-343 - table wgEncodeSydhTfbsGm12878InputIggmusAlnRep2 does not exist, from filetype bam
-344 - could not find gbdb path in table hg19.wgEncodeSydhTfbsRajiPol2UcdAlnRep2
-345 - table wgEncodeSydhTfbsRajiPol2UcdAlnRep2 does not exist, from filetype bam
-346 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gata2UcdAlnRep1
-347 - table wgEncodeSydhTfbsK562Gata2UcdAlnRep1 does not exist, from filetype bam
-348 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep1
-349 - table wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep1 does not exist, from filetype bam
-350 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1
-351 - table wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1 does not exist, from filetype bam
-352 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputIggrabAln
-353 - table wgEncodeSydhTfbsK562InputIggrabAln does not exist, from filetype bam
-354 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep2
-355 - table wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep2 does not exist, from filetype bam
-356 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Znf143166181apStdAlnRep2
-357 - table wgEncodeSydhTfbsGm12878Znf143166181apStdAlnRep2 does not exist, from filetype bam
-358 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3JundIggrabAlnRep1
-359 - table wgEncodeSydhTfbsHelas3JundIggrabAlnRep1 does not exist, from filetype bam
-360 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep1
-361 - table wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep1 does not exist, from filetype bam
-362 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescNrf1IggrabAlnRep1
-363 - table wgEncodeSydhTfbsH1hescNrf1IggrabAlnRep1 does not exist, from filetype bam
-364 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Smc3ab9263IggrabAlnRep1
-365 - table wgEncodeSydhTfbsHepg2Smc3ab9263IggrabAlnRep1 does not exist, from filetype bam
-366 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Bdp1StdAlnRep2
-367 - table wgEncodeSydhTfbsK562Bdp1StdAlnRep2 does not exist, from filetype bam
-368 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2ForsklnStdAlnRep2
-369 - table wgEncodeSydhTfbsHepg2Pol2ForsklnStdAlnRep2 does not exist, from filetype bam
-370 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CjunIggrabAlnRep2
-371 - table wgEncodeSydhTfbsHelas3CjunIggrabAlnRep2 does not exist, from filetype bam
-372 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brf2StdAlnRep1
-373 - table wgEncodeSydhTfbsHelas3Brf2StdAlnRep1 does not exist, from filetype bam
-374 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdefetalGata1UcdAlnRep2
-375 - table wgEncodeSydhTfbsPbdefetalGata1UcdAlnRep2 does not exist, from filetype bam
-376 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep2
-377 - table wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-378 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Ccnt2StdAlnRep1
-379 - table wgEncodeSydhTfbsK562Ccnt2StdAlnRep1 does not exist, from filetype bam
-380 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2
-381 - table wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2 does not exist, from filetype bam
-382 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2CebpbForsklnStdAlnRep1
-383 - table wgEncodeSydhTfbsHepg2CebpbForsklnStdAlnRep1 does not exist, from filetype bam
-384 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Pol2StdAlnRep3
-385 - table wgEncodeSydhTfbsHelas3Pol2StdAlnRep3 does not exist, from filetype bam
-386 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Znf143IggrabAlnRep1
-387 - table wgEncodeSydhTfbsHelas3Znf143IggrabAlnRep1 does not exist, from filetype bam
-388 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep1
-389 - table wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep1 does not exist, from filetype bam
-390 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep2
-391 - table wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep2 does not exist, from filetype bam
-392 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2
-393 - table wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2 does not exist, from filetype bam
-394 - could not find gbdb path in table hg19.wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep2
-395 - table wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep2 does not exist, from filetype bam
-396 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Zzz3StdAlnRep2
-397 - table wgEncodeSydhTfbsHelas3Zzz3StdAlnRep2 does not exist, from filetype bam
-398 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep3
-399 - table wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep3 does not exist, from filetype bam
-400 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecCfosUcdAlnRep2
-401 - table wgEncodeSydhTfbsHuvecCfosUcdAlnRep2 does not exist, from filetype bam
-402 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Bhlhe40cIggrabAlnRep2
-403 - table wgEncodeSydhTfbsHepg2Bhlhe40cIggrabAlnRep2 does not exist, from filetype bam
-404 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep3
-405 - table wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep3 does not exist, from filetype bam
-406 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep2
-407 - table wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep2 does not exist, from filetype bam
-408 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputUcdAlnRep1
-409 - table wgEncodeSydhTfbsHepg2InputUcdAlnRep1 does not exist, from filetype bam
-410 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputInslnStdAlnRep1
-411 - table wgEncodeSydhTfbsHepg2InputInslnStdAlnRep1 does not exist, from filetype bam
-412 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep2
-413 - table wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep2 does not exist, from filetype bam
-414 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep2
-415 - table wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep2 does not exist, from filetype bam
-416 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep1
-417 - table wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-418 - table wgEncodeSydhTfbsGm12891NfkbIggrabSig does not exist, from filetype bigWig
-419 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847InputIggmusAlnRep1
-420 - table wgEncodeSydhTfbsGm10847InputIggmusAlnRep1 does not exist, from filetype bam
-421 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescTbpIggrabAlnRep1
-422 - table wgEncodeSydhTfbsH1hescTbpIggrabAlnRep1 does not exist, from filetype bam
-423 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Rpc155StdAlnRep1
-424 - table wgEncodeSydhTfbsK562Rpc155StdAlnRep1 does not exist, from filetype bam
-425 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep2
-426 - table wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep2 does not exist, from filetype bam
-427 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2IggmusAlnRep2
-428 - table wgEncodeSydhTfbsK562Pol2IggmusAlnRep2 does not exist, from filetype bam
-429 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Gcn5StdAlnRep1
-430 - table wgEncodeSydhTfbsGm12878Gcn5StdAlnRep1 does not exist, from filetype bam
-431 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep1
-432 - table wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep1 does not exist, from filetype bam
-433 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep1
-434 - table wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-435 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CfosStdAlnRep2
-436 - table wgEncodeSydhTfbsHelas3CfosStdAlnRep2 does not exist, from filetype bam
-437 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifng6hStdAlnRep2
-438 - table wgEncodeSydhTfbsK562Stat1Ifng6hStdAlnRep2 does not exist, from filetype bam
-439 - could not find gbdb path in table hg19.wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep1
-440 - table wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdAlnRep1 does not exist, from filetype bam
-441 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2ErraForsklnStdAlnRep2
-442 - table wgEncodeSydhTfbsHepg2ErraForsklnStdAlnRep2 does not exist, from filetype bam
-443 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1
-444 - table wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1 does not exist, from filetype bam
-445 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecCfosUcdAlnRep1
-446 - table wgEncodeSydhTfbsHuvecCfosUcdAlnRep1 does not exist, from filetype bam
-447 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescRad21IggrabAlnRep1
-448 - table wgEncodeSydhTfbsH1hescRad21IggrabAlnRep1 does not exist, from filetype bam
-449 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep1
-450 - table wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep1 does not exist, from filetype bam
-451 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep2
-452 - table wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-453 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Znf143166181apStdAlnRep1
-454 - table wgEncodeSydhTfbsGm12878Znf143166181apStdAlnRep1 does not exist, from filetype bam
-455 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep2
-456 - table wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-457 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep1
-458 - table wgEncodeSydhTfbsGm12878Ebf1sc137065StdAlnRep1 does not exist, from filetype bam
-459 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep1
-460 - table wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep1 does not exist, from filetype bam
-461 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CfosStdAlnRep1
-462 - table wgEncodeSydhTfbsHelas3CfosStdAlnRep1 does not exist, from filetype bam
-463 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562E2f4UcdAlnRep2
-464 - table wgEncodeSydhTfbsK562E2f4UcdAlnRep2 does not exist, from filetype bam
-465 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputForsklnStdAlnRep2
-466 - table wgEncodeSydhTfbsHepg2InputForsklnStdAlnRep2 does not exist, from filetype bam
-467 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Tr4UcdAlnRep1
-468 - table wgEncodeSydhTfbsHepg2Tr4UcdAlnRep1 does not exist, from filetype bam
-469 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfna30StdAlnRep2
-470 - table wgEncodeSydhTfbsK562CmycIfna30StdAlnRep2 does not exist, from filetype bam
-471 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562JundStdAlnRep1
-472 - table wgEncodeSydhTfbsK562JundStdAlnRep1 does not exist, from filetype bam
-473 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep2
-474 - table wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep2 does not exist, from filetype bam
-475 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputInslnStdAlnRep2
-476 - table wgEncodeSydhTfbsHepg2InputInslnStdAlnRep2 does not exist, from filetype bam
-477 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep1
-478 - table wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep1 does not exist, from filetype bam
-479 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunIfng30StdAlnRep1
-480 - table wgEncodeSydhTfbsK562CjunIfng30StdAlnRep1 does not exist, from filetype bam
-481 - table wgEncodeSydhTfbsGm18526NfkbIggrabSig does not exist, from filetype bigWig
-482 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Rad21StdAlnRep1
-483 - table wgEncodeSydhTfbsK562Rad21StdAlnRep1 does not exist, from filetype bam
-484 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Pol2s2IggrabAlnRep1
-485 - table wgEncodeSydhTfbsHelas3Pol2s2IggrabAlnRep1 does not exist, from filetype bam
-486 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Usf2IggrabAlnRep2
-487 - table wgEncodeSydhTfbsK562Usf2IggrabAlnRep2 does not exist, from filetype bam
-488 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
-489 - table wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1 does not exist, from filetype bam
-490 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Rpc155StdAlnRep1
-491 - table wgEncodeSydhTfbsHelas3Rpc155StdAlnRep1 does not exist, from filetype bam
-492 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1
-493 - table wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1 does not exist, from filetype bam
-494 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2
-495 - table wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2 does not exist, from filetype bam
-496 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Tr4StdAlnRep2
-497 - table wgEncodeSydhTfbsHelas3Tr4StdAlnRep2 does not exist, from filetype bam
-498 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep1
-499 - table wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep1 does not exist, from filetype bam
-500 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifng30StdAlnRep1
-501 - table wgEncodeSydhTfbsK562Stat1Ifng30StdAlnRep1 does not exist, from filetype bam
-502 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep2
-503 - table wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep2 does not exist, from filetype bam
-504 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdefetalGata1UcdAlnRep1
-505 - table wgEncodeSydhTfbsPbdefetalGata1UcdAlnRep1 does not exist, from filetype bam
-506 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol3StdAlnRep2
-507 - table wgEncodeSydhTfbsK562Pol3StdAlnRep2 does not exist, from filetype bam
-508 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CfosStdAlnRep1
-509 - table wgEncodeSydhTfbsK562CfosStdAlnRep1 does not exist, from filetype bam
-510 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputIfna30StdAlnRep1
-511 - table wgEncodeSydhTfbsK562InputIfna30StdAlnRep1 does not exist, from filetype bam
-512 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputIfng30StdAlnRep1
-513 - table wgEncodeSydhTfbsHelas3InputIfng30StdAlnRep1 does not exist, from filetype bam
-514 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputIggmusAlnRep1
-515 - table wgEncodeSydhTfbsHelas3InputIggmusAlnRep1 does not exist, from filetype bam
-516 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Brca1a300IggrabAlnRep2
-517 - table wgEncodeSydhTfbsHepg2Brca1a300IggrabAlnRep2 does not exist, from filetype bam
-518 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1
-519 - table wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1 does not exist, from filetype bam
-520 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep1
-521 - table wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep1 does not exist, from filetype bam
-522 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep3
-523 - table wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep3 does not exist, from filetype bam
-524 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep1
-525 - table wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep1 does not exist, from filetype bam
-526 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunIfng30StdAlnRep2
-527 - table wgEncodeSydhTfbsK562CjunIfng30StdAlnRep2 does not exist, from filetype bam
-528 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep2
-529 - table wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep2 does not exist, from filetype bam
-530 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfna30StdAlnRep1
-531 - table wgEncodeSydhTfbsK562CmycIfna30StdAlnRep1 does not exist, from filetype bam
-532 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Bdp1StdAlnRep1
-533 - table wgEncodeSydhTfbsHelas3Bdp1StdAlnRep1 does not exist, from filetype bam
-534 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep3
-535 - table wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep3 does not exist, from filetype bam
-536 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pgc1aForsklnStdAlnRep1
-537 - table wgEncodeSydhTfbsHepg2Pgc1aForsklnStdAlnRep1 does not exist, from filetype bam
-538 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2
-539 - table wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2 does not exist, from filetype bam
-540 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Smc3ab9263IggrabAlnRep2
-541 - table wgEncodeSydhTfbsHelas3Smc3ab9263IggrabAlnRep2 does not exist, from filetype bam
-542 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep1
-543 - table wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep1 does not exist, from filetype bam
-544 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputIfna6hStdAlnRep1
-545 - table wgEncodeSydhTfbsK562InputIfna6hStdAlnRep1 does not exist, from filetype bam
-546 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep4
-547 - table wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep4 does not exist, from filetype bam
-548 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878JundStdAlnRep1
-549 - table wgEncodeSydhTfbsGm12878JundStdAlnRep1 does not exist, from filetype bam
-550 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099InputIggmusAlnRep1
-551 - table wgEncodeSydhTfbsGm19099InputIggmusAlnRep1 does not exist, from filetype bam
-552 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep1
-553 - table wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep1 does not exist, from filetype bam
-554 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecInputStdAlnRep1
-555 - table wgEncodeSydhTfbsHuvecInputStdAlnRep1 does not exist, from filetype bam
-556 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycStdAlnRep1
-557 - table wgEncodeSydhTfbsK562CmycStdAlnRep1 does not exist, from filetype bam
-558 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep1
-559 - table wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep1 does not exist, from filetype bam
-560 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep2
-561 - table wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep2 does not exist, from filetype bam
-562 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifng30StdAlnRep2
-563 - table wgEncodeSydhTfbsK562Stat1Ifng30StdAlnRep2 does not exist, from filetype bam
-564 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep2
-565 - table wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep2 does not exist, from filetype bam
-566 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1
-567 - table wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1 does not exist, from filetype bam
-568 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Kap1UcdAlnRep1
-569 - table wgEncodeSydhTfbsK562Kap1UcdAlnRep1 does not exist, from filetype bam
-570 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4
-571 - table wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4 does not exist, from filetype bam
-572 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescTbpIggrabAlnRep2
-573 - table wgEncodeSydhTfbsH1hescTbpIggrabAlnRep2 does not exist, from filetype bam
-574 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brf1StdAlnRep1
-575 - table wgEncodeSydhTfbsK562Brf1StdAlnRep1 does not exist, from filetype bam
-576 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep2
-577 - table wgEncodeSydhTfbsGm12878Brca1a300IggmusAlnRep2 does not exist, from filetype bam
-578 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gata2UcdAlnRep2
-579 - table wgEncodeSydhTfbsK562Gata2UcdAlnRep2 does not exist, from filetype bam
-580 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3
-581 - table wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3 does not exist, from filetype bam
-582 - table wgEncodeSydhTfbsGm12892NfkbIggrabSig does not exist, from filetype bigWig
-583 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2
-584 - table wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2 does not exist, from filetype bam
-585 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brf1StdAlnRep2
-586 - table wgEncodeSydhTfbsHelas3Brf1StdAlnRep2 does not exist, from filetype bam
-587 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep2
-588 - table wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep2 does not exist, from filetype bam
-589 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep2
-590 - table wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep2 does not exist, from filetype bam
-591 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep3
-592 - table wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-593 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878WhipIggmusAlnRep2
-594 - table wgEncodeSydhTfbsGm12878WhipIggmusAlnRep2 does not exist, from filetype bam
-595 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293tInputUcdAln
-596 - table wgEncodeSydhTfbsHek293tInputUcdAln does not exist, from filetype bam
-597 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878JundStdAlnRep2
-598 - table wgEncodeSydhTfbsGm12878JundStdAlnRep2 does not exist, from filetype bam
-599 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescUsf2IggrabAlnRep2
-600 - table wgEncodeSydhTfbsH1hescUsf2IggrabAlnRep2 does not exist, from filetype bam
-601 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Mxi1StdAlnRep2
-602 - table wgEncodeSydhTfbsHepg2Mxi1StdAlnRep2 does not exist, from filetype bam
-603 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Tf3c110StdAlnRep1
-604 - table wgEncodeSydhTfbsK562Tf3c110StdAlnRep1 does not exist, from filetype bam
-605 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878CfosStdAlnRep2
-606 - table wgEncodeSydhTfbsGm12878CfosStdAlnRep2 does not exist, from filetype bam
-607 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3TbpIggrabAlnRep2
-608 - table wgEncodeSydhTfbsHelas3TbpIggrabAlnRep2 does not exist, from filetype bam
-609 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Bhlhe40cIggrabAlnRep1
-610 - table wgEncodeSydhTfbsHepg2Bhlhe40cIggrabAlnRep1 does not exist, from filetype bam
-611 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep2
-612 - table wgEncodeSydhTfbsGm12878Ctcfsc15914c20StdAlnRep2 does not exist, from filetype bam
-613 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep2
-614 - table wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep2 does not exist, from filetype bam
-615 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Spt20StdAlnRep2
-616 - table wgEncodeSydhTfbsHelas3Spt20StdAlnRep2 does not exist, from filetype bam
-617 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4
-618 - table wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4 does not exist, from filetype bam
-619 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CmycStdAlnRep2
-620 - table wgEncodeSydhTfbsHelas3CmycStdAlnRep2 does not exist, from filetype bam
-621 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Hnf4aForsklnStdAlnRep2
-622 - table wgEncodeSydhTfbsHepg2Hnf4aForsklnStdAlnRep2 does not exist, from filetype bam
-623 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Nrf1IggrabAlnRep1
-624 - table wgEncodeSydhTfbsK562Nrf1IggrabAlnRep1 does not exist, from filetype bam
-625 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Yy1UcdAlnRep2
-626 - table wgEncodeSydhTfbsK562Yy1UcdAlnRep2 does not exist, from filetype bam
-627 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4MaxStdAlnRep1
-628 - table wgEncodeSydhTfbsNb4MaxStdAlnRep1 does not exist, from filetype bam
-629 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293tZnf263UcdAlnRep1
-630 - table wgEncodeSydhTfbsHek293tZnf263UcdAlnRep1 does not exist, from filetype bam
-631 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycStdAlnRep2
-632 - table wgEncodeSydhTfbsK562CmycStdAlnRep2 does not exist, from filetype bam
-633 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep3
-634 - table wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep3 does not exist, from filetype bam
-635 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1
-636 - table wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-637 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecPol2StdAlnRep3
-638 - table wgEncodeSydhTfbsHuvecPol2StdAlnRep3 does not exist, from filetype bam
-639 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep1
-640 - table wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep1 does not exist, from filetype bam
-641 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep2
-642 - table wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-643 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3JundIggrabAlnRep2
-644 - table wgEncodeSydhTfbsHelas3JundIggrabAlnRep2 does not exist, from filetype bam
-645 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2
-646 - table wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2 does not exist, from filetype bam
-647 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Xrcc4StdAlnRep2
-648 - table wgEncodeSydhTfbsK562Xrcc4StdAlnRep2 does not exist, from filetype bam
-649 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1
-650 - table wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1 does not exist, from filetype bam
-651 - table wgEncodeSydhTfbsGm18951NfkbIggrabSig does not exist, from filetype bigWig
-652 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878CfosStdAlnRep1
-653 - table wgEncodeSydhTfbsGm12878CfosStdAlnRep1 does not exist, from filetype bam
-654 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputIfng30StdAlnRep1
-655 - table wgEncodeSydhTfbsK562InputIfng30StdAlnRep1 does not exist, from filetype bam
-656 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2
-657 - table wgEncodeSydhTfbsGm12878InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-658 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep1
-659 - table wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep1 does not exist, from filetype bam
-660 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputMnaseAlnRep2
-661 - table wgEncodeSydhTfbsHelas3InputMnaseAlnRep2 does not exist, from filetype bam
-662 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Yy1UcdAlnRep1
-663 - table wgEncodeSydhTfbsK562Yy1UcdAlnRep1 does not exist, from filetype bam
-664 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep1
-665 - table wgEncodeSydhTfbsGm18526InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-666 - could not find gbdb path in table hg19.wgEncodeSydhTfbsU2osKap1UcdAlnRep2
-667 - table wgEncodeSydhTfbsU2osKap1UcdAlnRep2 does not exist, from filetype bam
-668 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep1
-669 - table wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep1 does not exist, from filetype bam
-670 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1
-671 - table wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1 does not exist, from filetype bam
-672 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep2
-673 - table wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep2 does not exist, from filetype bam
-674 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878InputIggrabAlnRep1
-675 - table wgEncodeSydhTfbsGm12878InputIggrabAlnRep1 does not exist, from filetype bam
-676 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Ini1IggmusAlnRep2
-677 - table wgEncodeSydhTfbsK562Ini1IggmusAlnRep2 does not exist, from filetype bam
-678 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecCjunStdAlnRep1
-679 - table wgEncodeSydhTfbsHuvecCjunStdAlnRep1 does not exist, from filetype bam
-680 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep2
-681 - table wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep2 does not exist, from filetype bam
-682 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brf2StdAlnRep3
-683 - table wgEncodeSydhTfbsK562Brf2StdAlnRep3 does not exist, from filetype bam
-684 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562TbpIggmusAlnRep1
-685 - table wgEncodeSydhTfbsK562TbpIggmusAlnRep1 does not exist, from filetype bam
-686 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Rad21IggrabAlnRep2
-687 - table wgEncodeSydhTfbsGm12878Rad21IggrabAlnRep2 does not exist, from filetype bam
-688 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep2
-689 - table wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-690 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526InputIggmusAlnRep1
-691 - table wgEncodeSydhTfbsGm18526InputIggmusAlnRep1 does not exist, from filetype bam
-692 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputStdAlnRep1
-693 - table wgEncodeSydhTfbsHelas3InputStdAlnRep1 does not exist, from filetype bam
-694 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2s2StdAlnRep1
-695 - table wgEncodeSydhTfbsK562Pol2s2StdAlnRep1 does not exist, from filetype bam
-696 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Nrf1IggrabAlnRep2
-697 - table wgEncodeSydhTfbsK562Nrf1IggrabAlnRep2 does not exist, from filetype bam
-698 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep2
-699 - table wgEncodeSydhTfbsK562Mxi1af4185IggrabAlnRep2 does not exist, from filetype bam
-700 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep6
-701 - table wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep6 does not exist, from filetype bam
-702 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep2
-703 - table wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep2 does not exist, from filetype bam
-704 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1
-705 - table wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1 does not exist, from filetype bam
-706 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep2
-707 - table wgEncodeSydhTfbsGm12878Nfe2sc22827StdAlnRep2 does not exist, from filetype bam
-708 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510InputIggmusAlnRep1
-709 - table wgEncodeSydhTfbsGm15510InputIggmusAlnRep1 does not exist, from filetype bam
-710 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep4
-711 - table wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep4 does not exist, from filetype bam
-712 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293tZnf263UcdAlnRep2
-713 - table wgEncodeSydhTfbsHek293tZnf263UcdAlnRep2 does not exist, from filetype bam
-714 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep1
-715 - table wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep1 does not exist, from filetype bam
-716 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505InputIggmusAlnRep2
-717 - table wgEncodeSydhTfbsGm18505InputIggmusAlnRep2 does not exist, from filetype bam
-718 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562MaxStdAlnRep2
-719 - table wgEncodeSydhTfbsK562MaxStdAlnRep2 does not exist, from filetype bam
-720 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1
-721 - table wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1 does not exist, from filetype bam
-722 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1
-723 - table wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1 does not exist, from filetype bam
-724 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Rpc155StdAlnRep2
-725 - table wgEncodeSydhTfbsK562Rpc155StdAlnRep2 does not exist, from filetype bam
-726 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdePol2UcdAlnRep1
-727 - table wgEncodeSydhTfbsPbdePol2UcdAlnRep1 does not exist, from filetype bam
-728 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep3
-729 - table wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep3 does not exist, from filetype bam
-730 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2
-731 - table wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2 does not exist, from filetype bam
-732 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep3
-733 - table wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-734 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep3
-735 - table wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep3 does not exist, from filetype bam
-736 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Tr4UcdAlnRep2
-737 - table wgEncodeSydhTfbsHepg2Tr4UcdAlnRep2 does not exist, from filetype bam
-738 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3E2f4StdAlnRep1
-739 - table wgEncodeSydhTfbsHelas3E2f4StdAlnRep1 does not exist, from filetype bam
-740 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep2
-741 - table wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep2 does not exist, from filetype bam
-742 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep2
-743 - table wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep2 does not exist, from filetype bam
-744 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesInputEtoh01cStdAln
-745 - table wgEncodeSydhTfbsMcf10aesInputEtoh01cStdAln does not exist, from filetype bam
-746 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecPol2StdAlnRep2
-747 - table wgEncodeSydhTfbsHuvecPol2StdAlnRep2 does not exist, from filetype bam
-748 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep1
-749 - table wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep1 does not exist, from filetype bam
-750 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878MaxStdAlnRep2
-751 - table wgEncodeSydhTfbsGm12878MaxStdAlnRep2 does not exist, from filetype bam
-752 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2P300sc582IggrabAlnRep1
-753 - table wgEncodeSydhTfbsHepg2P300sc582IggrabAlnRep1 does not exist, from filetype bam
-754 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep1
-755 - table wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep1 does not exist, from filetype bam
-756 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2StdAlnRep1
-757 - table wgEncodeSydhTfbsK562Pol2StdAlnRep1 does not exist, from filetype bam
-758 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep2
-759 - table wgEncodeSydhTfbsGm10847InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-760 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1
-761 - table wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1 does not exist, from filetype bam
-762 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1
-763 - table wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1 does not exist, from filetype bam
-764 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescMaxUcdAlnRep1
-765 - table wgEncodeSydhTfbsH1hescMaxUcdAlnRep1 does not exist, from filetype bam
-766 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep1
-767 - table wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep1 does not exist, from filetype bam
-768 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep1
-769 - table wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep1 does not exist, from filetype bam
-770 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1
-771 - table wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1 does not exist, from filetype bam
-772 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep2
-773 - table wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep2 does not exist, from filetype bam
-774 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep1
-775 - table wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep1 does not exist, from filetype bam
-776 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep1
-777 - table wgEncodeSydhTfbsHelas3Prdm19115IggrabAlnRep1 does not exist, from filetype bam
-778 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Sirt6StdAlnRep2
-779 - table wgEncodeSydhTfbsK562Sirt6StdAlnRep2 does not exist, from filetype bam
-780 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep1
-781 - table wgEncodeSydhTfbsHelas3Brca1a300IggrabAlnRep1 does not exist, from filetype bam
-782 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Gcn5StdAlnRep1
-783 - table wgEncodeSydhTfbsHelas3Gcn5StdAlnRep1 does not exist, from filetype bam
-784 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep2
-785 - table wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep2 does not exist, from filetype bam
-786 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Hsf1ForsklnStdAlnRep1
-787 - table wgEncodeSydhTfbsHepg2Hsf1ForsklnStdAlnRep1 does not exist, from filetype bam
-788 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep1
-789 - table wgEncodeSydhTfbsGm12878Nrf1IggmusAlnRep1 does not exist, from filetype bam
-790 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526InputIggmusAlnRep2
-791 - table wgEncodeSydhTfbsGm18526InputIggmusAlnRep2 does not exist, from filetype bam
-792 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep2
-793 - table wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdAlnRep2 does not exist, from filetype bam
-794 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3
-795 - table wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3 does not exist, from filetype bam
-796 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2
-797 - table wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2 does not exist, from filetype bam
-798 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gtf2bStdAlnRep2
-799 - table wgEncodeSydhTfbsK562Gtf2bStdAlnRep2 does not exist, from filetype bam
-800 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2TbpIggrabAlnRep2
-801 - table wgEncodeSydhTfbsHepg2TbpIggrabAlnRep2 does not exist, from filetype bam
-802 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Gcn5StdAlnRep2
-803 - table wgEncodeSydhTfbsGm12878Gcn5StdAlnRep2 does not exist, from filetype bam
-804 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Bhlhe40cIggmusAlnRep1
-805 - table wgEncodeSydhTfbsGm12878Bhlhe40cIggmusAlnRep1 does not exist, from filetype bam
-806 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193InputIggmusAlnRep2
-807 - table wgEncodeSydhTfbsGm19193InputIggmusAlnRep2 does not exist, from filetype bam
-808 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2
-809 - table wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2 does not exist, from filetype bam
-810 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep1
-811 - table wgEncodeSydhTfbsHepg2CebpbIggrabAlnRep1 does not exist, from filetype bam
-812 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep2
-813 - table wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep2 does not exist, from filetype bam
-814 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep2
-815 - table wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep2 does not exist, from filetype bam
-816 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep1
-817 - table wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep1 does not exist, from filetype bam
-818 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4Pol2StdAlnRep2
-819 - table wgEncodeSydhTfbsNb4Pol2StdAlnRep2 does not exist, from filetype bam
-820 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep1
-821 - table wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep1 does not exist, from filetype bam
-822 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep1
-823 - table wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep1 does not exist, from filetype bam
-824 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3
-825 - table wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3 does not exist, from filetype bam
-826 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878CfosStdAlnRep3
-827 - table wgEncodeSydhTfbsGm12878CfosStdAlnRep3 does not exist, from filetype bam
-828 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878TbpIggmusAlnRep1
-829 - table wgEncodeSydhTfbsGm12878TbpIggmusAlnRep1 does not exist, from filetype bam
-830 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2
-831 - table wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2 does not exist, from filetype bam
-832 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep3
-833 - table wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep3 does not exist, from filetype bam
-834 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Grp20ForsklnStdAlnRep2
-835 - table wgEncodeSydhTfbsHepg2Grp20ForsklnStdAlnRep2 does not exist, from filetype bam
-836 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep3
-837 - table wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-838 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Chd2ab68301IggmusAlnRep1
-839 - table wgEncodeSydhTfbsGm12878Chd2ab68301IggmusAlnRep1 does not exist, from filetype bam
-840 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brg1IggmusAlnRep2
-841 - table wgEncodeSydhTfbsK562Brg1IggmusAlnRep2 does not exist, from filetype bam
-842 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol3StdAlnRep1
-843 - table wgEncodeSydhTfbsK562Pol3StdAlnRep1 does not exist, from filetype bam
-844 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Setdb1UcdAlnRep2
-845 - table wgEncodeSydhTfbsK562Setdb1UcdAlnRep2 does not exist, from filetype bam
-846 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Mafksc477IggrabAlnRep2
-847 - table wgEncodeSydhTfbsHepg2Mafksc477IggrabAlnRep2 does not exist, from filetype bam
-848 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2
-849 - table wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2 does not exist, from filetype bam
-850 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep1
-851 - table wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-852 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecGata2UcdAlnRep2
-853 - table wgEncodeSydhTfbsHuvecGata2UcdAlnRep2 does not exist, from filetype bam
-854 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescJundIggrabAlnRep2
-855 - table wgEncodeSydhTfbsH1hescJundIggrabAlnRep2 does not exist, from filetype bam
-856 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Znf143IggrabAlnRep1
-857 - table wgEncodeSydhTfbsK562Znf143IggrabAlnRep1 does not exist, from filetype bam
-858 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep1
-859 - table wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep1 does not exist, from filetype bam
-860 - could not find gbdb path in table hg19.wgEncodeSydhTfbsShsy5yInputUcdAln
-861 - table wgEncodeSydhTfbsShsy5yInputUcdAln does not exist, from filetype bam
-862 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep3
-863 - table wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep3 does not exist, from filetype bam
-864 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Yy1StdAlnRep1
-865 - table wgEncodeSydhTfbsGm12878Yy1StdAlnRep1 does not exist, from filetype bam
-866 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Hsf1ForsklnStdAlnRep2
-867 - table wgEncodeSydhTfbsHepg2Hsf1ForsklnStdAlnRep2 does not exist, from filetype bam
-868 - could not find gbdb path in table hg19.wgEncodeSydhTfbsRajiPol2UcdAlnRep1
-869 - table wgEncodeSydhTfbsRajiPol2UcdAlnRep1 does not exist, from filetype bam
-870 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep1
-871 - table wgEncodeSydhTfbsHelas3P300sc584sc584IggrabAlnRep1 does not exist, from filetype bam
-872 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Tr4StdAlnRep1
-873 - table wgEncodeSydhTfbsHelas3Tr4StdAlnRep1 does not exist, from filetype bam
-874 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputPravastStdAlnRep2
-875 - table wgEncodeSydhTfbsHepg2InputPravastStdAlnRep2 does not exist, from filetype bam
-876 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Smc3ab9263IggrabAlnRep1
-877 - table wgEncodeSydhTfbsHelas3Smc3ab9263IggrabAlnRep1 does not exist, from filetype bam
-878 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Kap1UcdAlnRep2
-879 - table wgEncodeSydhTfbsHek293Kap1UcdAlnRep2 does not exist, from filetype bam
-880 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep2
-881 - table wgEncodeSydhTfbsGm12878Pol2s2IggmusAlnRep2 does not exist, from filetype bam
-882 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562E2f4UcdAlnRep1
-883 - table wgEncodeSydhTfbsK562E2f4UcdAlnRep1 does not exist, from filetype bam
-884 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2CjunIggrabAlnRep1
-885 - table wgEncodeSydhTfbsHepg2CjunIggrabAlnRep1 does not exist, from filetype bam
-886 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep2
-887 - table wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep2 does not exist, from filetype bam
-888 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brf2StdAlnRep2
-889 - table wgEncodeSydhTfbsHelas3Brf2StdAlnRep2 does not exist, from filetype bam
-890 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5
-891 - table wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5 does not exist, from filetype bam
-892 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecInputStdAlnRep2
-893 - table wgEncodeSydhTfbsHuvecInputStdAlnRep2 does not exist, from filetype bam
-894 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CebpbIggrabAlnRep1
-895 - table wgEncodeSydhTfbsK562CebpbIggrabAlnRep1 does not exist, from filetype bam
-896 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526InputIggmusAlnRep3
-897 - table wgEncodeSydhTfbsGm18526InputIggmusAlnRep3 does not exist, from filetype bam
-898 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Chd2IggrabAlnRep1
-899 - table wgEncodeSydhTfbsHelas3Chd2IggrabAlnRep1 does not exist, from filetype bam
-900 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep2
-901 - table wgEncodeSydhTfbsK562Gtf2f1ab28179IggrabAlnRep2 does not exist, from filetype bam
-902 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Brca1a300IggrabAlnRep1
-903 - table wgEncodeSydhTfbsHepg2Brca1a300IggrabAlnRep1 does not exist, from filetype bam
-904 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4MaxStdAlnRep2
-905 - table wgEncodeSydhTfbsNb4MaxStdAlnRep2 does not exist, from filetype bam
-906 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep3
-907 - table wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep3 does not exist, from filetype bam
-908 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Pol2StdAlnRep1
-909 - table wgEncodeSydhTfbsHelas3Pol2StdAlnRep1 does not exist, from filetype bam
-910 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Znf263UcdAlnRep2
-911 - table wgEncodeSydhTfbsK562Znf263UcdAlnRep2 does not exist, from filetype bam
-912 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep2
-913 - table wgEncodeSydhTfbsGm15510InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-914 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputIggmusAlnRep1
-915 - table wgEncodeSydhTfbsK562InputIggmusAlnRep1 does not exist, from filetype bam
-916 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep1
-917 - table wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-918 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Yy1StdAlnRep2
-919 - table wgEncodeSydhTfbsGm12878Yy1StdAlnRep2 does not exist, from filetype bam
-920 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep4
-921 - table wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep4 does not exist, from filetype bam
-922 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Bdp1StdAlnRep3
-923 - table wgEncodeSydhTfbsK562Bdp1StdAlnRep3 does not exist, from filetype bam
-924 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Mafkab50322IggrabAlnRep2
-925 - table wgEncodeSydhTfbsK562Mafkab50322IggrabAlnRep2 does not exist, from filetype bam
-926 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505InputIggmusAlnRep1
-927 - table wgEncodeSydhTfbsGm18505InputIggmusAlnRep1 does not exist, from filetype bam
-928 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep1
-929 - table wgEncodeSydhTfbsHelas3Gtf2f1ab28179IggrabAlnRep1 does not exist, from filetype bam
-930 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CebpbIggrabAlnRep2
-931 - table wgEncodeSydhTfbsK562CebpbIggrabAlnRep2 does not exist, from filetype bam
-932 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep1
-933 - table wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep1 does not exist, from filetype bam
-934 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep1
-935 - table wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-936 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Nfe2StdAlnRep1
-937 - table wgEncodeSydhTfbsK562Nfe2StdAlnRep1 does not exist, from filetype bam
-938 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep1
-939 - table wgEncodeSydhTfbsGm12878Irf3IggmusAlnRep1 does not exist, from filetype bam
-940 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Chd2ab68301IggrabAlnRep1
-941 - table wgEncodeSydhTfbsHepg2Chd2ab68301IggrabAlnRep1 does not exist, from filetype bam
-942 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep3
-943 - table wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep3 does not exist, from filetype bam
-944 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHct116Pol2UcdAlnRep2
-945 - table wgEncodeSydhTfbsHct116Pol2UcdAlnRep2 does not exist, from filetype bam
-946 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Spt20StdAlnRep1
-947 - table wgEncodeSydhTfbsGm12878Spt20StdAlnRep1 does not exist, from filetype bam
-948 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep2
-949 - table wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep2 does not exist, from filetype bam
-950 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Atf3StdAlnRep2
-951 - table wgEncodeSydhTfbsK562Atf3StdAlnRep2 does not exist, from filetype bam
-952 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep1
-953 - table wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep1 does not exist, from filetype bam
-954 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brf2StdAlnRep2
-955 - table wgEncodeSydhTfbsK562Brf2StdAlnRep2 does not exist, from filetype bam
-956 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Zzz3StdAlnRep1
-957 - table wgEncodeSydhTfbsGm12878Zzz3StdAlnRep1 does not exist, from filetype bam
-958 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep2
-959 - table wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-960 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3
-961 - table wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3 does not exist, from filetype bam
-962 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep2
-963 - table wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-964 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep1
-965 - table wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep1 does not exist, from filetype bam
-966 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1
-967 - table wgEncodeSydhTfbsMcf7Znf217UcdAlnRep1 does not exist, from filetype bam
-968 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Mafkab50322IggrabAlnRep1
-969 - table wgEncodeSydhTfbsHepg2Mafkab50322IggrabAlnRep1 does not exist, from filetype bam
-970 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510InputIggmusAlnRep2
-971 - table wgEncodeSydhTfbsGm15510InputIggmusAlnRep2 does not exist, from filetype bam
-972 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep1
-973 - table wgEncodeSydhTfbsGm19099InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-974 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CjunIggrabAlnRep1
-975 - table wgEncodeSydhTfbsHelas3CjunIggrabAlnRep1 does not exist, from filetype bam
-976 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescInputIggrabAln
-977 - table wgEncodeSydhTfbsH1hescInputIggrabAln does not exist, from filetype bam
-978 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep2
-979 - table wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep2 does not exist, from filetype bam
-980 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep5
-981 - table wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep5 does not exist, from filetype bam
-982 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Setdb1UcdAlnRep1
-983 - table wgEncodeSydhTfbsK562Setdb1UcdAlnRep1 does not exist, from filetype bam
-984 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562MaxStdAlnRep1
-985 - table wgEncodeSydhTfbsK562MaxStdAlnRep1 does not exist, from filetype bam
-986 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep2
-987 - table wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep2 does not exist, from filetype bam
-988 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Rfx5200401194IggrabAlnRep1
-989 - table wgEncodeSydhTfbsHepg2Rfx5200401194IggrabAlnRep1 does not exist, from filetype bam
-990 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep1
-991 - table wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep1 does not exist, from filetype bam
-992 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Mxi1IggmusAlnRep1
-993 - table wgEncodeSydhTfbsGm12878Mxi1IggmusAlnRep1 does not exist, from filetype bam
-994 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep3
-995 - table wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-996 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep1
-997 - table wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep1 does not exist, from filetype bam
-998 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Zzz3StdAlnRep1
-999 - table wgEncodeSydhTfbsHelas3Zzz3StdAlnRep1 does not exist, from filetype bam
-1000 - could not find gbdb path in table hg19.wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1
-1001 - table wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1 does not exist, from filetype bam
-1002 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputIfng6hStdAlnRep1
-1003 - table wgEncodeSydhTfbsK562InputIfng6hStdAlnRep1 does not exist, from filetype bam
-1004 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3
-1005 - table wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3 does not exist, from filetype bam
-1006 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562JundStdAlnRep2
-1007 - table wgEncodeSydhTfbsK562JundStdAlnRep2 does not exist, from filetype bam
-1008 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2
-1009 - table wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2 does not exist, from filetype bam
-1010 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep1
-1011 - table wgEncodeSydhTfbsGm12891InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-1012 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7Gata3UcdAlnRep1
-1013 - table wgEncodeSydhTfbsMcf7Gata3UcdAlnRep1 does not exist, from filetype bam
-1014 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep1
-1015 - table wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep1 does not exist, from filetype bam
-1016 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep2
-1017 - table wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-1018 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdePol2UcdAlnRep2
-1019 - table wgEncodeSydhTfbsPbdePol2UcdAlnRep2 does not exist, from filetype bam
-1020 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7Gata3UcdAlnRep2
-1021 - table wgEncodeSydhTfbsMcf7Gata3UcdAlnRep2 does not exist, from filetype bam
-1022 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHct116InputUcdAlnRep1
-1023 - table wgEncodeSydhTfbsHct116InputUcdAlnRep1 does not exist, from filetype bam
-1024 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2s2IggrabAlnRep1
-1025 - table wgEncodeSydhTfbsHepg2Pol2s2IggrabAlnRep1 does not exist, from filetype bam
-1026 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep2
-1027 - table wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep2 does not exist, from filetype bam
-1028 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562NfyaStdAlnRep2
-1029 - table wgEncodeSydhTfbsK562NfyaStdAlnRep2 does not exist, from filetype bam
-1030 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputStdAlnRep2
-1031 - table wgEncodeSydhTfbsK562InputStdAlnRep2 does not exist, from filetype bam
-1032 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecMaxStdAlnRep1
-1033 - table wgEncodeSydhTfbsHuvecMaxStdAlnRep1 does not exist, from filetype bam
-1034 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep5
-1035 - table wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep5 does not exist, from filetype bam
-1036 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep1
-1037 - table wgEncodeSydhTfbsGm12892InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-1038 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3CmycStdAlnRep1
-1039 - table wgEncodeSydhTfbsHelas3CmycStdAlnRep1 does not exist, from filetype bam
-1040 - table wgEncodeSydhTfbsGm10847NfkbIggrabSig does not exist, from filetype bigWig
-1041 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2P300sc582IggrabAlnRep2
-1042 - table wgEncodeSydhTfbsHepg2P300sc582IggrabAlnRep2 does not exist, from filetype bam
-1043 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Bhlhe40cIggmusAlnRep2
-1044 - table wgEncodeSydhTfbsGm12878Bhlhe40cIggmusAlnRep2 does not exist, from filetype bam
-1045 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep1
-1046 - table wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep1 does not exist, from filetype bam
-1047 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Xrcc4StdAlnRep1
-1048 - table wgEncodeSydhTfbsK562Xrcc4StdAlnRep1 does not exist, from filetype bam
-1049 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Spt20StdAlnRep2
-1050 - table wgEncodeSydhTfbsGm12878Spt20StdAlnRep2 does not exist, from filetype bam
-1051 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecCjunStdAlnRep2
-1052 - table wgEncodeSydhTfbsHuvecCjunStdAlnRep2 does not exist, from filetype bam
-1053 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep1
-1054 - table wgEncodeSydhTfbsGm12878Rfx5200401194IggmusAlnRep1 does not exist, from filetype bam
-1055 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1
-1056 - table wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1 does not exist, from filetype bam
-1057 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Hmgn3StdAlnRep2
-1058 - table wgEncodeSydhTfbsK562Hmgn3StdAlnRep2 does not exist, from filetype bam
-1059 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2JundIggrabAlnRep1
-1060 - table wgEncodeSydhTfbsHepg2JundIggrabAlnRep1 does not exist, from filetype bam
-1061 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3
-1062 - table wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3 does not exist, from filetype bam
-1063 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4Pol2StdAlnRep3
-1064 - table wgEncodeSydhTfbsNb4Pol2StdAlnRep3 does not exist, from filetype bam
-1065 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2JundIggrabAlnRep2
-1066 - table wgEncodeSydhTfbsHepg2JundIggrabAlnRep2 does not exist, from filetype bam
-1067 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7InputUcdAlnRep2
-1068 - table wgEncodeSydhTfbsMcf7InputUcdAlnRep2 does not exist, from filetype bam
-1069 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Pol2s2IggrabAlnRep2
-1070 - table wgEncodeSydhTfbsHelas3Pol2s2IggrabAlnRep2 does not exist, from filetype bam
-1071 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep1
-1072 - table wgEncodeSydhTfbsHelas3Rfx5200401194IggrabAlnRep1 does not exist, from filetype bam
-1073 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputIggrabAln
-1074 - table wgEncodeSydhTfbsHepg2InputIggrabAln does not exist, from filetype bam
-1075 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep1
-1076 - table wgEncodeSydhTfbsK562P300sc584sc48343IggrabAlnRep1 does not exist, from filetype bam
-1077 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Ini1IggmusAlnRep1
-1078 - table wgEncodeSydhTfbsK562Ini1IggmusAlnRep1 does not exist, from filetype bam
-1079 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Tr4UcdAlnRep1
-1080 - table wgEncodeSydhTfbsK562Tr4UcdAlnRep1 does not exist, from filetype bam
-1081 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Rfx5IggrabAlnRep2
-1082 - table wgEncodeSydhTfbsK562Rfx5IggrabAlnRep2 does not exist, from filetype bam
-1083 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pgc1aForsklnStdAlnRep2
-1084 - table wgEncodeSydhTfbsHepg2Pgc1aForsklnStdAlnRep2 does not exist, from filetype bam
-1085 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunStdAlnRep1
-1086 - table wgEncodeSydhTfbsK562CjunStdAlnRep1 does not exist, from filetype bam
-1087 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputIggrabAlnRep1
-1088 - table wgEncodeSydhTfbsHelas3InputIggrabAlnRep1 does not exist, from filetype bam
-1089 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878InputStdAlnRep1
-1090 - table wgEncodeSydhTfbsGm12878InputStdAlnRep1 does not exist, from filetype bam
-1091 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep2
-1092 - table wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep2 does not exist, from filetype bam
-1093 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2IggmusAlnRep1
-1094 - table wgEncodeSydhTfbsK562Pol2IggmusAlnRep1 does not exist, from filetype bam
-1095 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep1
-1096 - table wgEncodeSydhTfbsGm18505InputTnfaIggrabAlnRep1 does not exist, from filetype bam
-1097 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep2
-1098 - table wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep2 does not exist, from filetype bam
-1099 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep2
-1100 - table wgEncodeSydhTfbsGm18951InputTnfaIggrabAlnRep2 does not exist, from filetype bam
-1101 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep2
-1102 - table wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep2 does not exist, from filetype bam
-1103 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep1
-1104 - table wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep1 does not exist, from filetype bam
-1105 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Bdp1StdAlnRep1
-1106 - table wgEncodeSydhTfbsK562Bdp1StdAlnRep1 does not exist, from filetype bam
-1107 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Mafksc477IggrabAlnRep1
-1108 - table wgEncodeSydhTfbsHepg2Mafksc477IggrabAlnRep1 does not exist, from filetype bam
-1109 - could not find gbdb path in table hg19.wgEncodeSydhTfbsU2osKap1UcdAlnRep1
-1110 - table wgEncodeSydhTfbsU2osKap1UcdAlnRep1 does not exist, from filetype bam
-1111 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep2
-1112 - table wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep2 does not exist, from filetype bam
-1113 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescRad21IggrabAlnRep2
-1114 - table wgEncodeSydhTfbsH1hescRad21IggrabAlnRep2 does not exist, from filetype bam
-1115 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep3
-1116 - table wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep3 does not exist, from filetype bam
-1117 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescInputUcdAln
-1118 - table wgEncodeSydhTfbsH1hescInputUcdAln does not exist, from filetype bam
-1119 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2
-1120 - table wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2 does not exist, from filetype bam
-1121 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Chd2ab68301IggrabAlnRep2
-1122 - table wgEncodeSydhTfbsHepg2Chd2ab68301IggrabAlnRep2 does not exist, from filetype bam
-1123 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep4
-1124 - table wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep4 does not exist, from filetype bam
-1125 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep1
-1126 - table wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep1 does not exist, from filetype bam
-1127 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878P300bStdAlnRep1
-1128 - table wgEncodeSydhTfbsGm12878P300bStdAlnRep1 does not exist, from filetype bam
-1129 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep2
-1130 - table wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-1131 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Tf3c110StdAlnRep3
-1132 - table wgEncodeSydhTfbsK562Tf3c110StdAlnRep3 does not exist, from filetype bam
-1133 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CfosStdAlnRep2
-1134 - table wgEncodeSydhTfbsK562CfosStdAlnRep2 does not exist, from filetype bam
-1135 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep2
-1136 - table wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep2 does not exist, from filetype bam
-1137 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Sirt6StdAlnRep1
-1138 - table wgEncodeSydhTfbsK562Sirt6StdAlnRep1 does not exist, from filetype bam
-1139 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Pol3StdAlnRep2
-1140 - table wgEncodeSydhTfbsGm12878Pol3StdAlnRep2 does not exist, from filetype bam
-1141 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep2
-1142 - table wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep2 does not exist, from filetype bam
-1143 - could not find gbdb path in table hg19.wgEncodeSydhTfbsU2osInputUcdAln
-1144 - table wgEncodeSydhTfbsU2osInputUcdAln does not exist, from filetype bam
-1145 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2TbpIggrabAlnRep1
-1146 - table wgEncodeSydhTfbsHepg2TbpIggrabAlnRep1 does not exist, from filetype bam
-1147 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep1
-1148 - table wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep1 does not exist, from filetype bam
-1149 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep2
-1150 - table wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-1151 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHuvecPol2StdAlnRep1
-1152 - table wgEncodeSydhTfbsHuvecPol2StdAlnRep1 does not exist, from filetype bam
-1153 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep1
-1154 - table wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep1 does not exist, from filetype bam
-1155 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputPravastStdAlnRep3
-1156 - table wgEncodeSydhTfbsHepg2InputPravastStdAlnRep3 does not exist, from filetype bam
-1157 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Hnf4aForsklnStdAlnRep1
-1158 - table wgEncodeSydhTfbsHepg2Hnf4aForsklnStdAlnRep1 does not exist, from filetype bam
-1159 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Znf274StdAlnRep1
-1160 - table wgEncodeSydhTfbsGm12878Znf274StdAlnRep1 does not exist, from filetype bam
-1161 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep2
-1162 - table wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep2 does not exist, from filetype bam
-1163 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln
-1164 - table wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln does not exist, from filetype bam
-1165 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Rpc155StdAlnRep2
-1166 - table wgEncodeSydhTfbsHelas3Rpc155StdAlnRep2 does not exist, from filetype bam
-1167 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep2
-1168 - table wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep2 does not exist, from filetype bam
-1169 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2
-1170 - table wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2 does not exist, from filetype bam
-1171 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2
-1172 - table wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2 does not exist, from filetype bam
-1173 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2
-1174 - table wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2 does not exist, from filetype bam
-1175 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Hmgn3StdAlnRep1
-1176 - table wgEncodeSydhTfbsK562Hmgn3StdAlnRep1 does not exist, from filetype bam
-1177 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Stat1StdAlnRep2
-1178 - table wgEncodeSydhTfbsGm12878Stat1StdAlnRep2 does not exist, from filetype bam
-1179 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562NfyaStdAlnRep1
-1180 - table wgEncodeSydhTfbsK562NfyaStdAlnRep1 does not exist, from filetype bam
-1181 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep1
-1182 - table wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep1 does not exist, from filetype bam
-1183 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Znf274UcdAlnRep1
-1184 - table wgEncodeSydhTfbsK562Znf274UcdAlnRep1 does not exist, from filetype bam
-1185 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Elk4UcdAlnRep1
-1186 - table wgEncodeSydhTfbsHek293Elk4UcdAlnRep1 does not exist, from filetype bam
-1187 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562E2f6UcdAlnRep2
-1188 - table wgEncodeSydhTfbsK562E2f6UcdAlnRep2 does not exist, from filetype bam
-1189 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Atf3StdAlnRep1
-1190 - table wgEncodeSydhTfbsK562Atf3StdAlnRep1 does not exist, from filetype bam
-1191 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Maffm8194IggrabAlnRep2
-1192 - table wgEncodeSydhTfbsHepg2Maffm8194IggrabAlnRep2 does not exist, from filetype bam
-1193 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep2
-1194 - table wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep2 does not exist, from filetype bam
-1195 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1
-1196 - table wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1 does not exist, from filetype bam
-1197 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2InputPravastStdAlnRep1
-1198 - table wgEncodeSydhTfbsHepg2InputPravastStdAlnRep1 does not exist, from filetype bam
-1199 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Nfe2StdAlnRep2
-1200 - table wgEncodeSydhTfbsK562Nfe2StdAlnRep2 does not exist, from filetype bam
-1201 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1
-1202 - table wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1 does not exist, from filetype bam
-1203 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputIggmusAlnRep2
-1204 - table wgEncodeSydhTfbsK562InputIggmusAlnRep2 does not exist, from filetype bam
-1205 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3MaxStdAlnRep1
-1206 - table wgEncodeSydhTfbsHelas3MaxStdAlnRep1 does not exist, from filetype bam
-1207 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep1
-1208 - table wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep1 does not exist, from filetype bam
-1209 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNt2d1InputUcdAlnRep1
-1210 - table wgEncodeSydhTfbsNt2d1InputUcdAlnRep1 does not exist, from filetype bam
-1211 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep2
-1212 - table wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep2 does not exist, from filetype bam
-1213 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3E2f1StdAlnRep2
-1214 - table wgEncodeSydhTfbsHelas3E2f1StdAlnRep2 does not exist, from filetype bam
-1215 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep1
-1216 - table wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep1 does not exist, from filetype bam
-1217 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2
-1218 - table wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2 does not exist, from filetype bam
-1219 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep2
-1220 - table wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep2 does not exist, from filetype bam
-1221 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep1
-1222 - table wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep1 does not exist, from filetype bam
-1223 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep1
-1224 - table wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep1 does not exist, from filetype bam
-1225 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2ErraForsklnStdAlnRep1
-1226 - table wgEncodeSydhTfbsHepg2ErraForsklnStdAlnRep1 does not exist, from filetype bam
-1227 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gtf2bStdAlnRep1
-1228 - table wgEncodeSydhTfbsK562Gtf2bStdAlnRep1 does not exist, from filetype bam
-1229 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Mxi1StdAlnRep1
-1230 - table wgEncodeSydhTfbsHepg2Mxi1StdAlnRep1 does not exist, from filetype bam
-1231 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescUsf2IggrabAlnRep1
-1232 - table wgEncodeSydhTfbsH1hescUsf2IggrabAlnRep1 does not exist, from filetype bam
-1233 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3
-1234 - table wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3 does not exist, from filetype bam
-1235 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4InputStdAlnRep1
-1236 - table wgEncodeSydhTfbsNb4InputStdAlnRep1 does not exist, from filetype bam
-1237 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562E2f6UcdAlnRep1
-1238 - table wgEncodeSydhTfbsK562E2f6UcdAlnRep1 does not exist, from filetype bam
-1239 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Rfx5200401194IggrabAlnRep2
-1240 - table wgEncodeSydhTfbsHepg2Rfx5200401194IggrabAlnRep2 does not exist, from filetype bam
-1241 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3
-1242 - table wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3 does not exist, from filetype bam
-1243 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Grp20ForsklnStdAlnRep1
-1244 - table wgEncodeSydhTfbsHepg2Grp20ForsklnStdAlnRep1 does not exist, from filetype bam
-1245 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep1
-1246 - table wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep1 does not exist, from filetype bam
-1247 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdeGata1UcdAlnRep2
-1248 - table wgEncodeSydhTfbsPbdeGata1UcdAlnRep2 does not exist, from filetype bam
-1249 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep2
-1250 - table wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep2 does not exist, from filetype bam
-1251 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep4
-1252 - table wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep4 does not exist, from filetype bam
-1253 - could not find gbdb path in table hg19.wgEncodeSydhTfbsMcf7InputUcdAlnRep1
-1254 - table wgEncodeSydhTfbsMcf7InputUcdAlnRep1 does not exist, from filetype bam
-1255 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Gata1UcdAlnRep1
-1256 - table wgEncodeSydhTfbsK562Gata1UcdAlnRep1 does not exist, from filetype bam
-1257 - could not find gbdb path in table hg19.wgEncodeSydhTfbsPbdeInputUcdAln
-1258 - table wgEncodeSydhTfbsPbdeInputUcdAln does not exist, from filetype bam
-1259 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12891InputIggmusAlnRep2
-1260 - table wgEncodeSydhTfbsGm12891InputIggmusAlnRep2 does not exist, from filetype bam
-1261 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892InputIggmusAlnRep2
-1262 - table wgEncodeSydhTfbsGm12892InputIggmusAlnRep2 does not exist, from filetype bam
-1263 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2
-1264 - table wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2 does not exist, from filetype bam
-1265 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep4
-1266 - table wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep4 does not exist, from filetype bam
-1267 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNb4Pol2StdAlnRep1
-1268 - table wgEncodeSydhTfbsNb4Pol2StdAlnRep1 does not exist, from filetype bam
-1269 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Smc3ab9263IggrabAlnRep2
-1270 - table wgEncodeSydhTfbsHepg2Smc3ab9263IggrabAlnRep2 does not exist, from filetype bam
-1271 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep1
-1272 - table wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep1 does not exist, from filetype bam
-1273 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Pol2s2IggrabAlnRep2
-1274 - table wgEncodeSydhTfbsHepg2Pol2s2IggrabAlnRep2 does not exist, from filetype bam
-1275 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Chd2IggrabAlnRep2
-1276 - table wgEncodeSydhTfbsHelas3Chd2IggrabAlnRep2 does not exist, from filetype bam
-1277 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3E2f1StdAlnRep1
-1278 - table wgEncodeSydhTfbsHelas3E2f1StdAlnRep1 does not exist, from filetype bam
-1279 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2
-1280 - table wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2 does not exist, from filetype bam
-1281 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878InputIggmusAlnRep1
-1282 - table wgEncodeSydhTfbsGm12878InputIggmusAlnRep1 does not exist, from filetype bam
-1283 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2CebpbForsklnStdAlnRep2
-1284 - table wgEncodeSydhTfbsHepg2CebpbForsklnStdAlnRep2 does not exist, from filetype bam
-1285 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Brf1StdAlnRep2
-1286 - table wgEncodeSydhTfbsK562Brf1StdAlnRep2 does not exist, from filetype bam
-1287 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Znf143IggrabAlnRep2
-1288 - table wgEncodeSydhTfbsHelas3Znf143IggrabAlnRep2 does not exist, from filetype bam
-1289 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Mafkab50322IggrabAlnRep1
-1290 - table wgEncodeSydhTfbsK562Mafkab50322IggrabAlnRep1 does not exist, from filetype bam
-1291 - could not find gbdb path in table hg19.wgEncodeSydhTfbsRajiInputUcdAln
-1292 - table wgEncodeSydhTfbsRajiInputUcdAln does not exist, from filetype bam
-1293 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep5
-1294 - table wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep5 does not exist, from filetype bam
-1295 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562InputStdAlnRep1
-1296 - table wgEncodeSydhTfbsK562InputStdAlnRep1 does not exist, from filetype bam
-1297 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep2
-1298 - table wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep2 does not exist, from filetype bam
-1299 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Znf143IggrabAlnRep2
-1300 - table wgEncodeSydhTfbsK562Znf143IggrabAlnRep2 does not exist, from filetype bam
-1301 - table wgEncodeSydhTfbsGm19193NfkbIggrabSig does not exist, from filetype bigWig
-1302 - could not find gbdb path in table hg19.wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep1
-1303 - table wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep1 does not exist, from filetype bam
-1304 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep2
-1305 - table wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep2 does not exist, from filetype bam
-1306 - could not find gbdb path in table hg19.wgEncodeSydhTfbsH1hescRfx5200401194IggrabAlnRep2
-1307 - table wgEncodeSydhTfbsH1hescRfx5200401194IggrabAlnRep2 does not exist, from filetype bam
-1308 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1
-1309 - table wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1 does not exist, from filetype bam
-1310 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep1
-1311 - table wgEncodeSydhTfbsHelas3Mxi1af4185IggrabAlnRep1 does not exist, from filetype bam
-1312 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Stat1StdAlnRep1
-1313 - table wgEncodeSydhTfbsGm12878Stat1StdAlnRep1 does not exist, from filetype bam
-1314 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHek293InputUcdAln
-1315 - table wgEncodeSydhTfbsHek293InputUcdAln does not exist, from filetype bam
-1316 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep1
-1317 - table wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep1 does not exist, from filetype bam
-1318 - could not find gbdb path in table hg19.wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep3
-1319 - table wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep3 does not exist, from filetype bam
-1320 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep3
-1321 - table wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-1322 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Znf274StdAlnRep2
-1323 - table wgEncodeSydhTfbsGm12878Znf274StdAlnRep2 does not exist, from filetype bam
-1324 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12878Pol3StdAlnRep1
-1325 - table wgEncodeSydhTfbsGm12878Pol3StdAlnRep1 does not exist, from filetype bam
-1326 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep3
-1327 - table wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep3 does not exist, from filetype bam
-1328 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm10847InputIggmusAlnRep2
-1329 - table wgEncodeSydhTfbsGm10847InputIggmusAlnRep2 does not exist, from filetype bam
-1330 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep1
-1331 - table wgEncodeSydhTfbsK562Bhlhe40nb100IggrabAlnRep1 does not exist, from filetype bam
-1332 - could not find gbdb path in table hg19.wgEncodeSydhTfbsK562NelfeStdAlnRep1
-1333 - table wgEncodeSydhTfbsK562NelfeStdAlnRep1 does not exist, from filetype bam
-1334 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep3
-1335 - table wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep3 does not exist, from filetype bam
-1336 - could not find gbdb path in table hg19.wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep1
-1337 - table wgEncodeSydhTfbsGm19193InputTnfaIggrabAlnRep1 does not exist, from filetype bam
 ############################################################
 
 Categories of tables and files('):
@@ -1351,7 +14,7 @@ D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
     Tables: 548
-    Files: 2554
+    Files: 2443
     Gbdbs: 305
 
 A) Untouched Tables (0):
@@ -1365,8 +28,8 @@ B') Deprecated files (0 downloadables, 0 gbdbs):
 C) New tables (548):
 wgEncodeSydhTfbsGm10847InputIggmusSig
 wgEncodeSydhTfbsGm10847InputTnfaIggrabSig
-wgEncodeSydhTfbsGm10847NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm10847NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm10847NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm10847Pol2IggmusPk
 wgEncodeSydhTfbsGm10847Pol2IggmusSig
 wgEncodeSydhTfbsGm12878Bhlhe40cIggmusPk
@@ -1437,50 +100,50 @@ wgEncodeSydhTfbsGm12878Zzz3StdPk
 wgEncodeSydhTfbsGm12878Zzz3StdSig
 wgEncodeSydhTfbsGm12891InputIggmusSig
 wgEncodeSydhTfbsGm12891InputTnfaIggrabSig
-wgEncodeSydhTfbsGm12891NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm12891NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm12891NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm12891Pol2IggmusPk
 wgEncodeSydhTfbsGm12891Pol2IggmusSig
 wgEncodeSydhTfbsGm12892InputIggmusSig
 wgEncodeSydhTfbsGm12892InputTnfaIggrabSig
-wgEncodeSydhTfbsGm12892NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm12892NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm12892NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm12892Pol2IggmusPk
 wgEncodeSydhTfbsGm12892Pol2IggmusSig
 wgEncodeSydhTfbsGm15510InputIggmusSig
 wgEncodeSydhTfbsGm15510InputTnfaIggrabSig
-wgEncodeSydhTfbsGm15510NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm15510NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm15510NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm15510Pol2IggmusPk
 wgEncodeSydhTfbsGm15510Pol2IggmusSig
 wgEncodeSydhTfbsGm18505InputIggmusSig
 wgEncodeSydhTfbsGm18505InputTnfaIggrabSig
-wgEncodeSydhTfbsGm18505NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm18505NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm18505NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm18505Pol2IggmusPk
 wgEncodeSydhTfbsGm18505Pol2IggmusSig
 wgEncodeSydhTfbsGm18526InputIggmusSig
 wgEncodeSydhTfbsGm18526InputTnfaIggrabSig
-wgEncodeSydhTfbsGm18526NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm18526NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm18526NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm18526Pol2IggmusPk
 wgEncodeSydhTfbsGm18526Pol2IggmusSig
 wgEncodeSydhTfbsGm18951InputIggmusSig
 wgEncodeSydhTfbsGm18951InputTnfaIggrabSig
-wgEncodeSydhTfbsGm18951NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm18951NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm18951NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm18951Pol2IggmusPk
 wgEncodeSydhTfbsGm18951Pol2IggmusSig
 wgEncodeSydhTfbsGm19099InputIggmusSig
 wgEncodeSydhTfbsGm19099InputTnfaIggrabSig
-wgEncodeSydhTfbsGm19099NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm19099NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm19099NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm19099Pol2IggmusPk
 wgEncodeSydhTfbsGm19099Pol2IggmusSig
 wgEncodeSydhTfbsGm19193InputIggmusSig
 wgEncodeSydhTfbsGm19193InputTnfaIggrabSig
-wgEncodeSydhTfbsGm19193NkfbTnfaIggrabPk
-wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig
+wgEncodeSydhTfbsGm19193NfkbTnfaIggrabPk
+wgEncodeSydhTfbsGm19193NfkbTnfaIggrabSig
 wgEncodeSydhTfbsGm19193Pol2IggmusPk
 wgEncodeSydhTfbsGm19193Pol2IggmusSig
 wgEncodeSydhTfbsH1hescCjunIggrabPk
@@ -1912,7 +575,7 @@ wgEncodeSydhTfbsU2osKap1UcdSig
 wgEncodeSydhTfbsU2osSetdb1UcdPk
 wgEncodeSydhTfbsU2osSetdb1UcdSig
 
-C') New files (2551 downloadables, 305 gbdbs):
+C') New files (2440 downloadables, 305 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/
     NOT on RR but must be placed in:
@@ -1932,39 +595,23 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabRawDataRep5.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep5.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabAlnRep5.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabRawDataRep5.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep5.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabAlnRep5.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabRawDataRep5.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep2.bam
@@ -2260,27 +907,17 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep2.bam
@@ -2315,27 +952,17 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep2.bam
@@ -2361,39 +988,23 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabRawDataRep5.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep5.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabAlnRep5.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabRawDataRep5.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep5.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabAlnRep5.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabRawDataRep5.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep2.bam
@@ -2419,39 +1030,23 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabRawDataRep5.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep5.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabAlnRep5.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabRawDataRep5.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep5.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabAlnRep5.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabRawDataRep5.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep2.bam
@@ -2483,27 +1078,17 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep2.bam
@@ -2526,33 +1111,20 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep4.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabAlnRep4.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabRawDataRep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep4.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabAlnRep4.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabRawDataRep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep2.bam
@@ -2581,27 +1153,17 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep2.bam
@@ -2627,27 +1189,17 @@ C') New files (2551 downloadables, 305 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193InputTnfaIggrabRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193InputTnfaIggrabRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193InputTnfaIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbIggrabSig.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep1.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep1.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep3.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabAlnRep3.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabPk.narrowPeak.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabRawDataRep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabAlnRep3.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabAlnRep3.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabRawDataRep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep2.bam
@@ -4472,7 +3024,7 @@ C') New files (2551 downloadables, 305 gbdbs):
 
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm10847InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm10847InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm10847NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm10847Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Bhlhe40cIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Brca1a300IggmusSig.bigWig
@@ -4511,35 +3063,35 @@ C') New files (2551 downloadables, 305 gbdbs):
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12878Zzz3StdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12891InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12891InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12891NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12891Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12892InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12892InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm12892NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm12892Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm15510InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm15510InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm15510NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm15510Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18505InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18505InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm18505NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18505Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18526InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18526InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm18526NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18526Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18951InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18951InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm18951NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm18951Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm19099InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm19099InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm19099NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm19099Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm19193InputIggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm19193InputTnfaIggrabSig.bigWig
-/gbdb/hg19/bbi/wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhTfbsGm19193NfkbTnfaIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsGm19193Pol2IggmusSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsH1hescCjunIggrabSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhTfbsH1hescCtbp2UcdSig.bigWig
@@ -4782,6 +3334,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhTfbs/release1/md5sum.txt

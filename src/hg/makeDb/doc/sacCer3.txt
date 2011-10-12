@@ -563,8 +563,42 @@ s/^4/chrIV/; s/^2/chrII/; s/^9/chrIX/; s/^1/chrI/;" | sort -k1,1 -k2,2n \
     | hgsql sacCer3 -e \
 'load data local infile "/dev/stdin" into table growthCondition'
 
-#  fixed some typos and other tweaks, including making some subscripts.  
+#  fixed some typos and other tweaks (added hyphens), 
+#  including making some subscripts in growthCondition table.  
+#  (also had to change transRegCodeCondition.growthCondition field to match)
 #  propagated to all 3 sacCer* dbs  - 2011-09-08  b0b and steve
+
+#	eliminate some names from Attr that are not in primary table
+#	as identified by joinerCheck:
+# Error: 15 of 36501 elements of sacCer3.oregannoAttr.id are not in key oreganno.id line 2871 of all.joiner
+# Example miss: OREG0029365
+ sacCer3.oregannoLink.id - hits 21886 of 21895
+# Error: 9 of 21895 elements of sacCer3.oregannoLink.id are not in key oreganno.id line 2872 of all.joiner
+# Example miss: OREG0029365
+
+    hgsql -N -e "select id from oregannoAttr;" sacCer3 \
+	| sort -u > oregannoAttr.id.txt
+    hgsql -N -e "select id from oreganno;" sacCer3 \
+	| sort -u > oreganno.id.txt
+    comm -13 oreganno.id.txt oregannoAttr.id.txt
+    #	OREG0029365
+    #	OREG0029396
+    #	OREG0030456
+
+    hgsql -e 'delete from oregannoAttr where id="OREG0029365";' sacCer3 
+    hgsql -e 'delete from oregannoAttr where id="OREG0029396";' sacCer3
+    hgsql -e 'delete from oregannoAttr where id="OREG0030456";' sacCer3
+
+    hgsql -N -e "select id from oregannoLink;" sacCer3 \
+	| sort -u > oregannoLink.id.txt
+    comm -13 oreganno.id.txt oregannoLink.id.txt
+    #	OREG0029365
+    #	OREG0029396
+    #	OREG0030456
+    hgsql -e 'delete from oregannoLink where id="OREG0029365";' sacCer3 
+    hgsql -e 'delete from oregannoLink where id="OREG0029396";' sacCer3
+    hgsql -e 'delete from oregannoLink where id="OREG0030456";' sacCer3
+
 #
 #########################################################################
 # Oreganno track - (DONE - 2011-08-31 - Hiram)

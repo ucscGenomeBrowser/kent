@@ -109,6 +109,10 @@ The format of the type fields:
    unique for Clone Coverage track on human assemblies
 5. type ctgPos
    unique for Physical Map Contigs track on human assemblies
+    Optional: some ctgPos and ctgPos2 tracks attempt to make a URL
+	to NCBI for the item name.  When this is not appropriate use:
+    url none
+	to turn off that URL construction in the hgc item click page.
 6. type expRatio
     DNA chip expression data
     Nothing follows expRatio, but the following fields

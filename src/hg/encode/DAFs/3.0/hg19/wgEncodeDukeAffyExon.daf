@@ -1,0 +1,23 @@
+# Data Agreement File for Duke Affy Exon project
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+dafVersion       2.0
+
+# Lab and general info
+grant            Crawford
+lab              Duke
+dataType         AffyExonArray
+compositeSuffix  DukeExonArray
+group            expression
+variables        cell,treatment
+assembly         hg19
+
+validationSettings validateFiles.broadPeak:mmCheckOneInN=100
+
+# Track/view definition
+view             SimpleSignal
+type             broadPeak
+required         yes
+hasReplicates    yes

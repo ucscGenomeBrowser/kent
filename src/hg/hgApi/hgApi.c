@@ -183,6 +183,10 @@ if(!strcmp(cmd, "trackList"))
         }
     dyStringAppend(output, "\n]\n");
     }
+else if(!strcmp(cmd, "defaultPos"))
+    {
+    dyStringPrintf(output, "{\"pos\": \"%s\"}", hDefaultPos(database));
+    }
 else if(!strcmp(cmd, "metaDb"))
     {
     // Return list of values for given metaDb var

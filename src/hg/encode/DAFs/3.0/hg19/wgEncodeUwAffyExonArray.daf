@@ -1,0 +1,35 @@
+# Data Agreement File for Affy Exon project
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files   view    cell treatment  origAssembly 
+
+#Explanation of DDF terms
+#files: The name of the files to be associated with this data
+#view: The type of view that these files are. The options are listed in this DAF
+#cell: The cell name. The cell registered vocbulary is found at: http://hgwdev.cse.ucsc.edu/ENCODE/cellTypes.html
+#treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
+#origAssembly: The assembly that the data was originally released on (hg18 or hg19)
+#labVersion: Free text for the lab to keep track of any other data
+
+# Lab and general info
+grant             Stam
+lab               UW
+dataType          AffyExonArray
+compositeSuffix   UwAffyExonArray
+group             expression
+variables         cell,treatment
+assembly          hg19
+dafVersion        2.0
+noAutoCreate      yes
+validationSettings validateFiles.broadPeak:mmCheckOneInN=100
+
+
+# Track/view definition
+view             SimpleSignal
+type             broadPeak
+required         yes
+hasReplicates    yes
+

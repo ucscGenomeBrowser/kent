@@ -1,0 +1,146 @@
+# Data Agreement File $Revision: 1.6 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files	view replicate	cell	readType	mapAlgorithm	insertLength	labVersion	softwareVersion	origAssembly
+#
+#files          a list of files that correspond to the metadata in this line
+#view           the view of the data as described below
+#replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
+#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
+#mapAlgorithm   the mapping algorithm (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
+#insertLength   the insert length for the read (ttp://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
+#labVersion     free text for the lab to specify metadata (possibly 'These files produced for use with GENCODE V3c' or something of the like) (OPTIONAL)
+#softwareVersion free text for the lab to specify Cufflinks V??? You can also clarify your mapAlgorithm here (OPTIONAL)
+#origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)  (OPTIONAL) THIS HELPS CRICKET ALOT
+#
+#NOTE:  The optional columns do not have to be in the DDF for validation.  They do not show up in the file names, just the metadata.
+
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Myers
+lab               Caltech
+dataType          RnaSeq
+compositeSuffix   CaltechRnaSeq
+group             expression
+variables         cell,readType,mapAlgorithm,insertLength,treatment
+assembly          hg19
+
+validationSettings validateFiles.fastq:mmCheckOneInN=10;validateFiles.bam:bamPercent=98,mismatches=6
+
+# Track/view definition
+
+# ONE TYPE OF FASTQ SHOULD BE WITH EVERY SUBMISSION
+# single ended fastq data
+view             Fastq
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+# first read for paired end fastq data
+view             FastqRd1
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+# second read for paired end fastq data
+view             FastqRd2
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
+view             Signal
+type             bigWig
+hasReplicates    yes
+required         no
+
+# ONE TYPE OF SIGNAL SHOULD BE WITH EVERY SUBMISSION
+view             MinusSignal
+type             bigWig
+hasReplicates    yes
+required         no
+
+view             PlusSignal
+type             bigWig
+hasReplicates    yes
+required         no
+
+view             Splices
+type             bam
+hasReplicates    yes 
+required         no
+
+#ONE TYPE OF BAM SHOULD BE WITH EVERY SUBMISSION
+view             Aligns
+type             bam
+hasReplicates    yes
+required         no
+
+view             Paired
+type             bam
+hasReplicates    yes
+required         no
+
+# the following views are download only
+
+view             GeneGencV3c 
+type             fpkm
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             GeneGencV4  
+type             fpkm
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             TranscriptGencV3c
+type             fpkm
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             TranscriptGencV4 
+type             fpkm
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             GeneDeNovo
+type             fpkm
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             TranscriptDeNovo
+type             fpkm 
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             GeneModel
+type             gtf
+hasReplicates    yes
+required         no
+downloadOnly     no 
+
+view             InsLength
+type             insDist
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             Junctions
+type             junction
+hasReplicates    yes
+required         no
+downloadOnly     yes
+

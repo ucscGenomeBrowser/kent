@@ -7,6 +7,7 @@ subGroup1 view Views 1-Transfrags=Transfrags 2-PlusRawSignal=Plus_Raw_Signal 3-M
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 dimensions dimensionX=cellType dimensionY=localization
+#fileSortOrder cell=Cell_Line view=View geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ localization=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks

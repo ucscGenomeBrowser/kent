@@ -1,9 +1,9 @@
 track wgEncodeSunyAlbanyGeneSt
 compositeTrack on
+superTrack wgEncodeRbpSuper dense
 shortLabel SUNY RIP GeneST
 longLabel RNA Binding Protein Associated RNA by RIP-chip GeneST from ENCODE/SUNY Albany 
 group regulation
-superTrack wgEncodeRbpSuper dense
 subGroup1 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2)
 subGroup2 factor Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=RIP-Input
 dimensions dimensionX=factor dimensionY=cellType
@@ -11,19 +11,19 @@ sortOrder cellType=+ factor=+
 fileSortOrder cell=Cell_Line antibody=Target labVersion=Antibody view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
-useScore 1
 priority 0
 wgEncode 1
-noInherit on
-viewUi on
+#noInherit on
+origAssembly hg18
+type broadPeak
+boxedCfg on
+canPack On
+useScore 1
+#minGrayLevel 11%
 scoreFilter 2
 scoreFilterLimits 1:1000
 #pValueFilter 0.0
 #pValueFilterLimits 0:0.5
-scoreMin 0
-boxedCfg on
-#minGrayLevel 11%
-type broadPeak
 html wgEncodeSunyAlbanyGeneSt.new
 
 	track wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
@@ -246,8 +246,8 @@ html wgEncodeSunyAlbanyGeneSt.new
 
 	track wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneSt off
-	shortLabel H1-hESC RIP-Input
-	longLabel H1-hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+	shortLabel H1hESC RIP-Input
+	longLabel H1hESC RIP-Input RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups factor=ripInput cellType=1H1HESC
         origAssembly hg18
 	type broadPeak
@@ -258,8 +258,8 @@ html wgEncodeSunyAlbanyGeneSt.new
 
 	track wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneSt off
-	shortLabel H1-hESC T7Tag
-	longLabel H1-hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+	shortLabel H1hESC T7Tag
+	longLabel H1hESC T7Tag RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups factor=T7Tag cellType=1H1HESC
         origAssembly hg18
 	type broadPeak
@@ -269,8 +269,8 @@ html wgEncodeSunyAlbanyGeneSt.new
 
 	track wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
 	parent wgEncodeSunyAlbanyGeneSt on
-	shortLabel H1-hESC ELAVL1
-	longLabel H1-hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
+	shortLabel H1hESC ELAVL1
+	longLabel H1hESC ELAV1 RBP Associated RNA by RIP-chip GeneST from ENCODE/SUNY
 	subGroups factor=ELAVL1 cellType=1H1HESC
         origAssembly hg18
 	type broadPeak

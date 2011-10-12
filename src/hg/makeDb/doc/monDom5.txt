@@ -1816,7 +1816,6 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/melGal1/bed
     ln -s lastz.monDom5.swap lastz.monDom5
 
-
 ##############################################################################
 # LASTZ Cow bosTau6 (DONE - 2011-05-31- Chin)
     screen # use a screen to manage this multi-day job
@@ -1870,4 +1869,60 @@ TMPDIR=/scratch/tmp
     ln -s blastz.monDom5.swap lastz.monDom5
 
 #########################################################################
+# LASTZ Frog xenTro3 (DONE - 2011-09-22 - Hiram)
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/monDom5/bed/lastzXenTro3.2011-09-22
+    cd /hive/data/genomes/monDom5/bed/lastzXenTro3.2011-09-22
 
+    cat << '_EOF_' > DEF
+# Opossum vs. Frog
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Opossum MonDom5
+SEQ1_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ1_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog XenTro3
+SEQ2_DIR=/scratch/data/xenTro3/xenTro3.2bit
+SEQ2_LEN=/scratch/data/xenTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/monDom5/bed/lastzXenTro3.2011-09-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+    #	Elapsed time: 1329m50s
+    cat fb.monDom5.chainXenTro3Link.txt
+    #	75079446 bases of 3501660299 (2.144%) in intersection
+
+    # and the swap
+    mkdir /hive/data/genomes/xenTro3/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/xenTro3/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzXenTro3.2011-09-22/DEF \
+        -swap -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #	real    66m38.348s
+
+    cat fb.xenTro3.chainMonDom5Link.txt 
+    #	74593612 bases of 1358334882 (5.492%) in intersection
+
+    cd /hive/data/genomes/xenTro3/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
+#########################################################################

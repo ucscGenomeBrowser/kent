@@ -29,6 +29,7 @@ int clTracks = 4;	/* Number of track to test. */
 int clTables = 2;	/* Number of tables to test. */
 int clDbs = 1;		/* Number of databases per organism. */
 int clOrgs = 2;		/* Number of organisms to test. */
+boolean appendLog;      /* append to log rather than create it */
 
 void usage()
 /* Explain usage and exit. */
@@ -51,6 +52,7 @@ errAbort(
   "   -tracks=N - Number of tracks per group to test (default %d)\n"
   "   -tables=N - Number of tables per track to test (deault %d)\n"
   "   -verbose=N - Set to 0 for silent operation, 2 or 3 for debugging\n"
+  "   -appendLog - Append to log file rather than creating it\n"
   , clOrgs, clDbs, clTracks, clTables);
 }
 
@@ -68,6 +70,7 @@ static struct optionSpec options[] = {
    {"groups", OPTION_INT},
    {"tracks", OPTION_INT},
    {"tables", OPTION_INT},
+   {"appendLog", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -1112,7 +1115,10 @@ void hgTablesTest(char *url, char *logName)
 {
 /* Get default page, and open log. */
 struct htmlPage *rootPage = htmlPageGet(url);
-logFile = mustOpen(logName, "w");
+if (appendLog)
+    logFile = mustOpen(logName, "a");
+else
+    logFile = mustOpen(logName, "w");
 if (! endsWith(url, "hgTables"))
     warn("Warning: first argument should be a complete URL to hgTables, "
 	 "but doesn't look like one (%s)", url);
@@ -1176,6 +1182,7 @@ clOrgs = optionInt("orgs", clOrgs);
 clGroups = optionInt("groups", clGroups);
 clTracks = optionInt("tracks", clTracks);
 clTables = optionInt("tables", clTables);
+appendLog = optionExists("appendLog");
 if (clOrg != NULL)
    clOrgs = BIGNUM;
 hgTablesTest(argv[1], argv[2]);

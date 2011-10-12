@@ -28,12 +28,12 @@ subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp
 subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC584=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF217=ZNF217 ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGMUS=IgG-mus IGGRAB=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
 subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=4-hydroxytamoxifen TNFa=TNFa
-dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
-dimensionZchecked aNone
-dimensionAchecked std,IGGmus,IGGrab,UCD
-filterComposite dimZ=one dimA=multi
+dimensions dimX=cellType dimY=factor dimA=treatment dimB=control
+dimensionAchecked aNone,IFNa30,IGNa6h,IFNg30,IFNg6h
+dimensionBchecked std,IGGMUS,IGGRAB
+filterComposite dimA=one dimB=multi
 sortOrder cellType=+ factor=+ control=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target treatment=Treatment view=View control=Control setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line antibody=Antibody_Target treatment=Treatment view=View control=Control setType=Type dccAccession=UCSC_Accession geoSampleAccession=GEO<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
 visibilityViewDefaults Peaks=pack  Signal=full
@@ -250,7 +250,7 @@ wgEncode 1
     # subId=1209 dateSubmitted=2010-05-20
 
         track wgEncodeSydhTfbsGm12878TbpIggmusPk
-        subTrack wgEncodeSydhTfbsViewPeaks off
+        subTrack wgEncodeSydhTfbsViewPeaks on
         shortLabel GM78 TBP IgM
         longLabel GM12878 TBP IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=TBP cellType=1GM12878 control=IGGMUS treatment=aNone
@@ -439,7 +439,7 @@ wgEncode 1
         # was wgEncodeSydhTfbsHelas3Prdm1vIggrabPk cricket Tue Apr 19 11:00:14 2011
 
         track wgEncodeSydhTfbsK562Chd2ab68301IggrabPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 CHD2 IgR
         longLabel K562 CHD2 IgG-rab ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=CHD2AB68301 cellType=1K562 control=IGGRAB treatment=aNone
@@ -574,7 +574,7 @@ wgEncode 1
         # subId=2535 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562TbpIggmusPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 TBP IgM
         longLabel K562 TBP IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=TBP cellType=1K562 control=IGGMUS treatment=aNone
@@ -711,7 +711,7 @@ wgEncode 1
         # subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd2ab68301IggmusPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel GM78 CHD2 IgM
         longLabel GM12878 CHD2 IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=CHD2AB68301 cellType=1GM12878 control=IGGMUS treatment=aNone
@@ -1078,7 +1078,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsGm12878Pol2StdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on 
         shortLabel GM78 Pol2 Std
         longLabel GM12878 Pol2 Standard ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1GM12878 control=std treatment=aNone
@@ -1096,7 +1096,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsGm12878Rad21IggrabPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel GM78 Rad2 IgR
         longLabel GM12878 Rad21 IgG-rab ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=RAD21 cellType=1GM12878 control=IGGRAB treatment=aNone
@@ -1473,7 +1473,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562Pol2Ifna30StdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 IFa3 Pol2 Sd
         longLabel K562 Pol2 Standard IFNa 30min ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1K562 control=std treatment=IFNa30
@@ -1482,7 +1482,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562Pol2Ifna6hStdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 IFa6 Pol2 Sd
         longLabel K562 Pol2 Standard IFNa 6hrs ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1K562 control=std treatment=IFNa6h
@@ -1491,7 +1491,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562Pol2Ifng30StdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 IFg3 Pol2 Sd
         longLabel K562 Pol2 Standard IFNg 30min ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1K562 control=std treatment=IFNg30
@@ -1500,7 +1500,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562Pol2Ifng6hStdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 IFg6 Pol2 Sd
         longLabel K562 Pol2 Standard IFNg 6hrs ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1K562 control=std treatment=IFNg6h
@@ -1509,7 +1509,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562Pol2IggmusPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 Pol2 IgM
         longLabel K562 Pol2 IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1K562 control=IGGMUS treatment=aNone
@@ -1518,7 +1518,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562Pol2StdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 Pol2 Std
         longLabel K562 Pol2 Standard ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1K562 control=std treatment=aNone
@@ -1545,7 +1545,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsK562Rad21StdPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on
         shortLabel K562 Rad2 Std
         longLabel K562 Rad21 Standard ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=RAD21 cellType=1K562 control=std treatment=aNone
@@ -1822,7 +1822,7 @@ wgEncode 1
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm10847NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm10847NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM47 TNF NKB IgR
         longLabel GM10847 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1831,7 +1831,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
         # was wgEncodeSydhTfbsGm10847NfkbIggrabPk wong Thu Jul 14 19:06:33 2011
 
-        track wgEncodeSydhTfbsGm15510NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm15510NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM10 TNF NKB IgR
         longLabel GM15510 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1840,7 +1840,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
         # was wgEncodeSydhTfbsGm15510NfkbIggrabPk wong Thu Jul 14 19:06:35 2011
 
-        track wgEncodeSydhTfbsGm18505NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm18505NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM05 TNF NKB IgR
         longLabel GM18505 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1858,7 +1858,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
 
         track wgEncodeSydhTfbsGm12878Pol2IggmusPk
-        parent wgEncodeSydhTfbsViewPeaks off
+        parent wgEncodeSydhTfbsViewPeaks on 
         shortLabel GM78 Pol2 IgM
         longLabel GM12878 Pol2 IgG-mus ChIP-Seq Peaks from ENCODE/SYDH
         subGroups view=Peaks factor=POL2 cellType=1GM12878 control=IGGMUS treatment=aNone
@@ -1885,7 +1885,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
         # was wgEncodeSydhTfbsGm12878NfkbTnfaStdPk wong Wed Jul 13 12:02:10 2011
 
-        track wgEncodeSydhTfbsGm18951NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm18951NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM51 TNF NKB IgR
         longLabel GM18951 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1919,7 +1919,7 @@ wgEncode 1
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12891NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm12891NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM91 TNF NKB IgR
         longLabel GM12891 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1928,7 +1928,7 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
         # was wgEncodeSydhTfbsGm12891NfkbIggrabPk wong Thu Jul 14 19:06:34 2011
 
-        track wgEncodeSydhTfbsGm12892NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm12892NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM92 TNF NKB IgR
         longLabel GM12892 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1953,7 +1953,7 @@ wgEncode 1
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm18526NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm18526NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM26 TNF NKB IgR
         longLabel GM18526 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1970,7 +1970,7 @@ wgEncode 1
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm19099NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm19099NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM99 TNF NKB IgR
         longLabel GM19099 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -1987,7 +1987,7 @@ wgEncode 1
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm19193NkfbTnfaIggrabPk
+        track wgEncodeSydhTfbsGm19193NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM93 TNF NKB IgR
         longLabel GM19193 NFKB IgG-rab TNFa ChIP-Seq Peaks from ENCODE/SYDH
@@ -2797,7 +2797,7 @@ wgEncode 1
 #    # subId=1345 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsGm12878TbpIggmusSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel GM78 TBP IgM
         longLabel GM12878 TBP IgG-mus ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=TBP cellType=1GM12878 control=IGGMUS treatment=aNone
@@ -3065,7 +3065,7 @@ wgEncode 1
         # was wgEncodeSydhTfbsHelas3Prdm1vIggrabSig cricket Tue Apr 19 11:00:14 2011
 
         track wgEncodeSydhTfbsK562Chd2ab68301IggrabSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 CHD2 IgR
         longLabel K562 CHD2 IgG-rab ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=CHD2AB68301 cellType=1K562 control=IGGRAB treatment=aNone
@@ -3200,7 +3200,7 @@ wgEncode 1
         # subId=2535 dateSubmitted=2010-10-20
 
         track wgEncodeSydhTfbsK562TbpIggmusSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 TBP IgM
         longLabel K562 TBP IgG-mus ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=TBP cellType=1K562 control=IGGMUS treatment=aNone
@@ -3295,7 +3295,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm10847InputIggrabSig wong Mon Jul 18 14:01:38 2011
 
-        track wgEncodeSydhTfbsGm10847NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm10847NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM47 TNF NKB IgR
         longLabel GM10847 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3389,7 +3389,7 @@ wgEncode 1
         # was wgEncodeSydhTfbsGm12878NfkbTnfaStdSig wong Wed Jul 13 12:02:10 2011
 
         track wgEncodeSydhTfbsGm12878Pol2IggmusSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on 
         shortLabel GM78 Pol2 IgM
         longLabel GM12878 Pol2 IgG-mus ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1GM12878 control=IGGMUS treatment=aNone
@@ -3398,7 +3398,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Pol2StdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel GM78 Pol2 Std
         longLabel GM12878 Pol2 Standard ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1GM12878 control=std treatment=aNone
@@ -3416,7 +3416,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsGm12878Rad21IggrabSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel GM78 Rad2 IgR
         longLabel GM12878 Rad21 IgG-rab ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=RAD21 cellType=1GM12878 control=IGGRAB treatment=aNone
@@ -3477,7 +3477,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm12891InputIggrabSig wong Mon Jul 18 14:01:38 2011
 
-        track wgEncodeSydhTfbsGm12891NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm12891NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM91 TNF NKB IgR
         longLabel GM12891 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3511,7 +3511,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm12892InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
-        track wgEncodeSydhTfbsGm12892NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm12892NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM92 TNF NKB IgR
         longLabel GM12892 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3545,7 +3545,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm15510InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
-        track wgEncodeSydhTfbsGm15510NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm15510NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM10 TNF NKB IgR
         longLabel GM15510 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3579,7 +3579,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm18505InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
-        track wgEncodeSydhTfbsGm18505NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm18505NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM05 TNF NKB IgR
         longLabel GM18505 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3613,7 +3613,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm18526InputIggrabSig wong Mon Jul 18 14:01:39 2011
 
-        track wgEncodeSydhTfbsGm18526NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm18526NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM26 TNF NKB IgR
         longLabel GM18526 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3647,7 +3647,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm18951InputIggrabSig wong Mon Jul 18 14:01:40 2011
 
-        track wgEncodeSydhTfbsGm18951NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm18951NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM51 TNF NKB IgR
         longLabel GM18951 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3681,7 +3681,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm19099InputIggrabSig wong Mon Jul 18 14:01:40 2011
 
-        track wgEncodeSydhTfbsGm19099NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm19099NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM99 TNF NKB IgR
         longLabel GM19099 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -3715,7 +3715,7 @@ wgEncode 1
         # subId=3053 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsGm19193InputIggrabSig wong Mon Jul 18 14:01:40 2011
 
-        track wgEncodeSydhTfbsGm19193NkfbTnfaIggrabSig
+        track wgEncodeSydhTfbsGm19193NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM93 TNF NKB IgR
         longLabel GM19193 NFKB IgG-rab TNFa ChIP-Seq Signal from ENCODE/SYDH
@@ -4461,7 +4461,7 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifna30StdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 IFa3 Pol2 Sd
         longLabel K562 Pol2 Standard IFNa 30min ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1K562 control=std treatment=IFNa30
@@ -4470,7 +4470,7 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifna6hStdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 IFa6 Pol2 Sd
         longLabel K562 Pol2 Standard IFNa 6hrs ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1K562 control=std treatment=IFNa6h
@@ -4479,7 +4479,7 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifng30StdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 IFg3 Pol2 Sd
         longLabel K562 Pol2 Standard IFNg 30min ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1K562 control=std treatment=IFNg30
@@ -4488,7 +4488,7 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2Ifng6hStdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 IFg6 Pol2 Sd
         longLabel K562 Pol2 Standard IFNg 6hrs ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1K562 control=std treatment=IFNg6h
@@ -4497,7 +4497,7 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2IggmusSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 Pol2 IgM
         longLabel K562 Pol2 IgG-mus ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1K562 control=IGGMUS treatment=aNone
@@ -4506,7 +4506,7 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Pol2StdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 Pol2 Std
         longLabel K562 Pol2 Standard ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=POL2 cellType=1K562 control=std treatment=aNone
@@ -4524,7 +4524,7 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
 
         track wgEncodeSydhTfbsK562Rad21StdSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel K562 Rad2 Std
         longLabel K562 Rad21 Standard ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=RAD21 cellType=1K562 control=std treatment=aNone
@@ -4881,7 +4881,7 @@ wgEncode 1
         # subId=3875 dateSubmitted=2011-04-04
 
         track wgEncodeSydhTfbsGm12878Chd2ab68301IggmusSig
-        parent wgEncodeSydhTfbsViewSignal off
+        parent wgEncodeSydhTfbsViewSignal on
         shortLabel GM78 CHD2 IgM
         longLabel GM12878 CHD2 IgG-mus ChIP-Seq Signal from ENCODE/SYDH
         subGroups view=Signal factor=CHD2AB68301 cellType=1GM12878 control=IGGMUS treatment=aNone

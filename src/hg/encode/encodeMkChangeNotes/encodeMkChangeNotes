@@ -102,6 +102,19 @@ def same_file(x, y, do_md5=True):
             else:
                 return True
 
+def remove_duplicates(list):
+    seen = {}
+    for i in list:
+        if i in seen:
+           pass
+        else:
+            seen[i] = 1
+    returnlist = []
+    for i in seen:
+        returnlist.append(i)
+    return(returnlist)
+
+
 #### Main ######################################################################
 
 def main(argv=None):
@@ -154,10 +167,10 @@ def main(argv=None):
 
     # if new relase, add the full path to all files
     path_prefix = ""
-    if prev_release_dir == "-":
-        path_prefix = "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" \
+    #if prev_release_dir == "-":
+    path_prefix = "/usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" \
             % (database, options.composite_name, current_release_dir)
-
+      
     # generate the list of files
     file_pattern = ".*\.(gz|bigWig|bam|tgz)$"   # the pattern that describes what files we even consider
     current_files = get_file_set(current_release_dir, file_pattern)
@@ -389,6 +402,18 @@ def main(argv=None):
         print >>sys.stderr, "  new files: %d" % len(new_files_list)
         print >>sys.stderr, "  new gbdbs: %d" % len(new_gbdbs_list)
         print >>sys.stderr, "  additional files: %d" % len(addition_files)
+
+    unchanged_tables_list = remove_duplicates(unchanged_tables_list)
+    unchanged_files_list = remove_duplicates(unchanged_files_list)
+    unchanged_gbdbs_list = remove_duplicates(unchanged_gbdbs_list)
+    removed_tables_list = remove_duplicates(removed_tables_list)
+    removed_files_list = remove_duplicates(removed_files_list)
+    removed_gbdbs_list = remove_duplicates(removed_gbdbs_list)
+    new_tables_list = remove_duplicates(new_tables_list)
+    new_files_list = remove_duplicates(new_files_list)
+    new_gbdbs_list = remove_duplicates(new_gbdbs_list)
+    addition_files = remove_duplicates(addition_files)
+
 
     # if asked, save the list of new files
     if options.files_path:
