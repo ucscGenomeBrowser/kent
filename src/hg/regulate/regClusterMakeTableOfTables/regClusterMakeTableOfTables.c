@@ -9,6 +9,8 @@
 
 static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.4 2010/05/17 02:21:36 kent Exp $";
 
+int scoreColIx = 6;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -22,10 +24,15 @@ errAbort(
   "        uw01 - From UW DNase file names for hg18\n"
   "        uw02 - From UW DNase file names for hg19 as of Jan 2011 freeze\n"
   "        enh01 - From enhancer picks\n"
+  "options:\n"
+  "    scoreColIx=N (default %d) Index (1 based) of score column in files.  Use 5 for bed,\n"
+  "               6 for narrowPeak"
+  , scoreColIx
   );
 }
 
 static struct optionSpec options[] = {
+   {"scoreColIx", OPTION_INT},
    {NULL, 0},
 };
 
@@ -84,8 +91,10 @@ char *row[scoreCol+1];
 double sum = 0, sumSquares = 0;
 int n = 0;
 double minVal=0, maxVal=0;
-while (lineFileRow(lf, row))
+int fieldCount;
+while ((fieldCount = lineFileChop(lf, row)) != 0)
     {
+    lineFileExpectAtLeast(lf, scoreCol+1, fieldCount);
     double x = sqlDouble(row[scoreCol]);
     if (n == 0)
         minVal = maxVal = x;
@@ -237,11 +246,12 @@ struct slName *in, *inList = readAllLines(input);
  * routine to output the metadata columns from the middle parts. */
 int commonPrefix = commonPrefixSize(inList);
 int commonSuffix = commonSuffixSize(inList);
-int scoreColIx = 6;
+uglyf("regClusterMakeTableOfTables(type=%s, input=%s, output=%s)\n", type, input, output);
+int scoreIx = scoreColIx - 1;
 for (in = inList; in != NULL; in = in->next)
     {
-    fprintf(f, "%s\t0\t1\t2\t%d\t", in->name, scoreColIx);
-    fprintf(f, "%g", calcNormScoreFactor(in->name, scoreColIx));
+    fprintf(f, "%s\t0\t1\t2\t%d\t", in->name, scoreIx);
+    fprintf(f, "%g", calcNormScoreFactor(in->name, scoreIx));
     char *s = in->name;
     int len = strlen(s);
     char *midString = cloneStringZ(s+commonPrefix, len - commonPrefix - commonSuffix);
@@ -267,6 +277,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+scoreColIx = optionInt("scoreColIx", scoreColIx);
 regClusterMakeTableOfTables(argv[1], argv[2], argv[3]);
 return 0;
 }

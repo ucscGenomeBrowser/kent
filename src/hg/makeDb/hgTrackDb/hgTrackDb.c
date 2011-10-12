@@ -732,6 +732,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
 /* Write to tab-separated file; hold off on html, since it must be encoded */
     {
+    verbose(2, "Starting write of tabs to %s\n", tab);
     FILE *f = mustOpen(tab, "w");
     for (td = tdbList; td != NULL; td = td->next)
         {
@@ -745,6 +746,7 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
         td->html = hold;
         }
     carefulClose(&f);
+    verbose(2, "Wrote tab representation to %s\n", tab);
     }
 
 /* Update database */
@@ -763,7 +765,9 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
 
     /* Load in regular fields. */
     safef(query, sizeof(query), "load data local infile '%s' into table %s", tab, trackDbName);
+    verbose(2, "sending mysql \"%s\"\n", query);
     sqlUpdate(conn, query);
+    verbose(2, "done tab file load");
 
     /* Load in html and settings fields. */
     for (td = tdbList; td != NULL; td = td->next)
