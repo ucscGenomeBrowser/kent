@@ -640,6 +640,7 @@ labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 md5sum 6796687c100f9ea8483dfaa913f53c13,c07091461d252da16c5ffdb3106a1c92
 origAssembly hg18
 project wgEncode
+replicate 1
 setType input
 subId 3839
 treatment None
@@ -667,6 +668,7 @@ labVersion Illumina 2.0, low confidence sequences excluded
 md5sum 09db1075d458dc26aafc649b32ab76a1
 origAssembly hg18
 project wgEncode
+replicate 1
 setType input
 subId 3839
 treatment None
@@ -1361,6 +1363,7 @@ md5sum 6796687c100f9ea8483dfaa913f53c13,c07091461d252da16c5ffdb3106a1c92
 objStatus renamed - Files were renamed due to cell naming from K562b -> K562
 origAssembly hg18
 project wgEncode
+replicate 1
 setType input
 subId 3839
 treatment None
@@ -1389,6 +1392,7 @@ md5sum 09db1075d458dc26aafc649b32ab76a1
 objStatus renamed - Files were renamed due to cell naming from K562b -> K562
 origAssembly hg18
 project wgEncode
+replicate 1
 setType input
 subId 3839
 treatment None
@@ -2370,6 +2374,7 @@ grant Snyder
 lab USC
 md5sum 72d7d70bd91906633de2d9e2ad82e845,f80ee1524bca7495408a6ebd6a575b40
 project wgEncode
+replicate 1
 setType input
 subId 1123
 treatment None
@@ -2394,6 +2399,7 @@ grant Snyder
 lab USC
 md5sum 880e1f44ed54e0e4ba525dc5c189ad5c
 project wgEncode
+replicate 1
 setType input
 subId 1123
 treatment None
@@ -2726,8 +2732,8 @@ control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-08
-dateUnrestricted 2012-07-07
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
 expId 2070
 fileName wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam,wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam.bai
@@ -2750,8 +2756,8 @@ control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-08
-dateUnrestricted 2012-07-07
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
 expId 2070
 fileName wgEncodeSydhHistonePanc1InputUcdRawDataRep1.fastq.tgz
@@ -2774,8 +2780,8 @@ control UCDavis
 controlId wgEncodeEH002070
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-08
-dateUnrestricted 2012-07-07
+dateSubmitted 2011-09-19
+dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002070
 expId 2070
 fileName wgEncodeSydhHistonePanc1InputUcdSig.bigWig
@@ -3800,6 +3806,7 @@ grant Snyder
 lab USC
 md5sum aba4f90213b861c611c210c0b1efb1bc,0fff0df3fb98df465ec8e801e663fc04
 project wgEncode
+replicate 1
 setType input
 subId 3839
 treatment None
@@ -3825,6 +3832,7 @@ grant Snyder
 lab USC
 md5sum 227a9d1068936d528d371dc6ad3a05b8
 project wgEncode
+replicate 1
 setType input
 subId 3839
 treatment None
@@ -3858,4 +3866,4 @@ tableName wgEncodeSydhHistoneU2osInputUcdSig
 treatment None
 view Signal
 
-# MAGIC: 107366140
+# MAGIC: 185219905
