@@ -1,15 +1,18 @@
 // encodeChipMatrix.js - pull experiment table and metadata from server 
 //      and display ChIP antibodies vs. cell types in a matrix
-
-// Formatted: jsbeautify.py -j
+// Formatted: jsbeautify.py -j -k
 // Syntax checked: jslint indent:4, plusplus: true, continue: true, unparam: true, sloppy: true, browser: true */
 /*global $, encodeProject */
 
 $(function () {
-    var requests = [
+    var dataType;
+    var requests =
     // Requests to server API
-    encodeProject.serverRequests.experiment, encodeProject.serverRequests.cellType, encodeProject.serverRequests.antibody],
-        dataType;
+    [
+        encodeProject.serverRequests.experiment,
+        encodeProject.serverRequests.cellType,
+        encodeProject.serverRequests.antibody
+        ];
 
     function tableOut(matrix, cellTiers, cellTypeHash, antibodyGroups, antibodyHash, targetHash) {
         // Create table where rows = cell types and columns are datatypes
