@@ -286,6 +286,8 @@ exit $status # BRACKET
 
        swissProt --> sp111004
        proteins  --> proteins111004
+       uniProt   --> proteins111004
+       proteome  --> proteins111004
 
 # Run some simple test on hgTracks, hgNear, hgGene, pbTracks, and pbGlobal  
 # to make sure things are running OK.
