@@ -5,7 +5,112 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
-# ensembl 63 update (WORKING - 2011-08-15 - Hiram)
+# ensembl 64 update (WORKING - 2011-10-12 - Hiram)
+
+     #### when complete, reset dateReferences:
+     hgsql -e \
+'update trackVersion set dateReference="jun2011" where version="63";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where version="64";' hgFixed
+
+
+############################################################################
+#  bosTau6 - Cow - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6
+    cat << '_EOF_' > bosTau6.ensGene.ra
+# required db variable
+db bosTau6
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9X][0-9]*\)/chr\1/; s/^MT/chrM/; s/^GJ\([0-9]*\).1/chrUn_GJ\1/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=64 bosTau6.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6/bed/ensGene.64
+    featureBits bosTau6 ensGene
+    # 42264149 bases of 2649682029 (1.595%) in intersection
+
+############################################################################
+#  myoLuc2 - Microbat - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc2
+    cat << '_EOF_' > myoLuc2.ensGene.ra
+# required db variable
+db myoLuc2
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=64 myoLuc2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc2/bed/ensGene.64
+    featureBits myoLuc2 ensGene
+    # 32782563 bases of 1966419868 (1.667%) in intersection
+
+############################################################################
+#  gorGor3 - Gorilla - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3
+    cat << '_EOF_' > gorGor3.ensGene.ra
+# required db variable
+db gorGor3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+# delete commands take out genes that are only in patch sequence
+nameTranslation '/^cutchr/d; /^unplaced/d; s/^\([0-9X][0-9ab]*\)/chr\1/; s/^MT/chrM/;'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=64 gorGor3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3/bed/ensGene.64
+    featureBits gorGor3 ensGene
+    # 50017329 bases of 3026913193 (1.652%) in intersection
+
+############################################################################
+#  gasAcu1 - Stickleback - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/gasAcu1
+    cat << '_EOF_' > gasAcu1.ensGene.ra
+# required db variable
+db gasAcu1
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^group\([IUVX]\)/chr\1/; s/^MT/chrM/;"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=64 gasAcu1.ensGene.ra
+
+    # requires extra attention after the all database for loop attempt
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.64/process
+    mv gasAcu1.allGenes.gp.gz gasAcu1.allGenes.gp.beforeLift.gz
+    zcat gasAcu1.allGenes.gp.beforeLift.gz \
+	| liftUp -extGenePred -type=.gp gasAcu1.scaffolds.gp \
+	    ../../../jkStuff/contigsToScaffolds.lft carry stdin
+    liftUp -extGenePred gasAcu1.allGenes.gp \
+	../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft carry \
+	    gasAcu1.scaffolds.gp
+    gzip gasAcu1.scaffolds.gp
+    gzip gasAcu1.allGenes.gp
+    #	verify OK
+    genePredCheck -db=gasAcu1 gasAcu1.allGenes.gp.gz
+    #	checked: 29245 failed: 0
+
+    #	then continue with the load
+    cd /hive/data/genomes/gasAcu1
+    doEnsGeneUpdate.pl -continue=load -ensVersion=64 gasAcu1.ensGene.ra \
+	> ens.64.load 2>&1
+
+    featureBits gasAcu1 ensGene
+    # 36792090 bases of 446627861 (8.238%) in intersection
+
+############################################################################
+############################################################################
+############################################################################
+# ensembl 63 update (DONE - 2011-08-15 - Hiram)
 grep "_63" EnsGeneAutomate.pm  | grep "=>" | awk '{print $1}' \
 	| sed -e "s/'//g" | sort
 
