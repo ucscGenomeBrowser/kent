@@ -1,34 +1,34 @@
-LIST=\
-wgEncodeHudsonalphaChipSeq.ra\
-wgEncodeYaleChIPseq.ra\
-wgEncodeBroadChipSeq.ra\
-wgEncodeChromatinMap.ra\
-wgEncodeUwChIPSeq.ra\
-wgEncodeUwDGF.ra\
-wgEncodeUwDnaseSeq.ra\
-wgEncodeCaltechRnaSeq.ra\
-wgEncodeReg.ra\
-wgEncodeUwAffyExonArray.ra\
-wgEncodeSunyalbanyRnaGeneChip.ra\
-wgEncodeBuOrchid.ra\
-wgEncodeGisPet.ra\
-wgEncodeHudsonalphaMethyl27.ra\
-wgEncodeHudsonalphaRnaSeq.ra\
-wgEncodeRikenCage.ra\
-wgEncodeSangerGencode.ra\
-wgEncodeYaleRNAseq.ra\
-wgEncodeCshlLongRnaSeq.ra\
-wgEncodeMapability.ra\
-wgEncodeNhgriBip.ra\
-wgEncodeNhgriNRE.ra\
-wgEncodeCshlShortRnaSeq.ra\
-wgEncodeGisDnaPet.ra\
-wgEncodeHudsonalphaMethylSeq.ra\
-wgEncodeDukeAffyExonArray.ra\
-wgEncodeHelicosRnaSeq.ra\
-wgEncodeAffyRnaChip.ra\
-wgEncodeGisRnaSeq.ra\
-wgEncodeHudsonalphaCnv.ra\
+LIST= \
+wgEncodeAffyRnaChip.ra \
+wgEncodeBroadChipSeq.ra \
 wgEncodeBroadHmm.ra \
+wgEncodeBuOrchid.ra \
+wgEncodeCaltechRnaSeq.ra \
+wgEncodeChromatinMap.ra \
+wgEncodeCshlLongRnaSeq.ra \
+wgEncodeCshlShortRnaSeq.ra \
+wgEncodeDukeAffyExonArray.ra \
+wgEncodeGisDnaPet.ra \
+wgEncodeGisPet.ra \
+wgEncodeGisRnaSeq.ra \
+wgEncodeHelicosRnaSeq.ra \
+wgEncodeHudsonalphaChipSeq.ra \
+wgEncodeHudsonalphaCnv.ra \
+wgEncodeHudsonalphaMethyl27.ra \
+wgEncodeHudsonalphaMethylSeq.ra \
+wgEncodeHudsonalphaRnaSeq.ra \
+wgEncodeMapability.ra \
+wgEncodeNhgriBip.ra \
+wgEncodeNhgriNRE.ra \
+wgEncodeReg.ra \
+wgEncodeRikenCage.ra \
+wgEncodeSangerGencode.ra \
+wgEncodeSunyalbanyRnaGeneChip.ra \
+wgEncodeUwAffyExonArray.ra \
+wgEncodeUwChIPSeq.ra \
+wgEncodeUwDGF.ra \
+wgEncodeUwDnaseSeq.ra \
+wgEncodeYaleChIPseq.ra \
+wgEncodeYaleRNAseq.ra
 
 include ../../../../makefile.metaDb
