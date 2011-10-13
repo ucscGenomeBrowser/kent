@@ -282,7 +282,9 @@ exit $status # BRACKET
 
 # SWITCH SYMBOLIC PROTEIN DATABASE LINKS (TBD)
 
-# Ask system admin to switch the following symbolic database links:
+# Ask system admin to switch the following symbolic database links after
+# reaching this point in this script, and running the companion script
+# sp111004:
 
        swissProt --> sp111004
        proteins  --> proteins111004
