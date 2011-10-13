@@ -14361,6 +14361,108 @@ tableName wgEncodeUwDnaseMcf7RawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwDnaseMonocd14AlnRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14AlnRep1.bam,wgEncodeUwDnaseMonocd14AlnRep1.bam.bai
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+md5sum 2541114974c49e5425f5ac81569b42e4,c72edb39635f0e9e8505b3733efdbc1e
+objStatus replaced - lab replaced this version with a V2
+project wgEncode
+replicate 1
+subId 3211
+treatment None
+view Alignments
+
+metaObject wgEncodeUwDnaseMonocd14HotspotsRep1
+objType table
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+md5sum e023fc2d251088cd5db8dbf78bec1e08
+objStatus replaced - lab replaced this version with a V2
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14HotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwDnaseMonocd14PkRep1
+objType table
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+md5sum e335b2982e1948071d72f13119ed9c39
+objStatus replaced - lab replaced this version with a V2
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwDnaseMonocd14RawDataRep1
+objType file
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14RawDataRep1.fastq.gz
+grant Stam
+lab UW
+md5sum 44f9bcecec88b7072b59d159e5cb62ea
+objStatus replaced - lab replaced this version with a V2
+project wgEncode
+replicate 1
+subId 3211
+treatment None
+view RawData
+
+metaObject wgEncodeUwDnaseMonocd14RawRep1
+objType table
+cell Monocytes-CD14+
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-10
+fileName wgEncodeUwDnaseMonocd14RawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+md5sum ea9f4da97f07da7841c339e4f8415336
+objStatus replaced - lab replaced this version with a V2
+project wgEncode
+replicate 1
+subId 3211
+tableName wgEncodeUwDnaseMonocd14RawRep1
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwDnaseMonocd14ro1746AlnRep1
 objType file
 cell Monocytes-CD14+
@@ -14426,7 +14528,7 @@ treatment None
 view Alignments
 
 metaObject wgEncodeUwDnaseMonocd14ro1746HotspotsRep1
-objType file
+objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -14442,7 +14544,7 @@ objStatus replaced - lab replaced this version with a V2
 project wgEncode
 replicate 1
 subId 3211
-tableName wgEncodeUwDnaseMonocd14HotspotsRep1
+tableName wgEncodeUwDnaseMonocd14ro1746HotspotsRep1
 treatment None
 view Hotspots
 
@@ -14493,7 +14595,7 @@ treatment None
 view Hotspots
 
 metaObject wgEncodeUwDnaseMonocd14ro1746PkRep1
-objType file
+objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -14509,7 +14611,7 @@ objStatus replaced - lab replaced this version with a V2
 project wgEncode
 replicate 1
 subId 3211
-tableName wgEncodeUwDnaseMonocd14PkRep1
+tableName wgEncodeUwDnaseMonocd14ro1746PkRep1
 treatment None
 view Peaks
 
@@ -14621,7 +14723,7 @@ treatment None
 view RawData
 
 metaObject wgEncodeUwDnaseMonocd14ro1746RawRep1
-objType file
+objType table
 cell Monocytes-CD14+
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -14637,7 +14739,7 @@ objStatus replaced - lab replaced this version with a V2
 project wgEncode
 replicate 1
 subId 3211
-tableName wgEncodeUwDnaseMonocd14RawRep1
+tableName wgEncodeUwDnaseMonocd14ro1746RawRep1
 treatment None
 view RawSignal
 
@@ -18856,4 +18958,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1932941418
+# MAGIC: 1537953165
