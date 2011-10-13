@@ -28,7 +28,7 @@ body {
 }
 
 a {
-	color: #003366;
+    color: #003366;
 }
 
 table {
@@ -65,15 +65,15 @@ h4.title {
 }
     
 dt {
-	padding-bottom: 12px;
+    padding-bottom: 12px;
 }
 
 dd {
-	padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 .date {
-	font-size: 10pt;
+    font-size: 10pt;
 }
 
 /*General styles*/
@@ -86,7 +86,7 @@ dd {
 }
 
 .big {
-	font-size: 16pt;
+    font-size: 16pt;
 }
 
 #referenceGenome td+td {
