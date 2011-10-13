@@ -75,6 +75,7 @@ sub execute {
   $this->{'hasBeenExecuted'} = 1;
   close($this->{'fh'});
   &HgAutomate::run("chmod a+x $this->{fileName}");
+  &HgAutomate::nfsNoodge("$this->{fileName}");
   &HgAutomate::run("$HgAutomate::runSSH $this->{runHost} nice $this->{fileName}");
 }
 

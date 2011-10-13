@@ -20,8 +20,8 @@ set xdb = mm9
 set Xdb = Mm9
 set ydb = canFam2
 set zdb = rheMac2
-set spDb = sp101005
-set pbDb = proteins101005
+set spDb = sp111004
+set pbDb = proteins111004
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer7
@@ -483,7 +483,6 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 # wc $testingDir/txWalk.intersect.bed
 #
 
-
 # Fetch human protein set and table that describes if curated or not.
 # Takes about a minute
 hgsql -N $spDb -e \
@@ -637,10 +636,6 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
-
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
 
 # Merge back in antibodies, and add the small, noncoding genes that are not well-represented
 # in GenBank (Rfam, tRNA)
@@ -803,8 +798,6 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
-
-
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
@@ -848,11 +841,6 @@ hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -906,6 +894,11 @@ hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+
+
+
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -954,7 +947,7 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-
+exit $status # BRACKET
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
