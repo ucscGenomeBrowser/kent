@@ -386,3 +386,71 @@ close (FH);
     # request rsync copy from cluster admin
 
 #########################################################################
+# AUTO UPDATE GENBANK (DONE - 2011-10-14 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Gorilla gorilla	546	4	0
+# Gorilla gorilla gorilla	1	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that gorGor3 has almost no native est's
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add gorGor3 before gorGor2 and commit to GIT
+# Gorilla
+gorGor3.serverGenome = /hive/data/genomes/gorGor3/gorGor3.2bit
+gorGor3.clusterGenome = /scratch/data/gorGor3/gorGor3.2bit
+gorGor3.ooc = /scratch/data/gorGor3/gorGor3.11.ooc
+gorGor3.lift = no
+gorGor3.perChromTables = no
+gorGor3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+gorGor3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+gorGor3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+gorGor3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+gorGor3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+gorGor3.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+gorGor3.downloadDir = gorGor3
+gorGor3.refseq.mrna.native.load  = yes
+gorGor3.refseq.mrna.xeno.load = yes
+gorGor3.refseq.mrna.xeno.loadDesc  = yes
+gorGor3.genbank.est.native.load = no
+gorGor3.upstreamGeneTbl = xenoRefGene
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding gorGor3 Gorilla" etc/genbank.conf
+    git push
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # gorGor genome information, if this is a new species, need to add stuff
+    # there
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+XXX - ready here when rsync to klusters is done XXX
+    time nice -n +19 ./bin/gbAlignStep -initial gorGor3 &
+    #	var/build/logs/2011.09.12-09:03:09.gorGor3.initalign.log
+    #	real    360m20.657s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad gorGor3 &
+    #	logFile: var/dbload/hgwdev/logs/2011.09.12-20:47:05.dbload.log
+    #	real    118m27.671s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add gorGor3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added gorGor3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
