@@ -144,15 +144,24 @@ taxId 9595
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
 	gorGor3 > do.log 2>&1 &
-XXX - running - Wed Oct 12 09:41:16 PDT 2011
-    # about 1 hour 3 minutes
-    #	real    23m18.960s
+    #	real    3208m54.385s
+    #	There were problems in three chunks.  They would not complete
+    #	after a couple days running time.  They were taken manually
+    #	and broken up into smaller parts to get completed.  Note
+    #	work in directories:
+    #	/hive/data/genomes/gorGor3/bed/simpleRepeat/stragglers
+    #	/hive/data/genomes/gorGor3/bed/simpleRepeat/moreStragglers
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-continue=filter -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk \
+	gorGor3 > filter.log 2>&1 &
+    #	real    1m1.322s
 
-    #	real    198m33.953s
     cat fb.simpleRepeat 
-    #	103101528 bases of 1358346944 (7.590%) in intersection
+    #	199433151 bases of 2822760080 (7.065%) in intersection
+    #	This is quite a large intersection, highly unusual compared to
+    #	most genomes
 
-    # add to rmsk after it is done:
     cd /hive/data/genomes/gorGor3
     twoBitMask gorGor3.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed gorGor3.2bit
@@ -160,10 +169,11 @@ XXX - running - Wed Oct 12 09:41:16 PDT 2011
 
     twoBitToFa gorGor3.2bit stdout | faSize stdin > faSize.gorGor3.2bit.txt
     cat faSize.gorGor3.2bit.txt
-    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
-    #	333510395 lower) in 19550 sequences in 1 files
-    #	%22.06 masked total, %24.55 masked real
+    #	3029553646 bases (206793566 N's 2822760080 real 1445288963 upper
+    #	1377471117 lower) in 46823 sequences in 1 files
+    #	%45.47 masked total, %48.80 masked real
 
+    #  *** REMEMBER *** to reset they symLink in gbdb:
     rm /gbdb/gorGor3/gorGor3.2bit
     ln -s `pwd`/gorGor3.2bit /gbdb/gorGor3/gorGor3.2bit
 
@@ -344,3 +354,35 @@ close (FH);
     sed -e "s/20/23/; s/16/12/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
 
     hgLoadSqlTab gorGor3 ctgPos2 ctgPos2.sql scaffold.ctgPos2.tab
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-10-14 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \(  2822760080 / 2897316137 \) \* 1024
+    #	( 2822760080 / 2897316137 ) * 1024 = 997.649613
+    # round up to 1000
+
+    cd /hive/data/genomes/gorGor3
+    blat gorGor3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/gorGor3.11.ooc -repMatch=1000
+    #	Wrote 29991 overused 11-mers to jkStuff/gorGor3.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    # there are non-bridged gaps, but they aren't really that, since
+    #	they are all exactly 100 bases and they are all over the normal
+    #	chromosomes:
+    hgsql -N -e "select bridge from gap;" gorGor3 | sort | uniq -c
+    #	7001 no
+    #	426860 yes
+
+    #	cd /hive/data/genomes/gorGor3/jkStuff
+    #	gapToLift gorGor3 nonBridged.lift -bedFile=nonBridged.bed
+    cd /hive/data/genomes/gorGor3
+    mkdir /hive/data/staging/data/gorGor3
+    cp -p jkStuff/gorGor3.11.ooc chrom.sizes \
+	gorGor3.2bit /hive/data/staging/data/gorGor3
+    # request rsync copy from cluster admin
+
+#########################################################################
