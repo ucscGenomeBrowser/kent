@@ -1,13 +1,8 @@
 # for emacs: -*- mode: sh; -*-
 
 
-# This file describes browser build for the Medaka
-# genome, Takifugu rubripes, October 2004, MEDAKA1 from
-#       Institute of Genetics (NIG) and the University of Tokyo
-#       NIG: http://dolphin.lab.nig.ac.jp/medaka/
-#       UTGB: http://medaka.utgenome.org/o
-#       Data release policy: http://medaka.utgenome.org/#policy
-#       Ensembl: http://www.ensembl.org/Oryzias_latipes/index.html
+# This file describes browser build for the Fugu
+# genome, Takifugu rubripes, October 2004, Fugu v4.0 from
 #
 #       "$Id: fr2.txt,v 1.25 2009/09/20 17:16:43 markd Exp $"
 #
