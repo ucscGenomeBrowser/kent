@@ -5866,10 +5866,11 @@ if (consWiggles && consWiggles->next)
     boolean first = TRUE;
     for (consWig = consWiggles; consWig != NULL; consWig = consWig->next)
         {
-        char *wigVar = wigMafWiggleVar(name, consWig);
-        char *wigVarSuffix = wigVar + strlen(name) + 1;
+        char *wigVarSuffix = NULL;
+        char *wigVar = wigMafWiggleVar(name, consWig, &wigVarSuffix);
         cgiMakeCheckBox(wigVar,
                         cartUsualBooleanClosestToHome(cart, tdb, viewLevel, wigVarSuffix, first));
+        freeMem(wigVar);
         first = FALSE;
         subChar(consWig->uiLabel, '_', ' ');
         printf ("%s&nbsp;", consWig->uiLabel);

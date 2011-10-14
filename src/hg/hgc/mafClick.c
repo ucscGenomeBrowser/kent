@@ -666,8 +666,8 @@ else
             for (consWig = consWiggles; consWig != NULL;
                         consWig = consWig->next)
                 {
-                char *wigVar = wigMafWiggleVar(tdb->track, consWig);
-                char *wigVarSuffix = wigVar + strlen (tdb->track) + 1;
+                char *wigVarSuffix = NULL;
+                (void)wigMafWiggleVar(tdb->track, consWig, &wigVarSuffix);
                 if (cartVarExistsAnyLevel(cart, tdb, FALSE, wigVarSuffix))
                     {
                     wigSet = TRUE;
@@ -682,7 +682,7 @@ else
                 if (tdbIsContainerChild(tdb))
                     prefix = tdbGetContainer(tdb)->track;
 
-                cartSetBoolean(cart, wigMafWiggleVar(prefix, consWiggles), TRUE);
+                cartSetBoolean(cart, wigMafWiggleVar(prefix, consWiggles, NULL), TRUE);
                 wigOn = TRUE;
                 }
             if (wigOn)
@@ -696,8 +696,8 @@ else
                         printf("Conservation score statistics:");
                         first = FALSE;
                         }
-                    char *wigVar = wigMafWiggleVar(tdb->track, consWig);
-                    char *wigVarSuffix = wigVar + strlen (tdb->track) + 1;
+                    char *wigVarSuffix = NULL;
+                    (void)wigMafWiggleVar(tdb->track, consWig, &wigVarSuffix);
                     if (cartUsualBooleanClosestToHome(cart, tdb, FALSE, wigVarSuffix,FALSE))
                         {
                         printf("&nbsp;&nbsp;");
@@ -1220,8 +1220,8 @@ else
                         "Conservation score statistics", consWig->table);
             else
                 {
-                char *wigVar = wigMafWiggleVar(tdb->track, consWig);
-                char *wigVarSuffix = wigVar + strlen (tdb->track) + 1;
+                char *wigVarSuffix = NULL;
+                (void)wigMafWiggleVar(tdb->track, consWig, &wigVarSuffix);
                 if (!cartUsualBooleanClosestToHome(cart, tdb, FALSE, wigVarSuffix,FALSE))
                     continue;
                 if (first)

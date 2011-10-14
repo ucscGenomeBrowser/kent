@@ -2497,8 +2497,8 @@ for (consWig = consWigList; consWig != NULL; consWig = consWig->next)
     {
     if (differentString(consWig->leftLabel, DEFAULT_CONS_LABEL))
         {
-        char *wigVar = wigMafWiggleVar(tdb->track, consWig);
-        char *wigVarSuffix = wigVar + strlen (tdb->track) + 1;
+        char *wigVarSuffix = NULL;
+        (void)wigMafWiggleVar(tdb->track, consWig,&wigVarSuffix);
         if (!cartUsualBooleanClosestToHome(cart, tdb, FALSE, wigVarSuffix, first))
             continue;
         }

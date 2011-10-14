@@ -77,8 +77,8 @@ struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb);
 /* get conservation wiggle table names and labels from trackDb setting,
    ignoring those where table doesn't exist */
 
-char *wigMafWiggleVar(char *prefix, struct consWiggle *wig);
-/* Return name of cart variable for this cons wiggle */
+char *wigMafWiggleVar(char *prefix, struct consWiggle *wig,char **suffix);
+// Return name of cart variable (and optionally the suffix) for this cons wiggle
 
 struct wigMafSpecies
     {
