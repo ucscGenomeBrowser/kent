@@ -68,7 +68,7 @@ $(function () {
                         }
                         td += '">';
                         if (matrix[cellType][target]) {
-                            td += '<a target=_blank href="http://genome-preview.ucsc.edu/cgi-bin/hgTracks?db=hg19&tsCurTab=advancedTab&hgt_tsPage=&hgt_tSearch=search&hgt_mdbVar1=cell&hgt_mdbVar2=target&hgt_mdbVal1=';
+                            td += '<a target="searchWindow" href="http://genome-preview.ucsc.edu/cgi-bin/hgTracks?db=hg19&tsCurTab=advancedTab&hgt_tsPage=&hgt_tSearch=search&hgt_mdbVar1=cell&hgt_mdbVar2=target&hgt_mdbVar3=view&hgt_mdbVal2=Any&hgt_mdbVal1=';
                             td += cellType;
                             td += '&hgt_mdbVal2=';
                             // TODO: needs to be join of all antibodies for this target

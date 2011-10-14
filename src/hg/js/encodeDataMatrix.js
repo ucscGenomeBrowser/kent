@@ -69,9 +69,9 @@ $(function () {
                         }
                         td += '">';
                         if (matrix[cellType][dataType]) {
-                            td += '<a target=_blank title="';
+                            td += '<a target="searchWindow" title="';
                             td += dataTypeLabel + ' in ' + cellType + ' cells "';
-                            td += 'href="http://genome-preview.ucsc.edu/cgi-bin/hgTracks?db=hg19&tsCurTab=advancedTab&hgt_tsPage=&hgt_tSearch=search&hgt_mdbVar1=cell&hgt_mdbVar2=dataType&hgt_mdbVal1=';
+                            td += 'href="http://genome-preview.ucsc.edu/cgi-bin/hgTracks?db=hg19&tsCurTab=advancedTab&hgt_tsPage=&hgt_tSearch=search&hgt_mdbVar1=cell&hgt_mdbVar2=dataType&hgt_mdbVar3=view&hgt_mdbVal3=Any&hgt_mdbVal1=';
                             td += cellType;
                             td += '&hgt_mdbVal2=';
                             td += dataType;
