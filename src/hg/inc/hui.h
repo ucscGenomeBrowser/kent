@@ -830,7 +830,7 @@ struct mrnaFilter
    {
    struct  mrnaFilter *next;	/* Next in list. */
    char *label;	  /* Filter label. */
-   char *key;     /* Suffix of cgi variable holding search pattern. */
+   char *suffix;  /* Suffix of cgi variable holding search pattern. */
    char *table;	  /* Associated table to search. */
    char *pattern; /* Pattern to find. */
    int mrnaTableIx;	/* Index of field in mrna table. */
@@ -840,8 +840,8 @@ struct mrnaFilter
 struct mrnaUiData
 /* Data for mrna-specific user interface. */
    {
-   char *filterTypeVar;	/* cgi variable that holds type of filter. */
-   char *logicTypeVar;	/* cgi variable that indicates logic. */
+   char *filterTypeSuffix; /* cgi variable suffix that holds type of filter. */
+   char *logicTypeSuffix;  /* cgi variable suffix that indicates logic. */
    struct mrnaFilter *filterList;	/* List of filters that can be applied. */
    };
 
@@ -1005,11 +1005,14 @@ void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none);
 void radioButton(char *var, char *val, char *ourVal);
 /* Print one radio button */
 
-void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var, struct cart *cart);
+void oneMrnaFilterUi(struct controlGrid *cg, struct trackDb *tdb, char *text, char *var, char *suffix, struct cart *cart);
 /* Print out user interface for one type of mrna filter. */
 
-void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed);
-/* Put up UI for an bed track with filters. */
+void bedFiltCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed);
+/* Put up UI for an "bedFilter" tracks. */
+
+void mrnaCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed);
+/* Put up UI for an mRNA (or EST) track. */
 
 boolean bedScoreHasCfgUi(struct trackDb *tdb);
 // Confirms that this track has a bedScore Cfg UI

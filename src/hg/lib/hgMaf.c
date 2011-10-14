@@ -420,11 +420,11 @@ for (i = 0; i < fieldCt; i += 3)
 return wigList;
 }
 
-char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig)
+char *wigMafWiggleVar(char *prefix, struct consWiggle *wig)
 /* Return name of cart variable for this cons wiggle */
 {
 char option[128];
-safef(option, sizeof option, "%s.cons.%s", tdb->track, wig->leftLabel);
+safef(option, sizeof option, "%s.cons.%s", prefix, wig->leftLabel);
 return (cloneString(option));
 }
 

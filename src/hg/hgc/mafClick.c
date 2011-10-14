@@ -666,18 +666,23 @@ else
             for (consWig = consWiggles; consWig != NULL;
                         consWig = consWig->next)
                 {
-                char *wigVar = wigMafWiggleVar(tdb, consWig);
-                if (cartVarExists(cart, wigVar))
+                char *wigVar = wigMafWiggleVar(tdb->track, consWig);
+                char *wigVarSuffix = wigVar + strlen (tdb->track) + 1;
+                if (cartVarExistsAnyLevel(cart, tdb, FALSE, wigVarSuffix))
                     {
                     wigSet = TRUE;
-                    if (cartBoolean(cart, wigVar))
+                    if (cartBooleanClosestToHome(cart, tdb, FALSE, wigVarSuffix))
                         wigOn = TRUE;
                     }
                 }
             /* If there are no cart vars, turn on the first (default) wig */
             if (!wigSet)
                 {
-                cartSetBoolean(cart, wigMafWiggleVar(tdb, consWiggles), TRUE);
+                char *prefix = tdb->track; // use when setting things to the cart
+                if (tdbIsContainerChild(tdb))
+                    prefix = tdbGetContainer(tdb)->track;
+
+                cartSetBoolean(cart, wigMafWiggleVar(prefix, consWiggles), TRUE);
                 wigOn = TRUE;
                 }
             if (wigOn)
@@ -691,8 +696,9 @@ else
                         printf("Conservation score statistics:");
                         first = FALSE;
                         }
-                    if (cartUsualBoolean(cart, wigMafWiggleVar(tdb, consWig),
-                                            FALSE))
+                    char *wigVar = wigMafWiggleVar(tdb->track, consWig);
+                    char *wigVarSuffix = wigVar + strlen (tdb->track) + 1;
+                    if (cartUsualBooleanClosestToHome(cart, tdb, FALSE, wigVarSuffix,FALSE))
                         {
                         printf("&nbsp;&nbsp;");
                         subChar(consWig->uiLabel, '_', ' ');
@@ -1214,9 +1220,10 @@ else
                         "Conservation score statistics", consWig->table);
             else
                 {
-                if (!cartCgiUsualBoolean(cart,
-                    wigMafWiggleVar(tdb, consWig), FALSE))
-                        continue;
+                char *wigVar = wigMafWiggleVar(tdb->track, consWig);
+                char *wigVarSuffix = wigVar + strlen (tdb->track) + 1;
+                if (!cartUsualBooleanClosestToHome(cart, tdb, FALSE, wigVarSuffix,FALSE))
+                    continue;
                 if (first)
                     {
                     printf("\n<P>Conservation score statistics:");

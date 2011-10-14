@@ -1682,35 +1682,6 @@ void ensemblNonCodingUI(struct trackDb *tdb)
 ensemblNonCodingTypeConfig(tdb);
 }
 
-void mrnaUi(struct trackDb *tdb, boolean isXeno)
-/* Put up UI for an mRNA (or EST) track. */
-{
-struct mrnaUiData *mud = newMrnaUiData(tdb->track, isXeno);
-struct mrnaFilter *fil;
-struct controlGrid *cg = NULL;
-char *filterTypeVar = mud->filterTypeVar;
-char *filterTypeVal = cartUsualString(cart, filterTypeVar, "red");
-char *logicTypeVar = mud->logicTypeVar;
-char *logicTypeVal = cartUsualString(cart, logicTypeVar, "and");
-
-/* Define type of filter. */
-filterButtons(filterTypeVar, filterTypeVal, FALSE);
-printf("  <B>Combination Logic:</B> ");
-radioButton(logicTypeVar, logicTypeVal, "and");
-radioButton(logicTypeVar, logicTypeVal, "or");
-printf("<BR>\n");
-
-/* List various fields you can filter on. */
-printf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
-cg = startControlGrid(4, NULL);
-for (fil = mud->filterList; fil != NULL; fil = fil->next)
-    oneMrnaFilterUi(cg, fil->label, fil->key, cart);
-endControlGrid(&cg);
-baseColorDrawOptDropDown(cart, tdb);
-indelShowOptions(cart, tdb);
-}
-
-
 void transRegCodeUi(struct trackDb *tdb)
 /* Put up UI for transcriptional regulatory code - not
  * much more than score UI. */
@@ -2423,6 +2394,7 @@ char *track = tdb->track;
 //    place, lets be cautious at this time.
 // NOTE: Developer, please try to use cfgTypeFromTdb()/cfgByCfgType().
 
+boolean boxed = trackDbSettingClosestToHomeOn(tdb, "boxedCfg");
 // UI precedence:
 // 1) supers to get them out of the way: they have no controls
 // 2) special cases based upon track name (developer please avoid)
@@ -2486,17 +2458,6 @@ else if (sameString(track, "ensGeneNonCoding"))
     ensemblNonCodingUI(tdb);
 else if (sameString(track, "vegaGeneComposite"))
     vegaGeneUI(tdb);
-else if (sameString(track, "all_mrna")
-     ||  sameString(track, "mrna")
-     ||  sameString(track, "all_est")
-     ||  sameString(track, "est")
-     ||  sameString(track, "tightMrna")
-     ||  sameString(track, "tightEst")
-     ||  sameString(track, "intronEst"))
-    mrnaUi(tdb, FALSE);
-else if (sameString(track, "xenoMrna")
-     ||  sameString(track, "xenoEst"))
-    mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
 else if (startsWith("blastDm", track))
@@ -2566,13 +2527,22 @@ else if (sameString(track, "switchDbTss"))
 else if (sameString(track, "dgv")
      || (startsWith("dgvV", track) && isdigit(track[4])))
     dgvUi(tdb);
+else if (sameString(track, "all_mrna")
+     ||  sameString(track, "mrna")
+     ||  sameString(track, "all_est")
+     ||  sameString(track, "est")
+     ||  sameString(track, "tightMrna")
+     ||  sameString(track, "tightEst")
+     ||  sameString(track, "intronEst")
+     ||  sameString(track, "xenoMrna")
+     ||  sameString(track, "xenoEst"))
+    mrnaCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.
     eCfgType cType = cfgTypeFromTdb(tdb,FALSE);
     if (cType != cfgNone)
         {
-        boolean boxed = trackDbSettingClosestToHomeOn(tdb, "boxedCfg");
         cfgByCfgType(cType,database, cart, tdb,tdb->track, NULL, boxed);
         }
     // NOTE: these cases that fall through the cracks should probably get folded into cfgByCfgType()

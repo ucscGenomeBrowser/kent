@@ -773,7 +773,6 @@ if (ctPopup > cfgNone)
 {
     if (regexMatch(tdb->track, "^snp[0-9]+")     // Special cases to be removed
     ||  regexMatch(tdb->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
-    ||  regexMatch(tdb->track, "^multiz")  // NOTE: wigMaf is using non-standard view level naming methods so isn't configurable by ajax yet
     ||  startsWith("hapmapSnps", tdb->track)
     ||  startsWith("hapmapAlleles", tdb->track)
     ||  SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configureByPopup")))
