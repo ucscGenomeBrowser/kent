@@ -3654,6 +3654,8 @@ if (!psOutput)
 
                 if (sameWord(database,"fr2"))
                     fr2ScaffoldEnsemblLink(archive, &links);
+		else if (hTableExists(database, UCSC_TO_ENSEMBL))
+		    printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
                 else if (hTableExists(database, ctgPos))
                     /* see if we are entirely within a single contig */
                     {
