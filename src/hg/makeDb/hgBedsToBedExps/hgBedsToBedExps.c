@@ -12,6 +12,7 @@
 static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.6 2010/05/06 18:02:38 kent Exp $";
 
 boolean dupeLetterOk = FALSE;
+boolean addId = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,12 +24,16 @@ errAbort(
   "where in.cfg is a tab separated file that describes the beds.  The columns are\n"
   "   <factor> <cell name> <cell letter> <db/file> <score col ix> <multiplier> <file/table>\n"
   "options:\n"
-  "   -dupeLetterOk - if true don't insist that all cell letters be unique\n"
+  "   -dupeLetterOk - if set don't insist that all cell letters be unique\n"
+  "   -addId - if set then append a numberical id to the name field\n"
   );
 }
 
+static int addedId = 0;
+
 static struct optionSpec options[] = {
    {"dupeLetterOk", OPTION_BOOLEAN},
+   {"addId", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -208,7 +213,10 @@ for (ref = list; ref != NULL; ref = ref->next)
 
     /* Output. */
     fprintf(f, "%s\t%d\t%d\t", chrom, range->start, range->end);
-    fprintf(f, "%s\t", factor->factor);
+    if (addId)
+	fprintf(f, "%s%d\t", factor->factor, ++addedId);
+    else
+	fprintf(f, "%s\t", factor->factor);
     fprintf(f, "%d\t", round(maxLevel));	/* score */
     fprintf(f, ".\t");  /* strand.... */
     fprintf(f, "%d\t%d\t", range->start, range->end);
@@ -272,6 +280,7 @@ slReverse(&chromList);
 
 struct hashEl *chromElList, *chromEl;
 chromElList = hashElListHash(chromHash);
+slSort(&chromElList, hashElCmpWithEmbeddedNumbers);
 for (chromEl = chromElList; chromEl != NULL; chromEl = chromEl->next)
     {
     chromTree = chromEl->val;
@@ -335,6 +344,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 dupeLetterOk = optionExists("dupeLetterOk");
+addId = optionExists("addId");
 hgBedsToBedExps(argv[1], argv[2], argv[3]);
 return 0;
 }

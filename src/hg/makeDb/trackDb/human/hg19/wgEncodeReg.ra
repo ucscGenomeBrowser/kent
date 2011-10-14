@@ -25,53 +25,62 @@ canPack On
     priority 1.1
     dragAndDrop subTracks
 
+
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel Gm12878
 	longLabel Transcription of Gm12878 cells from ENCODE
 	parent wgEncodeRegTxn
-        type bigWig 0 65534
+        type bigWig 0 65535
+	priority 1
 	color 255,128,128
+
 
 	track wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled
 	shortLabel H1-hESC
 	longLabel Transcription of H1-hESC cells from ENCODE
 	parent wgEncodeRegTxn
-        type bigWig 0 65177
+        type bigWig 0 65535
+	priority 2
 	color 255,212,128
 
 	track wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
 	shortLabel HSMM
 	longLabel Transcription of HSMM cells from ENCODE
 	parent wgEncodeRegTxn
-        type bigWig 0 65503
-	color 120,235,204
+        type bigWig 0 65535
+	priority 5
+	color 128,255,242
 
 	track wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
 	shortLabel HUVEC
 	longLabel Transcription of HUVEC cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65535
-	color 128,212,255
+	priority 6
+	color 128,199,255
 
 	track wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled
 	shortLabel K562
 	longLabel Transcription of K562 cells from ENCODE
 	parent wgEncodeRegTxn
-        type bigWig 0 65528
-	color 128,128,255
+        type bigWig 0 65535
+	priority 7
+	color 149,128,255
 
 	track wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled
 	shortLabel NHEK
 	longLabel Transcription of NHEK cells from ENCODE
 	parent wgEncodeRegTxn
-	type bigWig 0 65534
-	color 212,128,255
+	type bigWig 0 65535
+	priority 8
+	color 227,128,255
 
 	track wgEncodeRegTxnCaltechRnaSeqNhlfR2x75Il200SigPooled
 	shortLabel NHLF
 	longLabel Transcription of NHLF cells from ENCODE
 	parent wgEncodeRegTxn
-	type bigWig 0 65534
+	type bigWig 0 65535
+	priority 9
 	color 255,128,212
 
     track wgEncodeRegMarkH3k4me1

@@ -457,6 +457,15 @@ const struct hashEl *b = *((struct hashEl **)vb);
 return strcmp(a->name, b->name);
 }
 
+int hashElCmpWithEmbeddedNumbers(const void *va, const void *vb)
+/* Compare two hashEl by name sorting including numbers within name,
+ * suitable for chromosomes, genes, etc. */
+{
+const struct hashEl *a = *((struct hashEl **)va);
+const struct hashEl *b = *((struct hashEl **)vb);
+return cmpStringsWithEmbeddedNumbers(a->name, b->name);
+}
+
 void *hashElFindVal(struct hashEl *list, char *name)
 /* Look up name in hashEl list and return val or NULL if not found. */
 {

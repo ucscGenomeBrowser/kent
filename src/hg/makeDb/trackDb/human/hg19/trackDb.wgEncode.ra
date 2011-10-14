@@ -13,7 +13,10 @@ include wgEncodeUncBsuProt.ra
 include wgEncodeUncBsuProtFasp.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra
+include wgEncodeReg.ra beta,public
+include wgEncodeReg.new.ra alpha
+
+
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
@@ -53,8 +56,7 @@ include wgEncodeUwAffyExonArray.ra beta,public
 include wgEncodeUwAffyExonArray.new.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
-include wgEncodeDukeAffyExon.ra beta,public
-include wgEncodeDukeAffyExon.new.ra alpha
+include wgEncodeDukeAffyExon.ra 
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
@@ -146,8 +148,7 @@ include wgEncodeUwHistone.new.ra alpha
 include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra beta,public
-include wgEncodeSydhHistone.new.ra alpha
+include wgEncodeSydhHistone.ra 
 
 # ENCODE TFBS -------------------------------------------
 
@@ -163,8 +164,8 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.ra beta,public
 include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.new.ra alpha
-include wgEncodeSydhTfbs.ra beta,public
+include wgEncodeSydhTfbs.ra alpha
+#include wgEncodeSydhTfbs.new.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra 
