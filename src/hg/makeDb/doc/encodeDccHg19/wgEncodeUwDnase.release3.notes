@@ -13,11 +13,11 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release3 (new+untouched):
-    Tables: 486
-    Files: 983
-    Gbdbs: 162
+    Tables: 492
+    Files: 987
+    Gbdbs: 164
 
-A) Untouched Tables (450):
+A) Untouched Tables (453):
 wgEncodeUwDnaseA549HotspotsRep1
 wgEncodeUwDnaseA549HotspotsRep2
 wgEncodeUwDnaseA549PkRep1
@@ -372,6 +372,9 @@ wgEncodeUwDnaseMcf7PkRep1
 wgEncodeUwDnaseMcf7PkRep2
 wgEncodeUwDnaseMcf7RawRep1
 wgEncodeUwDnaseMcf7RawRep2
+wgEncodeUwDnaseMonocd14HotspotsRep1
+wgEncodeUwDnaseMonocd14PkRep1
+wgEncodeUwDnaseMonocd14RawRep1
 wgEncodeUwDnaseNb4HotspotsRep1
 wgEncodeUwDnaseNb4HotspotsRep2
 wgEncodeUwDnaseNb4PkRep1
@@ -469,7 +472,7 @@ wgEncodeUwDnaseWi38PkRep2
 wgEncodeUwDnaseWi38RawRep1
 wgEncodeUwDnaseWi38RawRep2
 
-A') Untouched Files (902 downloadables, 150 gbdbs):
+A') Untouched Files (906 downloadables, 151 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release3/
     on RR:
@@ -583,8 +586,6 @@ wgEncodeUwDnaseBjRawDataRep1.fastq.gz
 wgEncodeUwDnaseBjRawDataRep2.fastq.gz
 wgEncodeUwDnaseBjRawRep1.bigWig
 wgEncodeUwDnaseBjRawRep2.bigWig
-wgEncodeUwDnaseBjtertRawDataRep1.fastq.gz
-wgEncodeUwDnaseBjtertRawDataRep2.fastq.gz
 wgEncodeUwDnaseCaco2AlnRep1.bam
 wgEncodeUwDnaseCaco2AlnRep1.bam.bai
 wgEncodeUwDnaseCaco2AlnRep2.bam
@@ -1185,6 +1186,12 @@ wgEncodeUwDnaseMcf7RawDataRep1.fastq.gz
 wgEncodeUwDnaseMcf7RawDataRep2.fastq.gz
 wgEncodeUwDnaseMcf7RawRep1.bigWig
 wgEncodeUwDnaseMcf7RawRep2.bigWig
+wgEncodeUwDnaseMonocd14AlnRep1.bam
+wgEncodeUwDnaseMonocd14AlnRep1.bam.bai
+wgEncodeUwDnaseMonocd14HotspotsRep1.broadPeak.gz
+wgEncodeUwDnaseMonocd14PkRep1.narrowPeak.gz
+wgEncodeUwDnaseMonocd14RawDataRep1.fastq.gz
+wgEncodeUwDnaseMonocd14RawRep1.bigWig
 wgEncodeUwDnaseNb4AlnRep1.bam
 wgEncodeUwDnaseNb4AlnRep1.bam.bai
 wgEncodeUwDnaseNb4AlnRep2.bam
@@ -1496,6 +1503,7 @@ wgEncodeUwDnaseWi38RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseLncapRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseMcf7RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseMcf7RawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseMonocd14RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseNb4RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseNb4RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseNhaRawRep1.bigWig
@@ -1531,7 +1539,7 @@ wgEncodeUwDnaseWi38RawRep2.bigWig
 
 B) Deprecated tables (0):
 
-B') Deprecated files (5 downloadables, 0 gbdbs):
+B') Deprecated files (2 downloadables, 0 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
     This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
     current location on alpha:
@@ -1539,14 +1547,11 @@ B') Deprecated files (5 downloadables, 0 gbdbs):
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
 
-wgEncodeUwDnaseMonocd14AlnRep1.bam
-wgEncodeUwDnaseMonocd14HotspotsRep1.broadPeak.gz
-wgEncodeUwDnaseMonocd14PkRep1.narrowPeak.gz
-wgEncodeUwDnaseMonocd14RawDataRep1.fastq.gz
-wgEncodeUwDnaseMonocd14RawRep1.bigWig
+wgEncodeUwDnaseBjtertRawDataRep1.fastq.gz
+wgEncodeUwDnaseBjtertRawDataRep2.fastq.gz
 
 
-C) New tables (36):
+C) New tables (39):
 wgEncodeUwDnaseCd20ro01778HotspotsRep2
 wgEncodeUwDnaseCd20ro01778PkRep2
 wgEncodeUwDnaseCd20ro01778RawRep2
@@ -1565,10 +1570,13 @@ wgEncodeUwDnaseHpaecRawRep1
 wgEncodeUwDnaseHsmmtHotspotsRep2
 wgEncodeUwDnaseHsmmtPkRep2
 wgEncodeUwDnaseHsmmtRawRep2
+wgEncodeUwDnaseMonocd14ro1746HotspotsRep1
 wgEncodeUwDnaseMonocd14ro1746HotspotsRep1V2
 wgEncodeUwDnaseMonocd14ro1746HotspotsRep2
+wgEncodeUwDnaseMonocd14ro1746PkRep1
 wgEncodeUwDnaseMonocd14ro1746PkRep1V2
 wgEncodeUwDnaseMonocd14ro1746PkRep2
+wgEncodeUwDnaseMonocd14ro1746RawRep1
 wgEncodeUwDnaseMonocd14ro1746RawRep1V2
 wgEncodeUwDnaseMonocd14ro1746RawRep2
 wgEncodeUwDnaseNt2d1HotspotsRep1
@@ -1584,7 +1592,7 @@ wgEncodeUwDnasePrecPkRep2
 wgEncodeUwDnasePrecRawRep1
 wgEncodeUwDnasePrecRawRep2
 
-C') New files (78 downloadables, 12 gbdbs):
+C') New files (78 downloadables, 13 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release3/
     NOT on RR but must be placed in:
@@ -1675,6 +1683,7 @@ wgEncodeUwDnasePrecRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseHmvecdadRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseHpaecRawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseHsmmtRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDnaseMonocd14ro1746RawRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseMonocd14ro1746RawRep1V2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseMonocd14ro1746RawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeUwDnaseNt2d1RawRep1.bigWig
