@@ -17,7 +17,7 @@ track wgEncodeSydhTfbs
 compositeTrack on
 superTrack wgEncodeTfBindingSuper dense
 shortLabel  SYDH TFBS
-longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Stanford/Yale/USC/Harvard
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale/USC/Harvard
 group regulation
 priority 0
 type bed 3
