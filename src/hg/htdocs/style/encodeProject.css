@@ -113,7 +113,7 @@ dd {
 /* colored bullets on cell types based on karyotype CV field */
 
 .cancer {
-    color: red;
+    color: brown;
     font-size: large;
     text-align: right;
     float: right;

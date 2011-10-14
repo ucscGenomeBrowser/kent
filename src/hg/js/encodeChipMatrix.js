@@ -1,18 +1,15 @@
 // encodeChipMatrix.js - pull experiment table and metadata from server 
 //      and display ChIP antibodies vs. cell types in a matrix
-// Formatted: jsbeautify.py -j -k
+// Formatted: jsbeautify.py -j
 // Syntax checked: jslint indent:4, plusplus: true, continue: true, unparam: true, sloppy: true, browser: true */
 /*global $, encodeProject */
 
 $(function () {
-    var dataType;
-    var requests =
-    // Requests to server API
-    [
-        encodeProject.serverRequests.experiment,
+    var dataType, server, requests = [
+        // Requests to server API
+            encodeProject.serverRequests.experiment,
         encodeProject.serverRequests.cellType,
-        encodeProject.serverRequests.antibody
-        ];
+        encodeProject.serverRequests.antibody];
 
     function tableOut(matrix, cellTiers, cellTypeHash, antibodyGroups, antibodyHash, targetHash) {
         // Create table where rows = cell types and columns are datatypes
@@ -105,9 +102,9 @@ $(function () {
             organism, assembly, header;
 
         // variables passed in hidden fields
-        organism = $("#var_organism").val();
-        assembly = $("#var_assembly").val();
-        header = $("#var_pageHeader").val();
+        organism = encodeChipMatrix_organism;
+        assembly = encodeChipMatrix_assembly;
+        header = encodeChipMatrix_pageHeader;
 
         $("#pageHeader").text(header);
         $("title").text('ENCODE ' + header);
@@ -168,11 +165,16 @@ $(function () {
         tableOut(matrix, cellTiers, cellTypeHash, antibodyGroups, antibodyHash, targetHash);
     }
 
+    // get server from calling web page (intended for genome-preview)
+    if ('encodeDataMatrix_server' in window) {
+        server = encodeDataMatrix_server;
+    } else {
+        server = document.location.hostname;
+    }
+
     // initialize
     encodeProject.setup({
-        // todo: add hidden page variable for server
-        server: "hgwdev.cse.ucsc.edu"
-        //server: "genome-preview.ucsc.edu"
+        server: server
     });
     encodeProject.loadAllFromServer(requests, handleServerData);
 });

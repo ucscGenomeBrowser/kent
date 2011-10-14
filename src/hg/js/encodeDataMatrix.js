@@ -1,25 +1,26 @@
-// encodeDataMatrix.js - pull experiment table and metadata from server 
-//      and display in data matrix
-// Formatted: jsbeautify.py -j
-// Syntax checked: jslint indent:4, plusplus: true, continue: true, unparam: true, sloppy: true, browser: true */
+/* encodeDataMatrix.js - pull experiment table and metadata from server 
+      and display in data matrix
+
+ Formatted: jsbeautify.py -j
+ Syntax checked: jslint indent:4, plusplus: true, continue: true, unparam: true, sloppy: true, browser: true
+*/
 /*global $, encodeProject */
 
 $(function () {
     var requests = [
         // Requests to server API
-        encodeProject.serverRequests.experiment, 
-        encodeProject.serverRequests.dataType, 
+            encodeProject.serverRequests.experiment,
+        encodeProject.serverRequests.dataType,
         encodeProject.serverRequests.cellType
-        ], dataType, organism, assembly;
+        ],
+        dataType, organism, assembly, server;
 
     function tableOut(matrix, cellTiers, cellTypeHash, dataGroups, dataTypeTermHash, dataTypeLabelHash) {
         // Create table where rows = cell types and columns are datatypes
         // create table and first row 2 rows (column title and column headers)
         var table, tableHeader, row, td;
 
-        table = $('<table>' + '<tr><td><td class="axisType" colspan=4>Element Types</td></tr>' +
-                '<tr id="columnHeaders"><td class="axisType" title="Click to view information about all cell types"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=' + 
-                organism + '">Cell Types</td></tr>');
+        table = $('<table>' + '<tr><td><td class="axisType" colspan=4>Element Types</td></tr>' + '<tr id="columnHeaders"><td class="axisType" title="Click to view information about all cell types"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=' + organism + '">Cell Types</td></tr>');
         tableHeader = $('#columnHeaders', table);
         $.each(dataGroups, function (i, group) {
             tableHeader.append('<th class="groupType"><div class="verticalText">' + group.label + '</div></th>');
@@ -28,9 +29,7 @@ $(function () {
 
                 // prune out datatypes with no experiments
                 if (dataTypeLabelHash[dataTypeLabel].count !== undefined) {
-                    tableHeader.append('<th class="elementType" title="' + 
-                       dataTypeLabelHash[dataTypeLabel].description +
-                       '"><div class="verticalText">' + dataTypeLabel + '</div></th>');
+                    tableHeader.append('<th class="elementType" title="' + dataTypeLabelHash[dataTypeLabel].description + '"><div class="verticalText">' + dataTypeLabel + '</div></th>');
                 }
             });
         });
@@ -50,12 +49,7 @@ $(function () {
                 if (!matrix[cellType]) {
                     return true;
                 }
-                row = $('<tr><th class="elementType" title="' +
-                        cellTypeHash[cellType].description + 
-                        '"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' +
-                        cellType + '">' + cellType + '</a><span title="karyotype: ' +
-                        cellTypeHash[cellType].karyotype + '" class="' +
-                        cellTypeHash[cellType].karyotype + '">&bull;</span></th>');
+                row = $('<tr><th class="elementType" title="' + cellTypeHash[cellType].description + '"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&term=' + cellType + '">' + cellType + '</a><span title="karyotype: ' + cellTypeHash[cellType].karyotype + '" class="' + cellTypeHash[cellType].karyotype + '">&bull;</span></th>');
 
                 $.each(dataGroups, function (i, group) {
                     // skip group header
@@ -64,7 +58,6 @@ $(function () {
                         // TODO: change this class to matrixElementType
                         //$(".cellType").click(matrixClickHandler);
                         //"searchWindow");
-
                         dataType = dataTypeLabelHash[dataTypeLabel].term;
                         // prune out datatypes with no experiments
                         if (dataTypeLabelHash[dataTypeLabel].count === undefined) {
@@ -111,10 +104,10 @@ $(function () {
             dataGroups = {},
             cellTiers, header;
 
-        // variables passed in hidden fields
-        organism = $("#var_organism").val();
-        assembly = $("#var_assembly").val();
-        header = $("#var_pageHeader").val();
+        // page-specific variables from calling page
+        organism = encodeDataMatrix_organism;
+        assembly = encodeDataMatrix_assembly;
+        header = encodeDataMatrix_pageHeader;
 
         $("#pageHeader").text(header);
         $("title").text('ENCODE ' + header);
@@ -166,11 +159,17 @@ $(function () {
         tableOut(matrix, cellTiers, cellTypeHash, dataGroups, dataTypeTermHash, dataTypeLabelHash);
     }
 
-    // initialize
+    // initialize encodeProject
+    // get server from calling web page (intended for genome-preview)
+    if ('encodeDataMatrix_server' in window) {
+        server = encodeDataMatrix_server;
+    } else {
+        server = document.location.hostname;
+        // or document.domain ?
+    }
+
     encodeProject.setup({
-        // todo: add hidden page variable for server
-        server: "hgwdev.cse.ucsc.edu"
-        //server: "genome-preview.ucsc.edu"
+        server: server
     });
     encodeProject.loadAllFromServer(requests, handleServerData);
 });
