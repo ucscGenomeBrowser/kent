@@ -13,7 +13,10 @@ include wgEncodeUncBsuProt.ra
 include wgEncodeUncBsuProtFasp.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra
+include wgEncodeReg.ra beta,public
+include wgEncodeReg.new.ra alpha
+
+
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
