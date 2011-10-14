@@ -72,7 +72,7 @@ $(function () {
                 }
             });
         }
-        $(table).append("<tr><th>Total: " + types.length + "<\/th><th>" + total + "<\/th><\/tr>");
+        $(table).append("<tr><td class='totals'>Total: " + types.length + "<\/td><td class='totals'>" + total + "<\/td><\/tr>");
         if (total === 0) {
             $(table).remove();
         }
