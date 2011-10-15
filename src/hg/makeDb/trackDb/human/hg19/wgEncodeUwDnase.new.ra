@@ -2163,7 +2163,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfadPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDF-Ad Pk 1
-        longLabel NHDF-Ad DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel NHDF-Ad DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHDF-Ad rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2172,7 +2172,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfadPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDF-Ad Pk 2
-        longLabel NHDF-Ad DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel NHDF-Ad DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHDF-Ad rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2181,7 +2181,7 @@ wgEncode 1
         track wgEncodeUwDnaseHvmfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HVMF Pk 1
-        longLabel HVMF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HVMF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HVMF rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2190,7 +2190,7 @@ wgEncode 1
         track wgEncodeUwDnaseHvmfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HVMF Pk 2
-        longLabel HVMF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HVMF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HVMF rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2199,7 +2199,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpdlfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPdLF Pk 1
-        longLabel HPdLF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HPdLF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPdLF rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2208,7 +2208,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpdlfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPdLF Pk 2
-        longLabel HPdLF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HPdLF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HPdLF rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2217,7 +2217,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPF Pk 1
-        longLabel HPF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HPF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPF rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2226,7 +2226,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPF Pk 2
-        longLabel HPF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HPF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HPF rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2235,7 +2235,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpafPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAF Pk 2
-        longLabel HPAF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HPAF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HPAF rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2244,7 +2244,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpafPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAF Pk 1
-        longLabel HPAF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HPAF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPAF rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2253,7 +2253,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdneoPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dNeo Pk 1
-        longLabel HMVEC-dNeo DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-dNeo DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdNeo rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2262,7 +2262,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dNeo Pk 2
-        longLabel HMVEC-dNeo DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-dNeo DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdNeo rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2271,7 +2271,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyneoPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dLN Pk 1
-        longLabel HMVEC-dLy-Neo DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-dLy-Neo DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdLyNeo rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2280,7 +2280,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dLN Pk 2
-        longLabel HMVEC-dLy-Neo DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-dLy-Neo DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdLyNeo rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2289,7 +2289,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyadPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dLA Pk 1
-        longLabel HMVEC-dLy-Ad DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-dLy-Ad DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdLyAd rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2298,7 +2298,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyadPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dLA Pk 2
-        longLabel HMVEC-dLy-Ad DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-dLy-Ad DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdLyAd rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2307,7 +2307,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdblneoPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dBN Pk 1
-        longLabel HMVEC-dBl-Neo DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-dBl-Neo DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdBlNeo rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2316,7 +2316,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdblneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dBN Pk 2
-        longLabel HMVEC-dBl-Neo DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-dBl-Neo DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdBlNeo rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2325,7 +2325,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdbladPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dBA Pk 1
-        longLabel HMVEC-dBl-Ad DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-dBl-Ad DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdBlAd rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2334,7 +2334,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdbladPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dBA Pk 2
-        longLabel HMVEC-dBl-Ad DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-dBl-Ad DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdBlAd rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2343,7 +2343,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecllyPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-LLy Pk 2
-        longLabel HMVEC-LLy DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-LLy DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLLy rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2352,7 +2352,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecllyPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-LLy Pk 1
-        longLabel HMVEC-LLy DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-LLy DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLLy rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2361,7 +2361,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmveclblPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-LBl Pk 2
-        longLabel HMVEC-LBl DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-LBl DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLbl rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2370,7 +2370,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMF Pk 2
-        longLabel HMF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMF rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2379,7 +2379,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMF Pk 1
-        longLabel HMF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMF rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2388,7 +2388,7 @@ wgEncode 1
         track wgEncodeUwDnaseHconfPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HConF Pk 1
-        longLabel HConF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HConF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCONF rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2397,7 +2397,7 @@ wgEncode 1
         track wgEncodeUwDnaseHconfPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HConF Pk 2
-        longLabel HConF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HConF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCONF rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2406,7 +2406,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfaaPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCFaa Pk 2
-        longLabel HCFaa DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HCFaa DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCFaa rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2415,7 +2415,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfaaPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCFaa Pk 1
-        longLabel HCFaa DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HCFaa DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCFaa rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2424,7 +2424,7 @@ wgEncode 1
         track wgEncodeUwDnaseAoafPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AoAF Pk 1
-        longLabel AoAF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel AoAF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AOAF rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2433,7 +2433,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMEC Pk 2
-        longLabel HMEC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMEC rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2442,7 +2442,7 @@ wgEncode 1
         track wgEncodeUwDnaseHct116PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCT-116 Pk 1
-        longLabel HCT-116 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HCT-116 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HCT116 rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2451,7 +2451,7 @@ wgEncode 1
         track wgEncodeUwDnaseHct116PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCT-116 Pk 2
-        longLabel HCT-116 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HCT-116 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HCT116 rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2460,7 +2460,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmveclblPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-LBl Pk 1
-        longLabel HMVEC-LBl DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-LBl DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECLbl rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2469,7 +2469,7 @@ wgEncode 1
         track wgEncodeUwDnaseAoafPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AoAF Pk 2
-        longLabel AoAF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel AoAF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=AOAF rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2478,7 +2478,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7-hESC Pk 2
-        longLabel H7-hESC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel H7-hESC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=H7es rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2487,7 +2487,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhaPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NH-A Pk 2
-        longLabel NH-A DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel NH-A DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHA rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2496,7 +2496,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbmecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBMEC Pk 2
-        longLabel HBMEC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HBMEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HBMEC rep=2 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2505,7 +2505,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhaPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NH-A Pk 1
-        longLabel NH-A DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel NH-A DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NHA rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2514,7 +2514,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbmecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBMEC Pk 1
-        longLabel HBMEC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HBMEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HBMEC rep=1 treatment=None
         type narrowPeak
         origAssembly hg19
@@ -2523,7 +2523,7 @@ wgEncode 1
         track wgEncodeUwDnaseA549PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel A549 Pk 1
-        longLabel A549 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel A549 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=A549 treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2532,7 +2532,7 @@ wgEncode 1
         track wgEncodeUwDnaseA549PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel A549 Pk 2
-        longLabel A549 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel A549 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=A549 treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2541,7 +2541,7 @@ wgEncode 1
         track wgEncodeUwDnaseBe2cPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BE2 C Pk 1
-        longLabel BE2C DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel BE2C DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=BE2C treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2550,7 +2550,7 @@ wgEncode 1
         track wgEncodeUwDnaseBe2cPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BE2 C Pk 2
-        longLabel BE2C DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel BE2C DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=BE2C treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2559,7 +2559,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12864PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM12864 Pk 1
-        longLabel GM12864 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel GM12864 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=GM12864 treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2568,7 +2568,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaspPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HA-sp Pk 1
-        longLabel HA-sp DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HA-sp DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HA-sp treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2577,7 +2577,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaspPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HA-sp Pk 2
-        longLabel HA-sp DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HA-sp DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HA-sp treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2586,7 +2586,7 @@ wgEncode 1
         track wgEncodeUwDnaseHipePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HIPEpiC Pk 1
-        longLabel HIPEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HIPEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HIPE treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2595,7 +2595,7 @@ wgEncode 1
         track wgEncodeUwDnaseHipePkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HIPEpiC Pk 2
-        longLabel HIPEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HIPEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HIPE treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2604,7 +2604,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMM Pk 1
-        longLabel HSMM DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HSMM DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HSMM treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2613,7 +2613,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMM Pk 2
-        longLabel HSMM DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HSMM DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HSMM treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2622,7 +2622,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmtPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMMtube Pk 1
-        longLabel HSMMtube DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HSMMtube DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HSMMt treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2631,7 +2631,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HUVEC Pk 2
-        longLabel HUVEC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HUVEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=2HUVEC treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2641,7 +2641,7 @@ wgEncode 1
         track wgEncodeUwDnaseJurkatPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Jurkat Pk 2
-        longLabel Jurkat DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel Jurkat DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=Jurkat treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2650,7 +2650,7 @@ wgEncode 1
         track wgEncodeUwDnaseJurkatPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Jurkat Pk 1
-        longLabel Jurkat DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel Jurkat DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=Jurkat treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2659,7 +2659,7 @@ wgEncode 1
         track wgEncodeUwDnaseLncapPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LNCaP Pk 2
-        longLabel LNCaP DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel LNCaP DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=LNCaP treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2669,7 +2669,7 @@ wgEncode 1
         track wgEncodeUwDnaseLncapPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel LNCaP Pk 1
-        longLabel LNCaP DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel LNCaP DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=LNCaP treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2679,7 +2679,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhekPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHEK Pk 2
-        longLabel NHEK DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel NHEK DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NHEK treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2689,7 +2689,7 @@ wgEncode 1
         track wgEncodeUwDnaseRptecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel RPTEC Pk 1
-        longLabel RPTEC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel RPTEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=RPTEC treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2698,7 +2698,7 @@ wgEncode 1
         track wgEncodeUwDnaseRptecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel RPTEC Pk 2
-        longLabel RPTEC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel RPTEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=RPTEC treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2707,7 +2707,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknmcPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SK-N-MC Pk 1
-        longLabel SK-N-MC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel SK-N-MC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=SKNMC treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2716,7 +2716,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknmcPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SK-N-MC Pk 2
-        longLabel SK-N-MC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel SK-N-MC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=SKNMC treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2725,7 +2725,7 @@ wgEncode 1
         track wgEncodeUwDnaseWerirb1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WERI-Rb-1 Pk 2
-        longLabel WERI-Rb-1 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel WERI-Rb-1 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WERIRb1 treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2734,7 +2734,7 @@ wgEncode 1
         track wgEncodeUwDnaseWerirb1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WERI-Rb-1 Pk 1
-        longLabel WERI-Rb-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel WERI-Rb-1 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WERIRb1 treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2743,7 +2743,7 @@ wgEncode 1
         track wgEncodeUwDnaseHacPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAc Pk 1
-        longLabel HAc DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HAc DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HAc treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2752,7 +2752,7 @@ wgEncode 1
         track wgEncodeUwDnaseHacPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAc Pk 2
-        longLabel HAc DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HAc DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HAc treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2761,7 +2761,7 @@ wgEncode 1
         track wgEncodeUwDnaseHahPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HA-h Pk 1
-        longLabel HA-h DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HA-h DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HAh treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2770,7 +2770,7 @@ wgEncode 1
         track wgEncodeUwDnaseHahPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HA-h Pk 2
-        longLabel HA-h DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HA-h DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HAh treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2779,7 +2779,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFF Pk 1
-        longLabel HFF DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HFF DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HFF treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2788,7 +2788,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFF Pk 2
-        longLabel HFF DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HFF DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HFF treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2797,7 +2797,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffmycPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFF-Myc Pk 2
-        longLabel HFF-Myc DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HFF-Myc DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HFFMyc treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2806,7 +2806,7 @@ wgEncode 1
         track wgEncodeUwDnaseHffmycPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HFF-Myc Pk 1
-        longLabel HFF-Myc DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HFF-Myc DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HFFMyc treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2815,7 +2815,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrgecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRGEC Pk 1
-        longLabel HRGEC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HRGEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HRGEC treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2824,7 +2824,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrgecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRGEC Pk 2
-        longLabel HRGEC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HRGEC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HRGEC treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2833,7 +2833,7 @@ wgEncode 1
         #track wgEncodeUwDnaseMonocd14PkRep1
         #parent wgEncodeUwDnaseViewaPeaks off
         #shortLabel Mono-CD14+ Pk 1
-        #longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 1 from ENCODE/UW
+        #longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         #subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
         #type narrowPeak
         #origAssembly hg19
@@ -2842,7 +2842,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 Pk 1
-        longLabel WI-38 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel WI-38 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2851,7 +2851,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 Pk 2
-        longLabel WI-38 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel WI-38 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WI38 treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2860,7 +2860,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 OHTM Pk 1
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WI38O treatment=OHTAM rep=1
         type narrowPeak
         origAssembly hg19
@@ -2869,7 +2869,7 @@ wgEncode 1
         track wgEncodeUwDnaseWi38OhtamPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel WI-38 OHTM Pk 2
-        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel WI-38 4-hydroxytamoxifen DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WI38O treatment=OHTAM rep=2
         type narrowPeak
         origAssembly hg19
@@ -2878,7 +2878,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319PkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09319 Pk 1
-        longLabel AG09319 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel AG09319 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=AG09319 treatment=None rep=1
         type narrowPeak
         origAssembly hg18
@@ -2887,7 +2887,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esPkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7-hESC Pk 1
-        longLabel H7-hESC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel H7-hESC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=H7es treatment=None rep=1
         type narrowPeak
         origAssembly hg18
@@ -2896,7 +2896,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpcePkRep2V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HNPCEpiC Pk 2
-        longLabel HNPCEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HNPCEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HNPCE treatment=None rep=2
         type narrowPeak
         origAssembly hg18
@@ -2905,7 +2905,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrePkRep2V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRE Pk 2
-        longLabel HRE DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HRE DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HRE treatment=None rep=2
         type narrowPeak
         origAssembly hg18
@@ -2914,7 +2914,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrePkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRE Pk 1
-        longLabel HRE DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HRE DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HRE treatment=None rep=1
         type narrowPeak
         origAssembly hg18
@@ -2923,7 +2923,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpePkRep2V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRPEpiC Pk 2
-        longLabel HRPEpiC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HRPEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HRPE treatment=None rep=2
         type narrowPeak
         origAssembly hg18
@@ -2932,7 +2932,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpePkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRPEpiC Pk 1
-        longLabel HRPEpiC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HRPEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HRPE treatment=None rep=1
         type narrowPeak
         origAssembly hg18
@@ -2941,7 +2941,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecPkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HUVEC Pk 1
-        longLabel HUVEC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HUVEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=2HUVEC treatment=None rep=1
         type narrowPeak
         origAssembly hg18
@@ -2951,7 +2951,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdadPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dAd Pk 2
-        longLabel HMVEC-dAd DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HMVEC-dAd DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDAD treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2960,7 +2960,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdadPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVEC-dAd Pk 1
-        longLabel HMVEC-dAd DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HMVEC-dAd DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HMVECDAD treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2969,7 +2969,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpaecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAEC Pk 1
-        longLabel HPAEC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel HPAEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=HPAEC treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2978,7 +2978,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd34mobilizedPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD34+ Mob Pk 1
-        longLabel CD34+ Mobilized DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel CD34+ Mobilized DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=CD34+MOBILIZED treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -2987,7 +2987,7 @@ wgEncode 1
         track wgEncodeUwDnaseCd20ro01778PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD20+ Pk 2
-        longLabel CD20+ DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel CD20+ DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=CD20+ treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -2998,7 +2998,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746PkRep1V2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Mono-CD14+ Pk 1
-        longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -3008,7 +3008,7 @@ wgEncode 1
         track wgEncodeUwDnaseMonocd14ro1746PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Mono-CD14+ Pk 2
-        longLabel Monocytes-CD14+ DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=MONOCD14 treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -3018,7 +3018,7 @@ wgEncode 1
         track wgEncodeUwDnaseNt2d1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NT2-D1 Pk 1
-        longLabel NT2-D1 DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel NT2-D1 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=NT2D1 treatment=None rep=1
         type narrowPeak
         origAssembly hg19
@@ -3027,7 +3027,7 @@ wgEncode 1
         track wgEncodeUwDnasePrecPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PReC Pk 2
-        longLabel PReC DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel PReC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=PREC treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -3036,7 +3036,7 @@ wgEncode 1
         track wgEncodeUwDnaseHsmmtPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HSMMtube Pk 2
-        longLabel HSMMtube DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel HSMMtube DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=HSMMt treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -3045,7 +3045,7 @@ wgEncode 1
         track wgEncodeUwDnaseNt2d1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NT2-D1 Pk 2
-        longLabel NT2-D1 DNaseI HS Peaks Rep 2 from ENCODE/UW
+        longLabel NT2-D1 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=NT2D1 treatment=None rep=2
         type narrowPeak
         origAssembly hg19
@@ -3054,7 +3054,7 @@ wgEncode 1
         track wgEncodeUwDnasePrecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PReC Pk 1
-        longLabel PReC DNaseI HS Peaks Rep 1 from ENCODE/UW
+        longLabel PReC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=PREC treatment=None rep=1
         type narrowPeak
         origAssembly hg19
