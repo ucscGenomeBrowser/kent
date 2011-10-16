@@ -1,12 +1,13 @@
 <!-- Display image in righthand corner -->
+<!--
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
   <TR><TD ALIGN=RIGHT>
     <A HREF="*** link to sequencing center's project page"
     TARGET=_blank>
-    <IMG SRC="/images/Caenorhabditis_brenneri.jpg" WIDTH=*** HEIGHT=*** ALT="C. brenneri"></A>
+    <IMG SRC="/images/Caenorhabditis_PB2801.jpg" WIDTH=*** HEIGHT=*** ALT="C. PB2801"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
-    <FONT SIZE=-1><em>Caenorhabditis brenneri</em><BR> 
+    <FONT SIZE=-1><em>Caenorhabditis PB2801</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
       Photo courtesy of ***
@@ -15,10 +16,17 @@
     </FONT>
   </TD></TR>
 </TABLE>
+-->
 
 <P>
-The Nov. 2010 <em>Caenorhabditis brenneri</em> draft assembly 
-(Washington University School of Medicine GSC Caenorhabditis brenneri(PB2801) 6.0.1b) was produced by the *** sequencing center.
+The Feb. 2008 <em>Caenorhabditis brenneri</em> (PB2801) draft assembly 
+was produced by the 
+<A HREF="http://genome.wustl.edu/genomes/view/caenorhabditis_brenneri/"
+TARGET=_blank>Washington University in St. Louis</A> (WUSTL) School of Medicine 
+Genome Sequencing Center. The UCSC caePb3 assembly corresponds to WUSTL version
+6.0.1b, WormBase WS220.  See also:
+<A HREF="http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02"
+TARGET=_blank>WGS ABEG02</A> trace archive.</P>
 
 <H3>Sample position queries</H3>
 <P>
@@ -26,7 +34,8 @@ A genome position can be specified by the accession number of a
 sequenced genomic region, an mRNA or EST, a chromosomal coordinate
 range, or keywords from the GenBank description of an mRNA. The
 following list shows examples of valid position queries for the
-C. brenneri genome.  See the
+<em>C. brenneri</em> genome. Note that the search results may include
+organisms other than the current genome. See the
 <A HREF="../goldenPath/help/hgTracksHelp.html"
     TARGET=_blank>User's Guide</A> for more information.
 <P>
@@ -35,33 +44,33 @@ C. brenneri genome.  See the
         <TH WIDTH=14>&nbsp;</TH>
        	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
+    <TR><TD VALIGN=Top>chrUn:1-1000000</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
+       	<TD VALIGN=Top>Displays first million bases of chrUn</TD>
     </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
-    </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+    <TR><TD VALIGN=Top NOWRAP>chrUn:1000000+2000</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays a region of chrUn that spans 2000 bases, starting with position 1000000 </TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
+    <TR><TD VALIGN=Top>EU677736</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
+		number EU677736</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
+    <TR><TD VALIGN=Top>FF084898</TD>
         <TD WIDTH=14>&nbsp;</TD>
       	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
+		FF084898</TD>
+    </TR>
+    <TR><TD VALIGN=Top>tnc-1</TD>
+        <TD WIDTH=14>&nbsp;</TD>
+      	<TD VALIGN=Top>Displays regions of tnc-1 mRNA</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
+    <TR><TD VALIGN=Top>pseudogene</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
+       	<TD VALIGN=Top>Lists pseudogene mRNAs</TD>
     </TR>
     <TR><TD VALIGN=Top>homeobox caudal</TD>
         <TD WIDTH=14>&nbsp;</TD>
@@ -75,55 +84,60 @@ C. brenneri genome.  See the
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
     </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
+    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
+    <TR><TD VALIGN=Top>nemeroff</TD>
         <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Nemeroff</TD>
     </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
+    <TR><TD VALIGN=Top>Hughes,K.J.</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author K.J. Hughes</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
     <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
+	GenBank requires the search format <em>Hughes KJ</em>, internally it
+	uses the format <em>Hughes,K.J.</em>.</TD>
     </TR>
 </TABLE>
 
 <HR>
+
 <H3>Assembly details</H3>
 <P>
-The genome has been sequenced to ***X coverage.
-Approximately 88% of the sequence has been anchored to chromosomes, 
-which include autosomes 1-24, 26-28, and 32, and sex chromosomes W and Z. 
-(In contrast to mammals, the female chicken is heterogametic (ZW) and the 
-male is homogametic (ZZ).) 
-The remaining unanchored contigs that could be localized to a chromosome 
-have been concatenated into the virtual 
-chromosomes &quot;chr*_random&quot;, separated by gaps of 10,000 bp. 
-Unanchored contigs that could not be localized to a chromosome 
-have been concatenated into the virtual 
-chromosome &quot;chrUn&quot;, separated by gaps of 1,000 bp in order 
-to reduce the total size of chrUn. 
-The chicken 
-mitochondrial sequence is also available as the virtual chromosome 
-&quot;chrM&quot;. 
-</P>
-
-
+See also: <A HREF="http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02"
+TARGET=_blank>WGS ABEG02</A> trace archive.</P>
+<P>
+This assembly is a 20X inbred (one 
+gravid female per generation) derivative of LKC28, which is conspecific with 
+CB5161. This species was renamed to <em>C. brenneri</em> in 2007. Other 
+conspecific strains include SB129 and SB280. 
+For more information, see Sudhaus W and Kiontke K. 
+<A HREF="http://www.mapress.com/zootaxa/2007f/zt01456p062.pdf"
+TARGET=_blank>Comparison of the cryptic nematode species <em>Caenorhabditis 
+brenneri</em> sp. n. and <em>C. remanei</em> (Nematoda: Rhabditidae) with the 
+stem species pattern of the <em>Caenorhabditis Elegans</em> group</A>. 
+<em>Zootaxa</em> 25 Apr. 2007;1456:45-62.  </P>
+<P>
+The assembly has been sequenced to 9.5X WGS coverage. The 3,510 supercontigs
+are displayed in the UCSC Genome browser as a single artificial
+chromosome chrUn with artificial gaps of 1,000 Ns inserted between supercontigs.
+The largest supercontig is 4,147,112 bp; 121 supercontigs
+larger than 377,562 bp (N50) contain over 50% of the sequence.
+For more information about the assembly, see the WUSTL <em>C. brenneri</em>
+<A HREF="http://genome.wustl.edu/genomes/view/caenorhabditis_brenneri/"
+TARGET=_blank>project page</A>. </P>
 <P>
 Bulk downloads of the sequence and annotation data are available via 
-the Genome Browser <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/caePb3/">FTP
-server</A> or the <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#c_brenneri">Downloads</A> page. 
-
-  *** Developer -- remove this if no conditions for use:
-These data have
-<A HREF="../goldenPath/credits.html#c_brenneri_use">specific 
-conditions for use</A>. 
-
-The C. brenneri browser annotation tracks were generated by UCSC and 
+the Genome Browser
+<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/caePb3/">FTP server</A>
+or the
+<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#caePb">Downloads</A>
+page.  These data have <A HREF="http://genome.wustl.edu/data/data_use_policy"
+TARGET=_blank>specific conditions for use</A>. </P>
+<P>
+The worm browser annotation tracks were generated by UCSC and 
 collaborators worldwide. See the 
-<A HREF="/goldenPath/credits.html#c_brenneri_credits">Credits</A> 
+<A HREF="/goldenPath/credits.html#worm_credits">Credits</A> 
 page for a detailed list of the organizations and individuals who contributed 
-to the success of this release. 
+to this release. 
 </P>
