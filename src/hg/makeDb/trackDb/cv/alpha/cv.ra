@@ -245,8 +245,7 @@ term A549
 tag A549
 type Cell Line
 organism human
-description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC
-#, newly promoted to tier 2: not in 2011 analysis
+description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC, newly promoted to tier 2: not in 2011 analysis
 tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
@@ -257,8 +256,8 @@ karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
-#tier 2
-tier 3
+tier 2
+#formerly tier 3
 protocol Myers:A549_protocol.pdf Crawford:A549_Crawford_protocol.pdf Stam:A549_Stam_protocol.pdf
 
 term AG04449
@@ -2872,8 +2871,7 @@ term IMR90
 tag IMR90
 type Cell Line
 organism human
-description Normal Human Lung Fibroblasts
-#, newly promoted to tier 2: not in 2011 analysis
+description Normal Human Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
 lineage endoderm
 vendorName ATCC
@@ -2881,8 +2879,8 @@ vendorId CCL-186
 lots 58607680
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
 sex U
-#tier 2
-tier 3
+tier 2
+# formerly tier 3
 protocol Stam:IMR90_Stam_protocol.pdf
 
 term iPS
@@ -3008,8 +3006,7 @@ term MCF-7
 tag MCF7
 type Cell Line
 organism human
-description mammary gland, adenocarcinoma. (PMID: 4357757)
-#, newly promoted to tier 2: not in 2011 analysis
+description mammary gland, adenocarcinoma. (PMID: 4357757), newly promoted to tier 2: not in 2011 analysis
 tissue Breast
 vendorName ATCC
 vendorId HTB-22
@@ -3020,8 +3017,8 @@ karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093
 sex F
-#tier 2
-tier 3
+tier 2
+#formerly tier 3
 protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
@@ -3114,11 +3111,8 @@ protocol Crawford:Melano_Crawford_protocol.pdf
 term Monocytes-CD14+
 tag MONOCD14
 type Cell Line
-#tier 2
-tier 3
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production
-#, newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 sex F
@@ -3128,13 +3122,12 @@ vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+tier 3
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
-#tier 2
-tier 3
 organism human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746
 #, newly promoted to tier 2: not in 2011 analysis
@@ -3147,6 +3140,8 @@ vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+tier 2
+#formerly tier 3
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Myometr
@@ -3613,8 +3608,7 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description Human neuroblastoma
-#, newly promoted to tier 2: not in 2011 analysis
+description Human neuroblastoma, newly promoted to tier 2: not in 2011 analysis
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -3625,8 +3619,8 @@ karyotype cancer
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
-#tier 2
-tier 3
+tier 2
+#formerly tier 3
 protocol Myers:SK-N-SH_Myers_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
