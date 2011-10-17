@@ -5,33 +5,38 @@ from ucscgenomics import ra, track
 def checkMetaDbForFiles(mdb, files, status, loose):
     errors = []
     revokedset = set()
+    revokedfiles = set()
     atticset = set()
     supplementalset = set()
     filtermdb = ra.RaFile()
+    
     for i in files:
         if re.match('.\/', i):
             supplementalset.add(i)
         if not re.match('wgEncode.*', i):
             continue
         
+        
+        #this needs to be rewritten to handle V2's and things like that
         filestanza = mdb.filter(lambda s: re.match(".*%s.*" % i,s['fileName']), lambda s: s)
         
         #should only return 1, just in case
         if filestanza:
-            for i in filestanza:
-                filtermdb[i.name] = i
-                if 'objStatus' in i and  re.search('revoked|replaced|renamed', i['objStatus']):
-                    revokedset.add(i.name)
-                if 'attic' in i:
-                    atticset.add(i.name)
+            for j in filestanza:
+                filtermdb[j.name] = j
+                if 'objStatus' in j and re.search('revoked|replaced|renamed', j['objStatus']):
+                    revokedfiles.add(i)
+                    revokedset.add(j.name)
+                if 'attic' in j:
+                    atticset.add(j.name)
         else:
             #pass
             if loose and re.match('.*bai', i):
                 pass
             else:
                 errors.append("metaDb: %s has is not mentioned in %s" % (i, status))
-        
-    return (filtermdb, revokedset, atticset, supplementalset, errors)
+                
+    return (filtermdb, revokedset, revokedfiles, atticset, supplementalset, errors)
 
 def checkAlphaForDropped(new, old, status, type):
     errors=[]
@@ -114,8 +119,8 @@ def getGbdbFiles(database, tableset, revokedset, mdb):
     sep = "','"
     tablestr = sep.join(tableset)
     tablestr = "'" + tablestr + "'"
-    revokestr = sep.join(tableset)
-    revokestr = "'" + tablestr + "'"
+    revokestr = sep.join(revokedset)
+    revokestr = "'" + revokestr + "'"
     
     cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, tablestr)
     p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
@@ -229,17 +234,7 @@ def separateOutAdditional(oldReleaseFiles, totalFiles, newSupplementalSet, oldSu
 def printWithPath(set, c, release):
     for i in sorted(set):
         print "%s/%s" % (c.downloadsDirectory + 'release' + release, i)
-
-def makeRevokedFiles(revokedSet, mdb):
-    revokedFiles = set()
-    for i in revokedSet:
-        file = mdb.filter(lambda s: re.match(".*%s.*" % i,s['fileName']), lambda s: s['fileName'])
-        for j in file:
-            splitfile = j.split(",")
-            for k in splitfile:
-                revokedFiles.add(k)
-    return revokedFiles
-
+        
 def printIter(inlist):
     for i in sorted(inlist):
         print i
@@ -342,13 +337,12 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         printWithPath(oldSupplementalSet & newSupplementalSet, c, args.releaseNew)
         print ""
         print "Removed Supplemental Files:"
-        printWithPath(oldSupplementaList - newSupplementalSet, c, args.releaseNew)
+        printWithPath(oldSupplementalSet - newSupplementalSet, c, args.releaseNew)
     print "\n"
     print "OTHER FILES:"
     print "New: %s" % len(additionalList)
     print "Revoked/Replace: %s" % len(oldAdditionalList)
     print "Total: %s" % len(additionalList | oldAdditionalList)
-    print "\n"
     if args.full:
         print "" 
         print "New Other Files (%s):" % len(additionalList)
@@ -356,9 +350,12 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         print ""
         print "Revoked Other Files (%s):" % len(oldAdditionalList)
         printWithPath(oldAdditionalList, c, args.releaseNew)
+    print "\n"
     print "Files that dropped between releases (%s):" % len(missingFiles)
     printWithPath(missingFiles, c, args.releaseOld)
-    
+    print "\n"
+    if not args.ignore:
+        print "No Errors"
     
 def printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, pushTables, c, pushGbdbs, atticSet, newSupplementalSet, tableSize):
     print "mkChangeNotes v2"
@@ -406,6 +403,8 @@ def printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, pu
         print "New Other Files (%s):" % len(additionalList)
         printWithPath(additionalList, c, args.releaseNew)
     
+    if not args.ignore:
+        print "No Errors"
 
 
 def printErrors(errors):
@@ -468,9 +467,9 @@ def main():
         newMdb = c.alphaMetaDb
         oldMdb = c.publicMetaDb
 
-        (newMdb, revokedSet, atticSet, newSupplementalSet, newFileErrors) = checkMetaDbForFiles(newMdb, newReleaseFiles, "alpha metaDb", loose)
+        (newMdb, revokedSet, revokedFiles, atticSet, newSupplementalSet, newFileErrors) = checkMetaDbForFiles(newMdb, newReleaseFiles, "alpha metaDb", loose)
         errors.extend(newFileErrors)
-        (oldMdb, spam, eggs, oldSupplementalSet, oldFileErrors) = checkMetaDbForFiles(oldMdb, oldReleaseFiles, "public metaDb", loose)
+        (oldMdb, spam, eggs, ham, oldSupplementalSet, oldFileErrors) = checkMetaDbForFiles(oldMdb, oldReleaseFiles, "public metaDb", loose)
         errors.extend(oldFileErrors)
         errors.extend(checkAlphaForDropped(newMdb, oldMdb, "alpha metaDb", "stanza"))
         missingFiles = checkFilesForDropped(newReleaseFiles, oldReleaseFiles)
@@ -499,7 +498,6 @@ def main():
         oldReleaseFiles = cleanSpecialFiles(set(oldReleaseFiles))
         (oldReleaseFiles, additionalList, oldAdditionalList, totalFiles) = separateOutAdditional(oldReleaseFiles, totalFiles, newSupplementalSet, oldSupplementalSet)
         
-        revokedFiles = makeRevokedFiles(revokedSet, newMdb)
         pushTables = set(sorted((newTableSet - oldTableSet)))
         tableSize = getTableSize(pushTables, args.database)
         
@@ -518,7 +516,7 @@ def main():
         
         newMdb = c.alphaMetaDb
         
-        (newMdb, revokedSet, atticSet, newSupplementalSet, newFileErrors) = checkMetaDbForFiles(newMdb, newReleaseFiles, "alpha metaDb", loose)
+        (newMdb, revokedSet, revokedFiles, atticSet, newSupplementalSet, newFileErrors) = checkMetaDbForFiles(newMdb, newReleaseFiles, "alpha metaDb", loose)
         errors.extend(newFileErrors)
         
         (newTableSet, revokedTableSet, newTableError) = checkTableStatus(newMdb, newReleaseFiles, args.database, args.composite, "alpha metaDb", loose, revokedSet)
