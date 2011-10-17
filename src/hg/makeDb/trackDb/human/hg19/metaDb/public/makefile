@@ -37,6 +37,7 @@ wgEncodeSydhRnaSeq.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeUncBsuProt.ra \
 wgEncodeUw5C.ra \
+wgEncodeCshlLongRnaSeq.ra \
 
 include ../../../../makefile.metaDb
 
