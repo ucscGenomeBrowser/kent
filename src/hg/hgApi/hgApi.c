@@ -58,7 +58,7 @@ static void encodeExpJson(struct dyString *json, struct encodeExp *el)
 /* Print out encodeExp in JSON format. Manually converted from autoSql which outputs
  * to file pointer.
  */
-// TODO: move to lib/encode/encodeExp.c
+// TODO: move to lib/encode/encodeExp.c, extend autoSql to support, and use json*() functions
 {
 dyStringPrintf(json, "{");
 dyStringPrintf(json, "\"ix\":%u", el->ix);
