@@ -25,7 +25,7 @@ origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HEPG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293T=HEK293-T-REx HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src NB4=NB4 NT2D1=NT2-D1 PANC1=PANC1 PBDE=PBDE PBDEFetal=PBDE-Fetal PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y U2OS=U2OS 
-subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2&alpha; AP2gamma=AP-2&gamma; BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(AB50322) MafKsc477=MafK_(SC-477) MAX=Max Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC584=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(AB9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF217=ZNF217 ZNF274=ZNF274 ZNF274M01=ZNF274_(M01) ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
+subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2&alpha; AP2gamma=AP-2&gamma; BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS CHD2AB68301=CHD2_(AB68301) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(AB50322) MafKsc477=MafK_(SC-477) MAX=Max Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC584=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(AB9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF7L2=TCF7L2 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF217=ZNF217 ZNF274=ZNF274 ZNF274M01=ZNF274_(M01) ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGMUS=IgG-mus IGGRAB=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
 subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct_36hr ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=4-hydroxytamoxifen TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
@@ -859,20 +859,21 @@ wgEncode 1
 #        track wgEncodeSydhTfbsHepg2Tcf4UcdPk
 #        parent wgEncodeSydhTfbsViewPeaks off
 #        shortLabel HepG2b TCF4 Pk
-#        longLabel HepG2b TCF4 UC Davis ChIP-seq Peaks from ENCODE/SYDH
-#        subGroups view=Peaks factor=TCF4 cellType=2HEPG2 control=UCD treatment=aNone
+#        longLabel HepG2b TCF7L2 UC Davis ChIP-seq Peaks from ENCODE/SYDH
+#        subGroups view=Peaks factor=TCF7L2 cellType=2HEPG2 control=UCD treatment=aNone
 #        type narrowPeak
 #        color 189,0,157
 #        # subId=3390 dateSubmitted=2011-01-19
 
-        track wgEncodeSydhTfbsHepg2Tcf4UcdPk
+        track wgEncodeSydhTfbsHepg2Tcf7l2UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel HEPG TCF4 UCD
-        longLabel HEPG2 TCF4 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TCF4 cellType=2HEPG2 control=UCD treatment=aNone
+        shortLabel HEPG TCF7 UCD
+        longLabel HEPG2 TCF7L2 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=TCF7L2 cellType=2HEPG2 control=UCD treatment=aNone
         type narrowPeak
         color 189,0,157
         # subId=4411 dateSubmitted=2011-06-27
+        # was wgEncodeSydhTfbsHepg2Tcf4UcdPk vsmalladi Mon Oct 17 10:24:05 2011
 
         track wgEncodeSydhTfbsH1hescTbpIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -1138,13 +1139,14 @@ wgEncode 1
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsHct116Tcf4UcdPk
+        track wgEncodeSydhTfbsHct116Tcf7l2UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel HCT TCF4 UCD
-        longLabel HCT-116 TCF4 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TCF4 cellType=HCT116 control=UCD treatment=aNone
+        shortLabel HCT TCF7 UCD
+        longLabel HCT-116 TCF7L2 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=TCF7L2 cellType=HCT116 control=UCD treatment=aNone
         type narrowPeak
         # subId=4165 dateSubmitted=2011-06-03
+        # was wgEncodeSydhTfbsHct116Tcf4UcdPk vsmalladi Mon Oct 17 10:24:01 2011
 
         track wgEncodeSydhTfbsHuvecMaxStdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -2195,13 +2197,14 @@ wgEncode 1
         # subId=4412 dateSubmitted=2011-06-27
         # was wgEncodeSydhTfbsH1hescJundStdPk wong Thu Jul 14 17:49:07 2011
 
-        track wgEncodeSydhTfbsHek293Tcf4UcdPk
+        track wgEncodeSydhTfbsHek293Tcf7l2UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel HEK2 TCF4 UCD
-        longLabel HEK293 TCF4 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TCF4 cellType=HEK293 control=UCD treatment=aNone
+        shortLabel HEK2 TCF7 UCD
+        longLabel HEK293 TCF7L2 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=TCF7L2 cellType=HEK293 control=UCD treatment=aNone
         type narrowPeak
         # subId=4341 dateSubmitted=2011-06-22
+        # was wgEncodeSydhTfbsHek293Tcf4UcdPk vsmalladi Mon Oct 17 10:24:02 2011
 
         track wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -2318,30 +2321,33 @@ wgEncode 1
         color 46,0,184
         # subId=4462 dateSubmitted=2011-09-14
 
-        track wgEncodeSydhTfbsMcf7Tcf4UcdPk
+        track wgEncodeSydhTfbsMcf7Tcf7l2UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MCF7 TCF4 UCD
-        longLabel MCF-7 TCF4 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TCF4 cellType=MCF7 control=UCD treatment=aNone
+        shortLabel MCF7 TCF7 UCD
+        longLabel MCF-7 TCF7L2 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=TCF7L2 cellType=MCF7 control=UCD treatment=aNone
         type narrowPeak
         # subId=4836 dateSubmitted=2011-09-20
+        # was wgEncodeSydhTfbsMcf7Tcf4UcdPk vsmalladi Mon Oct 17 10:24:06 2011
 
-        track wgEncodeSydhTfbsPanc1Tcf4UcdPk
+        track wgEncodeSydhTfbsPanc1Tcf7l2UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel PANC TCF4 UCD
-        longLabel PANC1 TCF4 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TCF4 cellType=PANC1 control=UCD treatment=aNone
+        shortLabel PANC TCF7 UCD
+        longLabel PANC1 TCF7L2 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=TCF7L2 cellType=PANC1 control=UCD treatment=aNone
         type narrowPeak
         # subId=4839 dateSubmitted=2011-09-19
+        # was wgEncodeSydhTfbsPanc1Tcf4UcdPk vsmalladi Mon Oct 17 10:24:07 2011
 
-        track wgEncodeSydhTfbsHelas3Tcf4UcdPk
+        track wgEncodeSydhTfbsHelas3Tcf7l2UcdPk
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel HeLa TCF4 UCD
-        longLabel HeLa-S3 TCF4 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=TCF4 cellType=2HELAS3 control=UCD treatment=aNone
+        shortLabel HeLa TCF7 UCD
+        longLabel HeLa-S3 TCF7L2 UC Davis ChIP-Seq Peaks from ENCODE/SYDH
+        subGroups view=Peaks factor=TCF7L2 cellType=2HELAS3 control=UCD treatment=aNone
         type narrowPeak
         color 0,119,158
         # subId=4835 dateSubmitted=2011-09-19
+        # was wgEncodeSydhTfbsHelas3Tcf4UcdPk vsmalladi Mon Oct 17 10:24:04 2011
 
         track wgEncodeSydhTfbsHelas3NfybIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
@@ -3835,13 +3841,14 @@ wgEncode 1
         type bigWig 0.000000 12339.400391
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsHct116Tcf4UcdSig
+        track wgEncodeSydhTfbsHct116Tcf7l2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HCT TCF4 UCD
-        longLabel HCT-116 TCF4 UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TCF4 cellType=HCT116 control=UCD treatment=aNone
+        shortLabel HCT TCF7 UCD
+        longLabel HCT-116 TCF7L2 UC Davis ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=TCF7L2 cellType=HCT116 control=UCD treatment=aNone
         type bigWig 0.000000 8673.700195
         # subId=3053 dateSubmitted=2010-12-02
+        # was wgEncodeSydhTfbsHct116Tcf4UcdSig vsmalladi Mon Oct 17 10:24:02 2011
 
         track wgEncodeSydhTfbsHek293InputStdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -5128,20 +5135,21 @@ wgEncode 1
 #        track wgEncodeSydhTfbsHepg2Tcf4UcdSig
 #        parent wgEncodeSydhTfbsViewSignal off
 #        shortLabel HepG2b TCF4 Sig
-#        longLabel HepG2b TCF4 UC Davis ChIP-seq Signal from ENCODE/SYDH
-#        subGroups view=Signal factor=TCF4 cellType=2HEPG2 control=UCD treatment=aNone
+#        longLabel HepG2b TCF7L2 UC Davis ChIP-seq Signal from ENCODE/SYDH
+#        subGroups view=Signal factor=TCF7L2 cellType=2HEPG2 control=UCD treatment=aNone
 #        type bigWig 1.000000 14201.000000
 #        color 189,0,157
 #        # subId=3390 dateSubmitted=2011-01-19
 
-        track wgEncodeSydhTfbsHepg2Tcf4UcdSig
+        track wgEncodeSydhTfbsHepg2Tcf7l2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HEPG TCF4 UCD
-        longLabel HEPG2 TCF4 UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TCF4 cellType=2HEPG2 control=UCD treatment=aNone
+        shortLabel HEPG TCF7 UCD
+        longLabel HEPG2 TCF7L2 UC Davis ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=TCF7L2 cellType=2HEPG2 control=UCD treatment=aNone
         type bigWig 1.000000 14667.000000
         color 189,0,157
         # subId=4411 dateSubmitted=2011-06-27
+        # was wgEncodeSydhTfbsHepg2Tcf4UcdSig vsmalladi Mon Oct 17 10:24:05 2011
 
         track wgEncodeSydhTfbsH1hescTbpIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -5389,13 +5397,14 @@ wgEncode 1
         # subId=4412 dateSubmitted=2011-06-27
         # was wgEncodeSydhTfbsH1hescJundStdSig wong Thu Jul 14 17:49:07 2011
 
-        track wgEncodeSydhTfbsHek293Tcf4UcdSig
+        track wgEncodeSydhTfbsHek293Tcf7l2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HEK2 TCF4 UCD
-        longLabel HEK293 TCF4 UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TCF4 cellType=HEK293 control=UCD treatment=aNone
+        shortLabel HEK2 TCF7 UCD
+        longLabel HEK293 TCF7L2 UC Davis ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=TCF7L2 cellType=HEK293 control=UCD treatment=aNone
         type bigWig 1.000000 18167.000000
         # subId=4341 dateSubmitted=2011-06-22
+        # was wgEncodeSydhTfbsHek293Tcf4UcdSig vsmalladi Mon Oct 17 10:24:03 2011
 
         track wgEncodeSydhTfbsShsy5yGata3sc269sc269UcdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -5521,13 +5530,14 @@ wgEncode 1
         color 46,0,184
         # subId=4462 dateSubmitted=2011-09-14
 
-        track wgEncodeSydhTfbsMcf7Tcf4UcdSig
+        track wgEncodeSydhTfbsMcf7Tcf7l2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel MCF7 TCF4 UCD
-        longLabel MCF-7 TCF4 UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TCF4 cellType=MCF7 control=UCD treatment=aNone
+        shortLabel MCF7 TCF7 UCD
+        longLabel MCF-7 TCF7L2 UC Davis ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=TCF7L2 cellType=MCF7 control=UCD treatment=aNone
         type bigWig 1.000000 20980.000000
         # subId=4836 dateSubmitted=2011-09-20
+        # was wgEncodeSydhTfbsMcf7Tcf4UcdSig vsmalladi Mon Oct 17 10:24:06 2011
 
         track wgEncodeSydhTfbsPanc1InputUcdSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -5537,22 +5547,24 @@ wgEncode 1
         type bigWig 1.000000 65207.000000
         # subId=4840 dateSubmitted=2011-09-19
 
-        track wgEncodeSydhTfbsPanc1Tcf4UcdSig
+        track wgEncodeSydhTfbsPanc1Tcf7l2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel PANC TCF4 UCD
-        longLabel PANC1 TCF4 UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TCF4 cellType=PANC1 control=UCD treatment=aNone
+        shortLabel PANC TCF7 UCD
+        longLabel PANC1 TCF7L2 UC Davis ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=TCF7L2 cellType=PANC1 control=UCD treatment=aNone
         type bigWig 1.000000 21870.000000
         # subId=4839 dateSubmitted=2011-09-19
+        # was wgEncodeSydhTfbsPanc1Tcf4UcdSig vsmalladi Mon Oct 17 10:24:07 2011
 
-        track wgEncodeSydhTfbsHelas3Tcf4UcdSig
+        track wgEncodeSydhTfbsHelas3Tcf7l2UcdSig
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HeLa TCF4 UCD
-        longLabel HeLa-S3 TCF4 UC Davis ChIP-Seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=TCF4 cellType=2HELAS3 control=UCD treatment=aNone
+        shortLabel HeLa TCF7 UCD
+        longLabel HeLa-S3 TCF7L2 UC Davis ChIP-Seq Signal from ENCODE/SYDH
+        subGroups view=Signal factor=TCF7L2 cellType=2HELAS3 control=UCD treatment=aNone
         type bigWig 1.000000 12380.000000
         color 0,119,158
         # subId=4835 dateSubmitted=2011-09-19
+        # was wgEncodeSydhTfbsHelas3Tcf4UcdSig vsmalladi Mon Oct 17 10:24:04 2011
 
         track wgEncodeSydhTfbsHelas3NfybIggrabSig
         parent wgEncodeSydhTfbsViewSignal off

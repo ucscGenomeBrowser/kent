@@ -15492,65 +15492,9 @@ tableName wgEncodeSydhTfbsHct116Pol2UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1
-objType file
-antibody TCF4
-cell HCT-116
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId wgEncodeEH000627
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
-fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam,wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam.bai
-geoSampleAccession GSM782123
-grant Snyder
-lab USC
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
-md5sum 8160c3d74ba505aca5af720f71867644,10fde6e46e01dee903ef349eb7beee10
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1358
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2
-objType file
-antibody TCF4
-cell HCT-116
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId wgEncodeEH000627
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
-fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam,wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam.bai
-geoSampleAccession GSM782123
-grant Snyder
-lab USC
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
-md5sum a3de170a7849edf9218e19204f8e46de,5b2c7caa1fc6aa07dbb0d3d0be30a5b4
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1361
-treatment None
-view Alignments
-
 metaObject wgEncodeSydhTfbsHct116Tcf7l2RawDataRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HCT-116
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -15578,7 +15522,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHct116Tcf7l2RawDataRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HCT-116
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -15604,9 +15548,65 @@ subId 225
 treatment None
 view RawData
 
+metaObject wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep1
+objType file
+antibody TCF7L2
+cell HCT-116
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH000627
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
+fileName wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep1.bam,wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep1.bam.bai
+geoSampleAccession GSM782123
+grant Snyder
+lab USC
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
+md5sum 8160c3d74ba505aca5af720f71867644,10fde6e46e01dee903ef349eb7beee10
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1358
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep2
+objType file
+antibody TCF7L2
+cell HCT-116
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH000627
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
+fileName wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep2.bam,wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep2.bam.bai
+geoSampleAccession GSM782123
+grant Snyder
+lab USC
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
+md5sum a3de170a7849edf9218e19204f8e46de,5b2c7caa1fc6aa07dbb0d3d0be30a5b4
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1361
+treatment None
+view Alignments
+
 metaObject wgEncodeSydhTfbsHct116Tcf7l2UcdPk
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HCT-116
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -15632,7 +15632,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHct116Tcf7l2UcdSig
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HCT-116
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -16301,9 +16301,9 @@ tableName wgEncodeSydhTfbsHek293Pol2StdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1
+metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdAlnRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -16314,7 +16314,7 @@ dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
-fileName wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1.bam,wgEncodeSydhTfbsHek293Tcf4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHek293Tcf7l2UcdAlnRep1.bam,wgEncodeSydhTfbsHek293Tcf7l2UcdAlnRep1.bam.bai
 geoSampleAccession GSM782124
 grant Snyder
 lab USC
@@ -16326,9 +16326,9 @@ subId 4341
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2
+metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdAlnRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -16339,7 +16339,7 @@ dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
-fileName wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2.bam,wgEncodeSydhTfbsHek293Tcf4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsHek293Tcf7l2UcdAlnRep2.bam,wgEncodeSydhTfbsHek293Tcf7l2UcdAlnRep2.bam.bai
 geoSampleAccession GSM782124
 grant Snyder
 lab USC
@@ -16353,7 +16353,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdPk
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -16379,7 +16379,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdRawDataRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -16405,7 +16405,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdRawDataRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -16431,7 +16431,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdSig
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HEK293
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -23947,9 +23947,9 @@ tableName wgEncodeSydhTfbsHelas3TbpIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep1
+metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdAlnRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -23960,7 +23960,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
-fileName wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep1.bam,wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdAlnRep1.bam,wgEncodeSydhTfbsHelas3Tcf7l2UcdAlnRep1.bam.bai
 grant Snyder
 lab USC
 md5sum eb2bd3aff8b492b07aef2f905b424442,a196a1e346f225040b012853c0827bd1
@@ -23971,9 +23971,9 @@ subId 4835
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep2
+metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdAlnRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -23984,7 +23984,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
-fileName wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep2.bam,wgEncodeSydhTfbsHelas3Tcf4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdAlnRep2.bam,wgEncodeSydhTfbsHelas3Tcf7l2UcdAlnRep2.bam.bai
 grant Snyder
 lab USC
 md5sum 9d35a364c46b33c4ec49181ea6bb1e98,792523c532c968c640b87b4d91d8dd09
@@ -23997,7 +23997,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdPk
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -24022,7 +24022,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -24046,7 +24046,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -24070,7 +24070,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdSig
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -30625,9 +30625,9 @@ tableName wgEncodeSydhTfbsHepg2TbpIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1
+metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdAlnRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -30639,7 +30639,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1.bam,wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHepg2Tcf7l2UcdAlnRep1.bam,wgEncodeSydhTfbsHepg2Tcf7l2UcdAlnRep1.bam.bai
 geoSampleAccession GSM782122
 grant Snyder
 lab USC
@@ -30651,9 +30651,9 @@ subId 4411
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2
+metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdAlnRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -30665,7 +30665,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2.bam,wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsHepg2Tcf7l2UcdAlnRep2.bam,wgEncodeSydhTfbsHepg2Tcf7l2UcdAlnRep2.bam.bai
 geoSampleAccession GSM782122
 grant Snyder
 lab USC
@@ -30679,7 +30679,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdPk
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -30706,7 +30706,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdRawDataRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -30732,7 +30732,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdRawDataRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -30758,7 +30758,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdSig
 objType table
-antibody TCF4
+antibody TCF7L2
 cell HepG2
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -46533,9 +46533,9 @@ tableName wgEncodeSydhTfbsMcf7InputUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep1
+metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdAlnRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell MCF-7
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -46546,7 +46546,7 @@ dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
-fileName wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep1.bam,wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdAlnRep1.bam,wgEncodeSydhTfbsMcf7Tcf7l2UcdAlnRep1.bam.bai
 grant Snyder
 lab USC
 md5sum c07c62deb7aa2557f64f712ce5726626,b6b41b94fdbc5ed6a5f5332e68ef5750
@@ -46557,9 +46557,9 @@ subId 4836
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep2
+metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdAlnRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell MCF-7
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -46570,7 +46570,7 @@ dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
-fileName wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep2.bam,wgEncodeSydhTfbsMcf7Tcf4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdAlnRep2.bam,wgEncodeSydhTfbsMcf7Tcf7l2UcdAlnRep2.bam.bai
 grant Snyder
 lab USC
 md5sum 2f286f4746ad0f0587df09e3d3a857bb,662ca5b2a9a4e52bb98da86a7d24752e
@@ -46583,7 +46583,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdPk
 objType table
-antibody TCF4
+antibody TCF7L2
 cell MCF-7
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -46608,7 +46608,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell MCF-7
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -46632,7 +46632,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell MCF-7
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -46656,7 +46656,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdSig
 objType table
-antibody TCF4
+antibody TCF7L2
 cell MCF-7
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -48014,9 +48014,9 @@ tableName wgEncodeSydhTfbsPanc1InputUcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep1
+metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdAlnRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -48027,7 +48027,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
-fileName wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep1.bam,wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdAlnRep1.bam,wgEncodeSydhTfbsPanc1Tcf7l2UcdAlnRep1.bam.bai
 grant Snyder
 lab USC
 md5sum ba7e2e6538942dbfc34e3cdd692e9039,0076fcc32b5d71f52dee52c6d5f7cf6d
@@ -48038,9 +48038,9 @@ subId 4839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep2
+metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdAlnRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -48051,7 +48051,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
-fileName wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep2.bam,wgEncodeSydhTfbsPanc1Tcf4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdAlnRep2.bam,wgEncodeSydhTfbsPanc1Tcf7l2UcdAlnRep2.bam.bai
 grant Snyder
 lab USC
 md5sum 9638ac811c335a99fc4077381811ec24,32f4d85d55251075991c7f9e3d558a5a
@@ -48064,7 +48064,7 @@ view Alignments
 
 metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdPk
 objType table
-antibody TCF4
+antibody TCF7L2
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -48089,7 +48089,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep1
 objType file
-antibody TCF4
+antibody TCF7L2
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -48113,7 +48113,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep2
 objType file
-antibody TCF4
+antibody TCF7L2
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -48137,7 +48137,7 @@ view RawData
 
 metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdSig
 objType table
-antibody TCF4
+antibody TCF7L2
 cell PANC-1
 composite wgEncodeSydhTfbs
 control UCDavis
@@ -49691,4 +49691,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 2020312435
+# MAGIC: -651967405
