@@ -212,19 +212,14 @@ myoLuc2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaF
 myoLuc2.downloadDir = myoLuc2
 
 myoLuc2.refseq.mrna.native.load  = no
-myoLuc2.refseq.mrna.xeno.load = no
-myoLuc2.refseq.mrna.xeno.loadDesc = no
-
+myoLuc2.refseq.mrna.xeno.load = yes
+myoLuc2.refseq.mrna.xeno.loadDesc = yes
 myoLuc2.genbank.mrna.native.load = yes
 myoLuc2.genbank.mrna.native.loadDesc = yes
 myoLuc2.genbank.mrna.xeno.load = yes
 myoLuc2.genbank.mrna.xeno.loadDesc = yes
 myoLuc2.genbank.est.native.load = no
 myoLuc2.genbank.est.native.loadDesc = no
-
-
-
-
 
     git add etc/genbank.conf
     git commit -m "Added myoLuc2" etc/genbank.conf
@@ -588,3 +583,22 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+
+############################################################################
+#  myoLuc2 - Microbat - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc2
+    cat << '_EOF_' > myoLuc2.ensGene.ra
+# required db variable
+db myoLuc2
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=64 myoLuc2.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/myoLuc2/bed/ensGene.64
+    featureBits myoLuc2 ensGene
+    # 32782563 bases of 1966419868 (1.667%) in intersection
+
+############################################################################
+

@@ -4363,7 +4363,7 @@ printf("<H3>Coloring Information and Examples</H3>\n");
 puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
 puts("The examples below show a few ways to highlight individual tracks, "
      "and their interplay. It's good to keep it simple at first. It's easy "
-     "to make pretty but completely cryptic displays with this feature.");
+     "to make pretty, but completely cryptic, displays with this feature.");
 puts(
      "<UL>"
      "<LI>To put Genes in upper case red text, check the "
@@ -4385,7 +4385,7 @@ puts(
      "</UL>");
 puts("<H3>Further Details and Ideas</H3>");
 puts("<P>Copying and pasting the web page output to a text editor such as Word "
-     "will retain upper case but lose colors and other formatting. That's still "
+     "will retain upper case but lose colors and other formatting. That is still "
      "useful because other web tools such as "
      "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
      "can be set to ignore lower case.  To fully capture formatting such as color "
@@ -4438,7 +4438,7 @@ puts("<P>The default line width of 60 characters is standard, but if you have "
 puts("<P>Be careful about requesting complex formatting for a very large "
      "chromosomal region.  After all the html tags are added to the output page, "
      "the file size may exceed size limits that your browser, clipboard, and "
-     "other software can safely display.  The tool will format 10Mbp and more though.</P>");
+     "other software can safely display.  The tool will format 10 Mb and more, however.</P>");
 }
 trackDbFreeList(&tdbList);
 }
