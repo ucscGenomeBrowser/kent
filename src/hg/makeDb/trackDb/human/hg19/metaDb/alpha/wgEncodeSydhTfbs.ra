@@ -15503,8 +15503,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
+dccAccession wgEncodeEH000629
+expId 629
 fileName wgEncodeSydhTfbsHct116Tcf7l2RawDataRep1.fastq.gz
 geoSampleAccession GSM782123
 grant Snyder
@@ -15531,8 +15531,8 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
+dccAccession wgEncodeEH000629
+expId 629
 fileName wgEncodeSydhTfbsHct116Tcf7l2RawDataRep2.fastq.gz
 geoSampleAccession GSM782123
 grant Snyder
@@ -15560,8 +15560,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
+dccAccession wgEncodeEH000629
+expId 629
 fileName wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep1.bam,wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep1.bam.bai
 geoSampleAccession GSM782123
 grant Snyder
@@ -15588,8 +15588,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
+dccAccession wgEncodeEH000629
+expId 629
 fileName wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep2.bam,wgEncodeSydhTfbsHct116Tcf7l2UcdAlnRep2.bam.bai
 geoSampleAccession GSM782123
 grant Snyder
@@ -15615,8 +15615,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
-dccAccession wgEncodeEH000628
-expId 628
+dccAccession wgEncodeEH000629
+expId 629
 fileName wgEncodeSydhTfbsHct116Tcf7l2UcdPk.narrowPeak.gz
 geoSampleAccession GSM782123
 grant Snyder
@@ -15641,8 +15641,8 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
-dccAccession wgEncodeEH000628
-expId 628
+dccAccession wgEncodeEH000629
+expId 629
 fileName wgEncodeSydhTfbsHct116Tcf7l2UcdSig.bigWig
 geoSampleAccession GSM782123
 grant Snyder
@@ -49691,4 +49691,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -651967405
+# MAGIC: -651967381
