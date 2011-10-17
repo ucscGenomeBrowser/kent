@@ -127,6 +127,13 @@ class CompositeTrack(object):
         if not os.path.isdir(self._downloadsDirectory):
             raise KeyError(self._downloadsDirectory + ' does not exist')
         return self._downloadsDirectory
+   
+    @property 
+    def httpDownloadsPath(self):
+        """The location of the downloadable files path in apache form"""
+        if not os.path.isdir(self._httpDownloadsPath):
+            raise KeyError(self._httpDownloadsPath + ' does not exist')
+        return self._httpDownloadsPath
     
     @property 
     def files(self):
@@ -272,6 +279,7 @@ class CompositeTrack(object):
         self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + compositeName + '.ra'    
         self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + compositeName + '.ra'
         self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
+        self._httpDownloadsPath = '/usr/local/apache/htdocs-hgdownload/goldenPath/' + database + '/' + 'encodeDCC/' + compositeName + '/'
         self._url = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + compositeName
         self._database = database
         self._name = compositeName        
