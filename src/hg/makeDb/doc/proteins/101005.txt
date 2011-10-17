@@ -150,7 +150,8 @@ hgLoadSqlTab proteins101005 interProXref $kent/src/hg/lib/interProXref.sql ./int
 hgsql proteins101005 -N -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
 hgLoadSqlTab proteins101005 swInterPro $kent/src/hg/lib/swInterPro.sql ./swInterPro.tab
 
-# BUILD TABLES FOR pbGlobal (PB V1.1)
+# BUILD TABLES FOR pbGlobal (PB V1.1).  These tables are used by the Proteome
+# Browser.  
 
 cd /hive/data/inside/proteins/101005
 mkdir pbGlobal

@@ -45,7 +45,6 @@ dataVersion ENCODE September 2009 Freeze
 dateSubmitted 2009-10-27
 dccAccession wgEncodeEH001878
 expId 1878
-expVars lab,dataType,labExpId
 fileName wgEncodeGencodePolyaV3.gtf.gz
 grant Hubbard
 lab Sanger

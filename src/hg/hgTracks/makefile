@@ -20,7 +20,7 @@ COMMONO = altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWar
 
 O = mainMain.o ${COMMONO} 
 
-export COMMONO
+export RENDERO = renderMain.o ${COMMONO}
 
 include ../../inc/cgi_build_rules.mk
 

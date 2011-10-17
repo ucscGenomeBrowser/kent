@@ -3426,31 +3426,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-static void addTracksFromTrackHub(int id, char *hubUrl, struct track **pTrackList,
-	struct trackHub **pHubList)
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
-{
-/* Load trackDb.ra file and make it into proper trackDb tree */
-char hubName[8];
-safef(hubName, sizeof(hubName), "hub_%d",id);
-struct trackHub *hub = trackHubOpen(hubUrl, hubName);
-if (hub != NULL)
-    {
-    struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-    if (hubGenome != NULL)
-	{
-	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
-	tdbList = trackDbLinkUpGenerations(tdbList);
-	tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	trackDbPrioritizeContainerItems(tdbList);
-	addTdbListToTrackList(tdbList, NULL, pTrackList);
-	if (tdbList != NULL)
-	    slAddHead(pHubList, hub);
-	}
-    }
-}
-
 void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
@@ -3463,12 +3438,17 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         /* error catching in so it won't just abort  */
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
-	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+	    {
+	    struct trackDb *tdbList = hubAddTracks(hub, database, pHubList);
+	    addTdbListToTrackList(tdbList, NULL, pTrackList);
+	    // we're going to free the hubConnectStatus list
+	    hub->trackHub = NULL; 
+	    }
         errCatchEnd(errCatch);
         if (errCatch->gotError)
-	    hubSetErrorMessage( errCatch->message->string, hub->id);
+	    hubUpdateStatus( errCatch->message->string, hub);
 	else
-	    hubSetErrorMessage(NULL, hub->id);
+	    hubUpdateStatus(NULL, hub);
         errCatchFree(&errCatch);
 	}
     }
@@ -3622,6 +3602,22 @@ if (!psOutput)
         }
     }
 
+if (!psOutput)
+    {
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
+        cartSessionId(cart), "PDF/PS");
+    }
+
+if (!psOutput)
+    {
+    if (wikiLinkEnabled())
+        {
+        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
+        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
+        cartSessionVarName(), cartSessionId(cart));
+        }
+    }
+
 char ensVersionString[256];
 char ensDateReference[256];
 ensGeneTrackVersion(database, ensVersionString, ensDateReference,
@@ -3658,6 +3654,8 @@ if (!psOutput)
 
                 if (sameWord(database,"fr2"))
                     fr2ScaffoldEnsemblLink(archive, &links);
+		else if (hTableExists(database, UCSC_TO_ENSEMBL))
+		    printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
                 else if (hTableExists(database, ctgPos))
                     /* see if we are entirely within a single contig */
                     {
@@ -3808,22 +3806,6 @@ if (!psOutput)
 
 for(link = links; link != NULL; link = link->next)
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s\" TARGET=\"_blank\" class=\"topbar\" id=\"%s\">%s</A>&nbsp;&nbsp;</TD>\n", link->url, link->id, link->name);
-
-if (!psOutput)
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
-        cartSessionId(cart), "PDF/PS");
-    }
-
-if (!psOutput)
-    {
-    if (wikiLinkEnabled())
-        {
-        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
-        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
-        cartSessionVarName(), cartSessionId(cart));
-        }
-    }
 
 if (hIsGisaidServer())
     {

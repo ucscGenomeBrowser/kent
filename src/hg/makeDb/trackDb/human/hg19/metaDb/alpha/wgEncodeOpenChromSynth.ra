@@ -1,7 +1,7 @@
 metaObject wgEncodeOpenChromSynth
 objType composite
 composite wgEncodeOpenChromSynth
-expVars lab,dataType,cell,composite
+expVars lab,dataType,cell,treatment,composite
 
 metaObject wgEncodeOpenChromSynthGlioblaPk
 objType table

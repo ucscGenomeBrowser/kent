@@ -4,15 +4,22 @@ This track contains chromatin interaction data from the University of Washington
 group generated using 5C (Chromatin Conformation Capture Carbon Copy).
 The 5C method is used here to define short and long-range range interactions 
 between transcription start sites (TSS) and DNaseI hypersensitive sites (DHS) or other genomic features.
-The 5C method is summarized below.<P>
+The 5C method is summarized below.</P>
 <P>
 Transcription factors bind to  promoter-associated proteins, bringing the associated DNA sequences in close proximity to each other.  Cross linking the DNA and proteins immobilizes these interactions and thus maintains their close proximity.  Cleavage of the sample with restriction endonuclease followed by ligation results in hybrid molecules where a fragment with a regulatory element is physically associated with a fragment containing a TSS.  The interactions are then detected by oligonucleotide-dependent, ligation-mediated assays, where one set of primers is complementary to the  end of fragments with a TSS and the second set of primers are complementary to fragments with a feature.  Primers are designed to the forward strand of the feature and the reverse strand of the TSS so that ligation only occurs between TSS and feature, not between different features.  Specific interactions are detected by massively parallel sequencing.</P>
+</P>
 <P>
-The data in this track comprises three different experiment types:  whole-chromosome 5C analysis of
+<!---The data in this track comprises three different experiment types:  whole-chromosome 5C analysis of
 DHS/TSS interactions in chromosome 21 in two cell lines (K562 and GM06990), and two projects 
-focusing on targeted regions: </P>
+focusing on targeted regions: 
+-->
+The data in this track comprises two different experiment types focusing on targeted
+regions:
+
+</P>
 <P>
-<I><B>Gene-targeted project</I></B>
+<I><B>Gene-targeted project</B></I>
+</P>
 <P>
 Analysis of DNase I hypersensitive sites reveals many genes where there
 are multiple sites restricted to the cell type where a protein
@@ -20,8 +27,8 @@ is observed to be expressed.  These sites potentially identify regulatory sites 
 This set of  experiments attempts to observe interactions between these DHS sites and transcription starts
 in 25 regions selected based on genes expressed in GM06990 (B-lymphocyte),
 BJ (foreskin fibroblast), HepG2 (liver cancer cell line), or SK-N-SH_RA
-(Neuroblastoma cell line differentiated with retinoic acid, aka SKNSH).
-<P>
+(neuroblastoma cell line, SKNSH, differentiated with retinoic acid).
+</P>
 <I><B> Myc project</B></I>
 <P>
 Genome wide association studies have identified SNPs linked to prostate, colon, and
@@ -34,6 +41,7 @@ CaCo2 (colon cancer cell line), LNCaP (prostate cancer cell line), MCF7
 <H2>File Conventions</H2>
 <P>
 The following types of data are available for download:
+</p>
 <DL>
 <DT><I>Matrix</I></DT>
 <DD>
@@ -41,28 +49,26 @@ Interaction files are in a matrix format indicating interaction strength,
 with "reverse primer name  | genome version | reverse HindIII fragment coordinates" in
 the top row and "forward primer name | genome version | forward primer fragment coordinates"
 in the first column.  The number of sequences mapped to each interaction fills the matrix.
-</DD></DL>
-<p>
-<dt><i>Primer</i></dt>
-Primer data files include the sequences of the primers used in the experiments and
-sequences for control sites in the ENCODE pilot ENr313 gene desert region on chr16.
-</p>
-<p>
-<dt><i>Raw Data</i></dt>
-Sequencing files are provided in fastQ format.
-</p>
-<p>
 <B>
 In order to understand the Matrix data, you must download the associated primer data file.
 </B>
-</P>
-</p>
+</DD>
+<dt><i>Primer</i></dt>
+<dd>
+Primer data files include the sequences of the primers used in the experiments and
+sequences for control sites in the ENCODE pilot ENr313 gene desert region on chr16.<dd>
+<dt><i>Raw Data</i></dt>
+<dd>
+Sequencing files are provided in fastQ format.</dd>
+</dl>
 <H2>Methods</H2>
 <P>
-Cells were grown according to the approved ENCODE cell culture protocols. The isolated nuclei were formaldehyde cross-linked.  The DNA isolated from the nuclei was cleaved with restriction enzyme, ligated, and cross-links removed to create a 3C library (Dekker et al., 2002). Primers complementary to the TSS and feature were added, annealed and ligated to produce a 5C library (Dostie et al., 2006).  The DNA fragments generated in the ligation mediated-reactions were partially digested with DNaseI, end-repaired and ligated to adapters, before sequencing.  
+Cells were grown according to the approved
+<A TARGET=_BLANK HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
+The isolated nuclei were formaldehyde cross-linked.  The DNA isolated from the nuclei was cleaved with restriction enzyme, ligated, and cross-links removed to create a 3C library (Dekker et al., 2002). Primers complementary to the TSS and feature were added, annealed and ligated to produce a 5C library (Dostie et al., 2006).  The DNA fragments generated in the ligation mediated-reactions were partially digested with DNaseI, end-repaired and ligated to adapters, before sequencing.  
 The sequencing reads generated were mapped to the predicted ligation products.  
-The number of sequences mapping to predicted junction fragments were tabulated from sequencing runs. The number of times a sequence was detected for a given interaction between a TSS and feature was to indicate the relative strength of the interaction. 
-<P>
+The number of sequences mapping to predicted junction fragments were tabulated from sequencing runs. 
+The number of times a sequence was detected for a given interaction between a TSS and feature indicates the relative strength of the interation.
 </P>
 <B><I>Gene-targeted project</I></B>
 <P>
@@ -72,7 +78,7 @@ of interest.  Reverse primers were designed to HindIII sites for all transcripti
 1 Mb on either side of the region targeted by the forward primer set.  Matrix files are labeled by
 the coordinates of the region covered by the forward primer set. These experiments  were done in a
 multiplex manner with the forward and reverse primers for all 25 regions mixed together in a single
-reaction.   2 replicates  were performed for 4 cell lines for 25 regions.
+reaction. Two replicates  were performed for 4 cell lines for 25 regions.
 High-throughput sequencing was performed on an ABI SOLiD instrument collecting 50 bp reads.
 The interaction files provided map all the reads in the output sequence without a mismatch threshold. 
 </P>
@@ -81,24 +87,19 @@ The interaction files provided map all the reads in the output sequence without 
 Forward primers were designed
 to HindIII fragments of 4.29 Mb section of human chromosome 8 centered on the gene desert 5~R of the
 myc gene.  Reverse primers were designed to all HindIII fragments containing refseq txStarts in a 7.6 Mb
-region extending &gt;2 Mb on either side of the forward primer set.   
+region extending &gt; 2 Mb on either side of the forward primer set.   
 High-throughput sequencing was performed on an ABI SOLiD instrument collecting 50 bp reads.
 The interaction files provided map all the reads in the output sequence without a mismatch threshold. 
 </P>
 <H2>Verification</H2>
 <P>
-Data were verified by sequencing biological replicates displaying correlation coefficient &gt;0.9. 
-</P>
-<H2>Release Notes</H2>
-<P>
-This is release 1 (July 2011) of the data.
+Data were verified by sequencing biological replicates displaying correlation coefficient &gt; 0.9. 
 </P>
 
 
 <H2>Credits</H2>
 <P>
 These data were generated by the University of Washington ENCODE Group.</P>
-<P>
 Contact: <A HREF="mailto:&#115;&#117;l&#108;&#64;&#117;.w&#97;&#115;h&#105;&#110;&#103;&#116;&#111;n.&#101;&#100;&#117;">Richard Sandstrom</A>
 <!-- above address is sull at u.washington.edu -->
 </P>

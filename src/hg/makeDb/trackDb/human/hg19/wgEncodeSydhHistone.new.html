@@ -19,11 +19,12 @@ Shown for each
 experiment (defined as a particular antibody and a particular
 cell type) is a track of enrichment for the specifically modified
 histone (<I>Signal</I>), along with sites that have the
-greatest enrichment (<I>Peaks</I>).  Also included for each
+greatest enrichment (<I>Peaks</I>).  Also, included for each
 cell type is the input signal, which represents the
 control condition where no antibody targeting was performed.
 In general the following chemical modifications have associated genetic
 phenotypes:
+</P>
 <ul>
 <li>H3K4me3 and H3K9Ac are considered to be marks of active
 or potentially active promoter regions </li>
@@ -35,7 +36,6 @@ transcriptional elongation</li>
 <li>H3K27me3 and H3K9me3 are
 considered to be marks of inactive regions.</li>
 </ul>
-</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -47,14 +47,14 @@ are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 <P>
 For each cell type, this track contains the following views:
 <DL>
-<DT><I>Peaks</I>
-<DD>Regions of signal enrichment based on processed data (usually normalized data from pooled replicates).
-<DT><I>Signal</I>
-<DD>Density graph (wiggle) of signal enrichment based on aligned read density.
+<DT><I>Peaks</I></DT>
+<DD>Regions of signal enrichment based on processed data (usually normalized data from pooled replicates).</DD>
+<DT><I>Signal</I></DT>
+<DD>Density graph (wiggle) of signal enrichment based on aligned read density.</DD>
 </DL>
 </P>
 <P>Peaks and signals displayed in this track are the results of pooled replicate
-sequence and alignment files for each replicate are available for
+sequence. Alignment files for each replicate are available for
 <A HREF="/cgi-bin/hgFileUi?g=wgEncodeSydhHistone">download</A>.
 </P>
 
@@ -65,15 +65,17 @@ sequence and alignment files for each replicate are available for
 Cells were grown according to the approved
 <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 Briefly, cells were cross-linked, chromatin was extracted and sonicated
-using a Bioruptor sonicator (Diagenode) to an average size of 300-500bp,
+using a Bioruptor sonicator (Diagenode) to an average size of 300-500 bp,
 and individual ChIP assays were performed using antibodies to modified histones.
-For the K562 and Ntera2 histone ChIP-seq samples, immunoprecipitates were 
-collected using protein G-coupled magnetic beads; a detailed ChIP and library
-protocol can be found at
-<A HREF="http://www.roadmapepigenomics.org/protocols" TARGET=_BLANK>http://www.roadmapepigenomics.org/protocols</A>.
+For the K562 and NTera-2 (NT2-D1) histone ChIP-seq samples, immunoprecipitates were 
+collected using protein G-coupled magnetic beads; a detailed
+<A HREF="http://www.roadmapepigenomics.org/protocols" TARGET=_BLANK> ChIP and library
+protocol</A>
+can be found at the Roadmap Epigenome Project.
 For the U2OS histone ChIP-seq samples, immunoprecipitates were collected using 
-StaphA cells; a detailed protocol can be found at
-<A HREF="http://expression.genomecenter.ucdavis.edu/chip.html" TARGET=_BLANK>http://expression.genomecenter.ucdavis.edu/chip.html</A>.
+StaphA cells; a 
+<A HREF="http://expression.genomecenter.ucdavis.edu/chip.html" TARGET=_BLANK>detailed protocol</A>
+can be found at the UCD Genome Center.
 Library DNA was quantitated using either a Nanodrop or a BioAnalyzer and sequenced on an Illumina GA2.  
 </P>
 
@@ -100,7 +102,9 @@ to be significantly enriched compared to the input DNA control.
 
 <h2>Release Notes</h2>
 <p>
-This release adds 12 new experiments.
+This is Release 2 (October 2011) of this track, which adds experiments for the 
+PANC-1 and the PBMC cell lines. Additionally, the distinction 
+between K562 and K562b has been deprecated so that data that previously was labeled K562b is now labeled K562.
 </p>
 
 
@@ -133,13 +137,18 @@ Blahnik KR, Dou L, Echupare L, Iyengar S, O&#39;Geen H, et al.
         class = "external text"
         title="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3039671/"
         rel=nofollow
-        TARGET = _BLANK>Characterization of the Contradictory Chromatin Signatures at the 3&#39; Exons of Zinc Finger Genes</A>.
-<EM>PLoS One.</EM> 2011; 6(2): e17121.
+        TARGET =" _BLANK">Characterization of the Contradictory Chromatin Signatures at the 3&#39; Exons of Zinc Finger Genes</A>.
+<EM>PLoS One.</EM> 2011;6(2):e17121.
 </P>
 <P>
 O&#39;Geen H, Echipare L, Farnham PJ
-Using ChIP-seq technology to generate high-resolution profiles of histone modifications.
- <EM>Methods Mol Biol.</EM> In Press.
+    <A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21913086"
+	class="external text"
+	title="http://www.ncbi.nlm.nih.gov/pubmed/21913086"
+	rel="nofollow"
+	TARGET =" _BLANK">
+	Using ChIP-seq technology to generate high-resolution profiles of histone modifications</A>.
+ <EM>Methods Mol Biol.</EM> 2011;791;265-286.
 </P>
 
 <P>
@@ -148,7 +157,7 @@ O&#39;Geen H, Frietze S, Farnham PJ
 	class="external text"
 	title="http://www.ncbi.nlm.nih.gov/pubmed/20680851?dopt=abstract&otool=uscnmlib"
 	rel="nofollow"
-	TARGET = _BLANK>Using ChIP-seq Technology to Identify Targets of Zinc Finger Transcription Factors</A>.
+	TARGET = "_BLANK">Using ChIP-seq Technology to Identify Targets of Zinc Finger Transcription Factors</A>.
  <EM>Methods Mol Biol.</EM> 2010;649:437-455.
 </P>
 

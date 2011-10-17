@@ -10,7 +10,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.13
+set dir = $genomes/hg19/bed/ucsc.13.2
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -20,8 +20,8 @@ set xdb = mm9
 set Xdb = Mm9
 set ydb = canFam2
 set zdb = rheMac2
-set spDb = sp101005
-set pbDb = proteins101005
+set spDb = sp111004
+set pbDb = proteins111004
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer7
@@ -76,7 +76,7 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
-set rfam = /hive/data/outside/Rfam/110710
+set rfam = /hive/data/outside/Rfam/111005
 
 
 # Tracks
@@ -157,22 +157,24 @@ netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
 netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
 
-# Get the Rfams that overlap with blocks that are syntenic to $Xdb
+# Get the Rfams that overlap with blocks that are syntenic to $Xdb.
+# Filter out anything not aligned uniquely, since the later stages of the 
+# pipeline will assume that each aligned sequence is aligned uniquely.  This
+# unique alignment assumption might not make sense in this instance, and 
+# probably should be revisited later, but affects only a few sequences 
+# at this time (10/09/11).
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
-bedIntersect -aHitAny rfam/rfam.all.bed ${db}.${xdb}.syn.bed rfam/rfam.syntenic.bed
-cat rfam/rfam.syntenic.bed |awk '{ print $4}' > rfam/rfam.syntenic.hits.txt
-pslSomeRecords ${rfam}/${db}/Rfam.human.bestHits.psl \
-    rfam/rfam.syntenic.hits.txt  rfam/rfam.syntenic.psl
-
+bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
+bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
+pslCDnaFilter -uniqueMapped rfam.syntenic.psl rfam.syntenic.uniq.psl
+pslToBed rfam.syntenic.uniq.psl rfam.syntenic.uniq.bed
  
 # Create directories full of alignments split by chromosome.
-mkdir -p est refSeq mrna trna
+mkdir -p est refSeq mrna 
 pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
-bedSplitOnChrom trna.bed trna
-bedSplitOnChrom rfam/rfam.syntenic.bed rfam
 
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
@@ -191,14 +193,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e ccds/$c.bed) then
 	  echo creating empty ccds/$c.bed
           echo -n "" >ccds/$c.bed
-    endif
-    if (! -e trna/$c.bed) then
-	  echo creating empty trna/$c.bed
-          echo -n "" >trna/$c.bed
-    endif
-    if (! -e rfam/$c.bed) then
-	  echo creating empty rfam/$c.bed
-          echo -n "" >rfam/$c.bed
     endif
 end
 
@@ -252,7 +246,7 @@ end
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
-    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna trna/$c.bed trna rfam/$c.bed rfam \
+    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna  \
 	bedToGraph/$c.txg
 end
 
@@ -266,8 +260,6 @@ end
 cat > trim.weights <<end
 refSeq  100
 ccds    50
-trna    50
-rfam    20
 mrna    2
 txOrtho 1
 exoniphy 1
@@ -491,7 +483,6 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 # wc $testingDir/txWalk.intersect.bed
 #
 
-
 # Fetch human protein set and table that describes if curated or not.
 # Takes about a minute
 hgsql -N $spDb -e \
@@ -646,10 +637,13 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
-# Merge back in antibodies
-cat txWalk.bed antibody.bed > abWalk.bed
+# Merge back in antibodies, and add the small, noncoding genes that are not well-represented
+# in GenBank (Rfam, tRNA)
+cat txWalk.bed antibody.bed trna.bed rfam.syntenic.uniq.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
-cat txWalk.fa antibody.fa > abWalk.fa
+sequenceForBed -db=$db -bedIn=trna.bed -fastaOut=stdout -upCase -keepName > trna.fa
+sequenceForBed -db=$db -bedIn=rfam.syntenic.uniq.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.uniq.fa
+cat txWalk.fa antibody.fa trna.fa rfam.syntenic.uniq.fa > abWalk.fa
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -660,7 +654,7 @@ txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
 # Create gene info table. Takes 8 seconds
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
-cat mrna/*.psl refSeq/*.psl rfam/*psl trna.psl \
+cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.uniq.psl \
       | txInfoAssemble pick.bed pick.tce cdsEvidence/txCdsPredict.tce \
 	altSplice.bed abWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
 
@@ -804,8 +798,6 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
-
-
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
@@ -902,6 +894,11 @@ hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+
+
+
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -950,7 +947,7 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-
+exit $status # BRACKET
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -1062,8 +1059,8 @@ mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
-utrFa $db knownGene utr3 utr3/utr.fa
-utrFa $db knownGene utr5 utr5/utr.fa
+utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr3 utr3/utr.fa
+utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr5 utr5/utr.fa
 
 # Split up files and make files that define job.
 faSplit sequence utr3/utr.fa 10000 utr3/split/s
@@ -1237,24 +1234,34 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
 
-# Do KEGG Pathways build
+# Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
     mkdir -p $dir/kegg
     cd $dir/kegg
 
-    wget --timestamping -O hsa2.html \
-    "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
+    # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+    cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
+    cut -f 2 j.tmp >j.hsa
+    cut -f 1,3 j.tmp >j.1
+    paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
+    rm j.hsa j.1 j.tmp
+    hgLoadSqlTab $tempDb keggMapDesc $kent/src/hg/lib/keggMapDesc.sql keggMapDesc.tab
 
-    cat hsa2.html |grep "show_pathway" |sed -e 's/show_pathway?/\tpath:/'\
-     |grep -v org_name |sed -e 's/">/\t/' |sed -e 's#</a><br>##'  |cut -f 2,3 \
-    >hsa.lis
-    
-    ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
+    # Following in two-step process, build/load a table that maps UCSC Gene IDs
+    # to LocusLink IDs and to KEGG pathways.  First, make a table that maps 
+    # LocusLink IDs to KEGG pathways from the downloaded data.  Store it temporarily
+    # in the keggPathway table, overloading the schema.
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+    cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
-    kgAttachKegg $db keggList.tab  keggPathway.tab
-    hgLoadSqlTab $tempDb keggPathway ~/kent/src/hg/lib/keggPathway.sql ./keggPathway.tab
-
-    cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
-    hgLoadSqlTab $tempDb keggMapDesc ~/kent/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+    # Next, use the temporary contents of the keggPathway table to join with
+    # knownToLocusLink, creating the real content of the keggPathway table.
+    # Load this data, erasing the old temporary content
+    hgsql hg19 -N -e \
+    'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+    >keggPathway.tab
+    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1278,8 +1285,9 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
@@ -1305,6 +1313,10 @@ sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
 
+# move this exit statement to the end of the section to be done next
+#exit $status # BRACKET
+
+
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
 # page, gene sorter, and proteome browser still need more tables.
@@ -1317,12 +1329,6 @@ ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 
-# Build known genes list for google
-# make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
-
-    cd $genomes/$db/bed
-    rm -rf knownGeneList/$db
-
 # Run hgKnownGeneList to generate the tree of HTML pages
 # under ./knownGeneList/$db 
 
@@ -1333,9 +1339,6 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     rm -rf /usr/local/apache/htdocs/knownGeneList/$db
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 #

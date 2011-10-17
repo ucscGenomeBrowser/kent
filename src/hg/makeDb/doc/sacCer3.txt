@@ -1185,6 +1185,8 @@ doEstimate.sh $(root1) {check out line+ LOG/$(root1).log} TREES/$(root1)
 # Submission to last job:           195s       3.25m     0.05h    0.00d
 
     # Now combine parameter estimates.  
+    # XXX - these phyloBoot processes did not complete after several weeks
+    #	of run time.
     ls TREES/*.cons.mod > cons.txt
     /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloBoot \
 	--read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
@@ -1463,6 +1465,27 @@ ps -f
 echo waiting ...
 wait
 
+# There is one to run for sacCer3 itself:
+    mkdir /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/sacCer3
+    cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/sacCer3
+    cat << '_EOF_' > sacCer3.config.ra
+targetGenesetPrefix sgd
+targetDb sacCer3
+queryDbs danRer7
+
+danRer7Fa /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/danRer7.ensembl.faa
+sacCer3Fa /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
+
+buildDir /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/sacCer3
+scratchDir /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab/sacCer3/tmp
+'_EOF_'
+    # << happy emacs
+
+    # leave out the -noSelf for this:
+    doHgNearBlastp.pl -noLoad -workhorse=hgwdev \
+        -clusterHub=swarm sacCer3.config.ra > do.log 2>&1
+    cd run.sacCer3.sacCer3
+    ./loadPairwise.csh
 
     # filter out names that do not exist in sgdGene
     cd /hive/data/genomes/sacCer3/bed/sgdAnnotations/blastTab

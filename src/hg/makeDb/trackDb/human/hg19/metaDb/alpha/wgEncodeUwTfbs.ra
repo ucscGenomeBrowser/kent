@@ -3423,39 +3423,17 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
-fileName wgEncodeUwTfbsCd20ro01778InputStdAlnRep1.bam
+fileName wgEncodeUwTfbsCd20ro01778InputStdAlnRep1.bam,wgEncodeUwTfbsCd20ro01778InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId RO 01778
 labVersion Bowtie 0.12.7
+md5sum a998c692fd0af13254f1b919c94b8602,b2b9aa448f7d2eab1d7289e9259ee1b9
 origAssembly hg19
 project wgEncode
 replicate 1
 setType input
 subId 4645
-view Alignments
-
-metaObject wgEncodeUwTfbsCd20ro01778InputStdAlnRep2
-objType file
-antibody Input
-cell CD20+_RO01778
-composite wgEncodeUwTfbs
-control std
-controlId CD20+_RO01778/Input/std
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-fileName wgEncodeUwTfbsCd20ro01778InputStdAlnRep2.bam
-grant Stam
-lab UW
-labExpId RO 01794
-labVersion Bowtie 0.12.7
-origAssembly hg19
-project wgEncode
-replicate 2
-setType input
-subId 4644
 view Alignments
 
 metaObject wgEncodeUwTfbsCd20ro01778InputStdRawDataRep1
@@ -3473,33 +3451,12 @@ fileName wgEncodeUwTfbsCd20ro01778InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId RO 01778
+md5sum 446280508b26672b70dbc041a4847dc4
 origAssembly hg19
 project wgEncode
 replicate 1
 setType input
 subId 4645
-view RawData
-
-metaObject wgEncodeUwTfbsCd20ro01778InputStdRawDataRep2
-objType file
-antibody Input
-cell CD20+_RO01778
-composite wgEncodeUwTfbs
-control std
-controlId CD20+_RO01778/Input/std
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-fileName wgEncodeUwTfbsCd20ro01778InputStdRawDataRep2.fastq.gz
-grant Stam
-lab UW
-labExpId RO 01794
-origAssembly hg19
-project wgEncode
-replicate 2
-setType input
-subId 4644
 view RawData
 
 metaObject wgEncodeUwTfbsCd20ro01778InputStdRawRep1
@@ -3518,6 +3475,7 @@ grant Stam
 lab UW
 labExpId RO 01778
 labVersion WindowDensity-bin20-win+/-75
+md5sum 27f7d35df75cab7ae6a7b0af362b05ef
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3526,28 +3484,76 @@ subId 4645
 tableName wgEncodeUwTfbsCd20ro01778InputStdRawRep1
 view RawSignal
 
-metaObject wgEncodeUwTfbsCd20ro01778InputStdRawRep2
-objType table
+metaObject wgEncodeUwTfbsCd20ro01794InputStdAlnRep1
+objType file
 antibody Input
-cell CD20+_RO01778
+cell CD20+_RO01794
 composite wgEncodeUwTfbs
 control std
-controlId CD20+_RO01778/Input/std
+controlId CD20+_RO01794/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodeUwTfbsCd20ro01778InputStdRawRep2.bigWig
+fileName wgEncodeUwTfbsCd20ro01794InputStdAlnRep1.bam,wgEncodeUwTfbsCd20ro01794InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId RO 01794
+labVersion Bowtie 0.12.7
+md5sum c0bfafd13b7c89847334e7f0434a40e0,475e09e65139e129257aea9cadafffab
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4644
+view Alignments
+
+metaObject wgEncodeUwTfbsCd20ro01794InputStdRawDataRep1
+objType file
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwTfbs
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwTfbsCd20ro01794InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01794
+md5sum 9b347753e5eb9c139014e48dcae42604
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4644
+view RawData
+
+metaObject wgEncodeUwTfbsCd20ro01794InputStdRawRep1
+objType table
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwTfbs
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwTfbsCd20ro01794InputStdRawRep1.bigWig
 grant Stam
 lab UW
 labExpId RO 01794
 labVersion WindowDensity-bin20-win+/-75
+md5sum 9a985235a976c5851aff3396d0b62a9b
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 setType input
 subId 4644
-tableName wgEncodeUwTfbsCd20ro01778InputStdRawRep2
+tableName wgEncodeUwTfbsCd20ro01794InputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdAlnRep1
@@ -8937,6 +8943,78 @@ replicate 2
 setType exp
 subId 4686
 tableName wgEncodeUwTfbsHacCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsHacInputStdAlnRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwTfbs
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwTfbsHacInputStdAlnRep1.bam,wgEncodeUwTfbsHacInputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS18311
+labVersion Bowtie 0.12.7
+md5sum b95fbb76d9b076c2629583826db57dc5,5fa210b70bf0c5438cad68c83388dc04
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4635
+view Alignments
+
+metaObject wgEncodeUwTfbsHacInputStdRawDataRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwTfbs
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwTfbsHacInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18311
+md5sum 959ac35ce86cba6068b0ceda932fb066
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4635
+view RawData
+
+metaObject wgEncodeUwTfbsHacInputStdRawRep1
+objType table
+antibody Input
+cell HAc
+composite wgEncodeUwTfbs
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwTfbsHacInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18311
+labVersion WindowDensity-bin20-win+/-75
+md5sum cae49b3cb83211703208867a7a8d5b00
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4635
+tableName wgEncodeUwTfbsHacInputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwTfbsHaspCtcfStdAlnRep1
@@ -16565,11 +16643,12 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
-fileName wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1.bam
+fileName wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1.bam,wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId RO 01746
 labVersion Bowtie 0.12.7
+md5sum db0dd73402806e1932dcf9289f623044,aaf3ed6bd65b7ea5220dc192992b83db
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16592,6 +16671,7 @@ fileName wgEncodeUwTfbsMonocd14ro1746InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId RO 01746
+md5sum a32a40d3445b0d09480d7127877d1cb5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16615,6 +16695,7 @@ grant Stam
 lab UW
 labExpId RO 01746
 labVersion WindowDensity-bin20-win+/-75
+md5sum 8853c6528b861db17db4a1d20ead82df
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19550,4 +19631,4 @@ subId 4365
 tableName wgEncodeUwTfbsWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1656142219
+# MAGIC: 1287700010

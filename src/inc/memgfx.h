@@ -356,6 +356,8 @@ struct hsvColor mgRgbToHsv(struct rgbColor rgb);
  * In HSV, Hue is the color in the range [0,360) with 0=red 120=green 240=blue,
  * Saturation goes from white (0) to fully saturated color (1000), and
  * Value goes from black (0) through to the hue (1000). */
+#define hsvValMax 1000
+#define hsvSatMax 1000
 
 struct rgbColor mgHslToRgb(struct hslColor hsl);
 /* Convert HSL to RGB colorspace (see http://en.wikipedia.org/wiki/HSL_and_HSV) */

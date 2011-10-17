@@ -3,6 +3,375 @@ objType composite
 composite wgEncodeOpenChromChip
 expVars lab,dataType,cell,treatment,antibody
 
+metaObject wgEncodeOpenChromChipA549CtcfAlnRep1
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
+fileName wgEncodeOpenChromChipA549CtcfAlnRep1.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 4935
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549CtcfAlnRep2
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
+fileName wgEncodeOpenChromChipA549CtcfAlnRep2.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 4935
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
+objType table
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
+fileName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 4935
+tableName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipA549CtcfPkRep1
+objType table
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
+fileName wgEncodeOpenChromChipA549CtcfPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 4935
+tableName wgEncodeOpenChromChipA549CtcfPkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipA549CtcfRawDataRep1
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
+fileName wgEncodeOpenChromChipA549CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 4935
+view RawData
+
+metaObject wgEncodeOpenChromChipA549CtcfRawDataRep2
+objType file
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
+fileName wgEncodeOpenChromChipA549CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 4935
+view RawData
+
+metaObject wgEncodeOpenChromChipA549CtcfSig
+objType table
+antibody CTCF
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002078
+expId 2078
+fileName wgEncodeOpenChromChipA549CtcfSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_A549
+project wgEncode
+setType exp
+subId 4935
+tableName wgEncodeOpenChromChipA549CtcfSig
+view Signal
+
+metaObject wgEncodeOpenChromChipA549InputAln
+objType file
+antibody Input
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-27
+dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH002077
+expId 2077
+fileName wgEncodeOpenChromChipA549InputAln.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+setType input
+subId 4906
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549InputRawData
+objType file
+antibody Input
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-27
+dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH002077
+expId 2077
+fileName wgEncodeOpenChromChipA549InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 4906
+view RawData
+
+metaObject wgEncodeOpenChromChipA549InputSig
+objType table
+antibody Input
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-27
+dateUnrestricted 2012-06-27
+dccAccession wgEncodeEH002077
+expId 2077
+fileName wgEncodeOpenChromChipA549InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 4906
+tableName wgEncodeOpenChromChipA549InputSig
+view Signal
+
+metaObject wgEncodeOpenChromChipA549Pol2AlnRep1
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
+fileName wgEncodeOpenChromChipA549Pol2AlnRep1.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 4934
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549Pol2AlnRep2
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
+fileName wgEncodeOpenChromChipA549Pol2AlnRep2.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 4934
+view Alignments
+
+metaObject wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
+fileName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 4934
+tableName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipA549Pol2PkRep1
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
+fileName wgEncodeOpenChromChipA549Pol2PkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+setType exp
+subId 4934
+tableName wgEncodeOpenChromChipA549Pol2PkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipA549Pol2RawDataRep1
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
+fileName wgEncodeOpenChromChipA549Pol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 4934
+view RawData
+
+metaObject wgEncodeOpenChromChipA549Pol2RawDataRep2
+objType file
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
+fileName wgEncodeOpenChromChipA549Pol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 4934
+view RawData
+
+metaObject wgEncodeOpenChromChipA549Pol2Sig
+objType table
+antibody Pol2
+cell A549
+composite wgEncodeOpenChromChip
+controlId A549/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-29
+dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002079
+expId 2079
+fileName wgEncodeOpenChromChipA549Pol2Sig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_A549
+project wgEncode
+setType exp
+subId 4934
+tableName wgEncodeOpenChromChipA549Pol2Sig
+view Signal
+
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep1
 objType file
 antibody CTCF
@@ -6936,4 +7305,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -167092005
+# MAGIC: -1222874610
