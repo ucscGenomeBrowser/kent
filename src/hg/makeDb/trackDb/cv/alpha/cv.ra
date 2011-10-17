@@ -2783,7 +2783,7 @@ termId BTO:0001282
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282
 sex M
 tier 3
-protocol Myers:HT1080_Myers_protocol.pdf
+protocol SUNY(missing):HT1080_SUNY_protocol.pdf
 
 #This cell line has been superceded by SK-N-SH, HTB-11 was the venderId.
 #term HTB-11
