@@ -3112,7 +3112,8 @@ term Monocytes-CD14+
 tag MONOCD14
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production
+#, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 sex F
@@ -3129,8 +3130,7 @@ term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746
-#, newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 sex F
