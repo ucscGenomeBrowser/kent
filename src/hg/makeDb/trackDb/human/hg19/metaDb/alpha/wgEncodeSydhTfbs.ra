@@ -15492,62 +15492,6 @@ tableName wgEncodeSydhTfbsHct116Pol2UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHct116Tcf4RawDataRep1
-objType file
-antibody TCF4
-cell HCT-116
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId wgEncodeEH000627
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
-fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep1.fastq.gz
-geoSampleAccession GSM782123
-grant Snyder
-lab USC
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-md5sum a2c2f1f6b80336dc6c33b899ba6c9495
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 225
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHct116Tcf4RawDataRep2
-objType file
-antibody TCF4
-cell HCT-116
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId wgEncodeEH000627
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-dccAccession wgEncodeEH000628
-expId 628
-fileName wgEncodeSydhTfbsHct116Tcf4RawDataRep2.fastq.gz
-geoSampleAccession GSM782123
-grant Snyder
-lab USC
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-md5sum 2f66ec99b251c1e844c786cfc8b85d5a
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 225
-treatment None
-view RawData
-
 metaObject wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1
 objType file
 antibody TCF4
@@ -15604,7 +15548,63 @@ subId 1361
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHct116Tcf4UcdPk
+metaObject wgEncodeSydhTfbsHct116Tcf7l2RawDataRep1
+objType file
+antibody TCF4
+cell HCT-116
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH000627
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
+fileName wgEncodeSydhTfbsHct116Tcf7l2RawDataRep1.fastq.gz
+geoSampleAccession GSM782123
+grant Snyder
+lab USC
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+md5sum a2c2f1f6b80336dc6c33b899ba6c9495
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 225
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHct116Tcf7l2RawDataRep2
+objType file
+antibody TCF4
+cell HCT-116
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId wgEncodeEH000627
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+dccAccession wgEncodeEH000628
+expId 628
+fileName wgEncodeSydhTfbsHct116Tcf7l2RawDataRep2.fastq.gz
+geoSampleAccession GSM782123
+grant Snyder
+lab USC
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+md5sum 2f66ec99b251c1e844c786cfc8b85d5a
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 225
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHct116Tcf7l2UcdPk
 objType table
 antibody TCF4
 cell HCT-116
@@ -15617,7 +15617,7 @@ dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH000628
 expId 628
-fileName wgEncodeSydhTfbsHct116Tcf4UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHct116Tcf7l2UcdPk.narrowPeak.gz
 geoSampleAccession GSM782123
 grant Snyder
 lab USC
@@ -15626,11 +15626,11 @@ origAssembly hg18
 project wgEncode
 setType exp
 subId 4165
-tableName wgEncodeSydhTfbsHct116Tcf4UcdPk
+tableName wgEncodeSydhTfbsHct116Tcf7l2UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHct116Tcf4UcdSig
+metaObject wgEncodeSydhTfbsHct116Tcf7l2UcdSig
 objType table
 antibody TCF4
 cell HCT-116
@@ -15643,7 +15643,7 @@ dateSubmitted 2010-12-02
 dateUnrestricted 2011-09-01
 dccAccession wgEncodeEH000628
 expId 628
-fileName wgEncodeSydhTfbsHct116Tcf4UcdSig.bigWig
+fileName wgEncodeSydhTfbsHct116Tcf7l2UcdSig.bigWig
 geoSampleAccession GSM782123
 grant Snyder
 lab USC
@@ -15652,7 +15652,7 @@ origAssembly hg18
 project wgEncode
 setType exp
 subId 3053
-tableName wgEncodeSydhTfbsHct116Tcf4UcdSig
+tableName wgEncodeSydhTfbsHct116Tcf7l2UcdSig
 treatment None
 view Signal
 
@@ -16351,7 +16351,7 @@ subId 4341
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHek293Tcf4UcdPk
+metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdPk
 objType table
 antibody TCF4
 cell HEK293
@@ -16364,7 +16364,7 @@ dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
-fileName wgEncodeSydhTfbsHek293Tcf4UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHek293Tcf7l2UcdPk.narrowPeak.gz
 geoSampleAccession GSM782124
 grant Snyder
 lab USC
@@ -16373,11 +16373,11 @@ md5sum 4e47e166a8954e0762ccf68e4e47ab43
 project wgEncode
 setType exp
 subId 4341
-tableName wgEncodeSydhTfbsHek293Tcf4UcdPk
+tableName wgEncodeSydhTfbsHek293Tcf7l2UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep1
+metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdRawDataRep1
 objType file
 antibody TCF4
 cell HEK293
@@ -16390,7 +16390,7 @@ dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
-fileName wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsHek293Tcf7l2UcdRawDataRep1.fastq.tgz
 geoSampleAccession GSM782124
 grant Snyder
 lab USC
@@ -16403,7 +16403,7 @@ subId 4341
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep2
+metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdRawDataRep2
 objType file
 antibody TCF4
 cell HEK293
@@ -16416,7 +16416,7 @@ dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
-fileName wgEncodeSydhTfbsHek293Tcf4UcdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsHek293Tcf7l2UcdRawDataRep2.fastq.tgz
 geoSampleAccession GSM782124
 grant Snyder
 lab USC
@@ -16429,7 +16429,7 @@ subId 4341
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHek293Tcf4UcdSig
+metaObject wgEncodeSydhTfbsHek293Tcf7l2UcdSig
 objType table
 antibody TCF4
 cell HEK293
@@ -16442,7 +16442,7 @@ dateSubmitted 2011-06-22
 dateUnrestricted 2012-03-22
 dccAccession wgEncodeEH002022
 expId 2022
-fileName wgEncodeSydhTfbsHek293Tcf4UcdSig.bigWig
+fileName wgEncodeSydhTfbsHek293Tcf7l2UcdSig.bigWig
 geoSampleAccession GSM782124
 grant Snyder
 lab USC
@@ -16451,7 +16451,7 @@ md5sum 692a81d59ba768e7babcdaa807f44dc9
 project wgEncode
 setType exp
 subId 4341
-tableName wgEncodeSydhTfbsHek293Tcf4UcdSig
+tableName wgEncodeSydhTfbsHek293Tcf7l2UcdSig
 treatment None
 view Signal
 
@@ -23995,7 +23995,7 @@ subId 4835
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Tcf4UcdPk
+metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdPk
 objType table
 antibody TCF4
 cell HeLa-S3
@@ -24008,7 +24008,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
-fileName wgEncodeSydhTfbsHelas3Tcf4UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -24016,11 +24016,11 @@ md5sum 3873c87228900bef00ea720074130ba3
 project wgEncode
 setType exp
 subId 4835
-tableName wgEncodeSydhTfbsHelas3Tcf4UcdPk
+tableName wgEncodeSydhTfbsHelas3Tcf7l2UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHelas3Tcf4UcdRawDataRep1
+metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep1
 objType file
 antibody TCF4
 cell HeLa-S3
@@ -24033,7 +24033,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
-fileName wgEncodeSydhTfbsHelas3Tcf4UcdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
 md5sum cae0aaa44f1813310782e4db6a81c9c8
@@ -24044,7 +24044,7 @@ subId 4835
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Tcf4UcdRawDataRep2
+metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep2
 objType file
 antibody TCF4
 cell HeLa-S3
@@ -24057,7 +24057,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
-fileName wgEncodeSydhTfbsHelas3Tcf4UcdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
 md5sum 6a33b82cb4c907cdf539fdeff04d6fcb
@@ -24068,7 +24068,7 @@ subId 4835
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Tcf4UcdSig
+metaObject wgEncodeSydhTfbsHelas3Tcf7l2UcdSig
 objType table
 antibody TCF4
 cell HeLa-S3
@@ -24081,7 +24081,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002069
 expId 2069
-fileName wgEncodeSydhTfbsHelas3Tcf4UcdSig.bigWig
+fileName wgEncodeSydhTfbsHelas3Tcf7l2UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -24089,7 +24089,7 @@ md5sum aaef7e7c9d39e777af5448efb948f64e
 project wgEncode
 setType exp
 subId 4835
-tableName wgEncodeSydhTfbsHelas3Tcf4UcdSig
+tableName wgEncodeSydhTfbsHelas3Tcf7l2UcdSig
 treatment None
 view Signal
 
@@ -30677,7 +30677,7 @@ subId 4411
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHepg2Tcf4UcdPk
+metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdPk
 objType table
 antibody TCF4
 cell HepG2
@@ -30691,7 +30691,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHepg2Tcf7l2UcdPk.narrowPeak.gz
 geoSampleAccession GSM782122
 grant Snyder
 lab USC
@@ -30700,11 +30700,11 @@ md5sum a8820427b58edb00f5616bb88b43db4f
 project wgEncode
 setType exp
 subId 4411
-tableName wgEncodeSydhTfbsHepg2Tcf4UcdPk
+tableName wgEncodeSydhTfbsHepg2Tcf7l2UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1
+metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdRawDataRep1
 objType file
 antibody TCF4
 cell HepG2
@@ -30718,7 +30718,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsHepg2Tcf7l2UcdRawDataRep1.fastq.tgz
 geoSampleAccession GSM782122
 grant Snyder
 lab USC
@@ -30730,7 +30730,7 @@ subId 4411
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2
+metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdRawDataRep2
 objType file
 antibody TCF4
 cell HepG2
@@ -30744,7 +30744,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsHepg2Tcf7l2UcdRawDataRep2.fastq.tgz
 geoSampleAccession GSM782122
 grant Snyder
 lab USC
@@ -30756,7 +30756,7 @@ subId 4411
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2Tcf4UcdSig
+metaObject wgEncodeSydhTfbsHepg2Tcf7l2UcdSig
 objType table
 antibody TCF4
 cell HepG2
@@ -30770,7 +30770,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEH001780
 expId 1780
-fileName wgEncodeSydhTfbsHepg2Tcf4UcdSig.bigWig
+fileName wgEncodeSydhTfbsHepg2Tcf7l2UcdSig.bigWig
 geoSampleAccession GSM782122
 grant Snyder
 lab USC
@@ -30779,7 +30779,7 @@ md5sum 25f83b14d8f3e06a3822edebd754a88b
 project wgEncode
 setType exp
 subId 4411
-tableName wgEncodeSydhTfbsHepg2Tcf4UcdSig
+tableName wgEncodeSydhTfbsHepg2Tcf7l2UcdSig
 treatment None
 view Signal
 
@@ -46581,7 +46581,7 @@ subId 4836
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMcf7Tcf4UcdPk
+metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdPk
 objType table
 antibody TCF4
 cell MCF-7
@@ -46594,7 +46594,7 @@ dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
-fileName wgEncodeSydhTfbsMcf7Tcf4UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -46602,11 +46602,11 @@ md5sum b880c65186203c229b71c0139f69a70e
 project wgEncode
 setType exp
 subId 4836
-tableName wgEncodeSydhTfbsMcf7Tcf4UcdPk
+tableName wgEncodeSydhTfbsMcf7Tcf7l2UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMcf7Tcf4UcdRawDataRep1
+metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep1
 objType file
 antibody TCF4
 cell MCF-7
@@ -46619,7 +46619,7 @@ dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
-fileName wgEncodeSydhTfbsMcf7Tcf4UcdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
 md5sum 45a49b53c33370de427a400c79140e4d
@@ -46630,7 +46630,7 @@ subId 4836
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf7Tcf4UcdRawDataRep2
+metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep2
 objType file
 antibody TCF4
 cell MCF-7
@@ -46643,7 +46643,7 @@ dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
-fileName wgEncodeSydhTfbsMcf7Tcf4UcdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
 md5sum f8bfca6f61361e44c1d47f3ac9c0332c
@@ -46654,7 +46654,7 @@ subId 4836
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMcf7Tcf4UcdSig
+metaObject wgEncodeSydhTfbsMcf7Tcf7l2UcdSig
 objType table
 antibody TCF4
 cell MCF-7
@@ -46667,7 +46667,7 @@ dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002072
 expId 2072
-fileName wgEncodeSydhTfbsMcf7Tcf4UcdSig.bigWig
+fileName wgEncodeSydhTfbsMcf7Tcf7l2UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -46675,7 +46675,7 @@ md5sum 79ea4f064f73bd3d65dd1b459a7b4f88
 project wgEncode
 setType exp
 subId 4836
-tableName wgEncodeSydhTfbsMcf7Tcf4UcdSig
+tableName wgEncodeSydhTfbsMcf7Tcf7l2UcdSig
 treatment None
 view Signal
 
@@ -48062,7 +48062,7 @@ subId 4839
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsPanc1Tcf4UcdPk
+metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdPk
 objType table
 antibody TCF4
 cell PANC-1
@@ -48075,7 +48075,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
-fileName wgEncodeSydhTfbsPanc1Tcf4UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdPk.narrowPeak.gz
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -48083,11 +48083,11 @@ md5sum eef703eeb30d2387e52b50b6e9547451
 project wgEncode
 setType exp
 subId 4839
-tableName wgEncodeSydhTfbsPanc1Tcf4UcdPk
+tableName wgEncodeSydhTfbsPanc1Tcf7l2UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsPanc1Tcf4UcdRawDataRep1
+metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep1
 objType file
 antibody TCF4
 cell PANC-1
@@ -48100,7 +48100,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
-fileName wgEncodeSydhTfbsPanc1Tcf4UcdRawDataRep1.fastq.tgz
+fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep1.fastq.tgz
 grant Snyder
 lab USC
 md5sum 687f270b38d23d5e04e5a2309335320a
@@ -48111,7 +48111,7 @@ subId 4839
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsPanc1Tcf4UcdRawDataRep2
+metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep2
 objType file
 antibody TCF4
 cell PANC-1
@@ -48124,7 +48124,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
-fileName wgEncodeSydhTfbsPanc1Tcf4UcdRawDataRep2.fastq.tgz
+fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdRawDataRep2.fastq.tgz
 grant Snyder
 lab USC
 md5sum 7a97d2a7d84724f3ce75eab5242e3c23
@@ -48135,7 +48135,7 @@ subId 4839
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsPanc1Tcf4UcdSig
+metaObject wgEncodeSydhTfbsPanc1Tcf7l2UcdSig
 objType table
 antibody TCF4
 cell PANC-1
@@ -48148,7 +48148,7 @@ dateSubmitted 2011-09-19
 dateUnrestricted 2012-06-19
 dccAccession wgEncodeEH002071
 expId 2071
-fileName wgEncodeSydhTfbsPanc1Tcf4UcdSig.bigWig
+fileName wgEncodeSydhTfbsPanc1Tcf7l2UcdSig.bigWig
 grant Snyder
 lab USC
 labVersion PeakSeq1.0
@@ -48156,7 +48156,7 @@ md5sum 1766de2cbd00ab4d2ae66a2fbb73b404
 project wgEncode
 setType exp
 subId 4839
-tableName wgEncodeSydhTfbsPanc1Tcf4UcdSig
+tableName wgEncodeSydhTfbsPanc1Tcf7l2UcdSig
 treatment None
 view Signal
 
@@ -49691,4 +49691,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 66240439
+# MAGIC: 2020312435
