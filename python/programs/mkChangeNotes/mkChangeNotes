@@ -1,123 +1,413 @@
 #!/hive/groups/encode/dcc/bin/python
-import sys, os, shutil, stat, argparse, datetime
-from ucscgenomics.compositetrack.CompositeTrack import *
-from ucscgenomics.rafile.RaFile import *
-from ucscgenomics.softfile.SoftFile import *
-from ucscgenomics.cvfile.CvFile import *
+import sys, os, re, argparse, subprocess
+from ucscgenomics import ra, track
 
-def diff(list1, list2):
-	return list1.difference(list2), list1.intersection(list2), list2.difference(list1)
-	
-def diff2(dict1, dict2):
-	for file in list1.itervalues():
-		if file.name in list2:
-			if file.md5sum == dict2[file.name].md5sum:
-				same.append(file)
-			else:
-				new.append(file)
-		else:
-			dep.append(file)
-	
-	for file in dict2.itervalues():
-		if file.name not in dict1:
-			new.append(file)
-			
-	return new, same, dep
-	
+def checkMetaDbForFiles(mdb, files, status, loose):
+    errors = []
+    for i in files:
+        if not re.match('wgEncode.*', i):
+            continue
+        filestanza = mdb.filter(lambda s: re.match(".*%s.*" % i,s['fileName']), lambda s: s)
+        if filestanza:
+            pass
+        else:
+            #pass    
+            if loose and re.match('.*bai', i):
+                pass
+            else:
+                errors.append("metaDb: %s has is not mentioned in %s" % (i, status))
+                
+    return errors
+
+def checkAlphaForDropped(new, old, status, type):
+    errors=[]
+    for i in old:
+        if re.search('MAGIC', i):
+            pass
+            if i in old:
+                errors.append("MAGIC number same in alpha and public metaDb")
+            else:
+                continue
+        if not re.match('wgEncode.*', i):
+            continue
+        if i in new:
+            pass
+        else:
+            errors.append("%s: %s missing from %s" % (type, i, status))
+            
+    return errors
+
+def checkTableStatus(mdb, files, database, composite, status, loose):
+    errors=[]
+    #home = os.environ['HOME']
+    #dbhost = ''
+    #dbuser = ''
+    #dbpassword = ''
+    #p = re.compile('db.(\S+)=(\S+)')
+    #with open("%s/.hg.conf" % home) as f:
+    #    for line in f:
+    #        line.rstrip("\n\r")
+    #        if p.match(line):
+    #            m = p.match(line)
+    #            if m.groups(1)[0] == 'host':
+    #                dbhost = m.groups(1)[1]
+    #            if m.groups(1)[0] == 'user':
+    #                dbuser = m.groups(1)[1]
+    #            if m.groups(1)[0] == 'password':
+    #                dbpassword = m.groups(1)[1]
+    #print dbhost
+    #print dbuser
+    #print dbpassword
+
+    #db = MySQLdb.connect (host = dbhost,
+    #            user = dbuser,
+    #            passwd = dbpassword,
+    #            db = database)
+
+    #cursor = db.cursor ()
+    #cursor.execute ("show tables like '%s%s'" % (composite, "%"))
+    #tableset = set(cursor.fetchall())
+    
+    mdbtableset = set(mdb.filter(lambda s: s['objType'] == 'table' and 'tableName' in s and 'attic' not in s and s['fileName'].split(",",1)[0] in files, lambda s: s['metaObject']))
+    atticset = set(mdb.filter(lambda s: 'attic' in s, lambda s: s['metaObject']))
+    revokedset = set(mdb.filter(lambda s: re.search('revoked|replaced|renamed', s['objStatus']), lambda s: s['metaObject']))
+    mdbtableset = mdbtableset - revokedset
+
+    sep = "','"
+    tablestr = sep.join(mdbtableset)
+    tablestr = "'" + tablestr + "'"
+
+    #this should really be using python's database module, but I'd need admin access to install it
+    #at this point, I am just parsing the output form hgsql
+    cmd = "hgsql %s -e \"select table_name from information_schema.TABLES where table_name in (%s)\"" % (database, tablestr)
+    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+    output = p.stdout.read()
+    
+    sqltableset = set(output.split("\n")[1:])
+
+    missingTableNames = set(mdb.filter(lambda s: s['objType'] == 'table' and 'tableName' not in s and 'attic' not in s, lambda s: s['metaObject']))
+
+    missingFromDb = mdbtableset - sqltableset
+    
+    if missingTableNames:
+        for i in missingTableNames:
+            errors.append("table: %s is type obj, but missing tableName field called by %s" % (i, status))
+
+    if missingFromDb:
+        for i in missingFromDb:
+            errors.append("table: %s table not found in Db called by %s" % (i, status))
+
+    return (mdbtableset, revokedset, atticset, errors)
+
+def getGbdbFiles(database, tableset, mdb):
+    errors = []
+    sep = "','"
+    tablestr = sep.join(tableset)
+    tablestr = "'" + tablestr + "'"
+
+    cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, tablestr)
+    p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+    output = p.stdout.read()
+    
+    gbdbtableset = set(output.split("\n")[1:])
+    
+    file1stanzalist = mdb.filter(lambda s: s['tableName'] in set(output.split("\n")[1:]), lambda s: s)
+    
+    gbdbfileset = set()
+    for i in file1stanzalist:
+        filelist = i['fileName'].split(',')
+        for j in filelist:
+            if os.path.isfile("/gbdb/%s/bbi/%s" % (database, j)):
+                gbdbfileset.add(j)
+            else:
+                errors.append("gbdb: %s does not exist in /gbdb/%s/bbi" % (j, databsase))
+    
+    return (gbdbfileset, errors)
+
+def checkMd5sums(newfiles, oldfiles):
+    errors = []
+    for i in oldfiles:
+        if i not in newfiles:
+            pass
+        else:
+            if oldfiles[i].md5sum != newfiles[i].md5sum:
+                errors.append("file: %s have changed md5sums between releases. %s vs %s" % (i, oldfiles[i].md5sum, newfiles[i].md5sum))
+
+    return errors
+
+def makeFileSizes(c, args, pushFiles, pushGbdbs, additionalList):
+    pushFileSize = list()
+    for i in pushGbdbs:
+        pushFileSize.append("%s/%s" % (c.downloadsDirectory + 'release' + args.releaseNew, i))    
+    for i in pushFiles:
+        pushFileSize.append("%s/%s" % (c.downloadsDirectory + 'release' + args.releaseNew, i))
+    for i in additionalList:
+        pushFileSize.append("%s/%s" % (c.downloadsDirectory + 'release' + args.releaseNew, i))
+    filesizes = 0
+    for i in pushFileSize:
+        filesizes = filesizes + int(os.path.getsize(i))
+    filesizes = filesizes / (1024**2)
+        
+    return filesizes
+
+def cleanSpecialFiles(pushFiles, totalFiles):
+    specialRemoveList = ['md5sum.history']
+    for i in specialRemoveList:
+        if i in pushFiles:
+            pushFiles.remove(i)
+        if i in totalFiles:
+            totalFiles.remove(i)
+    
+    return(pushFiles, totalFiles)
+    
+def separateOutAdditional(oldReleaseFiles, totalFiles, pushFiles):
+    additionalList = set()
+    for i in totalFiles:
+        if not re.match('wgEncode.*', i):
+            additionalList.add(i)
+    for i in additionalList:
+        if i in pushFiles:
+            pushFiles.remove(i)
+    oldReleaseFiles = oldReleaseFiles - (oldReleaseFiles - totalFiles)
+
+    return(oldReleaseFiles, pushFiles, additionalList)
+
+def printWithPath(set, c, args):
+    for i in sorted(set):
+        print "%s/%s" % (c.downloadsDirectory + 'release' + args.releaseNew, i)
+
+def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, pushTables, pushFiles, pushGbdbs, c, oldTableSet, oldReleaseFiles, oldGbdbSet, filesizes, newAtticSet, oldAtticSet, newRevokedSet, oldRevokedSet):
+    revokedSet = ((newRevokedSet | oldRevokedSet) - (oldRevokedSet - newRevokedSet))
+    unrevokedSet = (oldRevokedSet - newRevokedSet)
+    atticSet = ((newAtticSet | oldAtticSet) - (oldAtticSet - newAtticSet))
+    unatticSet = (oldAtticSet - newAtticSet) 
+    sep = "\n"    
+    print "mkChangeNotes v2"
+    print "%s %s Release %s" % (args.database, args.composite, args.releaseNew)
+    print "" 
+    print "Totals:"
+    print "New Files and Gbdbs: %d" % (int(len(additionalList) + int(len(pushFiles)) + int(len(pushGbdbs))))
+    print "Total size of files to be pushed: %d MB" % filesizes
+    print ""
+    print "Total Files: %d" % int(len(totalFiles | oldReleaseFiles))
+    print "Total Gbdbs: %d" % int(len(newGbdbSet | oldGbdbSet))
+    print "Total Tables: %d" % int(len(newTableSet | oldTableSet))
+    print "Other Files: %d" % int(len(additionalList))
+    print "Total Revoked: %d" % int(len(revokedSet))
+    print "Total Unrevoked: %d" % int(len(unrevokedSet))
+    print "Total Attic: %d" % int(len(atticSet))
+    print "Total Un-attic: %d" % int(len(unatticSet))
+    print "\n"
+    print "New Tables (%s):" % len(pushTables)
+    print sep.join(sorted(pushTables))
+    print "\n"
+    print "New Files (%s):" % len(pushFiles)
+    printWithPath(pushFiles, c, args)
+    print "\n"
+    print "New Gbdbs (%s):" % len(pushGbdbs)
+    printWithPath(pushGbdbs, c, args)
+    print "\n"
+    print "Additional Files (%s):" % len(additionalList)
+    printWithPath(additionalList, c, args)
+    print "\n"
+    print "Active Untouched Tables (%s):" % len(oldTableSet)
+    print sep.join(sorted(oldTableSet))
+    print "\n"
+    print "Active Untouched Files (%s):" % len(set(oldReleaseFiles))
+    printWithPath(oldReleaseFiles, c, args)
+    print "\n"
+    print "Active Untouched Gbdbs (%s):" % len(oldGbdbSet)
+    printWithPath(oldGbdbSet, c, args)
+    print "\n"
+    print "Revoked Objects (%s):" % len(revokedSet)
+    for i in sorted(revokedSet):
+        print i
+    print "\n"
+    print "Attic Objects (%s):" % len(atticSet)
+    for i in sorted(atticSet):
+        print i
+    print "\n"
+    print "Unrevoked Objects (%s):" % len(unrevokedSet)
+    for i in sorted(unrevokedSet):
+        print i
+    print "\n"
+    print "Un-attic Objects (%s):" % len(unatticSet)
+    for i in sorted(unatticSet):
+        print i
+    print "\n"
+    print "No Errors"
+    
+def printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, pushTables, pushFiles, c, pushGbdbs, filesizes, atticSet, revokedSet):
+    print "mkChangeNotes v2"
+    print "%s %s Release %s against Release %s" % (args.database, args.composite, args.releaseNew, args.releaseOld)
+    print "" 
+    print "Totals:"
+    print "Files and Gbdbs: %d" % (int(len(totalFiles)) + int(len(newGbdbSet)))
+    print "Total size of files to be pushed: %d MB" % filesizes
+    print ""
+    print "Files: %d" % int(len(totalFiles))
+    print "Gbdbs: %d" % int(len(newGbdbSet))
+    print "Tables: %d" % int(len(newTableSet))
+    print "Other Files: %d" % int(len(additionalList))
+    print "Total Revoked: %d" % int(len(revokedSet))
+    print "Total Attic: %d" % int(len(atticSet))
+    print "\n"
+    sep = "\n"    
+    print "New Tables (%s):" % len(pushTables)
+    print sep.join(sorted(pushTables))
+    print "\n"
+    print "New Files (%s):" % len(pushFiles)
+    printWithPath(pushFiles, c, args)
+    print "\n"
+    print "New Gbdbs (%s):" % len(pushGbdbs)
+    printWithPath(pushGbdbs, c, args)
+    print "\n"
+    print "Additional Files (%s):" % len(additionalList)
+    printWithPath(additionalList, c, args)
+    print "\n"
+    print "Revoked Objects (%s):" % len(revokedSet)
+    for i in sorted(revokedSet):
+        print i
+    print "\n"
+    print "Attic Objects (%s):" % len(atticSet)
+    for i in sorted(atticSet):
+        print i
+    print "\n"
+    print "No Errors"
+
+def printErrors(errors):
+    errorsDict = {}
+    for i in errors:
+        line = i.split(":", 1)
+        try:
+            errorsDict[line[0]].append(line[1])
+        except:
+            errorsDict[line[0]] = []
+            errorsDict[line[0]].append(line[1])
+    print "Errors (%s):" % len(errors)
+    for i in sorted(errorsDict.keys()):
+        print "%s:" % i
+        for j in sorted(errorsDict[i]):
+            print "%s" % j
+
 def main():
 
-	parser = argparse.ArgumentParser(description = 'Prepares a submission to GEO. Creates a soft file and shell script with the correct call to aspera.')
-	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
-	parser.add_argument('-i', '--instrument', help='If specified, expIds without instruments listed will default to this value. Use the no-spacing name eg Illumina_GA2')
-	parser.add_argument('database', help='The database, typically hg19 or mm9')
-	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
-	parser.add_argument('expIds', nargs='*', help='Any number of expIds separated by spaces, you can also specify a range by using a hyphen, "140 150 160-170" for instance, or leave blank to specify the entire file')
-	
-	if len(sys.argv) == 1:
-		parser.print_usage()
-		return
-	
-	args = parser.parse_args(sys.argv[1:])
-		
-	compositeTrack = CompositeTrack(args.database, args.composite, args.trackPath)
-	
-	cvPath = compositeTrack.trackPath + 'cv/alpha/cv.ra'
-	cv = CvFile(cvPath)
-	
-	same = list()
-	new = list()
-	changed = list()
-	dep = list()
-	
-	r1 = 0
-	r2 = 1
-	print len(compositeTrack.releases)
-	
-	for file in compositeTrack.releases[r1].itervalues():
-		if file.name in compositeTrack.releases[r2]:
-			if file.md5sum == compositeTrack.releases[r2][file.name].md5sum:
-				same.append(file)
-			else:
-				new.append(file)
-		else:
-			dep.append(file)
-		
-	for file in compositeTrack.releases[r2].itervalues():
-		if file.name not in compositeTrack.releases[r1]:
-			new.append(file)
-			
-	print 'Same: ' + str(len(same))
-	for file in same:
-		print file.name
-		
-	print 'New: ' + str(len(new))
-	for file in new:
-		print file.name
-		
-	print 'Deprecated: ' + str(len(dep))
-	for file in dep:
-		print file.name
-		
-	alphafiles = compositeTrack.alphaMetaDb.filter(lambda s: 'fileName' in s, lambda s: s['fileName'])
-	publicfiles = compositeTrack.publicMetaDb.filter(lambda s: 'fileName' in s, lambda s: s['fileName'])
-	
-	sameMdb = list()
-	newMdb = list()
-	depMdb = list()
-	
-	for file in alphafiles:
-		if file in publicfiles:
-			sameMdb.append(file)
-		else:
-			depMdb.append(file)
-		
-	for file in publicfiles:
-		if file not in alphafiles:
-			newMdb.append(file)
-			
-	print 'Same Mdb: ' + str(len(same))
-	for file in sameMdb:
-		print file
-		
-	print 'New Mdb: ' + str(len(new))
-	for file in newMdb:
-		print file
-		
-	print 'Deprecated Mdb: ' + str(len(dep))
-	for file in depMdb:
-		print file
-		
-	onlyAlphaMdb = list()
-	bothAlpha = list()
-	onlyAlphaD = list()
-	
-	onlyPublicMdb = list()
-	bothPublic = list()
-	onlyPublicD = list()
-	
-	for file in alphafiles:
-		
+    parser = argparse.ArgumentParser(
+        prog='mkChangeNotes',
+        description='Writes out notes file for packing to QA',
+        epilog='example: encodeMkChange hg19 wgEncodeUwDnase 3 2'
+        )
+    parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
+    parser.add_argument('-l', '--loose', action="store_true", default=0, help='Loose checking for legacy elements. Will be retired once all tracks go through a release cycle')
+    parser.add_argument('-i', '--ignore', action="store_true", default=0, help='Ignore errors, print out report.')
+    parser.add_argument('database', help='The database, typically hg19 or mm9')
+    parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
+    parser.add_argument('releaseNew', help='The new release to be released')
+    parser.add_argument('releaseOld', help='The old release that is already released')
 
-	
+    if len(sys.argv) == 1:
+        parser.print_help()
+        return
+    args = parser.parse_args(sys.argv[1:])
+    if not args.releaseNew.isdigit():
+        parser.print_help()
+        return
+
+    
+    c = track.CompositeTrack(args.database,args.composite)
+
+    loose = args.loose
+
+    errors = []
+    
+    if args.releaseOld == "-":
+        args.releaseOld = 0
+    if int(args.releaseOld) > int(args.releaseNew):
+        errors.append("Old Release is higher than New Release")
+        args.releaseOld = args.releaseNew
+
+    if int(args.releaseNew) > 1:
+    
+        newReleaseFiles = c.releases[int(args.releaseNew)-1]
+        oldReleaseFiles = c.releases[int(args.releaseOld)-1]
+
+        newMdb = c.alphaMetaDb
+        oldMdb = c.publicMetaDb
+            
+        errors.extend(checkMetaDbForFiles(newMdb, newReleaseFiles, "alpha metaDb", loose))    
+        errors.extend(checkMetaDbForFiles(oldMdb, oldReleaseFiles, "public metaDb", loose))
+        errors.extend(checkAlphaForDropped(newMdb, oldMdb, "alpha metaDb", "stanza"))
+        errors.extend(checkAlphaForDropped(newReleaseFiles, oldReleaseFiles, "new release download directory", "file"))
+        errors.extend(checkMd5sums(newReleaseFiles, oldReleaseFiles))
+
+        (newTableSet, newRevokedSet, newAtticSet, newTableError) = checkTableStatus(newMdb, newReleaseFiles, args.database, args.composite, "alpha metaDb", loose)
+        errors.extend(newTableError)
+        (oldTableSet, oldRevokedSet, oldAtticSet, oldTableError) = checkTableStatus(oldMdb, oldReleaseFiles, args.database, args.composite, "public metaDb", loose)
+        errors.extend(oldTableError)
+
+        (newGbdbSet, newGbdbError) = getGbdbFiles(args.database, newTableSet, newMdb)
+        errors.extend(newGbdbError)
+        (oldGbdbSet, oldGbdbError) = getGbdbFiles(args.database, oldTableSet, oldMdb)
+        errors.extend(oldGbdbError)
+    
+        droppedTables = oldTableSet - newTableSet
+        if droppedTables:
+            for i in droppedTables:
+                errors.append("table: %s was dropped between releases" % i)
+
+
+#########
+        #some weird suggestion from online about python 3 not being able to compare strings to ints implicitly,
+        #here for future reference in case something breaks
+        #pushTables = sorted((newTableSet - oldTableSet), key=lambda item: (int(item.partition(' ')[0])
+        #           if item[0].isdigit() else float('inf'), item))
+        #pushFiles = sorted((newReleaseFiles - oldReleaseFiles), key=lambda item: (int(item.partition(' ')[0])
+        #           if item[0].isdigit() else float('inf'), item))
+        #pushGbdbs = sorted((newGbdbSet - oldGbdbSet), key=lambda item: (int(item.partition(' ')[0])
+        #           if item[0].isdigit() else float('inf'), item))
+#########
+
+        pushTables = sorted((newTableSet - oldTableSet))
+        pushFiles = sorted((set(newReleaseFiles) - set(oldReleaseFiles)))
+        pushGbdbs = sorted((newGbdbSet - oldGbdbSet))
+        totalFiles = set(newReleaseFiles)
+
+        (pushFiles, totalFiles) = cleanSpecialFiles(pushFiles, totalFiles)
+        (oldReleaseFiles, totalFiles) = cleanSpecialFiles(set(oldReleaseFiles), totalFiles)
+        (oldReleaseFiles, pushFiles, additionalList) = separateOutAdditional(oldReleaseFiles, totalFiles, pushFiles)
+        
+        filesizes = makeFileSizes(c, args, pushFiles, pushGbdbs, additionalList)   
+        
+        if (not errors) or args.ignore:
+            printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, pushTables, pushFiles, pushGbdbs, c, oldTableSet, oldReleaseFiles, oldGbdbSet, filesizes, newAtticSet, oldAtticSet, newRevokedSet, oldRevokedSet)
+
+        else:
+            printErrors(errors)
+
+
+    else:
+
+        args.releaseOld = 0
+        newReleaseFiles = c.releases[int(args.releaseNew)-1]
+        newMdb = c.alphaMetaDb
+        errors.extend(checkMetaDbForFiles(newMdb, newReleaseFiles, "alpha metaDb", loose))
+        (newTableSet, newRevokedSet, newAtticSet, newTableError) = checkTableStatus(newMdb, newReleaseFiles, args.database, args.composite, "alpha metaDb", loose)
+        errors.extend(newTableError)
+        (newGbdbSet, newGbdbError) = getGbdbFiles(args.database, newTableSet, newMdb)
+        errors.extend(newGbdbError)
+        #set for easy operations
+        totalFiles = set(newReleaseFiles)
+        #clean out special fiels we don't push i.e. md5sum.history
+        (pushFiles, totalFiles) = cleanSpecialFiles(totalFiles, totalFiles)
+        #makes list for additional files
+        (spam, pushFiles, additionalList) = separateOutAdditional(set(), totalFiles, pushFiles)
+        #makes files sizes
+        filesizes = makeFileSizes(c, args, pushFiles, newGbdbSet, additionalList)
+        if (not errors) or args.ignore:
+            printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, newTableSet, pushFiles, c, newGbdbSet, filesizes, newAtticSet, newRevokedSet) 
+        else:
+            printErrors(errors)
+
 if __name__ == '__main__':
-	main()
+    main()
+

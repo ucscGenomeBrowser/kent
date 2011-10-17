@@ -4,7 +4,7 @@
     type bigWig 0 10000
     superTrack wgEncodeReg hide
     shortLabel DNAse Signals
-    longLabel DNAse Hypersensitivity on 7 Cell Lines from ENCODE/UW
+    longLabel DNAse Hypersensitivity on 9 Cell Lines from ENCODE/UW
     configurable on
     visibility hide
     maxHeightPixels 100:30:11
@@ -15,7 +15,7 @@
     dragAndDrop subTracks
 
         track wgEncodeRegDnaseNormGm12878
-	table wgEncodeUwDnaseGm12878SigPooled
+	table wgEncodeRegDnaseGm12878SigPooled
 	shortLabel Gm12878
 	longLabel DNAse Hypersensitivity of Gm12878 cells from ENCODE
 	parent wgEncodeRegDnaseNorm
@@ -23,47 +23,63 @@
 	color 255,128,128
 
 	track wgEncodeRegDnaseNormH1hesc
-	table wgEncodeUwDnaseH1hescSigPooled
+	table wgEncodeRegDnaseH1hescSigPooled
 	shortLabel H1-hESC
 	longLabel DNAse Hypersensitivity of H1-hESC cells from ENCODE
 	parent wgEncodeRegDnaseNorm
         type bigWig 0 65177
 	color 255,212,128
 
+	track wgEncodeRegDnaseNormHelas3
+	table wgEncodeRegDnaseHelas3SigPooled
+	shortLabel HeLa-S3
+	longLabel DNAse Hypersensitivity of HeLa-S3 cells from ENCODE
+	parent wgEncodeRegDnaseNorm
+        type bigWig 0 65177
+	color 227,255,128
+
+	track wgEncodeRegDnaseNormHepg2
+	table wgEncodeRegDnaseHepg2SigPooled
+	shortLabel HepG2
+	longLabel DNAse Hypersensitivity of HepG2 cells from ENCODE
+	parent wgEncodeRegDnaseNorm
+        type bigWig 0 65177
+	color 128,255,149
+
 	track wgEncodeRegDnaseNormHsmm
-	table wgEncodeUwDnaseHsmmSigPooled
+	table wgEncodeRegDnaseHsmmSigPooled
 	shortLabel HSMM
 	longLabel DNAse Hypersensitivity of HSMM cells from ENCODE
 	parent wgEncodeRegDnaseNorm
         type bigWig 0 65503
-	color 120,235,204
+	color 128,255,242
 
 	track wgEncodeRegDnaseNormHuvec
-	table wgEncodeUwDnaseHuvecSigPooled
+	table wgEncodeRegDnaseHuvecSigPooled
 	shortLabel HUVEC
 	longLabel DNAse Hypersensitivity of HUVEC cells from ENCODE
 	parent wgEncodeRegDnaseNorm
         type bigWig 0 65535
-	color 128,212,255
+	color 128,199,255
 
 	track wgEncodeRegDnaseNormK562
-	table wgEncodeUwDnaseK562SigPooled
+	table wgEncodeRegDnaseK562SigPooled
 	shortLabel K562
 	longLabel DNAse Hypersensitivity of K562 cells from ENCODE
 	parent wgEncodeRegDnaseNorm
         type bigWig 0 65528
-	color 128,128,255
+	color 149,128,255
 
 	track wgEncodeRegDnaseNormNhek
-	table wgEncodeUwDnaseNhekSigPooled
+	table wgEncodeRegDnaseNhekSigPooled
 	shortLabel NHEK
 	longLabel DNAse Hypersensitivity of NHEK cells from ENCODE
 	parent wgEncodeRegDnaseNorm
 	type bigWig 0 65534
-	color 212,128,255
+	color 227,128,255
 
 	track wgEncodeRegDnaseNormNhlf
-	table wgEncodeUwDnaseNhlfSigPooled
+	table wgEncodeRegDnaseNhlfSigPooled
 	shortLabel NHLF
 	longLabel DNAse Hypersensitivity of NHLF cells from ENCODE
 	parent wgEncodeRegDnaseNorm
@@ -133,14 +149,34 @@
     useScore 1
     priority 1.7
 
+    track wgEncodeRegEnhDnaseH3k4me1StringentOn9
+    shortLabel DNAse+H3K4Me1 En9
+    longLabel Stringent Enhancers (DNAse+ H3K4Me1+ CTCF- Promoter-) on 9 Cell Lines by ENCODE/UCSC
+    type factorSource
+    superTrack wgEncodeReg hide
+    sourceTable wgEncodeRegEnhDnaseH3k4me1CellsOn9
+    visibility hide
+    color 120,0,150
+    priority 1.73
+
+    track wgEncodeRegEnhDnaseH3k4me1LooseOn9
+    shortLabel DNAse+H3K4Me1 En9
+    longLabel Loose Enhancers (DNAse+ H3K4Me1+ CTCF- Promoter-) on 9 Cell Lines by ENCODE/UCSC
+    type factorSource
+    superTrack wgEncodeReg hide
+    sourceTable wgEncodeRegEnhDnaseH3k4me1CellsOn9
+    visibility hide
+    color 120,0,150
+    priority 1.74
+
     track wgEncodeRegMarkNormH3k4me1
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz H3K4Me1
-    longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
-    visibility hide
+    longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on 9 cell lines from ENCODE
+    visibility full
     viewLimits 0:150
     maxHeightPixels 100:50:11
     aggregate transparentOverlay
@@ -164,12 +200,28 @@
 	color 255,212,128
 	type bigWig 0 1727
 
+	track wgEncodeRegMarkNormH3k4me1Helas3
+	table wgEncodeBroadHistoneHelas3H3k04me1NormSig
+	shortLabel HeLa-S3
+	longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k4me1
+	color 227,255,128
+	type bigWig 0 10000
+
+	track wgEncodeRegMarkNormH3k4me1Hepg2
+	table wgEncodeBroadHistoneHepg2H3k4me1NormSig
+	shortLabel HepG2
+	longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k4me1
+	color 128,255,149
+	type bigWig 0 858
+
 	track wgEncodeRegMarkNormH3k4me1Hsmm
 	table wgEncodeBroadHistoneHsmmH3k4me1NormSig
 	shortLabel HSMM
 	longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me1
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 14799
 
 	track wgEncodeRegMarkNormH3k4me1Huvec
@@ -177,7 +229,7 @@
 	shortLabel HUVEC
 	longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me1
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 1429
 
 	track wgEncodeRegMarkNormH3k4me1K562
@@ -185,7 +237,7 @@
 	shortLabel K562
 	longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me1
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 1099
 
 	track wgEncodeRegMarkNormH3k4me1Nhek
@@ -193,7 +245,7 @@
 	shortLabel NHEK
 	longLabel H3K4Me1 Normalized (Often Found Near Regulatory Elements) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me1
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 3060
 
 	track wgEncodeRegMarkNormH3k4me1Nhlf
@@ -208,10 +260,10 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz H3K4Me3
-    longLabel H3K4Me3 Normalized (Often Found Near Promoters) on 7 cell lines from ENCODE
-    visibility hide
+    longLabel H3K4Me3 Normalized (Often Found Near Promoters) on 9 cell lines from ENCODE
+    visibility full
     viewLimits 0:250
     maxHeightPixels 100:50:11
     aggregate transparentOverlay
@@ -235,12 +287,28 @@
 	color 255,212,128
 	type bigWig 0 3791
 
+	track wgEncodeRegMarkNormH3k4me3Helas3
+	table wgEncodeBroadHistoneHelas3H3k4me3NormSig
+	shortLabel HeLa-S3
+	longLabel H3K4Me3 Normalized (Often Found Near Promoters) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k4me3
+	color 227,255,128
+	type bigWig 0 1114
+
+	track wgEncodeRegMarkNormH3k4me3Hepg2
+	table wgEncodeBroadHistoneHepg2H3k4me3NormSig
+	shortLabel HepG2
+	longLabel H3K4Me3 Normalized (Often Found Near Promoters) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k4me3
+	color 128,255,149
+	type bigWig 0 1802
+
 	track wgEncodeRegMarkNormH3k4me3Hsmm
 	table wgEncodeBroadHistoneHsmmH3k4me3NormSig
 	shortLabel HSMM
 	longLabel H3K4Me3 Normalized (Often Found Near Promoters) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me3
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 58110
 
 	track wgEncodeRegMarkNormH3k4me3Huvec
@@ -248,7 +316,7 @@
 	shortLabel HUVEC
 	longLabel H3K4Me3 Normalized (Often Found Near Promoters) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me3
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 4300
 
 	track wgEncodeRegMarkNormH3k4me3K562
@@ -256,7 +324,7 @@
 	shortLabel K562
 	longLabel H3K4Me3 Normalized (Often Found Near Promoters) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me3
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 2962
 
 	track wgEncodeRegMarkNormH3k4me3Nhek
@@ -264,7 +332,7 @@
 	shortLabel NHEK
 	longLabel H3K4Me3 Normalized (Often Found Near Promoters) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k4me3
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 15823
 
 	track wgEncodeRegMarkNormH3k4me3Nhlf
@@ -279,9 +347,9 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz H3K9Ac
-    longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
+    longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on 9 cell lines from ENCODE
     visibility hide
     viewLimits 0:200
     maxHeightPixels 100:50:11
@@ -306,12 +374,28 @@
 	color 255,212,128
 	type bigWig 0 4660
 
+	track wgEncodeRegMarkNormH3k9acHelas3
+	table wgEncodeBroadHistoneHelas3H3k9acNormSig
+	shortLabel HeLa-S3
+	longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k9ac
+	color 227,255,128
+	type bigWig 0 2372
+
+	track wgEncodeRegMarkNormH3k9acHepg2
+	table wgEncodeBroadHistoneHepg2H3k9acNormSig
+	shortLabel HepG2
+	longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k9ac
+	color 128,255,149
+	type bigWig 0 3523
+
 	track wgEncodeRegMarkNormH3k9acHsmm
 	table wgEncodeBroadHistoneHsmmH3k9acNormSig
 	shortLabel HSMM
 	longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k9ac
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 2777
 
 	track wgEncodeRegMarkNormH3k9acHuvec
@@ -319,7 +403,7 @@
 	shortLabel HUVEC
 	longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k9ac
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 3772
 
 	track wgEncodeRegMarkNormH3k9acK562
@@ -327,7 +411,7 @@
 	shortLabel K562
 	longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k9ac
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 4853
 
 	track wgEncodeRegMarkNormH3k9acNhek
@@ -335,7 +419,7 @@
 	shortLabel NHEK
 	longLabel H3K9Ac Normalized (Often Found Near Regulatory Elements) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k9ac
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 2832
 
 	track wgEncodeRegMarkNormH3k9acNhlf
@@ -350,9 +434,9 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz H3K27Ac
-    longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on 7 cell lines from ENCODE
+    longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on 9 cell lines from ENCODE
     visibility hide
     viewLimits 0:200
     maxHeightPixels 100:50:11
@@ -377,12 +461,28 @@
 	color 255,212,128
 	type bigWig 0 4972
 
+	track wgEncodeRegMarkNormH3k27acHelas3
+	table wgEncodeBroadHistoneHelas3H3k27acNormSig
+	shortLabel HeLa-S3
+	longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k27ac
+	color 227,255,128
+	type bigWig 0 4130
+
+	track wgEncodeRegMarkNormH3k27acHepg2
+	table wgEncodeBroadHistoneHepg2H3k27acNormSig
+	shortLabel HepG2
+	longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k27ac
+	color 128,255,149
+	type bigWig 0 4180
+
 	track wgEncodeRegMarkNormH3k27acHsmm
 	table wgEncodeBroadHistoneHsmmH3k27acNormSig
 	shortLabel HSMM
 	longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27ac
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 4864
 
 	track wgEncodeRegMarkNormH3k27acHuvec
@@ -390,7 +490,7 @@
 	shortLabel HUVEC
 	longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27ac
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 3122
 
 	track wgEncodeRegMarkNormH3k27acK562
@@ -398,7 +498,7 @@
 	shortLabel K562
 	longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27ac
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 8085
 
 	track wgEncodeRegMarkNormH3k27acNhek
@@ -406,7 +506,7 @@
 	shortLabel NHEK
 	longLabel H3K27Ac Normalized (Often Found Near Regulatory Elements) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27ac
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 48237
 
 	track wgEncodeRegMarkNormH3k27acNhlf
@@ -421,9 +521,9 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz H3K27Me3
-    longLabel H3K27Me3 Normalized (Polycomb silenced) on 7 cell lines from ENCODE
+    longLabel H3K27Me3 Normalized (Polycomb silenced) on 9 cell lines from ENCODE
     visibility hide
     viewLimits 0:150
     maxHeightPixels 100:50:11
@@ -448,12 +548,28 @@
 	color 255,212,128
 	type bigWig 0 1473
 
+	track wgEncodeRegMarkNormH3k27me3Helas3
+	table wgEncodeBroadHistoneHelas3H3k27me3NormSig
+	shortLabel HeLa-S3
+	longLabel H3K27Me3 Normalized (Polycomb silenced) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k27me3
+	color 227,255,128
+	type bigWig 0 1385
+
+	track wgEncodeRegMarkNormH3k27me3Hepg2
+	table wgEncodeBroadHistoneHepg2H3k27me3NormSig
+	shortLabel HepG2
+	longLabel H3K27Me3 Normalized (Polycomb silenced) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k27me3
+	color 128,255,149
+	type bigWig 0 822
+
 	track wgEncodeRegMarkNormH3k27me3Hsmm
 	table wgEncodeBroadHistoneHsmmH3k27me3NormSig
 	shortLabel HSMM
 	longLabel H3K27Me3 Normalized (Polycomb silenced) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27me3
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 1386
 
 	track wgEncodeRegMarkNormH3k27me3Huvec
@@ -461,7 +577,7 @@
 	shortLabel HUVEC
 	longLabel H3K27Me3 Normalized (Polycomb silenced) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27me3
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 930
 
 	track wgEncodeRegMarkNormH3k27me3K562
@@ -469,7 +585,7 @@
 	shortLabel K562
 	longLabel H3K27Me3 Normalized (Polycomb silenced) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27me3
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 5188
 
 	track wgEncodeRegMarkNormH3k27me3Nhek
@@ -477,7 +593,7 @@
 	shortLabel NHEK
 	longLabel H3K27Me3 Normalized (Polycomb silenced) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k27me3
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 1918
 
 	track wgEncodeRegMarkNormH3k27me3Nhlf
@@ -492,9 +608,9 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz H3K36Me3
-    longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on 7 cell lines from ENCODE
+    longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on 9 cell lines from ENCODE
     visibility hide
     viewLimits 0:100
     maxHeightPixels 100:50:11
@@ -519,12 +635,28 @@
 	color 255,212,128
 	type bigWig 0 1058
 
+	track wgEncodeRegMarkNormH3k36me3Helas3
+	table wgEncodeBroadHistoneHelas3H3k36me3NormSig
+	shortLabel HeLa-S3
+	longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k36me3
+	color 227,255,128
+	type bigWig 0 1508
+
+	track wgEncodeRegMarkNormH3k36me3Hepg2
+	table wgEncodeBroadHistoneHepg2H3k36me3NormSig
+	shortLabel HepG2
+	longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormH3k36me3
+	color 128,255,149
+	type bigWig 0 1878
+
 	track wgEncodeRegMarkNormH3k36me3Hsmm
 	table wgEncodeBroadHistoneHsmmH3k36me3NormSig
 	shortLabel HSMM
 	longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k36me3
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 1257
 
 	track wgEncodeRegMarkNormH3k36me3Huvec
@@ -532,7 +664,7 @@
 	shortLabel HUVEC
 	longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k36me3
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 13001
 
 	track wgEncodeRegMarkNormH3k36me3K562
@@ -540,7 +672,7 @@
 	shortLabel K562
 	longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k36me3
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 4097
 
 	track wgEncodeRegMarkNormH3k36me3Nhek
@@ -548,7 +680,7 @@
 	shortLabel NHEK
 	longLabel H3K36Me3 Normalized (Marks Areas of RNA PolII Elongation) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormH3k36me3
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 901
 
 	track wgEncodeRegMarkNormH3k36me3Nhlf
@@ -563,9 +695,9 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
-    shortLabel Normaliz H4K20Me1
-    longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on 7 cell lines from ENCODE
+    superTrack wgEncodeReg full
+    shortLabel Normaliz H3K30Me1
+    longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on 9 cell lines from ENCODE
     visibility hide
     viewLimits 0:150
     maxHeightPixels 100:50:11
@@ -577,7 +709,7 @@
 	track wgEncodeRegMarkNormH4k20me1Gm12878
 	table wgEncodeBroadHistoneGm12878H4k20me1NormSig
 	shortLabel GM12878
-	longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on GM12878 Cells from ENCODE
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on GM12878 Cells from ENCODE
 	parent wgEncodeRegMarkNormH4k20me1
 	color 255,128,128
 	type bigWig 0 1361
@@ -585,47 +717,63 @@
 	track wgEncodeRegMarkNormH4k20me1H1hesc
 	table wgEncodeBroadHistoneH1hescH4k20me1NormSig
 	shortLabel H1-hESC
-	longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on H1-hESC Cells from ENCODE
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on H1-hESC Cells from ENCODE
 	parent wgEncodeRegMarkNormH4k20me1
 	color 255,212,128
 	type bigWig 0 1025
 
+	track wgEncodeRegMarkNormH4k20me1Helas3
+	table wgEncodeBroadHistoneHelas3H4k20me1NormSig
+	shortLabel HeLa-S3
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormH4k20me1
+	color 227,255,128
+	type bigWig 0 1760
+
+	track wgEncodeRegMarkNormH4k20me1Hepg2
+	table wgEncodeBroadHistoneHepg2H4k20me1NormSig
+	shortLabel HepG2
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormH4k20me1
+	color 128,255,149
+	type bigWig 0 1049
+
 	track wgEncodeRegMarkNormH4k20me1Hsmm
 	table wgEncodeBroadHistoneHsmmH4k20me1NormSig
 	shortLabel HSMM
-	longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on HSMM Cells from ENCODE
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormH4k20me1
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 1785
 
 	track wgEncodeRegMarkNormH4k20me1Huvec
 	table wgEncodeBroadHistoneHuvecH4k20me1NormSig
 	shortLabel HUVEC
-	longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on HUVEC Cells from ENCODE
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormH4k20me1
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 1324
 
 	track wgEncodeRegMarkNormH4k20me1K562
 	table wgEncodeBroadHistoneK562H4k20me1NormSig
 	shortLabel K562
-	longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on K562 Cells from ENCODE
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormH4k20me1
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 1045
 
 	track wgEncodeRegMarkNormH4k20me1Nhek
 	table wgEncodeBroadHistoneNhekH4k20me1NormSig
 	shortLabel NHEK
-	longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on NHEK Cells from ENCODE
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormH4k20me1
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 2710
 
 	track wgEncodeRegMarkNormH4k20me1Nhlf
 	table wgEncodeBroadHistoneNhlfH4k20me1NormSig
 	shortLabel NHLF
-	longLabel H4K20Me1 Normalized (Associated with Active Accessible Regions) on NHLF Cells from ENCODE
+	longLabel H3K30Me1 Normalized (Associated with Active Accessible Regions) on NHLF Cells from ENCODE
 	parent wgEncodeRegMarkNormH4k20me1
 	color 255,128,212
 	type bigWig 0 3071
@@ -634,9 +782,9 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz CTCF
-    longLabel CTCF Normalized (Insulator/DNA Looping) on 7 cell lines from ENCODE
+    longLabel CTCF Normalized (Insulator/DNA Looping) on 9 cell lines from ENCODE
     visibility hide
     viewLimits 0:300
     maxHeightPixels 100:50:11
@@ -661,12 +809,28 @@
 	color 255,212,128
 	type bigWig 0 6584
 
+	track wgEncodeRegMarkNormCtcfHelas3
+	table wgEncodeBroadHistoneHelas3CtcfNormSig
+	shortLabel HeLa-S3
+	longLabel CTCF Normalized (Insulator/DNA Looping) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormCtcf
+	color 227,255,128
+	type bigWig 0 2295
+
+	track wgEncodeRegMarkNormCtcfHepg2
+	table wgEncodeBroadHistoneHepg2CtcfNormSig
+	shortLabel HepG2
+	longLabel CTCF Normalized (Insulator/DNA Looping) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormCtcf
+	color 128,255,149
+	type bigWig 0 4810
+
 	track wgEncodeRegMarkNormCtcfHsmm
 	table wgEncodeBroadHistoneHsmmCtcfNormSig
 	shortLabel HSMM
 	longLabel CTCF Normalized (Insulator/DNA Looping) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormCtcf
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 3276
 
 	track wgEncodeRegMarkNormCtcfHuvec
@@ -674,7 +838,7 @@
 	shortLabel HUVEC
 	longLabel CTCF Normalized (Insulator/DNA Looping) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormCtcf
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 2644
 
 	track wgEncodeRegMarkNormCtcfK562
@@ -682,7 +846,7 @@
 	shortLabel K562
 	longLabel CTCF Normalized (Insulator/DNA Looping) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormCtcf
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 7721
 
 	track wgEncodeRegMarkNormCtcfNhek
@@ -690,7 +854,7 @@
 	shortLabel NHEK
 	longLabel CTCF Normalized (Insulator/DNA Looping) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormCtcf
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 3034
 
 	track wgEncodeRegMarkNormCtcfNhlf
@@ -705,9 +869,9 @@
     container multiWig
     noInherit on
     type bigWig 0 10000
-    superTrack wgEncodeReg hide
+    superTrack wgEncodeReg full
     shortLabel Normaliz Input Control
-    longLabel Input Control Normalized (Input Control - used to filter peaks) on 7 cell lines from ENCODE
+    longLabel Input Control Normalized (Input Control - used to filter peaks) on 9 cell lines from ENCODE
     visibility hide
     viewLimits 0:150
     maxHeightPixels 100:50:11
@@ -732,12 +896,28 @@
 	color 255,212,128
 	type bigWig 0 1049
 
+	track wgEncodeRegMarkNormControlHelas3
+	table wgEncodeBroadHistoneHelas3ControlNormSig
+	shortLabel HeLa-S3
+	longLabel Input Control Normalized (Input Control - used to filter peaks) on HeLa-S3 Cells from ENCODE
+	parent wgEncodeRegMarkNormControl
+	color 227,255,128
+	type bigWig 0 2738
+
+	track wgEncodeRegMarkNormControlHepg2
+	table wgEncodeBroadHistoneHepg2ControlNormSig
+	shortLabel HepG2
+	longLabel Input Control Normalized (Input Control - used to filter peaks) on HepG2 Cells from ENCODE
+	parent wgEncodeRegMarkNormControl
+	color 128,255,149
+	type bigWig 0 1837
+
 	track wgEncodeRegMarkNormControlHsmm
 	table wgEncodeBroadHistoneHsmmControlNormSig
 	shortLabel HSMM
 	longLabel Input Control Normalized (Input Control - used to filter peaks) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkNormControl
-	color 120,235,204
+	color 128,255,242
 	type bigWig 0 2007
 
 	track wgEncodeRegMarkNormControlHuvec
@@ -745,7 +925,7 @@
 	shortLabel HUVEC
 	longLabel Input Control Normalized (Input Control - used to filter peaks) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkNormControl
-	color 128,212,255
+	color 128,199,255
 	type bigWig 0 1516
 
 	track wgEncodeRegMarkNormControlK562
@@ -753,7 +933,7 @@
 	shortLabel K562
 	longLabel Input Control Normalized (Input Control - used to filter peaks) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkNormControl
-	color 158,158,255
+	color 149,128,255
 	type bigWig 0 1326
 
 	track wgEncodeRegMarkNormControlNhek
@@ -761,7 +941,7 @@
 	shortLabel NHEK
 	longLabel Input Control Normalized (Input Control - used to filter peaks) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkNormControl
-	color 212,128,255
+	color 227,128,255
 	type bigWig 0 1749
 
 	track wgEncodeRegMarkNormControlNhlf

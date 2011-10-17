@@ -20,8 +20,8 @@ set xdb = mm9
 set Xdb = Mm9
 set ydb = canFam2
 set zdb = rheMac2
-set spDb = sp101005
-set pbDb = proteins101005
+set spDb = sp111004
+set pbDb = proteins111004
 set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer7
@@ -483,7 +483,6 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 # wc $testingDir/txWalk.intersect.bed
 #
 
-
 # Fetch human protein set and table that describes if curated or not.
 # Takes about a minute
 hgsql -N $spDb -e \
@@ -637,10 +636,6 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
-
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
 
 # Merge back in antibodies, and add the small, noncoding genes that are not well-represented
 # in GenBank (Rfam, tRNA)
@@ -803,8 +798,6 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
-
-
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
@@ -848,11 +841,6 @@ hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -954,7 +942,7 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-
+exit $status # BRACKET
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -1160,11 +1148,11 @@ cd $dir
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
-	pfamDesc.tab > sub.tab
+	pfam/pfamDesc.tab > sub.tab
 cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
-hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
+hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -1292,10 +1280,8 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
@@ -1321,7 +1307,7 @@ sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
 
 # move this exit statement to the end of the section to be done next
-#exit $status # BRACKET
+exit $status # BRACKET
 
 
 # Make full text index.  Takes a minute or so.  After this the genome browser
@@ -1347,6 +1333,8 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
+# move this exit statement to the end of the section to be done next
+#exit $status # BRACKET
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms

@@ -12,7 +12,7 @@ subGroup4 view View SimpleSignal=Signal
 dimensions dimensionA=rep dimensionY=cellType dimensionX=treatment
 dimensionAchecked rep1,rep2
 sortOrder cellType=+ treatment=+ rep=+
-fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep origAssembly=Original<BR>Assembly dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep origAssembly=Original<BR>Assembly dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
 visibility hide

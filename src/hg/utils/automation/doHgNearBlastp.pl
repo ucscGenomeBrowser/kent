@@ -248,6 +248,7 @@ _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::nfsNoodge("$bossScript");
   &HgAutomate::run("$HgAutomate::runSSH $distrHost nice $bossScript");
 }
 
@@ -274,6 +275,7 @@ _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::nfsNoodge("$bossScript");
   &HgAutomate::run("$HgAutomate::runSSH $distrHost nice $bossScript");
 } # formatSequence
 
@@ -353,6 +355,7 @@ _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::nfsNoodge("$bossScript");
   &HgAutomate::run("$HgAutomate::runSSH $clusterHub $bossScript");
 } # runPairwiseBlastp
 
@@ -395,6 +398,7 @@ _EOF_
     ;
   close($fh);
   &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::nfsNoodge("$bossScript");
 
   return if ($opt_noLoad);
 
