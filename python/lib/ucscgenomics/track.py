@@ -172,12 +172,15 @@ class CompositeTrack(object):
                 releasefiles = dict()
                 
                 for file in os.listdir(releasepath):
-                    if file != 'md5sum.txt' and md5s != None and file in md5s:
+                    if file != 'md5sum.txt' and md5s != None and file in md5s and not os.path.isdir(releasepath + file):
                         releasefiles[file] = TrackFile(releasepath + file, md5s[file])
-                    else:
+                    elif not os.path.isdir(releasepath + file):
                         releasefiles[file] = TrackFile(releasepath + file, None)
-                    
-                #releasefiles.sort()
+                    elif os.path.isdir(releasepath + file):
+                        for innerfile in os.listdir(releasepath + file):
+                            pathfile = file + "/" + innerfile 
+                            releasefiles[pathfile] = TrackFile(releasepath + pathfile, None)
+		#releasefiles.sort()
                 self._releaseFiles.append(releasefiles)
                 count = count + 1
                 
