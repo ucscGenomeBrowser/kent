@@ -194,6 +194,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
     char varName[1024];
     safef(varName, sizeof(varName), "%s." VCF_HAP_HEIGHT_VAR, name);
     cgiMakeIntVarInRange(varName, cartHeight, "Height (in pixels) of track", 5, "10", "2500");
+    puts("<BR>");
     }
 }
 
@@ -260,6 +261,20 @@ if (cartListVarExists(cart, cartVar))
 cgiMakeCheckboxGroupWithVals(cartVar, labels, values, filterCount, selectedValues, 1);
 }
 
+static void vcfCfgMinAlleleFreq(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
+				char *name, boolean compositeLevel)
+/* Show input for minimum allele frequency, if we can extract it from the VCF INFO column. */
+{
+printf("<B>Minimum minor allele frequency (if INFO column includes AF or AC+AN):</B>\n");
+double cartMinFreq = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel,
+					   VCF_MIN_ALLELE_FREQ_VAR, VCF_DEFAULT_MIN_ALLELE_FREQ);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_MIN_ALLELE_FREQ_VAR, name);
+cgiMakeDoubleVarInRange(varName, cartMinFreq, "minor allele frequency between 0.0 and 0.5", 5,
+			"0.0", "0.5");
+puts("<BR>");
+}
+
 void vcfCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* VCF: Variant Call Format.  redmine #3710 */
 {
@@ -273,6 +288,7 @@ if (vcff != NULL)
 	vcfCfgHapCluster(cart, tdb, vcff, name, compositeLevel);
     vcfCfgMinQual(cart, tdb, vcff, name, compositeLevel);
     vcfCfgFilterColumn(cart, tdb, vcff, name, compositeLevel);
+    vcfCfgMinAlleleFreq(cart, tdb, vcff, name, compositeLevel);
     }
 else
     {
