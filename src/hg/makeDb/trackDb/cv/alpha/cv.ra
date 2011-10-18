@@ -9684,12 +9684,14 @@ tag 5C
 type dataType
 label 5C
 description 5C Interactions
+dataGroup Other
 
 term AffyExonArray
 tag AFFYEXONARRAY
 type dataType
 label Exon-array
 description Affymetrix Exon Array
+dataGroup RNA Profiling
 
 
 #not currently in metaDb
@@ -9698,24 +9700,28 @@ tag BIP
 type dataType
 label Bi-dir Promoters
 description Bidirectional Promoters
+dataGroup Other
 
 term Cage
 tag CAGE
 type dataType
 label CAGE
 description CAGE
+dataGroup RNA Profiling
 
 term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
 description ChIP-Seq
+dataGroup TFBS/Histones
 
 term Cluster
 tag CLUSTER
 type dataType
 label Integ Cluster
 description Element cluster by integrative analysis
+dataGroup Other
 
 #tag not standard to match hg18
 term Cnv
@@ -9723,12 +9729,14 @@ tag CNVdt
 type dataType
 label CNV
 description Copy Number Variation
+dataGroup Other
 
 term Combined
 tag COMBO
 type dataType
 label Combined
 description Synthesis of multiple types of data
+dataGroup Other
 # Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
 #term not standard to match hg18???
@@ -9737,18 +9745,21 @@ tag DGF
 type dataType
 label DNase-DGF
 description DNase Digital Footprinting
+dataGroup Open Chromatin
 
 term DnaPet
 tag DNAPET
 type dataType
 label DNA-PET
 description DNA Paired End Tag
+dataGroup Other
 
 term DnaseSeq
 tag DNASESEQ
 type dataType
 label DNase-seq
 description DNase digestion followed by sequencing
+dataGroup Open Chromatin
 
 #The tag is not standard Camel case to be consistent with hg18
 term FaireSeq
@@ -9756,54 +9767,63 @@ tag FAIRESEQ
 type dataType
 label FAIRE-seq
 description FAIRE followed by sequencing
+dataGroup Open Chromatin
 
 term Genotype
 tag GENOTYPE
 type dataType
 label Genotype
 description Genotyping experiments including copy nummber variants and SNPs
+dataGroup Other
 
 term Gencode
 tag GENCODE
 type dataType
 label Gencode
 description Gencode
+dataGroup Other
 
 term ChiaPet
 tag CHIAPET
 type dataType
 label ChIA-pet
 description ChIA-pet
+dataGroup Other
 
 term Orchid
 tag ORCHID
 type dataType
 label ORChID
 description ORChID
+dataGroup Other
 
 term Mapability
 tag MAPABILITY
 type dataType
 label Mapability
 description Uniqueness of n-mer sequence fragments across the genome
+dataGroup Other
 
 term MethylArray
 tag METHYLARRAY
 type dataType
 label Methyl Array
 description Methyl Bead Array
+dataGroup DNA Methylation
 
 term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-Seq
 description MethylSeq
+dataGroup DNA Methylation
 
 term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
 description Methyl RRBS
+dataGroup DNA Methylation
 
 # tag not standard to match hg18
 term NRE
@@ -9811,24 +9831,28 @@ tag NRE
 type dataType
 label Neg Regulatory
 description Negative Regulatory Elements
+dataGroup Other
 
 term Nucleosome
 tag NUCLEOSOME
 type dataType
 label Nucleosome
 description Nucleosome positioning data
+dataGroup Other
 
 term Proteogenomics
 tag PROTGENO
 type dataType
 label Proteogenomics
 description Mass Spec Proteogenomic Mapping
+dataGroup Other
 
 term RepliSeq
 tag  REPLISEQ
 type dataType
 label Repli-Seq
 description Replication Timing (PROVISIONAL)
+dataGroup Other
 
 # tag not standard to match hg18
 term RnaPet
@@ -9836,18 +9860,21 @@ tag PET
 type dataType
 label RNA-PET
 description RNA Paired-End Tag
+dataGroup RNA Profiling
 
 term RnaChip
 tag RNACHIP
 type dataType
 label RNA-chip
 description microarray analysis of RNA expression
+dataGroup RNA Profiling
 
 term RnaSeq
 tag RNASEQ
 type dataType
 label RNA-seq
 description Sequencing analysis of RNA expression
+dataGroup RNA Profiling
 
 #GeneST and Tiling are flavors of the RIP-chip.
 #They need separate dataTypes for the experiment table to work
@@ -9856,31 +9883,35 @@ tag  GENEST
 type dataType
 label RIP-chip Gene ST
 description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
+dataGroup RNA Binding Proteins
 
 term RipTiling
 tag  TILING
 type dataType
 label RIP-chip Tiling Array
 description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
+dataGroup RNA Binding Proteins
 
 term RipChip
 tag  RIPCHIP
 type dataType
 label RIP-chip
 description Rna IP measured on microarray
+dataGroup RNA Binding Proteins
 
 term RipSeq
 tag  RIPSEQ
 type dataType
 label RIP-seq
 description RNA-seq on RIP-chip data
+dataGroup RNA Binding Proteins
 
 term Switchgear
 tag SWITCHGEAR
 type dataType
 label SwitchGear
 description SwitchGear Genomics 3' UTR reporter assay
-
+dataGroup RNA Binding Proteins
 
 #This is not in the metaDB currently
 term TfbsValid
@@ -9888,6 +9919,7 @@ tag TFBSVALID
 type dataType
 label TFBS-Valid
 description TFBS-Valid
+dataGroup Other
 
 ### version
 

@@ -168,7 +168,7 @@ def getTableSize(mdbtableset, database):
             tablesize = tablesize + float(j)
     return math.ceil(tablesize)
 
-def checkMd5sums(newfiles, oldfiles):
+def checkMd5sums(newfiles, oldfiles, loose):
     errors = []
     for i in oldfiles:
         if i not in newfiles:
@@ -176,8 +176,10 @@ def checkMd5sums(newfiles, oldfiles):
         elif re.match('wgEncode.*', i):
             if oldfiles[i].md5sum != newfiles[i].md5sum:
                 errors.append("file: %s have changed md5sums between releases. %s vs %s" % (i, oldfiles[i].md5sum, newfiles[i].md5sum))
-
-    return errors
+    if loose:
+        return list()
+    else:
+        return errors
 
 def makeFileSizes(c, args, inlist):
     checklist = list()
@@ -228,7 +230,7 @@ def separateOutAdditional(oldReleaseFiles, totalFiles, newSupplementalSet, oldSu
 def printWithPath(set, c, release):
     for i in sorted(set):
         print "%s/%s" % (c.httpDownloadsPath + 'release' + release, i)
-        
+
 def printGbdbPath(set, database):
     for i in sorted(set):
         print "/gbdb/%s/bbi/%s" % (database, i)
@@ -241,7 +243,7 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     #the groups here need to be predefined, I just copied and pasted after working out what they were
     sep = "\n"
     print "mkChangeNotes v2"
-    print "%s %s Release %s" % (args.database, args.composite, args.releaseNew)    
+    print "%s %s Release %s vs Release %s" % (args.database, args.composite, args.releaseNew, args.releaseOld)    
     print "" 
     print "QA Count Summaries for Release %s:" % args.releaseNew
     print "Tables: %d" % int(len(newTableSet))
@@ -272,7 +274,7 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         print "Gbdbs: %d MB" % size
     size = int(makeFileSizes(c, args, (newSupplementalSet - oldSupplementalSet)))
     totalsize = totalsize + size
-    if int(size/1-24) > 1:
+    if int(size/1024) > 1:
         print "Supplemental: %d MB" % (size, int(size/1024))
     else:
         print "Supplemental: %d MB" % size
@@ -334,12 +336,12 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         printGbdbPath(pushGbdbs, args.database)
         print ""
         print "Persisting Gbdb Files (%s):" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs)
-        printGbdbPath(((newGbdbSet & oldGbdbSet) - revokedGbdbs), args.database)
+        printGbdbPath((newGbdbSet & oldGbdbSet) - revokedGbdbs, args.database)
         print ""
         print "Revoked/Replaced/Renamed Gbdb Files (%s):" % len(revokedGbdbs)
         printGbdbPath(revokedGbdbs, args.database)
     print "\n"
-    print "Supplemental Files:"
+    print "SUPPLEMENTAL FILES:"
     print "New: %s" % len(newSupplementalSet - oldSupplementalSet)
     print "Persisting: %s" % len(oldSupplementalSet & newSupplementalSet)
     print "Removed: %s" % len(oldSupplementalSet - newSupplementalSet)
@@ -347,13 +349,13 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     print "Total: %s" % len(newSupplementalSet | oldSupplementalSet)
     if args.full:
         print ""
-        print "New Supplemental Files:"
+        print "New Supplemental Files (%s):" % len(newSupplementalSet - oldSupplementalSet)
         printWithPath(newSupplementalSet - oldSupplementalSet, c, args.releaseNew)
         print ""
-        print "Persisting Supplemental Files:"
+        print "Persisting Supplemental Files (%s):" % len(oldSupplementalSet & newSupplementalSet)
         printWithPath(oldSupplementalSet & newSupplementalSet, c, args.releaseNew)
         print ""
-        print "Removed Supplemental Files:"
+        print "Removed Supplemental Files (%s):" % len(oldSupplementalSet - newSupplementalSet)
         printWithPath(oldSupplementalSet - newSupplementalSet, c, args.releaseNew)
     print "\n"
     print "OTHER FILES:"
@@ -374,16 +376,21 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     if not args.ignore:
         print "No Errors"
     
-def printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, pushTables, c, pushGbdbs, atticSet, newSupplementalSet, tableSize):
+def printReportOne(args, totalFiles, revokedFiles, newGbdbSet, revokedGbdbs, newTableSet, revokedTables, additionalList, c, atticSet, newSupplementalSet, tableSize):
     print "mkChangeNotes v2"
     print "%s %s Release %s" % (args.database, args.composite, args.releaseNew)
     print ""
     print "QA Count Summaries for Release %s:" % args.releaseNew
-    print "Tables: %d" % int(len(newTableSet))
-    print "Files: %d" % int(len(totalFiles))
-    print "Gbdbs: %d" % int(len(newGbdbSet))
+    print "Tables: %d" % int(len(newTableSet - revokedTables))
+    print "Files: %d" % int(len(totalFiles - revokedFiles))
+    print "Gbdbs: %d" % int(len(newGbdbSet - revokedGbdbs))
     print "Supplemental: %d" % int(len(newSupplementalSet))
     print "Other: %d" % int(len(additionalList))
+    print ""
+    print "REVOKED:"
+    print "Tables: %s" % len(revokedTables)
+    print "Files: %s" % len(revokedFiles)
+    print "Gbdbs: %s" % len(revokedGbdbs)
     print "\n"
     totalsize = 0;
     print "Sizes of New:"
@@ -399,7 +406,7 @@ def printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, pu
         print "Files: %d MB (%d GB)" % (size, int(size/1024))
     else:
         print "Files: %d MB" % size
-    size = int(makeFileSizes(c, args, pushGbdbs))
+    size = int(makeFileSizes(c, args, newGbdbSet))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Gbdbs: %d MB (%d GB)" % (size, int(size/1024))
@@ -407,8 +414,8 @@ def printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, pu
         print "Gbdbs: %d MB" % size
     size = int(makeFileSizes(c, args, newSupplementalSet))
     totalsize = totalsize + size
-    if int(size/1-24) > 1:
-        print "Supplemental: %d MB" % (size, int(size/1024))
+    if int(size/1024) > 1:
+        print "Supplemental: %d MB (%d GB)" % (size, int(size/1024))
     else:
         print "Supplemental: %d MB" % size
     size = int(makeFileSizes(c, args, (additionalList)))
@@ -424,20 +431,28 @@ def printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, pu
     print "\n"
     if args.full:
         print ""
-        print "New Tables (%s):" % len(pushTables)
-        printIter(pushTables)
+        print "New Tables (%s):" % len(newTableSet - revokedTables)
+        printIter(newTableSet - revokedTables)
         print "\n"
-        print "New Download Files (%s):" % len(totalFiles)
-        printWithPath(totalFiles, c, args.releaseNew)
+        print "New Download Files (%s):" % len(totalFiles - revokedFiles)
+        printWithPath(totalFiles - revokedFiles, c, args.releaseNew)
         print "\n"
-        print "New Gbdb Files (%s):" % len(pushGbdbs)
-        printWithPath(pushGbdbs, c, args.releaseNew)
+        print "New Gbdb Files (%s):" % len(newGbdbSet - revokedGbdbs)
+        printGbdbPath(newGbdbSet - revokedGbdbs, args.database)
         print "\n"
-        print "New Supplemental Files:"
+        print "New Supplemental Files (%s):" % len(newSupplementalSet)
         printWithPath(newSupplementalSet, c, args.releaseNew)
         print "\n" 
         print "New Other Files (%s):" % len(additionalList)
         printWithPath(additionalList, c, args.releaseNew)
+        print "\n"
+        print "Revoked Tables (%s):" %len(revokedTables)
+        printIter(revokedTables)
+        print "Revoked Files (%s):" % len(revokedFiles)
+        printWithPath(revokedFiles, c, args.releaseNew)
+        print "\n"
+        print "Revoked Gbdbs (%s):" % len(revokedGbdbs)
+        printGbdbPath(revokedGbdbs, args.database)
         print "\n"
     if not args.ignore:
         print "No Errors"
@@ -497,12 +512,15 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
     errors = []
     
     if not args.releaseOld.isdigit():
-        args.releaseOld = 0
-    if int(args.releaseOld) > int(args.releaseNew):
+        args.releaseOld = 'solo'    
+    elif int(args.releaseOld) > int(args.releaseNew):
         errors.append("Old Release is higher than New Release")
         args.releaseOld = args.releaseNew
+        printErrors(errors)
+        return
 
-    if int(args.releaseNew) > 1:
+
+    if int(args.releaseNew) > 1 and str(args.releaseOld) != 'solo':
     
         newReleaseFiles = c.releases[int(args.releaseNew)-1]
         oldReleaseFiles = c.releases[int(args.releaseOld)-1]
@@ -519,7 +537,7 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
         #checks to see that nothing has disappeared between public and alpha
         errors.extend(checkAlphaForDropped(newMdb, oldMdb, "alpha metaDb", "stanza"))
         missingFiles = checkFilesForDropped(newReleaseFiles, oldReleaseFiles)
-        errors.extend(checkMd5sums(newReleaseFiles, oldReleaseFiles))
+        errors.extend(checkMd5sums(newReleaseFiles, oldReleaseFiles, loose))
 
         #checks and gets tables that are present, also returns a revoked set of tables for new
         (newTableSet, revokedTableSet, newTableError) = checkTableStatus(newMdb, newReleaseFiles, args.database, args.composite, "alpha metaDb", loose, revokedSet)
@@ -562,7 +580,7 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
             printErrors(errors)
 
 
-    else:
+    elif args.releaseOld == 'solo':
 
         newReleaseFiles = c.releases[int(args.releaseNew)-1]
         
@@ -588,7 +606,7 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
         #makes list for additional files
         (oldReleaseFiles, additionalList, oldAdditionalList, totalFiles) = separateOutAdditional(set(), totalFiles, newSupplementalSet, set())
         if (not errors) or args.ignore:
-            printReportOne(args, totalFiles, newGbdbSet, newTableSet, additionalList, newTableSet, c, newGbdbSet, atticSet, newSupplementalSet, tableSize) 
+            printReportOne(args, totalFiles, revokedFiles, newGbdbSet, revokedGbdbs, newTableSet, revokedTableSet, additionalList, c, atticSet, newSupplementalSet, tableSize) 
         else:
             printErrors(errors)
 

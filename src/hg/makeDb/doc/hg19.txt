@@ -17321,3 +17321,77 @@ XXX - running - Mon Oct 17 11:43:16 PDT 2011
     #	90929066 bases of 1358334882 (6.694%) in intersection
 
 ############################################################################
+# ISCA RETROSPECTIVE FROM DBVAR (DONE 10/17/11 angie)
+    # Redmine: Track #34 (dbVar for human)
+    mkdir -p /hive/data/genomes/hg19/bed/isca/2011_10_17
+    cd /hive/data/genomes/hg19/bed/isca/2011_10_17
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.GRCh37.remap.all.germline.ucsc.gvf.gz
+    zcat nstd37_ISCA_2011.GRCh37.remap.all.germline.ucsc.gvf.gz \
+    | perl -wne 'next if (/^(#|browser|track)/); chomp; \
+        ($c, undef, $varType, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
+        ($thickS, $thickE) = ($s, $e); \
+        ($attrCount, $attrTags, $attrVals, $gotVarTypeAttr) = (0, "", "", 0); \
+        foreach my $tagVal (split(";", $attrs)) { \
+          ($tag, $val) = split("=", $tagVal); \
+          if ($tag eq "ID") {$name = $val;} \
+          elsif ($tag eq "Start_range") { \
+            ($outerStart, $innerStart) = split(",", $val); \
+            $s = $outerStart if ($outerStart =~ /^\d+$/ && $outerStart < $s); \
+            $thickS = $innerStart if ($innerStart =~ /^\d+$/ && $innerStart > $thickS); \
+          } elsif ($tag eq "End_range") { \
+            ($innerEnd, $outerEnd) = split(",", $val); \
+            $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
+            $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
+          } elsif ($tag eq "var_type") { \
+            $gotVarTypeAttr = 1; \
+          } \
+          # Escape commas so the val list parses correctly in autoSql: \
+          $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
+          $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
+        } \
+        next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
+        if (! $gotVarTypeAttr) { \
+          $varType =~ s/%/%25/g;   $varType =~ s/,/%2C/g; \
+          $attrTags .= "var_type,";  $attrVals .= "$varType,";  $attrCount++; \
+        } \
+        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
+                      $attrCount, $attrTags, $attrVals); \
+        print join("\t", @bed8Attrs) . "\n";' \
+      > iscaRetrospective.bed
+    wc -l iscaRetrospective.bed
+#10203 iscaRetrospective.bed
+    # Split into subtracks by clinical_int value.
+    zcat nstd37_ISCA_2011.GRCh37.remap.all.germline.ucsc.gvf.gz \
+    | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
+#   3472 Benign
+#   3936 Pathogenic
+#   2614 Uncertain Significance
+#    135 Uncertain Significance: likely benign
+#     46 Uncertain Significance: likely pathogenic
+    foreach subtrack (Benign Pathogenic)
+      grep -w  $subtrack iscaRetrospective.bed > iscaRetrospective$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg19 iscaRetrospective$subtrack iscaRetrospective$subtrack.bed
+    end
+#Loaded 3472 elements of size 11
+#Loaded 3936 elements of size 11
+
+    # The subcategories of Uncertain need a bit more sophisticated treatment:
+    set subtrack = Uncertain
+    grep -w $subtrack iscaRetrospective.bed \
+    | grep -v 'Uncertain Significance: likely' \
+      > iscaRetrospective$subtrack.bed
+    hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+      -allowStartEqualEnd hg19 iscaRetrospective$subtrack iscaRetrospective$subtrack.bed
+#Loaded 2614 elements of size 11
+    foreach unc (benign pathogenic)
+      set subtrack = Likely`perl -we 'print ucfirst("'$unc'");'`
+      grep -w "Uncertain Significance: likely $unc" iscaRetrospective.bed \
+        > iscaRetrospective$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg19 iscaRetrospective$subtrack iscaRetrospective$subtrack.bed
+    end
+#Loaded 135 elements of size 11
+#Loaded 46 elements of size 11
+
+############################################################################
