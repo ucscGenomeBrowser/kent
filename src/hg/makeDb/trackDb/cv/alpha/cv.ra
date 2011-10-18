@@ -5173,7 +5173,7 @@ lab Myers
 lots I1010
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
-validation CEBPB_(SC-150)(missing):human_CEBPB_SC-150_validation_Myers.pdf
+validation CEBPB_(SC-150)(Western_blot,IP-Mass_Spec):human_CEBPB_SC-150_validation_Myers.pdf
 
 term CEBPD_(SC-636)
 tag CEBPDSC636
@@ -5188,7 +5188,7 @@ lab Myers
 lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation CEBPD_(SC-636)(Missing):human_CEBPD_SC-636_validation_Myers.pdf
+validation CEBPD_(SC-636)(Western_blot,IP-Mass_Spec):human_CEBPD_SC-636_validation_Myers.pdf
 
 term CHD1_(A301-218A)
 tag CHD1A301218A
@@ -5232,7 +5232,7 @@ lab Myers
 lots C2306
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation CREB1_(SC-240)(missing):human_CREB1_SC-240_sc-240_validation_Myers.pdf
+validation CREB1_(SC-240)(Western_blot,IP-Mass_Spec):human_CREB1_SC-240_validation_Myers.pdf
 
 term CTCF
 tag CTCF
@@ -6765,7 +6765,7 @@ lab Myers
 lots L0808
 targetId GeneCard:NFIC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
-validation NFIC_(SC-81335)(missing):human_NFIC_SC-81335_validation_Myers.pdf
+validation NFIC_(SC-81335)(Western_blot,IP-Mass_Spec):human_NFIC_SC-81335_validation_Myers.pdf
 
 term NF-E2
 tag NFE2
@@ -7270,7 +7270,7 @@ lab Myers
 lots B0909
 targetId GeneCard:RUNX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
-validation RUNX3_(SC-101553)(missing):human_RUNX3_SC-101553_validation_Myers.pdf
+validation RUNX3_(SC-101553)(Western_blot,IP-Mass_Spec):human_RUNX3_SC-101553_validation_Myers.pdf
 
 term RXRA
 tag RXRA
@@ -7718,7 +7718,7 @@ lab Myers
 lots A1811
 targetId GeneCard:TEAD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
-validation TEAD4_(SC-101184)(missing):human_TEAD4_SC-101184_validation_Myers.pdf
+validation TEAD4_(SC-101184)(Western_blot,IP-Mass_Spec):human_TEAD4_SC-101184_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term TFIIB
