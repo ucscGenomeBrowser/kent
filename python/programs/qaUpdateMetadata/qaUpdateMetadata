@@ -39,28 +39,29 @@ def main():
 		for j in vars:
 			if j not in newMdb[i]:
 				if j in oldMdb[i]:
-					del oldMdb[i][j]
 					changelist = addChange(changelist, i, "deleted %s" % j)
+					del oldMdb[i][j]
 					continue
 				else:
 					continue
 			if j not in oldMdb[i]:
-				oldMdb[i][j] = newMdb[i][j]
 				changelist = addChange(changelist, i, "added %s = %s" % (j, newMdb[i][j]))
+				oldMdb[i][j] = newMdb[i][j]
 				continue
 			elif oldMdb[i][j] != newMdb[i][j]:
-				oldMdb[i][j] = newMdb[i][j]
 				changelist = addChange(changelist, i, "changed %s from %s to %s" % (j, oldMdb[i][j], newMdb[i][j]))
+				oldMdb[i][j] = newMdb[i][j]
+
 	
 	for i in sorted(changelist):
 		print i
 		for j in changelist[i]:
+			pass
 			print j
 		print ""
 		
 
 	f = open(c._betaMdbPath, 'w')
-	print f
 	magic = ""
 	for i in sorted(oldMdb):
 		if re.search('MAGIC', i):
