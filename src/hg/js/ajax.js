@@ -10,10 +10,14 @@ function nullProcessReqChange()
             alert("req.responseText: " + req.responseText);
 }
 
+// The ajaxWaitCount code is currently NOT used, but we are keeping it in case in the future we decide we
+// really need to support sequential AJAX calls (without just using synchronous AJAX calls).
+// 
 // When setting vars with ajax, it may be necessary to wait for response before newer calls
 // Therefore this counter is set up to allow an "outside callback" when the ajax is done
 // The typical scenario is setCartVar by ajax, followed immmediately by a form submit.
 // To avoid the race condition, the form gets submitted after the ajax returns
+
 var ajaxWaitCount = 0;
 function ajaxWaitIsDone()     { return ( ajaxWaitCount <= 0 ); }
 function ajaxWaitCountUp()    { ajaxWaitCount++; }
@@ -165,25 +169,22 @@ function setCartVars(names, values)
     }
     loc = loc + "/cartDump";
     var hgsid = getHgsid();
-    loc = loc + "?submit=1&noDisplay=1&hgsid=" + hgsid;
+    var data = "submit=1&noDisplay=1&hgsid=" + hgsid;
     var track = getTrack();
     if(track && track.length > 0)
-        loc = loc + "&g=" + track;
-
-    // Set up dynamic portion of url
-    var ix=0;
-    while( ix < names.length ) { // Sends multiple messages if the URL gets too long
-        var pairs = "";
-        for(  ;ix<names.length && pairs.length < 5000;ix++) {  // FIXME: How big is too big?
-            //pairs = pairs + "&cartDump.varName=" + escape(names[ix]) + "&cartDump.newValue=" + escape(values[ix]);
-            pairs = pairs + "&" + escape(names[ix]) + "=" + escape(values[ix]);
-        }
-        if(pairs.length == 0)
-            return;
-        //warn(pairs);
-        ajaxWaitCountUp();
-        loadXMLDoc(loc + pairs,ajaxWaitCountDown);
+        data = data + "&g=" + track;
+    for(var ix=0; ix<names.length; ix++) {
+        data = data + "&" + encodeURIComponent(names[ix]) + "=" + encodeURIComponent(values[ix]);
     }
+    $.ajax({
+               type: "POST",
+               url: loc,
+               data: data,
+               trueSuccess: function () {},
+               success: catchErrorOrDispatch,
+               error: errorHandler,
+               cache: false
+           });
 }
 
 function setCartVar(name, value)
@@ -241,11 +242,13 @@ function setCartVarAndRefresh(name,val)
 
 function errorHandler(request, textStatus)
 {
-    var str = "encountered ajax error";
-    if(textStatus && textStatus.length) {
-        str += ": '" + textStatus + "'";
+    var str;
+    if(textStatus && textStatus.length && textStatus != "error") {
+        str = "Encountered network error : '" + textStatus + "'.";
+    } else {
+        str = "Encountered a network error."
     }
-    str += "; please retry the action you just performed";
+    str += " Please try again. If the problem persists, please check your network connection.";
     showWarning(str);
     jQuery('body').css('cursor', '');
     if(this.disabledEle) {
