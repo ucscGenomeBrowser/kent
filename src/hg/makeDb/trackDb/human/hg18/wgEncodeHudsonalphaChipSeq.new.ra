@@ -6,10 +6,10 @@ track wgEncodeHudsonalphaChipSeq
 compositeTrack on
 shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
-#longLabelClip all
+longLabelClip all
 group regulation
 subGroup1 view Views Peaks=Peaks zRaw=Raw_Signal
-subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1H1=H1-hESC&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i>  2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 JURKAT=Jurkat PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH U87=U87
+subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K5=K562&nbsp;(Tier_1)  2HELA=HeLa-S3&nbsp;(Tier_2) 2HEP=HepG2&nbsp;(Tier_2) A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 JURKAT=Jurkat PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH U87=U87
 subGroup3 factor Factor BATF=BATF BCL03=BCL3 BCL11A=BCL11A BHLHE40=BHLHE40 CTCF=CTCF EBF=EBF EGR1=Egr-1 FOSL2=FOSL2 FOXP2=FOXP2 GABP=GABP GR=GR HEY1=HEY1 JUND=JunD IRF4=IRF4 NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=Pbx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SRF=SRF SP1=SP1 TAF1=TAF1 TCF12=TCF12 USF1=USF-1 ZBTB33=ZBTB33 zRXLCH=RevXlinkChromatin
 subGroup4 rep Replicate rep1=1 rep2=2
 subGroup5 prot Protocol PCR1x=PCR_1x PCR2x=PCR_2x

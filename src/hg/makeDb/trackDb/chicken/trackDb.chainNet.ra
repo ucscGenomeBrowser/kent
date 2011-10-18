@@ -11,6 +11,7 @@ priority 220.3
 
 track chainNetAnoCar1 override
 priority 220.3
+shortLabel $o_db Chain/Net
 
 track chainNetOrnAna1 override
 priority 230.3
