@@ -1320,17 +1320,6 @@ ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 
-# Run hgKnownGeneList to generate the tree of HTML pages
-# under ./knownGeneList/$db 
-
-    hgKnownGeneList $db
-
-# copy over to /usr/local/apache/htdocs
-    
-    rm -rf /usr/local/apache/htdocs/knownGeneList/$db
-    mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
-    cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
-
 # move this exit statement to the end of the section to be done next
 #exit $status # BRACKET
 
