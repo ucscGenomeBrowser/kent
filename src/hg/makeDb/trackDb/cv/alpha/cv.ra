@@ -245,8 +245,7 @@ term A549
 tag A549
 type Cell Line
 organism human
-description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC
-#, newly promoted to tier 2: not in 2011 analysis
+description epithelial cell line derived from a lung carcinoma tissue. (PMID: 175022), "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old caucasian male." - ATCC, newly promoted to tier 2: not in 2011 analysis
 tissue Epithelium
 vendorName ATCC
 vendorId CCl-185
@@ -257,8 +256,8 @@ karyotype cancer
 termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
-#tier 2
-tier 3
+tier 2
+#formerly tier 3
 protocol Myers:A549_protocol.pdf Crawford:A549_Crawford_protocol.pdf Stam:A549_Stam_protocol.pdf
 
 term AG04449
@@ -2784,7 +2783,7 @@ termId BTO:0001282
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282
 sex M
 tier 3
-protocol Myers:HT1080_Myers_protocol.pdf
+protocol SUNY(missing):HT1080_SUNY_protocol.pdf
 
 #This cell line has been superceded by SK-N-SH, HTB-11 was the venderId.
 #term HTB-11
@@ -2872,8 +2871,7 @@ term IMR90
 tag IMR90
 type Cell Line
 organism human
-description Normal Human Lung Fibroblasts
-#, newly promoted to tier 2: not in 2011 analysis
+description Normal Human Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
 lineage endoderm
 vendorName ATCC
@@ -2881,8 +2879,8 @@ vendorId CCL-186
 lots 58607680
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
 sex U
-#tier 2
-tier 3
+tier 2
+# formerly tier 3
 protocol Stam:IMR90_Stam_protocol.pdf
 
 term iPS
@@ -3008,8 +3006,7 @@ term MCF-7
 tag MCF7
 type Cell Line
 organism human
-description mammary gland, adenocarcinoma. (PMID: 4357757)
-#, newly promoted to tier 2: not in 2011 analysis
+description mammary gland, adenocarcinoma. (PMID: 4357757), newly promoted to tier 2: not in 2011 analysis
 tissue Breast
 vendorName ATCC
 vendorId HTB-22
@@ -3020,8 +3017,8 @@ karyotype cancer
 termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093
 sex F
-#tier 2
-tier 3
+tier 2
+#formerly tier 3
 protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
@@ -3114,8 +3111,6 @@ protocol Crawford:Melano_Crawford_protocol.pdf
 term Monocytes-CD14+
 tag MONOCD14
 type Cell Line
-#tier 2
-tier 3
 organism human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production
 #, newly promoted to tier 2: not in 2011 analysis
@@ -3128,16 +3123,14 @@ vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+tier 3
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
-#tier 2
-tier 3
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746
-#, newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746, newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 sex F
@@ -3147,6 +3140,8 @@ vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+tier 2
+#formerly tier 3
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Myometr
@@ -3613,8 +3608,7 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description Human neuroblastoma
-#, newly promoted to tier 2: not in 2011 analysis
+description Human neuroblastoma, newly promoted to tier 2: not in 2011 analysis
 tissue Brain
 lineage ectoderm
 vendorName ATCC
@@ -3625,8 +3619,8 @@ karyotype cancer
 termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
-#tier 2
-tier 3
+tier 2
+#formerly tier 3
 protocol Myers:SK-N-SH_Myers_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
@@ -9690,12 +9684,14 @@ tag 5C
 type dataType
 label 5C
 description 5C Interactions
+dataGroup Other
 
 term AffyExonArray
 tag AFFYEXONARRAY
 type dataType
 label Exon-array
 description Affymetrix Exon Array
+dataGroup RNA Profiling
 
 
 #not currently in metaDb
@@ -9704,24 +9700,28 @@ tag BIP
 type dataType
 label Bi-dir Promoters
 description Bidirectional Promoters
+dataGroup Other
 
 term Cage
 tag CAGE
 type dataType
 label CAGE
 description CAGE
+dataGroup RNA Profiling
 
 term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
 description ChIP-Seq
+dataGroup TFBS/Histones
 
 term Cluster
 tag CLUSTER
 type dataType
 label Integ Cluster
 description Element cluster by integrative analysis
+dataGroup Other
 
 #tag not standard to match hg18
 term Cnv
@@ -9729,12 +9729,14 @@ tag CNVdt
 type dataType
 label CNV
 description Copy Number Variation
+dataGroup Other
 
 term Combined
 tag COMBO
 type dataType
 label Combined
 description Synthesis of multiple types of data
+dataGroup Other
 # Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
 #term not standard to match hg18???
@@ -9743,18 +9745,21 @@ tag DGF
 type dataType
 label DNase-DGF
 description DNase Digital Footprinting
+dataGroup Open Chromatin
 
 term DnaPet
 tag DNAPET
 type dataType
 label DNA-PET
 description DNA Paired End Tag
+dataGroup Other
 
 term DnaseSeq
 tag DNASESEQ
 type dataType
 label DNase-seq
 description DNase digestion followed by sequencing
+dataGroup Open Chromatin
 
 #The tag is not standard Camel case to be consistent with hg18
 term FaireSeq
@@ -9762,54 +9767,63 @@ tag FAIRESEQ
 type dataType
 label FAIRE-seq
 description FAIRE followed by sequencing
+dataGroup Open Chromatin
 
 term Genotype
 tag GENOTYPE
 type dataType
 label Genotype
 description Genotyping experiments including copy nummber variants and SNPs
+dataGroup Other
 
 term Gencode
 tag GENCODE
 type dataType
 label Gencode
 description Gencode
+dataGroup Other
 
 term ChiaPet
 tag CHIAPET
 type dataType
 label ChIA-pet
 description ChIA-pet
+dataGroup Other
 
 term Orchid
 tag ORCHID
 type dataType
 label ORChID
 description ORChID
+dataGroup Other
 
 term Mapability
 tag MAPABILITY
 type dataType
 label Mapability
 description Uniqueness of n-mer sequence fragments across the genome
+dataGroup Other
 
 term MethylArray
 tag METHYLARRAY
 type dataType
 label Methyl Array
 description Methyl Bead Array
+dataGroup DNA Methylation
 
 term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-Seq
 description MethylSeq
+dataGroup DNA Methylation
 
 term MethylRrbs
 tag METHYLRRBS
 type dataType
 label Methyl RRBS
 description Methyl RRBS
+dataGroup DNA Methylation
 
 # tag not standard to match hg18
 term NRE
@@ -9817,24 +9831,28 @@ tag NRE
 type dataType
 label Neg Regulatory
 description Negative Regulatory Elements
+dataGroup Other
 
 term Nucleosome
 tag NUCLEOSOME
 type dataType
 label Nucleosome
 description Nucleosome positioning data
+dataGroup Other
 
 term Proteogenomics
 tag PROTGENO
 type dataType
 label Proteogenomics
 description Mass Spec Proteogenomic Mapping
+dataGroup Other
 
 term RepliSeq
 tag  REPLISEQ
 type dataType
 label Repli-Seq
 description Replication Timing (PROVISIONAL)
+dataGroup Other
 
 # tag not standard to match hg18
 term RnaPet
@@ -9842,18 +9860,21 @@ tag PET
 type dataType
 label RNA-PET
 description RNA Paired-End Tag
+dataGroup RNA Profiling
 
 term RnaChip
 tag RNACHIP
 type dataType
 label RNA-chip
 description microarray analysis of RNA expression
+dataGroup RNA Profiling
 
 term RnaSeq
 tag RNASEQ
 type dataType
 label RNA-seq
 description Sequencing analysis of RNA expression
+dataGroup RNA Profiling
 
 #GeneST and Tiling are flavors of the RIP-chip.
 #They need separate dataTypes for the experiment table to work
@@ -9862,31 +9883,35 @@ tag  GENEST
 type dataType
 label RIP-chip Gene ST
 description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
+dataGroup RNA Binding Proteins
 
 term RipTiling
 tag  TILING
 type dataType
 label RIP-chip Tiling Array
 description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
+dataGroup RNA Binding Proteins
 
 term RipChip
 tag  RIPCHIP
 type dataType
 label RIP-chip
 description Rna IP measured on microarray
+dataGroup RNA Binding Proteins
 
 term RipSeq
 tag  RIPSEQ
 type dataType
 label RIP-seq
 description RNA-seq on RIP-chip data
+dataGroup RNA Binding Proteins
 
 term Switchgear
 tag SWITCHGEAR
 type dataType
 label SwitchGear
 description SwitchGear Genomics 3' UTR reporter assay
-
+dataGroup RNA Binding Proteins
 
 #This is not in the metaDB currently
 term TfbsValid
@@ -9894,6 +9919,7 @@ tag TFBSVALID
 type dataType
 label TFBS-Valid
 description TFBS-Valid
+dataGroup Other
 
 ### version
 
