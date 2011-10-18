@@ -38,18 +38,22 @@ chainLinearGap medium
 
 track chainNetDanRer6 override
 priority 240.3
+shortLabel $o_db Chain/Net
 
 track chainNetDanRer5 override
 priority 240.3
+shortLabel $o_db Chain/Net
 
 track chainNetDanRer4 override
 priority 240.3
+shortLabel $o_db Chain/Net
 
 track chainNetAnoCar2 override
 priority 260.3
 
 track chainNetAnoCar1 override
 priority 260.3
+shortLabel $o_db Chain/Net
 
 track chainNetGalGal3 override
 priority 280.3
