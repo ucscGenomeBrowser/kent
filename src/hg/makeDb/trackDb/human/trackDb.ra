@@ -3912,16 +3912,31 @@ noScoreFilter .
     parent iscaRetrospectiveComposite
     shortLabel ISCA Ret Benign
     longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Benign)
+    priority 1
+
+    track iscaRetrospectiveLikelyBenign
+    parent iscaRetrospectiveComposite
+    shortLabel ISCA Ret Lik.Ben
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Likely Benign)
+    priority 2
 
     track iscaRetrospectivePathogenic
     parent iscaRetrospectiveComposite
     shortLabel ISCA Ret Pathog.
     longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Pathogenic)
+    priority 3
+
+    track iscaRetrospectiveLikelyPathogenic
+    parent iscaRetrospectiveComposite
+    shortLabel ISCA Ret Lik.Path.
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Likely Pathogenic)
+    priority 4
 
     track iscaRetrospectiveUncertain
     parent iscaRetrospectiveComposite
     shortLabel ISCA Ret Uncert.
     longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Uncertain)
+    priority 5
 
 searchName decipherId
 searchTable decipher
@@ -3989,7 +4004,21 @@ semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
+searchTable iscaRetrospectiveLikelyBenign
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20
+
 searchTable iscaRetrospectivePathogenic
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20
+
+searchTable iscaRetrospectiveLikelyPathogenic
 searchMethod exact
 searchType bed
 semiShortCircuit 1
