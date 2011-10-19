@@ -1105,7 +1105,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol missing
 
 term CD34+_Mobilized
-tag CD34+MOBILIZED
+tag CD34MOBILIZED
 type Cell Line
 tier 3
 organism human
@@ -5793,7 +5793,7 @@ lab Hardison
 lots J2108
 targetId GeneCard: GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation GATA2_(SC-9008)(missing):human_GATA2_SC-9008_validation_Hardison.pdf
+validation GATA2_(SC-9008)(Western_blot):human_GATA2_SC-9008_validation_Hardison.pdf
 
 term  GATA3_(SC-268)
 tag  GATA3

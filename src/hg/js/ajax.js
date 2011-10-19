@@ -176,8 +176,16 @@ function setCartVars(names, values)
     for(var ix=0; ix<names.length; ix++) {
         data = data + "&" + encodeURIComponent(names[ix]) + "=" + encodeURIComponent(values[ix]);
     }
+    var type;
+    // We prefer GETs so we can analyze logs, but use POSTs if data is longer than a (conservatively small) 
+    // maximum length to avoid problems on older versions of IE.
+    if((loc.length + data.length) > 2000) {
+        type = "POST";
+    } else {
+        type = "GET";
+    }
     $.ajax({
-               type: "POST",
+               type: type,
                url: loc,
                data: data,
                trueSuccess: function () {},
