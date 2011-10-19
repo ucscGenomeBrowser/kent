@@ -1,6 +1,6 @@
 // Javascript for use in hgTracks CGI
 
-"use strict";
+// "use strict";
 
 var debug = false;
 var browser;              // browser ("msie", "safari" etc.) // move to utils.js?
@@ -1893,29 +1893,6 @@ var rightClick = {
                 }
             } else {
                 imageV2.requestImgUpdate(id, id+"="+cmd, "");
-                /*var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis in remote cart
-                if(imageV2.enabled) {
-                    data += "&hgt.trackNameFilter=" + id;
-                }
-                //var center = $("#img_data_" + id);
-                //center.attr('src', "../images/loading.gif")
-                //center.attr('style', "text-align: center; display: block;");
-                //warn("hgTracks?"+data); // Uesful to cut and paste the url
-                var loadingId = showLoadingImage("tr_" + id);
-                $.ajax({
-                        type: "GET",
-                        url: "../cgi-bin/hgTracks",
-                        data: data,
-                        dataType: "html",
-                        trueSuccess: imageV2.updateImgAndMap,
-                        success: catchErrorOrDispatch,
-                        error: errorHandler,
-                        cmd: cmd,
-                        newVisibility: cmd,
-                        id: id,
-                        loadingId: loadingId,
-                        cache: false
-                    });*/
             }
         }
     },
