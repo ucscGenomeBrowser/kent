@@ -524,12 +524,6 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 
-hPrintf("<TR><TD>");
-hCheckBox("enableAdvancedJavascript", advancedJavascriptFeaturesEnabled(cart));
-hPrintf("</TD><TD>");
-hPrintf("Enable advanced javascript features");
-hPrintf("</TD></TR>\n");
-
 hTableEnd();
 cgiDown(0.9);
 

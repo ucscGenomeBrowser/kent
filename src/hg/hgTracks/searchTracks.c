@@ -553,12 +553,6 @@ hPrintf("</div>"); // This div allows the clear button to empty it
 
 void doSearchTracks(struct group *groupList)
 {
-if (!advancedJavascriptFeaturesEnabled(cart))
-    {
-    warn("Requires advanced javascript features.");
-    return;
-    }
-
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized
