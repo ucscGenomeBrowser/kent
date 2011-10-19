@@ -187,10 +187,9 @@ def makeFileSizes(c, args, inlist):
         checklist.append("%s/%s" % (c.downloadsDirectory + 'release' + args.releaseNew, i))    
     filesizes = 0
     for i in checklist:
-        filesizes = filesizes + int(os.path.getsize(i))
-    filesizes = filesizes / (1024**2)
-        
-    return filesizes
+	filesizes = filesizes + int(os.path.getsize(i))
+    filesizes = math.ceil(float(filesizes) / (1024**2))
+    return int(filesizes)
 
 def cleanSpecialFiles(inlist):
     specialRemoveList = ['md5sum.history']
@@ -252,7 +251,8 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     print "Supplemental: %d" % int(len(newSupplementalSet - oldSupplementalSet))
     print "Other: %d" % int(len(additionalList))
     print "\n"
-    totalsize = 0;
+    totalsize = 0
+    size = 0
     print "Sizes of New:"
     tableGb = int(tableSize/1024)
     if tableGb > 1:
