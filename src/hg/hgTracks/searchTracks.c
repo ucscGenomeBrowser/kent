@@ -521,7 +521,7 @@ else
         hPrintf("</td>\n");
 
         // shortLabel has description popup and longLabel has "..." metadata
-        hPrintf("<td><a target='_top' onclick=\"hgTrackUiPopUp('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
+        hPrintf("<td><a target='_top' onclick=\"popUp.hgTrackUi('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
         compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE, tdbHash);
         hPrintf("</td></tr>\n");

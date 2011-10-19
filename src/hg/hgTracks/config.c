@@ -111,7 +111,7 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
+    hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
         group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
     hPrintf("<B>&nbsp;%s</B> ", group->label);
     hPrintf("&nbsp;&nbsp;&nbsp;");
@@ -548,9 +548,9 @@ cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome a
 hPrintf(" ");
 cgiMakeButtonWithMsg(configDefaultAll, "default","Display only default tracks");
 hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
-hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return setAllTrackGroupVisibility(false)");
+hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return vis.expandAllGroups(false)");
 hPrintf(" ");
-hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return setAllTrackGroupVisibility(true)");
+hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return vis.expandAllGroups(true)");
 hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility more selectively below.</div>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
