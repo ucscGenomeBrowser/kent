@@ -2528,12 +2528,9 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 hPrintf("</MAP>\n");
 
 jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE && advancedJavascriptFeaturesEnabled(cart));
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
-if(rulerClickHeight)
-    {
-    jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
-    }
+jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
 if(newWinWidth)
     {
     jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
@@ -4686,11 +4683,7 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 jsonHashAddNumber(jsonForClient, "insideX", insideX);
 jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
-#ifdef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
-#else///ifndef NEW_JQUERY
-hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
-#endif///ndef NEW_JQUERY
 if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
@@ -4737,7 +4730,7 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
-if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
+if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
     // Set up imgBox dimensions
@@ -5029,10 +5022,7 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",tl.picWidth);//min(tl.picWidth, 800));
     hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
     hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
-    #ifdef IMAGEv2_DRAG_SCROLL
-    if(!advancedJavascriptFeaturesEnabled(cart))
-    #endif//def IMAGEv2_DRAG_SCROLL
-        hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
+    hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
 
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
     hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom in 1.5x'>&gt;&nbsp;&lt;</a>\n");
@@ -5044,11 +5034,8 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<td width='40' align='right'><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
     hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
     hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
-        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-    #ifdef IMAGEv2_DRAG_SCROLL
-    if(!advancedJavascriptFeaturesEnabled(cart))
-    #endif//ndef IMAGEv2_DRAG_SCROLL
-        hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
+    hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
+    hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
 
     hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
     hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
@@ -5953,7 +5940,7 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 
-dragZooming = advancedJavascriptFeaturesEnabled(cart);
+dragZooming = TRUE;
 
 /* Do main display. */
 
@@ -5982,10 +5969,6 @@ if(!trackImgOnly)
     if(dragZooming && !searching)
         {
         jsIncludeFile("jquery.imgareaselect.js", NULL);
-#ifndef NEW_JQUERY
-        webIncludeResourceFile("autocomplete.css");
-        jsIncludeFile("jquery.autocomplete.js", NULL);
-#endif///ndef NEW_JQUERY
         }
     jsIncludeFile("autocomplete.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
@@ -5994,19 +5977,14 @@ if(!trackImgOnly)
     jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
-    if(advancedJavascriptFeaturesEnabled(cart))
+    webIncludeResourceFile("jquery-ui.css");
+    if (!searching) // NOT doing search
         {
-        webIncludeResourceFile("jquery-ui.css");
-        if (!searching) // NOT doing search
-            {
-            webIncludeResourceFile("jquery.contextmenu.css");
-            jsIncludeFile("jquery.contextmenu.js", NULL);
-            webIncludeResourceFile("ui.dropdownchecklist.css");
-            jsIncludeFile("ui.dropdownchecklist.js", NULL);
-#ifdef NEW_JQUERY
-            jsIncludeFile("ddcl.js", NULL);
-#endif///def NEW_JQUERY
-            }
+        webIncludeResourceFile("jquery.contextmenu.css");
+        jsIncludeFile("jquery.contextmenu.js", NULL);
+        webIncludeResourceFile("ui.dropdownchecklist.css");
+        jsIncludeFile("ui.dropdownchecklist.js", NULL);
+        jsIncludeFile("ddcl.js", NULL);
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
