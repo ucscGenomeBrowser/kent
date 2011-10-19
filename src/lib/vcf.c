@@ -306,6 +306,9 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
 	else
 	    def->fieldCount = atoi(number);
 	def->type = vcfInfoTypeFromSubstr(vcff, line, substrs[4]);
+	// greedy regex pulls in end quote, trim if found:
+	if (line[substrs[5].rm_eo-1] == '"')
+	    line[substrs[5].rm_eo-1] = '\0';
 	def->description = vcfFileCloneSubstr(vcff, line, substrs[5]);
 	slAddHead((isInfo ? &(vcff->infoDefs) : &(vcff->gtFormatDefs)), def);
 	}

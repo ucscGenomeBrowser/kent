@@ -19,7 +19,7 @@
 #ifdef USE_TABIX
 
 static boolean getMinQual(struct trackDb *tdb, double *retMinQual, boolean compositeLevel)
-/* Return TRUE and set retMinQual id cart contains minimum QUAL filter */
+/* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
 {
 char cartVar[512];
 safef(cartVar, sizeof(cartVar), "%s."VCF_APPLY_MIN_QUAL_VAR, tdb->track);
@@ -70,15 +70,94 @@ for (i = 0;  i < record->filterCount;  i++)
 return FALSE;
 }
 
+static boolean getMinFreq(struct trackDb *tdb, double *retMinFreq, boolean compositeLevel)
+/* Return TRUE and set retMinFreq if cart contains nonzero minimum minor allele frequency. */
+{
+char cartVar[512];
+//#*** is there an ExistsClosestToHome?
+safef(cartVar, sizeof(cartVar), "%s."VCF_MIN_ALLELE_FREQ_VAR, tdb->track);
+if (cartVarExists(cart, cartVar))
+    {
+    double minFreq = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel,
+					    VCF_MIN_ALLELE_FREQ_VAR, VCF_DEFAULT_MIN_ALLELE_FREQ);
+    if (minFreq > 0)
+	{
+	if (retMinFreq != NULL)
+	    *retMinFreq = minFreq;
+	return TRUE;
+	}
+    }
+return FALSE;
+}
+
+static boolean minFreqFail(struct vcfRecord *record, double minFreq)
+/* Return TRUE if record's INFO include AF (alternate allele frequencies) or AC+AN
+ * (alternate allele counts and total count of observed alleles) and the minor allele
+ * frequency < minFreq -- or rather, major allele frequency > (1 - minFreq) because
+ * variants with > 2 alleles might have some significant minor frequencies along with
+ * tiny minor frequencies). */
+{
+struct vcfFile *vcff = record->file;
+boolean gotInfo = FALSE;
+double refFreq = 1.0;
+double maxAltFreq = 0.0;
+int i;
+const struct vcfInfoElement *afEl = vcfRecordFindInfo(record, "AF");
+const struct vcfInfoDef *afDef = vcfInfoDefForKey(vcff, "AF");
+if (afEl != NULL && afDef != NULL && afDef->type == vcfInfoFloat)
+    {
+    // If INFO includes alt allele freqs, use them directly.
+    gotInfo = TRUE;
+    for (i = 0;  i < afEl->count;  i++)
+	{
+	double altFreq = afEl->values[i].datFloat;
+	refFreq -= altFreq;
+	if (altFreq > maxAltFreq)
+	    maxAltFreq = altFreq;
+	}
+    }
+else
+    {
+    // Calculate alternate allele freqs from AC and AN:
+    const struct vcfInfoElement *acEl = vcfRecordFindInfo(record, "AC");
+    const struct vcfInfoDef *acDef = vcfInfoDefForKey(vcff, "AC");
+    const struct vcfInfoElement *anEl = vcfRecordFindInfo(record, "AN");
+    const struct vcfInfoDef *anDef = vcfInfoDefForKey(vcff, "AN");
+    if (acEl != NULL && acDef != NULL && acDef->type == vcfInfoInteger &&
+	anEl != NULL && anDef != NULL && anDef->type == vcfInfoInteger && anEl->count == 1)
+	{
+	gotInfo = TRUE;
+	int totalCount = anEl->values[0].datFloat;
+	for (i = 0;  i < acEl->count;  i++)
+	    {
+	    int altCount = acEl->values[i].datFloat;
+	    double altFreq = (double)altCount / totalCount;
+	    refFreq -= altFreq;
+	    if (altFreq < maxAltFreq)
+		maxAltFreq = altFreq;
+	    }
+	}
+    }
+if (gotInfo)
+    {
+    double majorAlFreq = max(refFreq, maxAltFreq);
+    if (majorAlFreq > (1.0 - minFreq))
+	return TRUE;
+    }
+return FALSE;
+}
+
 static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
 /* If a filter is specified in the cart, remove any records that don't pass filter. */
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb, tdb->track);
-double minQual = 0;
+double minQual = VCF_DEFAULT_MIN_QUAL;
 struct slName *filterValues = NULL;
+double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
 boolean gotQualFilter = getMinQual(tdb, &minQual, compositeLevel);
 boolean gotFilterFilter = getFilterValues(tdb, &filterValues, compositeLevel);
-if (! (gotQualFilter || gotFilterFilter) )
+boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq, compositeLevel);
+if (! (gotQualFilter || gotFilterFilter || gotMinFreqFilter) )
     return;
 
 struct vcfRecord *rec, *nextRec, *newList = NULL;
@@ -86,7 +165,8 @@ for (rec = vcff->records;  rec != NULL;  rec = nextRec)
     {
     nextRec = rec->next;
     if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
-	   (gotFilterFilter && filterColumnFail(rec, filterValues))) )
+	   (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
+	   (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
 	slAddHead(&newList, rec);
     }
 slReverse(&newList);
@@ -100,6 +180,7 @@ static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
 int maxLen = 33;
+int maxAlCount = 5;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
@@ -107,25 +188,23 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     int len = strlen(pgs->name);
     if (len > maxLen)
 	{
-	if (strchr(pgs->name, '/') != NULL)
+	int maxAlLen = maxLen / min(rec->alleleCount, maxAlCount);
+	pgs->name[0] = '\0';
+	int i;
+	for (i = 0;  i < rec->alleleCount;  i++)
 	    {
-	    char *copy = cloneString(pgs->name);
-	    char *allele[8];
-	    int cnt = chopByChar(copy, '/', allele, pgs->alleleCount);
-	    int maxAlLen = maxLen / pgs->alleleCount;
-	    pgs->name[0] = '\0';
-	    int i;
-	    for (i = 0;  i < cnt;  i++)
+	    if (i > 0)
+		safencat(pgs->name, len+1, "/", 1);
+	    if (i >= maxAlCount)
 		{
-		if (i > 0)
-		    safencat(pgs->name, len+1, "/", 1);
-		if (strlen(allele[i]) > maxAlLen-3)
-		    strcpy(allele[i]+maxAlLen-3, "...");
-		safencat(pgs->name, len+1, allele[i], maxAlLen);
+		safecat(pgs->name, len+1, "...");
+		pgs->alleleCount = maxAlCount;
+		break;
 		}
+	    if (strlen(rec->alleles[i]) > maxAlLen-3)
+		strcpy(rec->alleles[i]+maxAlLen-3, "...");
+	    safencat(pgs->name, len+1, rec->alleles[i], maxAlLen);
 	    }
-	else
-	    strcpy(pgs->name+maxLen-3, "...");
 	}
     slAddHead(&pgsList, pgs);
     }

@@ -1,8 +1,9 @@
-// encodeProject - javascript utilities for ENCODE-specific things 
-// such as controlled vocabulary and experiment table
+/* encodeProject - javascript utilities for ENCODE-specific things 
+ such as controlled vocabulary and experiment table
 
-// Formatted: jsbeautify.py -j
-// Syntax checked: jslint --indent=4 --plusplus=true --strict=false --browser=true
+ Formatted: jsbeautify.py -j -k
+ Syntax checked: jslint --indent=4 --plusplus=true --strict=false --browser=true
+*/
 /*global $ */
 
 var encodeProject = (function () {
@@ -25,6 +26,8 @@ var encodeProject = (function () {
     }
 
     // TODO: modularize by extending Array.sort ?
+
+
     function cmpCV(a, b) {
         // Helper function for case-insensitive sort of CV objects
         //  Use label if any, otherwise the term
@@ -61,8 +64,7 @@ var encodeProject = (function () {
             // and an array of dataTypes, alphasorted, with 'Other' last
             var dataGroupHash = {},
                 dataGroups = [],
-                otherGroup,
-                group;
+                otherGroup, group;
             $.each(dataTypes, function (i, dataType) {
                 group = dataType.dataGroup;
                 if (!group) {
@@ -128,7 +130,6 @@ var encodeProject = (function () {
 
         isHistone: function (target) {
             // Helper function, returns true if antibody target histone modification
-
             return target.match(/^H[234]/);
         },
 
@@ -153,11 +154,9 @@ var encodeProject = (function () {
             // and an array of antibody targets, alphasorted
             var antibodyGroups = [],
                 antibodyGroupHash = {},
-                group,
-                target;
+                group, target;
             $.each(antibodies, function (i, antibody) {
-                group = encodeProject.isHistone(antibody.target) ? 
-                        "Histone Modification" : "Transcription Factor";
+                group = encodeProject.isHistone(antibody.target) ? "Histone Modification" : "Transcription Factor";
                 if (!antibodyGroupHash[group]) {
                     antibodyGroupHash[group] = {
                         label: group,

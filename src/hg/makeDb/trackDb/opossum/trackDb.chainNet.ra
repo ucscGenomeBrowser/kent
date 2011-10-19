@@ -27,7 +27,7 @@ chainMinScore 5000
 chainLinearGap loose
 
 track chainNetSusScr2 override
-priority 540.3
+priority 365.3
 chainMinScore 5000
 chainLinearGap loose
 
@@ -102,6 +102,7 @@ chainLinearGap loose
 
 track chainNetPanTro2 override
 priority 530.3
+shortLabel $o_db Chain/Net
 chainLinearGap loose
 chainMinScore 1000
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
