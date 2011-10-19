@@ -2525,7 +2525,7 @@ hPrintf("</MAP>\n");
 jsonHashAddBoolean(jsonForClient, "dragSelection", TRUE);
 jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
-jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
+    jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
 if(newWinWidth)
     {
     jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
@@ -3434,7 +3434,7 @@ for (hub = hubList; hub != NULL; hub = hub->next)
 	    struct trackDb *tdbList = hubAddTracks(hub, database, pHubList);
 	    addTdbListToTrackList(tdbList, NULL, pTrackList);
 	    // we're going to free the hubConnectStatus list
-	    hub->trackHub = NULL; 
+	    hub->trackHub = NULL;
 	    }
         errCatchEnd(errCatch);
         if (errCatch->gotError)
@@ -4095,7 +4095,7 @@ else
         paddedLabel[i+1] = label[i];
     }
 #if IN_PLACE_UPDATE
-hButtonWithOnClick(var, paddedLabel, NULL, "return navigateButtonClick(this);");
+hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
 #else
 hButton(var, paddedLabel);
 #endif
@@ -4379,7 +4379,7 @@ struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (startsWithWord("makeItems", track->tdb->type) )
-        hPrintf("setUpMakeItemsDrag(\"%s\");\n", track->track);
+        hPrintf("makeItemsByDrag.init(\"%s\");\n", track->track);
     }
 
 hPrintf( "}\n");
@@ -4915,12 +4915,12 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
 #if IN_PLACE_UPDATE
-    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right", "return imageV2.navigateButtonClick(this);");
 #else
     hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
     hButtonWithMsg("hgt.left2", " <<", "move 47.5% to the left");
@@ -4999,7 +4999,7 @@ if (!hideControls)
                     "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database)
                     );
 	hWrites(" ");
-	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
+	hButtonWithOnClick("hgt.jump", "jump", NULL, "imageV2.jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
@@ -5017,7 +5017,7 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",tl.picWidth);//min(tl.picWidth, 800));
     hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
     hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
-    hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
+        hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
 
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
     hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom in 1.5x'>&gt;&nbsp;&lt;</a>\n");
@@ -5029,8 +5029,8 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<td width='40' align='right'><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
     hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
     hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
-    hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-    hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
+        hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
+        hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
 
     hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
     hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
@@ -5063,9 +5063,9 @@ if (!hideControls)
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
 #if IN_PLACE_UPDATE
-    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return imageV2.navigateButtonClick(this);");
 #else
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
@@ -5089,9 +5089,9 @@ if (!hideControls)
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
 #if IN_PLACE_UPDATE
-    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return imageV2.navigateButtonClick(this);");
 #else
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
@@ -5157,7 +5157,7 @@ if (!hideControls)
 	hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
 	hPrintf("<tr><td align='left'>\n");
 
-	hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
+	hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return vis.expandAllGroups(false)");
 	hPrintf("</td>");
 
 	hPrintf("<td colspan='%d' align='CENTER' nowrap>"
@@ -5167,7 +5167,7 @@ if (!hideControls)
 	   "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
 
 	hPrintf("<td align='right'>");
-	hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
+	hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return vis.expandAllGroups(true)");
 	hPrintf("</td></tr>");
 
 	if (!hIsGsidServer())
@@ -5202,7 +5202,7 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-            hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+            hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
@@ -5970,14 +5970,14 @@ if(!trackImgOnly)
     jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
-    webIncludeResourceFile("jquery-ui.css");
-    if (!searching) // NOT doing search
-        {
-        webIncludeResourceFile("jquery.contextmenu.css");
-        jsIncludeFile("jquery.contextmenu.js", NULL);
-        webIncludeResourceFile("ui.dropdownchecklist.css");
-        jsIncludeFile("ui.dropdownchecklist.js", NULL);
-        jsIncludeFile("ddcl.js", NULL);
+        webIncludeResourceFile("jquery-ui.css");
+        if (!searching) // NOT doing search
+            {
+            webIncludeResourceFile("jquery.contextmenu.css");
+            jsIncludeFile("jquery.contextmenu.js", NULL);
+            webIncludeResourceFile("ui.dropdownchecklist.css");
+            jsIncludeFile("ui.dropdownchecklist.js", NULL);
+            jsIncludeFile("ddcl.js", NULL);
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
