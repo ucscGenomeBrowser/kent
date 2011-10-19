@@ -2521,8 +2521,6 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-// XXXX remove this after we remove dragSelection from hgTracks.js
-jsonHashAddBoolean(jsonForClient, "dragSelection", TRUE);
 jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
     jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);

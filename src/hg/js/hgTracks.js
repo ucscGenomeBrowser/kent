@@ -12,11 +12,9 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * int winStart           // genomic start coordinate (0-based, half-open)
  * int winEnd             // genomic end coordinate
  * int newWinWidth        // new width (in bps) if user clicks on the top ruler
- * boolean dragSelection  // true if we should allow drag and select
  * boolean revCmplDisp    // true if we are in reverse display
  * int insideX            // width of side-bar (in pixels)
  * int rulerClickHeight   // height of ruler (in pixels) - zero if ruler is hidden
- * boolean dragSelection  // true if drag-and-select turned on
  * boolean inPlaceUpdate  // true if in-place-update is turned on
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
@@ -533,7 +531,7 @@ var dragSelect = {
             imgHeight = imageV2.imgTbl.height();
 
         // No longer disable without ruler, because shift-drag still works
-        if(typeof(hgTracks) != "undefined" && hgTracks.dragSelection) {
+        if(typeof(hgTracks) != "undefined") {
 
             if (hgTracks.rulerClickHeight == undefined || hgTracks.rulerClickHeight == null)
                 hgTracks.rulerClickHeight = 0; // will be zero if no ruler track
@@ -1124,7 +1122,7 @@ var dragReorder = {
     mapItemMouseOver: function ()
     {
         // Record data for current map area item
-        id = this.id;
+        var id = this.id;
         if (id == undefined || id == null || id.length == 0) {
             id = '';
             var tr = $( this ).parents('tr.imgOrd');
