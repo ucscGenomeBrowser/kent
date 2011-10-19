@@ -123,7 +123,6 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
-boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
 struct jsonHashElement *jsonForClient = NULL;
 
@@ -1708,11 +1707,6 @@ for (i=1; i<=boxes; ++i)
         ns -= (ne - seqBaseCount);
         ne = seqBaseCount;
         }
-    if(!dragZooming)
-        {
-        mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,NULL,
-                        chromName, ns, ne, message);
-        }
     }
 return newWinWidth;
 }
@@ -1957,7 +1951,7 @@ if(theImgBox)
 // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started
 // prior to this in doTrackForm()
     {
-    rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");
+    rulerTtl = "drag select or click to zoom";
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
@@ -2527,7 +2521,8 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
+// XXXX remove this after we remove dragSelection from hgTracks.js
+jsonHashAddBoolean(jsonForClient, "dragSelection", TRUE);
 jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
 jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
@@ -2599,7 +2594,7 @@ if(theImgBox)
     }
 else
     {
-    char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
+    char *titleAttr = "title='click or drag mouse in base position track to zoom in'";
     hPrintf("<IMG SRC='%s' BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
         gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
     hPrintf("><BR>\n");
@@ -4998,7 +4993,7 @@ if (!hideControls)
 	hWrites("position/search ");
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
-	if(dragZooming && assemblySupportsGeneSuggest(database))
+	if(assemblySupportsGeneSuggest(database))
             hPrintf(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> "
                     "<input type='text' size='8' name='hgt.suggest' id='suggest'>\n"
                     "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database)
@@ -5081,7 +5076,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites(dragZooming ? "Click or drag in the base position track to zoom in. " : "Click on base position to zoom in around cursor. ");
+    hWrites("Click or drag in the base position track to zoom in. ");
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
 #ifdef IMAGEv2_DRAG_SCROLL
@@ -5940,8 +5935,6 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 
-dragZooming = TRUE;
-
 /* Do main display. */
 
 if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
@@ -5966,7 +5959,7 @@ if(!trackImgOnly)
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
-    if(dragZooming && !searching)
+    if(!searching)
         {
         jsIncludeFile("jquery.imgareaselect.js", NULL);
         }
