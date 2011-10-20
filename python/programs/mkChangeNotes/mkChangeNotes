@@ -147,7 +147,7 @@ def getGbdbFiles(database, tableset, revokedset, mdb):
             if os.path.isfile("/gbdb/%s/bbi/%s" % (database, j)):
                 revokedfileset.add(j)
             else:
-                errors.append("gbdb: revoked gbdb %s does not exist in /gbdb/%s/bbi" % (j, databsase))
+                errors.append("gbdb: revoked gbdb %s does not exist in /gbdb/%s/bbi" % (j, database))
     
     return (gbdbfileset, revokedfileset, errors)
 
