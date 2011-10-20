@@ -293,16 +293,16 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     print "\n"
     print "TABLES:"
     print "New: %s" % len(pushTables)
-    print "Persisting: %s" % len(oldTableSet & newTableSet)
+    print "Untouched: %s" % len(oldTableSet & newTableSet)
     print "Revoked/Replaced/Renamed: %s" % len(revokedTableSet)
-    print "New + Persisting: %s" % len(newTableSet)
-    print "Total (New + Persisting + Revoked/Replaced/Renamed): %s" % len(newTableSet | oldTableSet | revokedTableSet)
-    if args.full:
+    print "New + Untouched: %s" % len(newTableSet)
+    print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(newTableSet | oldTableSet | revokedTableSet)
+    if not args.summary:
         print ""
         print "New Tables (%s):" % len(pushTables)
         printIter(pushTables)
         print ""
-        print "Persisting (%s):" % len(oldTableSet & newTableSet)
+        print "Untouched (%s):" % len(oldTableSet & newTableSet)
         printIter(oldTableSet & newTableSet)
         print ""
         print "Revoked/Replaced/Renamed Tables (%s):" % len(revokedTableSet)
@@ -311,16 +311,16 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     #downlaodables = total - revoked
     print "DOWNLOAD FILES:"
     print "New: %s" % len(pushFiles - revokedFiles)
-    print "Persisting: %s" % len((totalFiles & oldReleaseFiles) - revokedFiles)
+    print "Untouched: %s" % len((totalFiles & oldReleaseFiles) - revokedFiles)
     print "Revoked/Replaced/Renamed: %s" % len(revokedFiles)
-    print "New + Persisting: %s" % len((pushFiles - revokedFiles) | ((totalFiles & oldReleaseFiles) - revokedFiles))
-    print "Total (New + Persisting + Revoked/Replaced/Renamed): %s" % len(totalFiles | oldReleaseFiles | revokedFiles)
-    if args.full:
+    print "New + Untouched: %s" % len((pushFiles - revokedFiles) | ((totalFiles & oldReleaseFiles) - revokedFiles))
+    print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(totalFiles | oldReleaseFiles | revokedFiles)
+    if not args.summary:
         print ""
         print "New Download Files (%s):" % len(pushFiles - revokedFiles)
         printWithPath((pushFiles - revokedFiles), c, args.releaseNew)
         print ""
-        print "Persisting Download Files (%s):" % len((totalFiles & oldReleaseFiles) - revokedFiles)    
+        print "Untouched Download Files (%s):" % len((totalFiles & oldReleaseFiles) - revokedFiles)    
         printWithPath(((totalFiles & oldReleaseFiles) - revokedFiles), c, args.releaseNew)
         print ""
         print "Revoked/Replaced/Renamed Download Files (%s):" % len(revokedFiles)    
@@ -328,16 +328,16 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     print "\n"
     print "GBDBS:"
     print "New: %s" % len(pushGbdbs)
-    print "Persisting: %s" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs)
+    print "Untouched: %s" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs)
     print "Revoked/Replaced/Renamed: %s" % len(revokedGbdbs)
-    print "New + Persisting: %s" % len(pushGbdbs | ((newGbdbSet & oldGbdbSet) - revokedGbdbs))
-    print "Total (New + Persisting + Revoked/Replaced/Renamed): %s" % len(newGbdbSet | oldGbdbSet | revokedGbdbs)
-    if args.full:
+    print "New + Untouched: %s" % len(pushGbdbs | ((newGbdbSet & oldGbdbSet) - revokedGbdbs))
+    print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(newGbdbSet | oldGbdbSet | revokedGbdbs)
+    if not args.summary:
         print ""
         print "New Gbdb Files (%s):" % len(pushGbdbs)
         printGbdbPath(pushGbdbs, args.database)
         print ""
-        print "Persisting Gbdb Files (%s):" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs)
+        print "Untouched Gbdb Files (%s):" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs)
         printGbdbPath((newGbdbSet & oldGbdbSet) - revokedGbdbs, args.database)
         print ""
         print "Revoked/Replaced/Renamed Gbdb Files (%s):" % len(revokedGbdbs)
@@ -345,16 +345,16 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     print "\n"
     print "SUPPLEMENTAL FILES:"
     print "New: %s" % len(newSupplementalSet - oldSupplementalSet)
-    print "Persisting: %s" % len(oldSupplementalSet & newSupplementalSet)
+    print "Untouched: %s" % len(oldSupplementalSet & newSupplementalSet)
     print "Removed: %s" % len(oldSupplementalSet - newSupplementalSet)
-    print "New + Persisting: %s" % len((newSupplementalSet - oldSupplementalSet) | (oldSupplementalSet & newSupplementalSet))
+    print "New + Untouched: %s" % len((newSupplementalSet - oldSupplementalSet) | (oldSupplementalSet & newSupplementalSet))
     print "Total: %s" % len(newSupplementalSet | oldSupplementalSet)
-    if args.full:
+    if not args.summary:
         print ""
         print "New Supplemental Files (%s):" % len(newSupplementalSet - oldSupplementalSet)
         printWithPath(newSupplementalSet - oldSupplementalSet, c, args.releaseNew)
         print ""
-        print "Persisting Supplemental Files (%s):" % len(oldSupplementalSet & newSupplementalSet)
+        print "Untouched Supplemental Files (%s):" % len(oldSupplementalSet & newSupplementalSet)
         printWithPath(oldSupplementalSet & newSupplementalSet, c, args.releaseNew)
         print ""
         print "Removed Supplemental Files (%s):" % len(oldSupplementalSet - newSupplementalSet)
@@ -364,7 +364,7 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     print "New: %s" % len(additionalList)
     print "Revoked/Replace: %s" % len(oldAdditionalList)
     print "Total: %s" % len(additionalList | oldAdditionalList)
-    if args.full:
+    if not args.summary:
         print "" 
         print "New Other Files (%s):" % len(additionalList)
         printWithPath(additionalList, c, args.releaseNew)
@@ -431,7 +431,7 @@ def printReportOne(args, totalFiles, revokedFiles, newGbdbSet, revokedGbdbs, new
     else:
         print "Total: %d MB" % totalsize
     print "\n"
-    if args.full:
+    if not args.summary:
         print ""
         print "New Tables (%s):" % len(newTableSet - revokedTables)
         printIter(newTableSet - revokedTables)
@@ -494,7 +494,7 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
     parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
     parser.add_argument('-l', '--loose', action="store_true", default=0, help='Loose checking for legacy elements. Will be retired once all tracks go through a release cycle')
     parser.add_argument('-i', '--ignore', action="store_true", default=0, help='Ignore errors, print out report.')
-    parser.add_argument('-f', '--full', action="store_true", default=0, help='Print full stats.')
+    parser.add_argument('-s', '--summary', action="store_true", default=0, help='Print summary stats only.')
     parser.add_argument('database', help='The database, typically hg19 or mm9')
     parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
     parser.add_argument('releaseNew', help='The new release to be released')
