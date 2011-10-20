@@ -834,5 +834,19 @@ CREATE TABLE ucscToEnsembl (
 
     hgLoadSqlTab bosTau6 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
 
+#############################################################################
+# LIFTOVER TO bosTau4 (DONE - 2011-10-20 - Chin)
+
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
+    # real    110m26.710s
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau4.over.chain.gz >> md5sum.txt
+    popd
+
 ############################################################################
 

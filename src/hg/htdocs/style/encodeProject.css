@@ -1,6 +1,7 @@
-/* Style for ENCODE Project */
+/* Style for ENCODE Project
+        (Mostly re-using Genome Browser styles)
+*/
 
-/* mostly re-using GB styles */
 /* over-riding alignment so we don't have to nest in a table */
 .topBlueBar {
     text-align: left;
@@ -28,7 +29,7 @@ body {
 }
 
 a {
-	color: #003366;
+    color: #003366;
 }
 
 table {
@@ -65,18 +66,16 @@ h4.title {
 }
     
 dt {
-	padding-bottom: 12px;
+    padding-bottom: 12px;
 }
 
 dd {
-	padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 
-.date {
-	font-size: 10pt;
-}
 
 /*General styles*/
+
 .thick {
     font-weight:bold;
 }
@@ -86,70 +85,25 @@ dd {
 }
 
 .big {
-	font-size: 16pt;
+    font-size: 16pt;
 }
 
-#referenceGenome td+td {
-    background-color: #DDD;
+.gold {
+    background-color: #FFDB70;
 }
 
-.foo:hover {
-    color: white;
-    background-color: black;
-    border: 2px gray inset;
+.date {
+    font-size: 10pt;
 }
 
-
-.summaryTable {
-    float: left;
-    width: 30%;
-    border-spacing: 5px;
-    margin-top: 3em;
-    margin-left: 3%;
-}
-
-.summaryTable th {
-    padding: 3px;
-    background-color: #DC7;
-    text-align: left;
-    padding-left: 2em;
-}
-
-.summaryTable td {
-    text-align: left;
-    padding-left: 1em;
-}
-
-.summaryTable td+td {
-    text-align: right;
-    padding-right: 1em;
-}
-
-.matrixButton {
-    float: right;
-    margin-right: 1em;
-}
-
-#searchButtons {
-    float: right;
-    margin-right: 1em;
-}
-
-.selectable:hover
-{
+.selectable:hover {
     background-color: black;
     color: white;
 }
 
-.selected
-{
+.selected {
     background-color: #FFAB66;
     color: white;
-}
-
-.odd
-{
-    background-color: #F6F3DF;
 }
 
 .selectable {
@@ -159,7 +113,7 @@ dd {
 /* colored bullets on cell types based on karyotype CV field */
 
 .cancer {
-    color: red;
+    color: brown;
     font-size: large;
     text-align: right;
     float: right;
@@ -174,5 +128,7 @@ dd {
 
 .unknown {
     color: lightgrey;
+    text-align: right;
+    float: right;
 }
 

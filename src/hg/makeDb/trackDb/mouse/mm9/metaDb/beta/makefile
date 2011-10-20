@@ -7,4 +7,4 @@ wgEncodeSydhHist.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUwDnase.ra
 
-../../../../makefile.metaDb
+include ../../../../makefile.metaDb

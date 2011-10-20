@@ -192,20 +192,15 @@ void cytoBandIdeoMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* Print out a box to jump to band in browser window .*/
 {
 struct cytoBand *cb = item;
-if(advancedJavascriptFeaturesEnabled(cart))
-    {
-    x = hvGfxAdjXW(hvg, x, width);
 
-    hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-    hPrintf("onclick='return false;' ");
-    hPrintf("HREF=\"#\" class='cytoBand'");
-    mapStatusMessage("%s %s:%d-%d", (cb->name==NULL?"":cb->name),cb->chrom, cb->chromStart+1, cb->chromEnd);
-    hPrintf(">\n");
-    }
-else
-    {
-    mapBoxJumpTo(hvg, x, y, width, height, tg, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
-    }
+x = hvGfxAdjXW(hvg, x, width);
+
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
+hPrintf("onclick='return false;' ");
+hPrintf("HREF=\"#\" class='cytoBand'");
+mapStatusMessage("%s %s:%d-%d", (cb->name==NULL?"":cb->name),cb->chrom, cb->chromStart+1, cb->chromEnd);
+hPrintf(">\n");
+
 }
 
 int cytoBandIdeoTotalHeight(struct track *tg, enum trackVisibility vis)

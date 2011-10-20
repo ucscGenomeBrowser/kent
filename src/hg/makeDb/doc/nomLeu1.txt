@@ -211,9 +211,15 @@ nomLeu1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaF
 nomLeu1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 nomLeu1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 nomLeu1.downloadDir = nomLeu1
-nomLeu1.refseq.mrna.native.load  = yes
+nomLeu1.refseq.mrna.native.load  = no
 nomLeu1.refseq.mrna.xeno.load = yes
 nomLeu1.refseq.mrna.xeno.loadDesc  = yes
+nomLeu1.genbank.mrna.native.load = yes
+nomLeu1.genbank.mrna.native.loadDesc = yes
+nomLeu1.genbank.mrna.xeno.load = yes
+nomLeu1.genbank.mrna.xeno.loadDesc = yes
+nomLeu1.genbank.est.native.load = yes
+nomLeu1.genbank.est.native.loadDesc = yes
 
     git add etc/genbank.conf
     git commit -m "Added nomLeu1" etc/genbank.conf
