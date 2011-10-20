@@ -190,6 +190,10 @@ struct hashEl *hashElListHash(struct hash *hash);
 int hashElCmp(const void *va, const void *vb);
 /* Compare two hashEl by name. */
 
+int hashElCmpWithEmbeddedNumbers(const void *va, const void *vb);
+/* Compare two hashEl by name sorting including numbers within name,
+ * suitable for chromosomes, genes, etc. */
+
 void *hashElFindVal(struct hashEl *list, char *name);
 /* Look up name in hashEl list and return val or NULL if not found. */
 

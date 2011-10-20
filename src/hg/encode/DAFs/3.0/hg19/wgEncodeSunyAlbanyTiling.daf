@@ -1,0 +1,25 @@
+# Data Agreement File for RIP-Cchip project $Revision: 1.1 $
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the associated .ddf file should look like this:
+# files   view    cell   antibody   labVersion 
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Tenenbaum
+lab               SunyAlbany
+dataType          RipChip
+compositeSuffix   SunyAlbanyTiling
+group             regulation
+variables         cell, antibody
+assembly          hg19
+
+validationSettings validateFiles.broadPeak:mmCheckOneInN=1000
+
+# Track/view definition
+view             RbpAssocRna
+type             broadPeak
+required         no
+hasReplicates    no

@@ -58,10 +58,12 @@ struct cellInfo
 struct cellInfo cells[] = {
     { "Gm12878", "GM12878", 255,128,128, },
     { "H1hesc", "H1-hESC", 255,212,128, },
-    { "Hsmm", "HSMM", 120,235,204, },
-    { "Huvec", "HUVEC", 128,212,255, },
-    { "K562", "K562", 158,158,255, },
-    { "Nhek", "NHEK", 212,128,255, },
+    { "Helas3", "HeLa-S3", 227, 255, 128,},
+    { "Hepg2", "HepG2", 128,255,149,},
+    { "Hsmm", "HSMM", 128,255,242, },
+    { "Huvec", "HUVEC", 128,199,255, },
+    { "K562", "K562", 149,128,255, },
+    { "Nhek", "NHEK", 227,128,255, },
     { "Nhlf", "NHLF", 255,128,212, },
 };
 
@@ -79,7 +81,7 @@ for (i=0; i<ArraySize(marks); ++i)
     printf("    type bigWig 0 10000\n");
     printf("    superTrack wgEncodeReg full\n");
     printf("    shortLabel Normaliz %s\n", mark->name);
-    printf("    longLabel %s Normalized (%s) on 7 cell lines from ENCODE\n", mark->name, mark->blurb);
+    printf("    longLabel %s Normalized (%s) on 9 cell lines from ENCODE\n", mark->name, mark->blurb);
     printf("    visibility %s\n", mark->vis);
     printf("    viewLimits 0:%d\n", mark->yMax);
     printf("    maxHeightPixels 100:50:11\n");

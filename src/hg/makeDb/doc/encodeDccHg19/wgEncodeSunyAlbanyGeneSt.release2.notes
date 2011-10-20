@@ -15,17 +15,8 @@ Summary total counts for release2 (new+untouched):
     Files: 27
     Gbdbs: 0
 
-A) Untouched Tables (0):
+A) Untouched Tables (24):
 
-A') Untouched Files (0 downloadables, 0 gbdbs):
-    current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/
-    on RR:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/
-
-
-
-B) Deprecated tables (24):
 wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
@@ -51,11 +42,9 @@ wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 
-B') Deprecated files (24 downloadables, 0 gbdbs):
-    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
-    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+A') Untouched Files (24 downloadables, 0 gbdbs):
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release1/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/
 
@@ -90,26 +79,26 @@ wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStGm12878RipinRbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStGm12878T7RbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStH1hescRipinRbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStH1hescT7RbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStHelas3RipinRbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStHelas3T7RbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStHepg2RipinRbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStHepg2T7RbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStK562RipinRbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2
 wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2
-wgEncodeSunyAlbanyGeneStK562T7RbpAssocRnaV2
+wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2
 
 C') New files (24 downloadables, 0 gbdbs):
     current location on alpha:
@@ -117,30 +106,30 @@ C') New files (24 downloadables, 0 gbdbs):
     NOT on RR but must be placed in:
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/
 
-wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStGm12878RipinRbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStGm12878T7RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStH1hescRipinRbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStH1hescT7RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHelas3RipinRbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHelas3T7RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHepg2RipinRbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStHepg2T7RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStK562RipinRbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2.broadPeak.gz
-wgEncodeSunyAlbanyGeneStK562T7RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRnaV2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSunyAlbanyGeneSt/release2/wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRnaV2.broadPeak.gz
 
 
 D) Additional items:

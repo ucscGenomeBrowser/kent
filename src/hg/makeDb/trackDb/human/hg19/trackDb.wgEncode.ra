@@ -8,19 +8,22 @@ include wgEncodeGencodeV4.ra
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
 
-# UNC/BSU Proteogenomics (wrangler: cline)
-#include wgEncodeUncBsuProt.ra beta,public
+# UNC/BSU Proteogenomics (wrangler: cline,cricket)
 include wgEncodeUncBsuProt.ra
+include wgEncodeUncBsuProtFasp.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra
+include wgEncodeReg.ra beta,public
+include wgEncodeReg.new.ra alpha
+
+
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra alpha
+include wgEncodeGisRnaPet.ra 
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -43,33 +46,33 @@ include wgEncodeGisChiaPet.ra alpha
 include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
-include wgEncodeUw5C.ra alpha
+include wgEncodeUw5C.ra 
 
 
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.ra
+include wgEncodeUwAffyExonArray.ra beta,public
+include wgEncodeUwAffyExonArray.new.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.ra 
 
-
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
-#UNC FAIRE (wrangler: tim)
+#UNC FAIRE (wrangler: Matt)
 include wgEncodeOpenChromFaire.new.ra alpha
 include wgEncodeOpenChromFaire.ra beta,public
 
-#Open Chrom Synth (wrangler: tim)
-include wgEncodeOpenChromSynth.ra
+#Open Chrom Synth (wrangler: Matt)
+include wgEncodeOpenChromSynth.new.ra alpha
+include wgEncodeOpenChromSynth.ra beta,public
 
-#Duke DNaseI HS (wrangler: tim)
+#Duke DNaseI HS (wrangler: Matt)
 include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.new.ra alpha
-include wgEncodeUwDnase.ra beta,public
+include wgEncodeUwDnase.ra 
 
 
 #UW DNase DGF (wrangler: Venkat)
@@ -99,11 +102,11 @@ include wgEncodeCaltechRnaSeq.ra beta,public
 include wgEncodeCaltechRnaSeq.new.ra alpha
 
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.ra alpha
+include wgEncodeCshlLongRnaSeq.ra
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
-include wgEncodeSydhRnaSeq.ra alpha
+include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
@@ -122,8 +125,8 @@ include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra alpha
 include wgEncodeHaibMethyl450.ra alpha
 #HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
-include wgEncodeHaibMethylRrbs.ra beta,public
-include wgEncodeHaibMethylRrbs.new.ra alpha
+include wgEncodeHaibMethylRrbs.ra
+
 
 
 
@@ -132,11 +135,11 @@ include wgEncodeHaibMethylRrbs.new.ra alpha
 
 # ENCODE HISTONE --------------------------------------
 
-#Broad Histone (wrangler: Tim)
+#Broad Histone (wrangler: Matt)
 include wgEncodeBroadHistone.new.ra alpha
 include wgEncodeBroadHistone.ra beta,public
 
-#Broad HMM (wrangler: Tim)
+#Broad HMM (wrangler: Matt)
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
@@ -144,9 +147,7 @@ include wgEncodeUwHistone.new.ra alpha
 include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra beta,public
-include wgEncodeSydhHistone.new.ra alpha
-
+include wgEncodeSydhHistone.ra 
 
 # ENCODE TFBS -------------------------------------------
 
@@ -154,7 +155,7 @@ include wgEncodeSydhHistone.new.ra alpha
 include wgEncodeUwTfbs.new.ra alpha
 include wgEncodeUwTfbs.ra beta,public
 
-#UTA TFBS (wrangler: Tim)
+#UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.new.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
@@ -162,7 +163,8 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.ra beta,public
 include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.ra alpha
+include wgEncodeSydhTfbs.ra beta,public
+include wgEncodeSydhTfbs.new.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra 
@@ -171,8 +173,7 @@ include wgEncodeUchicagoTfbs.ra
 # SUNY RBP -----------------------------------------
 
 # SUNY RIP Gene ST (wrangler: cricket)
-include wgEncodeSunyAlbanyGeneSt.ra beta,public
-include wgEncodeSunyAlbanyGeneSt.new.ra alpha
+include wgEncodeSunyAlbanyGeneSt.ra
 
 # SUNY Tiling Array (wrangler: cricket)
 include wgEncodeSunyAlbanyTiling.ra
@@ -182,11 +183,11 @@ include wgEncodeSunyAlbanyTiling.ra
 include wgEncodeSunySwitchgear.ra
 
 # SUNY Rip-seq (wrangler: cricket)
-include wgEncodeSunyRipSeq.ra alpha,beta 
+include wgEncodeSunyRipSeq.ra 
 
 # Other miscellany ------------------------------------
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
-include wgEncodeMapability.ra beta,public
-include wgEncodeMapability.new.ra alpha
+include wgEncodeMapability.ra public
+include wgEncodeMapability.new.ra alpha,beta
 

@@ -8,7 +8,7 @@ shortLabel Stanf Nucleosome
 longLabel Nucleosome Position by MNase-seq from ENCODE/Stanford/BYU
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878<b>&nbsp;(Tier_1)</b> K562=K562<b>&nbsp;(Tier_1)</b>
+subGroup2 cellType Cell_Line 1GM12878=GM12878<b>&nbsp;(Tier_1)</b> 1K562=K562<b>&nbsp;(Tier_1)</b>
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 fileSortOrder cell=Cell_Line replicate=Rep view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -34,7 +34,7 @@ noInherit on
         parent wgEncodeSydhNsomeViewSignal
         shortLabel K562 Sig
         longLabel K562 Nucleosome Signal from ENCODE/Stanford/BYU
-	subGroups view=Signal cellType=K562
+	subGroups view=Signal cellType=1K562
         type bigWig 0.000000 31303.900391
         origAssembly hg19
         color 46,0,184
@@ -44,7 +44,7 @@ noInherit on
         parent wgEncodeSydhNsomeViewSignal
         shortLabel GM12878 Sig
         longLabel GM12878 Nucleosome Signal from ENCODE/Stanford/BYU
-	subGroups view=Signal cellType=GM12878
+	subGroups view=Signal cellType=1GM12878
         type bigWig 0.000000 16392.599609
         origAssembly hg19
         color 153,38,0

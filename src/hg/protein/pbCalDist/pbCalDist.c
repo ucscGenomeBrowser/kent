@@ -127,7 +127,7 @@ char *kgId;
 
 if (argc != 5) usage();
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
 /* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
@@ -167,7 +167,7 @@ o2 = mustOpen("pepResDist.tab", "w");
 conn  = hAllocConn(database);
 conn2 = hAllocConn(database);
 
-for (j=0; j<strlen(aaAlphabet); j++)
+for (j=0; j<23; j++)
     {
     aaResCnt[j] = 0;
     }
@@ -260,7 +260,7 @@ while (row2 != NULL)
     for (i=0; i<len; i++)
 	{
 	aaResFound = 0;
-	for (j=0; j<strlen(aaAlphabet); j++)
+	for (j=0; j<23; j++)
 	    {
 	    if (*chp == aaAlphabet[j])
 		{
@@ -299,7 +299,7 @@ while (row2 != NULL)
     }
 
 totalResCnt = 0;
-for (i=0; i<strlen(aaAlphabet); i++)
+for (i=0; i<23; i++)
     {
     totalResCnt = totalResCnt + aaResCnt[i];
     }

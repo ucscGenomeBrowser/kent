@@ -37,10 +37,10 @@ struct udcFile *udcFileOpen(char *url, char *cacheDir);
 void udcFileClose(struct udcFile **pFile);
 /* Close down cached file. */
 
-int udcRead(struct udcFile *file, void *buf, int size);
+bits64 udcRead(struct udcFile *file, void *buf, bits64 size);
 /* Read a block from file.  Return amount actually read. */
 
-void udcMustRead(struct udcFile *file, void *buf, int size);
+void udcMustRead(struct udcFile *file, void *buf, bits64 size);
 /* Read a block from file.  Abort if any problem, including EOF before size is read. */
 
 #define udcMustReadOne(file, var) udcMustRead(file, &(var), sizeof(var))

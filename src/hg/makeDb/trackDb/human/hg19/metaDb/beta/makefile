@@ -1,40 +1,44 @@
 
 LIST=\
 wgEncodeAffyRnaChip.ra \
-wgEncodeMapability.ra \
-wgEncodeGencodeV4.ra \
-wgEncodeGisDnaPet.ra \
-wgEncodeGisRnaSeq.ra \
-wgEncodeCshlShortRnaSeq.ra \
-wgEncodeUwDnase.ra \
-wgEncodeUwDgf.ra \
-wgEncodeHaibMethylRrbs.ra \
 wgEncodeBroadHistone.ra \
-wgEncodeRikenCage.ra \
-wgEncodeUwHistone.ra \
-wgEncodeSunyAlbanyTiling.ra \
-wgEncodeCaltechRnaSeq.ra \
-wgEncodeUwAffyExonArray.ra \
-wgEncodeUwTfbs.ra \
-wgEncodeOpenChromChip.ra \
-wgEncodeOpenChromFaire.ra \
-wgEncodeSunyAlbanyGeneSt.ra \
-wgEncodeOpenChromDnase.ra\
+wgEncodeBroadHmm.ra \
 wgEncodeBuOrchid.ra \
+wgEncodeCaltechRnaSeq.ra \
+wgEncodeCshlLongRnaSeq.ra \
+wgEncodeCshlShortRnaSeq.ra \
+wgEncodeDukeAffyExon.ra \
+wgEncodeGencodeV4.ra \
+wgEncodeGencodeV7.ra \
+wgEncodeGisDnaPet.ra \
+wgEncodeGisRnaPet.ra \
+wgEncodeGisRnaSeq.ra \
+wgEncodeHaibGenotype.ra \
+wgEncodeHaibMethylRrbs.ra \
+wgEncodeHaibTfbs.ra \
+wgEncodeMapability.ra \
+wgEncodeOpenChromChip.ra \
+wgEncodeOpenChromDnase.ra\
+wgEncodeOpenChromFaire.ra \
 wgEncodeOpenChromSynth.ra \
 wgEncodeReg.ra \
-wgEncodeSydhHistone.ra \
-wgEncodeUchicagoTfbs.ra \
-wgEncodeDukeAffyExon.ra \
-wgEncodeBroadHmm.ra \
-wgEncodeGencodeV7.ra \
-wgEncodeHaibTfbs.ra \
-wgEncodeSydhNsome.ra \
-wgEncodeSunySwitchgear.ra \
-wgEncodeHaibGenotype.ra \
+wgEncodeRikenCage.ra \
+wgEncodeSunyAlbanyGeneSt.ra \
+wgEncodeSunyAlbanyTiling.ra \
 wgEncodeSunyRipSeq.ra \
+wgEncodeSunySwitchgear.ra \
+wgEncodeSydhHistone.ra \
+wgEncodeSydhNsome.ra \
+wgEncodeSydhRnaSeq.ra \
+wgEncodeSydhTfbs.ra \
+wgEncodeUchicagoTfbs.ra \
 wgEncodeUncBsuProt.ra \
-
+wgEncodeUw5C.ra \
+wgEncodeUwAffyExonArray.ra \
+wgEncodeUwDgf.ra \
+wgEncodeUwDnase.ra \
+wgEncodeUwHistone.ra \
+wgEncodeUwTfbs.ra 
 
 include ../../../../makefile.metaDb
 

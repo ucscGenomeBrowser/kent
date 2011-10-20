@@ -13,31 +13,27 @@ fed into a tandem mass spectrometer (MS/MS). The series of fragment
 masses produced in MS/MS create a signature that can then be used to
 identify the peptide from a protein or DNA sequence database. For
 proteogenomic mapping, this identifying spectrum is mapped directly
-back to its most likely encoding locus on a genome sequenc (Giddings, et al. 2003). This
+back to its most likely encoding locus on a genome sequence (Giddings, et al. 2003). This
 allows the direct verification of protein-encoding transcripts.</p>
 
-<p>The proteogenomic track displays mass spectrometry data that has
+<p>The proteogenomic track displays mass spectrometry data that have
 been matched to the genomic sequence for selected cell lines, using a
 workflow and software specifically designed for this purpose. </p>
 <p>The proteogenomic tracks can be used to identify which parts of the
 genome are translated into proteins, to verify which transcripts
 discovered by ENCODE are protein-encoding, and can also reveal new
 genes and/or splice variants of genes. Of particular interest may be
-its ability to reveal the translation of small Open Reading Frames (ORF), antisense
+its ability to reveal the translation of small open reading frames (ORFs), antisense
 transcripts, or sites annotated as introns that encode proteins.
 </p>
 <h2>Display Conventions and Configuration</h2>
-<!--<P>
-This track is a multi-view composite track that contains multiple data types
-(<EM>views</EM>).  For each view, there are multiple subtracks that
-display individually on the browser.  Instructions for configuring multi-view
-tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-ENCODE tracks typically contain one or more of the following views:
-<DL>-->
-
-<p>The display for this track shows peptide mappings as
-grayscale-colored items where higher scores correspond to
-darker-colored blocks.<br>
+<p>The display for this track shows peptide mappings as contiguous,
+rectangular items.  These items are rendered in grayscale according to the
+score, with darker items representing higher-confidence peptide mappings.  
+The name of each item is the amino acid
+sequence of the peptide.  If a period (.) appears at the end of a
+name, it signifies a stop codon.  
+<br>
 </p>
 <p>In addition to the displayed genomic coordinates, several additional
 fields are available for each track item.<br>
@@ -61,22 +57,22 @@ Consequently, short mappings might have a
 strong <span style="font-style: italic;"> Raw Score </span> but a
 weaker
 <span style="font-style: italic;"> Score. </span></li>
-  <li>The <span style="font-style: italic;">Repeat Count</span>
-indicates the number of places in the genome that match the peptide
-sequence. This reflects the uniqueness of the peptide mapping in the
-genome. Any mappings to highly-duplicated regions will have
-high <span style="font-style: italic;"> Repeat Counts </span> and
-peptides which are repeated more than 10 times in the genome are
-deleted from the track.<br>
+  <li>The <span style="font-style: italic;">Spectrum ID</span> is a
+semi-unique identifier of the spectrum associated with the peptide
+mapping, and can be used to track the origins of the mapping.<br>
   </li>
   <li>The <span style="font-style: italic;">Peptide Rank </span>
 indicates the rank of each peptide/spectrum mapping.  A spectrum can
 be chimeric, containing more than one peptide, and the spectrum can be
 mapped with confidence to two or more distinct peptides.  Peptides
 with ranks greater than 3 are deleted from the track.</li>
-  <li>The <span style="font-style: italic;">Spectrum ID</span> is a
-semi-unique identifier of the spectrum associated with the peptide
-mapping, and can be used to track the origins of the mapping.<br>
+  <li>The <span style="font-style: italic;">Peptide Repeat Count</span>
+indicates the number of places in the genome that match the peptide
+sequence. This reflects the uniqueness of the peptide mapping in the
+genome. Any mappings to highly-duplicated regions will have a
+high <span style="font-style: italic;"> Peptide Repeat Count </span> and
+peptides which were repeated more than 10 times in the genome were
+deleted from the track.<br>
   </li>
 </ul>
 <h2>Methods</h2>
@@ -97,8 +93,10 @@ missed cleavages allowed in the search is described by the metadata
 parameter <i>miscleavages</i>.
 <p>We performed proteogenomic mapping with two missed cleavages
 allowed and using the whole human genomic sequence (UCSC hg19) via the
-genome fingerprint scanning (GFS) program (Khatum, et al. 2008)  and newly developed
-Peppy [to appear]. We used HMM_Score (Shevchenko, et al. 2007) to accurately match MS/MS
+genome fingerprint scanning (GFS) program (Khatun, et al. 2008)  and newly 
+developed Peppy 
+(<a href="http://www.peppyresearch.com/">http://www.peppyresearch.com</a>/). 
+We used HMM_Score (Shevchenko, et al. 2007) to accurately match MS/MS
 spectra to their corresponding genome sequences.  E-values are
 calculated, which estimate the number of results at the given score
 level which would be expected by random chance. We then empirically

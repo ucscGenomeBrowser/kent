@@ -2,6 +2,7 @@ metaObject wgEncodeUchicagoTfbs
 objType composite
 composite wgEncodeUchicagoTfbs
 expVars lab,dataType,cell,antibody,control
+geoSeriesAccession GSE31363
 
 metaObject wgEncodeUchicagoTfbsK562EfosControlAlnRep1
 objType file
@@ -16,10 +17,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
-fileName wgEncodeUchicagoTfbsK562EfosControlAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562EfosControlAlnRep1.bam,wgEncodeUchicagoTfbsK562EfosControlAlnRep1.bam.bai
+geoSampleAccession GSM777644
 grant White
 lab UChicago
-md5sum bam=ff072d5cad866bbf58a8b6c823bfeeb0,bai=96db0712a084a03a9ded2f3340485e9d
+md5sum ff072d5cad866bbf58a8b6c823bfeeb0,96db0712a084a03a9ded2f3340485e9d
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -41,6 +43,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
 fileName wgEncodeUchicagoTfbsK562EfosControlPk.narrowPeak.gz
+geoSampleAccession GSM777644
 grant White
 lab UChicago
 md5sum 2a6280868b59db45c28f4bd94ab6c9da
@@ -65,6 +68,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
 fileName wgEncodeUchicagoTfbsK562EfosControlRawDataRep1.fastq.gz
+geoSampleAccession GSM777644
 grant White
 lab UChicago
 md5sum 9935e947c7ed31bb7195b35c999628bd
@@ -89,6 +93,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
 fileName wgEncodeUchicagoTfbsK562EfosControlSig.bigWig
+geoSampleAccession GSM777644
 grant White
 lab UChicago
 md5sum c7fb5effb153da5168b5c039a92f3a93
@@ -112,10 +117,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
-fileName wgEncodeUchicagoTfbsK562EfosControlfosAlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562EfosControlfosAlnRep2.bam,wgEncodeUchicagoTfbsK562EfosControlfosAlnRep2.bam.bai
+geoSampleAccession GSM777644
 grant White
 lab UChicago
-md5sum bam=3fd0e58f252d989eb584d42d292906fa,bai=96dba3f7610bc8222406d33015605d1a
+md5sum 3fd0e58f252d989eb584d42d292906fa,96dba3f7610bc8222406d33015605d1a
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -136,10 +142,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
-fileName wgEncodeUchicagoTfbsK562EfosControlfosAlnRep3.bam
+fileName wgEncodeUchicagoTfbsK562EfosControlfosAlnRep3.bam,wgEncodeUchicagoTfbsK562EfosControlfosAlnRep3.bam.bai
+geoSampleAccession GSM777644
 grant White
 lab UChicago
-md5sum bam=11f08557c08af8d1c2a5291c74e33f5b,bai=e4eed90af366d15e971bc492410228e2
+md5sum 11f08557c08af8d1c2a5291c74e33f5b,e4eed90af366d15e971bc492410228e2
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2
@@ -161,6 +168,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
 fileName wgEncodeUchicagoTfbsK562EfosControlfosRawDataRep2.fastq.gz
+geoSampleAccession GSM777644
 grant White
 lab UChicago
 md5sum 570525d41fdb33981b63f962d0cbfaa1
@@ -185,6 +193,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001207
 expId 1207
 fileName wgEncodeUchicagoTfbsK562EfosControlfosRawDataRep3.fastq.gz
+geoSampleAccession GSM777644
 grant White
 lab UChicago
 md5sum 04be498358447e4af649538f9305870b
@@ -208,10 +217,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001208
 expId 1208
-fileName wgEncodeUchicagoTfbsK562Egata2ControlAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562Egata2ControlAlnRep1.bam,wgEncodeUchicagoTfbsK562Egata2ControlAlnRep1.bam.bai
+geoSampleAccession GSM777641
 grant White
 lab UChicago
-md5sum bam=bc5ea7d0770a0ee6f9e9aa50173d56d6,bai=396a13dcdbe7527b7fb00334fbebd2e0
+md5sum bc5ea7d0770a0ee6f9e9aa50173d56d6,396a13dcdbe7527b7fb00334fbebd2e0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -233,6 +243,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001208
 expId 1208
 fileName wgEncodeUchicagoTfbsK562Egata2ControlPk.narrowPeak.gz
+geoSampleAccession GSM777641
 grant White
 lab UChicago
 md5sum 64b38546e77f71b87310cbeb7c3bf5d2
@@ -257,6 +268,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001208
 expId 1208
 fileName wgEncodeUchicagoTfbsK562Egata2ControlRawDataRep1.fastq.gz
+geoSampleAccession GSM777641
 grant White
 lab UChicago
 md5sum 1a7f744b33a6cbd77eb4f014f19e0677
@@ -281,6 +293,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001208
 expId 1208
 fileName wgEncodeUchicagoTfbsK562Egata2ControlSig.bigWig
+geoSampleAccession GSM777641
 grant White
 lab UChicago
 md5sum 4c4772065c94e2322e4037478b0d2b03
@@ -304,10 +317,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001208
 expId 1208
-fileName wgEncodeUchicagoTfbsK562Egata2Controlgata2AlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562Egata2Controlgata2AlnRep2.bam,wgEncodeUchicagoTfbsK562Egata2Controlgata2AlnRep2.bam.bai
+geoSampleAccession GSM777641
 grant White
 lab UChicago
-md5sum bam=bf331637890b133047c147385d557f04,bai=04109b0008bf3202177d361867479ec2
+md5sum bf331637890b133047c147385d557f04,04109b0008bf3202177d361867479ec2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -329,6 +343,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001208
 expId 1208
 fileName wgEncodeUchicagoTfbsK562Egata2Controlgata2RawDataRep2.fastq.gz
+geoSampleAccession GSM777641
 grant White
 lab UChicago
 md5sum e8bb45c0bb2ea5d23e81d2f02a3d5baf
@@ -352,10 +367,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001209
 expId 1209
-fileName wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep1.bam,wgEncodeUchicagoTfbsK562Ehdac8ControlAlnRep1.bam.bai
+geoSampleAccession GSM777640
 grant White
 lab UChicago
-md5sum bam=6f243fbd58506bed4cf0185a84f0933e,bai=418b5bed469602621edff7e436828b87
+md5sum 6f243fbd58506bed4cf0185a84f0933e,418b5bed469602621edff7e436828b87
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -377,6 +393,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001209
 expId 1209
 fileName wgEncodeUchicagoTfbsK562Ehdac8ControlPk.narrowPeak.gz
+geoSampleAccession GSM777640
 grant White
 lab UChicago
 md5sum 5f54a00f490be9bd92213e0295408d81
@@ -401,6 +418,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001209
 expId 1209
 fileName wgEncodeUchicagoTfbsK562Ehdac8ControlRawDataRep1.fastq.gz
+geoSampleAccession GSM777640
 grant White
 lab UChicago
 md5sum a422ee47472046be2183e17d4c7b9fee
@@ -425,6 +443,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001209
 expId 1209
 fileName wgEncodeUchicagoTfbsK562Ehdac8ControlSig.bigWig
+geoSampleAccession GSM777640
 grant White
 lab UChicago
 md5sum a298f8d34d5191a653429549830151b5
@@ -448,10 +467,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001209
 expId 1209
-fileName wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8AlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8AlnRep2.bam,wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8AlnRep2.bam.bai
+geoSampleAccession GSM777640
 grant White
 lab UChicago
-md5sum bam=9eaeb7e0814f2e5a405a6df055824568,bai=b2a531a83e629559126e2faeaeafee7c
+md5sum 9eaeb7e0814f2e5a405a6df055824568,b2a531a83e629559126e2faeaeafee7c
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -473,6 +493,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001209
 expId 1209
 fileName wgEncodeUchicagoTfbsK562Ehdac8Controlhdac8RawDataRep2.fastq.gz
+geoSampleAccession GSM777640
 grant White
 lab UChicago
 md5sum 7ee1eaab3923f127a43296906a2447d8
@@ -496,10 +517,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001210
 expId 1210
-fileName wgEncodeUchicagoTfbsK562EjunbControlAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562EjunbControlAlnRep1.bam,wgEncodeUchicagoTfbsK562EjunbControlAlnRep1.bam.bai
+geoSampleAccession GSM777638
 grant White
 lab UChicago
-md5sum bam=a38c39c08215b20e614d1513c19e37dc,bai=f0e691bb6cecc3d684e5b1f73d73ff68
+md5sum a38c39c08215b20e614d1513c19e37dc,f0e691bb6cecc3d684e5b1f73d73ff68
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -521,6 +543,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001210
 expId 1210
 fileName wgEncodeUchicagoTfbsK562EjunbControlPk.narrowPeak.gz
+geoSampleAccession GSM777638
 grant White
 lab UChicago
 md5sum 171e5b65d57537390e9e55accafb9afb
@@ -545,6 +568,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001210
 expId 1210
 fileName wgEncodeUchicagoTfbsK562EjunbControlRawDataRep1.fastq.gz
+geoSampleAccession GSM777638
 grant White
 lab UChicago
 md5sum b06f28a6ced1a49d3503cb5bd76d31bb
@@ -569,6 +593,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001210
 expId 1210
 fileName wgEncodeUchicagoTfbsK562EjunbControlSig.bigWig
+geoSampleAccession GSM777638
 grant White
 lab UChicago
 md5sum 4836bef0a5d871a772c9fdfc36750e68
@@ -592,10 +617,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001210
 expId 1210
-fileName wgEncodeUchicagoTfbsK562EjunbControljunbAlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562EjunbControljunbAlnRep2.bam,wgEncodeUchicagoTfbsK562EjunbControljunbAlnRep2.bam.bai
+geoSampleAccession GSM777638
 grant White
 lab UChicago
-md5sum bam=6d0db067c5eda2b90a2d90313f7de084,bai=4d2e3a5ec57298c71f7937094acb3ff3
+md5sum 6d0db067c5eda2b90a2d90313f7de084,4d2e3a5ec57298c71f7937094acb3ff3
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -617,6 +643,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001210
 expId 1210
 fileName wgEncodeUchicagoTfbsK562EjunbControljunbRawDataRep2.fastq.gz
+geoSampleAccession GSM777638
 grant White
 lab UChicago
 md5sum 5696c1df3c741e96ec730314f69c50a9
@@ -640,10 +667,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
-fileName wgEncodeUchicagoTfbsK562EjundControlAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562EjundControlAlnRep1.bam,wgEncodeUchicagoTfbsK562EjundControlAlnRep1.bam.bai
+geoSampleAccession GSM777639
 grant White
 lab UChicago
-md5sum bam=bd36ef191fc05037bd2f96ec652c6846,bai=05676ce0687ba2fd9caaa947797a5379
+md5sum bd36ef191fc05037bd2f96ec652c6846,05676ce0687ba2fd9caaa947797a5379
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -665,6 +693,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
 fileName wgEncodeUchicagoTfbsK562EjundControlPk.narrowPeak.gz
+geoSampleAccession GSM777639
 grant White
 lab UChicago
 md5sum 97c915f0ad3c41a65bf4d61458d07c9b
@@ -689,6 +718,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
 fileName wgEncodeUchicagoTfbsK562EjundControlRawDataRep1.fastq.gz
+geoSampleAccession GSM777639
 grant White
 lab UChicago
 md5sum 47860582137a853304202933c97a9b12
@@ -713,6 +743,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
 fileName wgEncodeUchicagoTfbsK562EjundControlSig.bigWig
+geoSampleAccession GSM777639
 grant White
 lab UChicago
 md5sum 57d573177b770eb54f2fcd07c2cad947
@@ -736,10 +767,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
-fileName wgEncodeUchicagoTfbsK562EjundControljundAlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562EjundControljundAlnRep2.bam,wgEncodeUchicagoTfbsK562EjundControljundAlnRep2.bam.bai
+geoSampleAccession GSM777639
 grant White
 lab UChicago
-md5sum bam=4085b02dbdd2566182fdd58ac4de2303,bai=d4b9773fb70409e3381fdb48e8d138df
+md5sum 4085b02dbdd2566182fdd58ac4de2303,d4b9773fb70409e3381fdb48e8d138df
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -760,10 +792,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
-fileName wgEncodeUchicagoTfbsK562EjundControljundAlnRep3.bam
+fileName wgEncodeUchicagoTfbsK562EjundControljundAlnRep3.bam,wgEncodeUchicagoTfbsK562EjundControljundAlnRep3.bam.bai
+geoSampleAccession GSM777639
 grant White
 lab UChicago
-md5sum bam=4a0b9cb58e45cb14e46840e405d14d4e,bai=66d92e9e65040e806995f597d53b3231
+md5sum 4a0b9cb58e45cb14e46840e405d14d4e,66d92e9e65040e806995f597d53b3231
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2
@@ -785,6 +818,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
 fileName wgEncodeUchicagoTfbsK562EjundControljundRawDataRep2.fastq.gz
+geoSampleAccession GSM777639
 grant White
 lab UChicago
 md5sum 003369f1d8496de1f023593119b4b19a
@@ -809,6 +843,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001211
 expId 1211
 fileName wgEncodeUchicagoTfbsK562EjundControljundRawDataRep3.fastq.gz
+geoSampleAccession GSM777639
 grant White
 lab UChicago
 md5sum 97c5019479b18da8739b02190c668d36
@@ -832,10 +867,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001212
 expId 1212
-fileName wgEncodeUchicagoTfbsK562Enr4a1ControlAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562Enr4a1ControlAlnRep1.bam,wgEncodeUchicagoTfbsK562Enr4a1ControlAlnRep1.bam.bai
+geoSampleAccession GSM777637
 grant White
 lab UChicago
-md5sum bam=770a028f9d4005de622063829caffda1,bai=4d4c4bae53e908e3c45403918f783ad9
+md5sum 770a028f9d4005de622063829caffda1,4d4c4bae53e908e3c45403918f783ad9
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -857,6 +893,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001212
 expId 1212
 fileName wgEncodeUchicagoTfbsK562Enr4a1ControlPk.narrowPeak.gz
+geoSampleAccession GSM777637
 grant White
 lab UChicago
 md5sum 35973747f04c53456e53f30125e1ba96
@@ -881,6 +918,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001212
 expId 1212
 fileName wgEncodeUchicagoTfbsK562Enr4a1ControlRawDataRep1.fastq.gz
+geoSampleAccession GSM777637
 grant White
 lab UChicago
 md5sum 7d03fb3f855bb949563e61199a0ca587
@@ -905,6 +943,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001212
 expId 1212
 fileName wgEncodeUchicagoTfbsK562Enr4a1ControlSig.bigWig
+geoSampleAccession GSM777637
 grant White
 lab UChicago
 md5sum 5382d810da2bb9da2659800c694297f8
@@ -928,10 +967,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001212
 expId 1212
-fileName wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2.bam,wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1AlnRep2.bam.bai
+geoSampleAccession GSM777637
 grant White
 lab UChicago
-md5sum bam=d6593cdb6dbd763ee7386d174269312f,bai=796980c78ef8f39516530181e266b1ce
+md5sum d6593cdb6dbd763ee7386d174269312f,796980c78ef8f39516530181e266b1ce
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -953,6 +993,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001212
 expId 1212
 fileName wgEncodeUchicagoTfbsK562Enr4a1Controlnr4a1RawDataRep2.fastq.gz
+geoSampleAccession GSM777637
 grant White
 lab UChicago
 md5sum 1fcb7812e8107875b334d23c6251cde2
@@ -976,10 +1017,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001201
 expId 1201
-fileName wgEncodeUchicagoTfbsK562InputControlfosAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562InputControlfosAlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlfosAlnRep1.bam.bai
+geoSampleAccession GSM777646
 grant White
 lab UChicago
-md5sum bam=f6a885a065961598a37d98a6b126595e,bai=327d5d088c26a64d80975a87b163bcc0
+md5sum f6a885a065961598a37d98a6b126595e,327d5d088c26a64d80975a87b163bcc0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1000,10 +1042,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001201
 expId 1201
-fileName wgEncodeUchicagoTfbsK562InputControlfosAlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562InputControlfosAlnRep2.bam,wgEncodeUchicagoTfbsK562InputControlfosAlnRep2.bam.bai
+geoSampleAccession GSM777646
 grant White
 lab UChicago
-md5sum bam=b920edf4e40d626d05a6ad444de7fc19,bai=9586f46ccc87a228e95cb2ada8f9a583
+md5sum b920edf4e40d626d05a6ad444de7fc19,9586f46ccc87a228e95cb2ada8f9a583
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1024,10 +1067,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001201
 expId 1201
-fileName wgEncodeUchicagoTfbsK562InputControlfosAlnRep3.bam
+fileName wgEncodeUchicagoTfbsK562InputControlfosAlnRep3.bam,wgEncodeUchicagoTfbsK562InputControlfosAlnRep3.bam.bai
+geoSampleAccession GSM777646
 grant White
 lab UChicago
-md5sum bam=99a0b8d96e285209da8e7f6d7938954d,bai=5823e68f445c29d8184ab4bec5c0219b
+md5sum 99a0b8d96e285209da8e7f6d7938954d,5823e68f445c29d8184ab4bec5c0219b
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2
@@ -1049,6 +1093,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001201
 expId 1201
 fileName wgEncodeUchicagoTfbsK562InputControlfosRawDataRep1.fastq.gz
+geoSampleAccession GSM777646
 grant White
 lab UChicago
 md5sum 9a19c0276b7cd6e9a86ae75ad499ce0b
@@ -1073,6 +1118,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001201
 expId 1201
 fileName wgEncodeUchicagoTfbsK562InputControlfosRawDataRep2.fastq.gz
+geoSampleAccession GSM777646
 grant White
 lab UChicago
 md5sum 903a57a8d7b433480d6ea75db86fff05
@@ -1097,6 +1143,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001201
 expId 1201
 fileName wgEncodeUchicagoTfbsK562InputControlfosRawDataRep3.fastq.gz
+geoSampleAccession GSM777646
 grant White
 lab UChicago
 md5sum 94faa0e1ef71a2927431a63d18490927
@@ -1120,10 +1167,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001202
 expId 1202
-fileName wgEncodeUchicagoTfbsK562InputControlgata2AlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562InputControlgata2AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlgata2AlnRep1.bam.bai
+geoSampleAccession GSM777648
 grant White
 lab UChicago
-md5sum bam=f6a885a065961598a37d98a6b126595e,bai=327d5d088c26a64d80975a87b163bcc0
+md5sum f6a885a065961598a37d98a6b126595e,327d5d088c26a64d80975a87b163bcc0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1144,10 +1192,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001202
 expId 1202
-fileName wgEncodeUchicagoTfbsK562InputControlgata2AlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562InputControlgata2AlnRep2.bam,wgEncodeUchicagoTfbsK562InputControlgata2AlnRep2.bam.bai
+geoSampleAccession GSM777648
 grant White
 lab UChicago
-md5sum bam=bf7fcfa07b9abd04abc404fff8c1a1ff,bai=c3aa266288cd204580689ef8abb83a8b
+md5sum bf7fcfa07b9abd04abc404fff8c1a1ff,c3aa266288cd204580689ef8abb83a8b
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1169,6 +1218,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001202
 expId 1202
 fileName wgEncodeUchicagoTfbsK562InputControlgata2RawDataRep1.fastq.gz
+geoSampleAccession GSM777648
 grant White
 lab UChicago
 md5sum 9a19c0276b7cd6e9a86ae75ad499ce0b
@@ -1193,6 +1243,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001202
 expId 1202
 fileName wgEncodeUchicagoTfbsK562InputControlgata2RawDataRep2.fastq.gz
+geoSampleAccession GSM777648
 grant White
 lab UChicago
 md5sum a0b6ebb4a7a215a77fc26cc14edac3b7
@@ -1216,10 +1267,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001203
 expId 1203
-fileName wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep1.bam.bai
+geoSampleAccession GSM777647
 grant White
 lab UChicago
-md5sum bam=f6a885a065961598a37d98a6b126595e,bai=327d5d088c26a64d80975a87b163bcc0
+md5sum f6a885a065961598a37d98a6b126595e,327d5d088c26a64d80975a87b163bcc0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1240,10 +1292,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001203
 expId 1203
-fileName wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep2.bam,wgEncodeUchicagoTfbsK562InputControlhdac8AlnRep2.bam.bai
+geoSampleAccession GSM777647
 grant White
 lab UChicago
-md5sum bam=be6a2fe3f541b923c33b2e0ab95301cc,bai=e52e1102ccbb7d01ba6a9c8450acf096
+md5sum be6a2fe3f541b923c33b2e0ab95301cc,e52e1102ccbb7d01ba6a9c8450acf096
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1265,6 +1318,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001203
 expId 1203
 fileName wgEncodeUchicagoTfbsK562InputControlhdac8RawDataRep1.fastq.gz
+geoSampleAccession GSM777647
 grant White
 lab UChicago
 md5sum 9a19c0276b7cd6e9a86ae75ad499ce0b
@@ -1289,6 +1343,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001203
 expId 1203
 fileName wgEncodeUchicagoTfbsK562InputControlhdac8RawDataRep2.fastq.gz
+geoSampleAccession GSM777647
 grant White
 lab UChicago
 md5sum 6971d9cf2cbc4d071a2c27c4ce9f1041
@@ -1312,10 +1367,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001204
 expId 1204
-fileName wgEncodeUchicagoTfbsK562InputControljunbAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562InputControljunbAlnRep1.bam,wgEncodeUchicagoTfbsK562InputControljunbAlnRep1.bam.bai
+geoSampleAccession GSM777643
 grant White
 lab UChicago
-md5sum bam=f6a885a065961598a37d98a6b126595e,bai=327d5d088c26a64d80975a87b163bcc0
+md5sum f6a885a065961598a37d98a6b126595e,327d5d088c26a64d80975a87b163bcc0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1336,10 +1392,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001204
 expId 1204
-fileName wgEncodeUchicagoTfbsK562InputControljunbAlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562InputControljunbAlnRep2.bam,wgEncodeUchicagoTfbsK562InputControljunbAlnRep2.bam.bai
+geoSampleAccession GSM777643
 grant White
 lab UChicago
-md5sum bam=21a4e30d315371585b1f04cfe80c6661,bai=e2cef7e8dd4189ed9f5e1e791c7e47ce
+md5sum 21a4e30d315371585b1f04cfe80c6661,e2cef7e8dd4189ed9f5e1e791c7e47ce
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1361,6 +1418,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001204
 expId 1204
 fileName wgEncodeUchicagoTfbsK562InputControljunbRawDataRep1.fastq.gz
+geoSampleAccession GSM777643
 grant White
 lab UChicago
 md5sum 9a19c0276b7cd6e9a86ae75ad499ce0b
@@ -1385,6 +1443,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001204
 expId 1204
 fileName wgEncodeUchicagoTfbsK562InputControljunbRawDataRep2.fastq.gz
+geoSampleAccession GSM777643
 grant White
 lab UChicago
 md5sum 12d8e6844092e5b48e6b9e15196d7a3b
@@ -1408,10 +1467,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001205
 expId 1205
-fileName wgEncodeUchicagoTfbsK562InputControljundAlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562InputControljundAlnRep1.bam,wgEncodeUchicagoTfbsK562InputControljundAlnRep1.bam.bai
+geoSampleAccession GSM777642
 grant White
 lab UChicago
-md5sum bam=f6a885a065961598a37d98a6b126595e,bai=327d5d088c26a64d80975a87b163bcc0
+md5sum f6a885a065961598a37d98a6b126595e,327d5d088c26a64d80975a87b163bcc0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1432,10 +1492,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001205
 expId 1205
-fileName wgEncodeUchicagoTfbsK562InputControljundAlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562InputControljundAlnRep2.bam,wgEncodeUchicagoTfbsK562InputControljundAlnRep2.bam.bai
+geoSampleAccession GSM777642
 grant White
 lab UChicago
-md5sum bam=35f2cc4323b88e61389894af7c10fbf6,bai=9ec7ba6fa51fbab11f1831c5a5e4fb9d
+md5sum 35f2cc4323b88e61389894af7c10fbf6,9ec7ba6fa51fbab11f1831c5a5e4fb9d
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1456,10 +1517,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001205
 expId 1205
-fileName wgEncodeUchicagoTfbsK562InputControljundAlnRep3.bam
+fileName wgEncodeUchicagoTfbsK562InputControljundAlnRep3.bam,wgEncodeUchicagoTfbsK562InputControljundAlnRep3.bam.bai
+geoSampleAccession GSM777642
 grant White
 lab UChicago
-md5sum bam=9ff96d536190ae35181ae3ec79f16db8,bai=228073df1211aa7ea3864ab4a63f38f5
+md5sum 9ff96d536190ae35181ae3ec79f16db8,228073df1211aa7ea3864ab4a63f38f5
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2
@@ -1481,6 +1543,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001205
 expId 1205
 fileName wgEncodeUchicagoTfbsK562InputControljundRawDataRep1.fastq.gz
+geoSampleAccession GSM777642
 grant White
 lab UChicago
 md5sum 9a19c0276b7cd6e9a86ae75ad499ce0b
@@ -1505,6 +1568,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001205
 expId 1205
 fileName wgEncodeUchicagoTfbsK562InputControljundRawDataRep2.fastq.gz
+geoSampleAccession GSM777642
 grant White
 lab UChicago
 md5sum 9072b20a7d5f1c65650ac43a139f75eb
@@ -1529,6 +1593,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001205
 expId 1205
 fileName wgEncodeUchicagoTfbsK562InputControljundRawDataRep3.fastq.gz
+geoSampleAccession GSM777642
 grant White
 lab UChicago
 md5sum 7a389138aa0c34511caf32b42f63b2dd
@@ -1552,10 +1617,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001206
 expId 1206
-fileName wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep1.bam
+fileName wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep1.bam,wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep1.bam.bai
+geoSampleAccession GSM777645
 grant White
 lab UChicago
-md5sum bam=f6a885a065961598a37d98a6b126595e,bai=327d5d088c26a64d80975a87b163bcc0
+md5sum f6a885a065961598a37d98a6b126595e,327d5d088c26a64d80975a87b163bcc0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -1576,10 +1642,11 @@ dateSubmitted 2011-01-27
 dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001206
 expId 1206
-fileName wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep2.bam
+fileName wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep2.bam,wgEncodeUchicagoTfbsK562InputControlnr4a1AlnRep2.bam.bai
+geoSampleAccession GSM777645
 grant White
 lab UChicago
-md5sum bam=ecd58198380ab5d4ac21028e531b960e,bai=23e574d031e90427dbac471b9f0a8ad7
+md5sum ecd58198380ab5d4ac21028e531b960e,23e574d031e90427dbac471b9f0a8ad7
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
@@ -1601,6 +1668,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001206
 expId 1206
 fileName wgEncodeUchicagoTfbsK562InputControlnr4a1RawDataRep1.fastq.gz
+geoSampleAccession GSM777645
 grant White
 lab UChicago
 md5sum 9a19c0276b7cd6e9a86ae75ad499ce0b
@@ -1625,6 +1693,7 @@ dateUnrestricted 2011-10-27
 dccAccession wgEncodeEH001206
 expId 1206
 fileName wgEncodeUchicagoTfbsK562InputControlnr4a1RawDataRep2.fastq.gz
+geoSampleAccession GSM777645
 grant White
 lab UChicago
 md5sum 3db90fb5516da7fcb326a232840d7071
@@ -1635,4 +1704,4 @@ setType input
 subId 3310
 view RawData
 
-# MAGIC: 90846231
+# MAGIC: -415277169

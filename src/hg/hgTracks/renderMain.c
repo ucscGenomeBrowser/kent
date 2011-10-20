@@ -114,15 +114,35 @@ if(argc == 1)
     hPrintDisable();
     oldVars = hashNew(10);
     struct cart *cart = cartForSession(hUserCookie(), excludeVars, oldVars);
+
     // setup approriate CGI variables which tell hgTracks code what to do.
-    cartSetBoolean(cart, "hgt.imageV1", TRUE);
     cartSetBoolean(cart, "hgt.trackImgOnly", TRUE);
-    cartSetString(cart, "hgt.contentType", "png");
-    printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+    if(cartVarExists(cart, "jsonp"))
+        {
+        // experimental code to support remote rendering via a jsonp callback
+        // e.g.: /cgi-bin/hgRenderTracks?track=bamMMS9MbutiPygmy&track=...&jsonp=remoteTrackCallback&postion=...&pix=800
+        cartSetString(cart, "hgt.contentType", "jsonp");
+        cartSetString(cart, "hgt.trackNameFilter", cartString(cart, "track"));
+        cartSetString(cart, cartString(cart, "track"), cartUsualString(cart, "vis", "pack"));
+        }
+    else
+        {
+        // remote rendering of hgTracks PNG image based on contents of a session; caller may pass in a subset of
+        // hgTracks parameters: e.g. db, hgsid, pix, position and tracks with explicit visibilities (e.g. knownGene=pack).
+
+        cartSetString(cart, "hgt.contentType", "png");
+        cartSetBoolean(cart, "hgt.imageV1", TRUE);
+        if(!cartVarExists(cart, "hgt.baseShowAsm"))
+            cartSetBoolean(cart, "hgt.baseShowAsm", TRUE);
+        if(!cartVarExists(cart, "hgt.baseShowPos"))
+            cartSetBoolean(cart, "hgt.baseShowPos", TRUE);
+        }
     doMiddle(cart);
     }
 else
     {
+    // XXXX remove this code ... well, maybe not - this still might be useful for a stand-alone remote renderer.
+
     // command line call
 
     /* Set up some timing since we're trying to optimize things very often. */

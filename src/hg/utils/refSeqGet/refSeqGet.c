@@ -192,8 +192,8 @@ static void processMetaData(FILE *fh, struct sqlConnection *conn, struct sqlConn
 /* get meta data for an accession */
 {
 boolean isCoding = genbankIsRefSeqCodingMRnaAcc(rsvi->acc);
-char query[128];
-safef(query, sizeof(query), "SELECT name,product,protAcc,locusLinkId FROM refLink WHERE mrnaAcc = \"%s\"", rsvi->acc);
+char query[256];
+safef(query, sizeof(query), "SELECT rl.name,rl.product,rl.protAcc,rl.locusLinkId,rs.status FROM refLink rl, refSeqStatus rs WHERE (rl.mrnaAcc = \"%s\") and (rs.mrnaAcc = rl.mrnaAcc)", rsvi->acc);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)
@@ -201,7 +201,7 @@ if (row == NULL)
 char buf[32];
 char *protAccVer = getProtAccVerIf(conn2, rsvi->acc, row[2], buf, sizeof(buf));
 char *cds = isCoding ? getCds(conn2, rsvi->acc) : "";
-fprintf(fh, "%s.%d\t%s\t%s\t%s\t%s\t%s\n", rsvi->acc, rsvi->ver, protAccVer, row[0], row[3], cds, row[1]);
+fprintf(fh, "%s.%d\t%s\t%s\t%s\t%s\t%s\t%s\n", rsvi->acc, rsvi->ver, protAccVer, row[0], row[3], cds, row[1], row[4]);
 sqlFreeResult(&sr);
 if (isCoding)
     freeMem(cds);
@@ -211,7 +211,7 @@ static void getMetaData(struct sqlConnection *conn, struct refSeqVerInfo *refSeq
 /* get request prot sequences from database */
 {
 struct sqlConnection *conn2 = sqlConnect(sqlGetDatabase(conn));
-static char *hdr = "#mrnaAcc\t" "protAcc\t" "geneName\t" "ncbiGeneId\t" "cds\t" "product\n";
+static char *hdr = "#mrnaAcc\t" "protAcc\t" "geneName\t" "ncbiGeneId\t" "cds\t" "product\t" "status\n";
 FILE *fh = mustOpen(outFile, "w");
 fputs(hdr, fh);
 struct refSeqVerInfo *rsvi;

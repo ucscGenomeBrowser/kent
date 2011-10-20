@@ -5,7 +5,7 @@ compositeTrack on
 shortLabel UW Affy Exon
 longLabel Affymetrix Exon Array from ENCODE/University of Washington 
 group expression
-subGroup1 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) 4-HeLaS3=HeLa-S3&nbsp;(Tier_2) 5-HepG2=HepG2&nbsp;(Tier_2) 6-HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AOAF BE2C=BE2_C BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAc=HAc HA-sp=HA-sp HAE=HAE HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPE HCONF=HCONF HCT116=HCT116 HEE=HEE HEK293=HEK293 HGF=HGF HIPE=HIPE HL60=HL60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-Lbl HMVECLLy=HMVEC-LLy HNPCE=HNPCE HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCE HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPE=HRPE HSMM=HSMM HSMMt=HSMMtube HVMF=HVMF Jurkat=Jurkat LNCaP=LNCaP MCF7=MCF-7 NB4=NB4 NHA=NHA NHEK=NHEK NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 WI38=WI-38 WI38t=WI-38_<i>Tamoxifen<\i>
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 6HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AOAF BE2C=BE2_C BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAc=HAc HA-sp=HA-sp HAE=HAE HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPE HCONF=HCONF HCT116=HCT116 HEE=HEE HEK293=HEK293 HGF=HGF HIPE=HIPE HL60=HL60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-Lbl HMVECLLy=HMVEC-LLy HNPCE=HNPCE HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCE HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPE=HRPE HSMM=HSMM HSMMt=HSMMtube HVMF=HVMF Jurkat=Jurkat LNCaP=LNCaP MCF7=MCF-7 NB4=NB4 NHA=NHA NHEK=NHEK NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 WI38=WI-38 WI38t=WI-38_<i>Tamoxifen<\i>
 subGroup2 rep Rep rep1=1 rep2=2 
 dimensions dimensionX=rep dimensionY=cellType 
 boxedCfg on
@@ -63,7 +63,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HepG2 1
         longLabel HepG2 Exon array Signal Replicate 1 from ENCODE/UW
-        subGroups  cellType=5-HepG2 rep=rep1
+        subGroups  cellType=2HEPG2 rep=rep1
         type broadPeak
         accession GSM472906
         color 189,0,157
@@ -73,7 +73,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HepG2 2
         longLabel HepG2 Exon array Signal Replicate 2 from ENCODE/UW
-        subGroups  cellType=5-HepG2 rep=rep2
+        subGroups  cellType=2HEPG2 rep=rep2
         type broadPeak
         accession GSM472907
         color 189,0,157
@@ -128,7 +128,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HeLa-S3 1
         longLabel HeLa-S3 Exon array Signal Replicate 1 from ENCODE/UW
-        subGroups  cellType=4-HeLaS3 rep=rep1
+        subGroups  cellType=2HELAS3 rep=rep1
         type broadPeak
         accession GSM472916
         color 0,119,158
@@ -210,7 +210,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel K562 1
         longLabel K562 Exon array Signal Replicate 1 from ENCODE/UW
-        subGroups  cellType=3-K562 rep=rep1
+        subGroups  cellType=1K562 rep=rep1
         type broadPeak
         accession GSM472926
         color 46,0,184
@@ -220,7 +220,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel K562 2
         longLabel K562 Exon array Signal Replicate 2 from ENCODE/UW
-        subGroups  cellType=3-K562 rep=rep2
+        subGroups  cellType=1K562 rep=rep2
         type broadPeak
         accession GSM472927
         color 46,0,184
@@ -239,7 +239,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel GM12878 1
         longLabel GM12878 Exon array Signal Replicate 1 from ENCODE/UW
-        subGroups  cellType=1-GM12878 rep=rep1
+        subGroups  cellType=1GM12878 rep=rep1
         type broadPeak
         accession GSM472931
         color 153,38,0
@@ -249,7 +249,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HeLa-S3 2
         longLabel HeLa-S3 Exon array Signal Replicate 2 from ENCODE/UW
-        subGroups  cellType=4-HeLaS3 rep=rep2
+        subGroups  cellType=2HELAS3 rep=rep2
         type broadPeak
         accession GSM472932
         color 0,119,158
@@ -277,7 +277,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HUVEC 1
         longLabel HUVEC Exon array Signal Replicate 1 from ENCODE/UW
-        subGroups  cellType=6-HUVEC rep=rep1
+        subGroups  cellType=6HUVEC rep=rep1
         type broadPeak
         accession GSM472935
         color 224,75,0
@@ -1197,7 +1197,7 @@ superTrack wgEncodeExonArraySuper dense
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HUVEC 2
         longLabel HUVEC Exon array Signal Replicate 2 from ENCODE/UW
-        subGroups  cellType=6-HUVEC rep=rep2
+        subGroups  cellType=6HUVEC rep=rep2
         type broadPeak
         accession GSM651577
         color 224,75,0

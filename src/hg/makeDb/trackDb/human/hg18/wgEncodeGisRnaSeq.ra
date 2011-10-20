@@ -12,6 +12,7 @@ subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
 dimensions dimensionX=cellType dimensionY=rep
 #dimensionZchecked longPolyA
 #sortOrder cellType=+ rnaExtract=+ view=+ rep=+
+#fileSortOrder cell=Cell_Line view=View replicate=Lab<BR>Replicate fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 sortOrder cellType=+ view=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subtracks

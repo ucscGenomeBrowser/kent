@@ -40,7 +40,33 @@ static int gffSegLineScan(struct gff* gff, struct gffSegLine *seg)
     return scanned;
 }
 
-static boolean _gffSeekDoubleSharpLine();
+static boolean _gffGetLine(struct gff *gff)
+/* Get the next line into a gff file.  (private)
+ * return FALSE at EOF or if problem. */
+{
+char *s;
+s = fgets(gff->buf, gff->bufSize, gff->file);
+if (s == NULL)
+    {
+    return FALSE;
+    }
+gff->bytesInBuf = strlen(gff->buf);
+gff->readIx = 0;
+gff->lineNumber += 1;
+return TRUE;
+}
+
+static boolean _gffSeekDoubleSharpLine(struct gff *gff)
+/* Go find next line that begins with ## */
+{
+for (;;)
+    {
+    if (!_gffGetLine(gff)) return FALSE;
+    if (gff->bytesInBuf >= 2)
+	if (gff->buf[0] == '#' && gff->buf[1] == '#') 
+		return TRUE;
+    }
+}
 
 boolean gffOpen(struct gff *gff, char *fileName)
 /* Initialize gff structure and open file for it. */
@@ -81,22 +107,6 @@ lmCleanup(&gff->memPool);
 zeroBytes(gff, sizeof(*gff));
 }
 
-static boolean _gffGetLine(struct gff *gff)
-/* Get the next line into a gff file.  (private)
- * return FALSE at EOF or if problem. */
-{
-char *s;
-s = fgets(gff->buf, gff->bufSize, gff->file);
-if (s == NULL)
-    {
-    return FALSE;
-    }
-gff->bytesInBuf = strlen(gff->buf);
-gff->readIx = 0;
-gff->lineNumber += 1;
-return TRUE;
-}
-
 #if 0 /* unused */
 static boolean _gffAtEof(struct gff *gff)
 /* Returns TRUE if at the end of gff file. */
@@ -117,18 +127,6 @@ if (gff->readIx >= gff->bytesInBuf)
 return gff->buf[gff->readIx++];
 }
 #endif
-
-static boolean _gffSeekDoubleSharpLine(struct gff *gff)
-/* Go find next line that begins with ## */
-{
-for (;;)
-    {
-    if (!_gffGetLine(gff)) return FALSE;
-    if (gff->bytesInBuf >= 2)
-	if (gff->buf[0] == '#' && gff->buf[1] == '#') 
-		return TRUE;
-    }
-}
 
 static boolean _gffSeekDna(struct gff *gff)
 /* Skip through file until you get the DNA */ 

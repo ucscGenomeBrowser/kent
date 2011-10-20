@@ -75,7 +75,6 @@ install:
 	cp -p --remove-destination getConservation.csh     ${SCRIPTS}
 	cp -p --remove-destination getDbSize.csh           ${SCRIPTS}
 	cp -p --remove-destination getField.csh            ${SCRIPTS}
-	cp -p --remove-destination getGbdbBeta.csh         ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
 	cp -p --remove-destination getLastMonth.csh        ${SCRIPTS}
 	cp -p --remove-destination getLiftOver.csh         ${SCRIPTS}

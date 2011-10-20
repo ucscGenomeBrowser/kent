@@ -4,9 +4,7 @@ common alignment.  This is an implementation of the TransMap algorithm:
 Given alignments of
       a -> b
       b -> c
-
-it produces and alignment of a -> c
-
+it produces an alignment of a -> c.
 
 Examples:
 

@@ -43,10 +43,12 @@ for (i = 0;  i < ba->attrCount;  i++)
     cgiDecode(ba->attrVals[i], ba->attrVals[i], strlen(ba->attrVals[i]));
     char *tag = ba->attrTags[i];
     // User-defined keywords used in dbVar's GVF:
-    if (sameString(tag, "var_type"))
+    if (sameString(tag, "var_type")) // This one isn't anymore, but I add it back (hg18.txt).
 	tag = "Variant type";
     else if (sameString(tag, "clinical_int"))
 	tag = "Clinical interpretation";
+    else if (sameString(tag, "var_origin"))
+	tag = "Variant origin";
     else if (islower(tag[0]))
 	// Uppercase for nice display, assuming user doesn't care which keywords are
 	// user-defined vs. GVF standard:
@@ -77,6 +79,11 @@ for (i = 0;  i < ba->attrCount;  i++)
 	else
 	    // not formatted as expected, just print as-is:
 	    printf("<B>%s</B>: %s<BR>\n", tag, htmlEncode(ba->attrVals[i]));
+	}
+    // Parent sounds like mom or dad (as in var_origin)... tweak it too:
+    else if (sameString(tag, "Parent"))
+	{
+	printf("<B>Structural variant cluster:</B> %s<BR>\n", htmlEncode(ba->attrVals[i]));
 	}
     else
 	{

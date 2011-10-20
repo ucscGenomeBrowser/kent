@@ -39,7 +39,7 @@ objType table
 composite wgEncodeRegTfbsClustered
 dataType Cluster
 dateUnrestricted 2011-10-21
-fileName wgEncodeRegTfbsCells.tab.gz
+fileName wgEncodeRegTfbsClusteredCells
 grant Kent
 lab UCSC
 project wgEncode
@@ -139,6 +139,64 @@ tableName wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
 sourceObj wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigRep1V2 wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigRep2V2
 view Signal
 
+metaObject wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
+cell HeLa-S3
+composite wgEncodeRegTxnCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
+fileName wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum c0ee13a431fac2ff6b4d00aa0c574e3d
+objType table
+origAssembly hg18
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+subId 3418
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
+cell HepG2
+composite wgEncodeRegTxnCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2011-01-22
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
+fileName wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bigWig
+grant Myers
+insertLength 200
+lab Caltech
+localization cell
+mapAlgorithm TH1014
+md5sum 1448d05c49419c2e920038aa17ed92ab
+objType table
+origAssembly hg18
+project wgEncode
+readType 2x75
+rnaExtract longPolyA
+subId 3466
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled
+view Signal
+
+metaObject wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled
+cell HSMM
+composite wgEncodeRegTxnCaltechRnaSeq
+dataType RnaSeq
 metaObject wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled
 cell HUVEC
 composite wgEncodeRegTxn

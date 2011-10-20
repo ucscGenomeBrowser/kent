@@ -4,27 +4,30 @@ track wgEncodeUncBsuProt
 compositeTrack on
 superTrack wgEncodeProtGenoSuper dense
 shortLabel UNC/BSU ProtGeno
-longLabel ENCODE UNC/BSU Proteogenomics
+longLabel Proteogenomics from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
-subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)
 subGroup2 localization Localization cytosol=cytosol membraneFraction=membrane mito=mitochondria nucleus=nucleus 
 #subGroup3 view View Signal=Signal RawSignal=RawSignal
 dimensions dimensionX=cellType dimensionY=localization
 sortOrder cellType=+ localization=+ 
 fileSortOrder cell=Cell_Line localization=Localization view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
-controlledVocabulary encode/cv.ra cellType localization
+controlledVocabulary encode/cv.ra cellType=cell localization=localization
 dragAndDrop subTracks
 priority 0
-type bed 3
+type bed 6 +
 noInherit on
+useScore 1
 wgEncode 1
+scoreFilter 200
+scoreFilterLimits 200:1000
 visibility hide
 	
         	track wgEncodeUncBsuProtGm12878NucleusSig
         	parent wgEncodeUncBsuProt
         	shortLabel GM12878 nucleus
-        	longLabel GM12878 nuclear Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        	subGroups  cellType=GM12878 localization=nucleus
+        	longLabel GM12878 nucleus Proteogenomic Mapping Hits from ENCODE/UNC/BSU
+        	subGroups  cellType=1GM12878 localization=nucleus
 		visibility full
         	type peptideMapping
         	origAssembly hg19
@@ -35,7 +38,7 @@ visibility hide
         	parent wgEncodeUncBsuProt
         	shortLabel K562 cytosol
         	longLabel K562 cytosol Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        	subGroups  cellType=K562 localization=cytosol
+        	subGroups  cellType=1K562 localization=cytosol
 		visibility full
         	type peptideMapping
         	origAssembly hg19
@@ -46,7 +49,7 @@ visibility hide
         	parent wgEncodeUncBsuProt
         	shortLabel K562 membrane
         	longLabel K562 membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-        	subGroups  cellType=K562 localization=membraneFraction
+        	subGroups  cellType=1K562 localization=membraneFraction
 		visibility full
         	type peptideMapping
         	origAssembly hg19
@@ -57,7 +60,7 @@ visibility hide
 	        parent wgEncodeUncBsuProt
 	        shortLabel K562 mitochondria
 	        longLabel K562 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-	        subGroups  cellType=K562 localization=mito
+	        subGroups  cellType=1K562 localization=mito
 		visibility full
 	        type peptideMapping
 	        origAssembly hg19
@@ -68,7 +71,7 @@ visibility hide
 	        parent wgEncodeUncBsuProt
 	        shortLabel K562 nucleus
 	        longLabel K562 nucleus Proteogenomic Mapping Hits from ENCODE/UNC/BSU 
-	        subGroups  cellType=K562 localization=nucleus
+	        subGroups  cellType=1K562 localization=nucleus
 		visibility full
 	        type peptideMapping
 	        origAssembly hg19
@@ -79,8 +82,8 @@ visibility hide
 	        parent wgEncodeUncBsuProt
 	       	shortLabel GM12878 mito
 	        longLabel GM12878 mitochondria Proteogenomic Mapping Hits from ENCODE/UNC/BSU
-	        subGroups cellType=GM12878 localization=mito
-	       	visibility full
+	        subGroups cellType=1GM12878 localization=mito
+	        visibility full
 	        type peptideMapping
 	        origAssembly hg19
 	        color 153,38,0
@@ -90,7 +93,7 @@ visibility hide
         	parent wgEncodeUncBsuProt
         	shortLabel GM12878 membrane
         	longLabel GM12878 membrane Proteogenomic Mapping Hits from ENCODE/UNC/BSU
-        	subGroups cellType=GM12878 localization=membraneFraction
+        	subGroups cellType=1GM12878 localization=membraneFraction
         	visibility full
         	type peptideMapping
         	origAssembly hg19

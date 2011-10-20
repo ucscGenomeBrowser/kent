@@ -351,6 +351,15 @@ struct gsidSeq
     char *subjId;
     };
 
+/* list of links to display in a menu */
+struct hotLink
+    {
+    struct hotLink *next;
+    char *name;
+    char *url;
+    char *id;
+    };
+
 extern char *excludeVars[];
 extern struct trackLayout tl;
 extern struct jsonHashElement *jsonForClient;

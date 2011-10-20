@@ -11,7 +11,7 @@ joinerCheck: $O ${MYLIBS}
 #	${STRIP} ${BINDIR}/joinerCheck${EXE}
 
 clean:
-	rm -f $O
+	rm -f $O joinerCheck
 
 test: 
 	joinerCheck ../all.joiner
@@ -21,3 +21,6 @@ foo:
 
 ensembl:
 	joinerCheck -fieldListIn=hgwbeta.fields -identifier=ensemblTranscriptId ../all.joiner -keys -fields -database=hg16
+
+compile:: $O ${MYLIBS}
+	${CC} ${COPT} -o joinerCheck $O ${MYLIBS} $L

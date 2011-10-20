@@ -774,7 +774,7 @@ return result;
 }
 
 
-boolean AddCompositeToIncluder(struct raFile *includer, char *composite, char *newCompositeRaName, char **warnMsg)
+boolean addCompositeToIncluder(struct raFile *includer, char *composite, char *newCompositeRaName, char **warnMsg)
 /* Find <composite>{.other}.ra in includer file trackDb.wgEncode.ra
  * Return compositeName (no path) or NULL if error, give warnings.
  * Split the record, inserting below all the records found, with tag alpha */

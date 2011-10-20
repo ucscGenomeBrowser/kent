@@ -136,7 +136,7 @@ int ipcnt={0};
 int interProCount;
 if (argc != 3) usage();
 
-strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZBJOU");
+strcpy(aaAlphabet, "WCMHYNFIDQKRTVPGEASLXZB");
 
 /* Ala:  1.800  Arg: -4.500  Asn: -3.500  Asp: -3.500  Cys:  2.500  Gln: -3.500 */
 aa_hydro['A'] =  1.800;
@@ -175,7 +175,7 @@ o2 = mustOpen("pepResDist.tab", "w");
 conn2 = sqlConnect(database);
 conn3 = sqlConnect(protDbName);
 
-for (j=0; j<strlen(aaAlphabet); j++)
+for (j=0; j<23; j++)
     {
     aaResCnt[j] = 0;
     }
@@ -199,11 +199,8 @@ safef(query2, sizeof(query2),
       proteinDatabaseName, proteinDatabaseName, database);
 
 sr2  = sqlMustGetResult(conn2, query2);
-while ((row2 = sqlNextRow(sr2)) != NULL)
+ while ((molWtCnt < MAX_PROTEIN_CNT) && (row2 = sqlNextRow(sr2)) != NULL)
     {
-    if (molWtCnt >= MAX_PROTEIN_CNT)
-       errAbort("Too many proteins - please set MAX_PROTEIN_CNT to be more than %d\n", 
-       	MAX_PROTEIN_CNT);
     accession = row2[0];   
     molWt[molWtCnt] = (double)(atof(row2[1]));
     molWtCnt++;
@@ -225,7 +222,7 @@ while ((row2 = sqlNextRow(sr2)) != NULL)
     for (i=0; i<len; i++)
 	{
 	aaResFound = 0;
-	for (j=0; j<strlen(aaAlphabet); j++)
+	for (j=0; j<23; j++)
 	    {
 	    if (*chp == aaAlphabet[j])
 		{
@@ -274,7 +271,7 @@ sqlDisconnect(&conn2);
 sqlDisconnect(&conn3);
 
 totalResCnt = 0;
-for (i=0; i<strlen(aaAlphabet); i++)
+for (i=0; i<23; i++)
     {
     totalResCnt = totalResCnt + aaResCnt[i];
     }

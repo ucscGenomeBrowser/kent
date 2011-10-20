@@ -1,0 +1,242 @@
+track strainAlignments
+compositeTrack on
+shortLabel Yeast Strains
+longLabel Other yeast strains alignments
+group compGeno
+priority 125
+visibility hide
+type psl .
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsMaxZoom 10000.0
+showCdsAllScales .
+baseColorDefault itemBases
+pslSequence different
+html strainAlignments
+longLabelClip all
+
+    track pslMafNetAWRI1631
+    parent strainAlignments
+    shortLabel AWRI1631
+    longLabel Yeast strain AWRI1631 alignment
+    baseColorUseSequence extFile seqAWRI1631 extAWRI1631
+    priority 1
+
+    track pslMafNetAWRI796
+    parent strainAlignments
+    shortLabel AWRI796
+    longLabel Yeast strain AWRI796 alignment
+    baseColorUseSequence extFile seqAWRI796 extAWRI796
+    priority 2
+
+    track pslMafNetCBS7960
+    parent strainAlignments
+    shortLabel CBS7960
+    longLabel Yeast strain CBS7960 alignment
+    baseColorUseSequence extFile seqCBS7960 extCBS7960
+    priority 3
+
+    track pslMafNetCLIB215
+    parent strainAlignments
+    shortLabel CLIB215
+    longLabel Yeast strain CLIB215 alignment
+    baseColorUseSequence extFile seqCLIB215 extCLIB215
+    priority 4
+
+    track pslMafNetCLIB324
+    parent strainAlignments
+    shortLabel CLIB324
+    longLabel Yeast strain CLIB324 alignment
+    baseColorUseSequence extFile seqCLIB324 extCLIB324
+    priority 5
+
+    track pslMafNetCLIB382
+    parent strainAlignments
+    shortLabel CLIB382
+    longLabel Yeast strain CLIB382 alignment
+    baseColorUseSequence extFile seqCLIB382 extCLIB382
+    priority 6
+
+    track pslMafNetEC1118
+    parent strainAlignments
+    shortLabel EC1118
+    longLabel Yeast strain EC1118 alignment
+    baseColorUseSequence extFile seqEC1118 extEC1118
+    priority 7
+
+    track pslMafNetFL100
+    parent strainAlignments
+    shortLabel FL100
+    longLabel Yeast strain FL100 alignment
+    baseColorUseSequence extFile seqFL100 extFL100
+    priority 8
+
+    track pslMafNetFostersB
+    parent strainAlignments
+    shortLabel FostersB
+    longLabel Yeast strain FostersB alignment
+    baseColorUseSequence extFile seqFostersB extFostersB
+    priority 9
+
+    track pslMafNetFostersO
+    parent strainAlignments
+    shortLabel FostersO
+    longLabel Yeast strain FostersO alignment
+    baseColorUseSequence extFile seqFostersO extFostersO
+    priority 10
+
+    track pslMafNetJAY291
+    parent strainAlignments
+    shortLabel JAY291
+    longLabel Yeast strain JAY291 alignment
+    baseColorUseSequence extFile seqJAY291 extJAY291
+    priority 11
+
+    track pslMafNetLalvinQA23
+    parent strainAlignments
+    shortLabel LalvinQA23
+    longLabel Yeast strain LalvinQA23 alignment
+    baseColorUseSequence extFile seqLalvinQA23 extLalvinQA23
+    priority 12
+
+    track pslMafNetM22
+    parent strainAlignments
+    shortLabel M22
+    longLabel Yeast strain M22 alignment
+    baseColorUseSequence extFile seqM22 extM22
+    priority 13
+
+    track pslMafNetPW5
+    parent strainAlignments
+    shortLabel PW5
+    longLabel Yeast strain PW5 alignment
+    baseColorUseSequence extFile seqPW5 extPW5
+    priority 14
+
+    track pslMafNetRM11-1a
+    parent strainAlignments
+    shortLabel RM11-1a
+    longLabel Yeast strain RM11-1a alignment
+    baseColorUseSequence extFile seqRM11-1a extRM11-1a
+    priority 15
+
+    track pslMafNetSigma1278b
+    parent strainAlignments
+    shortLabel Sigma1278b
+    longLabel Yeast strain Sigma1278b alignment
+    baseColorUseSequence extFile seqSigma1278b extSigma1278b
+    priority 16
+
+    track pslMafNetT7
+    parent strainAlignments
+    shortLabel T7
+    longLabel Yeast strain T7 alignment
+    baseColorUseSequence extFile seqT7 extT7
+    priority 17
+
+    track pslMafNetT73
+    parent strainAlignments
+    shortLabel T73
+    longLabel Yeast strain T73 alignment
+    baseColorUseSequence extFile seqT73 extT73
+    priority 18
+
+    track pslMafNetUC5
+    parent strainAlignments
+    shortLabel UC5
+    longLabel Yeast strain UC5 alignment
+    baseColorUseSequence extFile seqUC5 extUC5
+    priority 19
+
+    track pslMafNetVL3
+    parent strainAlignments
+    shortLabel VL3
+    longLabel Yeast strain VL3 alignment
+    baseColorUseSequence extFile seqVL3 extVL3
+    priority 20
+
+    track pslMafNetVin13
+    parent strainAlignments
+    shortLabel Vin13
+    longLabel Yeast strain Vin13 alignment
+    baseColorUseSequence extFile seqVin13 extVin13
+    priority 21
+
+    track pslMafNetW303
+    parent strainAlignments
+    shortLabel W303
+    longLabel Yeast strain W303 alignment
+    baseColorUseSequence extFile seqW303 extW303
+    priority 22
+
+    track pslMafNetY10
+    parent strainAlignments
+    shortLabel Y10
+    longLabel Yeast strain Y10 alignment
+    baseColorUseSequence extFile seqY10 extY10
+    priority 23
+
+    track pslMafNetYJM269
+    parent strainAlignments
+    shortLabel YJM269
+    longLabel Yeast strain YJM269 alignment
+    baseColorUseSequence extFile seqYJM269 extYJM269
+    priority 24
+
+    track pslMafNetYJM789
+    parent strainAlignments
+    shortLabel YJM789
+    longLabel Yeast strain YJM789 alignment
+    baseColorUseSequence extFile seqYJM789 extYJM789
+    priority 25
+
+    track pslMafNetYPS163
+    parent strainAlignments
+    shortLabel YPS163
+    longLabel Yeast strain YPS163 alignment
+    baseColorUseSequence extFile seqYPS163 extYPS163
+    priority 26
+
+    track pslMafNetsacBay
+    parent strainAlignments
+    shortLabel sacBay
+    longLabel Yeast strain sacBay alignment
+    baseColorUseSequence extFile seqsacBay extsacBay
+    priority 27
+
+    track pslMafNetsacCas
+    parent strainAlignments
+    shortLabel sacCas
+    longLabel Yeast strain sacCas alignment
+    baseColorUseSequence extFile seqsacCas extsacCas
+    priority 28
+
+    track pslMafNetsacKlu
+    parent strainAlignments
+    shortLabel sacKlu
+    longLabel Yeast strain sacKlu alignment
+    baseColorUseSequence extFile seqsacKlu extsacKlu
+    priority 29
+
+    track pslMafNetsacKud
+    parent strainAlignments
+    shortLabel sacKud
+    longLabel Yeast strain sacKud alignment
+    baseColorUseSequence extFile seqsacKud extsacKud
+    priority 30
+
+    track pslMafNetsacMik
+    parent strainAlignments
+    shortLabel sacMik
+    longLabel Yeast strain sacMik alignment
+    baseColorUseSequence extFile seqsacMik extsacMik
+    priority 31
+
+    track pslMafNetsacPar
+    parent strainAlignments
+    shortLabel sacPar
+    longLabel Yeast strain sacPar alignment
+    baseColorUseSequence extFile seqsacPar extsacPar
+    priority 32

@@ -13,9 +13,10 @@
 #define IMAGEv2_DRAG_SCROLL_SZ 1
 
 #ifdef IMAGEv2_DRAG_SCROLL
-    #define IMAGEv2_SHORT_MAPITEMS
     #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
-        #define IMAGEv2_NO_LEFTLABEL_ON_FULL
+        #define IMAGEv2_SHORT_MAPITEMS
+        //#define IMAGEv2_SHORT_TOGGLE
+        //#define IMAGEv2_NO_LEFTLABEL_ON_FULL
         // Because the sideLabel clipping will leave a no longer needed label
         // aligned with the centerLabel, we will need to either: remove sideLabels
         // (which otherwise work) or add a new side-slice to match the centerlabel

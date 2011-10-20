@@ -37,6 +37,17 @@ struct kgXref kgXref;
 struct sqlResult *sr;
 char **row;
 
+/* Verify that the number of fields present in this kgXref table is what's
+ * expected, since more fields were added to the schema recently (10/19/2011) */
+struct slName *kgXrefFields = sqlListFields(conn, "kgXref");
+if (slCount(kgXrefFields) != KGXREF_NUM_COLS) 
+    {
+    errAbort("This genome has %d columns in kgXref but %d are expected - old genome?", 
+	     slCount(kgXrefFields), KGXREF_NUM_COLS);
+    }
+slFreeList(kgXrefFields);
+
+
 safef(query, sizeof(query), "SELECT * from kgXref");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

@@ -203,12 +203,12 @@ if (rgdGeneId != NULL)
 	    {
 	    geneSym = cloneString(row[0]);
 	    hPrintf("<B>Symbol:</B> %s ", addComma(row[0]));
-	    //hPrintf("<BR>\n");
+	    hPrintf("<BR>\n");
 	    }
 	if (row[1][0] != 0 && !sameString(row[0], "n/a"))
 	    {
 	    geneName = cloneString(row[1]);
-	    hPrintf("<BR><B>Name:</B> %s ", addComma(geneName));
+	    hPrintf("<B>Name:</B> %s ", addComma(geneName));
 	    hPrintf("<BR>\n");
 	    }
 	}

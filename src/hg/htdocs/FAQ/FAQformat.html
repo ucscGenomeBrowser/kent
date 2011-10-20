@@ -49,12 +49,14 @@
                 		<LI><A HREF="#format8">.nib format</A>
                 		<LI><A HREF="#format9">GenePred table format</A>
 				<LI><A HREF="#format10">Personal Genome SNP format</A>
+				<LI><A HREF="#format10.1">VCF format</A>
                                 <LI><A HREF="#format11">ENCODE RNA elements format</A>
 				<LI><A HREF="#format12">narrowPeak format</A>
 				<LI><A HREF="#format13">broadPeak format</A>
 				<LI><A HREF="#format14">gappedPeak format</A>
                                 <LI><A HREF="#format15">tagAlign format</A>
-				<LI><A HREF-"#format16">pairedTagAlign format</A>
+				<LI><A HREF="#format16">pairedTagAlign format</A>
+                                <LI><A HREF="#format17">peptideMapping format</A>
 				</UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -420,6 +422,9 @@ separated by spaces instead of tabs, the track will not display correctly. For m
 information on GFF format, refer to <A
 HREF="http://www.sanger.ac.uk/resources/software/gff"
 TARGET=_blank>http://www.sanger.ac.uk/resources/software/gff</A>. </P>
+<P>If you would like to obtain browser data in GFF (GTF) format, please refer to
+<A HREF="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format" TARGET="_blank">
+Genes in gtf or gff format</A> on the Wiki.</P>
 <P>
 Here is a brief description of the GFF fields:</P>
 
@@ -1246,7 +1251,11 @@ The most significant bit in a nibble is set if the base is masked. </P>
 		    <TD>
 <P>
 genePred is a table format commonly used for gene prediction tracks in the
-Genome Browser. Variations of the genePred format are listed below.
+Genome Browser. Variations of the genePred format are listed below.</P>
+<P>
+If you would like to obtain browser data in GFF (GTF) format, please refer to
+<A HREF="http://genomewiki.ucsc.edu/index.php/Genes_in_gtf_or_gff_format" TARGET="_blank">
+Genes in gtf or gff format</A> on the Wiki.</P>
 
 <H4><A name=GenePredictions></A>Gene Predictions</H4>
 The following definition is used for gene prediction tables. In 
@@ -1404,6 +1413,57 @@ chr21	31812879	31812880	C	1	0	0
         <BR>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
+
+<!--Content Table-->
+<A NAME="format10.1"></A>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>
+	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
+	        <TR><TD>
+	        <!--cheap trick to get background on row to be continuous-->
+		<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+		    <FONT SIZE="4"><b>&nbsp; VCF format</b></FONT></TD>
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+	        </TABLE>
+	        </TD></TR>
+	    </TABLE>
+	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+<P>
+<A HREF="http://www.1000genomes.org/wiki/Analysis/Variant%20Call%20Format/vcf-variant-call-format-version-41"
+TARGET=_BLANK>Variant Call Format (VCF)</A> is a flexible and extendable
+format for variation data such as single nucleotide variants,
+insertions/deletions, copy number variants and structural variants.
+When a VCF file is compressed and indexed using
+<A HREF="http://samtools.sourceforge.net/tabix.shtml"
+TARGET=_BLANK>tabix</A>, and made web-accesible,
+the Genome Browser can fetch only the portions of the file necessary
+to display items in the viewed region.
+This makes it possible to display alignments from files that
+are so large that the connection to UCSC would time out when
+attempting to upload the whole file to UCSC.
+Both the compressed VCF file and its tabix index file remain on your
+web-accessible server (http or ftp), not on the UCSC server.
+UCSC temporarily caches the accessed portions of the files to speed up
+interactive display.
+</P><P>
+Click <A HREF="../goldenPath/help/vcf.html">here</A> for more information
+about VCF custom tracks.</P>
+<P></P>
+			    </TD><TD WIDTH=15></TD></TR>
+			</TABLE><BR>
+		     </TD></TR>
+		</TABLE>
+	     </TD></TR>
+	</TABLE>
+	<BR>
 
 <!--content table-->
 <a name="format11"></a>
@@ -1721,5 +1781,84 @@ Tag Alignment Format for Paired Reads was used to provide genomic mapping of pai
     	</table>
 	<br>
 
+<a name="format17"></a><br>
+<table bgcolor="#888888" border="0" cellpadding="1" cellspacing="0"                      
+ width="100%">   
+  <tbody>
+    <tr>
+      <td>
+      <table bgcolor="#fffee8" border="0" cellpadding="0"
+ cellspacing="0" width="100%">
+        <tbody>
+          <tr>
+            <td>
+            <table background="../images/hr.gif" bgcolor="#d9e4f8"  width="100%">
+              <tbody>
+                <tr>
+                  <td>
+                  <table margin="0" cellpadding="0" cellspacing="0" width="100%">
+                    <tbody>
+                      <tr>
+                        <td align="left"><font size="4"><b>&nbsp;
+ENCODE peptideMapping: BED6+4 format</b></font></td>
+                        <td align="right"><a href="#top"><img
+ src="/images/index.gif" alt="" align="right" border="0"></a> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table bgcolor="#fffee8" cellpadding="0" width="100%">
+              <tbody>
+                <tr>
+                  <th height="10"><br>
+                  </th>
+                </tr>
+                <tr>
+                  <td width="10">&nbsp;</td>
+                  <td>
+                  <p></p>
+                  <p><b>PeptideMapping. </b>The peptide mapping format was used
+		    to provide genomic mapping
+		    of proteogenmic mappings of peptides to the genome, with information
+		    that is appropriate for assessing the confidence of the mapping.&nbsp; <br>
+		  </p>
+		  <ol>
+		    <li><b>chrom</b> - Name of the chromosome. </li>
+		    <li><b>chromStart</b> - The starting position of the feature
+		      in the chromosome. The first base in a chromosome is numbered 0. </li>
+		    <li><b>chromEnd</b>
+		      - The ending position of the feature in the chromosome or scaffold. The
+		      chromEnd base is not included in the display of the feature. For
+		      example, the first 100 bases of a chromosome are defined as
+		      chromStart=0, chromEnd=100, and span the bases numbered 0-99. </li>
+		    <li><b>name</b> - Identifier of paired-read. </li>
+		    <li><b>score</b> - Indicates uniqueness or quality
+		      (preferably 1000/alignment-count). </li>
+		    <li><b>strand</b> - Orientation of this read (+ or -). </li>
+		    <li><b>rawScore</b> - Raw score for this hit, as estimated through HMM analysis. </li>
+		    <li><b>spectrumId</b> - Non-unique identifier for the spectrum file </li>
+		    <li><b>peptideRank</b> - Rank of this hit, for peptides with multiple genomic hits></li>
+		    <li><b>peptideRepeatCount</b> - Indicates how many times this same hit was observed</li>
+		  </ol>
+                    </li>
+                  </ol>
+                  </td>
+                  <td width="15"><br>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 </BODY></HTML>

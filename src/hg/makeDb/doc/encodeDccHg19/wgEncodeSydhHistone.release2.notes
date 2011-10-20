@@ -2,114 +2,6 @@
 This is a release2 of the "ENCODE wgEncodeSydhHistone"
 The composite track is wgEncodeSydhHistone
 # WARNINGS #################################################
-1 - could not find None.bai file for wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
-2 - table wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2 does not exist, from filetype bam
-3 - could not find None.bai file for wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
-4 - table wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2 does not exist, from filetype bam
-5 - could not find None.bai file for wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
-6 - table wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1 does not exist, from filetype bam
-7 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
-8 - table wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1 does not exist, from filetype bam
-9 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
-10 - table wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1 does not exist, from filetype bam
-11 - could not find None.bai file for wgEncodeSydhHistoneNt2d1InputUcdAln.bam
-12 - table wgEncodeSydhHistoneNt2d1InputUcdAln does not exist, from filetype bam
-13 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
-14 - table wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2 does not exist, from filetype bam
-15 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam
-16 - table wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2 does not exist, from filetype bam
-17 - could not find None.bai file for wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
-18 - table wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1 does not exist, from filetype bam
-19 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
-20 - table wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1 does not exist, from filetype bam
-21 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
-22 - table wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2 does not exist, from filetype bam
-23 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
-24 - table wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1 does not exist, from filetype bam
-25 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
-26 - table wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2 does not exist, from filetype bam
-27 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
-28 - table wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1 does not exist, from filetype bam
-29 - could not find None.bai file for wgEncodeSydhHistoneU2osInputUcdAln.bam
-30 - table wgEncodeSydhHistoneU2osInputUcdAln does not exist, from filetype bam
-31 - could not find None.bai file for wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
-32 - table wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2 does not exist, from filetype bam
-33 - table wgEncodeSydhHistoneK562bH3k27me3bUcdPk does not exist, from filetype narrowPeak
-34 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
-35 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
-36 - table wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1 does not exist, from filetype bam
-37 - table wgEncodeSydhHistoneK562bInputUcdSig does not exist, from filetype bigWig
-38 - table wgEncodeSydhHistoneK562bH3k4me1UcdPk does not exist, from filetype narrowPeak
-39 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
-40 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
-41 - table wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2 does not exist, from filetype bam
-42 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
-43 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
-44 - table wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1 does not exist, from filetype bam
-45 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
-46 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
-47 - table wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2 does not exist, from filetype bam
-48 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
-49 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
-50 - table wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2 does not exist, from filetype bam
-51 - table wgEncodeSydhHistoneK562bH3k27me3bUcdSig does not exist, from filetype bigWig
-52 - table wgEncodeSydhHistoneK562bH3k9acbUcdSig does not exist, from filetype bigWig
-53 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
-54 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
-55 - table wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1 does not exist, from filetype bam
-56 - table wgEncodeSydhHistoneK562bH3k4me3bUcdSig does not exist, from filetype bigWig
-57 - table wgEncodeSydhHistoneK562bH3k9acbUcdPk does not exist, from filetype narrowPeak
-58 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
-59 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
-60 - table wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1 does not exist, from filetype bam
-61 - table wgEncodeSydhHistoneK562bH3k4me1UcdSig does not exist, from filetype bigWig
-62 - table wgEncodeSydhHistoneK562bH3k4me3bUcdPk does not exist, from filetype narrowPeak
-63 - could not find .bai file for bam file wgEncodeSydhHistoneK562bInputUcdAln.bam
-64 - could not find None.bai file for wgEncodeSydhHistoneK562bInputUcdAln.bam
-65 - table wgEncodeSydhHistoneK562bInputUcdAln does not exist, from filetype bam
-66 - could not find .bai file for bam file wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
-67 - could not find None.bai file for wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
-68 - table wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2 does not exist, from filetype bam
-69 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1
-70 - table wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1 does not exist, from filetype bam
-71 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562InputUcdAln
-72 - table wgEncodeSydhHistoneK562InputUcdAln does not exist, from filetype bam
-73 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2
-74 - table wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2 does not exist, from filetype bam
-75 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1
-76 - table wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1 does not exist, from filetype bam
-77 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2
-78 - table wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2 does not exist, from filetype bam
-79 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1
-80 - table wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1 does not exist, from filetype bam
-81 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1
-82 - table wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1 does not exist, from filetype bam
-83 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2
-84 - table wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2 does not exist, from filetype bam
-85 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2
-86 - table wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2 does not exist, from filetype bam
-87 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2
-88 - table wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2 does not exist, from filetype bam
-89 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2
-90 - table wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2 does not exist, from filetype bam
-91 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1
-92 - table wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1 does not exist, from filetype bam
-93 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcInputUcdAlnRep1
-94 - table wgEncodeSydhHistonePbmcInputUcdAlnRep1 does not exist, from filetype bam
-95 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2
-96 - table wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2 does not exist, from filetype bam
-97 - could not find gbdb path in table hg19.wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2
-98 - table wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2 does not exist, from filetype bam
-99 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1
-100 - table wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1 does not exist, from filetype bam
-101 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1
-102 - table wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1 does not exist, from filetype bam
-103 - could not find gbdb path in table hg19.wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2
-104 - table wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2 does not exist, from filetype bam
-105 - could not find gbdb path in table hg19.wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1
-106 - table wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1 does not exist, from filetype bam
-107 - could not find gbdb path in table hg19.wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1
-108 - table wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1 does not exist, from filetype bam
 ############################################################
 
 Categories of tables and files('):
@@ -119,13 +11,23 @@ B) Deprecated - are currently on RR but will no longer be needed and should not 
    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
 C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
+E) Addendum items 
 
 Summary total counts for release2 (new+untouched):
-    Tables: 36
-    Files: 147
-    Gbdbs: 20
+    Tables: 49
+    Files: 199
+    Gbdbs: 27
 
-A) Untouched Tables (16):
+A) Untouched Tables (25):
+wgEncodeSydhHistoneK562bH3k27me3bUcdPk
+wgEncodeSydhHistoneK562bH3k27me3bUcdSig
+wgEncodeSydhHistoneK562bH3k4me1UcdPk
+wgEncodeSydhHistoneK562bH3k4me1UcdSig
+wgEncodeSydhHistoneK562bH3k4me3bUcdPk
+wgEncodeSydhHistoneK562bH3k4me3bUcdSig
+wgEncodeSydhHistoneK562bH3k9acbUcdPk
+wgEncodeSydhHistoneK562bH3k9acbUcdSig
+wgEncodeSydhHistoneK562bInputUcdSig
 wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk
 wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig
 wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
@@ -143,77 +45,118 @@ wgEncodeSydhHistoneU2osH3k9me3UcdPk
 wgEncodeSydhHistoneU2osH3k9me3UcdSig
 wgEncodeSydhHistoneU2osInputUcdSig
 
-A') Untouched Files (64 downloadables, 9 gbdbs):
+A') Untouched Files (100 downloadables, 14 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/
 
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig.bigWig
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig
-wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
-wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam.bai
-wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
-wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam.bai
-wgEncodeSydhHistoneNt2d1H3k4me1UcdPk.narrowPeak.gz
-wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig.bigWig
-wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
-wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
-wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneNt2d1H3k9acbUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneNt2d1H3k9acbUcdSig.bigWig
-wgEncodeSydhHistoneNt2d1InputUcdAln.bam
-wgEncodeSydhHistoneNt2d1InputUcdAln.bam.bai
-wgEncodeSydhHistoneNt2d1InputUcdRawData.fastq.gz
-wgEncodeSydhHistoneNt2d1InputUcdSig.bigWig
-wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
-wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
-wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam.bai
-wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
-wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam.bai
-wgEncodeSydhHistoneU2osH3k9me3UcdPk.narrowPeak.gz
-wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneU2osH3k9me3UcdSig.bigWig
-wgEncodeSydhHistoneU2osInputUcdAln.bam
-wgEncodeSydhHistoneU2osInputUcdAln.bam.bai
-wgEncodeSydhHistoneU2osInputUcdRawData.fastq.gz
-wgEncodeSydhHistoneU2osInputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k27me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me1UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k4me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bH3k9acbUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bInputUcdAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bInputUcdAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bInputUcdRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562bInputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k4me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k9acbUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1InputUcdAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1InputUcdAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1InputUcdRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1InputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osH3k9me3UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osInputUcdAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osInputUcdAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osInputUcdRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneU2osInputUcdSig.bigWig
 
+/gbdb/hg19/bbi/wgEncodeSydhHistoneK562bH3k27me3bUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistoneK562bH3k4me1UcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistoneK562bH3k4me3bUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistoneK562bH3k9acbUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistoneK562bInputUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneNt2d1H3k27me3bUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig
@@ -226,7 +169,7 @@ wgEncodeSydhHistoneU2osInputUcdSig.bigWig
 
 B) Deprecated tables (0):
 
-B') Deprecated files (27 downloadables, 0 gbdbs):
+B') Deprecated files (1 downloadables, 0 gbdbs):
     NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
     This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
     current location on alpha:
@@ -234,36 +177,10 @@ B') Deprecated files (27 downloadables, 0 gbdbs):
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/
 
-wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneK562bH3k27me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneK562bH3k27me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562bH3k27me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562bH3k27me3bUcdSig.bigWig
-wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep1.bam
-wgEncodeSydhHistoneK562bH3k4me1UcdAlnRep2.bam
-wgEncodeSydhHistoneK562bH3k4me1UcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562bH3k4me1UcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562bH3k4me1UcdSig.bigWig
-wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneK562bH3k4me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneK562bH3k4me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562bH3k4me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562bH3k4me3bUcdSig.bigWig
-wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep1.bam
-wgEncodeSydhHistoneK562bH3k9acbUcdAlnRep2.bam
-wgEncodeSydhHistoneK562bH3k9acbUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562bH3k9acbUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562bH3k9acbUcdSig.bigWig
-wgEncodeSydhHistoneK562bInputUcdAln.bam
-wgEncodeSydhHistoneK562bInputUcdRawData.fastq.gz
-wgEncodeSydhHistoneK562bInputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release1/index.html
 
 
-C) New tables (20):
+C) New tables (24):
 wgEncodeSydhHistoneK562H3k27me3bUcdPk
 wgEncodeSydhHistoneK562H3k27me3bUcdSig
 wgEncodeSydhHistoneK562H3k4me1UcdPk
@@ -275,6 +192,10 @@ wgEncodeSydhHistoneK562H3k9acbUcdSig
 wgEncodeSydhHistoneK562InputUcdSig
 wgEncodeSydhHistoneNt2d1H3k09me3UcdPk
 wgEncodeSydhHistoneNt2d1H3k09me3UcdSig
+wgEncodeSydhHistonePanc1H3k04me1bUcdPk
+wgEncodeSydhHistonePanc1H3k04me1bUcdSig
+wgEncodeSydhHistonePanc1H3k27acUcdPk
+wgEncodeSydhHistonePanc1H3k27acUcdSig
 wgEncodeSydhHistonePbmcH3k04me3bUcdPk
 wgEncodeSydhHistonePbmcH3k04me3bUcdSig
 wgEncodeSydhHistonePbmcH3k27me3bUcdPk
@@ -285,92 +206,108 @@ wgEncodeSydhHistonePbmcH3k9me3UcdPk
 wgEncodeSydhHistonePbmcH3k9me3UcdSig
 wgEncodeSydhHistonePbmcInputUcdSig
 
-C') New files (80 downloadables, 11 gbdbs):
+C') New files (96 downloadables, 13 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/
     NOT on RR but must be placed in:
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/
 
-wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneK562H3k27me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562H3k27me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562H3k27me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562H3k27me3bUcdSig.bigWig
-wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam
-wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam.bai
-wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam
-wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam.bai
-wgEncodeSydhHistoneK562H3k4me1UcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562H3k4me1UcdSig.bigWig
-wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1.bam
-wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2.bam
-wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneK562H3k4me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562H3k4me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562H3k4me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562H3k4me3bUcdSig.bigWig
-wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam
-wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam.bai
-wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam
-wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam.bai
-wgEncodeSydhHistoneK562H3k9acbUcdPk.narrowPeak.gz
-wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistoneK562H3k9acbUcdSig.bigWig
-wgEncodeSydhHistoneK562InputUcdAln.bam
-wgEncodeSydhHistoneK562InputUcdAln.bam.bai
-wgEncodeSydhHistoneK562InputUcdRawData.fastq.gz
-wgEncodeSydhHistoneK562InputUcdSig.bigWig
-wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam
-wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam.bai
-wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam
-wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam.bai
-wgEncodeSydhHistoneNt2d1H3k09me3UcdPk.narrowPeak.gz
-wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep1.fastq.tgz
-wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep2.fastq.tgz
-wgEncodeSydhHistoneNt2d1H3k09me3UcdSig.bigWig
-wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam
-wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam
-wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistonePbmcH3k04me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistonePbmcH3k04me3bUcdSig.bigWig
-wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam
-wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam.bai
-wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam
-wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam.bai
-wgEncodeSydhHistonePbmcH3k27me3bUcdPk.narrowPeak.gz
-wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep1.fastq.gz
-wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep2.fastq.gz
-wgEncodeSydhHistonePbmcH3k27me3bUcdSig.bigWig
-wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam
-wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam.bai
-wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam
-wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam.bai
-wgEncodeSydhHistonePbmcH3k4me1UcdPk.narrowPeak.gz
-wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep1.fastq.gz
-wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep2.fastq.gz
-wgEncodeSydhHistonePbmcH3k4me1UcdSig.bigWig
-wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam
-wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam.bai
-wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam
-wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam.bai
-wgEncodeSydhHistonePbmcH3k9me3UcdPk.narrowPeak.gz
-wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep1.fastq.gz
-wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep2.fastq.tgz
-wgEncodeSydhHistonePbmcH3k9me3UcdSig.bigWig
-wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam
-wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam.bai
-wgEncodeSydhHistonePbmcInputUcdRawDataRep1.fastq.tgz
-wgEncodeSydhHistonePbmcInputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k27me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me1UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k4me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562H3k9acbUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562InputUcdAln.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562InputUcdAln.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562InputUcdRawData.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneK562InputUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistoneNt2d1H3k09me3UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k04me1bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1H3k27acUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k04me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k27me3bUcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k4me1UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdPk.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdRawDataRep2.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcH3k9me3UcdSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcInputUcdAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcInputUcdRawDataRep1.fastq.tgz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePbmcInputUcdSig.bigWig
 
 /gbdb/hg19/bbi/wgEncodeSydhHistoneK562H3k27me3bUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneK562H3k4me1UcdSig.bigWig
@@ -378,6 +315,8 @@ wgEncodeSydhHistonePbmcInputUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneK562H3k9acbUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneK562InputUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistoneNt2d1H3k09me3UcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistonePanc1H3k04me1bUcdSig.bigWig
+/gbdb/hg19/bbi/wgEncodeSydhHistonePanc1H3k27acUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistonePbmcH3k04me3bUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistonePbmcH3k27me3bUcdSig.bigWig
 /gbdb/hg19/bbi/wgEncodeSydhHistonePbmcH3k4me1UcdSig.bigWig
@@ -390,6 +329,32 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/
 
-README.txt
-files.txt
-md5sum.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/md5sum.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/README.txt
+
+E) Addendum items:
+
+	Summary total counts for addendum:
+    	Tables: 1
+    	Files: 4
+    	Gbdbs: 1
+
+	C) New tables (1):
+	wgEncodeSydhHistonePanc1InputUcdSig
+
+	C') New files (4 downloadables, 1 gbdbs):
+	    current location on alpha:
+	      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/
+	    NOT on RR but must be placed in:
+	      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/
+
+	/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam
+	/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1InputUcdAlnRep1.bam.bai
+	/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1InputUcdRawDataRep1.fastq.tgz
+	/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeSydhHistone/release2/wgEncodeSydhHistonePanc1InputUcdSig.bigWig
+
+	/gbdb/hg19/bbi/wgEncodeSydhHistonePanc1InputUcdSig.bigWig
+	
+	
+	

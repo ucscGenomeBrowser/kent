@@ -10,7 +10,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.13
+set dir = $genomes/hg19/bed/ucsc.13.2
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -20,13 +20,13 @@ set xdb = mm9
 set Xdb = Mm9
 set ydb = canFam2
 set zdb = rheMac2
-set spDb = sp101005
-set pbDb = proteins101005
+set spDb = sp111004
+set pbDb = proteins111004
 set ratDb = rn4
 set RatDb = Rn4
-set fishDb = danRer5
+set fishDb = danRer7
 set flyDb = dm3
-set wormDb = ce6
+set wormDb = ce9
 set yeastDb = sacCer2
 
 # The net alignment for the closely-related species indicated in $xdb
@@ -67,16 +67,16 @@ set tempFa = $dir/ucscGenes.faa
 set xdbFa = $genomes/$xdb/bed/ucsc.12/ucscGenes.faa
 set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
-set flyFa = $genomes/$flyDb/bed/flybase5.3/flyBasePep.fa
-set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
+set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
+set wormFa = $genomes/$wormDb/bed/blastp/wormPep210.faa
 set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
   # mm9.txt
-set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
-set rfam = /hive/data/outside/Rfam/110710
+set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
+set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
+set rfam = /hive/data/outside/Rfam/111005
 
 
 # Tracks
@@ -157,22 +157,25 @@ netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
 netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
 
-# Get the Rfams that overlap with blocks that are syntenic to $Xdb
+# Get the Rfams that overlap with blocks that are syntenic to $Xdb.
+# Filter out anything not aligned uniquely, since the later stages of the 
+# pipeline will assume that each aligned sequence is aligned uniquely.  This
+# unique alignment assumption might not make sense in this instance, and 
+# probably should be revisited later, but affects only a few sequences 
+# at this time (10/09/11).
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
-bedIntersect -aHitAny rfam/rfam.all.bed ${db}.${xdb}.syn.bed rfam/rfam.syntenic.bed
-cat rfam/rfam.syntenic.bed |awk '{ print $4}' > rfam/rfam.syntenic.hits.txt
-pslSomeRecords ${rfam}/${db}/Rfam.human.bestHits.psl \
-    rfam/rfam.syntenic.hits.txt  rfam/rfam.syntenic.psl
-
+bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
+bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
+pslCDnaFilter -uniqueMapped rfam.syntenic.psl rfam.syntenic.uniq.psl
+pslToBed rfam.syntenic.uniq.psl rfam.syntenic.uniq.bed
  
 # Create directories full of alignments split by chromosome.
-mkdir -p est refSeq mrna trna
+mkdir -p est refSeq mrna 
 pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
-bedSplitOnChrom trna.bed trna
-bedSplitOnChrom rfam/rfam.syntenic.bed rfam
+
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
@@ -190,14 +193,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e ccds/$c.bed) then
 	  echo creating empty ccds/$c.bed
           echo -n "" >ccds/$c.bed
-    endif
-    if (! -e trna/$c.bed) then
-	  echo creating empty trna/$c.bed
-          echo -n "" >trna/$c.bed
-    endif
-    if (! -e rfam/$c.bed) then
-	  echo creating empty rfam/$c.bed
-          echo -n "" >rfam/$c.bed
     endif
 end
 
@@ -218,6 +213,7 @@ if ($db =~ mm*) then
 else
     awk '$13 > 100' antibody.cluster | cut -f 1-12 > antibody.bed
 endif
+
 
 # Convert psls to bed, saving mapping info and weeding antibodies.  Takes 2.5 min
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
@@ -244,14 +240,13 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     endif
 end
 
-
 #  seven minutes to this point
 
 
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
-    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna trna/$c.bed trna rfam/$c.bed rfam \
+    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna  \
 	bedToGraph/$c.txg
 end
 
@@ -265,8 +260,6 @@ end
 cat > trim.weights <<end
 refSeq  100
 ccds    50
-trna    50
-rfam    20
 mrna    2
 txOrtho 1
 exoniphy 1
@@ -294,6 +287,7 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
     hgGetAnn -noMatchOk $xdb mrna $c stdout | txPslToBed stdin $genomes/$xdb/$xdb.2bit mrna/$c.bed
     hgGetAnn -noMatchOk $xdb intronEst $c stdout | txPslToBed stdin $genomes/$xdb/$xdb.2bit est/$c.bed
 end
+
 
 # Create other species splicing graphs.  Takes about five minutes.
 cd $dir/$xdb
@@ -369,12 +363,12 @@ ssh $ramFarm "cd $dir/txOrtho; gensub2 toDoList single template jobList"
 ssh $ramFarm "cd $dir/txOrtho; para make jobList"
 ssh $ramFarm "cd $dir/txOrtho; para time > run.time"
 cat txOrtho/run.time
-# Completed: 194 of 194 jobs
-# CPU time in finished jobs:      43309s     721.81m    12.03h    0.50d  0.001 y
-# IO & Wait Time:                  2977s      49.62m     0.83h    0.03d  0.000 y
-# Average job time:                 239s       3.98m     0.07h    0.00d
-# Longest finished job:            2148s      35.80m     0.60h    0.02d
-# Submission to last job:         55348s     922.47m    15.37h    0.64d
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:       3497s      58.28m     0.97h    0.04d  0.000 y
+# IO & Wait Time:                  6568s     109.47m     1.82h    0.08d  0.000 y
+# Average job time:                 153s       2.54m     0.04h    0.00d
+# Longest finished job:             481s       8.02m     0.13h    0.01d
+# Submission to last job:          2861s      47.68m     0.79h    0.03d
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 
@@ -405,12 +399,12 @@ cd $dir
 rm -r $xdb/chains $xdb/nets
 
 
-
-
 # Get exonophy. Takes about 4 seconds.
 hgsql -N $db -e "select chrom, txStart, txEnd, name, "1", strand from exoniphy order by chrom, txStart;" \
     > exoniphy.bed
 bedToTxEdges exoniphy.bed exoniphy.edges
+
+
 
 # Add evidence from ests, orthologous other species transcripts, and exoniphy
 # Takes 36 seconds.
@@ -427,6 +421,7 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
+
 #
 # special testing suggestion: uncomment below
 # compareModifiedFileSizes.csh $oldGeneDir .
@@ -435,9 +430,6 @@ end
 # checkRandomLinesExist.py -s $testingDir/chr22.graph.bounds.old \
 #  -d $testingDir/chr22.graph.bounds.new
 #
-
-
-
 
 
 
@@ -454,6 +446,7 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	-evidence=txWalk/$c.ev -sizes=mrnaSize.tab -defrag=0.25 \
 	    -singleExonFactor=$sef
 end
+
 
 # Make a file that lists the various categories of alt-splicing we see.
 # Do this by making and analysing splicing graphs of just the transcripts
@@ -489,7 +482,6 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 #    $testingDir/txWalk.intersect.bed
 # wc $testingDir/txWalk.intersect.bed
 #
-
 
 # Fetch human protein set and table that describes if curated or not.
 # Takes about a minute
@@ -533,12 +525,11 @@ ssh $cpuFarm "cd $dir/blat/rna; gensub2 toDoList single template jobList"
 ssh $cpuFarm "cd $dir/blat/rna; para make jobList"
 
 ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
-# Completed: 194 of 194 jobs
-# CPU time in finished jobs:      43309s     721.81m    12.03h    0.50d  0.001 y
-# IO & Wait Time:                  2977s      49.62m     0.83h    0.03d  0.000 y
-# Average job time:                 239s       3.98m     0.07h    0.00d
-# Longest finished job:            2148s      35.80m     0.60h    0.02d
-# Submission to last job:         55348s     922.47m    15.37h    0.64d
+# CPU time in finished jobs:      60973s    1016.22m    16.94h    0.71d  0.002 y
+# IO & Wait Time:                  4892s      81.53m     1.36h    0.06d  0.000 y
+# Average job time:                 340s       5.66m     0.09h    0.00d
+# Longest finished job:            2751s      45.85m     0.76h    0.03d
+# Submission to last job:          2808s      46.80m     0.78h    0.03d
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 
@@ -579,11 +570,12 @@ ssh $cpuFarm "cd $dir/blat/protein; para time > run.time"
 
 cat blat/protein/run.time
 # Completed: 194 of 194 jobs
-# CPU time in finished jobs:      14718s     245.31m     4.09h    0.17d  0.000 y
-# IO & Wait Time:                   966s      16.09m     0.27h    0.01d  0.000 y
-# Average job time:                  81s       1.35m     0.02h    0.00d
-# Longest finished job:             279s       4.65m     0.08h    0.00d
-# Submission to last job:           465s       7.75m     0.13h    0.01d
+# CPU time in finished jobs:      34921s     582.01m     9.70h    0.40d  0.001 y
+# IO & Wait Time:                  8711s     145.19m     2.42h    0.10d  0.000 y
+# Average job time:                 225s       3.75m     0.06h    0.00d
+# Longest finished job:             621s      10.35m     0.17h    0.01d
+# Submission to last job:           629s      10.48m     0.17h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
 # seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
@@ -604,6 +596,8 @@ rm -r protein/raw
 
 
 
+
+
 cd $dir
 
 # Get parts of multiple alignments corresponding to transcripts.
@@ -616,6 +610,7 @@ foreach c (`cut -f1 $genomes/$db/chrom.sizes`)
 	   | mafSpeciesSubset stdin ourOrgs.txt txWalk/$c.maf -keepFirst
     endif
 end
+
 
 cd $dir
 
@@ -641,10 +636,13 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
-# Merge back in antibodies
-cat txWalk.bed antibody.bed > abWalk.bed
+# Merge back in antibodies, and add the small, noncoding genes that are not well-represented
+# in GenBank (Rfam, tRNA)
+cat txWalk.bed antibody.bed trna.bed rfam.syntenic.uniq.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
-cat txWalk.fa antibody.fa > abWalk.fa
+sequenceForBed -db=$db -bedIn=trna.bed -fastaOut=stdout -upCase -keepName > trna.fa
+sequenceForBed -db=$db -bedIn=rfam.syntenic.uniq.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.uniq.fa
+cat txWalk.fa antibody.fa trna.fa rfam.syntenic.uniq.fa > abWalk.fa
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -655,7 +653,7 @@ txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
 # Create gene info table. Takes 8 seconds
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
-cat mrna/*.psl refSeq/*.psl rfam/*psl trna.psl \
+cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.uniq.psl \
       | txInfoAssemble pick.bed pick.tce cdsEvidence/txCdsPredict.tce \
 	altSplice.bed abWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
 
@@ -729,6 +727,7 @@ txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa \
     ucscGenesTx.fa ucscGenesTx.faa
 
 
+
 # Generate ucscGene/uniprot blat run.
 mkdir -p $dir/blat/uniprotVsUcsc
 cd $dir/blat/uniprotVsUcsc
@@ -763,12 +762,13 @@ ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para make jobList"
 ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para time > run.time"
 
 cat run.time
-#Completed: 97 of 97 jobs
-#CPU time in finished jobs:       1150s      19.17m     0.32h    0.01d  0.000 y
-#IO & Wait Time:                   293s       4.88m     0.08h    0.00d  0.000 y
-#Average job time:                  15s       0.25m     0.00h    0.00d
-#Longest finished job:              59s       0.98m     0.02h    0.00d
-#Submission to last job:            71s       1.18m     0.02h    0.00d
+# Completed: 97 of 97 jobs
+# CPU time in finished jobs:       4111s      68.52m     1.14h    0.05d  0.000 y
+# IO & Wait Time:                   508s       8.47m     0.14h    0.01d  0.000 y
+# Average job time:                  48s       0.79m     0.01h    0.00d
+# Longest finished job:             491s       8.18m     0.14h    0.01d
+# Submission to last job:           501s       8.35m     0.14h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 pslCat raw/*.psl > ../../ucscVsUniprot.psl
 rm -r raw
@@ -781,6 +781,8 @@ rm -r raw
 # there was a different CDS selection process.
 cd $dir
 txCdsRedoUniprotPicks ucscBadUniprot.picks ucscVsUniprot.psl uniCurated.tab ucscGenes.picks
+
+
 
 # Cluster the coding and the uncoding sets, and make up canonical and
 # isoforms tables. Takes 3 seconds.
@@ -795,9 +797,6 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 # table.
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
-
-
-
 
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
@@ -828,6 +827,7 @@ else
     exit 255
 endif
 
+
 # Make up knownGenes table, adding uniProt ID. Load into database.
 #	Takes 3 seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.faa uniProt.fa refPep.fa ucscGenes.gp
@@ -841,8 +841,6 @@ hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
-
-
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -896,9 +894,6 @@ hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
-#
-# TODO: determine WHY knownToHprd is so much smaller than previously
-# (knownToHprd old: 1,642,416 new: 1,214,016)     
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -937,7 +932,6 @@ cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
 cd $dir
 
-# TODO: rerun the hprd command after figuring out WHY knownToHprd seems so much smaller...
 # Create Human P2P protein-interaction Gene Sorter columns
 if ($db =~ hg*) then
 hgLoadNetDist $genomes/$db/p2p/hprd/hprd.pathLengths $tempDb humanHprdP2P \
@@ -987,6 +981,7 @@ cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
+
 
 # Remove non-syntenic hits for human and rat
 # Takes a few minutes
@@ -1050,6 +1045,7 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
+
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
@@ -1057,8 +1053,8 @@ mkdir -p rnaStruct
 cd rnaStruct
 mkdir -p utr3/split utr5/split utr3/fold utr5/fold
 # these commands take some significant time
-utrFa $db knownGene utr3 utr3/utr.fa
-utrFa $db knownGene utr5 utr5/utr.fa
+utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr3 utr3/utr.fa
+utrFa -nibPath=$genomes/$db/nib $tempDb knownGene utr5 utr5/utr.fa
 
 # Split up files and make files that define job.
 faSplit sequence utr3/utr.fa 10000 utr3/split/s
@@ -1094,13 +1090,15 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     cd ../utr5
     rm -r split fold err batch.bak
 
+
+
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
 #   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
-set pfamScratch = $scratchDir/tmp/pfam
-mkdir -p $pfamScratch
-cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
+set pfamScratch = $scratchDir/pfam
+ssh $cpufarm mkdir -p $pfamScratch
+ssh $cpufarm cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
 mkdir -p $dir/pfam
 cd $dir/pfam
 mkdir -p splitProt
@@ -1109,7 +1107,7 @@ mkdir -p result
 ls -1 splitProt > prot.list
 cat << '_EOF_' > doPfam
 #!/bin/csh -ef
-/hive/data/outside/pfam/hmmpfam -E 0.1 /scratch/tmp/Pfam_fs \
+/hive/data/outside/pfam/hmmpfam -E 0.1 /hive/scratch/pfam/Pfam_fs \
 	splitProt/$1 > /scratch/tmp/$2.pf
 mv /scratch/tmp/$2.pf $3
 '_EOF_'
@@ -1123,13 +1121,13 @@ doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/pfam; para make jobList"
-#
-# Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    3665959s   61099.32m  1018.32h   42.43d  0.116 y
-# IO & Wait Time:               3731399s   62189.98m  1036.50h   43.19d  0.118 y
-# Average job time:                 765s      12.75m     0.21h    0.01d
-# Longest finished job:            4941s      82.35m     1.37h    0.06d
-# Submission to last job:         10041s     167.35m     2.79h    0.12d
+
+# Completed: 9667 of 9667 jobs
+# CPU time in finished jobs:    3704753s   61745.89m  1029.10h   42.88d  0.117 y
+# IO & Wait Time:              12906097s  215101.61m  3585.03h  149.38d  0.409 y
+# Average job time:                1718s      28.64m     0.48h    0.02d
+# Longest finished job:            8907s     148.45m     2.47h    0.10d
+# Submission to last job:         29041s     484.02m     8.07h    0.34d
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
@@ -1149,11 +1147,11 @@ cd $dir
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
-	pfamDesc.tab > sub.tab
+	pfam/pfamDesc.tab > sub.tab
 cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
-hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
+hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -1178,13 +1176,12 @@ doScop $(path1) $(root1) {check out line+ result/$(root1).pf}
 gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/scop; para make jobList"
-# Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    3953327s   65888.78m  1098.15h   45.76d  0.125 y
-# IO & Wait Time:               7723843s  128730.72m  2145.51h   89.40d  0.245 y
-# Average job time:                1208s      20.13m     0.34h    0.01d
-# Longest finished job:            4703s      78.38m     1.31h    0.05d
-# Submission to last job:         12535s     208.92m     3.48h    0.15d
-
+# CPU time in finished jobs:    3980861s   66347.69m  1105.79h   46.07d  0.126 y
+# IO & Wait Time:              11114844s  185247.39m  3087.46h  128.64d  0.352 y
+# Average job time:                1562s      26.03m     0.43h    0.02d
+# Longest finished job:            8166s     136.10m     2.27h    0.09d
+# Submission to last job:         18306s     305.10m     5.08h    0.21d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1195,9 +1192,6 @@ scopCollapse scopPlusScore.tab /hive/data/outside/scop/model.tab ucscScop.tab \
 hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
 hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
-
-# move this endif statement past business that has successfully been completed
-endif # BRACKET
 
 # Regenerate ccdsKgMap table
 ~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
@@ -1223,63 +1217,6 @@ rm kgSpAlias_0.tmp
 hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
 
-# RE-BUILD HG18 PROTEOME BROWSER TABLES (DONE, Fan, 4/2/07). 
-
-# These are instructions for building tables 
-# needed for the Proteome Browser. 
- 
-# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
-# ARE REBUILT.  Also make sure have proteins database rebuilt to correspond with swissProt
-# This build is based on proteins DBs dated 090821
-
-# Create the working directory
-
-mkdir -p $dir/pb
-cd $dir/pb
-
-
-# Build the pepMwAa table
-
-hgsql $spDb -N -e \
-"select info.acc, molWeight, aaSize from info, accToTaxon where accToTaxon.taxon=$taxon and accToTaxon.acc = info.acc" > pepMwAa.tab
-
-hgLoadSqlTab $tempDb pepMwAa ~/kent/src/hg/lib/pepMwAa.sql ./pepMwAa.tab
-
-# Build the pepPi table
-cd $dir/pb
-pbCalPi $spDb pepPi.tab
-hgLoadSqlTab $tempDb pepPi ~/kent/src/hg/lib/pepPi.sql ./pepPi.tab
-
-# Calculate and load pep distributions
-cd $dir/pb
-pbCalDist $spDb $pbDb $taxon $tempDb 
-hgLoadSqlTab $tempDb pepExonCntDist ~/kent/src/hg/lib/pepExonCntDist.sql ./pepExonCntDist.tab
-hgLoadSqlTab $tempDb pepCCntDist ~/kent/src/hg/lib/pepCCntDist.sql ./pepCCntDist.tab
-hgLoadSqlTab $tempDb pepHydroDist ~/kent/src/hg/lib/pepHydroDist.sql ./pepHydroDist.tab
-hgLoadSqlTab $tempDb pepMolWtDist ~/kent/src/hg/lib/pepMolWtDist.sql ./pepMolWtDist.tab
-hgLoadSqlTab $tempDb pepResDist ~/kent/src/hg/lib/pepResDist.sql ./pepResDist.tab
-hgLoadSqlTab $tempDb pepIPCntDist ~/kent/src/hg/lib/pepIPCntDist.sql ./pepIPCntDist.tab
-hgLoadSqlTab $tempDb pepPiDist ~/kent/src/hg/lib/pepPiDist.sql ./pepPiDist.tab
-
-
-# Calculate frequency distributions
-
-pbCalResStd $spDb $taxon $tempDb
-
-# Create pbAnomLimit and pbResAvgStd tables
-
-hgLoadSqlTab $tempDb pbAnomLimit ~/kent/src/hg/lib/pbAnomLimit.sql ./pbAnomLimit.tab
-
-hgLoadSqlTab $tempDb pbResAvgStd ~/kent/src/hg/lib/pbResAvgStd.sql ./pbResAvgStd.tab
-
-compareModifiedFileSizes.csh $oldGeneDir .
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
-
-# The old pbStamp table seems OK, so no adjustment needed.
-
 # Do BioCyc Pathways build
     mkdir -p $dir/bioCyc
     cd $dir/bioCyc
@@ -1289,33 +1226,41 @@ exit $status # BRACKET
     hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
-#breakpoint
 
-# Do KEGG Pathways build
+# Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
     mkdir -p $dir/kegg
     cd $dir/kegg
 
-    wget --timestamping -O hsa2.html \
-    "http://www.kegg.jp/kegg-bin/show_organism?menu_type=pathway_maps&org=hsa" 
+    # Make the keggMapDesc table, which maps KEGG pathway IDs to descriptive names
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+    cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
+    cut -f 2 j.tmp >j.hsa
+    cut -f 1,3 j.tmp >j.1
+    paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
+    rm j.hsa j.1 j.tmp
+    hgLoadSqlTab $tempDb keggMapDesc $kent/src/hg/lib/keggMapDesc.sql keggMapDesc.tab
 
-    cat hsa2.html |grep "mapno=" |sed -e 's/mapno=/\npath:hsa/'|grep -v org_name |\
-    sed -e 's/">/\t/' |\
-    sed -e 's/</\t/'|cut -f 1,2 >hsa.lis
-    
-    ~/kent/src/hg/protein/getKeggList2.pl hsa > keggList.tab
+    # Following in two-step process, build/load a table that maps UCSC Gene IDs
+    # to LocusLink IDs and to KEGG pathways.  First, make a table that maps 
+    # LocusLink IDs to KEGG pathways from the downloaded data.  Store it temporarily
+    # in the keggPathway table, overloading the schema.
+    wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+    cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
-    kgAttachKegg $db keggList.tab  keggPathway.tab
-    hgLoadSqlTab $tempDb keggPathway ~/src/hg/lib/keggPathway.sql ./keggPathway.tab
-
-    cat hsa.lis | sed -e 's/path://' > keggMapDesc.tab
-    hgLoadSqlTab $tempDb keggMapDesc ~/src/hg/lib/keggMapDesc.sql ./keggMapDesc.tab
+    # Next, use the temporary contents of the keggPathway table to join with
+    # knownToLocusLink, creating the real content of the keggPathway table.
+    # Load this data, erasing the old temporary content
+    hgsql hg19 -N -e \
+    'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+    >keggPathway.tab
+    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
 # Make spMrna table (useful still?)
    cd $dir
    hgsql $db -N -e "select spDisplayID,kgID from kgXref where spDisplayID != ''" > spMrna.tab;
    hgLoadSqlTab $tempDb spMrna ~/kent/src/hg/lib/spMrna.sql spMrna.tab
 
-#breakpoint
 
 # Do CGAP tables 
 
@@ -1333,7 +1278,8 @@ exit $status # BRACKET
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-#breakpoint	    
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
@@ -1358,6 +1304,10 @@ sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
 
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
+
 # Make full text index.  Takes a minute or so.  After this the genome browser
 # tracks display will work including the position search.  The genes details
 # page, gene sorter, and proteome browser still need more tables.
@@ -1369,26 +1319,9 @@ rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
-#breakpoint
 
-# Build known genes list for google
-# make knownGeneLists.html ${db}GeneList.html mm5GeneList.html rm3GeneList.html
-
-    cd $genomes/$db/bed
-    rm -rf knownGeneList/$db
-
-# Run hgKnownGeneList to generate the tree of HTML pages
-# under ./knownGeneList/$db 
-
-    hgKnownGeneList $db
-
-# copy over to /usr/local/apache/htdocs
-    
-    rm -rf /usr/local/apache/htdocs/knownGeneList/$db
-    mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
-    cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
-
-#breakpoint
+# move this exit statement to the end of the section to be done next
+#exit $status # BRACKET
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms

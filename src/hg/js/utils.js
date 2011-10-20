@@ -940,11 +940,11 @@ function waitMaskSetup(timeOutInMs)
         // create the waitMask
         $("body").append("<div id='waitMask' class='waitMask');'></div>");
         waitMask = $('#waitMask');
-        // Special for IE, since it takes so long, make mask obvious
-        if ($.browser.msie)
-            $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
     }
-    $(waitMask).css('display','block');
+    $(waitMask).css({opacity:0.0,display:'block',top: '0px', height: $(document).height().toString() + 'px' });
+    // Special for IE, since it takes so long, make mask obvious
+    if ($.browser.msie)
+        $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
 
     // Things could fail, so always have a timeout.
     if(timeOutInMs == undefined || timeOutInMs ==0)

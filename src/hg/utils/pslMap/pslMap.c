@@ -175,7 +175,7 @@ return cnt;
 
 static void writeMapInfo(FILE* fh, struct psl *inPsl, struct mapAln *mapAln, 
                          struct psl* mappedPsl)
-/* write mapInfo row */
+/* write mapInfo row. mapAln and mappedPsl are NULL in not mapped  */
 {
 /* srcQName srcQStart srcQEnd srcQSize */
 fprintf(fh, "%s\t%d\t%d\t%d\t",
@@ -184,22 +184,32 @@ fprintf(fh, "%s\t%d\t%d\t%d\t",
 fprintf(fh, "%s\t%d\t%d\t%s\t%d\t",
         inPsl->tName, inPsl->tStart, inPsl->tEnd, inPsl->strand,
         pslAlignedBases(inPsl));
-/* mappingQName mappingQStart mappingQEnd */
-fprintf(fh, "%s\t%d\t%d\t",
-        mapAln->psl->qName, mapAln->psl->qStart, mapAln->psl->qEnd);
-/* mappingTName mappingTStart mappingTEnd mappingStrand mappingId */
-fprintf(fh, "%s\t%d\t%d\t%s\t%d\t",
-        mapAln->psl->tName, mapAln->psl->tStart, mapAln->psl->tEnd,
-        mapAln->psl->strand, mapAln->id);
-/* mappedQName mappedQStart mappedQEnd mappedTName mappedTStart mappedTEnd mappedStrand */
-fprintf(fh, "%s\t%d\t%d\t%s\t%d\t%d\t%s\t",
-        mappedPsl->qName, mappedPsl->qStart, mappedPsl->qEnd, 
-        mappedPsl->tName, mappedPsl->tStart, mappedPsl->tEnd,
-        mappedPsl->strand);
-/* mappedAligned qStartTrunc qEndTrunc */
-fprintf(fh, "%d\t%d\t%d\n",
-        pslAlignedBases(mappedPsl), 
-        (mappedPsl->qStart-inPsl->qStart), (inPsl->qEnd-mappedPsl->qEnd));
+if (mapAln != NULL)
+    {
+    /* mappingQName mappingQStart mappingQEnd */
+    fprintf(fh, "%s\t%d\t%d",
+            mapAln->psl->qName, mapAln->psl->qStart, mapAln->psl->qEnd);
+    /* mappingTName mappingTStart mappingTEnd mappingStrand mappingId */
+    fprintf(fh, "\t%s\t%d\t%d\t%s\t%d\t",
+            mapAln->psl->tName, mapAln->psl->tStart, mapAln->psl->tEnd,
+            mapAln->psl->strand, mapAln->id);
+    /* mappedQName mappedQStart mappedQEnd mappedTName mappedTStart mappedTEnd mappedStrand */
+    fprintf(fh, "%s\t%d\t%d\t%s\t%d\t%d\t%s\t",
+            mappedPsl->qName, mappedPsl->qStart, mappedPsl->qEnd, 
+            mappedPsl->tName, mappedPsl->tStart, mappedPsl->tEnd,
+            mappedPsl->strand);
+    /* mappedAligned qStartTrunc qEndTrunc */
+    fprintf(fh, "%d\t%d\t%d\n",
+            pslAlignedBases(mappedPsl), 
+            (mappedPsl->qStart-inPsl->qStart), (inPsl->qEnd-mappedPsl->qEnd));
+    }
+else
+    {
+    int i;
+    for (i = 9; i < 26; i++)
+        fputc('\t', fh);
+    fputc('\n', fh);
+    }
 }
 
 static void addQNameSuffix(struct psl *psl)
@@ -213,8 +223,8 @@ psl->qName = newQName;
 freeMem(oldQName);
 }
 
-static void mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
-                       FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
+static boolean mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
+                          FILE* outPslFh, FILE *mapInfoFh, FILE *mappingPslFh)
 /* map one pair of query and target PSL */
 {
 struct psl* mappedPsl;
@@ -225,7 +235,8 @@ if (inPsl->tSize != mapAln->psl->qSize)
 mappedPsl = pslTransMap(mapOpts, inPsl, mapAln->psl);
 
 /* only output if blocks were actually mapped */
-if (mappedPsl != NULL)
+boolean wasMapped = mappedPsl != NULL;
+if (wasMapped)
     {
     if (suffix != NULL)
         addQNameSuffix(mappedPsl);
@@ -236,6 +247,7 @@ if (mappedPsl != NULL)
         pslTabOut(mapAln->psl, mappingPslFh);
     }
 pslFree(&mappedPsl);
+return wasMapped;
 }
 
 static void mapQueryPsl(struct psl* inPsl, struct chromBins *mapAlns,
@@ -246,9 +258,15 @@ static struct dyString *idBuf = NULL;
 struct binElement *overMapAlns
     = chromBinsFind(mapAlns, getMappingId(inPsl->tName, &idBuf), inPsl->tStart, inPsl->tEnd);
 struct binElement *overMapAln;
+boolean wasMapped = FALSE;
 for (overMapAln = overMapAlns; overMapAln != NULL; overMapAln = overMapAln->next)
-    mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh, mappingPslFh);
+    {
+    if (mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh, mappingPslFh))
+        wasMapped = TRUE;
+    }
 slFreeList(&overMapAlns);
+if ((mapInfoFh != NULL) && !wasMapped)
+    writeMapInfo(mapInfoFh, inPsl, NULL, NULL);
 }
 
 static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)

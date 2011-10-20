@@ -189,6 +189,13 @@ struct mdbByVar
     struct hash* valHash;    // if NOT NULL: hash of vals  (val str to limbVal struct)
     };
 
+// -------------- Sort primitives --------------
+int mdbObjCmp(const void *va, const void *vb);
+// Compare mdbObj to sort on obj name, case-insensitive.
+
+int mdbVarCmp(const void *va, const void *vb);
+// Compare mdbVar to sort on var name, case-insensitive.
+
 // ------ Parsing lines ------
 struct mdbObj *metadataLineParse(char *line);
 /* Parses a single formatted metadata line into mdbObj for updates or queries. */
@@ -295,7 +302,12 @@ void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
 int mdbObjPrintToTabFile(struct mdbObj *mdbObjs, char *file);
 // prints all objs as tab delimited obj var val into file for SQL LOAD DATA.  Returns count.
 
-char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude);
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator, boolean header);
+// prints mdbObjs as a table, but only the vars listed in comma delimited order.
+// Examples of separator: " " "\t\t" or "<TD>", in which case this is an HTML table.
+// mdbObjs list will be reordered. Sort fails when vars are missing in objs.
+
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude,boolean cvLabels);
 // returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
 
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle);
@@ -387,7 +399,7 @@ struct mdbObj *mdbObjsFilterTablesOrFiles(struct mdbObj **pMdbObjs,boolean table
 // Note: Since table/file objects overlap, there are 3 possibilites: tables, files, table && files
 
 struct mdbObj *mdbObjIntersection(struct mdbObj **a, struct mdbObj *b);
-// return duplicate objs from an intersection of two mdbObj lists.
+// return objs removed from pA while making an intersection of two mdbObj lists.
 // List b is untouched but pA will contain the resulting intersection
 
 void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *val,boolean deleteThis);

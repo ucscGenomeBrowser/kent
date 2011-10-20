@@ -18,13 +18,169 @@
 
 #ifdef USE_TABIX
 
-static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff)
+static boolean getMinQual(struct trackDb *tdb, double *retMinQual, boolean compositeLevel)
+/* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
+{
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s."VCF_APPLY_MIN_QUAL_VAR, tdb->track);
+if (cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
+				  VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL))
+    {
+    if (retMinQual != NULL)
+	*retMinQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
+						   VCF_DEFAULT_MIN_QUAL);
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean minQualFail(struct vcfRecord *record, double minQual)
+/* Return TRUE if record's QUAL column value is non-numeric or is less than minQual. */
+{
+if (isEmpty(record->qual) ||
+    (record->qual[0] != '-' && !isdigit(record->qual[0])) ||
+    atof(record->qual) < minQual)
+    return TRUE;
+return FALSE;
+}
+
+static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues,
+			       boolean compositeLevel)
+/* Return TRUE and set retValues if cart contains FILTER column values to exclude */
+{
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, tdb->track);
+if (cartListVarExists(cart, cartVar))
+    {
+    struct slName *selectedValues = cartOptionalSlNameList(cart, cartVar);
+    if (retValues != NULL)
+	*retValues = selectedValues;
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean filterColumnFail(struct vcfRecord *record, struct slName *filterValues)
+/* Return TRUE if record's FILTER column value(s) matches one of filterValues (from cart). */
+{
+int i;
+for (i = 0;  i < record->filterCount;  i++)
+    if (slNameInList(filterValues, record->filters[i]))
+	return TRUE;
+return FALSE;
+}
+
+static boolean getMinFreq(struct trackDb *tdb, double *retMinFreq, boolean compositeLevel)
+/* Return TRUE and set retMinFreq if cart contains nonzero minimum minor allele frequency. */
+{
+char cartVar[512];
+//#*** is there an ExistsClosestToHome?
+safef(cartVar, sizeof(cartVar), "%s."VCF_MIN_ALLELE_FREQ_VAR, tdb->track);
+if (cartVarExists(cart, cartVar))
+    {
+    double minFreq = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel,
+					    VCF_MIN_ALLELE_FREQ_VAR, VCF_DEFAULT_MIN_ALLELE_FREQ);
+    if (minFreq > 0)
+	{
+	if (retMinFreq != NULL)
+	    *retMinFreq = minFreq;
+	return TRUE;
+	}
+    }
+return FALSE;
+}
+
+static boolean minFreqFail(struct vcfRecord *record, double minFreq)
+/* Return TRUE if record's INFO include AF (alternate allele frequencies) or AC+AN
+ * (alternate allele counts and total count of observed alleles) and the minor allele
+ * frequency < minFreq -- or rather, major allele frequency > (1 - minFreq) because
+ * variants with > 2 alleles might have some significant minor frequencies along with
+ * tiny minor frequencies). */
+{
+struct vcfFile *vcff = record->file;
+boolean gotInfo = FALSE;
+double refFreq = 1.0;
+double maxAltFreq = 0.0;
+int i;
+const struct vcfInfoElement *afEl = vcfRecordFindInfo(record, "AF");
+const struct vcfInfoDef *afDef = vcfInfoDefForKey(vcff, "AF");
+if (afEl != NULL && afDef != NULL && afDef->type == vcfInfoFloat)
+    {
+    // If INFO includes alt allele freqs, use them directly.
+    gotInfo = TRUE;
+    for (i = 0;  i < afEl->count;  i++)
+	{
+	double altFreq = afEl->values[i].datFloat;
+	refFreq -= altFreq;
+	if (altFreq > maxAltFreq)
+	    maxAltFreq = altFreq;
+	}
+    }
+else
+    {
+    // Calculate alternate allele freqs from AC and AN:
+    const struct vcfInfoElement *acEl = vcfRecordFindInfo(record, "AC");
+    const struct vcfInfoDef *acDef = vcfInfoDefForKey(vcff, "AC");
+    const struct vcfInfoElement *anEl = vcfRecordFindInfo(record, "AN");
+    const struct vcfInfoDef *anDef = vcfInfoDefForKey(vcff, "AN");
+    if (acEl != NULL && acDef != NULL && acDef->type == vcfInfoInteger &&
+	anEl != NULL && anDef != NULL && anDef->type == vcfInfoInteger && anEl->count == 1)
+	{
+	gotInfo = TRUE;
+	int totalCount = anEl->values[0].datFloat;
+	for (i = 0;  i < acEl->count;  i++)
+	    {
+	    int altCount = acEl->values[i].datFloat;
+	    double altFreq = (double)altCount / totalCount;
+	    refFreq -= altFreq;
+	    if (altFreq < maxAltFreq)
+		maxAltFreq = altFreq;
+	    }
+	}
+    }
+if (gotInfo)
+    {
+    double majorAlFreq = max(refFreq, maxAltFreq);
+    if (majorAlFreq > (1.0 - minFreq))
+	return TRUE;
+    }
+return FALSE;
+}
+
+static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
+/* If a filter is specified in the cart, remove any records that don't pass filter. */
+{
+boolean compositeLevel = isNameAtCompositeLevel(tdb, tdb->track);
+double minQual = VCF_DEFAULT_MIN_QUAL;
+struct slName *filterValues = NULL;
+double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
+boolean gotQualFilter = getMinQual(tdb, &minQual, compositeLevel);
+boolean gotFilterFilter = getFilterValues(tdb, &filterValues, compositeLevel);
+boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq, compositeLevel);
+if (! (gotQualFilter || gotFilterFilter || gotMinFreqFilter) )
+    return;
+
+struct vcfRecord *rec, *nextRec, *newList = NULL;
+for (rec = vcff->records;  rec != NULL;  rec = nextRec)
+    {
+    nextRec = rec->next;
+    if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
+	   (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
+	   (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
+	slAddHead(&newList, rec);
+    }
+slReverse(&newList);
+vcff->records = newList;
+}
+
+static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 /* Convert vcff's records to pgSnp; don't free vcff until you're done with pgSnp
  * because it contains pointers into vcff's records' chrom. */
 {
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
 int maxLen = 33;
+int maxAlCount = 5;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
@@ -32,25 +188,23 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     int len = strlen(pgs->name);
     if (len > maxLen)
 	{
-	if (strchr(pgs->name, '/') != NULL)
+	int maxAlLen = maxLen / min(rec->alleleCount, maxAlCount);
+	pgs->name[0] = '\0';
+	int i;
+	for (i = 0;  i < rec->alleleCount;  i++)
 	    {
-	    char *copy = cloneString(pgs->name);
-	    char *allele[8];
-	    int cnt = chopByChar(copy, '/', allele, pgs->alleleCount);
-	    int maxAlLen = maxLen / pgs->alleleCount;
-	    pgs->name[0] = '\0';
-	    int i;
-	    for (i = 0;  i < cnt;  i++)
+	    if (i > 0)
+		safencat(pgs->name, len+1, "/", 1);
+	    if (i >= maxAlCount)
 		{
-		if (i > 0)
-		    safencat(pgs->name, len+1, "/", 1);
-		if (strlen(allele[i]) > maxAlLen-3)
-		    strcpy(allele[i]+maxAlLen-3, "...");
-		safencat(pgs->name, len+1, allele[i], maxAlLen);
+		safecat(pgs->name, len+1, "...");
+		pgs->alleleCount = maxAlCount;
+		break;
 		}
+	    if (strlen(rec->alleles[i]) > maxAlLen-3)
+		strcpy(rec->alleles[i]+maxAlLen-3, "...");
+	    safencat(pgs->name, len+1, rec->alleles[i], maxAlLen);
 	    }
-	else
-	    strcpy(pgs->name+maxLen-3, "...");
 	}
     slAddHead(&pgsList, pgs);
     }
@@ -502,8 +656,10 @@ static int rDrawTreeInLabelArea(struct hacTree *ht, struct hvGfx *hvg, enum yRet
 /* Recursively draw the haplotype clustering tree in the left label area.
  * Returns pixel height for use at non-leaf levels of tree. */
 {
-const int branchW = 4;
-int labelEnd = leftLabelX + leftLabelWidth;
+const int branchW = 3;
+const Color boundaryColor = MG_RED;
+const int labelEnd = leftLabelX + leftLabelWidth;
+const int rightEdge = labelEnd - 1;
 if (yType == yrtStart || yType == yrtEnd)
     {
     // We're just getting vertical span of a leaf cluster, not drawing any lines.
@@ -524,6 +680,7 @@ if (yType == yrtStart || yType == yrtEnd)
 // Otherwise yType is yrtMidPoint.  If we have 2 children, we'll be drawing some lines:
 if (ht->left != NULL && ht->right != NULL)
     {
+    const int nextX = x + branchW;
     int midY;
     if (ht->childDistance == 0 || x+(2*branchW) > labelEnd)
 	{
@@ -532,31 +689,33 @@ if (ht->left != NULL && ht->right != NULL)
 	// returned both yStart and yEnd. However, the time to draw a tree of
 	// 2188 hap's (1kG phase1 interim) is in the noise, so I consider it
 	// not worth the effort of refactoring to save a sub-millisecond here.
-	int yStartLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtStart, x+branchW,
+	int yStartLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtStart, nextX,
 					      yFromNode, extraData);
-	int yEndLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtEnd, x+branchW,
+	int yEndLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtEnd, nextX,
 					    yFromNode, extraData);
-	int yStartRight = rDrawTreeInLabelArea(ht->right, hvg, yrtStart, x+branchW,
+	int yStartRight = rDrawTreeInLabelArea(ht->right, hvg, yrtStart, nextX,
 					       yFromNode, extraData);
-	int yEndRight = rDrawTreeInLabelArea(ht->right, hvg, yrtEnd, x+branchW,
+	int yEndRight = rDrawTreeInLabelArea(ht->right, hvg, yrtEnd, nextX,
 					     yFromNode, extraData);
 	int yStart = min(yStartLeft, yStartRight);
 	int yEnd = max(yEndLeft, yEndRight);
 	midY = (yStart + yEnd) / 2;
-	hvGfxLine(hvg, x+branchW-1, yStart, x+branchW-1, yEnd-1, MG_BLACK);
-	hvGfxLine(hvg, x+branchW, yStart, labelEnd, yStart, MG_BLACK);
-	hvGfxLine(hvg, x+branchW, yEnd-1, labelEnd, yEnd-1, MG_BLACK);
+	Color branchColor = (ht->childDistance == 0) ? MG_BLACK : shadesOfGray[5];
+	hvGfxLine(hvg, x, midY, rightEdge, midY, branchColor);
+	hvGfxLine(hvg, rightEdge, yStart, rightEdge, yEnd-1, branchColor);
+	hvGfxLine(hvg, max(rightEdge-1, x), yStart, rightEdge, yStart, boundaryColor);
+	hvGfxLine(hvg, max(rightEdge-1, x), yEnd-1, rightEdge, yEnd-1, boundaryColor);
 	}
     else
 	{
-	int leftMid = rDrawTreeInLabelArea(ht->left, hvg, yrtMidPoint, x+branchW,
+	int leftMid = rDrawTreeInLabelArea(ht->left, hvg, yrtMidPoint, nextX,
 					   yFromNode, extraData);
-	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, x+branchW,
+	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, nextX,
 					    yFromNode, extraData);
 	midY = (leftMid + rightMid) / 2;
-	hvGfxLine(hvg, x+branchW-1, leftMid, x+branchW-1, rightMid, MG_BLACK);
+	hvGfxLine(hvg, nextX-1, leftMid, nextX-1, rightMid, MG_BLACK);
+	hvGfxLine(hvg, x, midY, nextX-1, midY, MG_BLACK);
 	}
-    hvGfxLine(hvg, x, midY, x+branchW-1, midY, MG_BLACK);
     return midY;
     }
 else if (ht->left != NULL)
@@ -566,7 +725,10 @@ else if (ht->right != NULL)
 // Leaf node -- return pixel height. Draw a line if yType is midpoint.
 int y = yFromNode(ht->itemOrCluster, extraData, yType);
 if (yType == yrtMidPoint && x < labelEnd)
-    hvGfxLine(hvg, x, y, labelEnd, y, MG_BLACK);
+    {
+    hvGfxLine(hvg, x, y, rightEdge, y, MG_BLACK);
+    hvGfxLine(hvg, max(rightEdge-1, x), y, rightEdge, y, boundaryColor);
+    }
 return y;
 }
 
@@ -638,6 +800,12 @@ hvGfxUnclip(hvgLL);
 hvGfxSetClip(hvgLL, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
+static void ignoreEm(char *format, va_list args)
+/* Ignore warnings from genotype parsing -- when there's one, there
+ * are usually hundreds more just like it. */
+{
+}
+
 static void vcfHapClusterDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis)
@@ -652,9 +820,11 @@ boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+pushWarnHandler(ignoreEm);
 struct vcfRecord *rec;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     vcfParseGenotypes(rec);
+popWarnHandler();
 unsigned short gtHapCount = 0;
 int ix, centerIx = getCenterVariantIx(tg, seqStart, seqEnd, vcff->records);
 struct hacTree *ht = NULL;
@@ -729,7 +899,7 @@ else
     fileOrUrl = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
     hFreeConn(&conn);
     }
-int vcfMaxErr = 100;
+int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,
@@ -741,12 +911,13 @@ if (errCatchStart(errCatch))
     vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
     if (vcff != NULL)
 	{
+	filterRecords(vcff, tg->tdb);
 	if (hapClustEnabled && vcff->genotypeCount > 1 && vcff->genotypeCount < 3000 &&
 	    (tg->visibility == tvPack || tg->visibility == tvSquish))
 	    vcfHapClusterOverloadMethods(tg, vcff);
 	else
 	    {
-	    tg->items = vcfFileToPgSnp(vcff);
+	    tg->items = vcfFileToPgSnp(vcff, tg->tdb);
 	    // pgSnp bases coloring/display decision on count of items:
 	    tg->customInt = slCount(tg->items);
 	    }

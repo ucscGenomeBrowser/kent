@@ -76,6 +76,7 @@ static struct optionSpec optionSpecs[] = {
     {"table",   OPTION_STRING}, // default "metaDb"
     {"obj",     OPTION_STRING}, // objName or objId
     {"vars",    OPTION_STRING}, // Select set of object by vars
+    {"or",       OPTION_STRING},// or var1=val1 var2=val2...
     {"composite",OPTION_STRING}, // Special case of a commn var (replaces vars="composite=wgEncodeBroadHistone")
     {"var",     OPTION_STRING}, // variable  ONLY USED WHEN VAL has spaces
     {"val",     OPTION_STRING}, // value     ONLY USED WHEN VAL has spaces
@@ -99,6 +100,7 @@ if(argc == 1)
     usage();
 
 struct mdbObj * mdbObjs = NULL;
+int retCode = 0;
 
 optionInit(&argc, argv, optionSpecs);
 
@@ -114,6 +116,7 @@ boolean testIt   = optionExists("test");
 boolean recreate = optionExists("recreate");
 boolean force    = optionExists("force");
 boolean replace  = FALSE;
+char *orVars     = NULL;
 char *encodeExp  = optionVal("encodeExp",NULL);
 if (encodeExp != NULL)
     {
@@ -175,7 +178,7 @@ if(recreate)
         sqlDisconnect(&conn);
         if(optionExists("obj") || optionExists("vars") || argc > 2)
                 verbose(1, "Can't test further commands.  Consider '-db= [-table=] -recreate' as the only arguments.\n");
-            return 0;  // Don't test any update if we haven't actually created the table!
+            return -1;  // Don't test any update if we haven't actually created the table!
             }
         }
     else
@@ -252,7 +255,14 @@ else // no file specified
         struct mdbByVar * mdbByVars = NULL;
         if (optionExists("vars"))
             {
-            mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
+            char *vars = optionVal("vars", NULL);
+            orVars = strstr(vars," || ");
+            if (orVars != NULL)
+                {
+                *orVars = '\0';
+                orVars += 4;
+                }
+            mdbByVars = mdbByVarsLineParse(vars);
             if (optionExists("composite"))
                 mdbByVarAppend(mdbByVars,"composite", optionVal("composite", NULL),FALSE);
             if (optionExists("var"))
@@ -270,6 +280,43 @@ else // no file specified
         mdbObjs = mdbObjsQueryByVars(conn,table,mdbByVars);
         }
     verbose(1, "Selected %d metadata objects\n", slCount(mdbObjs));
+
+    if(optionExists("or"))
+        {
+        if( orVars != NULL)
+            errAbort("Incompatible to use -or and ' || ' in -vars.\n");
+        if(!optionExists("vars") && !optionExists("obj"))
+            errAbort("Incompatible to use -or without -vars or -obj'.\n");
+        orVars = optionVal("or", NULL);
+        }
+
+    boolean resort = FALSE;
+    while(orVars != NULL)
+        {
+        char *vars = orVars;
+        orVars = strstr(vars," || ");
+        if (orVars != NULL)
+            {
+            *orVars = '\0';
+            orVars += 4;
+            }
+        struct mdbByVar * orByVars = mdbByVarsLineParse(vars);
+        if (optionExists("composite"))
+            mdbByVarAppend(orByVars,"composite", optionVal("composite", NULL),FALSE);
+        if (optionExists("var"))
+            mdbByVarAppend(orByVars,optionVal("var", NULL), optionVal("val", NULL),FALSE);
+
+        struct mdbObj * orResults = mdbObjsQueryByVars(conn,table,orByVars);
+        if (orResults != NULL)
+            {
+            // Merge be removing dups from orResults and cating together.
+            orResults = mdbObjIntersection(&orResults,mdbObjs);
+            mdbObjs = slCat(mdbObjs,orResults);
+            resort = TRUE;
+            }
+        }
+    if (resort)
+        slSort(&mdbObjs,&mdbObjCmp); // Need to be returned to obj order
 
     if (mdbObjs != NULL)
         {
@@ -309,7 +356,10 @@ if (mdbObjs != NULL)
             boolean updateAccession = (optionExists("accession"));
             struct mdbObj *updatable = mdbObjsEncodeExperimentify(conn,db,table,encodeExp,&mdbObjs,(verboseLevel() > 1? 1:0),createExpIfNecessary,updateAccession); // 1=warnings
             if (updatable == NULL)
+                {
                 verbose(1, "No Experiment ID updates were discovered in %d object(s).\n", slCount(mdbObjs));
+                retCode = 2;
+                }
             else
                 {
                 if (testIt)
@@ -322,8 +372,10 @@ if (mdbObjs != NULL)
         // Finally the actual update (or test update)
         count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
         }
+    if (count <= 0)
+        retCode = 1;
 
-    if (testIt && encodeExp == NULL)
+    if (testIt && !deleteIt && encodeExp == NULL)
         {
         int invalids = mdbObjsValidate(mdbObjs,TRUE);
         int varsCnt=mdbObjCount(mdbObjs,FALSE);
@@ -339,5 +391,5 @@ else
 
 sqlDisconnect(&conn);
 mdbObjsFree(&mdbObjs);
-return 0;
+return retCode;
 }

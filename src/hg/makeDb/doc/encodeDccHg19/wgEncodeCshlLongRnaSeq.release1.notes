@@ -1,13 +1,6 @@
 # generated with encodeMkChangeNotes 0.9
 This is a release1 of the "ENCODE wgEncodeCshlLongRnaSeq"
 The composite track is wgEncodeCshlLongRnaSeq
-# WARNINGS #################################################
-200 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqHepg2CellPapSpikeinsRep1.spikeins.bam.gz
-211 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqGm12878CellPamSpikeinsRep1.spikeins.bam.gz
-212 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqK562CytosolPapSpikeinsRep1.spikeins.bam.gz
-219 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqBjCellPapSpikeinsRep2.spikeins.bam.gz
-222 - could not find .bai file for bam file wgEncodeCshlLongRnaSeqK562CellPapSpikeinsRep2.spikeins.bam.gz
-############################################################
 
 Categories of tables and files('):
 A) Untouched - are on public browser and should remain
@@ -18,9 +11,9 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 591
-    Files: 1364
-    Gbdbs: 521
+    Tables: 473
+    Files: 1358
+    Gbdbs: 468
 
 A) Untouched Tables (0):
 
@@ -30,7 +23,7 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (479):
+C) New tables (473):
 wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2
 wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep1
@@ -429,26 +422,20 @@ wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1
 wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep2
 wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1
 wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2
-wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5
 wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1
 wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2
-wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5
 wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1
 wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2
-wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5
 wgEncodeCshlLongRnaSeqNhekCellPamContigs
 wgEncodeCshlLongRnaSeqNhekCellPamJunctions
 wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1
 wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2
-wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 wgEncodeCshlLongRnaSeqNhekCellPapContigs
 wgEncodeCshlLongRnaSeqNhekCellPapJunctions
 wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1
 wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2
-wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5
 wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1
 wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2
-wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5
 wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
 wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep3
 wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep3
@@ -511,9 +498,7 @@ wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2
 wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1
 wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 
-
-
-C') New files (1361 downloadables, 521 gbdbs):
+C') New files (1358 downloadables, 468 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/
     NOT on RR but must be placed in:
@@ -962,7 +947,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamGeneGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamJunctions.bedRnaElements.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep1.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamSpikeinsRep2.spikeins.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptDeNovo.gtf.gz
@@ -1308,7 +1292,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamGeneGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamJunctions.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep3.pdf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamSpikeinsRep3.spikeins.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7.gtf.gz
@@ -1717,7 +1700,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamGeneDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamGeneGencV7.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamJunctions.bedRnaElements.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamProtocolRep4.pdf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamSpikeinsRep3.spikeins.bam.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptDeNovo.gtf.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7.gtf.gz
@@ -1930,8 +1912,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep2.bam.bai
@@ -1950,12 +1930,9 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep1.bam
@@ -1966,12 +1943,7 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep2.bam.bai
@@ -1990,12 +1962,8 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep2.bigWig
@@ -2014,7 +1982,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2.bam.bai
@@ -2066,7 +2033,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1.bam
@@ -2083,14 +2049,12 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep1.bigWig
@@ -2102,7 +2066,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1.bam.bai
@@ -2155,16 +2118,10 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1.bam.bai
@@ -2183,15 +2140,12 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep4.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep4.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep3.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep4.bigWig
@@ -2204,9 +2158,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep3.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1.bam.bai
@@ -2246,8 +2197,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1.bam
@@ -2291,16 +2240,12 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1.bam.bai
@@ -2309,33 +2254,23 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5.bam.bai
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep3.bigWig
@@ -2347,7 +2282,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep3.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep3.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep4.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3.bam.bai
@@ -2371,12 +2305,9 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2.bam.bai
@@ -2387,8 +2318,6 @@ C') New files (1361 downloadables, 521 gbdbs):
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2.bigWig
@@ -2409,6 +2338,6 @@ D) Additional items:
     should be placed on the RR in (overwritting any existing copy):
       /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/README.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/files.txt
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/md5sum.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCshlLongRnaSeq/release1/README.txt

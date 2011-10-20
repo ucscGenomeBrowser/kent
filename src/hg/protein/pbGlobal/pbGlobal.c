@@ -66,7 +66,7 @@ int sfCount;			/* count of Superfamily domains */
 
 struct sqlConnection *spConn;   /* Connection to SwissProt database. */
 
-char aaAlphabet[30] = {"WCMHYNFIDQKRTVPGEASLXZBJOU"};
+char aaAlphabet[30] = {"WCMHYNFIDQKRTVPGEASLXZB"};
 char *protSeq;
 int  protSeqLen;
 

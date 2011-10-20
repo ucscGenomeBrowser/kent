@@ -11,17 +11,17 @@ void usage()
 errAbort(
   "metaCheck - a program to validate that tables, files, and trackDb entries exist\n"
   "usage:\n"
-  "   metaCheck database composite metaDb.ra trackDb.ra downloadDir\n"
+  "   metaCheck database composite\n"
   "arguments:\n"
   "   database            assembly database\n"
   "   composite           name of track composite\n"
-  "   metaDb.ra           RA file with composite metaDb information\n"
-  "   trackDb.ra          RA file with composite trackDb information\n"
-  "   downloadDir         download directory for composite\n"
   "options:\n"
   "   -outMdb=file.ra     output cruft-free metaDb ra file\n"
   "   -onlyCompTdb        only check trackDb entries that start with composite\n"
   "   -release            set release state, default alpha\n"
+  "   -metaDb=            specify a path for the metaDb, by default, this looks in <database>'s metaDb.\n"
+  "   -trackDb=           specify a path for the trackDb, by default, this is looks in <database>'s trackDb.\n"
+  "   -downloadDir=       specify a path for the downloads directory\n"
   "   -help               print out extended information about what metaCheck is doing\n"
   );
 }
@@ -35,6 +35,9 @@ static struct optionSpec options[] = {
    {"help", OPTION_BOOLEAN},
    {"onlyCompTdb", OPTION_BOOLEAN},
    {"release", OPTION_STRING},
+   {"metaDb", OPTION_STRING},
+   {"trackDb", OPTION_STRING},
+   {"downloadDir", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -126,6 +129,8 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
         }
     }
 }
+
+
 
 struct hash *getMetaDbHash(char *metaDb, struct mdbObj **head)
 {
@@ -325,6 +330,23 @@ for(trackObj = trackObjs; trackObj; trackObj = trackObj->next)
     }
 }
 
+void getDbPath(char *path, char *database, char *composite, char *type){
+    strcat(path,"/kent/src/hg/makeDb/trackDb/");
+    if (strncmp(database,"mm", 2) == 0){
+        strcat(path,"mouse/");
+    } else {
+        strcat(path,"human/");
+    }
+    strcat(path,database);
+    strcat(path,"/");
+    if (strcmp(type,"metaDb") == 0){
+        strcat(path,"metaDb/alpha/");
+        printf("%s\n",path);
+    }
+    strcat(path,composite);
+    strcat(path,".ra");
+}
+
 void metaCheck(char *database, char *composite, char *metaDb, char *trackDb, 
     char *downDir)
 /* metaCheck - a program to validate that tables, files, and trackDb entries exist. */
@@ -370,15 +392,78 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (optionExists("help"))
+if (optionExists("help")){
     printHelp();
+}
     
-if (argc != 6)
+if (argc != 3) {
     usage();
+}
 outMdb = optionVal("outMdb", outMdb);
 onlyCompTdb = optionExists("onlyCompTdb");
 release = optionVal("release", release);
 
-metaCheck(argv[1], argv[2], argv[3], argv[4], argv[5]);
+char *database = argv[1];
+char *composite = argv[2];
+
+char *home = strdup(getenv("HOME"));
+
+/* If user doesn't provide a metaDB, assume the path using the database and composite  */
+char *metaDb = malloc(256);
+if(!optionExists("metaDb")){
+    strcpy(metaDb,home);
+    getDbPath(metaDb,database,composite,"metaDb");
+/* Else get the one they provided */
+} else {
+    strcpy(metaDb,optionVal("metaDb",metaDb));
+    if(strchr(metaDb,'~')!=NULL){
+        char *dup = malloc(256);
+        strcpy(dup,home);
+        strcat(dup,(strchr(metaDb,'~')+1)); //replace '~' with $HOME
+        strcpy(metaDb,dup);
+        free(dup);
+    }
+}
+
+/* If user doesn't provide a trackDB, assume the path using the database and composite  */
+char *trackDb = malloc(256);
+if(!optionExists("trackDb")){
+    strcpy(trackDb,home);
+    getDbPath(trackDb,database,composite,"trackDb");
+} else {
+    strcpy(trackDb,optionVal("trackDb",trackDb));
+    if(strchr(trackDb,'~')!=NULL){
+        char *dup = malloc(256);
+        strcpy(dup,home);
+        strcat(dup,(strchr(trackDb,'~')+1));//replace '~' with $HOME
+        strcpy(trackDb,dup);
+        free(dup);
+    }
+}
+
+char *downloadDir = malloc(256);
+if(!optionExists("downloadDir")){
+    strcpy(downloadDir,"/hive/groups/encode/dcc/analysis/ftp/pipeline/");
+    strcat(downloadDir, database);
+    strcat(downloadDir, "/");
+//    strcat(dup,(strchr(downloadDir, I need to add the assembly here
+} else {
+    downloadDir = optionVal("downloadDir",downloadDir);
+    if(strchr(downloadDir,'~')!=NULL){
+        char *dup = malloc(256);
+        strcpy(dup,home);
+        strcat(dup,(strchr(downloadDir,'~')+1));
+        strcpy(downloadDir,dup);
+        free(dup);
+    }
+}
+
+
+printf("metaDb = %s\n trackDb = %s\n downloadDir = %s\n",metaDb,trackDb,downloadDir);
+metaCheck(database, composite, metaDb, trackDb, downloadDir);
+free(home);
+free(trackDb);
+free(downloadDir);
+free(metaDb);
 return 0;
 }

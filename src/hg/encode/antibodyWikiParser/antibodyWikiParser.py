@@ -15,7 +15,7 @@ import string
 import subprocess
 import sys
 import urllib2 
-from rafile.RaFile import *
+from ucscgenomics.rafile.RaFile import *
 
 
 

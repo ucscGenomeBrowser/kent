@@ -1,0 +1,60 @@
+# Data Agreement File for University of Chicago (White Lab) TFBS by Epitope-tagged ChipSeq $Revision: 1.3 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the associated DDF should look like this:
+# files view    cell    antibody        control        setType	controlId	replicate       seqPlatform	labVersion
+
+# Example:
+
+# yourfile.bigwig  Signal      K562    eGFP-Fos
+#
+# NOTE: Verify all antibodies are registered before submitting:
+#eGFP-JunB, eGFP-JunD, eGFP-Fos, eGFP-GATA2 and eGFP-HDAC8
+
+#Explanation of DDF terms
+#files: The name of the files to be associated with this data
+#view: The type of view that these files are. The options are listed in this DAF
+#cell: The cell name. The cell registered vocabulary is found at: http://hgwdev.cse.ucsc.edu/ENCODE/cellTypes.html
+#antibody: The antibody used for a specific target. The antibody registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Antibodies
+#control: The input used as control for ChIP-seq data. The control registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Controls
+#setType: The identification if either the data refers to an experiment (exp) or is input (input) for another experiment.
+#controlId: The unique identification of experiments. Using Cell/Treatment/Input/Control
+#replicate: The Replicate number. The replication number of a given experiment.
+#seqPlatform: The sequencing platform.  The sequence platform registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
+#labVersion: Free text for the lab to keep track of any other data
+
+dafVersion        2.0
+
+# Lab and general info
+grant             White
+lab               UChicago
+dataType          ChipSeq
+compositeSuffix   UchicagoTfbs
+group             regulation
+variables         cell, antibody, control
+assembly          hg19
+
+validationSettings validateFiles.bam:mismatches=2
+
+# Track/view definition
+view             Peaks
+type             narrowPeak
+hasReplicates    no
+required         no
+
+view             Signal
+type             bigWig
+hasReplicates    no
+required         no
+
+view             Alignments
+type             bam
+hasReplicates    yes
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes
+required         yes
