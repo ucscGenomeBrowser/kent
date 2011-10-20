@@ -293,9 +293,9 @@ term AG09309
 tag AG09309
 type Cell Line
 organism human
-description adult toe fibroblast from apparently healthy 21 year old
+description adult toe fibroblast from apparently healthy 21 year old, "7% of the cells examined showing random chromosome loss/gain" -Coriell
 tissue Skin
-karyotype "7% of the cells examined showing random chromosome loss/gain" -Coriell
+karyotype 
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG09309
 vendorName Coriell
 vendorId AG09309
@@ -322,9 +322,9 @@ term AG10803
 tag AG10803
 type Cell Line
 organism human
-description abdominal skin fibroblasts from apparently heathly 22 year old
+description abdominal skin fibroblasts from apparently heathly 22 year old, "8% of the cells examined showing random chromosome loss, 2% showing random chromosome gain, and 2% showing 69,XYY" -Coriell
 tissue Skin
-karyotype "8% of the cells examined showing random chromosome loss, 2% showing random chromosome gain, and 2% showing 69,XYY" -Coriell
+karyotype 
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG10803
 vendorName Coriell
 vendorId AG10803
@@ -2253,7 +2253,7 @@ tier 3
 organism human
 description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
-karyotype normal (cMyc)
+karyotype normal
 derivedFrom HFF
 sex M
 tissue Foreskin
@@ -2568,7 +2568,7 @@ tier 3
 organism human
 description normal human pancreatic duct cells immortalized with E6E7 gene of HPV
 lineage endoderm
-karyotype Unknown
+karyotype 
 sex F
 tissue Pancreatic Duct
 vendorName Dr. Ming-Sound Tsao, Ontario Cancer Institute
@@ -2890,7 +2890,7 @@ tier 3
 organism human
 description  induced pluripotent stem cell derived from skin fibroblast
 lineage  induced pluripotent stem cell derived from skin fibroblast
-karyotype  Unknown
+karyotype 
 sex B
 tissue Induced Pluripotent Stem Cell
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
@@ -3875,7 +3875,7 @@ tier 3
 organism human
 description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
 lineage endoderm
-karyotype normal (RAF)
+karyotype normal 
 sex F
 tissue Embryonic Lung
 vendorName Dr. Carl Mann, SBIGeM
