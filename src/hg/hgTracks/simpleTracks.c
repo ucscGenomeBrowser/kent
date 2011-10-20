@@ -3233,7 +3233,7 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
-if (vis == tvDense && canDrawBigBedDense(tg))
+if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
     }
