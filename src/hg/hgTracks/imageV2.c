@@ -1045,6 +1045,9 @@ int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topL
 {
 struct imgSlice *slice;
 char *imgFile = NULL;               // name of file that hold the image
+char *neededId = NULL; // id is only added it it is NOT the trackId.
+if (imgTrack->tdb == NULL || differentString(id,imgTrack->tdb->track))
+    neededId = id;
 
 int count = 0;
 for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
@@ -1070,7 +1073,7 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
         struct mapSet *map = sliceGetMap(slice,FALSE);
         if(map!=NULL)
             {          // NOTE: using find or add gives precedence to first of same coordinate map items added
-            mapSetItemFindOrAdd(map,link,title,max(topLeftX,slice->offsetX),max(topLeftY,slice->offsetY),min(bottomRightX,slice->offsetX + slice->width),min(bottomRightY,slice->offsetY + slice->height), id);
+            mapSetItemFindOrAdd(map,link,title,max(topLeftX,slice->offsetX),max(topLeftY,slice->offsetY),min(bottomRightX,slice->offsetX + slice->width),min(bottomRightY,slice->offsetY + slice->height), neededId);
             count++;
             }
         else

@@ -16,9 +16,10 @@ chainLinearGap loose
 
 track chainNetBosTau6 override
 priority 450.3
-shortLabel $o_db Chain/Net
 
 track chainNetBosTau4 override
+shortLabel $o_db Chain/Net
+priority 450.3
 visibility pack
 
     track chainNetBosTau4Viewnet override
