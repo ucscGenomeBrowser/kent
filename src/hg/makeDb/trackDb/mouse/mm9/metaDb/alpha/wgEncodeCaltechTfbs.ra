@@ -15,7 +15,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11653
@@ -43,7 +43,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep2.bam
+fileName wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep2.bam,wgEncodeCaltechTfbsC2c12CebpbFCntrl50bE2p60hPcr1xAlnRep2.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11847
@@ -243,7 +243,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12CebpbFCntrl50bPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12CebpbFCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12CebpbFCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11942
@@ -357,7 +357,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12CtcfFCntrl32bPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12CtcfFCntrl32bPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12CtcfFCntrl32bPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10506
@@ -471,7 +471,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12E2f4FCntrl50bE2p60hPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12E2f4FCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12E2f4FCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11718
@@ -585,7 +585,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11565
@@ -699,7 +699,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p24hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p24hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p24hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10007
@@ -784,7 +784,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p60hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12InputFCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10194
@@ -869,7 +869,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl32bPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl32bPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12InputFCntrl32bPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10135
@@ -954,7 +954,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xAlnRep1.bam
+dccInternalNotes This control doesn't have a corresponding experiment and will not be in release 1.
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11610
@@ -982,6 +983,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccInternalNotes This control doesn't have a corresponding experiment and will not be in release 1.
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -1010,6 +1012,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
+dccInternalNotes This control doesn't have a corresponding experiment and will not be in release 1.
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
@@ -1039,11 +1042,11 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-18
 dateUnrestricted 2012-07-18
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11612
-md5sum 41b2a554e8048790108b64f2ea645860
+md5sum 41b2a554e8048790108b64f2ea645860,767b6c1e6124ed1121eab3f72cbe8e11
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1070,7 +1073,7 @@ fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xRawDataRep1.fastq.gz
 grant Hardison
 lab Caltech-m
 labExpId 11612
-md5sum a2bcbeeebc1d7895df1c45a0b73bfde9
+md5sum beda94224fa62b31bfded9a2c2a76b86
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1097,7 +1100,7 @@ fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xSigRep1.bigWig
 grant Hardison
 lab Caltech-m
 labExpId 11612
-md5sum bf0869254f1208e01c2f18dc5deef5c1
+md5sum 537dc35f41ca00a3418d7aa68187542e
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1121,7 +1124,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11610
@@ -1149,7 +1152,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xAlnRep2.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xAlnRep2.bam,wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xAlnRep2.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11637
@@ -1291,12 +1294,12 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11612
 labVersion Myoblast
-md5sum 94f7681c9cebc9e83db062dca0d8cc5b
+md5sum 94f7681c9cebc9e83db062dca0d8cc5b,2ff986016bf657d631407fe7d9d0a55e
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1324,7 +1327,7 @@ grant Hardison
 lab Caltech-m
 labExpId 11612
 labVersion Myoblast
-md5sum 3584664c6dd01fd5bae747ee529061be
+md5sum 63d22b26b5b97a7c5a6bf0e352475af7
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1347,6 +1350,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dateUnrestricted 2012-06-01
+dccInternalNotes This control doesn't have a corresponding experiment and will not be in release 1. Missing alignments.
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xRawDataRep2.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -1375,6 +1379,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-02
 dateUnrestricted 2012-06-01
+dccInternalNotes This control doesn't have a corresponding experiment and will not be in release 1. Missing alignments.
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xRawDataRep3.fastq.gz
 grant Hardison
 lab Caltech-m
@@ -1432,6 +1437,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-01
 dateUnrestricted 2012-06-01
+dccInternalNotes This control doesn't have a corresponding experiment and will not be in release 1. Missing alignments.
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep2.bigWig
 grant Hardison
 lab Caltech-m
@@ -1461,6 +1467,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-02
 dateUnrestricted 2012-06-01
+dccInternalNotes This control doesn't have a corresponding experiment and will not be in release 1. Missing alignments.
 fileName wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep3.bigWig
 grant Hardison
 lab Caltech-m
@@ -1490,7 +1497,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12MaxFCntrl50bE2p60hPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12MaxFCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12MaxFCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11682
@@ -1604,7 +1611,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12MaxFCntrl50bPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12MaxFCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12MaxFCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11924
@@ -1718,7 +1725,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12NrsfFCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10065
@@ -1832,7 +1839,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12Pol2FCntrl32bE2p60hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Pol2FCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Pol2FCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10704
@@ -1946,7 +1953,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12Pol2s2FCntrl32bE2p60hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Pol2s2FCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Pol2s2FCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10703
@@ -2146,7 +2153,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p60hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10158
@@ -2260,7 +2267,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10599
@@ -2374,7 +2381,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl50bE2p7dPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Sc12732FCntrl50bE2p7dPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Sc12732FCntrl50bE2p7dPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11927
@@ -2488,7 +2495,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p24hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p24hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p24hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10296
@@ -2602,7 +2609,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p60hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p60hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bE2p60hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10481
@@ -2716,7 +2723,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Sc32758FCntrl32bPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10333
@@ -2830,7 +2837,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl50bE2p7dPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Sc32758FCntrl50bE2p7dPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Sc32758FCntrl50bE2p7dPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11926
@@ -2944,7 +2951,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12SrfFCntrl32bE2p24hPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12SrfFCntrl32bE2p24hPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12SrfFCntrl32bE2p24hPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10335
@@ -3058,7 +3065,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bE2p60hPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Tcf12FCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11719
@@ -3172,7 +3179,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-05
 dateUnrestricted 2012-05-05
-fileName wgEncodeCaltechTfbsC2c12Tcf3FCntrl32bE2p5dPcr2xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Tcf3FCntrl32bE2p5dPcr2xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Tcf3FCntrl32bE2p5dPcr2xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 10409
@@ -3286,7 +3293,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bE2p60hPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bE2p60hPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Usf1FCntrl50bE2p60hPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11644
@@ -3400,7 +3407,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
-fileName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xAlnRep1.bam
+fileName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xAlnRep1.bam,wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xAlnRep1.bam.bai
 grant Hardison
 lab Caltech-m
 labExpId 11923
@@ -3502,4 +3509,4 @@ tableName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: 1969807254
+# MAGIC: 1079636301
