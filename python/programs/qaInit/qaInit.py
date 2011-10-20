@@ -183,9 +183,9 @@ Thank You!
 	f.close()
 	return gbdbstr
 	
-def writeFileMail(files, args, user, qaDir, c):
+def writeFileMail(files, others, args, user, qaDir, c):
 	sep = ""
-	filestr = sep.join(list(sorted(files)))
+	filestr = sep.join(list(sorted(files | others)))
 	mail = """Hi Pushers,
 
 Please push these %s files:
@@ -207,7 +207,20 @@ Thanks!
 	f = open(qaDir + "/pushFilesMail", "w")
 	f.write(mail)
 	f.close()
-	return filestr
+	subIds = dict()
+	mdb = c.alphaMetaDb
+	p = re.compile('.*(wgE.*)')
+	for i in files:
+		m = p.match(i)
+		file = m.group(1)
+		filestanza = mdb.filter(lambda s: re.match(".*%s.*" % file,s['fileName']), lambda s: s)
+		if filestanza:
+			for j in filestanza:
+				if 'subId' in j:
+					if not j['subId'] in subIds:
+						subIds[j['subId']] = 1
+            
+	return filestr, set(sorted(subIds.keys()))
 
 def writeHtml(args, c, qaDir):
 	f = open(c._trackDbPath, "r")
@@ -339,6 +352,13 @@ Thanks!
 %s
 """ % (downloads, args.composite, args.database, user)
 
+def changeStatus(subIds):
+	for i in subIds:
+		cmd = "encodeStatus.pl %s reviewing 2>&1" % (i)
+		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+		output = p.stdout.read()
+	return
+
 def main():
 	parser = argparse.ArgumentParser(
         prog='qaInit',
@@ -381,11 +401,13 @@ qaInir hg19 wgEncodeSydhTfbs 1 69
 	
 	tablestr = writeTableMail(tables, args, user, qaDir)
 	gbdbstr = writeGbdbMail(gbdbs, args, user, qaDir)
-	filestr = writeFileMail(files | supplemental | others, args, user, qaDir, c)
+	(filestr, subIds) = writeFileMail(files, supplemental | others, args, user, qaDir, c)
 	(short, long) = writeHtml(args, c, qaDir)
 	
 	writePushHtmlMail(args, user, qaDir)
 	writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir)
+	
+	changeStatus(subIds)
 	
 	runScript(args, qaDir)
 
