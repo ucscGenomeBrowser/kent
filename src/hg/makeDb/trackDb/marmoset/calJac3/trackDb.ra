@@ -121,7 +121,7 @@ priority 103.29
         type wigMaf 0.0 1.0
         speciesCodonDefault calJac3
         speciesGroups Primates Vertebrate
-        sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
+        sGroup_Primates hg19 panTro2 gorGor2 ponAbe2 papHam1 rheMac2 tarSyr1 micMur1 otoGar1
         sGroup_Vertebrate mm9 canFam2 monDom5
         speciesDefaultOff  panTro2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1 
         #speciesDefaultOff ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1 mm9 canFam2 monDom5
