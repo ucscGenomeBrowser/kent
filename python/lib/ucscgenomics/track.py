@@ -166,7 +166,7 @@ class CompositeTrack(object):
             
     @property
     def qaInitDir(self):
-        qaDir = '/hive/groups/encode/encodeQa/' + self._database + '/' + self._name + '/'
+        qaDir = '/hive/groups/encode/encodeQa/test/' + self._database + '/' + self._name + '/'
         if os.path.exists(qaDir) and os.path.isdir(qaDir):
             pass
         else:
