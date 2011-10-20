@@ -187,7 +187,9 @@ def makeFileSizes(c, args, inlist):
         checklist.append("%s/%s" % (c.downloadsDirectory + 'release' + args.releaseNew, i))    
     filesizes = 0
     for i in checklist:
-	filesizes = filesizes + int(os.path.getsize(i))
+        realpath = os.path.realpath(i)
+        filesizes = filesizes + int(os.path.getsize(realpath))
+
     filesizes = math.ceil(float(filesizes) / (1024**2))
     return int(filesizes)
 
@@ -448,6 +450,7 @@ def printReportOne(args, totalFiles, revokedFiles, newGbdbSet, revokedGbdbs, new
         print "\n"
         print "Revoked Tables (%s):" %len(revokedTables)
         printIter(revokedTables)
+        print "\n"
         print "Revoked Files (%s):" % len(revokedFiles)
         printWithPath(revokedFiles, c, args.releaseNew)
         print "\n"
