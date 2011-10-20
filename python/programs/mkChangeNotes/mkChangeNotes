@@ -187,7 +187,9 @@ def makeFileSizes(c, args, inlist):
         checklist.append("%s/%s" % (c.downloadsDirectory + 'release' + args.releaseNew, i))    
     filesizes = 0
     for i in checklist:
-	filesizes = filesizes + int(os.path.getsize(i))
+        realpath = os.path.realpath(i)
+        filesizes = filesizes + int(os.path.getsize(realpath))
+
     filesizes = math.ceil(float(filesizes) / (1024**2))
     return int(filesizes)
 
