@@ -1,6 +1,6 @@
 // Javascript for use in hgTracks CGI
 
-"use strict";
+// "use strict";
 
 var debug = false;
 var browser;              // browser ("msie", "safari" etc.) // move to utils.js?
@@ -12,11 +12,9 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * int winStart           // genomic start coordinate (0-based, half-open)
  * int winEnd             // genomic end coordinate
  * int newWinWidth        // new width (in bps) if user clicks on the top ruler
- * boolean dragSelection  // true if we should allow drag and select
  * boolean revCmplDisp    // true if we are in reverse display
  * int insideX            // width of side-bar (in pixels)
  * int rulerClickHeight   // height of ruler (in pixels) - zero if ruler is hidden
- * boolean dragSelection  // true if drag-and-select turned on
  * boolean inPlaceUpdate  // true if in-place-update is turned on
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
@@ -533,7 +531,7 @@ var dragSelect = {
             imgHeight = imageV2.imgTbl.height();
 
         // No longer disable without ruler, because shift-drag still works
-        if(typeof(hgTracks) != "undefined" && hgTracks.dragSelection) {
+        if(typeof(hgTracks) != "undefined") {
 
             if (hgTracks.rulerClickHeight == undefined || hgTracks.rulerClickHeight == null)
                 hgTracks.rulerClickHeight = 0; // will be zero if no ruler track
@@ -1124,7 +1122,7 @@ var dragReorder = {
     mapItemMouseOver: function ()
     {
         // Record data for current map area item
-        id = this.id;
+        var id = this.id;
         if (id == undefined || id == null || id.length == 0) {
             id = '';
             var tr = $( this ).parents('tr.imgOrd');
@@ -1893,29 +1891,6 @@ var rightClick = {
                 }
             } else {
                 imageV2.requestImgUpdate(id, id+"="+cmd, "");
-                /*var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis in remote cart
-                if(imageV2.enabled) {
-                    data += "&hgt.trackNameFilter=" + id;
-                }
-                //var center = $("#img_data_" + id);
-                //center.attr('src', "../images/loading.gif")
-                //center.attr('style', "text-align: center; display: block;");
-                //warn("hgTracks?"+data); // Uesful to cut and paste the url
-                var loadingId = showLoadingImage("tr_" + id);
-                $.ajax({
-                        type: "GET",
-                        url: "../cgi-bin/hgTracks",
-                        data: data,
-                        dataType: "html",
-                        trueSuccess: imageV2.updateImgAndMap,
-                        success: catchErrorOrDispatch,
-                        error: errorHandler,
-                        cmd: cmd,
-                        newVisibility: cmd,
-                        id: id,
-                        loadingId: loadingId,
-                        cache: false
-                    });*/
             }
         }
     },
