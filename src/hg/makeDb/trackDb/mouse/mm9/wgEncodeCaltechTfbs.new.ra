@@ -457,6 +457,16 @@ noInherit on
         # subId=4711 dateSubmitted=2011-08-11
         # was wgEncodeCaltechTfbsC2c12Fosl1sc605FCntrl36bMybPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:47 2011
 
+        track wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xSigRep1
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 36bp 60h 1
+        longLabel C2C12 Control 36bp Myocyte 60h TFBS ChIP-seq Signal Rep 1 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL36B protocol=PCR1X sex=F treatment=E2P60H rep=rep1
+        type bigWig 0.042500 5125.781738
+        color 139,69,19
+        # subId=4712 dateSubmitted=2011-08-11
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl36bMyc60hPcr1xSigRep1 vsmalladi Tue Oct  4 13:10:47 2011
+
         track wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xSigRep1
         parent wgEncodeCaltechTfbsViewSignal off
         shortLabel C2 Con 50bp 60h 1
@@ -616,6 +626,26 @@ noInherit on
         color 139,69,19
         # subId=4448 dateSubmitted=2011-08-05
         # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep1 vsmalladi Tue Oct  4 14:20:04 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep3
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 50bp 3
+        longLabel C2C12 Control 50bp Myoblast TFBS Signal Rep 3 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep3
+        type bigWig 0.080100 10912.944336
+        color 139,69,19
+        # subId=4717 dateSubmitted=2011-09-02
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep3 vsmalladi Tue Oct  4 13:10:48 2011
+
+        track wgEncodeCaltechTfbsC2c12InputFCntrl50bPcr1xSigRep2
+        parent wgEncodeCaltechTfbsViewSignal off
+        shortLabel C2 Con 50bp 2
+        longLabel C2C12 Control 50bp Myoblast TFBS ChIP-seq Signal Rep 2 from ENCODE/Caltech
+        subGroups view=Signal factor=INPUT cellType=C2C12 control=CNTRL50B protocol=PCR1X sex=F treatment=NONE rep=rep2
+        type bigWig 0.051500 10494.582031
+        color 139,69,19
+        # subId=4715 dateSubmitted=2011-09-01
+        # was wgEncodeCaltechTfbsC2c12InputFCntrl50bMybPcr1xSigRep2 vsmalladi Tue Oct  4 13:10:48 2011
 
         track wgEncodeCaltechTfbsC2c12Sc12732FCntrl32bE2p24hPcr2xSigRep1
         parent wgEncodeCaltechTfbsViewSignal off
