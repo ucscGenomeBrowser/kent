@@ -450,6 +450,7 @@ def printReportOne(args, totalFiles, revokedFiles, newGbdbSet, revokedGbdbs, new
         print "\n"
         print "Revoked Tables (%s):" %len(revokedTables)
         printIter(revokedTables)
+        print "\n"
         print "Revoked Files (%s):" % len(revokedFiles)
         printWithPath(revokedFiles, c, args.releaseNew)
         print "\n"
