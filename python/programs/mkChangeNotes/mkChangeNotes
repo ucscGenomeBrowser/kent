@@ -31,7 +31,7 @@ def checkMetaDbForFiles(mdb, files, status, loose):
             if loose and re.match('.*bai', i):
                 pass
             else:
-                errors.append("metaDb: %s has is not mentioned in %s" % (i, status))
+                errors.append("metaDb: %s is not mentioned in %s" % (i, status))
                 
     return (filtermdb, revokedset, revokedfiles, atticset, supplementalset, errors)
 
@@ -259,45 +259,49 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     tableGb = int(tableSize/1024)
     if tableGb > 1:
         print "Tables: %d MB (%d GB)" % (tableSize, tableGb)
-    else:
+    elif tableSize:
         print "Tables: %d MB" % tableSize
     totalsize = totalsize + tableSize
     size = int(makeFileSizes(c, args, pushFiles))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Files: %d MB (%d GB)" % (size, int(size/1024))
-    else:
+    elif size:
         print "Files: %d MB" % size
     size = int(makeFileSizes(c, args, pushGbdbs))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Gbdbs: %d MB (%d GB)" % (size, int(size/1024))
-    else:
+    elif size:
         print "Gbdbs: %d MB" % size
     size = int(makeFileSizes(c, args, (newSupplementalSet - oldSupplementalSet)))
     totalsize = totalsize + size
     if int(size/1024) > 1:
-        print "Supplemental: %d MB" % (size, int(size/1024))
-    else:
+        print "Supplemental: %d MB (%d GB)" % (size, int(size/1024))
+    elif size:
         print "Supplemental: %d MB" % size
     size = int(makeFileSizes(c, args, (additionalList)))
     totalsize = totalsize + size
     if int(size/1024) > 1:
-        print "Other: %d MB" % size
-    else:
+        print "Other: %d MB (%d GB)" % (size, int(size/1024))
+    elif size:
         print "Other: %d MB" % size
     if int(totalsize/1024) > 1:
         print "Total: %d MB (%d GB)" % (totalsize, int(totalsize/1024))
-    else:
+    elif totalsize:
         print "Total: %d MB" % totalsize
-    print "\n"
-    print "TABLES:"
-    print "New: %s" % len(pushTables)
-    print "Untouched: %s" % len(oldTableSet & newTableSet)
-    print "Revoked/Replaced/Renamed: %s" % len(revokedTableSet)
-    print "New + Untouched: %s" % len(newTableSet)
-    print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(newTableSet | oldTableSet | revokedTableSet)
-    if not args.summary:
+    else:
+        print "No files to push"
+    tableprint = len(newTableSet | oldTableSet | revokedTableSet)
+    if tableprint:
+        print "\n"
+        print "TABLES:"
+        print "New: %s" % len(pushTables)
+        print "Untouched: %s" % len(oldTableSet & newTableSet)
+        print "Revoked/Replaced/Renamed: %s" % len(revokedTableSet)
+        print "New + Untouched: %s" % len(newTableSet)
+        print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(newTableSet | oldTableSet | revokedTableSet)
+    if tableprint and not args.summary:
         print ""
         print "New Tables (%s):" % len(pushTables)
         printIter(pushTables)
@@ -307,15 +311,17 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         print ""
         print "Revoked/Replaced/Renamed Tables (%s):" % len(revokedTableSet)
         printIter(revokedTableSet)
-    print "\n"
-    #downlaodables = total - revoked
-    print "DOWNLOAD FILES:"
-    print "New: %s" % len(pushFiles - revokedFiles)
-    print "Untouched: %s" % len((totalFiles & oldReleaseFiles) - revokedFiles)
-    print "Revoked/Replaced/Renamed: %s" % len(revokedFiles)
-    print "New + Untouched: %s" % len((pushFiles - revokedFiles) | ((totalFiles & oldReleaseFiles) - revokedFiles))
-    print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(totalFiles | oldReleaseFiles | revokedFiles)
-    if not args.summary:
+    dlprint = len(totalFiles | oldReleaseFiles | revokedFiles)
+    if dlprint:
+        print "\n"
+        #downlaodables = total - revoked
+        print "DOWNLOAD FILES:"
+        print "New: %s" % len(pushFiles - revokedFiles)
+        print "Untouched: %s" % len((totalFiles & oldReleaseFiles) - revokedFiles)
+        print "Revoked/Replaced/Renamed: %s" % len(revokedFiles)
+        print "New + Untouched: %s" % len((pushFiles - revokedFiles) | ((totalFiles & oldReleaseFiles) - revokedFiles))
+        print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(totalFiles | oldReleaseFiles | revokedFiles)
+    if dlprint and not args.summary:
         print ""
         print "New Download Files (%s):" % len(pushFiles - revokedFiles)
         printWithPath((pushFiles - revokedFiles), c, args.releaseNew)
@@ -325,14 +331,17 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         print ""
         print "Revoked/Replaced/Renamed Download Files (%s):" % len(revokedFiles)    
         printWithPath(revokedFiles, c, args.releaseNew)
-    print "\n"
-    print "GBDBS:"
-    print "New: %s" % len(pushGbdbs)
-    print "Untouched: %s" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs)
-    print "Revoked/Replaced/Renamed: %s" % len(revokedGbdbs)
-    print "New + Untouched: %s" % len(pushGbdbs | ((newGbdbSet & oldGbdbSet) - revokedGbdbs))
-    print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(newGbdbSet | oldGbdbSet | revokedGbdbs)
-    if not args.summary:
+   
+    gbdbprint = len(newGbdbSet | oldGbdbSet | revokedGbdbs) 
+    if gbdbprint:
+        print "\n"
+        print "GBDBS:"
+        print "New: %s" % len(pushGbdbs)
+        print "Untouched: %s" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs)
+        print "Revoked/Replaced/Renamed: %s" % len(revokedGbdbs)
+        print "New + Untouched: %s" % len(pushGbdbs | ((newGbdbSet & oldGbdbSet) - revokedGbdbs))
+        print "Total (New + Untouched + Revoked/Replaced/Renamed): %s" % len(newGbdbSet | oldGbdbSet | revokedGbdbs)
+    if gbdbprint and not args.summary:
         print ""
         print "New Gbdb Files (%s):" % len(pushGbdbs)
         printGbdbPath(pushGbdbs, args.database)
@@ -342,14 +351,16 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         print ""
         print "Revoked/Replaced/Renamed Gbdb Files (%s):" % len(revokedGbdbs)
         printGbdbPath(revokedGbdbs, args.database)
-    print "\n"
-    print "SUPPLEMENTAL FILES:"
-    print "New: %s" % len(newSupplementalSet - oldSupplementalSet)
-    print "Untouched: %s" % len(oldSupplementalSet & newSupplementalSet)
-    print "Removed: %s" % len(oldSupplementalSet - newSupplementalSet)
-    print "New + Untouched: %s" % len((newSupplementalSet - oldSupplementalSet) | (oldSupplementalSet & newSupplementalSet))
-    print "Total: %s" % len(newSupplementalSet | oldSupplementalSet)
-    if not args.summary:
+    supplementalprint = len(newSupplementalSet | oldSupplementalSet)
+    if supplementalprint:
+        print "\n"
+        print "SUPPLEMENTAL FILES:"
+        print "New: %s" % len(newSupplementalSet - oldSupplementalSet)
+        print "Untouched: %s" % len(oldSupplementalSet & newSupplementalSet)
+        print "Removed: %s" % len(oldSupplementalSet - newSupplementalSet)
+        print "New + Untouched: %s" % len((newSupplementalSet - oldSupplementalSet) | (oldSupplementalSet & newSupplementalSet))
+        print "Total: %s" % len(newSupplementalSet | oldSupplementalSet)
+    if supplementalprint and not args.summary:
         print ""
         print "New Supplemental Files (%s):" % len(newSupplementalSet - oldSupplementalSet)
         printWithPath(newSupplementalSet - oldSupplementalSet, c, args.releaseNew)
@@ -359,22 +370,25 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
         print ""
         print "Removed Supplemental Files (%s):" % len(oldSupplementalSet - newSupplementalSet)
         printWithPath(oldSupplementalSet - newSupplementalSet, c, args.releaseNew)
-    print "\n"
-    print "OTHER FILES:"
-    print "New: %s" % len(additionalList)
-    print "Revoked/Replace: %s" % len(oldAdditionalList)
-    print "Total: %s" % len(additionalList | oldAdditionalList)
-    if not args.summary:
+    otherprint = len(additionalList | oldAdditionalList)
+    if otherprint:
+        print "\n"
+        print "OTHER FILES:"
+        print "New: %s" % len(additionalList | (additionalList & oldAdditionalList))
+        print "Revoked/Replace: %s" % len(oldAdditionalList - additionalList)
+        print "Total: %s" % len(additionalList | oldAdditionalList)
+    if otherprint and not args.summary:
         print "" 
-        print "New Other Files (%s):" % len(additionalList)
+        print "New Other Files (%s):" % len(additionalList | (additionalList & oldAdditionalList))
         printWithPath(additionalList, c, args.releaseNew)
         print ""
-        print "Revoked Other Files (%s):" % len(oldAdditionalList)
+        print "Revoked Other Files (%s):" % len(oldAdditionalList - additionalList)
         printWithPath(oldAdditionalList, c, args.releaseNew)
     print "\n"
-    print "Files that dropped between releases (%s):" % len(missingFiles)
-    printWithPath(missingFiles, c, args.releaseOld)
-    print "\n"
+    if len(missingFiles):
+        print "Files that dropped between releases (%s):" % len(missingFiles)
+        printWithPath(missingFiles, c, args.releaseOld)
+        print "\n"
     if not args.ignore:
         print "No Errors"
     
@@ -402,13 +416,13 @@ def printReportOne(args, totalFiles, revokedFiles, newGbdbSet, revokedGbdbs, new
     else:
         print "Tables: %d MB" % tableSize
     totalsize = totalsize + tableSize
-    size = int(makeFileSizes(c, args, totalFiles))
+    size = int(makeFileSizes(c, args, totalFiles - revokedFiles))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Files: %d MB (%d GB)" % (size, int(size/1024))
     else:
         print "Files: %d MB" % size
-    size = int(makeFileSizes(c, args, newGbdbSet))
+    size = int(makeFileSizes(c, args, newGbdbSet - revokedGbdbs))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Gbdbs: %d MB (%d GB)" % (size, int(size/1024))
@@ -433,30 +447,38 @@ def printReportOne(args, totalFiles, revokedFiles, newGbdbSet, revokedGbdbs, new
     print "\n"
     if not args.summary:
         print ""
-        print "New Tables (%s):" % len(newTableSet - revokedTables)
-        printIter(newTableSet - revokedTables)
-        print "\n"
-        print "New Download Files (%s):" % len(totalFiles - revokedFiles)
-        printWithPath(totalFiles - revokedFiles, c, args.releaseNew)
-        print "\n"
-        print "New Gbdb Files (%s):" % len(newGbdbSet - revokedGbdbs)
-        printGbdbPath(newGbdbSet - revokedGbdbs, args.database)
-        print "\n"
-        print "New Supplemental Files (%s):" % len(newSupplementalSet)
-        printWithPath(newSupplementalSet, c, args.releaseNew)
-        print "\n" 
-        print "New Other Files (%s):" % len(additionalList)
-        printWithPath(additionalList, c, args.releaseNew)
-        print "\n"
-        print "Revoked Tables (%s):" %len(revokedTables)
-        printIter(revokedTables)
-        print "\n"
-        print "Revoked Files (%s):" % len(revokedFiles)
-        printWithPath(revokedFiles, c, args.releaseNew)
-        print "\n"
-        print "Revoked Gbdbs (%s):" % len(revokedGbdbs)
-        printGbdbPath(revokedGbdbs, args.database)
-        print "\n"
+        if len(newTableSet - revokedTables):
+            print "New Tables (%s):" % len(newTableSet - revokedTables)
+            printIter(newTableSet - revokedTables)
+            print "\n"
+        if len(totalFiles - revokedFiles):
+            print "New Download Files (%s):" % len(totalFiles - revokedFiles)
+            printWithPath(totalFiles - revokedFiles, c, args.releaseNew)
+            print "\n"
+        if len(newGbdbSet - revokedGbdbs):
+            print "New Gbdb Files (%s):" % len(newGbdbSet - revokedGbdbs)
+            printGbdbPath(newGbdbSet - revokedGbdbs, args.database)
+            print "\n"
+        if len(newSupplementalSet):
+            print "New Supplemental Files (%s):" % len(newSupplementalSet)
+            printWithPath(newSupplementalSet, c, args.releaseNew)
+            print "\n"
+        if len(additionalList):
+            print "New Other Files (%s):" % len(additionalList)
+            printWithPath(additionalList, c, args.releaseNew)
+            print "\n"
+        if len(revokedTables):
+            print "Revoked Tables (%s):" % len(revokedTables)
+            printIter(revokedTables)
+            print "\n"
+        if len(revokedFiles):
+            print "Revoked Files (%s):" % len(revokedFiles)
+            printWithPath(revokedFiles, c, args.releaseNew)
+            print "\n"
+        if len(revokedGbdbs):
+            print "Revoked Gbdbs (%s):" % len(revokedGbdbs)
+            printGbdbPath(revokedGbdbs, args.database)
+            print "\n"
     if not args.ignore:
         print "No Errors"
 
