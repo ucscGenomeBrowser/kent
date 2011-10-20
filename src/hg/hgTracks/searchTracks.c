@@ -521,7 +521,7 @@ else
         hPrintf("</td>\n");
 
         // shortLabel has description popup and longLabel has "..." metadata
-        hPrintf("<td><a target='_top' onclick=\"hgTrackUiPopUp('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
+        hPrintf("<td><a target='_top' onclick=\"popUp.hgTrackUi('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
         compositeMetadataToggle(database, track->tdb, NULL, TRUE, FALSE, tdbHash);
         hPrintf("</td></tr>\n");
@@ -553,12 +553,6 @@ hPrintf("</div>"); // This div allows the clear button to empty it
 
 void doSearchTracks(struct group *groupList)
 {
-if (!advancedJavascriptFeaturesEnabled(cart))
-    {
-    warn("Requires advanced javascript features.");
-    return;
-    }
-
 webIncludeResourceFile("ui.dropdownchecklist.css");
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
 // This line is needed to get the multi-selects initialized

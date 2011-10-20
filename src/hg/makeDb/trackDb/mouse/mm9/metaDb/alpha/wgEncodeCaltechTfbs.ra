@@ -1027,6 +1027,88 @@ tableName wgEncodeCaltechTfbsC2c12InputFCntrl36bE2p60hPcr1xSigRep1
 treatment EqS_2.0pct_60hr
 view Signal
 
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xAlnRep1
+objType file
+age immortalized
+antibody Input
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_36bp
+controlId 11612
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-18
+dateUnrestricted 2012-07-18
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xAlnRep1.bam
+grant Hardison
+lab Caltech-m
+labExpId 11612
+md5sum 41b2a554e8048790108b64f2ea645860
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+sex F
+strain C3H
+subId 4941
+treatment None
+view Alignments
+
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xRawDataRep1
+objType file
+age immortalized
+antibody Input
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_36bp
+controlId 11612
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-18
+dateUnrestricted 2012-07-18
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xRawDataRep1.fastq.gz
+grant Hardison
+lab Caltech-m
+labExpId 11612
+md5sum a2bcbeeebc1d7895df1c45a0b73bfde9
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+sex F
+strain C3H
+subId 4941
+treatment None
+view RawData
+
+metaObject wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xSigRep1
+objType table
+age immortalized
+antibody Input
+cell C2C12
+composite wgEncodeCaltechTfbs
+control Control_36bp
+controlId 11612
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-18
+dateUnrestricted 2012-07-18
+fileName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xSigRep1.bigWig
+grant Hardison
+lab Caltech-m
+labExpId 11612
+md5sum bf0869254f1208e01c2f18dc5deef5c1
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+sex F
+strain C3H
+subId 4941
+tableName wgEncodeCaltechTfbsC2c12InputFCntrl36bPcr1xSigRep1
+treatment None
+view Signal
+
 metaObject wgEncodeCaltechTfbsC2c12InputFCntrl50bE2p60hPcr1xAlnRep1
 objType file
 age immortalized
@@ -3420,4 +3502,4 @@ tableName wgEncodeCaltechTfbsC2c12Usf1FCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: 325843777
+# MAGIC: 1969807254

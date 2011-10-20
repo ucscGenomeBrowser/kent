@@ -19,6 +19,8 @@ subGroup8 rep Replicate 1=1 2=2 3=3 4=4
 dimensionAchecked 1,2,3,4
 dimensions dimensionY=cellType dimensionX=readType dimA=rep
 # sortOrder cellType=+ readType=+ view=+ mapAlgorithm=+ 
+#This file sort order has been checked out if we ever would like to leak it
+#fileSortOrder cell=Cell_Line readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder cellType=+ readType=+ rep=+ view=+ 
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm readType=readType
 dragAndDrop subTracks

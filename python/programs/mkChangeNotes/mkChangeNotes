@@ -139,7 +139,7 @@ def getGbdbFiles(database, tableset, revokedset, mdb):
             if os.path.isfile("/gbdb/%s/bbi/%s" % (database, j)):
                 gbdbfileset.add(j)
             else:
-                errors.append("gbdb: %s does not exist in /gbdb/%s/bbi" % (j, databsase))
+                errors.append("gbdb: %s does not exist in /gbdb/%s/bbi" % (j, database))
     
     for i in revokedstanzalist:
         filelist = i['fileName'].split(',')
@@ -495,7 +495,7 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
     parser.add_argument('database', help='The database, typically hg19 or mm9')
     parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
     parser.add_argument('releaseNew', help='The new release to be released')
-    parser.add_argument('releaseOld', nargs='?', default='-', help='The old release that is already released, if on release 1, put anything here')
+    parser.add_argument('releaseOld', nargs='?', default='-', help='The old release that is already released, if on release 1, or solo release mode, put anything here')
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -505,7 +505,7 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
         parser.print_help()
         return
 
-    c = track.CompositeTrack(args.database,args.composite)
+    c = track.CompositeTrack(args.database, args.composite)
 
     loose = args.loose
 
@@ -550,12 +550,6 @@ mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
         (oldGbdbSet, eggs, oldGbdbError) = getGbdbFiles(args.database, oldTableSet, set(), oldMdb)
         errors.extend(newGbdbError)
         errors.extend(oldGbdbError)
-    
-        #check to see if tables were dropped between releases
-        droppedTables = oldTableSet - newTableSet
-        if droppedTables:
-            for i in droppedTables:
-                errors.append("table: %s was dropped between releases" % i)
         
         #for ease of typing
         totalFiles = set(newReleaseFiles)
