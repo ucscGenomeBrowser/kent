@@ -266,32 +266,31 @@ def printReport(args, totalFiles, newGbdbSet, newTableSet, additionalList, oldAd
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Files: %d MB (%d GB)" % (size, int(size/1024))
-    elif size:
+    else:
         print "Files: %d MB" % size
     size = int(makeFileSizes(c, args, pushGbdbs))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Gbdbs: %d MB (%d GB)" % (size, int(size/1024))
-    elif size:
+    else:
         print "Gbdbs: %d MB" % size
     size = int(makeFileSizes(c, args, (newSupplementalSet - oldSupplementalSet)))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Supplemental: %d MB (%d GB)" % (size, int(size/1024))
-    elif size:
+    else:
         print "Supplemental: %d MB" % size
     size = int(makeFileSizes(c, args, (additionalList)))
     totalsize = totalsize + size
     if int(size/1024) > 1:
         print "Other: %d MB (%d GB)" % (size, int(size/1024))
-    elif size:
+    else:
         print "Other: %d MB" % size
     if int(totalsize/1024) > 1:
         print "Total: %d MB (%d GB)" % (totalsize, int(totalsize/1024))
-    elif totalsize:
-        print "Total: %d MB" % totalsize
     else:
-        print "No files to push"
+        print "Total: %d MB" % totalsize
+    
     tableprint = len(newTableSet | oldTableSet | revokedTableSet)
     if tableprint:
         print "\n"
