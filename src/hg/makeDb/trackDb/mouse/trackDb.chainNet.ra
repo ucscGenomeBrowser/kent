@@ -49,10 +49,12 @@ chainMinScore 3000
 
 track chainNetPanTro2 override
 priority 360.3
+shortLabel $o_db Chain/Net
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetPanTro1 override
 priority 360.3
+shortLabel $o_db Chain/Net
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 
 track chainNetHg19 override
@@ -105,28 +107,31 @@ priority 440.3
 
 track chainNetBosTau6 override
 priority 450.3
-shortLabel $o_db Chain/Net
 
 track chainNetBosTau4 override
 priority 450.3
+shortLabel $o_db Chain/Net
 chainMinScore 3000
 chainLinearGap medium
 
 track chainNetBosTau3 override
 priority 450.3
+shortLabel $o_db Chain/Net
 chainMinScore 3000
 chainLinearGap medium
 
 track chainNetBosTau2 override
 priority 450.3
+shortLabel $o_db Chain/Net
 chainMinScore 3000
 chainLinearGap medium
 
 track chainNetBosTau1 override
 priority 450.3
+shortLabel $o_db Chain/Net
 
 track chainNetSusScr1 override
-priority 475.3
+priority 360.3
 
 track chainNetSusScr2 override
 priority 360.3
@@ -142,6 +147,7 @@ priority 520.3
 
 track chainNetLoxAfr1 override
 priority 520.3
+shortLabel $o_db Chain/Net
 
 track chainNetMonDom5 override
 priority 540.3
@@ -166,6 +172,7 @@ priority 560.3
 
 track chainNetAnoCar1 override
 priority 560.3
+shortLabel $o_db Chain/Net
 
 track chainNetGalGal3 override
 priority 580.3
@@ -181,8 +188,13 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
 track chainNetXenTro1 override
 priority 590.3
+shortLabel $o_db Chain/Net
 
 track chainNetXenTro2 override
+priority 590.3
+shortLabel $o_db Chain/Net
+
+track chainNetXenTro3 override
 priority 590.3
 
 track chainNetDanRer7 override
@@ -190,6 +202,7 @@ priority 600.3
 
 track chainNetDanRer6 override
 priority 600.3
+shortLabel $o_db Chain/Net
 
 track chainNetDanRer5 override
 shortLabel $o_db Chain/Net
@@ -203,9 +216,11 @@ priority 600.3
 
 track chainNetDanRer4 override
 priority 600.3
+shortLabel $o_db Chain/Net
 
 track chainNetDanRer3 override
 priority 600.3
+shortLabel $o_db Chain/Net
 
 track chainNetOryLat2 override
 priority 610.3

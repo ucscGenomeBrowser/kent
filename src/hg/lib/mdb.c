@@ -418,7 +418,7 @@ return crc;
 
 // -------------- Sort primitives --------------
 int mdbObjCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
+// Compare mdbObj to sort on obj name, case-insensitive.
 {
 const struct mdbObj *a = *((struct mdbObj **)va);
 const struct mdbObj *b = *((struct mdbObj **)vb);
@@ -426,7 +426,7 @@ return strcasecmp(a->obj, b->obj);
 }
 
 int mdbVarCmp(const void *va, const void *vb)
-/* Compare to sort on label. */
+// Compare mdbVar to sort on var name, case-insensitive.
 {
 const struct mdbVar *a = *((struct mdbVar **)va);
 const struct mdbVar *b = *((struct mdbVar **)vb);
@@ -464,12 +464,18 @@ char *cloneVars = cloneString(varPairs);
         {
         if(*words[ix] == '#')
             break;
-        if(strchr(words[ix], '=') == NULL)
-            errAbort("This is not formatted var=val pairs: '%s'\n\t%s\n",words[ix],varPairs);
 
         AllocVar(mdbVar);
-        mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
-        mdbVar->val = cloneString(words[ix]);
+        if(strchr(words[ix], '=') == NULL) // treat this the same as "var="
+            {
+            mdbVar->var = cloneString(words[ix]);
+            mdbVar->val = NULL;
+            }
+        else
+            {
+            mdbVar->var = cloneNextWordByDelimiter(&(words[ix]),'=');
+            mdbVar->val = cloneString(words[ix]);
+            }
         verbose(3, "mdbObjAddVarPairs() var=val: %s=%s\n",mdbVar->var,mdbVar->val);
         struct mdbVar *oldVar = (struct mdbVar *)hashFindVal(mdbObj->varHash, mdbVar->var);
         if(oldVar)
@@ -1593,18 +1599,18 @@ mdbObjPrintToStream(mdbObjs, raStyle, f);
 fclose(f);
 }
 
-void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *seperator, boolean header)
+void mdbObjPrintOrderedToStream(FILE *outF,struct mdbObj **mdbObjs,char *order, char *separator, boolean header)
 // prints mdbObjs as a table, but only the vars listed in comma delimited order.
-// Examples of seperator: " " "\t\t" or "<TD>", in which case this is an HTML table.
+// Examples of separator: " " "\t\t" or "<TD>", in which case this is an HTML table.
 // mdbObjs list will be reordered. Sort fails when vars are missing in objs.
 {
-if (seperator == NULL)
-    seperator = " ";
+if (separator == NULL)
+    separator = " ";
 boolean html = FALSE;
-if (startsWith("<T",seperator) || startsWith("<t",seperator))
+if (startsWith("<T",separator) || startsWith("<t",separator))
     {
-    if(!endsWith(seperator,">"))
-        errAbort("mdbObjPrintOrdered() seperator is invalid HTML '%s'.\n",seperator);
+    if(!endsWith(separator,">"))
+        errAbort("mdbObjPrintOrdered() separator is invalid HTML '%s'.\n",separator);
     html = TRUE;
     }
 
@@ -1625,9 +1631,9 @@ if (header)
     for (var = vars;var != NULL; var = var->next)
         {
         if (html)
-            fprintf(outF, "%s%s",seperator,var->name); // <td> is first
+            fprintf(outF, "%s%s",separator,var->name); // <td> is first
         else
-            fprintf(outF, "%s%s",var->name,seperator);
+            fprintf(outF, "%s%s",var->name,separator);
         if (html)
             fprintf(outF, "</td>");
         }
@@ -1654,9 +1660,9 @@ for (;mdbObj != NULL; mdbObj = mdbObj->next)
                 val = " ";
             }
         if (html)
-            fprintf(outF, "%s%s",seperator,val); // <td> is first
+            fprintf(outF, "%s%s",separator,val); // <td> is first
         else
-            fprintf(outF, "%s%s",val,seperator);
+            fprintf(outF, "%s%s",val,separator);
         if (html)
             fprintf(outF, "</td>");
         }
@@ -1849,17 +1855,26 @@ if(mdbVar == NULL)
 return mdbVar->val;
 }
 
-struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var)
+struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var, char *emptyToken)
 // Returns a list of all vals in mdbObjs for a requested var
+// Will add empty only if there is atleast one empty val and at least one val found
 {
 struct slName *vals = NULL;
 struct mdbObj *mdbObj = mdbObjs;
+boolean foundEmpty = FALSE;
 for (;mdbObj != NULL;mdbObj = mdbObj->next)
     {
     char *val = mdbObjFindValue(mdbObj,var);
     if (val != NULL)
         slNameStore(&vals, val);
+    else
+        foundEmpty = TRUE;
     }
+
+// Will add empty only if there is atleast one empty val and at least one val found
+if (foundEmpty && vals != NULL && (emptyToken != NULL))
+    slNameStore(&vals, emptyToken);
+
 return vals;
 }
 
@@ -2325,6 +2340,7 @@ struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,bool
 struct mdbObj *mdbObjsReturned = NULL;
 struct mdbObj *mdbObjs = *pMdbObjs;
 *pMdbObjs = NULL;
+boolean wildValMatch = (val != NULL && strchr(val,'*') != NULL);
 struct mdbObj **pMatchTail   = returnMatches ? &mdbObjsReturned : pMdbObjs;  // Slightly faster than slAddHead/slReverse
 struct mdbObj **pNoMatchTail = returnMatches ? pMdbObjs : &mdbObjsReturned;  // Also known as too clever by half
 while (mdbObjs!=NULL)
@@ -2335,7 +2351,12 @@ while (mdbObjs!=NULL)
     if (val == NULL)
         match = (foundVal != NULL);           // any val will match
     else if (foundVal)
-        match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        {
+        if (wildValMatch)
+            match = (wildMatch(val,foundVal));
+        else
+            match = (sameWord(foundVal,val));   // must be same val (case insensitive)
+        }
     if (match)
         {
         *pMatchTail = obj;
@@ -2423,7 +2444,7 @@ return mdbObjsDropped;
 }
 
 struct mdbObj *mdbObjIntersection(struct mdbObj **pA, struct mdbObj *b)
-// return duplicate objs from an intersection of two mdbObj lists.
+// return objs removed from pA while making an intersection of two mdbObj lists.
 // List b is untouched but pA will contain the resulting intersection
 {
 struct mdbObj *mdbObj;

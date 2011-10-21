@@ -3,7 +3,24 @@ import os
 from ucscgenomics import ra
 
 class CvFile(ra.RaFile):
-	"""cv.ra representation. Mainly adds CV-specific validation to the RaFile"""
+	"""
+	cv.ra representation. Mainly adds CV-specific validation to the RaFile
+	
+	To create a CvFile, the simplest way is just to call it with no params,
+	but you can specify a file path if you want to open up something other
+	than the alpha cv in your tree, specify this. The handler can almost
+	always be left blank, since that simply provides a function to handle
+	validation errors that would otherwise throw an exception. You also should
+	specify a protocolPath if you want to validate, since it will check the
+	protocol documents when you validate, to ensure that the cv matches them.
+	
+	Validation recurses over all stanzas, calling the overridden validation
+	function for the more developed stanzas. To start validation, you can 
+	simply call validate() on the cv object.
+	
+	For more information about other things not specific to the cv, but for
+	all ra files, look at the RaFile documentation.
+	"""
 
 	def __init__(self, filePath=None, handler=None, protocolPath=None):
 		"""sets up exception handling method, and optionally reads from a file"""
@@ -145,9 +162,11 @@ class CvStanza(ra.RaStanza):
 		self.checkMandatory(ra, necessary | baseNecessary)
 		self.checkExtraneous(ra, necessary | baseNecessary | optional | baseOptional)
 		
-		if self['type'] != 'Cell Line': # cv, you disgust me with your inconsistencies
-			if len(ra.filter(lambda s: s['term'] == self['type'] and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
-				ra.handler(InvalidTypeError(self, self['type']))
+		temptype = self['type']
+		if self['type'] == 'Cell Line': # cv, you disgust me with your inconsistencies
+			temptype = 'cellType'
+		if len(ra.filter(lambda s: s['term'] == temptype and s['type'] == 'typeOfTerm', lambda s: s)) == 0:
+			ra.handler(InvalidTypeError(self, self['type']))
 
 		self.checkDuplicates(ra)
 		
@@ -237,7 +256,7 @@ class CvStanza(ra.RaStanza):
 					ra.handler(InvalidProtocolError(self, protocol))
 				else:
 					p = protocol.split(':', 1)[1]
-					if not os.path.isfile(ra.protocolPath + path + p):
+					if ra.protocolPath != None and not os.path.isfile(ra.protocolPath + path + p):
 						ra.handler(InvalidProtocolError(self, protocol))
 				
 class CvError(Exception):

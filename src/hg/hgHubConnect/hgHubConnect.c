@@ -54,7 +54,7 @@ puts(str);
 ourCellEnd();
 }
 
-static void hgHubConnectUnlisted()
+static void hgHubConnectUnlisted(struct hubConnectStatus *hubList)
 /* Put up the list of unlisted hubs and other controls for the page. */
 {
 // put out the top of our page
@@ -73,10 +73,10 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
 
 // count up the number of unlisted hubs we currently have
 int count = 0;
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCartAll(cart);
+struct hubConnectStatus *hub;
 for(hub = hubList; hub; hub = hub->next)
     {
-    if (isHubUnlisted(hub))
+    if (isHubUnlisted(hub) && ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) ))
 	count++;
     }
 
@@ -107,7 +107,7 @@ count = 0;
 for(hub = hubList; hub; hub = hub->next)
     {
     /* if the hub is public, then don't list it here */
-    if (!isHubUnlisted(hub))
+    if (!(isHubUnlisted(hub) && ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) )))
 	continue;
 
     if (count)
@@ -135,13 +135,19 @@ for(hub = hubList; hub; hub = hub->next)
 		, hub->hubUrl);
 	ourCellEnd();
 	}
-    ourPrintCell(hub->shortLabel);
-    if (isEmpty(hub->errorMessage))
-	ourPrintCell(hub->longLabel);
+    if (hub->trackHub != NULL)
+	ourPrintCell(hub->trackHub->shortLabel);
     else
+	ourPrintCell("");
+
+    if (!isEmpty(hub->errorMessage))
 	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
 	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
 	    hub->errorMessage);
+    else if (hub->trackHub != NULL)
+	ourPrintCell(hub->trackHub->longLabel);
+    else
+	ourPrintCell("");
 
     ourPrintCell(hub->hubUrl);
 
@@ -238,7 +244,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (isEmpty(errorMessage))
 	    ourPrintCell(longLabel);
 	else
-	    printf("<TD>ERROR: %s</TD>", errorMessage);
+	    printf("<TD><span class=\"hubError\">ERROR: %s </span>"
+		"<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+		errorMessage);
 
 	ourPrintCell(url);
 	}
@@ -264,18 +272,19 @@ static void tryHubOpen(unsigned id)
 /* try to open hub, leaks trackHub structure */
 {
 /* try opening this again to reset error */
+struct sqlConnection *conn = hConnectCentral();
 struct errCatch *errCatch = errCatchNew();
-struct trackHub *tHub;
+struct hubConnectStatus *hub = NULL;
 if (errCatchStart(errCatch))
-    tHub = trackHubFromId(id);
+    hub = hubConnectStatusForId(conn, id);
 errCatchEnd(errCatch);
 if (errCatch->gotError)
-    hubSetErrorMessage( errCatch->message->string, id);
+    hubUpdateStatus( errCatch->message->string, NULL);
 else
-    hubSetErrorMessage(NULL, id);
+    hubUpdateStatus(NULL, hub);
 errCatchFree(&errCatch);
 
-tHub = NULL;
+hDisconnectCentral(&conn);
 }
 
 
@@ -316,6 +325,29 @@ if (id != NULL)
     }
 
 cartRemove(theCart, "hubId");
+}
+
+static void checkTrackDbs(struct hubConnectStatus *hubList)
+{
+struct hubConnectStatus *hub = hubList;
+struct trackHub *trackHubList = NULL;
+
+for(; hub; hub = hub->next)
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	hubAddTracks(hub, database, &trackHubList);
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	hub->errorMessage = cloneString(errCatch->message->string);
+	hubUpdateStatus( errCatch->message->string, hub);
+	}
+    else
+	hubUpdateStatus(NULL, hub);
+    }
 }
 
 void doMiddle(struct cart *theCart)
@@ -375,10 +407,12 @@ printf("</div>\n");
 makeGenomePrint();
 
 // check to see if we have any new hubs
-unsigned newId = hubCheckForNew(database, cart);
+hubCheckForNew(database, cart);
 
-if (newId)
-    tryHubOpen(newId);
+// grab all the hubs that are listed in the cart
+struct hubConnectStatus *hubList =  hubConnectStatusListFromCartAll(cart);
+
+checkTrackDbs(hubList);
 
 // here's a little form for the add new hub button
 printf("<FORM ACTION=\"%s\" NAME=\"addHubForm\">\n",  "../cgi-bin/hgHubConnect");
@@ -414,7 +448,7 @@ printf("<div id=\"tabs\">"
        "</ul> ");
 
 hgHubConnectPublic();
-hgHubConnectUnlisted();
+hgHubConnectUnlisted(hubList);
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");

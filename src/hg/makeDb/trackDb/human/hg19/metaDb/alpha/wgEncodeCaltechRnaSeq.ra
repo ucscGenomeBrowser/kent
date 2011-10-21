@@ -14,12 +14,13 @@ dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11011
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b7d7d916256f7fbed062d62f8e638b0c,bai=35c6c98b4fba7c6866dd70db77845edd
+md5sum b7d7d916256f7fbed062d62f8e638b0c,35c6c98b4fba7c6866dd70db77845edd
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -41,12 +42,13 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11010
 localization cell
 mapAlgorithm TH1014
-md5sum bam=c25e4497f13790cfb1cb774af139f031,bai=e26326ddacc5ba5cdf9c8adc1966d727
+md5sum c25e4497f13790cfb1cb774af139f031,e26326ddacc5ba5cdf9c8adc1966d727
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -119,6 +121,7 @@ expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11011
 localization cell
 mapAlgorithm TH1014
 md5sum 274b28e7c78fd36d50ae235b0cdabf84
@@ -146,6 +149,7 @@ expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11010
 localization cell
 mapAlgorithm TH1014
 md5sum 9fe2006c7b68c99f0754b416c011b0b8
@@ -173,6 +177,7 @@ expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11011
 localization cell
 mapAlgorithm TH1014
 md5sum 796ea64e608aa0595d2ebbe8c29c6c40
@@ -200,6 +205,7 @@ expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11010
 localization cell
 mapAlgorithm TH1014
 md5sum 931c4a6cf89825cef98e6715d0ce31f0
@@ -224,12 +230,13 @@ dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11011
 localization cell
 mapAlgorithm TH1014
-md5sum bam=84e858ca0735e80e3f4d7849e9c090be,bai=7c42184af4a2fac5a468a0f9516b0d37
+md5sum 84e858ca0735e80e3f4d7849e9c090be,7c42184af4a2fac5a468a0f9516b0d37
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -251,12 +258,13 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000125
 expId 125
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11010
 localization cell
 mapAlgorithm TH1014
-md5sum bam=26293fea65f5e28d1f460fca23661171,bai=c1a97a0db2d230ca4fad14fcdba5bc64
+md5sum 26293fea65f5e28d1f460fca23661171,c1a97a0db2d230ca4fad14fcdba5bc64
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -276,10 +284,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11010
 mapAlgorithm TH1014
 md5sum ad4103df7343e02e95f2396a5452f163
 objStatus replaced
@@ -301,10 +311,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11010
 mapAlgorithm TH1014
 md5sum dcf115e03c2f877df9c7f6151733a76d
 objStatus replaced
@@ -326,10 +338,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11010
 mapAlgorithm TH1014
 md5sum 9c1833fe0367e4dc46c4847d92787b49
 objStatus replaced
@@ -351,10 +365,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2011-10-06
+dccAccession wgEncodeEH000125
+expId 125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11010
 mapAlgorithm TH1014
 md5sum c578db95d2ce9440a9c7065087e13f00
 objStatus replaced
@@ -378,13 +394,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
-md5sum bam=30b867ee186936262528423c7d8fecd2,bai=a1b43071f778488fda7582e1616723b6
+md5sum 30b867ee186936262528423c7d8fecd2,a1b43071f778488fda7582e1616723b6
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -406,13 +423,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
-md5sum bam=4e211666eebc50fed6118e7bf373b0fe,bai=815b8a68fbea313bff7662bdd8fe1eab
+md5sum 4e211666eebc50fed6118e7bf373b0fe,815b8a68fbea313bff7662bdd8fe1eab
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -437,6 +455,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum e9ea28c09e56c9328d75eac9e58e29b7
@@ -463,6 +482,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum 33d5d464a6da68e31084a953bfa54d3a
@@ -490,6 +510,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 md5sum 6bb7caefd719fcc0c04422ec2b3beab9
 origAssembly hg18
@@ -515,6 +536,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 md5sum 5f1378912a890da956db7de0d6d4cc78
 origAssembly hg18
@@ -540,6 +562,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 md5sum 51c4d1679b0ad29888bea2b40e26364a
 origAssembly hg18
@@ -565,6 +588,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 md5sum 96d6aadb16da66a198aa50c5deca69a3
 origAssembly hg18
@@ -589,6 +613,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum df152c461336398592d7fa83133a02dd
@@ -615,6 +640,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum ddd6303d91b67a0ecac01a3fc3f6f668
@@ -641,6 +667,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum 464eb5317f74fe716a2f40b3fe3f2cc4
@@ -667,6 +694,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum f7133ee0fad9f2a5f06510ef0a20b5bd
@@ -693,6 +721,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum d7ea38f0edb3836eec679986728d73ad
@@ -719,6 +748,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum 03aa6a0b3f599a3ef164bcdc27399d98
@@ -746,6 +776,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum 5a3e592682a9ca5cdb0f56fa6a318170
@@ -774,6 +805,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum 05b45de0139756182c45c28ce9f9c6bb
@@ -798,13 +830,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
-md5sum bam=bc50918b17b37c531facded3671a7c94,bai=ab25fea607a09bfc0b0b3a9404176628
+md5sum bc50918b17b37c531facded3671a7c94,ab25fea607a09bfc0b0b3a9404176628
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -826,13 +859,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
-md5sum bam=a6f8f785dc00bc13c5a56fb8330dcd6e,bai=70a696691bf788f1aeb7e14aad3722a6
+md5sum a6f8f785dc00bc13c5a56fb8330dcd6e,70a696691bf788f1aeb7e14aad3722a6
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -857,6 +891,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum 7c0c92fb09ee3038bc951dfb54650878
@@ -883,6 +918,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum c78567112e59917fe8bb96719b2c0777
@@ -909,6 +945,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum 835816c2c44ab289492c392f93ae3793
@@ -935,6 +972,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum 516d10d03988fbcdad17449127be395f
@@ -961,6 +999,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 localization cell
 mapAlgorithm TH1014
 md5sum 8deacbcf99623d8ea677dcdb5bbc1dad
@@ -987,6 +1026,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 localization cell
 mapAlgorithm TH1014
 md5sum 458495d56ea98459e89901e42db8c7d3
@@ -1010,13 +1050,14 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il400AlignsRep2V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b795de6855f4a9a159fcd17ceb7d5901,bai=b9d25e5856d5253f6d475b97cc89bb4e
+md5sum b795de6855f4a9a159fcd17ceb7d5901,b9d25e5856d5253f6d475b97cc89bb4e
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1041,6 +1082,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum bb06f65243ff5bf3e16bcbe6349a2836
@@ -1068,6 +1110,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 md5sum f58d510cac0f14b185e8cd860777e0de
 origAssembly hg18
@@ -1093,6 +1136,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 md5sum b1386c9919a18fe8738caa9facd7e342
 origAssembly hg18
@@ -1117,6 +1161,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum 36ff265758ef436c460cd363725de257
@@ -1143,6 +1188,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum 33484341537282222a9492797a49e82a
@@ -1169,6 +1215,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum c3e1dc7ee52b9aa843676ca4c9156a2a
@@ -1196,6 +1243,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum 3233c6f99568decaced3d0c368a6d493
@@ -1220,13 +1268,14 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000137
 expId 137
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
-md5sum bam=5a1ed642ee3842aa3b4618d223fea4d2,bai=a35275ea9bd05227231c38d898ce995a
+md5sum 5a1ed642ee3842aa3b4618d223fea4d2,a35275ea9bd05227231c38d898ce995a
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1251,6 +1300,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TSSRep2V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum 16ecb91ad700e0e18583f8d3b212d44a
@@ -1277,6 +1327,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum be65f3e02d6d114e4210a5e6d13b8c2f
@@ -1303,6 +1354,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 localization cell
 mapAlgorithm TH1014
 md5sum 66a6bf88221afc958ea0ba2ccbd4a719
@@ -1324,10 +1376,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10565
 mapAlgorithm TH1014
 md5sum 94d679e2c13b7fd713a36d03e3d82f35
 objStatus replaced
@@ -1349,10 +1404,13 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000122
+expId 122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10515
 mapAlgorithm TH1014
 md5sum 83203063ac7e59eae6ce522b6bd10eae
 objStatus replaced
@@ -1374,10 +1432,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10516
 mapAlgorithm TH1014
 md5sum c555f9f08017508eb2ed7505890129c1
 objStatus replaced
@@ -1400,13 +1461,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
-md5sum bam=8601206e648441dea06b536b97381871,bai=dfd1c803afacdafd96d42e73ee0b0479
+md5sum 8601206e648441dea06b536b97381871,dfd1c803afacdafd96d42e73ee0b0479
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1427,13 +1489,14 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b42c65ab6d04eb1000d2eb08987a9056,bai=7393bcc9e383ce072fbce4576db02736
+md5sum b42c65ab6d04eb1000d2eb08987a9056,7393bcc9e383ce072fbce4576db02736
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1458,6 +1521,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 622c09da744abb1593af2efcd06c3a38
@@ -1484,6 +1548,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 7aa897ff9b78d05ed1b796ca55061a03
@@ -1510,6 +1575,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 md5sum 80c729c4dc51d999b29f160fc0c3c0ed
 origAssembly hg19
@@ -1534,7 +1600,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-labExpId 02971
+labExpId SL2971
 labVersion 02971
 localization cell
 md5sum 4cb30a64d329b94572729973b2b6bf91
@@ -1560,6 +1626,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 md5sum cb57a6acca676e312a685df149895bc5
 origAssembly hg19
@@ -1584,7 +1651,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-labExpId 02971
+labExpId SL2971
 labVersion 02971
 localization cell
 md5sum 7ba263090dc325d5422abd68fb363561
@@ -1610,6 +1677,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 151187a5de7feca4f734a1a5cf284bfe
@@ -1636,6 +1704,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 24757a64ea5c65f871cf06607c68a4a7
@@ -1662,6 +1731,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 8e8889ff6bce358b255dd565af7932d7
@@ -1688,6 +1758,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 02a0ee3742bea583079a5beb93412f5e
@@ -1714,6 +1785,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum be254f0939d4fc3d7509f74fa13884e8
@@ -1740,6 +1812,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 052503d142b3513e8345ebdfa6534786
@@ -1766,6 +1839,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 66bf7283455942fcd9bf748d60673699
@@ -1793,6 +1867,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 6052488b6f4d0262fad04ef84e7e046b
@@ -1816,13 +1891,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
-md5sum bam=76bf6fcbc697c870e2871ea7724dfae7,bai=4db2f15ef0a74ac054341164664e6d21
+md5sum 76bf6fcbc697c870e2871ea7724dfae7,4db2f15ef0a74ac054341164664e6d21
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1843,13 +1919,14 @@ dateSubmitted 2011-03-14
 dateUnrestricted 2011-12-14
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12891R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
-md5sum bam=d38a684b10152d9bd28388232be48f44,bai=b133850585aaa3435fd33ff0a8ed9e9c
+md5sum d38a684b10152d9bd28388232be48f44,b133850585aaa3435fd33ff0a8ed9e9c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -1874,6 +1951,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 7d6fb7764b1903f06c890935a7b9225c
@@ -1900,6 +1978,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum 6086ee0db8058ab90a5e3ae9f554f413
@@ -1926,6 +2005,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum 0411b1e4ca819dcb3bc2b1944da41f3f
@@ -1952,6 +2032,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum b7dad9d8354516e7bebd4fed29baf0a1
@@ -1978,6 +2059,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11038
 localization cell
 mapAlgorithm TH1014
 md5sum c07c96b550dc2134b1e02e3e1e67960a
@@ -2004,6 +2086,7 @@ fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2971
 localization cell
 mapAlgorithm TH1014
 md5sum a99d9505f5503a5c3f8ae99c9008e9c6
@@ -2026,13 +2109,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b875bc2403e407855e14f8307b3689e6,bai=a07562587f280f070de050099db4197a
+md5sum b875bc2403e407855e14f8307b3689e6,a07562587f280f070de050099db4197a
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2053,13 +2137,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
-md5sum bam=f462987ea29143a367c71750afe06bb1,bai=79b7a9b00dc17c9dfd17fd6b7c2c3f9b
+md5sum f462987ea29143a367c71750afe06bb1,79b7a9b00dc17c9dfd17fd6b7c2c3f9b
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2080,13 +2165,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200AlignsRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
-md5sum bam=e95070c17ae3c7da4ebb738023edba25,bai=316c25d160c62cd4eb714a2a96c37b0c
+md5sum e95070c17ae3c7da4ebb738023edba25,316c25d160c62cd4eb714a2a96c37b0c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2111,6 +2197,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum a39560ea5caeeebf2a106d5e4c17c6df
@@ -2137,6 +2224,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 09d4c85fc89de3d3880ea4c5f06e106a
@@ -2163,6 +2251,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 448e6b34a1642b1c739310634b225a1b
@@ -2189,6 +2278,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 md5sum 6e8b6989524f88ed18e9211f15644ed4
 origAssembly hg19
@@ -2213,7 +2303,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-labExpId 02970
+labExpId SL2970
 labVersion 02970
 localization cell
 md5sum 41879169ddaff59e75f6c8071709dd3a
@@ -2239,7 +2329,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep3.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-labExpId 02973
+labExpId SL2973
 labVersion 02973
 localization cell
 md5sum 4c8e09f2996b0aa75faacae617408447
@@ -2265,6 +2355,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 md5sum d20a75deb7ac79d1436c6ef092af6c9f
 origAssembly hg19
@@ -2289,7 +2380,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-labExpId 02970
+labExpId SL2970
 labVersion 02970
 localization cell
 md5sum 1ed64d59246ea4bd66c8cc1598744d93
@@ -2315,7 +2406,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep3.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech
-labExpId 02973
+labExpId SL2973
 labVersion 02973
 localization cell
 md5sum c94978a1b5d2846e38b4521b8a029602
@@ -2341,6 +2432,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum dd3aa911617e46c0cfe7dfc4f7216367
@@ -2367,6 +2459,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 239afed59f7f1eff0f8e644e32d7d7fa
@@ -2393,6 +2486,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 5757f581776759f734d89bd4a60da5f2
@@ -2419,6 +2513,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 32c468ab639fd1e042dd5ee34878f3d6
@@ -2445,6 +2540,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum fc1f369ccfae49bbaafad828e09c1d68
@@ -2471,6 +2567,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 5625be74467636618e7c53be64a6d97d
@@ -2497,6 +2594,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum c7cec7be729e2f47ba38b63973adb0fa
@@ -2523,6 +2621,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 1ee3c32b7ba1de19ccad5f537aaeb39a
@@ -2549,6 +2648,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 421d265ceb7e4a98f896166d6e97c471
@@ -2575,6 +2675,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 5c1108a75f664374703c09328e1b349c
@@ -2602,6 +2703,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 687f03d3c4be21942ed9bdf90cd8db29
@@ -2629,6 +2731,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum c382c17fa4074ff762eb61cf10122b54
@@ -2652,13 +2755,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b8a1fdf2698376e417dc1a904188fc39,bai=b7bff76e55856b32e36eebf2fde4361c
+md5sum b8a1fdf2698376e417dc1a904188fc39,b7bff76e55856b32e36eebf2fde4361c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2679,13 +2783,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
-md5sum bam=6f2488d7085d8c13573bce2014dd35ca,bai=5f8338829a1e4cf57c3bf1c05bc676a6
+md5sum 6f2488d7085d8c13573bce2014dd35ca,5f8338829a1e4cf57c3bf1c05bc676a6
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2706,13 +2811,14 @@ dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam,wgEncodeCaltechRnaSeqGm12892R2x75Il200SplicesRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
-md5sum bam=95b2c965412f7a1cd35f99e0bba4d3c2,bai=41849a151ca64734fc52b0fdf769c3ac
+md5sum 95b2c965412f7a1cd35f99e0bba4d3c2,41849a151ca64734fc52b0fdf769c3ac
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -2737,6 +2843,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum d48c021246447f5cc3156826c4acade3
@@ -2763,6 +2870,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 9b60fdf3305376edd454cb97de78f2f1
@@ -2789,6 +2897,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 20984e2a00a4c29008e35f1fab4e2b03
@@ -2815,6 +2924,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 7520bfc7a2f20bd4c697ac823e2a6ba4
@@ -2841,6 +2951,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum 14b8ed2239bc35f6d94f13d83e6d1ed1
@@ -2867,6 +2978,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum da7c75eeaf1c6f00f858bedf948da344
@@ -2893,6 +3005,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11039
 localization cell
 mapAlgorithm TH1014
 md5sum 81751f3bb56ca2c1cde24748d125bbe0
@@ -2919,6 +3032,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2970
 localization cell
 mapAlgorithm TH1014
 md5sum b52f71203d9f43a63161bea1324c2bd5
@@ -2945,6 +3059,7 @@ fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId SL2973
 localization cell
 mapAlgorithm TH1014
 md5sum 6afb939b3589e90afadf56f6ae01ddcf
@@ -2968,12 +3083,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 10947
 localization cell
 mapAlgorithm TH1014
-md5sum bam=3c6b6a7da491d4a6a9460bf78d20dc4e,bai=251d27bada4a0dd496cb95fe088398fa
+md5sum 3c6b6a7da491d4a6a9460bf78d20dc4e,251d27bada4a0dd496cb95fe088398fa
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -2995,12 +3111,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11009
 localization cell
 mapAlgorithm TH1014
-md5sum bam=401e74ccbcd897e7d9dd702ef2e2a8ce,bai=90696c2bc33fe1f8cf3c8a23e9638e0c
+md5sum 401e74ccbcd897e7d9dd702ef2e2a8ce,90696c2bc33fe1f8cf3c8a23e9638e0c
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3025,6 +3142,7 @@ expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
+labExpId 10947
 localization cell
 md5sum 0b3c5c07b5ac34bb961b441745dbc6e8
 origAssembly hg18
@@ -3073,6 +3191,7 @@ expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 10947
 localization cell
 mapAlgorithm TH1014
 md5sum 1972c29a1ea829cadbde34409a9054e6
@@ -3100,6 +3219,7 @@ expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11009
 localization cell
 mapAlgorithm TH1014
 md5sum 6c001d66964b67f4a4e9a227de3a84a2
@@ -3127,6 +3247,7 @@ expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 10947
 localization cell
 mapAlgorithm TH1014
 md5sum 02ed40a6a7e0b72ffbc8f8c439edd1fd
@@ -3154,6 +3275,7 @@ expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11009
 localization cell
 mapAlgorithm TH1014
 md5sum 99f78462d0c1c7cf0c165f3ba05dd3ec
@@ -3178,12 +3300,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 10947
 localization cell
 mapAlgorithm TH1014
-md5sum bam=4cf4b19a3e4465dbea1f51a8216fbd95,bai=287adc76cbc7aad9e9bb5c518718bcf9
+md5sum 4cf4b19a3e4465dbea1f51a8216fbd95,287adc76cbc7aad9e9bb5c518718bcf9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3205,12 +3328,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000132
 expId 132
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11009
 localization cell
 mapAlgorithm TH1014
-md5sum bam=aa23f6e532a6adbc9536a487066670ab,bai=f76674c4442cd6e2257de211722328ea
+md5sum aa23f6e532a6adbc9536a487066670ab,f76674c4442cd6e2257de211722328ea
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -3230,10 +3354,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 10947
 mapAlgorithm TH1014
 md5sum 38ac0814bfe1862a64d470525f43dbcb
 objStatus replaced
@@ -3255,10 +3381,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11205
 mapAlgorithm TH1014
 md5sum 79e103224b39b2c544d904fc1819e1eb
 objStatus replaced
@@ -3280,10 +3408,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 10947
 mapAlgorithm TH1014
 md5sum 8e288cf6f2d93d676cebc38eedac2dc5
 objStatus replaced
@@ -3305,10 +3435,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
+expId 132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11205
 mapAlgorithm TH1014
 md5sum 9c91dd5baa74f949180a47535c38cc03
 objStatus replaced
@@ -3332,13 +3464,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
-md5sum bam=c98813c9577fa37418f1ae5841964162,bai=1f4f91ad9b262e5407c0e194296a6163
+md5sum c98813c9577fa37418f1ae5841964162,1f4f91ad9b262e5407c0e194296a6163
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3360,13 +3493,14 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
-md5sum bam=a410a257d7a6ebeb3673e2531934e375,bai=6efe87b2c66bb0a28eb15266c7ea2139
+md5sum a410a257d7a6ebeb3673e2531934e375,6efe87b2c66bb0a28eb15266c7ea2139
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3388,13 +3522,14 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
-md5sum bam=e776b497549eb6c7757516fadc29c3b3,bai=04b24bf40443c952e45bfb8bbaf86540
+md5sum e776b497549eb6c7757516fadc29c3b3,04b24bf40443c952e45bfb8bbaf86540
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3416,13 +3551,14 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200AlignsRep4V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
-md5sum bam=4e0a69e803e9a920c988f7bce1553a77,bai=ab082addc7ebb47572f6bc7cb538bbc7
+md5sum 4e0a69e803e9a920c988f7bce1553a77,ab082addc7ebb47572f6bc7cb538bbc7
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -3447,6 +3583,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum c71ebbad790070b73af53e3bf15b3da2
@@ -3473,6 +3610,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum 21d698ca5ec81cd7951f23690134871e
@@ -3499,6 +3637,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum c6c4852d82f1b2e83733c918c8f60e0e
@@ -3525,6 +3664,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200ExonsGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum 78d23cd1deb7b2b6b0f4f77fb6f88f5d
@@ -3552,6 +3692,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 md5sum 618f5ee048b9f2abe7e2e8e0a96e7b61
 origAssembly hg18
@@ -3577,6 +3718,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 md5sum 486ac5301a47ab617ebaf0cf9fc841a5
 origAssembly hg18
@@ -3602,6 +3744,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep3.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 md5sum 895e5173c69c92db7c41d9d84858dc84
 origAssembly hg18
@@ -3627,6 +3770,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd1Rep4.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 md5sum 0e7cce805f1d78c50c4a7f1e1485decf
 origAssembly hg18
@@ -3652,6 +3796,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 md5sum c51771a4f8db428f15c7a88c43efd254
 origAssembly hg18
@@ -3677,6 +3822,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 md5sum 0d28ecd7d3b692cee9b5143a44cfde30
 origAssembly hg18
@@ -3702,6 +3848,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep3.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 md5sum 1e57b7fa9dcdaf326ffa5af00eca65d5
 origAssembly hg18
@@ -3727,6 +3874,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200FastqRd2Rep4.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 md5sum 255330a0214525aa1da4b656f25d7421
 origAssembly hg18
@@ -3751,6 +3899,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum 3f278534f058b8131f0d53a6c10beca9
@@ -3777,6 +3926,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum 9f473801a82be23a7db0e23764021d2b
@@ -3803,6 +3953,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum dcbcf4566331459349abde79e40fa53c
@@ -3829,6 +3980,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneDeNovoRep4V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum 48fa2b8532590db61eecc5ce6ba7dfc1
@@ -3855,6 +4007,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum b3cc1b65f392eb1dc1547b3eccfa13be
@@ -3881,6 +4034,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum 4ad2a3d3245710d87ee268521dbc9c5c
@@ -3907,6 +4061,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum f768ed23c1f0849b108d10fe107d7ff7
@@ -3933,6 +4088,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200GeneGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum 294cc526433c34406500b57803cb9b67
@@ -3959,6 +4115,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum bd5eb97320c3039ba2c3e085938d1ebd
@@ -3985,6 +4142,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum 29981f71e290b87aaaf1a17a12604b9a
@@ -4011,6 +4169,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum f8de9fce6cf00481983188c3519cb3a3
@@ -4037,6 +4196,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum 22c197364264abf74864625d1c8bbbf3
@@ -4064,6 +4224,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum 9c66037fd6939d0eec272e82919844e5
@@ -4092,6 +4253,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum cab0e7f4fb64d26b33654673f641dbbc
@@ -4120,6 +4282,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum f6fcb1da349c20e382cf85fc546813cc
@@ -4148,6 +4311,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum 559320c18d02ed9b5f400970518ba648
@@ -4172,13 +4336,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
-md5sum bam=1d5de812ce6da76d0930148451c9df7c,bai=034616f0c3d4dfbca402a366a023e643
+md5sum 1d5de812ce6da76d0930148451c9df7c,034616f0c3d4dfbca402a366a023e643
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4200,13 +4365,14 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
-md5sum bam=9639b934c03483ed79225c0a922598f0,bai=897b1463a269c34a7b7a7c877e4bd74c
+md5sum 9639b934c03483ed79225c0a922598f0,897b1463a269c34a7b7a7c877e4bd74c
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4228,13 +4394,14 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
-md5sum bam=f37195b52920dd494edb4a053f39db69,bai=e491e48dfc95dc9a77cddb9e41e89018
+md5sum f37195b52920dd494edb4a053f39db69,e491e48dfc95dc9a77cddb9e41e89018
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4256,13 +4423,14 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
-md5sum bam=bfede33e27558171bc6e11e116225bd8,bai=b188968da362e01582a3b653afc90197
+md5sum bfede33e27558171bc6e11e116225bd8,b188968da362e01582a3b653afc90197
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4287,6 +4455,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum d66bd9922dcbc803610698539e6585b4
@@ -4313,6 +4482,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum 57ea40f71ae0c22b80ba63da64e31766
@@ -4339,6 +4509,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum ee14787e2ee0eb074f2864b26a9402fa
@@ -4365,6 +4536,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TSSRep4V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum cdecb80b9941704158da0f124e5ca267
@@ -4391,6 +4563,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum 0f74f62b29d6416b825df5f94a41c764
@@ -4417,6 +4590,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum a5a08242ed5d093aaf562e180eabc958
@@ -4443,6 +4617,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum 90a896c3f16049132e75cd9e7942f1f0
@@ -4469,6 +4644,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptDeNovoRep4V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum f600becf0c7fa2fef0feb2517a2ba002
@@ -4495,6 +4671,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 localization cell
 mapAlgorithm TH1014
 md5sum ef635317d76049af656dfb5b868c5b50
@@ -4521,6 +4698,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 localization cell
 mapAlgorithm TH1014
 md5sum eba7c1ff6afbed007dc609a12dc52b04
@@ -4547,6 +4725,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 localization cell
 mapAlgorithm TH1014
 md5sum 87cf50a54d7fb960f117db2950fb5f04
@@ -4573,6 +4752,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200TranscriptGencV3cRep4V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 localization cell
 mapAlgorithm TH1014
 md5sum d40d77d4bdd953a22de9bf48d247eeeb
@@ -4596,13 +4776,14 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il400AlignsRep1V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
-md5sum bam=66abda0e9463837f62084fb7db7f2039,bai=de83149535d75004e32a898fa1b18832
+md5sum 66abda0e9463837f62084fb7db7f2039,de83149535d75004e32a898fa1b18832
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4627,6 +4808,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 33138384cdae36e64d571c15c02d7462
@@ -4654,6 +4836,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 md5sum 22165a6c61f8cd4b5486da759e3ad9be
 origAssembly hg18
@@ -4679,6 +4862,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 md5sum 2053e9573bbabb24de68da503dc41e72
 origAssembly hg18
@@ -4703,6 +4887,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 27e254a0d43d8adf39f259822d03d9bd
@@ -4729,6 +4914,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 80da1eaec7237dab5aef4da84830359b
@@ -4755,6 +4941,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 319f3480f0d353d937ed3ebb31997ee3
@@ -4782,6 +4969,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2.bigWig
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 9344f8b1b4c668c4023d1af54b890072
@@ -4806,13 +4994,14 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000138
 expId 138
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam,wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
-md5sum bam=bd17b339a2bee1732bc56cbeb38e3861,bai=edd57aa8b3c501b6ac3a01f1da318e40
+md5sum bd17b339a2bee1732bc56cbeb38e3861,edd57aa8b3c501b6ac3a01f1da318e40
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -4837,6 +5026,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TSSRep1V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 8125aebab9f97d2f2183ff2fc4c0ea02
@@ -4863,6 +5053,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 71a915b089c18abac20d63f3ba2a1064
@@ -4889,6 +5080,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 localization cell
 mapAlgorithm TH1014
 md5sum 1b41b37d6b84478e362458cdfe98637b
@@ -4910,10 +5102,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11286
 mapAlgorithm TH1014
 md5sum 8168b115b088695f4db5d8e903910a42
 objStatus replaced
@@ -4935,10 +5130,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11288
 mapAlgorithm TH1014
 md5sum 7e2c28e42e0e94e08c2c343c4613505f
 objStatus replaced
@@ -4960,10 +5158,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11289
 mapAlgorithm TH1014
 md5sum ca9492a323b354d447c411e562bd674d
 objStatus replaced
@@ -4985,10 +5186,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
+expId 128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10874
 mapAlgorithm TH1014
 md5sum d610cf2bb3521d0f9677d5872d865774
 objStatus replaced
@@ -5010,10 +5214,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000138
+expId 138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
 grant Myers
 insertLength 400
 lab Caltech
+labExpId 10876
 mapAlgorithm TH1014
 md5sum f2c6d0bde06b21e8add541344d731737
 objStatus replaced
@@ -5036,13 +5243,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
-md5sum bam=34a00a4967798a37486729b287154b38,bai=0869164d5f267563bb44d5b27b65159f
+md5sum 34a00a4967798a37486729b287154b38,0869164d5f267563bb44d5b27b65159f
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5063,13 +5271,14 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
-md5sum bam=6ded65a8d81d53743b63158b70893549,bai=c276d637fb757b93bdfd1ebf26e9192f
+md5sum 6ded65a8d81d53743b63158b70893549,c276d637fb757b93bdfd1ebf26e9192f
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5094,6 +5303,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum ebd8989f154e5e34dc7a9aa9e5bf7053
@@ -5120,6 +5330,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum fe95d8b88b21e537ba47029892ee71a6
@@ -5146,6 +5357,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 md5sum 7be9775795bc68cd82ef5f47a140e7f8
 origAssembly hg19
@@ -5170,6 +5382,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 md5sum 4912e2df4569ae27537b53acb6a6aca7
 origAssembly hg19
@@ -5194,6 +5407,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 md5sum 95ff2bef7738bbcdd506a1c19c0149c2
 origAssembly hg19
@@ -5218,6 +5432,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 md5sum d0722e6cfcffada8c04b4c93708249bb
 origAssembly hg19
@@ -5242,6 +5457,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum d4dc01a68a78e42af9a25ca12bdba494
@@ -5268,6 +5484,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum 463cb8d8bb11a29ea4b4f82f8c7f9921
@@ -5294,6 +5511,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum 3c76e402f28536a79c877c0c5aebd9b7
@@ -5320,6 +5538,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum bbf8d46a7afa80f70405d0bdcae03d68
@@ -5346,6 +5565,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum 2e0a504cdc9fe65e52701809da06ca45
@@ -5372,6 +5592,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum ac9dd47b0f645c14e89921e2c424ec12
@@ -5398,6 +5619,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum 63c5505af9d35ca6a86312980f9989ba
@@ -5425,6 +5647,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum de34ec8697426f7334f6193dc2e53d5e
@@ -5448,13 +5671,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b1c98e599d3267d3fc180d398e39b9b0,bai=d679189fca4886cec38d21f75ee99baf
+md5sum b1c98e599d3267d3fc180d398e39b9b0,d679189fca4886cec38d21f75ee99baf
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5475,13 +5699,14 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
-md5sum bam=d5c96023912ae5f31817fbfca973e9c0,bai=d67a8c0dab93beff7950d5c70edf704a
+md5sum d5c96023912ae5f31817fbfca973e9c0,d67a8c0dab93beff7950d5c70edf704a
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -5506,6 +5731,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum c89c6c15ba4079d5e4d208789a47c2f7
@@ -5532,6 +5758,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum b724895c48d167025527f04c483b10c1
@@ -5558,6 +5785,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum e8b7053889cb74b52163d39666e0fb2b
@@ -5584,6 +5812,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum a16772603e298f0b59e40b849939a173
@@ -5610,6 +5839,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12096
 localization cell
 mapAlgorithm TH1014
 md5sum a6113756afa64acd21d081e74569bac5
@@ -5636,6 +5866,7 @@ fileName wgEncodeCaltechRnaSeqHct116R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12097
 localization cell
 mapAlgorithm TH1014
 md5sum 8486af5dc1dc200cb39ad5b2b5ec5a67
@@ -5659,12 +5890,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11208
 localization cell
 mapAlgorithm TH1014
-md5sum bam=6ad12d866a26c1b6a37b310ebd788ad1,bai=13a263412fb9c9bdc8f037df6bf6a274
+md5sum 6ad12d866a26c1b6a37b310ebd788ad1,13a263412fb9c9bdc8f037df6bf6a274
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5686,12 +5918,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11207
 localization cell
 mapAlgorithm TH1014
-md5sum bam=857438513e376d2558253af8387b71be,bai=1f8e5f8eb8b3b9d2d5afbbb42fadf4ec
+md5sum 857438513e376d2558253af8387b71be,1f8e5f8eb8b3b9d2d5afbbb42fadf4ec
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5716,6 +5949,7 @@ expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11208
 localization cell
 md5sum eeb166a5b043e44e9589c0b7c4f956c3
 origAssembly hg18
@@ -5740,6 +5974,7 @@ expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11207
 localization cell
 md5sum d1bbe9af8e9481bf277c8671247aeb0e
 origAssembly hg18
@@ -5764,6 +5999,7 @@ expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11208
 localization cell
 mapAlgorithm TH1014
 md5sum d35c6a6014b9881bfe5e7d4bd584bad6
@@ -5791,6 +6027,7 @@ expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11207
 localization cell
 mapAlgorithm TH1014
 md5sum 00a530d87d7b234d7140f3e7d947b8c5
@@ -5818,6 +6055,7 @@ expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11208
 localization cell
 mapAlgorithm TH1014
 md5sum 93586c9a5eee279751814b2ce4ce6523
@@ -5845,6 +6083,7 @@ expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11207
 localization cell
 mapAlgorithm TH1014
 md5sum 12fa4856564ab778bbc609cb9fee3b6d
@@ -5869,12 +6108,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11208
 localization cell
 mapAlgorithm TH1014
-md5sum bam=04eaef8ed2a4c788486752976bff1799,bai=929afdbc95ae5e50fcd9b218132551c9
+md5sum 04eaef8ed2a4c788486752976bff1799,929afdbc95ae5e50fcd9b218132551c9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5896,12 +6136,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000134
 expId 134
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11207
 localization cell
 mapAlgorithm TH1014
-md5sum bam=54d6a2a677bf445d78ffbf9f57ded488,bai=1d97b9d8786a66bb1d0371242af2dd6a
+md5sum 54d6a2a677bf445d78ffbf9f57ded488,1d97b9d8786a66bb1d0371242af2dd6a
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -5921,10 +6162,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11208
 mapAlgorithm TH1014
 md5sum 05cbc1946c81edefb96f0430933103a7
 objStatus replaced
@@ -5946,10 +6189,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11207
 mapAlgorithm TH1014
 md5sum efc73ca0589055941638ce819ca36b38
 objStatus replaced
@@ -5971,10 +6216,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11208
 mapAlgorithm TH1014
 md5sum f68f82cdf26e60bb9bf1af3301c36d32
 objStatus replaced
@@ -5996,10 +6243,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
+expId 134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11207
 mapAlgorithm TH1014
 md5sum 2d8e9322fb678ac331d3bc3e44796765
 objStatus replaced
@@ -6023,13 +6272,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
-md5sum bam=7aec375011d0161d6aa00cf6ef78168b,bai=a2b5be64d6e1167613d7a866db0130f0
+md5sum 7aec375011d0161d6aa00cf6ef78168b,a2b5be64d6e1167613d7a866db0130f0
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6051,13 +6301,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
-md5sum bam=355dbee232bc44418ac302bbb8a70dbf,bai=4aa2d30f0dc3c5972cbb61ddbccdce52
+md5sum 355dbee232bc44418ac302bbb8a70dbf,4aa2d30f0dc3c5972cbb61ddbccdce52
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6082,6 +6333,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum 8ffca98591083a944ff468bc20eb2479
@@ -6108,6 +6360,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum 2d023afa308bdd5b58665d0b1a5a0544
@@ -6135,6 +6388,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 md5sum ac841c2bd1040b8d9c33b835ee73fd54
 origAssembly hg18
@@ -6160,6 +6414,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 md5sum 8b4e2325aaa0e93a56d512c48c030c26
 origAssembly hg18
@@ -6185,6 +6440,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 md5sum 6bba7f69bfe0cedcd7c1ff01a4b044bf
 origAssembly hg18
@@ -6210,6 +6466,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 md5sum b0c95c0d38374fbc6dd9f60e30e7cca7
 origAssembly hg18
@@ -6234,6 +6491,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum 46d0b7acf8b499a379f7e2fab9fc395f
@@ -6260,6 +6518,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum 0f3235a8ab7398e7ecc3fec2d129c6d1
@@ -6286,6 +6545,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum 3309cc796c55d9529df410a9fa125928
@@ -6312,6 +6572,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum 15c345ecc4dc756d92faf20e37f4d86c
@@ -6338,6 +6599,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum 7927edfd881c30483ef04c2c42e8b5aa
@@ -6364,6 +6626,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum fd9eb5152fbc43e43a5f5a6485726a7a
@@ -6391,6 +6654,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum c0ee13a431fac2ff6b4d00aa0c574e3d
@@ -6419,6 +6683,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum e5f56f3743d2022316e23e5a5b26c457
@@ -6443,13 +6708,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
-md5sum bam=bb04716ad55e6bc1fc13908b572ecfdd,bai=4e54a9347c25e75fa454dd684141e9e2
+md5sum bb04716ad55e6bc1fc13908b572ecfdd,4e54a9347c25e75fa454dd684141e9e2
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6471,13 +6737,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
-md5sum bam=2d1393f563e27fdef545e28f105b152c,bai=8fe19068876022dd2d78ee794cbd1c92
+md5sum 2d1393f563e27fdef545e28f105b152c,8fe19068876022dd2d78ee794cbd1c92
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -6502,6 +6769,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum e95112769ef97120545e6a0b3e5a1dc3
@@ -6528,6 +6796,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum 2db29bf2a3a5768f1f282b346ca21718
@@ -6554,6 +6823,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum c4c952b6fbf79984642e7e1fcccf04e5
@@ -6580,6 +6850,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum 1b8a54dfe72dd479bc0617389422cf73
@@ -6606,6 +6877,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 localization cell
 mapAlgorithm TH1014
 md5sum ad57de084f12e95972bf5dd016c5b791
@@ -6632,6 +6904,7 @@ fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 localization cell
 mapAlgorithm TH1014
 md5sum 7ce45175462e557d550f55be34db910c
@@ -6653,10 +6926,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10881
 mapAlgorithm TH1014
 md5sum 297a8ea27443a2e7f430225b389b1c66
 objStatus replaced
@@ -6678,10 +6954,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
+expId 130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10882
 mapAlgorithm TH1014
 md5sum 15849de4602bd3122db7276e67f94b3f
 objStatus replaced
@@ -6705,12 +6984,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11210
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b49542b9c2a6bce74fb049f8873d9022,bai=eb2e128cc7b5ce4bd4bb5a2770631930
+md5sum b49542b9c2a6bce74fb049f8873d9022,eb2e128cc7b5ce4bd4bb5a2770631930
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -6733,12 +7013,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3.bam.bai
 grant Myers
 lab Caltech
+labExpId 11210
 localization cell
 mapAlgorithm TH1014
-md5sum bam=cf087561321957c34bcd80ca60d830f5,bai=8b53dca85af15bfda5807682cd957092
+md5sum cf087561321957c34bcd80ca60d830f5,8b53dca85af15bfda5807682cd957092
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6760,12 +7041,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11209
 localization cell
 mapAlgorithm TH1014
-md5sum bam=65443cd0793f3879ebb377cb92a0fac0,bai=531d57f7154d1227f307fba536dfda99
+md5sum 65443cd0793f3879ebb377cb92a0fac0,531d57f7154d1227f307fba536dfda99
 objStatus replaced
 origAssembly hg18
 project wgEncode
@@ -6788,12 +7070,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3.bam.bai
 grant Myers
 lab Caltech
+labExpId 11209
 localization cell
 mapAlgorithm TH1014
-md5sum bam=838a7d07cd08763fa6a61bedcd1a82c9,bai=09c331e0fc9a06c7e235d7aedcb8c2f9
+md5sum 838a7d07cd08763fa6a61bedcd1a82c9,09c331e0fc9a06c7e235d7aedcb8c2f9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6818,6 +7101,7 @@ expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11210
 localization cell
 md5sum 4ddf86e54e0d82a66840d366124d8c4d
 origAssembly hg18
@@ -6842,6 +7126,7 @@ expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11209
 localization cell
 md5sum 5041d82fe06f498fb762487f7137445a
 origAssembly hg18
@@ -6920,6 +7205,7 @@ expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11210
 localization cell
 mapAlgorithm TH1014
 md5sum 37e539c184fc5397dfd723917bcd32b8
@@ -6947,6 +7233,7 @@ expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11209
 localization cell
 mapAlgorithm TH1014
 md5sum 900fc07abdf7a8173a7211f2bfe56e17
@@ -6971,12 +7258,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11210
 localization cell
 mapAlgorithm TH1014
-md5sum bam=ecb7fb96775ccbab8033554234282f3f,bai=a9e243707d48c928fd3547c71c082c48
+md5sum ecb7fb96775ccbab8033554234282f3f,a9e243707d48c928fd3547c71c082c48
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -6998,12 +7286,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000135
 expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11209
 localization cell
 mapAlgorithm TH1014
-md5sum bam=ec3ef47efd4e156ae096aacc5fc5369d,bai=3209acd661d774efe56edfa20c126f90
+md5sum ec3ef47efd4e156ae096aacc5fc5369d,3209acd661d774efe56edfa20c126f90
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -7023,10 +7312,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11210
 mapAlgorithm TH1014
 md5sum baa3458e50b0867dfd472ca29fbb5fa4
 objStatus replaced
@@ -7048,10 +7339,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11209
 mapAlgorithm TH1014
 md5sum 9ba5616f0fe410a2e193817e6c51cd06
 objStatus replaced
@@ -7073,10 +7366,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11210
 mapAlgorithm TH1014
 md5sum c3258f2060f6f160faeb9c2b50867216
 objStatus replaced
@@ -7098,10 +7393,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
+expId 135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11209
 mapAlgorithm TH1014
 md5sum df5a932ce994354c5b7d6256d3bfadd9
 objStatus replaced
@@ -7125,13 +7422,14 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
-md5sum bam=e6027affb5310fb9175806906132ae0d,bai=7d0ce53f821201eafb884de615c83658
+md5sum e6027affb5310fb9175806906132ae0d,7d0ce53f821201eafb884de615c83658
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7153,13 +7451,14 @@ dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
-md5sum bam=a2f89cf26fcb7d3f07bc74ba6a21e0bf,bai=bb95ed70d41b7c57de4129ff031672d7
+md5sum a2f89cf26fcb7d3f07bc74ba6a21e0bf,bb95ed70d41b7c57de4129ff031672d7
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7184,6 +7483,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 7e17e170b718706bd09635fe96dfbb1f
@@ -7210,6 +7510,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum 9c592b6a65219aa33f2a7540a0a07900
@@ -7237,6 +7538,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 md5sum 9b64b6e77b31420cb9c6b43a9992ffa4
 origAssembly hg18
@@ -7262,6 +7564,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 md5sum 7bb086e02f38e86bc54517056c3c3a5b
 origAssembly hg18
@@ -7287,6 +7590,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 md5sum 1eaa731e3060390920def92de527c39b
 origAssembly hg18
@@ -7312,6 +7616,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 md5sum 187d689352b61d09e954f0d510a1bda3
 origAssembly hg18
@@ -7336,6 +7641,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 307f3f0cf4f4ca3300ef5b39a9d78541
@@ -7362,6 +7668,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum f4b4b8b89bc157646933d69bfa0e5b8a
@@ -7388,6 +7695,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum d2156f139cdd7b2eea47cfbde9a00c14
@@ -7414,6 +7722,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum 19ac6edfeb690e3145def6df223d6ffc
@@ -7440,6 +7749,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 177db254d4cfb29af3c65d39c9f5ed36
@@ -7466,6 +7776,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum ac98954ca1e10557c96c713de00e6add
@@ -7493,6 +7804,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 1448d05c49419c2e920038aa17ed92ab
@@ -7521,6 +7833,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum 0523fcec9023c565ea343480ea3aea93
@@ -7545,13 +7858,14 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
-md5sum bam=716b0304c6826d6eec9f056a2a6111c9,bai=60a3fd3fbcd4ad2d4c006744bc33c2c5
+md5sum 716b0304c6826d6eec9f056a2a6111c9,60a3fd3fbcd4ad2d4c006744bc33c2c5
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7573,13 +7887,14 @@ dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
-md5sum bam=801604e36f69354a80d22a22b3e99e00,bai=ce6575149e44635177ecb7ae7f5ac3de
+md5sum 801604e36f69354a80d22a22b3e99e00,ce6575149e44635177ecb7ae7f5ac3de
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -7604,6 +7919,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 84b098b5a0b1be586a9490d704a36c6d
@@ -7630,6 +7946,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum 060b742f4928588648943280f72afd23
@@ -7656,6 +7973,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 3c0d1661f8a40bf821f58743e55da46e
@@ -7682,6 +8000,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum 7a395824a160f9ef1013e840f146ee9e
@@ -7708,6 +8027,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 localization cell
 mapAlgorithm TH1014
 md5sum 618e4c8344400e48386c93f21de3eeef
@@ -7734,6 +8054,7 @@ fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 localization cell
 mapAlgorithm TH1014
 md5sum 8186a27e795b042287e1148e3b1aee06
@@ -7755,10 +8076,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10878
 mapAlgorithm TH1014
 md5sum 74cfd01f5a56b246840e2baa0dfc409a
 objStatus replaced
@@ -7780,10 +8104,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
+expId 127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10879
 mapAlgorithm TH1014
 md5sum 8962674d3e587f64e0cc88ee0f4060ea
 objStatus replaced
@@ -7806,13 +8133,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
-md5sum bam=76c6099c1ce24acc59335f6e31354698,bai=9bcae5aa5cb93d3a6ea95e2e5d312478
+md5sum 76c6099c1ce24acc59335f6e31354698,9bcae5aa5cb93d3a6ea95e2e5d312478
 project wgEncode
 readType 2x75
 replicate 1
@@ -7832,13 +8160,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
-md5sum bam=536fc38bd41cd24fba14271a2b9aea57,bai=8da33db226f90653a9c371e246bab4c8
+md5sum 536fc38bd41cd24fba14271a2b9aea57,8da33db226f90653a9c371e246bab4c8
 project wgEncode
 readType 2x75
 replicate 2
@@ -7862,6 +8191,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 45c27016c9041f6398211257a331fd90
@@ -7887,6 +8217,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 84c1b509651697c309858aff394ed582
@@ -7912,6 +8243,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 md5sum 70049c16aff4446a473f1bdbbd3a9846
 origAssembly hg19
@@ -7936,6 +8268,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 md5sum f09c61a04a82906c092df0437e74c52c
 origAssembly hg19
@@ -7960,6 +8293,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 md5sum 01ee32f85f02b8e4449075b5ded2f1ac
 origAssembly hg19
@@ -7984,6 +8318,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 md5sum 85b8477a09a39f5b620a87132edaaf6b
 origAssembly hg19
@@ -8008,6 +8343,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 128b6966045b3703ab4361afa98f81ad
@@ -8033,6 +8369,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 9f78fe778c0b5d6e4c1e17d00abdb1d4
@@ -8058,6 +8395,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 29ed5785f0de73eb60bdc8b9b0b2faf9
@@ -8083,6 +8421,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 47ff0fe86774603a76324509aef0ed5d
@@ -8108,6 +8447,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 558f889dbcb14c4a0633c40d302f9844
@@ -8133,6 +8473,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 39e2a9032a81717a6a4b6c79fe85edef
@@ -8158,6 +8499,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 585d42e0bd089c9871cb41113d82ebed
@@ -8184,6 +8526,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum d658dbe83ca0589d0c5dc533dcd2f860
@@ -8206,13 +8549,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
-md5sum bam=21f7b4a09370c7732939c476ebb1a871,bai=659639e302916e6a7c58e7036f592089
+md5sum 21f7b4a09370c7732939c476ebb1a871,659639e302916e6a7c58e7036f592089
 project wgEncode
 readType 2x75
 replicate 1
@@ -8232,13 +8576,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
-md5sum bam=33934ac8aa13e7b38da48a1602328948,bai=792ca88a3ced81e942c6fd24d4e28cbf
+md5sum 33934ac8aa13e7b38da48a1602328948,792ca88a3ced81e942c6fd24d4e28cbf
 project wgEncode
 readType 2x75
 replicate 2
@@ -8262,6 +8607,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum e1789f8df3101eaeeffd83c390e0d732
@@ -8287,6 +8633,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 0fa074b40317b33111329ee860f45806
@@ -8312,6 +8659,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum bffa02002543426efc1784028793d2f2
@@ -8337,6 +8685,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum e8bd486aa37683f133732e34b3c314bd
@@ -8362,6 +8711,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum dfc8a56eadec71f012c1ac8dd782d856
@@ -8387,6 +8737,7 @@ fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 1147472b2e7bce92102e9b2b2c8d6f10
@@ -8406,10 +8757,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11584
 mapAlgorithm TH1014
 md5sum e843798f290c555d55deee2fc5684e1c
 objStatus replaced
@@ -8430,10 +8784,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
+expId 1420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11585
 mapAlgorithm TH1014
 md5sum 46da19a4e47a2907434b0217a87046e3
 objStatus replaced
@@ -8457,12 +8814,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11206
 localization cell
 mapAlgorithm TH1014
-md5sum bam=923812c5c3a7938b2ce7a3f4eb9f8db3,bai=7bfa2235b23f05c71d6ff4209d0defc9
+md5sum 923812c5c3a7938b2ce7a3f4eb9f8db3,7bfa2235b23f05c71d6ff4209d0defc9
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8484,12 +8842,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11205
 localization cell
 mapAlgorithm TH1014
-md5sum bam=d0fcf94d7d3ac10e60e1e7b7c935a876,bai=79d36868185961b5695ad4b415955cb4
+md5sum d0fcf94d7d3ac10e60e1e7b7c935a876,79d36868185961b5695ad4b415955cb4
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8514,6 +8873,7 @@ expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11206
 localization cell
 md5sum 9dd06134e9ab2105cb57ad69cc23f13f
 origAssembly hg18
@@ -8538,6 +8898,7 @@ expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11205
 localization cell
 md5sum 5bc9a27bd35f6a5cb24eb4c52914e360
 origAssembly hg18
@@ -8562,6 +8923,7 @@ expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11206
 localization cell
 mapAlgorithm TH1014
 md5sum 73ba941c3fdbde6165fb5c30a5544309
@@ -8589,6 +8951,7 @@ expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11205
 localization cell
 mapAlgorithm TH1014
 md5sum c78b4ae4c72220140d2f5142fcc0c7f0
@@ -8616,6 +8979,7 @@ expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11206
 localization cell
 mapAlgorithm TH1014
 md5sum ca26ee3657cf78405c62db7ab68ae0c8
@@ -8643,6 +9007,7 @@ expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11205
 localization cell
 mapAlgorithm TH1014
 md5sum 270fbe452be9af18347e8968ae1395f8
@@ -8667,12 +9032,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11206
 localization cell
 mapAlgorithm TH1014
-md5sum bam=667c9cacf7150649650dae4026f33d2b,bai=1ed1363116448f112dc2fa41784d1973
+md5sum 667c9cacf7150649650dae4026f33d2b,1ed1363116448f112dc2fa41784d1973
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8694,12 +9060,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000133
 expId 133
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11205
 localization cell
 mapAlgorithm TH1014
-md5sum bam=bff9a47403b3b689071b49903950431b,bai=b56ae424f1489b868128d737f6f8de16
+md5sum bff9a47403b3b689071b49903950431b,b56ae424f1489b868128d737f6f8de16
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -8719,10 +9086,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11206
 mapAlgorithm TH1014
 md5sum 0132e5f995f5c48967274b720f5c7b71
 objStatus replaced
@@ -8744,10 +9113,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11205
 mapAlgorithm TH1014
 md5sum 3865a3c98ef236aed481a2ab77801ca4
 objStatus replaced
@@ -8769,10 +9140,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11206
 mapAlgorithm TH1014
 md5sum 9192a1f318ae5056349761f24620a56c
 objStatus replaced
@@ -8794,10 +9167,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
+expId 133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11205
 mapAlgorithm TH1014
 md5sum 3ff4108575314dc4c592c91046dc2ff5
 objStatus replaced
@@ -8821,13 +9196,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
-md5sum bam=994c1089194c3fc735dcfb2a3e2d8aa9,bai=b0949131457af254990eb860bb000abf
+md5sum 994c1089194c3fc735dcfb2a3e2d8aa9,b0949131457af254990eb860bb000abf
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8849,13 +9225,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
-md5sum bam=2cc9fdb535905e17682cae7efc9873a8,bai=215779942f4c1bd117a3b8ff7dbcd9ab
+md5sum 2cc9fdb535905e17682cae7efc9873a8,215779942f4c1bd117a3b8ff7dbcd9ab
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -8880,6 +9257,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum 26548d11c3499be60c41c645ee7259a1
@@ -8906,6 +9284,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum 14698761eba6a3977124a24b910e2ab0
@@ -8933,6 +9312,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 md5sum 3c88bfe058d345627b19360c2cfd296f
 origAssembly hg18
@@ -8958,6 +9338,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 md5sum e5005bcbedb456ec37693ef66ca4d945
 origAssembly hg18
@@ -8983,6 +9364,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 md5sum 748f7f1cfbeba2d58c3ec2e0ef5c6fe7
 origAssembly hg18
@@ -9008,6 +9390,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 md5sum 325c828fb2c63a84af9a12f546563705
 origAssembly hg18
@@ -9032,6 +9415,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum e1ccc8257ebf2a18a49f1e973b3c5bae
@@ -9058,6 +9442,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum 3308246cfc40ed06aca54621c0bca77b
@@ -9084,6 +9469,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum dcc597f21e2267774761b2f17095c33c
@@ -9110,6 +9496,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum 1b8c7c0bbf347956601d1aa054f1dbe0
@@ -9136,6 +9523,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum 18bbfa1947926eef1f7b93eb3fbe7b50
@@ -9162,6 +9550,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum 8e105876a5bdb7b3dcf1f44ca85d363a
@@ -9189,6 +9578,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum 6acf3fae13efbb3c5fc7370c3a37845a
@@ -9217,6 +9607,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum c36ecbfd3419222d3de11218db0890e5
@@ -9241,13 +9632,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
-md5sum bam=5c4f0385227aa67b3bd11cdd3599687a,bai=0b368d951e8b982cb505716ab84a3423
+md5sum 5c4f0385227aa67b3bd11cdd3599687a,0b368d951e8b982cb505716ab84a3423
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9269,13 +9661,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
-md5sum bam=f032a8216e467cdc8e35c8cb6738f208,bai=bc84fe1e35b32569ebda28eb82e0460e
+md5sum f032a8216e467cdc8e35c8cb6738f208,bc84fe1e35b32569ebda28eb82e0460e
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9300,6 +9693,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum 2d99ab7378c17f5d8f65ff1a5c55a186
@@ -9326,6 +9720,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum dde5f274b867db5783df341c772abecf
@@ -9352,6 +9747,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum 84df76bfcd762ae97f529d8f64b24675
@@ -9378,6 +9774,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum 226a7ad94b3a347089341840bba8b9b0
@@ -9404,6 +9801,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 localization cell
 mapAlgorithm TH1014
 md5sum e9136dad28c1be3ef38891c228aa32e6
@@ -9430,6 +9828,7 @@ fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 localization cell
 mapAlgorithm TH1014
 md5sum 7091ee78cd8374f021f341cad16838d5
@@ -9451,10 +9850,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10883
 mapAlgorithm TH1014
 md5sum d6693c771b00334cc2bb8a40b5a8c550
 objStatus replaced
@@ -9476,10 +9878,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
+expId 129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10885
 mapAlgorithm TH1014
 md5sum b3bcdb1cf85475f474b3665ad541c676
 objStatus replaced
@@ -9503,12 +9908,13 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqK562R1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11008
 localization cell
 mapAlgorithm TH1014
-md5sum bam=46079cae1a4f5978ff9bea2c90738ae7,bai=31452197d9adc3544b920da3e6f0ca88
+md5sum 46079cae1a4f5978ff9bea2c90738ae7,31452197d9adc3544b920da3e6f0ca88
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9530,12 +9936,13 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqK562R1x75dAlignsRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11007
 localization cell
 mapAlgorithm TH1014
-md5sum bam=04c3bed4e84dfd806d5fe047171a357f,bai=99ccace987e8989d5821b671d1103c34
+md5sum 04c3bed4e84dfd806d5fe047171a357f,99ccace987e8989d5821b671d1103c34
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9584,6 +9991,7 @@ expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dFastqRep2.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11007
 localization cell
 md5sum 7702e26590aea4e476047d1e28d73901
 origAssembly hg18
@@ -9608,6 +10016,7 @@ expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11008
 localization cell
 mapAlgorithm TH1014
 md5sum fdb819265e284825df5cff86de0ed7e7
@@ -9635,6 +10044,7 @@ expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dMinusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11007
 localization cell
 mapAlgorithm TH1014
 md5sum fdb48ca7d5939f7424c66379a6b81ebe
@@ -9662,6 +10072,7 @@ expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11008
 localization cell
 mapAlgorithm TH1014
 md5sum 0d2b0934c588b1bc9a12f034edb5a25c
@@ -9689,6 +10100,7 @@ expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dPlusSignalRep2V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11007
 localization cell
 mapAlgorithm TH1014
 md5sum 0739f36a41f598b55ba3bd9b88fd20a0
@@ -9713,12 +10125,13 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqK562R1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11008
 localization cell
 mapAlgorithm TH1014
-md5sum bam=6c5fe19781edaccc7ab88b95127cf03f,bai=38a4781aa67c1c0969f4ae7247038271
+md5sum 6c5fe19781edaccc7ab88b95127cf03f,38a4781aa67c1c0969f4ae7247038271
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9740,12 +10153,13 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 dccAccession wgEncodeEH000126
 expId 126
-fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam,wgEncodeCaltechRnaSeqK562R1x75dSplicesRep2V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11007
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b6fcc38c93ab4cd45dcadad6b24159f4,bai=878e66f4ea6dad2e2ec9e0481951684e
+md5sum b6fcc38c93ab4cd45dcadad6b24159f4,878e66f4ea6dad2e2ec9e0481951684e
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -9765,10 +10179,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11008
 mapAlgorithm TH1014
 md5sum 41b9ee2e5093a65210836330ddecf65a
 objStatus replaced
@@ -9790,10 +10206,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11007
 mapAlgorithm TH1014
 md5sum 331636845f81fe6d692c6381235dcd92
 objStatus replaced
@@ -9815,10 +10233,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11008
 mapAlgorithm TH1014
 md5sum b93bc266412a686eaee1854d6999be8b
 objStatus replaced
@@ -9840,10 +10260,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
+expId 126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11007
 mapAlgorithm TH1014
 md5sum 02352a8b78587d29d8023d6b874fcbf7
 objStatus replaced
@@ -9867,13 +10289,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
-md5sum bam=305076fb990e5f81e2246e72e9f6fa56,bai=7afe7f6e7fac1c2a70d09a4f2aa9eea9
+md5sum 305076fb990e5f81e2246e72e9f6fa56,7afe7f6e7fac1c2a70d09a4f2aa9eea9
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9895,13 +10318,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
-md5sum bam=b3dda219a1abd866ed07c5f2e172077e,bai=5d40a9a6df9001f077f46cd156cebfed
+md5sum b3dda219a1abd866ed07c5f2e172077e,5d40a9a6df9001f077f46cd156cebfed
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -9926,6 +10350,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum e4c24d036dfb013e3833019f41df6aaf
@@ -9952,6 +10377,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum f24c330bdee348a4b22fc39d88848efa
@@ -9979,6 +10405,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 md5sum e875c01724900f877e56d1ae1d3adddb
 origAssembly hg18
@@ -10003,6 +10430,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 md5sum ca0d6ac115e44f60e8724c78a73b17f1
 origAssembly hg18
@@ -10028,6 +10456,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 md5sum a11eea94649481abf7bb2d1b33fdb3f5
 origAssembly hg18
@@ -10052,6 +10481,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 md5sum 7489e112f69e3f5d9a2477b2cd0f3877
 origAssembly hg18
@@ -10076,6 +10506,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum 716f0e96de4468566be522a2d4c582e1
@@ -10102,6 +10533,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum 1a2ae71f8d456db33a83ba9ab95e5cac
@@ -10128,6 +10560,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum e1853cbbd73f1ecc9a4b6125d91c1c40
@@ -10154,6 +10587,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum 81e86613a893e36ffa115b8163ead5a1
@@ -10180,6 +10614,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum c951e0c947093b24310474ce08b3b577
@@ -10206,6 +10641,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum 9d3258dc90ab54fa5e95deb11fc4ae6a
@@ -10233,6 +10669,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum 6eff8e54b260d433c5e76ed4c49a7be4
@@ -10261,6 +10698,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum 9c1bda38fc8905540249b4682f1782a1
@@ -10285,13 +10723,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
-md5sum bam=5e5f8135899518696eaaf59fb781dc83,bai=aceb4f12930994af9c9d04efa852c306
+md5sum 5e5f8135899518696eaaf59fb781dc83,aceb4f12930994af9c9d04efa852c306
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10313,13 +10752,14 @@ dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
-md5sum bam=bd3e6dbc27eac2ff24fb22e558255bf5,bai=ace475045b8a19cc89c91503a50584f6
+md5sum bd3e6dbc27eac2ff24fb22e558255bf5,ace475045b8a19cc89c91503a50584f6
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10344,6 +10784,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum 291b26d4ee75667c6961f6a42cdca27b
@@ -10370,6 +10811,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum 6cfecef0953867d157745b3d620aa123
@@ -10396,6 +10838,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum d6a578f50c057d89204b2587f765479f
@@ -10422,6 +10865,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum 53288a65791f700b1f187bde8b1d20f7
@@ -10448,6 +10892,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 localization cell
 mapAlgorithm TH1014
 md5sum 869bad84d8766a22c0c4ed7026ce735d
@@ -10474,6 +10919,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 localization cell
 mapAlgorithm TH1014
 md5sum c196b9c1a135528f15ba5b46b47efcb3
@@ -10495,10 +10941,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10517
 mapAlgorithm TH1014
 md5sum 472cfd8f21b77e3e1c0a2eff3c645d7a
 objStatus replaced
@@ -10520,10 +10969,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
+expId 124
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10567
 mapAlgorithm TH1014
 md5sum f62220dc6a24a6df80cb9ba9fa114e3b
 objStatus replaced
@@ -10546,13 +10998,15 @@ dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
-md5sum bam=34b4380f910b706b1c3def98eeedd73b,bai=5f34d180db34ce346c562c01fcc03d18
+md5sum 34b4380f910b706b1c3def98eeedd73b,5f34d180db34ce346c562c01fcc03d18
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10577,6 +11031,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 513ac45f0d835dacc94411c87586e7e1
@@ -10603,6 +11059,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 md5sum 5e4fba08147d0f0f874891f4753d33c9
 origAssembly hg19
@@ -10627,6 +11085,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 md5sum ff1f9556f455944b96153dfce28e8ca2
 origAssembly hg19
@@ -10651,6 +11111,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum cbfe39a5cf10f833f606c842a04baafd
@@ -10677,6 +11139,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 2de2d608155f773a272261a6f9319231
@@ -10703,6 +11167,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 52b5a280954b2500af6699105aac897b
@@ -10725,13 +11191,15 @@ dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
-md5sum bam=dff28d0040fc6e7a69c7209db0f31bfa,bai=08723fcc237bbc5316b70a49692a833b
+md5sum dff28d0040fc6e7a69c7209db0f31bfa,08723fcc237bbc5316b70a49692a833b
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10739,7 +11207,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3477
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dAlignsRep1
-treatment Myocyte_7d
+treatment DIFF_7d
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dExonsGencV3cRep1V3
@@ -10756,6 +11224,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum fdefbc1aa9bd954f86fa5cf7421bd29a
@@ -10766,7 +11236,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
+treatment DIFF_7d
 view ExonsGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd1Rep1
@@ -10783,6 +11253,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 md5sum 8f4b9bb3d698f0fabb7b3a70b6ae4f52
 origAssembly hg19
@@ -10791,7 +11263,7 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3477
-treatment Myocyte_7d
+treatment DIFF_7d
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd2Rep1
@@ -10808,6 +11280,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dFastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 md5sum 145342d9066eb0555371718ef2f7a87a
 origAssembly hg19
@@ -10816,7 +11290,7 @@ readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 3477
-treatment Myocyte_7d
+treatment DIFF_7d
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneDeNovoRep1V3
@@ -10833,6 +11307,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 892bb8b8c7d74b6574e7a4b3c017a5ac
@@ -10843,7 +11319,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
+treatment DIFF_7d
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneGencV3cRep1V3
@@ -10860,6 +11336,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dGeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 5cbd745d2e1e2cb46fc108c2030bde88
@@ -10870,7 +11348,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
+treatment DIFF_7d
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3
@@ -10887,6 +11365,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum e2365edb5167c3b4713dcd7e350fd02c
@@ -10897,7 +11377,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
+treatment DIFF_7d
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1
@@ -10914,6 +11394,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 150ebbcc928783917a0c494c934b4faa
@@ -10924,7 +11406,7 @@ replicate 1
 rnaExtract longPolyA
 subId 4105
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSigRep1
-treatment Myocyte_7d
+treatment DIFF_7d
 view Signal
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
@@ -10937,13 +11419,15 @@ dateSubmitted 2011-05-05
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
-md5sum bam=7046f7c502bd88db1c32a7f114fdf858,bai=7bd4bac910221437abedfa6a5b767fcd
+md5sum 7046f7c502bd88db1c32a7f114fdf858,7bd4bac910221437abedfa6a5b767fcd
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -10951,7 +11435,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3477
 tableName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dSplicesRep1
-treatment Myocyte_7d
+treatment DIFF_7d
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTSSRep1V3
@@ -10968,6 +11452,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 46719f70f2f9133624dc75c189792523
@@ -10978,7 +11464,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
+treatment DIFF_7d
 view TssGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptDeNovoRep1V3
@@ -10995,6 +11481,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 1080c969eb84ab230a888d328ac97e74
@@ -11005,7 +11493,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
+treatment DIFF_7d
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptGencV3cRep1V3
@@ -11022,6 +11510,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dTrnscrptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11622
+labVersion myocyte
 localization cell
 mapAlgorithm TH1014
 md5sum 83c021b2bfed8532039555db2c70a226
@@ -11032,7 +11522,7 @@ replicate 1
 rnaExtract longPolyA
 subId 3595
 submittedDataVersion V3 - New Elements Formats
-treatment Myocyte_7d
+treatment DIFF_7d
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1
@@ -11049,6 +11539,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum 4befd19107433f9a45def29778e3f5e2
@@ -11071,13 +11563,15 @@ dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqLhcnm2R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
-md5sum bam=56674d15b37e7601ac36e58d0d2f9465,bai=2b6a01e0f372efe76c42b838046dae9c
+md5sum 56674d15b37e7601ac36e58d0d2f9465,2b6a01e0f372efe76c42b838046dae9c
 origAssembly hg19
 project wgEncode
 readType 2x75
@@ -11102,6 +11596,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum f82df609b36300fcd0fa6ace96ece038
@@ -11128,6 +11624,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum d99631e4fa0e7c197814390ae452fcae
@@ -11154,6 +11652,8 @@ fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11621
+labVersion myoblast
 localization cell
 mapAlgorithm TH1014
 md5sum decb3b30a4aa3509422bc7cbe6c016a7
@@ -11176,13 +11676,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
-md5sum bam=bf90494743bc9877cc6bc565154485ca,bai=98fd1fd0664b5bdafcd5dada78ec33d3
+md5sum bf90494743bc9877cc6bc565154485ca,98fd1fd0664b5bdafcd5dada78ec33d3
 project wgEncode
 readType 2x75
 replicate 1
@@ -11202,13 +11703,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
-md5sum bam=51a067ff282b9061fc39f1a3b98727cd,bai=e60c5c8cb7a63612abe04a6b559657fc
+md5sum 51a067ff282b9061fc39f1a3b98727cd,e60c5c8cb7a63612abe04a6b559657fc
 project wgEncode
 readType 2x75
 replicate 2
@@ -11228,13 +11730,14 @@ dateSubmitted 2011-02-12
 dateUnrestricted 2011-11-11
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200AlignsRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
-md5sum bam=d30e635c48943bd85ad061bd5eb7294b,bai=f3eba71c2153f484ca6ad2fa17cdbdd3
+md5sum d30e635c48943bd85ad061bd5eb7294b,f3eba71c2153f484ca6ad2fa17cdbdd3
 project wgEncode
 readType 2x75
 replicate 3
@@ -11258,6 +11761,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f2d6219c0d86ddf1612a63bd7de51324
@@ -11283,6 +11787,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum bc56498d676d9b01a42a1685bde969ca
@@ -11308,6 +11813,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200ExonsGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 786ae20b8d997c3f4637f98395c6b9bf
@@ -11334,6 +11840,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 md5sum b144ccab25a4ae10596a9b6d95352eb7
 project wgEncode
@@ -11357,6 +11864,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 md5sum 1f39b9e3b818f6da44dbd23ec4dace7c
 origAssembly hg19
@@ -11381,6 +11889,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd1Rep3.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 md5sum 914a451ea395a8929789c48d28f976df
 origAssembly hg19
@@ -11406,6 +11915,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 md5sum bdf0179ed4ecd7c98b4b51da897b0f13
 project wgEncode
@@ -11429,6 +11939,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 md5sum acd6496ccd6d1785b60ead52e831c67e
 origAssembly hg19
@@ -11453,6 +11964,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200FastqRd2Rep3.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 md5sum e189d91d06a615de4e18fa8e591386c3
 origAssembly hg19
@@ -11477,6 +11989,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum ebeb0ce2c4f99718e20059f11ca7b791
@@ -11502,6 +12015,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum c86fdfaeb2ef85999cc298a6c0724dbc
@@ -11527,6 +12041,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 87f2b40bf221d6fbfe081a40e0c61cc7
@@ -11552,6 +12067,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum dbe0c9d911222cc4f8e928c8b0227cf2
@@ -11577,6 +12093,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum afcc36725a0769f8d58acfb31ae630f2
@@ -11602,6 +12119,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum ad6b6f82c2f47dfb3517aaab79085c47
@@ -11627,6 +12145,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum 18381cc2452c0193f1ad2ac0121d52fe
@@ -11652,6 +12171,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 7d38a1e20a05f678c72daf23bdd18bc3
@@ -11677,6 +12197,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 52dc523ccda1fea00a686f8f0ebeb497
@@ -11702,6 +12223,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum e107a0fa82bce0044c13a7a8ff1cab31
@@ -11728,6 +12250,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 0669978e2325c8ccb73da658fd2cb72b
@@ -11754,6 +12277,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 3c5c7b34f0d917a331a60da7ac1f16d6
@@ -11776,13 +12300,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
-md5sum bam=de0a84aca83f09e93205822f615cf108,bai=7af9380bedc52b57b29fc33a1c16174d
+md5sum de0a84aca83f09e93205822f615cf108,7af9380bedc52b57b29fc33a1c16174d
 project wgEncode
 readType 2x75
 replicate 1
@@ -11802,13 +12327,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
-md5sum bam=3b111346ba963eb5b3958e1f7161268b,bai=ae0ad7c3fc1bdffb01a8663c3baf72ef
+md5sum 3b111346ba963eb5b3958e1f7161268b,ae0ad7c3fc1bdffb01a8663c3baf72ef
 project wgEncode
 readType 2x75
 replicate 2
@@ -11828,13 +12354,14 @@ dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam,wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
-md5sum bam=e4454727fe54f4872d50e011278a744f,bai=c20c3a35b5f1f285af2190fcf189ac92
+md5sum e4454727fe54f4872d50e011278a744f,c20c3a35b5f1f285af2190fcf189ac92
 project wgEncode
 readType 2x75
 replicate 3
@@ -11858,6 +12385,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum 075e9986692317fbc3aa4724de9645f8
@@ -11883,6 +12411,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 7b9eef2c333c49b9939012f183a2af97
@@ -11908,6 +12437,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TSSRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum eb72137bc641f3bd682335840a0fe53b
@@ -11933,6 +12463,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f755da2fee8d800221587b17410e747d
@@ -11958,6 +12489,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 50fb1553a8644f2dbe0861885dcbc618
@@ -11983,6 +12515,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptDeNovoRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum added3851f237dc2abaabb68dfe617b6
@@ -12008,6 +12541,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum aac13a83da476a5b1c6858abc0e6fa2e
@@ -12033,6 +12567,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum a84de012446172b5e33892a5a9191f83
@@ -12058,6 +12593,7 @@ fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200TranscriptGencV3cRep3V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum dff4e802de5b80bbeec6ee4f3492c9c7
@@ -12078,10 +12614,13 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11581
 mapAlgorithm TH1014
 md5sum 380b66e8b589c3a29b88a61fda477994
 objStatus replaced
@@ -12102,10 +12641,13 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001421
+expId 1421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11582
 mapAlgorithm TH1014
 md5sum 6f851490c20b69d2400a1c843b0754fa
 objStatus replaced
@@ -12129,12 +12671,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
-fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqNhekR1x75dAlignsRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11204
 localization cell
 mapAlgorithm TH1014
-md5sum bam=d5b78f643ccf7993a885d79c9ac8ff90,bai=b9cae79caf35d08a8fa38cb3f1ef9406
+md5sum d5b78f643ccf7993a885d79c9ac8ff90,b9cae79caf35d08a8fa38cb3f1ef9406
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -12159,6 +12702,7 @@ expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dFastqRep1.fastq.gz
 grant Myers
 lab Caltech
+labExpId 11204
 localization cell
 md5sum 32a43ff3839885e0a5903102a0ff5091
 origAssembly hg18
@@ -12183,6 +12727,7 @@ expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dMinusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11204
 localization cell
 mapAlgorithm TH1014
 md5sum 82d92f5f5cbaa6eab722700cd7696b8e
@@ -12210,6 +12755,7 @@ expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dPlusSignalRep1V3.bigWig
 grant Myers
 lab Caltech
+labExpId 11204
 localization cell
 mapAlgorithm TH1014
 md5sum 436e6ce59d1134369466d67c2a75a304
@@ -12234,12 +12780,13 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 dccAccession wgEncodeEH000136
 expId 136
-fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam,wgEncodeCaltechRnaSeqNhekR1x75dSplicesRep1V2.bam.bai
 grant Myers
 lab Caltech
+labExpId 11204
 localization cell
 mapAlgorithm TH1014
-md5sum bam=f1cbc66c36963d1a4db9372eec0c4918,bai=86f8b7a334ae9c930b4400fffc82f3ff
+md5sum f1cbc66c36963d1a4db9372eec0c4918,86f8b7a334ae9c930b4400fffc82f3ff
 origAssembly hg18
 project wgEncode
 readType 1x75D
@@ -12259,10 +12806,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11204
 mapAlgorithm TH1014
 md5sum 4baad335dd940803a3219810326f2d54
 objStatus replaced
@@ -12284,10 +12833,12 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
+expId 136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
-insertLength ilNA
 lab Caltech
+labExpId 11204
 mapAlgorithm TH1014
 md5sum 527799b7a0d412fca0db7e0124be3bab
 objStatus replaced
@@ -12311,13 +12862,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
-md5sum bam=82eaf4aa0f4474ff6123a494a4e7bc3c,bai=2ed8cafe496bf68745fb3fe6b85e9177
+md5sum 82eaf4aa0f4474ff6123a494a4e7bc3c,2ed8cafe496bf68745fb3fe6b85e9177
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -12338,13 +12890,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
-md5sum bam=102fb4b6454f275f27c3667541cefdda,bai=8252bf9e9d7bbdc0ec36bb96bd2eefa4
+md5sum 102fb4b6454f275f27c3667541cefdda,8252bf9e9d7bbdc0ec36bb96bd2eefa4
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -12369,6 +12922,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum eb7e26f852c345345a397a70a5c4e730
@@ -12395,6 +12949,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum 09c00147d5dd322206bc0851cc4e636d
@@ -12422,6 +12977,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 md5sum a9a01674724b6d8eeba00af97fee0603
 origAssembly hg18
@@ -12446,6 +13002,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 md5sum a18d97f8ba14fc7574c0e84db27e508c
 origAssembly hg18
@@ -12471,6 +13028,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 md5sum dac4b97033fb7e3a4d04349e586049b3
 origAssembly hg18
@@ -12495,6 +13053,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 md5sum 8993a7d4f97d295220dc53d619d4c7d9
 origAssembly hg18
@@ -12519,6 +13078,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum 245f344377962af4830d09251ca00388
@@ -12545,6 +13105,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum 96bba20ad5210fdec4a4b986fe37de66
@@ -12571,6 +13132,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum ea075d134690d310d20aaea4d40577ab
@@ -12597,6 +13159,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum de24189c34a6bfa67b2460f3b9c8219b
@@ -12623,6 +13186,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum 9b3c9c2bb63aa1cbe64c5298e267961c
@@ -12649,6 +13213,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum 83b38b160a8514b27e37771bdb908e72
@@ -12676,6 +13241,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum 1e9e843579cee9d96de24ebad982f317
@@ -12703,6 +13269,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum 9b6df67c3c4c4d62678db0707b307634
@@ -12727,13 +13294,14 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
-md5sum bam=d1419ff005feb525b8655b17c4f40e92,bai=4145ccde9a59993af21fc29c38b350d5
+md5sum d1419ff005feb525b8655b17c4f40e92,4145ccde9a59993af21fc29c38b350d5
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -12754,13 +13322,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
-md5sum bam=e6ed66ee1e9173fa83317cff531e60d7,bai=fcb03c981ac9c28ced7f8741d11835cd
+md5sum e6ed66ee1e9173fa83317cff531e60d7,fcb03c981ac9c28ced7f8741d11835cd
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -12785,6 +13354,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum 7353a2823e928cbbaaeeb9985d480112
@@ -12811,6 +13381,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum 48365b825f50cf5fbeec908af6257a38
@@ -12837,6 +13408,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum db571b5c530200f5dcdf9f7e12e1bfdf
@@ -12863,6 +13435,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum a1bcc716fa6957a821a55ce405b840ff
@@ -12889,6 +13462,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 localization cell
 mapAlgorithm TH1014
 md5sum 174a62dd640c62963ed54a5cd38b9441
@@ -12915,6 +13489,7 @@ fileName wgEncodeCaltechRnaSeqNhekR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 localization cell
 mapAlgorithm TH1014
 md5sum 06350ab353911a2405189c55ca9091b1
@@ -12936,10 +13511,13 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 10884
 mapAlgorithm TH1014
 md5sum b22e6ecf916792fade613a9f6111f9b6
 objStatus replaced
@@ -12960,10 +13538,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH000131
+expId 131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11586
 mapAlgorithm TH1014
 md5sum 238c4a04a7a1ca06a8516bba446d2d31
 objStatus replaced
@@ -12986,13 +13567,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
-md5sum bam=562c779768d207625984bf7fb72d149a,bai=fbd5d973c6c8606a71948628431a22a5
+md5sum 562c779768d207625984bf7fb72d149a,fbd5d973c6c8606a71948628431a22a5
 project wgEncode
 readType 2x75
 replicate 1
@@ -13012,13 +13594,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200AlignsRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
-md5sum bam=698eb744de450f19a5859a4b0b31c20e,bai=3a4011ed4bce8f730871979e82e1e6f9
+md5sum 698eb744de450f19a5859a4b0b31c20e,3a4011ed4bce8f730871979e82e1e6f9
 project wgEncode
 readType 2x75
 replicate 2
@@ -13042,6 +13625,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 0cebca8f15c7d6aed56ad9033e7ab28f
@@ -13067,6 +13651,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200ExonsGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum f3da2830e35162d5ca9a311c40dfbca5
@@ -13092,6 +13677,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 md5sum 9ad7e3ac8569e7c4b88880dca57a9d48
 origAssembly hg19
@@ -13116,6 +13702,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd1Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 md5sum 849b263f0ab8b5cc9c09820d90bcb35f
 origAssembly hg19
@@ -13140,6 +13727,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep1.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 md5sum c50d9844e78a1a66d9e88acaf33e3948
 origAssembly hg19
@@ -13164,6 +13752,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200FastqRd2Rep2.fastq.tgz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 md5sum a5b70601cb79b746d58606f99fd2e9d6
 origAssembly hg19
@@ -13188,6 +13777,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 3174b2bf67e53030b6b962b5b37252d4
@@ -13213,6 +13803,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 47edf03671d311a7ffab28d84417c02a
@@ -13238,6 +13829,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 935e30c092cdb0f5ed48d76ff530f7d3
@@ -13263,6 +13855,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200GeneGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 3c6f8d34d1be105456407328e39751a7
@@ -13288,6 +13881,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum a909aaa63ead3dae77a3fda9a677af36
@@ -13313,6 +13907,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bed.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 7497570de03e63c902e21293885398e6
@@ -13338,6 +13933,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 33a394274d02da08fdf7e8b6f09b6bf2
@@ -13364,6 +13960,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 1b981f54d2b5c0343e1df4f9f18f42d4
@@ -13386,13 +13983,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
-md5sum bam=0819108916df1d413755b208fe988811,bai=fa2fad06ba5c4ff5e93788adfafd0283
+md5sum 0819108916df1d413755b208fe988811,fa2fad06ba5c4ff5e93788adfafd0283
 project wgEncode
 readType 2x75
 replicate 1
@@ -13412,13 +14010,14 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam,wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
-md5sum bam=65903ccbdb793fb385541a44782d12d0,bai=623034a1e60a2b5864eebb44a7a0b3bf
+md5sum 65903ccbdb793fb385541a44782d12d0,623034a1e60a2b5864eebb44a7a0b3bf
 project wgEncode
 readType 2x75
 replicate 2
@@ -13442,6 +14041,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 287901b7da02a94b705c6d536abd1581
@@ -13467,6 +14067,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TSSRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 0206d58bc1036fa8a4cb7ac76bed1864
@@ -13492,6 +14093,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum e21f3d9751d46fd577edec296b7e04ec
@@ -13517,6 +14119,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptDeNovoRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 03038cc8ea8cbde2480d2073f0d34fde
@@ -13542,6 +14145,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep1V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 24e4b8522dca509c9dd5f55edc62212c
@@ -13567,6 +14171,7 @@ fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200TranscriptGencV3cRep2V3.gtf.gz
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum d7523997e302832a5dbb19aea0728537
@@ -13586,10 +14191,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11587
 mapAlgorithm TH1014
 md5sum f8852cf441edc07d4012fe2ce73aa986
 objStatus replaced
@@ -13610,10 +14218,13 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
+expId 1422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech
+labExpId 11588
 mapAlgorithm TH1014
 md5sum bbe87c2af89b7800b39f4d343dd5ef96
 objStatus replaced
@@ -13626,4 +14237,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 1574698017
+# MAGIC: 1368149414

@@ -158,11 +158,6 @@ return *grps;
 
 static void doFileSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
 {
-if (!advancedJavascriptFeaturesEnabled(cart))
-    {
-    warn("Requires advanced javascript features.");
-    return;
-    }
 struct sqlConnection *conn = hAllocConn(db);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 if (!sqlTableExists(conn, "metaDb"))

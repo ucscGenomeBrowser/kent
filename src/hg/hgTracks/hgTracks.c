@@ -123,7 +123,6 @@ char *protDbName;               /* Name of proteome database for this genome. */
 #define MAXCHAINS 50000000
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 int imagePixelHeight = 0;
-boolean dragZooming = TRUE;
 struct hash *oldVars = NULL;
 struct jsonHashElement *jsonForClient = NULL;
 
@@ -1708,11 +1707,6 @@ for (i=1; i<=boxes; ++i)
         ns -= (ne - seqBaseCount);
         ne = seqBaseCount;
         }
-    if(!dragZooming)
-        {
-        mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,NULL,
-                        chromName, ns, ne, message);
-        }
     }
 return newWinWidth;
 }
@@ -1957,7 +1951,7 @@ if(theImgBox)
 // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started
 // prior to this in doTrackForm()
     {
-    rulerTtl = (dragZooming?"drag select or click to zoom":"click to zoom 3x");
+    rulerTtl = "drag select or click to zoom";
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
@@ -2527,13 +2521,9 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
 /* Finish map. */
 hPrintf("</MAP>\n");
 
-jsonHashAddBoolean(jsonForClient, "dragSelection", dragZooming);
-jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE && advancedJavascriptFeaturesEnabled(cart));
+jsonHashAddBoolean(jsonForClient, "inPlaceUpdate", IN_PLACE_UPDATE);
 
-if(rulerClickHeight)
-    {
     jsonHashAddNumber(jsonForClient, "rulerClickHeight", rulerClickHeight);
-    }
 if(newWinWidth)
     {
     jsonHashAddNumber(jsonForClient, "newWinWidth", newWinWidth);
@@ -2602,7 +2592,7 @@ if(theImgBox)
     }
 else
     {
-    char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
+    char *titleAttr = "title='click or drag mouse in base position track to zoom in'";
     hPrintf("<IMG SRC='%s' BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
         gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
     hPrintf("><BR>\n");
@@ -3426,31 +3416,6 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-static void addTracksFromTrackHub(int id, char *hubUrl, struct track **pTrackList,
-	struct trackHub **pHubList)
-/* Load up stuff from data hub and append to list. The hubUrl points to
- * a trackDb.ra format file.  */
-{
-/* Load trackDb.ra file and make it into proper trackDb tree */
-char hubName[8];
-safef(hubName, sizeof(hubName), "hub_%d",id);
-struct trackHub *hub = trackHubOpen(hubUrl, hubName);
-if (hub != NULL)
-    {
-    struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-    if (hubGenome != NULL)
-	{
-	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
-	tdbList = trackDbLinkUpGenerations(tdbList);
-	tdbList = trackDbPolishAfterLinkup(tdbList, database);
-	trackDbPrioritizeContainerItems(tdbList);
-	addTdbListToTrackList(tdbList, NULL, pTrackList);
-	if (tdbList != NULL)
-	    slAddHead(pHubList, hub);
-	}
-    }
-}
-
 void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
@@ -3463,12 +3428,17 @@ for (hub = hubList; hub != NULL; hub = hub->next)
         /* error catching in so it won't just abort  */
         struct errCatch *errCatch = errCatchNew();
         if (errCatchStart(errCatch))
-	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+	    {
+	    struct trackDb *tdbList = hubAddTracks(hub, database, pHubList);
+	    addTdbListToTrackList(tdbList, NULL, pTrackList);
+	    // we're going to free the hubConnectStatus list
+	    hub->trackHub = NULL;
+	    }
         errCatchEnd(errCatch);
         if (errCatch->gotError)
-	    hubSetErrorMessage( errCatch->message->string, hub->id);
+	    hubUpdateStatus( errCatch->message->string, hub);
 	else
-	    hubSetErrorMessage(NULL, hub->id);
+	    hubUpdateStatus(NULL, hub);
         errCatchFree(&errCatch);
 	}
     }
@@ -3622,6 +3592,22 @@ if (!psOutput)
         }
     }
 
+if (!psOutput)
+    {
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
+        cartSessionId(cart), "PDF/PS");
+    }
+
+if (!psOutput)
+    {
+    if (wikiLinkEnabled())
+        {
+        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
+        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
+        cartSessionVarName(), cartSessionId(cart));
+        }
+    }
+
 char ensVersionString[256];
 char ensDateReference[256];
 ensGeneTrackVersion(database, ensVersionString, ensDateReference,
@@ -3658,6 +3644,8 @@ if (!psOutput)
 
                 if (sameWord(database,"fr2"))
                     fr2ScaffoldEnsemblLink(archive, &links);
+		else if (hTableExists(database, UCSC_TO_ENSEMBL))
+		    printEnsemblAnchor(database, archive, chromName, winStart, winEnd, &links);
                 else if (hTableExists(database, ctgPos))
                     /* see if we are entirely within a single contig */
                     {
@@ -3808,22 +3796,6 @@ if (!psOutput)
 
 for(link = links; link != NULL; link = link->next)
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s\" TARGET=\"_blank\" class=\"topbar\" id=\"%s\">%s</A>&nbsp;&nbsp;</TD>\n", link->url, link->id, link->name);
-
-if (!psOutput)
-    {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
-        cartSessionId(cart), "PDF/PS");
-    }
-
-if (!psOutput)
-    {
-    if (wikiLinkEnabled())
-        {
-        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
-        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
-        cartSessionVarName(), cartSessionId(cart));
-        }
-    }
 
 if (hIsGisaidServer())
     {
@@ -4121,7 +4093,7 @@ else
         paddedLabel[i+1] = label[i];
     }
 #if IN_PLACE_UPDATE
-hButtonWithOnClick(var, paddedLabel, NULL, "return navigateButtonClick(this);");
+hButtonWithOnClick(var, paddedLabel, NULL, "return imageV2.navigateButtonClick(this);");
 #else
 hButton(var, paddedLabel);
 #endif
@@ -4405,7 +4377,7 @@ struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (startsWithWord("makeItems", track->tdb->type) )
-        hPrintf("setUpMakeItemsDrag(\"%s\");\n", track->track);
+        hPrintf("makeItemsByDrag.init(\"%s\");\n", track->track);
     }
 
 hPrintf( "}\n");
@@ -4704,11 +4676,7 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 jsonHashAddNumber(jsonForClient, "insideX", insideX);
 jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
-#ifdef NEW_JQUERY
 hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
-#else///ifndef NEW_JQUERY
-hPrintf("<script type='text/javascript'>var newJQuery=false;</script>\n");
-#endif///ndef NEW_JQUERY
 if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
@@ -4755,7 +4723,7 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
-if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
+if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
     // Set up imgBox dimensions
@@ -4945,12 +4913,12 @@ if (!hideControls)
 #ifndef USE_NAVIGATION_LINKS
     hWrites("move ");
 #if IN_PLACE_UPDATE
-    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right", "return navigateButtonClick(this);");
-    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left3", "<<<", "move 95% to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left2", " <<", "move 47.5% to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.left1", " < ", "move 10% to the left", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right1", " > ", "move 10% to the right", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right2", ">> ", "move 47.5% to the right", "return imageV2.navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.right3", ">>>", "move 95% to the right", "return imageV2.navigateButtonClick(this);");
 #else
     hButtonWithMsg("hgt.left3", "<<<", "move 95% to the left");
     hButtonWithMsg("hgt.left2", " <<", "move 47.5% to the left");
@@ -5023,13 +4991,13 @@ if (!hideControls)
 	hWrites("position/search ");
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
-	if(dragZooming && assemblySupportsGeneSuggest(database))
+	if(assemblySupportsGeneSuggest(database))
             hPrintf(" <a title='click for help on gene search box' target='_blank' href='../goldenPath/help/geneSearchBox.html'>gene</a> "
                     "<input type='text' size='8' name='hgt.suggest' id='suggest'>\n"
                     "<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database)
                     );
 	hWrites(" ");
-	hButtonWithOnClick("hgt.jump", "jump", NULL, "jumpButtonOnClick()");
+	hButtonWithOnClick("hgt.jump", "jump", NULL, "imageV2.jumpButtonOnClick()");
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
@@ -5047,9 +5015,6 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<TABLE BORDER=0 CELLPADDING=0 width='%d'><tr style='font-size:small;'>\n",tl.picWidth);//min(tl.picWidth, 800));
     hPrintf("<td width='40' align='left'><a href='?hgt.left3=1' title='move 95&#37; to the left'>&lt;&lt;&lt;</a>\n");
     hPrintf("<td width='30' align='left'><a href='?hgt.left2=1' title='move 47.5&#37; to the left'>&lt;&lt;</a>\n");
-    #ifdef IMAGEv2_DRAG_SCROLL
-    if(!advancedJavascriptFeaturesEnabled(cart))
-    #endif//def IMAGEv2_DRAG_SCROLL
         hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
 
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
@@ -5063,9 +5028,6 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<td width='60' align='right'><a href='?hgt.out2=1' title='zoom out 3x'>&lt;&lt;&nbsp;&gt;&gt;</a>\n");
     hPrintf("<td width='80' align='right'><a href='?hgt.out3=1' title='zoom out 10x'>&lt;&lt;&lt;&nbsp;&gt;&gt;&gt;</a>\n");
         hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-    #ifdef IMAGEv2_DRAG_SCROLL
-    if(!advancedJavascriptFeaturesEnabled(cart))
-    #endif//ndef IMAGEv2_DRAG_SCROLL
         hPrintf("<td width='20' align='right'><a href='?hgt.right1=1' title='move 10&#37; to the right'>&gt;</a>\n");
 
     hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
@@ -5099,9 +5061,9 @@ if (!hideControls)
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
 #if IN_PLACE_UPDATE
-    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkLL", " < ", "move start position to the left", "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkLR", " > ", "move start position to the right", "return imageV2.navigateButtonClick(this);");
 #else
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
@@ -5112,7 +5074,7 @@ if (!hideControls)
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
-    hWrites(dragZooming ? "Click or drag in the base position track to zoom in. " : "Click on base position to zoom in around cursor. ");
+    hWrites("Click or drag in the base position track to zoom in. ");
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
 #ifdef IMAGEv2_DRAG_SCROLL
@@ -5125,9 +5087,9 @@ if (!hideControls)
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
 #if IN_PLACE_UPDATE
-    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkRL", " < ", "move end position to the left", "return imageV2.navigateButtonClick(this);");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return navigateButtonClick(this);");
+    hButtonWithOnClick("hgt.dinkRR", " > ", "move end position to the right", "return imageV2.navigateButtonClick(this);");
 #else
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
@@ -5193,7 +5155,7 @@ if (!hideControls)
 	hPrintf("<table border=0 cellspacing=1 cellpadding=1 width=%d>\n", CONTROL_TABLE_WIDTH);
 	hPrintf("<tr><td align='left'>\n");
 
-	hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
+	hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return vis.expandAllGroups(false)");
 	hPrintf("</td>");
 
 	hPrintf("<td colspan='%d' align='CENTER' nowrap>"
@@ -5203,7 +5165,7 @@ if (!hideControls)
 	   "more compact modes.</td>\n", MAX_CONTROL_COLUMNS - 2);
 
 	hPrintf("<td align='right'>");
-	hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
+	hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return vis.expandAllGroups(true)");
 	hPrintf("</td></tr>");
 
 	if (!hIsGsidServer())
@@ -5238,7 +5200,7 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-            hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
+            hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
@@ -5971,8 +5933,6 @@ initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
 
-dragZooming = advancedJavascriptFeaturesEnabled(cart);
-
 /* Do main display. */
 
 if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
@@ -5997,13 +5957,9 @@ if(!trackImgOnly)
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
-    if(dragZooming && !searching)
+    if(!searching)
         {
         jsIncludeFile("jquery.imgareaselect.js", NULL);
-#ifndef NEW_JQUERY
-        webIncludeResourceFile("autocomplete.css");
-        jsIncludeFile("jquery.autocomplete.js", NULL);
-#endif///ndef NEW_JQUERY
         }
     jsIncludeFile("autocomplete.js", NULL);
     jsIncludeFile("hgTracks.js", NULL);
@@ -6012,8 +5968,6 @@ if(!trackImgOnly)
     jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
-    if(advancedJavascriptFeaturesEnabled(cart))
-        {
         webIncludeResourceFile("jquery-ui.css");
         if (!searching) // NOT doing search
             {
@@ -6021,10 +5975,7 @@ if(!trackImgOnly)
             jsIncludeFile("jquery.contextmenu.js", NULL);
             webIncludeResourceFile("ui.dropdownchecklist.css");
             jsIncludeFile("ui.dropdownchecklist.js", NULL);
-#ifdef NEW_JQUERY
             jsIncludeFile("ddcl.js", NULL);
-#endif///def NEW_JQUERY
-            }
         }
 
     hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");

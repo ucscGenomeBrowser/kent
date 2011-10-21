@@ -31,7 +31,13 @@ sub new
         die "Missing \$args{DB}";
     }
     my $dsn = "DBI:mysql:$args{DB}";
-    my $confFile = "$ENV{HOME}/.hg.conf";
+    
+    my $confFile = "";
+    if ($ENV{HGDB_CONF}) {
+        $confFile = "$ENV{HGDB_CONF}"
+    } else {
+        $confFile = "$ENV{HOME}/.hg.conf";
+    }
     if(! -e $confFile) {
         die "Cannot locate conf file: '$confFile'";
     }

@@ -1261,7 +1261,7 @@ return tg;
 }
 
 int linkedFeaturesCmp(const void *va, const void *vb)
-/* Compare to sort based on chrom,chromStart. */
+/* Compare to sort based on start. */
 {
 const struct linkedFeatures *a = *((struct linkedFeatures **)va);
 const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
@@ -3233,7 +3233,7 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
-if (vis == tvDense && canDrawBigBedDense(tg))
+if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
     }

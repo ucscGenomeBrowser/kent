@@ -16,11 +16,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
 expId 1905
-fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneA549H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=244550f5dda9878434b06acbf66a4567,bai=5e17e880a868c15ef91b40f59ed7183c
+md5sum 244550f5dda9878434b06acbf66a4567,5e17e880a868c15ef91b40f59ed7183c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -41,11 +41,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001905
 expId 1905
-fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneA549H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=1e3190aeea2f26742a7207cf91d4fa59,bai=437ee2a5d31e6ef299671df1b45bdc97
+md5sum 1e3190aeea2f26742a7207cf91d4fa59,437ee2a5d31e6ef299671df1b45bdc97
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -270,11 +270,11 @@ dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
 dccAccession wgEncodeEH001904
 expId 1904
-fileName wgEncodeUwHistoneA549InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneA549InputStdAlnRep1.bam,wgEncodeUwHistoneA549InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=78344e37ca386f993eea9a4705db5d8a,bai=1493841684f38afdf8c247bc364f07fa
+md5sum 78344e37ca386f993eea9a4705db5d8a,1493841684f38afdf8c247bc364f07fa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -345,11 +345,11 @@ dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000927
 expId 927
-fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5a4bdd90bfa09d3274b4e07899df68e3,bai=8b850972a84967743547be2dfceaef2c
+md5sum 5a4bdd90bfa09d3274b4e07899df68e3,8b850972a84967743547be2dfceaef2c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -370,11 +370,11 @@ dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000927
 expId 927
-fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=9957592bd8e00f9e04b9c4778d73e620,bai=fe6d8afe026ec222f930ae032c4c9297
+md5sum 9957592bd8e00f9e04b9c4778d73e620,fe6d8afe026ec222f930ae032c4c9297
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -599,11 +599,11 @@ dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000928
 expId 928
-fileName wgEncodeUwHistoneAg04449InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04449InputStdAlnRep1.bam,wgEncodeUwHistoneAg04449InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5264bc1b354c973a80cadada2ae3c111,bai=da4cbf1437b874aea2686753b550d31d
+md5sum 5264bc1b354c973a80cadada2ae3c111,da4cbf1437b874aea2686753b550d31d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -674,11 +674,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000929
 expId 929
-fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=712d0285102f1c0decefcb98f1f7be73,bai=52e178512be422f2e3cd9b6ac81b813b
+md5sum 712d0285102f1c0decefcb98f1f7be73,52e178512be422f2e3cd9b6ac81b813b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -699,11 +699,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000929
 expId 929
-fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=66029b22a05111b358167f57976251c0,bai=6695ebc0c6ed2bff985789befcf69bd4
+md5sum 66029b22a05111b358167f57976251c0,6695ebc0c6ed2bff985789befcf69bd4
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -928,11 +928,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000930
 expId 930
-fileName wgEncodeUwHistoneAg04450InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg04450InputStdAlnRep1.bam,wgEncodeUwHistoneAg04450InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=7f4e3b368922860a5add9f457fd9d796,bai=692fd4fd96f152afd5077dac52a3241c
+md5sum 7f4e3b368922860a5add9f457fd9d796,692fd4fd96f152afd5077dac52a3241c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1003,11 +1003,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000931
 expId 931
-fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=fb5ae896e0ba686337ef0823fd12d39a,bai=e314f598848f8487a4384f25106ee45e
+md5sum fb5ae896e0ba686337ef0823fd12d39a,e314f598848f8487a4384f25106ee45e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1028,11 +1028,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000931
 expId 931
-fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=03c613ce8b07fd4d6d3b5e3dc8b991aa,bai=6691abfcdbc31620f3fb3e2b7ad11435
+md5sum 03c613ce8b07fd4d6d3b5e3dc8b991aa,6691abfcdbc31620f3fb3e2b7ad11435
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1257,11 +1257,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000932
 expId 932
-fileName wgEncodeUwHistoneAg09309InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09309InputStdAlnRep1.bam,wgEncodeUwHistoneAg09309InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8e2dfec72ade961e0706a79277a5d320,bai=9789d6e625268e3dec816a095ab574d4
+md5sum 8e2dfec72ade961e0706a79277a5d320,9789d6e625268e3dec816a095ab574d4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1332,11 +1332,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000933
 expId 933
-fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=3d673a3f66b030101522d2abd54d9cf0,bai=6abd3dd9baece695f45bf15a2cfb09c7
+md5sum 3d673a3f66b030101522d2abd54d9cf0,6abd3dd9baece695f45bf15a2cfb09c7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1357,11 +1357,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000933
 expId 933
-fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=2104c7d5d8199401b1e26ee0c97064e8,bai=3b8cdbeab31fd5a14333ae58ed569dd3
+md5sum 2104c7d5d8199401b1e26ee0c97064e8,3b8cdbeab31fd5a14333ae58ed569dd3
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1586,11 +1586,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000934
 expId 934
-fileName wgEncodeUwHistoneAg09319InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg09319InputStdAlnRep1.bam,wgEncodeUwHistoneAg09319InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8cb8f57d14406129326eb24bcf48c0e0,bai=0500443230b64859deb3e7773c3464cf
+md5sum 8cb8f57d14406129326eb24bcf48c0e0,0500443230b64859deb3e7773c3464cf
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1661,11 +1661,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000935
 expId 935
-fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a1685a90b3a3fa0ce21e031a01615b6b,bai=d818877f93c5d57aa27d02ec4827f398
+md5sum a1685a90b3a3fa0ce21e031a01615b6b,d818877f93c5d57aa27d02ec4827f398
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1686,11 +1686,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000935
 expId 935
-fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=10712d1036b895f6b9a5ad3c17a6fb7b,bai=cc3e02309a9d185f9a19a26ee818da48
+md5sum 10712d1036b895f6b9a5ad3c17a6fb7b,cc3e02309a9d185f9a19a26ee818da48
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1915,11 +1915,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000936
 expId 936
-fileName wgEncodeUwHistoneAg10803InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAg10803InputStdAlnRep1.bam,wgEncodeUwHistoneAg10803InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=17750156661b841bbd474bc308d4c528,bai=ed7917b31d0f11879fe0d396000bbd2a
+md5sum 17750156661b841bbd474bc308d4c528,ed7917b31d0f11879fe0d396000bbd2a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1990,11 +1990,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000937
 expId 937
-fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneAoafH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=27a8f365d3ce6147446fd1dcd08cd5ce,bai=02476f3a2f7f6e986cc45fd3703896d4
+md5sum 27a8f365d3ce6147446fd1dcd08cd5ce,02476f3a2f7f6e986cc45fd3703896d4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2015,11 +2015,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000937
 expId 937
-fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneAoafH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=ed4f1e8ec2d1d583f1b02344b8db7c01,bai=6a5cf1ceb5d4ed1f0617b427ab2fba81
+md5sum ed4f1e8ec2d1d583f1b02344b8db7c01,6a5cf1ceb5d4ed1f0617b427ab2fba81
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2244,11 +2244,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000938
 expId 938
-fileName wgEncodeUwHistoneAoafInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneAoafInputStdAlnRep1.bam,wgEncodeUwHistoneAoafInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=0fe4cec03b194e29fbeaf3c1ab00db10,bai=972293f4a60b42d6fd41c82d520a78a2
+md5sum 0fe4cec03b194e29fbeaf3c1ab00db10,972293f4a60b42d6fd41c82d520a78a2
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2319,11 +2319,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
 expId 1906
-fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneBe2cH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=60276f360171152c972a33cc6d4493a0,bai=a6b92a48916cbbda7c8cacf5cb2a3ec7
+md5sum 60276f360171152c972a33cc6d4493a0,a6b92a48916cbbda7c8cacf5cb2a3ec7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2344,11 +2344,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001906
 expId 1906
-fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneBe2cH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=405d8a49a19b4b03f25ea79315653a1e,bai=dec58ada32972e267470c0a912741b8c
+md5sum 405d8a49a19b4b03f25ea79315653a1e,dec58ada32972e267470c0a912741b8c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2573,11 +2573,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001892
 expId 1892
-fileName wgEncodeUwHistoneBe2cInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneBe2cInputStdAlnRep1.bam,wgEncodeUwHistoneBe2cInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8ffd9d6bbee62c96341f5b8c2dc6675a,bai=0d2f2b8d843ced4cf9697a775667a095
+md5sum 8ffd9d6bbee62c96341f5b8c2dc6675a,0d2f2b8d843ced4cf9697a775667a095
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2649,11 +2649,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000424
 expId 424
-fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=9e2d5f682dbf4143cc224f0546a3b18d,bai=23275a6d2d0e67a54fdbd8dc23aebcfd
+md5sum 9e2d5f682dbf4143cc224f0546a3b18d,23275a6d2d0e67a54fdbd8dc23aebcfd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2675,11 +2675,11 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000424
 expId 424
-fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=fd6de34b9f68bcb1f7f8010fef5c95f0,bai=e1887a9e689a78dcfa7e39e86d9d1fca
+md5sum fd6de34b9f68bcb1f7f8010fef5c95f0,e1887a9e689a78dcfa7e39e86d9d1fca
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2909,11 +2909,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000443
 expId 443
-fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=02cb8addb098d91357f6164217db6ba6,bai=4580fa4034ff0d5a08af4e52e63714b2
+md5sum 02cb8addb098d91357f6164217db6ba6,4580fa4034ff0d5a08af4e52e63714b2
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2935,11 +2935,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000443
 expId 443
-fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=a073b8e546de5fc0f44bd444d2386d03,bai=258738f36cf45792fff971ee6e391f88
+md5sum a073b8e546de5fc0f44bd444d2386d03,258738f36cf45792fff971ee6e391f88
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3169,11 +3169,11 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000416
 expId 416
-fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=a5b907cdd7724d570daaca5c5cfc6fbe,bai=32d1897d1b47dc32ca3fe71da2644451
+md5sum a5b907cdd7724d570daaca5c5cfc6fbe,32d1897d1b47dc32ca3fe71da2644451
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3195,11 +3195,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000416
 expId 416
-fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=60cfc1c643f3670f9dd57dba9d3778d3,bai=d015aa31fe1cdfb53c2f3b53886f7224
+md5sum 60cfc1c643f3670f9dd57dba9d3778d3,d015aa31fe1cdfb53c2f3b53886f7224
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3429,11 +3429,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000453
 expId 453
-fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam,wgEncodeUwHistoneBjInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=fecca16e8868cc72d17f9ece379c0e6f,bai=c647735f1f88c621699b56d28b1f5681
+md5sum fecca16e8868cc72d17f9ece379c0e6f,c647735f1f88c621699b56d28b1f5681
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3505,11 +3505,11 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000425
 expId 425
-fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=d3190e7ab5d11ed2f3aad479599e107e,bai=74337f637f6d157770d08c97b3e3a7fd
+md5sum d3190e7ab5d11ed2f3aad479599e107e,74337f637f6d157770d08c97b3e3a7fd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3531,11 +3531,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000425
 expId 425
-fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=8a1b3618647dc991031b577f26c3845f,bai=7af737645e193327625d1f59e4caf5c3
+md5sum 8a1b3618647dc991031b577f26c3845f,7af737645e193327625d1f59e4caf5c3
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -3765,11 +3765,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000426
 expId 426
-fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=be20e07af1668c8e2aafd707f86fdea4,bai=453b7d78d6a8a084a292372f54183d87
+md5sum be20e07af1668c8e2aafd707f86fdea4,453b7d78d6a8a084a292372f54183d87
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -3791,11 +3791,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000426
 expId 426
-fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=4d5875b30fb9dd3e59c22d253916aa89,bai=849e35577383c247cfd491f6bf83cf5d
+md5sum 4d5875b30fb9dd3e59c22d253916aa89,849e35577383c247cfd491f6bf83cf5d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4025,11 +4025,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000407
 expId 407
-fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=0759860600a898a6b9c8c0788d709a74,bai=81a4ed9f2a96221b2fd2cc964f006e16
+md5sum 0759860600a898a6b9c8c0788d709a74,81a4ed9f2a96221b2fd2cc964f006e16
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4051,11 +4051,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000407
 expId 407
-fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=22934f56fc3ee5accdd678de9baccf4e,bai=38a85ba87623bee96fac84502ceff401
+md5sum 22934f56fc3ee5accdd678de9baccf4e,38a85ba87623bee96fac84502ceff401
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4285,11 +4285,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000454
 expId 454
-fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam,wgEncodeUwHistoneCaco2InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6841559c5ff00fbf211a9b53cc4fc9cb,bai=71afce2e46864fb15c4039cac797c019
+md5sum 6841559c5ff00fbf211a9b53cc4fc9cb,71afce2e46864fb15c4039cac797c019
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4348,6 +4348,516 @@ subId 1287
 tableName wgEncodeUwHistoneCaco2InputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Bowtie 0.12.7
+md5sum c76e06b98d6a85a2755f36e21a4aedc3,6a335be90aabf4cdf911dc4171f29982
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneCd20ro01778H3k04me3StdAlnRep2.bam.bai
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Bowtie 0.12.7
+md5sum db56e469350d6fc05c20965edf54acc2,f134e984bc0ac173fc9292a4f3596353
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Hotspot-v5.2
+md5sum 3b4b946f3e70673c6a8013cfd3d674cd
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Hotspot-v5.2
+md5sum feb49d810cd02855f73e72ba972d89e3
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion lmax-v1.0
+md5sum deee5eb42ffeffd20e0e0799cf2a915e
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion lmax-v1.0
+md5sum a080d0f264729bc05ee3edf916b7635c
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdPkRep2
+view Peaks
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01778
+md5sum c8891fb0310e4d3113c2c331771d45e4
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01778
+md5sum 3a9bbfda33a615730a95c9e43068f2c3
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-14
+dateUnrestricted 2012-06-14
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion WindowDensity-bin20-win+/-75
+md5sum 8f071dfeea836a0af58ebd665f44607c
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4639
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2
+objType table
+antibody H3K4me3
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-08
+dateUnrestricted 2012-06-08
+fileName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2.bigWig
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion WindowDensity-bin20-win+/-75
+md5sum ecf0a905953e54a2bd2700fbde2402dd
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 4640
+tableName wgEncodeUwHistoneCd20ro01778H3k04me3StdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01778InputStdAlnRep1
+objType file
+antibody Input
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-25
+fileName wgEncodeUwHistoneCd20ro01778InputStdAlnRep1.bam,wgEncodeUwHistoneCd20ro01778InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion Bowtie 0.12.7
+md5sum a998c692fd0af13254f1b919c94b8602,b2b9aa448f7d2eab1d7289e9259ee1b9
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4638
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01778InputStdRawDataRep1
+objType file
+antibody Input
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-25
+fileName wgEncodeUwHistoneCd20ro01778InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01778
+md5sum 446280508b26672b70dbc041a4847dc4
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4638
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01778InputStdRawRep1
+objType table
+antibody Input
+cell CD20+_RO01778
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01778/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-25
+fileName wgEncodeUwHistoneCd20ro01778InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01778
+labVersion WindowDensity-bin20-win+/-75
+md5sum 27f7d35df75cab7ae6a7b0af362b05ef
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4638
+tableName wgEncodeUwHistoneCd20ro01778InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdAlnRep3
+objType file
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdAlnRep3.bam,wgEncodeUwHistoneCd20ro01794H3k04me3StdAlnRep3.bam.bai
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+md5sum 8836182d7f1766a43b3c0b2d14b1f1b1,2272531db07ebe9802fc29283933fcac
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3
+objType table
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Hotspot-v5.2
+md5sum 318229e222a0399a3ba4261752b03004
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+tableName wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3
+view Hotspots
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3
+objType table
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion lmax-v1.0
+md5sum 3c28ceef4fb49543a99be4d68c4fd6db
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+tableName wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3
+view Peaks
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdRawDataRep3
+objType file
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdRawDataRep3.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+md5sum 58edc1d3d6218dcc8cf66cf14ed9bdbc
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3
+objType table
+antibody H3K4me3
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+md5sum 7a6ad5229ae97056d3eb0a18ebc46122
+origAssembly hg19
+project wgEncode
+replicate 3
+setType exp
+subId 4637
+tableName wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3
+view RawSignal
+
+metaObject wgEncodeUwHistoneCd20ro01794InputStdAlnRep1
+objType file
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794InputStdAlnRep1.bam,wgEncodeUwHistoneCd20ro01794InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId RO 01794
+labVersion Bowtie 0.12.7
+md5sum c0bfafd13b7c89847334e7f0434a40e0,475e09e65139e129257aea9cadafffab
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4636
+view Alignments
+
+metaObject wgEncodeUwHistoneCd20ro01794InputStdRawDataRep1
+objType file
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01794
+md5sum 9b347753e5eb9c139014e48dcae42604
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4636
+view RawData
+
+metaObject wgEncodeUwHistoneCd20ro01794InputStdRawRep1
+objType table
+antibody Input
+cell CD20+_RO01794
+composite wgEncodeUwHistone
+control std
+controlId CD20+_RO01794/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodeUwHistoneCd20ro01794InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01794
+labVersion WindowDensity-bin20-win+/-75
+md5sum 9a985235a976c5851aff3396d0b62a9b
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4636
+tableName wgEncodeUwHistoneCd20ro01794InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1
 objType file
 antibody H3K27me3
@@ -4362,11 +4872,11 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000427
 expId 427
-fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=788fc1b6e3f8d3f520d14260b291b0e8,bai=b8d6eec5b0daced74fcf3d03cc8b98dd
+md5sum 788fc1b6e3f8d3f520d14260b291b0e8,b8d6eec5b0daced74fcf3d03cc8b98dd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4388,11 +4898,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000427
 expId 427
-fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=c9a9b69f7eb0d7de0ba377cc2f794e1b,bai=1a2d262697ab83fc2170ce52add33540
+md5sum c9a9b69f7eb0d7de0ba377cc2f794e1b,1a2d262697ab83fc2170ce52add33540
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4622,11 +5132,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000444
 expId 444
-fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e17a823125d4aa07511c4a776a694528,bai=2bc7791e9bbf0dc02dc420c3c20d209b
+md5sum e17a823125d4aa07511c4a776a694528,2bc7791e9bbf0dc02dc420c3c20d209b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4648,11 +5158,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000444
 expId 444
-fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=d8e2f1cde216dbe3e7e1a936ad0a5d76,bai=97d4fb35ae4f5f9506d7dcddfb0997ba
+md5sum d8e2f1cde216dbe3e7e1a936ad0a5d76,97d4fb35ae4f5f9506d7dcddfb0997ba
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4882,11 +5392,11 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000417
 expId 417
-fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=46d68f0662f82204955a7ef8a114d84e,bai=7cfa30b08eef679c5c0450beb73fe5c6
+md5sum 46d68f0662f82204955a7ef8a114d84e,7cfa30b08eef679c5c0450beb73fe5c6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4908,11 +5418,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000417
 expId 417
-fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2a665c182b9bf8bcf3114c22d715c897,bai=88806cb1dc268e5ac35273c13a88b20e
+md5sum 2a665c182b9bf8bcf3114c22d715c897,88806cb1dc268e5ac35273c13a88b20e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5142,11 +5652,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000455
 expId 455
-fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam,wgEncodeUwHistoneGm06990InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=19b0c0b982adf1de2311892c51896fd1,bai=36b7c169451f71916a10daa9dae17373
+md5sum 19b0c0b982adf1de2311892c51896fd1,36b7c169451f71916a10daa9dae17373
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5218,12 +5728,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
 expId 2038
-fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12864H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18706
 labVersion Bowtie 0.12.7
-md5sum bam=56225c7674d69ab62c8f136260ead36c,bai=a6c52510471cb505536a13fddcf314f1
+md5sum 56225c7674d69ab62c8f136260ead36c,a6c52510471cb505536a13fddcf314f1
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5244,12 +5754,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002038
 expId 2038
-fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneGm12864H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS18900
 labVersion Bowtie 0.12.7
-md5sum bam=1810851b8e3f8271642ea2e479d8a09d,bai=7efe840e4916d1eb77784830705d51b7
+md5sum 1810851b8e3f8271642ea2e479d8a09d,7efe840e4916d1eb77784830705d51b7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5482,12 +5992,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002039
 expId 2039
-fileName wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18707
 labVersion Bowtie 0.12.7
-md5sum bam=f435461d578d6910a9cf44fa28527078,bai=a28f6bafe9f7b9b0b01d1f03fef17896
+md5sum f435461d578d6910a9cf44fa28527078,a28f6bafe9f7b9b0b01d1f03fef17896
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5614,12 +6124,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002040
 expId 2040
-fileName wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18912
 labVersion Bowtie 0.12.7
-md5sum bam=2f9b47279693faaa87283fc59cbb231f,bai=49c663bf45511cec512d32857b5c5d4c
+md5sum 2f9b47279693faaa87283fc59cbb231f,49c663bf45511cec512d32857b5c5d4c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5746,12 +6256,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002041
 expId 2041
-fileName wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneGm12875H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18910
 labVersion Bowtie 0.12.7
-md5sum bam=777fd541bd3a9f8ff495e7e4c0536129,bai=b48f726db3a7af5c292371beddbf68e9
+md5sum 777fd541bd3a9f8ff495e7e4c0536129,b48f726db3a7af5c292371beddbf68e9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5879,11 +6389,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000428
 expId 428
-fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e88f0e21caf64f0bbf703666057221a1,bai=432bfc7c71fcb7b642b598c9b73d41c9
+md5sum e88f0e21caf64f0bbf703666057221a1,432bfc7c71fcb7b642b598c9b73d41c9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -5905,11 +6415,11 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000428
 expId 428
-fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=f0d1cff7235b7200ddb44aa948892975,bai=2b7a0e4ac2d4c7ee087c7f2380532211
+md5sum f0d1cff7235b7200ddb44aa948892975,2b7a0e4ac2d4c7ee087c7f2380532211
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6139,11 +6649,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000445
 expId 445
-fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=d30e889b0c20c1ab056e36a94999dfb4,bai=392d093089b45a1afa7b2f7168c1cb15
+md5sum d30e889b0c20c1ab056e36a94999dfb4,392d093089b45a1afa7b2f7168c1cb15
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6165,11 +6675,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000445
 expId 445
-fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=ed2dc50ae8ea78151f87063e73a7508f,bai=3e8d12b5cb09f4725a8eb89a07b427df
+md5sum ed2dc50ae8ea78151f87063e73a7508f,3e8d12b5cb09f4725a8eb89a07b427df
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6399,11 +6909,11 @@ dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 dccAccession wgEncodeEH000395
 expId 395
-fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=abc43d6a009f795893b2994c8d6a9058,bai=2795f9ca4910f53b89acd4c2c2ce789e
+md5sum abc43d6a009f795893b2994c8d6a9058,2795f9ca4910f53b89acd4c2c2ce789e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6425,11 +6935,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000395
 expId 395
-fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=27c37de6508d9737915a0c9b8422ccbc,bai=b0289d0155b2ce9ef4a590e0b83c2436
+md5sum 27c37de6508d9737915a0c9b8422ccbc,b0289d0155b2ce9ef4a590e0b83c2436
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -6660,11 +7170,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000463
 expId 463
-fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam,wgEncodeUwHistoneGm12878InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6164cad5393282dd732ffccbffa0509c,bai=d0e0e4b08a3597a8c3a3ab1a5c2a802d
+md5sum 6164cad5393282dd732ffccbffa0509c,d0e0e4b08a3597a8c3a3ab1a5c2a802d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6736,11 +7246,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000923
 expId 923
-fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=bd24d8bb1433c4a29bafe0d702de387d,bai=593b13285d67400ee4cbe99d7024e5fa
+md5sum bd24d8bb1433c4a29bafe0d702de387d,593b13285d67400ee4cbe99d7024e5fa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6761,11 +7271,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000923
 expId 923
-fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=8eee8be61c827893728c52125a784c17,bai=c5cdad93ba8b304a8d615b3d0bea08ee
+md5sum 8eee8be61c827893728c52125a784c17,c5cdad93ba8b304a8d615b3d0bea08ee
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6990,11 +7500,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000924
 expId 924
-fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=fe3617360493de5a56aabab835142b93,bai=0861c20373e66e9f12279ad11c40ba31
+md5sum fe3617360493de5a56aabab835142b93,0861c20373e66e9f12279ad11c40ba31
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7015,11 +7525,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000924
 expId 924
-fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=8286d3c767e2ed6530dcf112a76cc689,bai=0e8e3daa83b005c9d5aa59c2415cce84
+md5sum 8286d3c767e2ed6530dcf112a76cc689,0e8e3daa83b005c9d5aa59c2415cce84
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7244,11 +7754,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000925
 expId 925
-fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneH7esH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=56eee21eb31d98493397dc6cded5542a,bai=56aa83c1e73ef28b092b6ff2fd18a8f3
+md5sum 56eee21eb31d98493397dc6cded5542a,56aa83c1e73ef28b092b6ff2fd18a8f3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7269,11 +7779,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000925
 expId 925
-fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneH7esH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6f287af22265443f12cc6c7138ee350c,bai=d69252ce55d0dec451d4a9456d6d1902
+md5sum 6f287af22265443f12cc6c7138ee350c,d69252ce55d0dec451d4a9456d6d1902
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7498,11 +8008,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000926
 expId 926
-fileName wgEncodeUwHistoneH7esInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneH7esInputStdAlnRep1.bam,wgEncodeUwHistoneH7esInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=91bacab592eb8d177207cac81f66f660,bai=8f6f5a8f78e02f91c10053b29ec0fe5c
+md5sum 91bacab592eb8d177207cac81f66f660,8f6f5a8f78e02f91c10053b29ec0fe5c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7573,11 +8083,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
 expId 1907
-fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneHacH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=6c61354641293632e0d14c10a1a71b13,bai=06ba346332d5d6161f6357419e315ebb
+md5sum 6c61354641293632e0d14c10a1a71b13,06ba346332d5d6161f6357419e315ebb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7598,11 +8108,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001907
 expId 1907
-fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneHacH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=286d92e18c75550bd76d1b8048477f6d,bai=9ab6d324acce593dcb2b824df5feb47d
+md5sum 286d92e18c75550bd76d1b8048477f6d,9ab6d324acce593dcb2b824df5feb47d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7814,6 +8324,78 @@ subId 4368
 tableName wgEncodeUwHistoneHacH3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneHacInputStdAlnRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneHacInputStdAlnRep1.bam,wgEncodeUwHistoneHacInputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS18311
+labVersion Bowtie 0.12.7
+md5sum b95fbb76d9b076c2629583826db57dc5,5fa210b70bf0c5438cad68c83388dc04
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4634
+view Alignments
+
+metaObject wgEncodeUwHistoneHacInputStdRawDataRep1
+objType file
+antibody Input
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneHacInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18311
+md5sum 959ac35ce86cba6068b0ceda932fb066
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4634
+view RawData
+
+metaObject wgEncodeUwHistoneHacInputStdRawRep1
+objType table
+antibody Input
+cell HAc
+composite wgEncodeUwHistone
+control std
+controlId HAc/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneHacInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18311
+labVersion WindowDensity-bin20-win+/-75
+md5sum cae49b3cb83211703208867a7a8d5b00
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4634
+tableName wgEncodeUwHistoneHacInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneHaspH3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -7827,11 +8409,11 @@ dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH000973
 expId 973
-fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHaspH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=b55bda54985c5410795a240deac1282a,bai=2a807a12a024ce3788ba0a682b9c03aa
+md5sum b55bda54985c5410795a240deac1282a,2a807a12a024ce3788ba0a682b9c03aa
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7852,11 +8434,11 @@ dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH000973
 expId 973
-fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHaspH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=c42e51cd0e4c9b4edbef92c4a5ef7771,bai=4e5f36e2103a11ae18588ee2a46152c0
+md5sum c42e51cd0e4c9b4edbef92c4a5ef7771,4e5f36e2103a11ae18588ee2a46152c0
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8081,11 +8663,11 @@ dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 dccAccession wgEncodeEH000974
 expId 974
-fileName wgEncodeUwHistoneHaspInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHaspInputStdAlnRep1.bam,wgEncodeUwHistoneHaspInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=7898c19965155ba7502fb48b47cb83b0,bai=9923c389163e1e20ad034c0052ef67cd
+md5sum 7898c19965155ba7502fb48b47cb83b0,9923c389163e1e20ad034c0052ef67cd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8156,11 +8738,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000939
 expId 939
-fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=4abd2f5b6ef4e61b216fbd168b9e2fd4,bai=461c9bd494d0bbf6a49fd37ba2c17088
+md5sum 4abd2f5b6ef4e61b216fbd168b9e2fd4,461c9bd494d0bbf6a49fd37ba2c17088
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8181,11 +8763,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000939
 expId 939
-fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=33779a54f5fea2480fdad583cd998ff6,bai=2f4ecc1a35d6a96a92aa584f539d5189
+md5sum 33779a54f5fea2480fdad583cd998ff6,2f4ecc1a35d6a96a92aa584f539d5189
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8410,11 +8992,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000940
 expId 940
-fileName wgEncodeUwHistoneHbmecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHbmecInputStdAlnRep1.bam,wgEncodeUwHistoneHbmecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=e400625c8c40668cab20f58ce19b9abd,bai=6aaf03f1027c0319cd525c8363a55eef
+md5sum e400625c8c40668cab20f58ce19b9abd,6aaf03f1027c0319cd525c8363a55eef
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8485,11 +9067,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000941
 expId 941
-fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8db0ee2bf02ab43be4ee4e183508f64e,bai=49dfb714e9f224a53b8b8f2215a08112
+md5sum 8db0ee2bf02ab43be4ee4e183508f64e,49dfb714e9f224a53b8b8f2215a08112
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8510,11 +9092,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000941
 expId 941
-fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHcfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=aaa054176d883cc9a9e16056684fa9c8,bai=0b0ed3ed3e1c399b1576ded70cb46446
+md5sum aaa054176d883cc9a9e16056684fa9c8,0b0ed3ed3e1c399b1576ded70cb46446
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -8739,11 +9321,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000942
 expId 942
-fileName wgEncodeUwHistoneHcfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfInputStdAlnRep1.bam,wgEncodeUwHistoneHcfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=2ce08da7ebf4f6b64c42bea529dcfa74,bai=b11178be325e73d32c8ca86fd8f1f67f
+md5sum 2ce08da7ebf4f6b64c42bea529dcfa74,b11178be325e73d32c8ca86fd8f1f67f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8814,11 +9396,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000943
 expId 943
-fileName wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=9de255ca3ca7533357c8450c31247468,bai=e429565feacbff2421a32cce186ccb0e
+md5sum 9de255ca3ca7533357c8450c31247468,e429565feacbff2421a32cce186ccb0e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -8941,11 +9523,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000944
 expId 944
-fileName wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam,wgEncodeUwHistoneHcfaaInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a60ee4f14ae5dcabe946ca8ee7e7f4d1,bai=fec0a0721116524d6c1c6d2c9d8f5953
+md5sum a60ee4f14ae5dcabe946ca8ee7e7f4d1,fec0a0721116524d6c1c6d2c9d8f5953
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9016,11 +9598,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000945
 expId 945
-fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcmH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=07f5e0d197524ed5e5c220004c3a6537,bai=5bef5594c3942900eb5092549e7ba95a
+md5sum 07f5e0d197524ed5e5c220004c3a6537,5bef5594c3942900eb5092549e7ba95a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9041,11 +9623,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000945
 expId 945
-fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHcmH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=c9047d0b6860006d3c27fc256eed3d07,bai=e82f7044eaa79e188bc928002f03a505
+md5sum c9047d0b6860006d3c27fc256eed3d07,e82f7044eaa79e188bc928002f03a505
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9270,11 +9852,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000946
 expId 946
-fileName wgEncodeUwHistoneHcmInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcmInputStdAlnRep1.bam,wgEncodeUwHistoneHcmInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=0df7ecde7a43093a50d68fc0ba533357,bai=66f54ea18b5df81afb1ee6cfba598bcd
+md5sum 0df7ecde7a43093a50d68fc0ba533357,66f54ea18b5df81afb1ee6cfba598bcd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9345,11 +9927,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000947
 expId 947
-fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=da0cb849380733be3bce9711ff063a1e,bai=5eea8f90152b378a8aa130df4a347fe9
+md5sum da0cb849380733be3bce9711ff063a1e,5eea8f90152b378a8aa130df4a347fe9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9370,11 +9952,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000947
 expId 947
-fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=02aa54ce85ba04859e89d023379c6ed2,bai=ac1e4af03e28694dcf83e5d7b7317608
+md5sum 02aa54ce85ba04859e89d023379c6ed2,ac1e4af03e28694dcf83e5d7b7317608
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9599,11 +10181,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000948
 expId 948
-fileName wgEncodeUwHistoneHcpeInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHcpeInputStdAlnRep1.bam,wgEncodeUwHistoneHcpeInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=6ad1808f15353419a812ec8052f81542,bai=04b6d629e5d4a35762ad674db238d2b4
+md5sum 6ad1808f15353419a812ec8052f81542,04b6d629e5d4a35762ad674db238d2b4
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9674,11 +10256,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000949
 expId 949
-fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHct116H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=3d778ec50ec214908dd5e7f33b78f135,bai=33635a3728cc93f6142639a8b4daca6c
+md5sum 3d778ec50ec214908dd5e7f33b78f135,33635a3728cc93f6142639a8b4daca6c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9699,11 +10281,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000949
 expId 949
-fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHct116H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=dce23fbfa945e6f334654382b2baaf6c,bai=9153e4bf2c5cb0c2f4ccad14b83fdd3f
+md5sum dce23fbfa945e6f334654382b2baaf6c,9153e4bf2c5cb0c2f4ccad14b83fdd3f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9928,11 +10510,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000950
 expId 950
-fileName wgEncodeUwHistoneHct116InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHct116InputStdAlnRep1.bam,wgEncodeUwHistoneHct116InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=61678ad164b764b61fd09a6700d0b9f4,bai=74495607ab22a523622d7b9ac344f1b3
+md5sum 61678ad164b764b61fd09a6700d0b9f4,74495607ab22a523622d7b9ac344f1b3
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10003,11 +10585,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000951
 expId 951
-fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHeeH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a9a31e49bbbce3374127819c74fe6c7c,bai=78c9a0a0586987fa92801cdd96999fe5
+md5sum a9a31e49bbbce3374127819c74fe6c7c,78c9a0a0586987fa92801cdd96999fe5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10028,11 +10610,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000951
 expId 951
-fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHeeH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=3bf78cb12c62d57b0db8646c59122c04,bai=1094269b0a87f5791ffc7de3e749dcec
+md5sum 3bf78cb12c62d57b0db8646c59122c04,1094269b0a87f5791ffc7de3e749dcec
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10257,11 +10839,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000952
 expId 952
-fileName wgEncodeUwHistoneHeeInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHeeInputStdAlnRep1.bam,wgEncodeUwHistoneHeeInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=281d52b97200a80ef67671cdc3ec54ef,bai=14563062aba4a695c2b21de0c0793a57
+md5sum 281d52b97200a80ef67671cdc3ec54ef,14563062aba4a695c2b21de0c0793a57
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10332,11 +10914,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000953
 expId 953
-fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHek293H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8d58e75814b73112ae87d63bd59292e7,bai=353213478634aac168c4203637a5b69b
+md5sum 8d58e75814b73112ae87d63bd59292e7,353213478634aac168c4203637a5b69b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10357,11 +10939,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000953
 expId 953
-fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHek293H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=b68eba1f3128468a15affaf062cc4506,bai=16c80a7a6274ca198240c258e9833038
+md5sum b68eba1f3128468a15affaf062cc4506,16c80a7a6274ca198240c258e9833038
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10587,11 +11169,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000464
 expId 464
-fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam,wgEncodeUwHistoneHek293InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=8695fa41a3a4d66742f10c0c58d1c641,bai=09665d59afaf8b28ac74373d2a5a310f
+md5sum 8695fa41a3a4d66742f10c0c58d1c641,09665d59afaf8b28ac74373d2a5a310f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10664,11 +11246,11 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000442
 expId 442
-fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=be451045aa0743c4d08f9d86b0cf4d74,bai=48cd2a3e2d419736ab4bd0dc18a6fe0b
+md5sum be451045aa0743c4d08f9d86b0cf4d74,48cd2a3e2d419736ab4bd0dc18a6fe0b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10690,11 +11272,11 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000442
 expId 442
-fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=1cd35db27b89e85b75e7359810125b79,bai=61640a23ba872e8117d3a10ede8b52f6
+md5sum 1cd35db27b89e85b75e7359810125b79,61640a23ba872e8117d3a10ede8b52f6
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -10924,11 +11506,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000432
 expId 432
-fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=b5b6a186538cd09d8fd4fb37dbae20d1,bai=c05e7cf800fdd9e12613aadecb0ce73e
+md5sum b5b6a186538cd09d8fd4fb37dbae20d1,c05e7cf800fdd9e12613aadecb0ce73e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -10950,11 +11532,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000432
 expId 432
-fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=9e252e8a39d8bfcfdc4711a1daeef37f,bai=ac76ad183c66f14a2a9e02e2c155d968
+md5sum 9e252e8a39d8bfcfdc4711a1daeef37f,ac76ad183c66f14a2a9e02e2c155d968
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11184,11 +11766,11 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000423
 expId 423
-fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=423de60727d575c3647dba6d99dd10c8,bai=37d7693486717ae09a75e24c98a66719
+md5sum 423de60727d575c3647dba6d99dd10c8,37d7693486717ae09a75e24c98a66719
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11210,11 +11792,11 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000423
 expId 423
-fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=9a813f74e10e23549923be48c22d7496,bai=019beb8af73400f2881b82c377505b0d
+md5sum 9a813f74e10e23549923be48c22d7496,019beb8af73400f2881b82c377505b0d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11444,11 +12026,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000469
 expId 469
-fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam,wgEncodeUwHistoneHelas3InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=b98c396a6096dc8022f1d2cdddc17c53,bai=3c55ba38424aefef430853f56ba20aa3
+md5sum b98c396a6096dc8022f1d2cdddc17c53,3c55ba38424aefef430853f56ba20aa3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11521,11 +12103,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000433
 expId 433
-fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=0ea92bb4f021c48248fda19971016869,bai=27b6e4550f24dca9cbe7a6434c151dcc
+md5sum 0ea92bb4f021c48248fda19971016869,27b6e4550f24dca9cbe7a6434c151dcc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11547,11 +12129,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000433
 expId 433
-fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=17e0d3481ab48caf4d6c77c611c0c5c9,bai=dc3fa7690d3aa298e3925bd1f88ac7da
+md5sum 17e0d3481ab48caf4d6c77c611c0c5c9,dc3fa7690d3aa298e3925bd1f88ac7da
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -11781,11 +12363,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 dccAccession wgEncodeEH000446
 expId 446
-fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6291ae6fe675baf6a4574b886209edc0,bai=f76a5510a954769a13eeb7bf6d5735fe
+md5sum 6291ae6fe675baf6a4574b886209edc0,f76a5510a954769a13eeb7bf6d5735fe
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -11806,11 +12388,11 @@ dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 dccAccession wgEncodeEH000446
 expId 446
-fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=1cee86455a908e972b0bc8d0202952a7,bai=c861ede4985e3232bac44293f5e60345
+md5sum 1cee86455a908e972b0bc8d0202952a7,c861ede4985e3232bac44293f5e60345
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12038,11 +12620,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000413
 expId 413
-fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=e2b77a555cbff1d88fd0c4c89f7aa27d,bai=cb56fda5c365d696bbd1b19413467733
+md5sum e2b77a555cbff1d88fd0c4c89f7aa27d,cb56fda5c365d696bbd1b19413467733
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12064,11 +12646,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000413
 expId 413
-fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2843a5b19da589ef5375aef108f2fae8,bai=51add82e7226849ed61a34ed05c0a192
+md5sum 2843a5b19da589ef5375aef108f2fae8,51add82e7226849ed61a34ed05c0a192
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -12298,11 +12880,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000470
 expId 470
-fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam,wgEncodeUwHistoneHepg2InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=4c8d22ed605e136b98eaa395a140fc66,bai=073c42bec02eaddbe8ee8e8aab1b6ca3
+md5sum 4c8d22ed605e136b98eaa395a140fc66,073c42bec02eaddbe8ee8e8aab1b6ca3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12374,12 +12956,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002042
 expId 2042
-fileName wgEncodeUwHistoneHffH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHffH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneHffH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18320
 labVersion Bowtie 0.12.7
-md5sum bam=2c8f0c75c8016f7ef317d0e94094d5aa,bai=de1b6d53fe12b692a2f09db90754fa83
+md5sum 2c8f0c75c8016f7ef317d0e94094d5aa,de1b6d53fe12b692a2f09db90754fa83
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12506,12 +13088,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002043
 expId 2043
-fileName wgEncodeUwHistoneHffInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHffInputStdAlnRep1.bam,wgEncodeUwHistoneHffInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18316
 labVersion Bowtie 0.12.7
-md5sum bam=e9914cfc31c9cc3bc8ebb8cf488a1f67,bai=217c489ed9a2e4ccac50d00feb0de5e5
+md5sum e9914cfc31c9cc3bc8ebb8cf488a1f67,217c489ed9a2e4ccac50d00feb0de5e5
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12584,11 +13166,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
 expId 1908
-fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneHffmycH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=e9287e6a6320c2c125f44170fc9a7b35,bai=a49cadf75b24096a507e810aa6e2e9c9
+md5sum e9287e6a6320c2c125f44170fc9a7b35,a49cadf75b24096a507e810aa6e2e9c9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12609,11 +13191,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001908
 expId 1908
-fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneHffmycH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=d88886dba5b2e979c5e82efd41c7ea4b,bai=cc5e1b675fc7035fc02fb07f9e445aab
+md5sum d88886dba5b2e979c5e82efd41c7ea4b,cc5e1b675fc7035fc02fb07f9e445aab
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12838,11 +13420,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001896
 expId 1896
-fileName wgEncodeUwHistoneHffmycInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHffmycInputStdAlnRep1.bam,wgEncodeUwHistoneHffmycInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=05f3eba6548b38fa8ef4d5b2f7037e62,bai=d400c312c0e3d1e6c7e36f547d29b9df
+md5sum 05f3eba6548b38fa8ef4d5b2f7037e62,d400c312c0e3d1e6c7e36f547d29b9df
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12914,11 +13496,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000418
 expId 418
-fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=8935f1d2ea9d46a90ca6754a8ffa1312,bai=8ed165d8b04b6ecc494657905795e30a
+md5sum 8935f1d2ea9d46a90ca6754a8ffa1312,8ed165d8b04b6ecc494657905795e30a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -12940,11 +13522,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000418
 expId 418
-fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=7d6697ae4191ad696afbc52a04e9bc5e,bai=2d6ec431c16fa7f54cd0d864037073be
+md5sum 7d6697ae4191ad696afbc52a04e9bc5e,2d6ec431c16fa7f54cd0d864037073be
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -13174,11 +13756,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000465
 expId 465
-fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam,wgEncodeUwHistoneHl60InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=c65e659e364ddeddd821a73d643c87ab,bai=28b7ab34f13d37ecd24018483d522051
+md5sum c65e659e364ddeddd821a73d643c87ab,28b7ab34f13d37ecd24018483d522051
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13251,11 +13833,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000408
 expId 408
-fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=7ff0adf28c090b9dc743dde4fb056c31,bai=7dcd95fedac48311a291a1de005647e0
+md5sum 7ff0adf28c090b9dc743dde4fb056c31,7dcd95fedac48311a291a1de005647e0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13381,11 +13963,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000954
 expId 954
-fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHmecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=bdd6dfc24471483c921021dcd50969c2,bai=64bc17007a4718ffa97c3c133df7c5c0
+md5sum bdd6dfc24471483c921021dcd50969c2,64bc17007a4718ffa97c3c133df7c5c0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13406,11 +13988,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000954
 expId 954
-fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHmecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=be60ecca8637eab19c8a9b2313bc6e70,bai=49abfa992b3bec44608914f0c155428f
+md5sum be60ecca8637eab19c8a9b2313bc6e70,49abfa992b3bec44608914f0c155428f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13636,11 +14218,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000466
 expId 466
-fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam,wgEncodeUwHistoneHmecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=84f1f647c7fa6a8fa6755ac90a37f496,bai=4dcb8fc8ee73511246cad1481f7309ac
+md5sum 84f1f647c7fa6a8fa6755ac90a37f496,4dcb8fc8ee73511246cad1481f7309ac
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -13712,11 +14294,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000955
 expId 955
-fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHmfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=bcfe818333718eafd2fc8f13e8a5e021,bai=3309d3537ba85cffe3f1e5da2c6115ba
+md5sum bcfe818333718eafd2fc8f13e8a5e021,3309d3537ba85cffe3f1e5da2c6115ba
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -13737,11 +14319,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000955
 expId 955
-fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHmfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=80a045613c74a8b74d67476422f87b44,bai=5bdb172c2a721d740d51f3aea5b38a64
+md5sum 80a045613c74a8b74d67476422f87b44,5bdb172c2a721d740d51f3aea5b38a64
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -13966,11 +14548,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000956
 expId 956
-fileName wgEncodeUwHistoneHmfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHmfInputStdAlnRep1.bam,wgEncodeUwHistoneHmfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=68304f92a458c781c2512552e097a28f,bai=a10a5562ca21d8961fab60d6a7aea1ee
+md5sum 68304f92a458c781c2512552e097a28f,a10a5562ca21d8961fab60d6a7aea1ee
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14041,11 +14623,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000957
 expId 957
-fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHpafH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=4e6d08489a9d5c701a8af83a2a98dc38,bai=5deb6f8f93bc6fc7a46096feae3165fd
+md5sum 4e6d08489a9d5c701a8af83a2a98dc38,5deb6f8f93bc6fc7a46096feae3165fd
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14066,11 +14648,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000957
 expId 957
-fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHpafH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5fcfe60cf85c1753fc2325626ec9c908,bai=0db5a2ca7ab87b2e0559e2c235318124
+md5sum 5fcfe60cf85c1753fc2325626ec9c908,0db5a2ca7ab87b2e0559e2c235318124
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14295,11 +14877,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000958
 expId 958
-fileName wgEncodeUwHistoneHpafInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHpafInputStdAlnRep1.bam,wgEncodeUwHistoneHpafInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=230397d763983496c6a0e7aba97b8bde,bai=722fbe83858acf38e41c4537bea1e500
+md5sum 230397d763983496c6a0e7aba97b8bde,722fbe83858acf38e41c4537bea1e500
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14370,11 +14952,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000959
 expId 959
-fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHpfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=c44dfcc6e14d0405147989aac0b23b00,bai=697932f56c8aea440a82aec169336e0c
+md5sum c44dfcc6e14d0405147989aac0b23b00,697932f56c8aea440a82aec169336e0c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14395,11 +14977,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000959
 expId 959
-fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHpfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=7d6f6535a893a4e781c89b2b94e7f83d,bai=fab850f14d7f6cb6a18a7fc6990f2bbf
+md5sum 7d6f6535a893a4e781c89b2b94e7f83d,fab850f14d7f6cb6a18a7fc6990f2bbf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14624,11 +15206,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000960
 expId 960
-fileName wgEncodeUwHistoneHpfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHpfInputStdAlnRep1.bam,wgEncodeUwHistoneHpfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=a3b23daa86e235298f88d81aaf985422,bai=8026b69f9f6f5d92669666e8aac15817
+md5sum a3b23daa86e235298f88d81aaf985422,8026b69f9f6f5d92669666e8aac15817
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14700,11 +15282,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000429
 expId 429
-fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=b4923015155110ed83e226b5e6fedee8,bai=e537fd7f9301d03c28234d40e1ce5c29
+md5sum b4923015155110ed83e226b5e6fedee8,e537fd7f9301d03c28234d40e1ce5c29
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14726,11 +15308,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000429
 expId 429
-fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=586204965a6df7421fb1cc9dd242d3e4,bai=f59f16d27d46ceb4e7fb8d963446ac8d
+md5sum 586204965a6df7421fb1cc9dd242d3e4,f59f16d27d46ceb4e7fb8d963446ac8d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -14960,11 +15542,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000430
 expId 430
-fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=b86c8650376069e09235fd6a379f0cf4,bai=8b705d0a9e683c013ea1dda6e360c96d
+md5sum b86c8650376069e09235fd6a379f0cf4,8b705d0a9e683c013ea1dda6e360c96d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -14986,11 +15568,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000430
 expId 430
-fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=1b5385091d9dd432025e31893baf77a3,bai=788fa8810cc2fb907cc8d948672e99a1
+md5sum 1b5385091d9dd432025e31893baf77a3,788fa8810cc2fb907cc8d948672e99a1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15220,11 +15802,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000409
 expId 409
-fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=744bfc371b65c1fece68417e4f57371b,bai=6d16791b6ddb7495806907237d2b2115
+md5sum 744bfc371b65c1fece68417e4f57371b,6d16791b6ddb7495806907237d2b2115
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15246,11 +15828,11 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000409
 expId 409
-fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=0a71baacf4ff747a61d7f9dbe74b1678,bai=a744b6a572d0baeda04f433c023f5a9a
+md5sum 0a71baacf4ff747a61d7f9dbe74b1678,a744b6a572d0baeda04f433c023f5a9a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -15480,11 +16062,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000467
 expId 467
-fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam,wgEncodeUwHistoneHreInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=bccf9b943b8d4b3f944873f1b231974d,bai=e5c24a03e13225583b0cef01ab5618d5
+md5sum bccf9b943b8d4b3f944873f1b231974d,e5c24a03e13225583b0cef01ab5618d5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15556,11 +16138,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000961
 expId 961
-fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8a1c1a00f4f8c2e900dce28862aee394,bai=7455711593f5bac5761640513da16c84
+md5sum 8a1c1a00f4f8c2e900dce28862aee394,7455711593f5bac5761640513da16c84
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15581,11 +16163,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000961
 expId 961
-fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=8cecc3ed50c3dee5ad5dd45e4da5b10f,bai=5ee222edb52725be013ec605edcf6d32
+md5sum 8cecc3ed50c3dee5ad5dd45e4da5b10f,5ee222edb52725be013ec605edcf6d32
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -15810,11 +16392,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000962
 expId 962
-fileName wgEncodeUwHistoneHrpeInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHrpeInputStdAlnRep1.bam,wgEncodeUwHistoneHrpeInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=58b3f2fcef455370dca4a0d46dc450ae,bai=d0262574a710d50e39a7bd7fb3410318
+md5sum 58b3f2fcef455370dca4a0d46dc450ae,d0262574a710d50e39a7bd7fb3410318
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15886,11 +16468,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000411
 expId 411
-fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=27ce8f1815d1c0851da5622b8fcb0954,bai=c84bb0989071f0187f46756e7507d83f
+md5sum 27ce8f1815d1c0851da5622b8fcb0954,c84bb0989071f0187f46756e7507d83f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -15912,11 +16494,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000411
 expId 411
-fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=9ca847bdcdb664679a5238b781cb4c49,bai=a4aa5f12b3f8077ee7fd901c8f19b7c2
+md5sum 9ca847bdcdb664679a5238b781cb4c49,a4aa5f12b3f8077ee7fd901c8f19b7c2
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16147,11 +16729,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000431
 expId 431
-fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=ee3c9daf6704728748367d2561ed9532,bai=c593e7c19d64662280c500cdb69706f0
+md5sum ee3c9daf6704728748367d2561ed9532,c593e7c19d64662280c500cdb69706f0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16173,11 +16755,11 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000431
 expId 431
-fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=570904dd2aabb720caa439de53d24465,bai=fb99248d7d94e1ce6c2a4194542c848c
+md5sum 570904dd2aabb720caa439de53d24465,fb99248d7d94e1ce6c2a4194542c848c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16407,11 +16989,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000412
 expId 412
-fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=5955d9d07a18efc8fb8cb50a48925f11,bai=a5ee53cc1048cf606aa2012177fbd08f
+md5sum 5955d9d07a18efc8fb8cb50a48925f11,a5ee53cc1048cf606aa2012177fbd08f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16433,11 +17015,11 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000412
 expId 412
-fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6cf09a7fa19932885e07fc13a1b1d426,bai=be80ab9ba1c54ea2add1f93956b88c28
+md5sum 6cf09a7fa19932885e07fc13a1b1d426,be80ab9ba1c54ea2add1f93956b88c28
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -16667,11 +17249,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000468
 expId 468
-fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam,wgEncodeUwHistoneHuvecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=1e53aafd4a01a42265f15da95c0d6739,bai=7d77affe531b3bf14b921132dee44005
+md5sum 1e53aafd4a01a42265f15da95c0d6739,7d77affe531b3bf14b921132dee44005
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -16743,11 +17325,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000963
 expId 963
-fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=c129dca621b63461cc2c1c5162e74888,bai=e8f2a3152808bbb7874daa16c0a24cd7
+md5sum c129dca621b63461cc2c1c5162e74888,e8f2a3152808bbb7874daa16c0a24cd7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -16768,11 +17350,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000963
 expId 963
-fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=33cbd661595546f3bc06c8f5d463fea0,bai=ccb48f4344314917ec5252f8466b622a
+md5sum 33cbd661595546f3bc06c8f5d463fea0,ccb48f4344314917ec5252f8466b622a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -16997,11 +17579,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000964
 expId 964
-fileName wgEncodeUwHistoneHvmfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneHvmfInputStdAlnRep1.bam,wgEncodeUwHistoneHvmfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=b4f29bc2404fdb9116a579c6d13cac48,bai=777401b7e2ca22fba8bb86ae31fc6f6a
+md5sum b4f29bc2404fdb9116a579c6d13cac48,777401b7e2ca22fba8bb86ae31fc6f6a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17072,11 +17654,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000965
 expId 965
-fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=376c8795087b5d6e8c8a18e1578afda5,bai=08f2a6e273d2b5e207401b02210908de
+md5sum 376c8795087b5d6e8c8a18e1578afda5,08f2a6e273d2b5e207401b02210908de
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17097,11 +17679,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000965
 expId 965
-fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=f5ee3ad7a1da8aaf5feee7cd325ff3ff,bai=9dea67189e0df02dfe637b23eedd4e29
+md5sum f5ee3ad7a1da8aaf5feee7cd325ff3ff,9dea67189e0df02dfe637b23eedd4e29
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -17326,11 +17908,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000966
 expId 966
-fileName wgEncodeUwHistoneJurkatInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneJurkatInputStdAlnRep1.bam,wgEncodeUwHistoneJurkatInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5081f727d9ff27391c09e391b3661da5,bai=479a874d00e6aabe212d5343abf1d3f9
+md5sum 5081f727d9ff27391c09e391b3661da5,479a874d00e6aabe212d5343abf1d3f9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -17402,11 +17984,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000434
 expId 434
-fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=ef45aca1c42f351526f642fd872a6b53,bai=b16c88069b56291e541e5085046f68ce
+md5sum ef45aca1c42f351526f642fd872a6b53,b16c88069b56291e541e5085046f68ce
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17428,11 +18010,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000434
 expId 434
-fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam,wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=d50be002f1d52e4914c1ef0e7e12062e,bai=a35553573182c90d766fcb774dcf5e1a
+md5sum d50be002f1d52e4914c1ef0e7e12062e,a35553573182c90d766fcb774dcf5e1a
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17662,11 +18244,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000435
 expId 435
-fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam,wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=5beee41df89cd8eeb7ec57b42f0c33da,bai=aec948eb7de52b60679d8ea089b49682
+md5sum 5beee41df89cd8eeb7ec57b42f0c33da,aec948eb7de52b60679d8ea089b49682
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17688,11 +18270,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000435
 expId 435
-fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam,wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=6e9deef68ec724226c0d1d4c74f00fef,bai=e334fcc0cbaf1a7e9d0c6fae6a378cde
+md5sum 6e9deef68ec724226c0d1d4c74f00fef,e334fcc0cbaf1a7e9d0c6fae6a378cde
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -17922,11 +18504,11 @@ dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 dccAccession wgEncodeEH000400
 expId 400
-fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=b5df1d91564e0f2a58c10c8628994af2,bai=c08730e928a0063795d82578a393fffa
+md5sum b5df1d91564e0f2a58c10c8628994af2,c08730e928a0063795d82578a393fffa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -17948,11 +18530,11 @@ dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
 dccAccession wgEncodeEH000400
 expId 400
-fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam,wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=5ac7605e49b3ed1572a5779ea1b97aa0,bai=b9299f6b4ac5bffb2f760ca5b0f70da7
+md5sum 5ac7605e49b3ed1572a5779ea1b97aa0,b9299f6b4ac5bffb2f760ca5b0f70da7
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -18184,11 +18766,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000471
 expId 471
-fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam,wgEncodeUwHistoneK562InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=87bf94aee05213d3abd24e4256b14d29,bai=abd48cc689cd6efc49d2e42249540391
+md5sum 87bf94aee05213d3abd24e4256b14d29,abd48cc689cd6efc49d2e42249540391
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -18260,11 +18842,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
 expId 1909
-fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneLncapH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=aa16a8a7f6bd51b0d13754799b2869a2,bai=8b45886cb43b9955a3ff2cda4401d52c
+md5sum aa16a8a7f6bd51b0d13754799b2869a2,8b45886cb43b9955a3ff2cda4401d52c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18285,11 +18867,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001909
 expId 1909
-fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneLncapH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=4144bc0805eefb3640ecaa5a188d3980,bai=b81bf77002a49d7f8630da5a4d4c7dd6
+md5sum 4144bc0805eefb3640ecaa5a188d3980,b81bf77002a49d7f8630da5a4d4c7dd6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18514,11 +19096,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001897
 expId 1897
-fileName wgEncodeUwHistoneLncapInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneLncapInputStdAlnRep1.bam,wgEncodeUwHistoneLncapInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=0b78ee0b19e13e795ef4320063929ca5,bai=e5ce88067c7f98de41b407e251515a3c
+md5sum 0b78ee0b19e13e795ef4320063929ca5,e5ce88067c7f98de41b407e251515a3c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18589,12 +19171,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH000967
 expId 967
-fileName wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneMcf7H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS16201
 labVersion Bowtie 0.12.7
-md5sum bam=c373d90cf1fc0097b60ce80f6a0c4151,bai=45adc0da477fad48f271de2ead49547f
+md5sum c373d90cf1fc0097b60ce80f6a0c4151,45adc0da477fad48f271de2ead49547f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -18721,11 +19303,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000967
 expId 967
-fileName wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=c1dad189b9d0ca624fce6c08d3228fe7,bai=eeb801a5bba7964116cc11bcdf0ab8a0
+md5sum c1dad189b9d0ca624fce6c08d3228fe7,eeb801a5bba7964116cc11bcdf0ab8a0
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18848,11 +19430,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000968
 expId 968
-fileName wgEncodeUwHistoneMcf7InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneMcf7InputStdAlnRep1.bam,wgEncodeUwHistoneMcf7InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=b10fb6885ec687300b45ba920772296d,bai=db93a51ff2fbc9ee1d5c1a9cbf8aa466
+md5sum b10fb6885ec687300b45ba920772296d,db93a51ff2fbc9ee1d5c1a9cbf8aa466
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -18910,6 +19492,322 @@ subId 2655
 tableName wgEncodeUwHistoneMcf7InputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneMonocd14ro1746H3k04me3StdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+md5sum 8385667238057c3a5c27bbe23c5cc3bf,3ba836236f76b229c19b4ead6777ba9e
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+view Alignments
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1
+objType table
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Hotspot-v5.2
+md5sum 51d337e7aaab7535d4be984b675e1f03
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+tableName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1
+objType table
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion lmax-v1.0
+md5sum 31d6ed7d794593e95b67b162eb800d06
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+tableName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+md5sum 0e1de7eb151f7b1568318a368e4f32e1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+view RawData
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1
+objType table
+antibody H3K4me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+md5sum f74dee26e2d35eff73efeaa4cc8e99ae
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4642
+tableName wgEncodeUwHistoneMonocd14ro1746H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdAlnRep1
+objType file
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdAlnRep1.bam,wgEncodeUwHistoneMonocd14ro1746H3k27me3StdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+md5sum 8f1b7c32fdb68f031eb3f569d7dc6bb7,ac243dea67ceda3867a5504f5a61f68a
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+view Alignments
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1
+objType table
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Hotspot-v5.2
+md5sum a7ad8c4f07142b2556af53dbeeb793e6
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+tableName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1
+objType table
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion lmax-v1.0
+md5sum b3226aec571221807cbb837d6365c2c4
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+tableName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdPkRep1
+view Peaks
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawDataRep1
+objType file
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+md5sum 5cff2a552d53477390219429dfa8c497
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+view RawData
+
+metaObject wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1
+objType table
+antibody H3K27me3
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+md5sum 8fbf1bd83e764f0fcca629054a44881a
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 4643
+tableName wgEncodeUwHistoneMonocd14ro1746H3k27me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneMonocd14ro1746InputStdAlnRep1
+objType file
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746InputStdAlnRep1.bam,wgEncodeUwHistoneMonocd14ro1746InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion Bowtie 0.12.7
+md5sum db0dd73402806e1932dcf9289f623044,aaf3ed6bd65b7ea5220dc192992b83db
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4641
+view Alignments
+
+metaObject wgEncodeUwHistoneMonocd14ro1746InputStdRawDataRep1
+objType file
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746InputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId RO 01746
+md5sum a32a40d3445b0d09480d7127877d1cb5
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4641
+view RawData
+
+metaObject wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1
+objType table
+antibody Input
+cell Monocytes-CD14+_RO01746
+composite wgEncodeUwHistone
+control std
+controlId Monocytes-CD14+_RO01746/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-21
+dateUnrestricted 2012-06-21
+fileName wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId RO 01746
+labVersion WindowDensity-bin20-win+/-75
+md5sum 8853c6528b861db17db4a1d20ead82df
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 4641
+tableName wgEncodeUwHistoneMonocd14ro1746InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneNb4H3k4me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -18923,11 +19821,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000969
 expId 969
-fileName wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam,wgEncodeUwHistoneNb4H3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=283386ecb866b7c0db0a541b78f98f1a,bai=f91fd1e50cc054419ffe7c9ef3b66849
+md5sum 283386ecb866b7c0db0a541b78f98f1a,f91fd1e50cc054419ffe7c9ef3b66849
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19050,11 +19948,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000970
 expId 970
-fileName wgEncodeUwHistoneNb4InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNb4InputStdAlnRep1.bam,wgEncodeUwHistoneNb4InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=68138205d5dc967e206d59aae202213f,bai=211072291311fe91b475ae0b65953b22
+md5sum 68138205d5dc967e206d59aae202213f,211072291311fe91b475ae0b65953b22
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19125,11 +20023,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000971
 expId 971
-fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=42d9e695cd7696a82ae308dbb92447d0,bai=621093e44981f690c324a028005d7328
+md5sum 42d9e695cd7696a82ae308dbb92447d0,621093e44981f690c324a028005d7328
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19150,11 +20048,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000971
 expId 971
-fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=2bef57e1e06249c0fd97eb92e5ca0385,bai=6884891eca854f8c6ee7c7b665fe9d9c
+md5sum 2bef57e1e06249c0fd97eb92e5ca0385,6884891eca854f8c6ee7c7b665fe9d9c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -19379,11 +20277,11 @@ dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 dccAccession wgEncodeEH000972
 expId 972
-fileName wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam,wgEncodeUwHistoneNhdfneoInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=291082132e6429eb5af0094d5ec3b49c,bai=f479a8c0ab730ac32cac9bb8305b8e74
+md5sum 291082132e6429eb5af0094d5ec3b49c,f479a8c0ab730ac32cac9bb8305b8e74
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19455,11 +20353,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000436
 expId 436
-fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=021005dbc4443f0b3f444e4c60e69bdd,bai=68165f8d8499b0a68806fb7aa73e63f4
+md5sum 021005dbc4443f0b3f444e4c60e69bdd,68165f8d8499b0a68806fb7aa73e63f4
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -19481,11 +20379,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000436
 expId 436
-fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=76e554b666d4d345a984ef63243ce92f,bai=5e755ad1cebb07e9bffcb8c24bd6d950
+md5sum 76e554b666d4d345a984ef63243ce92f,5e755ad1cebb07e9bffcb8c24bd6d950
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -19715,11 +20613,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000414
 expId 414
-fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2b9884a64c7e7eb9128d93ef2b4c765a,bai=5c898abdb9acd45224edd545da1fb1fa
+md5sum 2b9884a64c7e7eb9128d93ef2b4c765a,5c898abdb9acd45224edd545da1fb1fa
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -19741,11 +20639,11 @@ dateSubmitted 2010-06-15
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000414
 expId 414
-fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=c14c53e250bfe109627f5ef295290ad0,bai=4bf3502d9355aeb1c27fad9ac3f68a2d
+md5sum c14c53e250bfe109627f5ef295290ad0,4bf3502d9355aeb1c27fad9ac3f68a2d
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -19976,11 +20874,11 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000415
 expId 415
-fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=44796a46e98e0ae1c492430f6cfcafc8,bai=b6a74ea09ab6164f3d953b0f2c655a9e
+md5sum 44796a46e98e0ae1c492430f6cfcafc8,b6a74ea09ab6164f3d953b0f2c655a9e
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -20002,11 +20900,11 @@ dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 dccAccession wgEncodeEH000415
 expId 415
-fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=93f13c94ddff752753a0feb617c9fdd8,bai=d17b69962990da89ef11ff0048a0dd79
+md5sum 93f13c94ddff752753a0feb617c9fdd8,d17b69962990da89ef11ff0048a0dd79
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -20236,11 +21134,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000472
 expId 472
-fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam,wgEncodeUwHistoneNhekInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=91cc4ef6fe3f3a73395231f47f34f46f,bai=7307229f70d64fc97b3e225269ff1378
+md5sum 91cc4ef6fe3f3a73395231f47f34f46f,7307229f70d64fc97b3e225269ff1378
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -20312,11 +21210,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
 expId 1910
-fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneNhlfH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=cb1ce369be1dfe7e900dcba416422ac3,bai=564e0b7a58476ae5c0c5c00fb5a9ce80
+md5sum cb1ce369be1dfe7e900dcba416422ac3,564e0b7a58476ae5c0c5c00fb5a9ce80
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20337,11 +21235,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001910
 expId 1910
-fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneNhlfH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=426dfa60c50d3328f9467fe36adbd9ed,bai=f81dd6a82f82d33a2520b4fa44f5ec0c
+md5sum 426dfa60c50d3328f9467fe36adbd9ed,f81dd6a82f82d33a2520b4fa44f5ec0c
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20566,11 +21464,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001899
 expId 1899
-fileName wgEncodeUwHistoneNhlfInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneNhlfInputStdAlnRep1.bam,wgEncodeUwHistoneNhlfInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=bc56a075054dbaeae27c9116f9bcda5d,bai=a96e44a6ab87f2e8d41ff5b8446fd47c
+md5sum bc56a075054dbaeae27c9116f9bcda5d,a96e44a6ab87f2e8d41ff5b8446fd47c
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20641,11 +21539,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
 expId 1911
-fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam,wgEncodeUwHistonePanc1H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=2b2750c7cd78d0b00540e0199b40e96f,bai=f0899bc1a262ea2dc108c563b5d52fbc
+md5sum 2b2750c7cd78d0b00540e0199b40e96f,f0899bc1a262ea2dc108c563b5d52fbc
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20666,11 +21564,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001911
 expId 1911
-fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam,wgEncodeUwHistonePanc1H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=5240c04763a21820fb969e46e84aeceb,bai=475e84e6753b7a06f3b6fdda6548ddbf
+md5sum 5240c04763a21820fb969e46e84aeceb,475e84e6753b7a06f3b6fdda6548ddbf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -20895,11 +21793,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001900
 expId 1900
-fileName wgEncodeUwHistonePanc1InputStdAlnRep1.bam
+fileName wgEncodeUwHistonePanc1InputStdAlnRep1.bam,wgEncodeUwHistonePanc1InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=e8444f8d9672c4c50d3b87f175c9e68e,bai=5b525c7c0811950c5b44929017c94014
+md5sum e8444f8d9672c4c50d3b87f175c9e68e,5b525c7c0811950c5b44929017c94014
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20970,12 +21868,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
 expId 2044
-fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneRptecH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18340
 labVersion Bowtie 0.12.7
-md5sum bam=2535e89d9b11dba266aa1886982ded8d,bai=8f28723c10059bc2e7b1f9410991c113
+md5sum 2535e89d9b11dba266aa1886982ded8d,8f28723c10059bc2e7b1f9410991c113
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -20996,12 +21894,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002044
 expId 2044
-fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneRptecH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneRptecH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS18339
 labVersion Bowtie 0.12.7
-md5sum bam=66ae4cce4e3c946fae46d6d7f5625128,bai=bbf038de462f716b2fd7ef61cfc92b4b
+md5sum 66ae4cce4e3c946fae46d6d7f5625128,bbf038de462f716b2fd7ef61cfc92b4b
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -21234,12 +22132,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002045
 expId 2045
-fileName wgEncodeUwHistoneRptecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneRptecInputStdAlnRep1.bam,wgEncodeUwHistoneRptecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18336
 labVersion Bowtie 0.12.7
-md5sum bam=8e4598bd0dee85ccbe1fc4674a62edab,bai=2e11f9239948bdd171c4690794676ba6
+md5sum 8e4598bd0dee85ccbe1fc4674a62edab,2e11f9239948bdd171c4690794676ba6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -21313,11 +22211,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000420
 expId 420
-fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=3a28fbba034a025ada3fe7b4022f3203,bai=ce66d3a55c44ee43833c9cee4bcbe4d7
+md5sum 3a28fbba034a025ada3fe7b4022f3203,ce66d3a55c44ee43833c9cee4bcbe4d7
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21339,11 +22237,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000420
 expId 420
-fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2ecc6c0549364dc335c894864483862b,bai=f43ba248402b5abf52dd2ce18b70e277
+md5sum 2ecc6c0549364dc335c894864483862b,f43ba248402b5abf52dd2ce18b70e277
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21573,11 +22471,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000438
 expId 438
-fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=ed8f514592784acca20555dcbdfb4cfa,bai=8a0379263b1163073741b6ff75344295
+md5sum ed8f514592784acca20555dcbdfb4cfa,8a0379263b1163073741b6ff75344295
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21599,11 +22497,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000438
 expId 438
-fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=753d29a3a99b8dc592dbbb7ca8baed41,bai=e7c2664aad0815802bbd504039c3caca
+md5sum 753d29a3a99b8dc592dbbb7ca8baed41,e7c2664aad0815802bbd504039c3caca
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -21833,11 +22731,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000421
 expId 421
-fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=25bc6c2f8e1398c3848e85111007c19b,bai=1df4539ed3f606b21c4015b040222a44
+md5sum 25bc6c2f8e1398c3848e85111007c19b,1df4539ed3f606b21c4015b040222a44
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -21859,11 +22757,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000421
 expId 421
-fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=72c38bdde10de64463710c7edb4dbc52,bai=0d926574d33ab35102e6c09b4fe6f1f9
+md5sum 72c38bdde10de64463710c7edb4dbc52,0d926574d33ab35102e6c09b4fe6f1f9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -22093,11 +22991,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000473
 expId 473
-fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam,wgEncodeUwHistoneSaecInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=727bf1fb6715522036f5faf38b7824c1,bai=dbdf0b8adb79506a5092328d2f0a4b66
+md5sum 727bf1fb6715522036f5faf38b7824c1,dbdf0b8adb79506a5092328d2f0a4b66
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22169,12 +23067,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
 expId 2046
-fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneSkmcH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS16211
 labVersion Bowtie 0.12.7
-md5sum bam=ce78b1284d29515637b30bb264aaad7f,bai=c422c79c03dc4645b7bcea63499ad82f
+md5sum ce78b1284d29515637b30bb264aaad7f,c422c79c03dc4645b7bcea63499ad82f
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22195,12 +23093,12 @@ dateSubmitted 2011-07-29
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002046
 expId 2046
-fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneSkmcH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS16212
 labVersion Bowtie 0.12.7
-md5sum bam=1449a743fbd72c4571f361d86961e776,bai=154c3e08774c60f57a0473d6e7e17eee
+md5sum 1449a743fbd72c4571f361d86961e776,154c3e08774c60f57a0473d6e7e17eee
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22433,11 +23331,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
 expId 1912
-fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam,wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=647650b1e98b2ed284bd60fb259c7cf1,bai=df0abf2bf9afd89d2dc351a5642d60e8
+md5sum 647650b1e98b2ed284bd60fb259c7cf1,df0abf2bf9afd89d2dc351a5642d60e8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22458,11 +23356,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001912
 expId 1912
-fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam,wgEncodeUwHistoneSknmcH3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=cc532a012f57d1217d6195cc27cac7df,bai=3c51f8ca942593ecca8c5f3978f35968
+md5sum cc532a012f57d1217d6195cc27cac7df,3c51f8ca942593ecca8c5f3978f35968
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -22687,11 +23585,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001901
 expId 1901
-fileName wgEncodeUwHistoneSknmcInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneSknmcInputStdAlnRep1.bam,wgEncodeUwHistoneSknmcInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=d5d191f1e9ca99b3e1121a9fd05ec28b,bai=6ac7de5c7f67f9e9c95911d7f0887bf6
+md5sum d5d191f1e9ca99b3e1121a9fd05ec28b,6ac7de5c7f67f9e9c95911d7f0887bf6
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -22763,11 +23661,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000440
 expId 440
-fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam,wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=64b262c9c7f8946bf430fb257fa0115a,bai=bf99d42e5d13e719b231826b5ef5655d
+md5sum 64b262c9c7f8946bf430fb257fa0115a,bf99d42e5d13e719b231826b5ef5655d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -22789,11 +23687,11 @@ dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 dccAccession wgEncodeEH000440
 expId 440
-fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam,wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=f938d5dcf9a2162c3921e79c38388f2d,bai=d04c6fb3cff53be1625ce8a3dc31a318
+md5sum f938d5dcf9a2162c3921e79c38388f2d,d04c6fb3cff53be1625ce8a3dc31a318
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23023,11 +23921,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000441
 expId 441
-fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam,wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=230981650cd77951c6a9ff271e0d707f,bai=ea199baa13f8196020a5d15f0e971eaf
+md5sum 230981650cd77951c6a9ff271e0d707f,ea199baa13f8196020a5d15f0e971eaf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23049,11 +23947,11 @@ dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 dccAccession wgEncodeEH000441
 expId 441
-fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam,wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=4000be91cea9171f8aa4c1a3b2b838dc,bai=b7b3c952981562bdfbebb0d4c98a146c
+md5sum 4000be91cea9171f8aa4c1a3b2b838dc,b7b3c952981562bdfbebb0d4c98a146c
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23283,11 +24181,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000422
 expId 422
-fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam,wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=2cd71ccbe2502b68bccb1de9102a4749,bai=2dd3e4e32f69dd7a84696bb1000945a5
+md5sum 2cd71ccbe2502b68bccb1de9102a4749,2dd3e4e32f69dd7a84696bb1000945a5
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23309,11 +24207,11 @@ dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 dccAccession wgEncodeEH000422
 expId 422
-fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam,wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=263740f9be1bec6220d6734477b6fba1,bai=fedf1309e6a7da15c084bbb78b18fd3e
+md5sum 263740f9be1bec6220d6734477b6fba1,fedf1309e6a7da15c084bbb78b18fd3e
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23543,11 +24441,11 @@ dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 dccAccession wgEncodeEH000474
 expId 474
-fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
+fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam,wgEncodeUwHistoneSknshraInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-md5sum bam=fa68ac676eda604a99da8e0171a5ea02,bai=60ed9a08fc64468a2116227f1a277568
+md5sum fa68ac676eda604a99da8e0171a5ea02,60ed9a08fc64468a2116227f1a277568
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23619,11 +24517,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
 expId 1913
-fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=07eab01efec34fadaf84936b43d76a88,bai=7c448be6fe858c24fc14807476d6e213
+md5sum 07eab01efec34fadaf84936b43d76a88,7c448be6fe858c24fc14807476d6e213
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23644,11 +24542,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001913
 expId 1913
-fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneWerirb1H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=9dbb1c8357b0fdff10516b317a058730,bai=65942ab28d65dcf3371eca85172d036a
+md5sum 9dbb1c8357b0fdff10516b317a058730,65942ab28d65dcf3371eca85172d036a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -23860,6 +24758,53 @@ subId 4380
 tableName wgEncodeUwHistoneWerirb1H3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneWerirb1InputStdAlnRep1
+objType file
+antibody Input
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam,wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+md5sum 4b263c42794d5aa07e09c5d9bebadde5,113c878900657f4fac0aa43749f8300c
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 4633
+view Alignments
+
+metaObject wgEncodeUwHistoneWerirb1InputStdRawRep1
+objType table
+antibody Input
+cell WERI-Rb-1
+composite wgEncodeUwHistone
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-07-28
+dateUnrestricted 2012-04-28
+fileName wgEncodeUwHistoneWerirb1InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+md5sum 5d0f0cdc08903fa90835af13a21d64a8
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 4633
+tableName wgEncodeUwHistoneWerirb1InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1
 objType file
 antibody H3K4me3
@@ -23873,12 +24818,12 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
 expId 2047
-fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1.bam,wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18355
 labVersion Bowtie 0.12.7
-md5sum bam=33b30abb5798a99583fad7949af75f9a,bai=55d033bd98a3a8b5c0ccb2e21de478c7
+md5sum 33b30abb5798a99583fad7949af75f9a,55d033bd98a3a8b5c0ccb2e21de478c7
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -23900,12 +24845,12 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002047
 expId 2047
-fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2.bam
+fileName wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2.bam,wgEncodeUwHistoneWi38H3k04me3OhtamStdAlnRep2.bam.bai
 grant Stam
 lab UW
 labExpId DS18354
 labVersion Bowtie 0.12.7
-md5sum bam=a958bbcf6779b9eb4bfc78ddc05e1108,bai=a59198fc9830de5e61ff2340ef549df1
+md5sum a958bbcf6779b9eb4bfc78ddc05e1108,a59198fc9830de5e61ff2340ef549df1
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24147,11 +25092,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
 expId 1914
-fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam,wgEncodeUwHistoneWi38H3k04me3StdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=6060e92b74564c494e80bd660c570fe6,bai=1a8e9bbffa2b39177e37132ca101214e
+md5sum 6060e92b74564c494e80bd660c570fe6,1a8e9bbffa2b39177e37132ca101214e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24172,11 +25117,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001914
 expId 1914
-fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam
+fileName wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam,wgEncodeUwHistoneWi38H3k04me3StdAlnRep2.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=7799e2f13e0f9e01a921b5d3f4cd9638,bai=df96a340c12e677b07502ac1949998ad
+md5sum 7799e2f13e0f9e01a921b5d3f4cd9638,df96a340c12e677b07502ac1949998ad
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -24401,12 +25346,12 @@ dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEH002048
 expId 2048
-fileName wgEncodeUwHistoneWi38InputOhtamStdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38InputOhtamStdAlnRep1.bam,wgEncodeUwHistoneWi38InputOhtamStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS18351
 labVersion Bowtie 0.12.7
-md5sum bam=865b7374b5917014e92fbe0e4932afc4,bai=2fff3ca054957eae4248a9ab8f54b86a
+md5sum 865b7374b5917014e92fbe0e4932afc4,2fff3ca054957eae4248a9ab8f54b86a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24482,11 +25427,11 @@ dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-24
 dccAccession wgEncodeEH001903
 expId 1903
-fileName wgEncodeUwHistoneWi38InputStdAlnRep1.bam
+fileName wgEncodeUwHistoneWi38InputStdAlnRep1.bam,wgEncodeUwHistoneWi38InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.7
-md5sum bam=ad9237429f19d8eba7252c7698b67679,bai=57958533d9b8a52c446bc55aded4339b
+md5sum ad9237429f19d8eba7252c7698b67679,57958533d9b8a52c446bc55aded4339b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24544,4 +25489,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -1048209676
+# MAGIC: -1860110701

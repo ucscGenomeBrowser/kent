@@ -16,14 +16,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000184
 dccRep 1
 expId 184
-fileName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767854
 grant Gingeras
 lab CSHL
 labExpId LID9005
 labProtocolId 021WC-
 localization cell
-md5sum bam=2aac07f3f113b5bd708915081eb1a11d,bai=0da3b2adf4f21d5bb50e7cae31b91f2c
+md5sum 2aac07f3f113b5bd708915081eb1a11d,0da3b2adf4f21d5bb50e7cae31b91f2c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -46,14 +46,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000184
 dccRep 2
 expId 184
-fileName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767854
 grant Gingeras
 lab CSHL
 labExpId LID9006
 labProtocolId 022WC-
 localization cell
-md5sum bam=6cfac7b713ffd1dac8d96220991fae70,bai=cdfd482d0d8708fff9a3a64f0a488da8
+md5sum 6cfac7b713ffd1dac8d96220991fae70,cdfd482d0d8708fff9a3a64f0a488da8
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -410,7 +410,7 @@ subId 4589
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamJunctions
-objType file
+objType table
 bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
@@ -433,6 +433,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3601
+tableName wgEncodeCshlLongRnaSeqA549CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqA549CellPamSpikeinsRep1
@@ -564,14 +565,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000143
 dccRep 1
 expId 143
-fileName wgEncodeCshlLongRnaSeqA549CellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqA549CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqA549CellPapAlnRep1.bam.bai
 geoSampleAccession GSM758564
 grant Gingeras
 lab CSHL
 labExpId LID8963
 labProtocolId 021WC+
 localization cell
-md5sum bam=6ac70824daafd4d48ca7666a8d7f0f36,bai=3976d51809de9a90a2899929905827a0
+md5sum 6ac70824daafd4d48ca7666a8d7f0f36,3976d51809de9a90a2899929905827a0
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -594,14 +595,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000143
 dccRep 2
 expId 143
-fileName wgEncodeCshlLongRnaSeqA549CellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqA549CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqA549CellPapAlnRep2.bam.bai
 geoSampleAccession GSM758564
 grant Gingeras
 lab CSHL
 labExpId LID8964
 labProtocolId 022WC+
 localization cell
-md5sum bam=b6c1b68f7839a19422b55c586bab4e7d,bai=a3e4d22810234d83d56ad5a1e3954f75
+md5sum b6c1b68f7839a19422b55c586bab4e7d,a3e4d22810234d83d56ad5a1e3954f75
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -1164,14 +1165,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000179
 dccRep 1
 expId 179
-fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9001
 labProtocolId 017WC-
 localization cell
-md5sum bam=bf874b47b46a49e9408b66dd0f8784d5,bai=bb7600b72dc20a55cd278a136408fd98
+md5sum bf874b47b46a49e9408b66dd0f8784d5,bb7600b72dc20a55cd278a136408fd98
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -1194,14 +1195,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000179
 dccRep 2
 expId 179
-fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM765396
 grant Gingeras
 lab CSHL
 labExpId LID9002
 labProtocolId 018WC-
 localization cell
-md5sum bam=b2d49064bf6100d51ba8383ef40de2e2,bai=b3f52dd205053226aa8de5804274f81c
+md5sum b2d49064bf6100d51ba8383ef40de2e2,b3f52dd205053226aa8de5804274f81c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -1558,7 +1559,7 @@ subId 4558
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamJunctions
-objType file
+objType table
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
@@ -1581,6 +1582,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3603
+tableName wgEncodeCshlLongRnaSeqAg04450CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPamSpikeinsRep1
@@ -1712,14 +1714,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000144
 dccRep 1
 expId 144
-fileName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1.bam.bai
 geoSampleAccession GSM758561
 grant Gingeras
 lab CSHL
 labExpId LID8965
 labProtocolId 017WC+
 localization cell
-md5sum bam=b04b44097cc0d85871b2b85d16c0e726,bai=d69121706c27b069745c375cc3f34b7c
+md5sum b04b44097cc0d85871b2b85d16c0e726,d69121706c27b069745c375cc3f34b7c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -1742,14 +1744,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000144
 dccRep 2
 expId 144
-fileName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep2.bam.bai
 geoSampleAccession GSM758561
 grant Gingeras
 lab CSHL
 labExpId LID8966
 labProtocolId 018WC+
 localization cell
-md5sum bam=0769d29627ad2d59745d7a3f7934097b,bai=7608df98e0e4082c3ab5bb4f313220e9
+md5sum 0769d29627ad2d59745d7a3f7934097b,7608df98e0e4082c3ab5bb4f313220e9
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -1984,7 +1986,7 @@ subId 4554
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapJunctions
-objType file
+objType table
 bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
@@ -2007,6 +2009,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3604
+tableName wgEncodeCshlLongRnaSeqAg04450CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep1
@@ -2311,14 +2314,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000185
 dccRep 1
 expId 185
-fileName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767855
 grant Gingeras
 lab CSHL
 labExpId LID9007
 labProtocolId 037WC-
 localization cell
-md5sum bam=5ff8fd7689442e2d3e0e84bfd8ebcbb2,bai=5f18542615c5d66311e1d948bdceeff7
+md5sum 5ff8fd7689442e2d3e0e84bfd8ebcbb2,5f18542615c5d66311e1d948bdceeff7
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -2341,14 +2344,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000185
 dccRep 2
 expId 185
-fileName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767855
 grant Gingeras
 lab CSHL
 labExpId LID9008
 labProtocolId 038WC-
 localization cell
-md5sum bam=3d2246eca90ce5f6cf2ba05aa4138260,bai=7b2803d446d031b25c3d6580ec0a13e4
+md5sum 3d2246eca90ce5f6cf2ba05aa4138260,7b2803d446d031b25c3d6580ec0a13e4
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -2705,7 +2708,7 @@ subId 4581
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamJunctions
-objType file
+objType table
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
@@ -2728,6 +2731,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3605
+tableName wgEncodeCshlLongRnaSeqBjCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPamSpikeinsRep1
@@ -2859,14 +2863,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000145
 dccRep 1
 expId 145
-fileName wgEncodeCshlLongRnaSeqBjCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqBjCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqBjCellPapAlnRep1.bam.bai
 geoSampleAccession GSM758562
 grant Gingeras
 lab CSHL
 labExpId LID8969
 labProtocolId 037WC+
 localization cell
-md5sum bam=aca7563b75059b34dbde330163a7f93c,bai=ce4ae0d071723520b6f50a637bc1e14d
+md5sum aca7563b75059b34dbde330163a7f93c,ce4ae0d071723520b6f50a637bc1e14d
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -2889,14 +2893,14 @@ dateUnrestricted 2011-07-01
 dccAccession wgEncodeEH000145
 dccRep 2
 expId 145
-fileName wgEncodeCshlLongRnaSeqBjCellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqBjCellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqBjCellPapAlnRep2.bam.bai
 geoSampleAccession GSM758562
 grant Gingeras
 lab CSHL
 labExpId LID8970
 labProtocolId 038WC+
 localization cell
-md5sum bam=0465277e9bc56886f737aa4141bfcf01,bai=e4a4f5c5a54cc596533cf87b194a65ea
+md5sum 0465277e9bc56886f737aa4141bfcf01,e4a4f5c5a54cc596533cf87b194a65ea
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -3131,7 +3135,7 @@ subId 4576
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapJunctions
-objType file
+objType table
 bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
@@ -3154,6 +3158,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3606
+tableName wgEncodeCshlLongRnaSeqBjCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep1
@@ -3458,14 +3463,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000148
 dccRep 1
 expId 148
-fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM758572
 grant Gingeras
 lab CSHL
 labExpId LID8661
 labProtocolId 003WC-
 localization cell
-md5sum bam=1a3f73a84e8cc76726202565cb9553ca,bai=8b4c4066203931a016c4a6275b247c2b
+md5sum 1a3f73a84e8cc76726202565cb9553ca,8b4c4066203931a016c4a6275b247c2b
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -3488,14 +3493,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000148
 dccRep 2
 expId 148
-fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM758572
 grant Gingeras
 lab CSHL
 labExpId LID8662
 labProtocolId 004WC-
 localization cell
-md5sum bam=7fe8124e8906f9593a59c6e1e6b21250,bai=ea332e13a261aa43b4c508584039887c
+md5sum 7fe8124e8906f9593a59c6e1e6b21250,ea332e13a261aa43b4c508584039887c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -3850,7 +3855,7 @@ subId 4586
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamJunctions
-objType file
+objType table
 bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -3873,6 +3878,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3611
+tableName wgEncodeCshlLongRnaSeqGm12878CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellPamProtocolRep1
@@ -4057,14 +4063,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000146
 dccRep 1
 expId 146
-fileName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1.bam.bai
 geoSampleAccession GSM758559
 grant Gingeras
 lab CSHL
 labExpId LID16629
 labProtocolId 003WC+
 localization cell
-md5sum bam=ef50cfac8b54beae2e40b510516dbfbe,bai=233186a92a6d2b8d3c7f88064d80dda5
+md5sum ef50cfac8b54beae2e40b510516dbfbe,233186a92a6d2b8d3c7f88064d80dda5
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -4087,14 +4093,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000146
 dccRep 2
 expId 146
-fileName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep2.bam.bai
 geoSampleAccession GSM758559
 grant Gingeras
 lab CSHL
 labExpId LID16630
 labProtocolId 004WC+
 localization cell
-md5sum bam=d5c629b8f777487a31f8b47d0851675e,bai=632ef915f47d94b2ed37320b648213b9
+md5sum d5c629b8f777487a31f8b47d0851675e,632ef915f47d94b2ed37320b648213b9
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -4658,13 +4664,13 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000141
 dccRep 1
 expId 141
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId crg-7
 labProtocolId gen0102WCt
 localization cell
-md5sum bam=dcd233c01bc856e5cc496b7d49771d67,bai=9f8a94015f2f5609cde523b62e6fc4f3
+md5sum dcd233c01bc856e5cc496b7d49771d67,9f8a94015f2f5609cde523b62e6fc4f3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4686,13 +4692,13 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000141
 dccRep 2
 expId 141
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam,wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId crg-12
 labProtocolId gen0103WCt
 localization cell
-md5sum bam=2e931b7df0bb6175b28bb20d6979fe36,bai=36b45efefc6ed8123603e0289f2a7752
+md5sum 2e931b7df0bb6175b28bb20d6979fe36,36b45efefc6ed8123603e0289f2a7752
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -4877,14 +4883,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000186
 dccRep 1
 expId 186
-fileName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767852
 grant Gingeras
 lab CSHL
 labExpId LID18547
 labProtocolId 003C-
 localization cytosol
-md5sum bam=5ce26b26feaf8cae59cf91f9cfa91aef,bai=83e62af7f48eb3b3e35cf764bc19c560
+md5sum 5ce26b26feaf8cae59cf91f9cfa91aef,83e62af7f48eb3b3e35cf764bc19c560
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -4907,14 +4913,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000186
 dccRep 2
 expId 186
-fileName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767852
 grant Gingeras
 lab CSHL
 labExpId LID18548
 labProtocolId 004C-
 localization cytosol
-md5sum bam=5c328902e347e5bc91832d467e581821,bai=adfda10dee177b0b7fc4421cf2aa71c0
+md5sum 5c328902e347e5bc91832d467e581821,adfda10dee177b0b7fc4421cf2aa71c0
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -5271,7 +5277,7 @@ subId 4559
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPamJunctions
-objType file
+objType table
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -5480,14 +5486,14 @@ dateUnrestricted 2011-07-05
 dccAccession wgEncodeEH000147
 dccRep 1
 expId 147
-fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam,wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam.bai
 geoSampleAccession GSM758560
 grant Gingeras
 lab CSHL
 labExpId LID8467
 labProtocolId 003C+
 localization cytosol
-md5sum bam=d6af952f8274ec254961f0396ac8c60d,bai=d72a8c0d5dbc7a90d0a9d6b05c095729
+md5sum d6af952f8274ec254961f0396ac8c60d,d72a8c0d5dbc7a90d0a9d6b05c095729
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -5510,14 +5516,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000147
 dccRep 2
 expId 147
-fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep2.bam,wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep2.bam.bai
 geoSampleAccession GSM758560
 grant Gingeras
 lab CSHL
 labExpId LID8468
 labProtocolId 004C+
 localization cytosol
-md5sum bam=6b002f30c7301a45f850db4c171dc5c2,bai=3ab4d4d8778e12ebdebfd08cd0657035
+md5sum 6b002f30c7301a45f850db4c171dc5c2,3ab4d4d8778e12ebdebfd08cd0657035
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -5752,7 +5758,7 @@ subId 4553
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapJunctions
-objType file
+objType table
 bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -5775,6 +5781,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3608
+tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep1
@@ -6079,14 +6086,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000187
 dccRep 1
 expId 187
-fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767853
 grant Gingeras
 lab CSHL
 labExpId LID9197
 labProtocolId 003N-
 localization nucleus
-md5sum bam=b32c92e3bbe827be3be546b72e8f040f,bai=764ce8f1f0d9934b778a3e49df721000
+md5sum b32c92e3bbe827be3be546b72e8f040f,764ce8f1f0d9934b778a3e49df721000
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -6109,14 +6116,14 @@ dateUnrestricted 2011-10-12
 dccAccession wgEncodeEH000187
 dccRep 2
 expId 187
-fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767853
 grant Gingeras
 lab CSHL
 labExpId LID9198
 labProtocolId 004N-
 localization nucleus
-md5sum bam=12a595c26af0bfa2735cbf9ef0b334be,bai=baa61168c5b67302cb49cd68910ef05e
+md5sum 12a595c26af0bfa2735cbf9ef0b334be,baa61168c5b67302cb49cd68910ef05e
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -6473,7 +6480,7 @@ subId 4548
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamJunctions
-objType file
+objType table
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6496,6 +6503,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3609
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPamProtocolRep1
@@ -6681,14 +6689,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000170
 dccRep 1
 expId 170
-fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1.bam,wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1.bam.bai
 geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8532
 labProtocolId 003N+
 localization nucleus
-md5sum bam=94d505d54ee07a68e2a0afb193a8b565,bai=9fc190fe174941a9f2ff5e8b1c6308e4
+md5sum 94d505d54ee07a68e2a0afb193a8b565,9fc190fe174941a9f2ff5e8b1c6308e4
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -6711,14 +6719,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000170
 dccRep 2
 expId 170
-fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam,wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam.bai
 geoSampleAccession GSM765386
 grant Gingeras
 lab CSHL
 labExpId LID8533
 labProtocolId 004N+
 localization nucleus
-md5sum bam=8e859e16bf00ff71cf55ffc322ac6126,bai=90c5b2aee2bd5e1cd8f2a8c14601c1b4
+md5sum 8e859e16bf00ff71cf55ffc322ac6126,90c5b2aee2bd5e1cd8f2a8c14601c1b4
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -6955,7 +6963,7 @@ subId 4601
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapJunctions
-objType file
+objType table
 bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
@@ -6978,6 +6986,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3610
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1
@@ -7283,14 +7292,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000149
 dccRep 1
 expId 149
-fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM758573
 grant Gingeras
 lab CSHL
 labExpId LID8663
 labProtocolId 005WC-
 localization cell
-md5sum bam=6587e586e376b989854a3040fa929b95,bai=13faa58e9d5b94e47cb334b00d49fab1
+md5sum 6587e586e376b989854a3040fa929b95,13faa58e9d5b94e47cb334b00d49fab1
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -7313,14 +7322,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000149
 dccRep 2
 expId 149
-fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM758573
 grant Gingeras
 lab CSHL
 labExpId LID8664
 labProtocolId 006WC-
 localization cell
-md5sum bam=36059f397cf60b1e8ea84869370fc020,bai=bc424d28efe2722bc5886b5fd4fcf820
+md5sum 36059f397cf60b1e8ea84869370fc020,bc424d28efe2722bc5886b5fd4fcf820
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -7675,7 +7684,7 @@ subId 4593
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamJunctions
-objType file
+objType table
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -7698,6 +7707,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3613
+tableName wgEncodeCshlLongRnaSeqH1hescCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPamProtocolRep1
@@ -7882,14 +7892,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000150
 dccRep 1
 expId 150
-fileName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1.bam.bai
 geoSampleAccession GSM758566
 grant Gingeras
 lab CSHL
 labExpId LID8461
 labProtocolId 005WC+
 localization cell
-md5sum bam=9dabe8fa9819a00a4ba8bb634b4e7e61,bai=1b4489108471c3a6b5e1d46db8db2636
+md5sum 9dabe8fa9819a00a4ba8bb634b4e7e61,1b4489108471c3a6b5e1d46db8db2636
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -7912,14 +7922,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000150
 dccRep 2
 expId 150
-fileName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep2.bam.bai
 geoSampleAccession GSM758566
 grant Gingeras
 lab CSHL
 labExpId LID8462
 labProtocolId 006WC+
 localization cell
-md5sum bam=458f9da89a28a39425dca1d224faa227,bai=57ee2a20d7dd62a8f45b6e9fdc0189ce
+md5sum 458f9da89a28a39425dca1d224faa227,57ee2a20d7dd62a8f45b6e9fdc0189ce
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -8154,7 +8164,7 @@ subId 4592
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapJunctions
-objType file
+objType table
 bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -8177,6 +8187,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3614
+tableName wgEncodeCshlLongRnaSeqH1hescCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep1
@@ -8481,14 +8492,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000198
 dccRep 2
 expId 198
-fileName wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767842
 grant Gingeras
 lab CSHL
 labExpId LID18549
 labProtocolId 006C-
 localization cytosol
-md5sum bam=8231e66c25359651f21d589872b2ec0d,bai=82d09fd0c676def20021b2adf1c832b5
+md5sum 8231e66c25359651f21d589872b2ec0d,82d09fd0c676def20021b2adf1c832b5
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -8731,7 +8742,7 @@ subId 4542
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamJunctions
-objType file
+objType table
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -8756,6 +8767,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3615
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPamProtocolRep2
@@ -8885,14 +8897,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000151
 dccRep 2
 expId 151
-fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2.bam,wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2.bam.bai
 geoSampleAccession GSM758570
 grant Gingeras
 lab CSHL
 labExpId LID8536
 labProtocolId 006C+
 localization cytosol
-md5sum bam=350490d4a0accd1d6746fb0ef32559f7,bai=1397412eac1768e005a8786c7c4e941a
+md5sum 350490d4a0accd1d6746fb0ef32559f7,1397412eac1768e005a8786c7c4e941a
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -9073,7 +9085,7 @@ subId 4582
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapJunctions
-objType file
+objType table
 bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -9098,6 +9110,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3616
+tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolPapMinusRawSigRep2
@@ -9286,14 +9299,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000199
 dccRep 2
 expId 199
-fileName wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767841
 grant Gingeras
 lab CSHL
 labExpId LID9199
 labProtocolId 006N-
 localization nucleus
-md5sum bam=da4d32efab8724e163ddc4aaf067cf46,bai=d6b69acb1e1b42e680a21c711c5c8183
+md5sum da4d32efab8724e163ddc4aaf067cf46,d6b69acb1e1b42e680a21c711c5c8183
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -9536,7 +9549,7 @@ subId 4590
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamJunctions
-objType file
+objType table
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -9561,6 +9574,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3617
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPamProtocolRep2
@@ -9690,14 +9704,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000152
 dccRep 2
 expId 152
-fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2.bam,wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2.bam.bai
 geoSampleAccession GSM758574
 grant Gingeras
 lab CSHL
 labExpId LID8558
 labProtocolId 006N+
 localization nucleus
-md5sum bam=0aee237b1e06812fca29dee76a513af6,bai=f80f671f6b4a8e0e73ebe70f54c86dd4
+md5sum 0aee237b1e06812fca29dee76a513af6,f80f671f6b4a8e0e73ebe70f54c86dd4
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -9878,7 +9892,7 @@ subId 4570
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapJunctions
-objType file
+objType table
 bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
@@ -9903,6 +9917,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3618
+tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusPapMinusRawSigRep2
@@ -10091,14 +10106,14 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000191
 dccRep 1
 expId 191
-fileName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767847
 grant Gingeras
 lab CSHL
 labExpId LID8790
 labProtocolId 011WC-
 localization cell
-md5sum bam=1856b9720ee5e59f1c92549c55f3e134,bai=08ddbb303c7dc31fa8028b2f44448ba4
+md5sum 1856b9720ee5e59f1c92549c55f3e134,08ddbb303c7dc31fa8028b2f44448ba4
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -10121,14 +10136,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000191
 dccRep 2
 expId 191
-fileName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767847
 grant Gingeras
 lab CSHL
 labExpId LID8791
 labProtocolId 012WC-
 localization cell
-md5sum bam=31eeda4a3395cc13d75e10ecf41aeeee,bai=d992f3cf35cda56b09fed8c29b7dce0c
+md5sum 31eeda4a3395cc13d75e10ecf41aeeee,d992f3cf35cda56b09fed8c29b7dce0c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -10485,7 +10500,7 @@ subId 4599
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamJunctions
-objType file
+objType table
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -10508,6 +10523,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3629
+tableName wgEncodeCshlLongRnaSeqHelas3CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPamProtocolRep1
@@ -10693,14 +10709,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000173
 dccRep 1
 expId 173
-fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1.bam.bai
 geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16633
 labProtocolId 011WC+
 localization cell
-md5sum bam=a20005281551a16e20382ca7316cc009,bai=760a900511b82a61add528f216545b23
+md5sum a20005281551a16e20382ca7316cc009,760a900511b82a61add528f216545b23
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -10723,14 +10739,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000173
 dccRep 2
 expId 173
-fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep2.bam.bai
 geoSampleAccession GSM765402
 grant Gingeras
 lab CSHL
 labExpId LID16634
 labProtocolId 012WC+
 localization cell
-md5sum bam=1a2705518ff2cbe67e73d747d3128093,bai=269a772461164540db8d46b01d5c951d
+md5sum 1a2705518ff2cbe67e73d747d3128093,269a772461164540db8d46b01d5c951d
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -10967,7 +10983,7 @@ subId 4583
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapJunctions
-objType file
+objType table
 bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -10990,6 +11006,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3630
+tableName wgEncodeCshlLongRnaSeqHelas3CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep1
@@ -11295,14 +11312,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000201
 dccRep 2
 expId 201
-fileName wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767838
 grant Gingeras
 lab CSHL
 labExpId LID18551
 labProtocolId 012C-
 localization cytosol
-md5sum bam=7065046372bed2d578375ea05491eeee,bai=30cb70b6553c7566d6ca68312cbd78c9
+md5sum 7065046372bed2d578375ea05491eeee,30cb70b6553c7566d6ca68312cbd78c9
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -11545,7 +11562,7 @@ subId 4577
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamJunctions
-objType file
+objType table
 bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -11570,6 +11587,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3631
+tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPamProtocolRep2
@@ -11699,14 +11717,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000171
 dccRep 1
 expId 171
-fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1.bam.bai
 geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8469
 labProtocolId 011C+
 localization cytosol
-md5sum bam=fc751da26061a6af4e702add69c06063,bai=ed00b00ef724245b68925d3dee64b650
+md5sum fc751da26061a6af4e702add69c06063,ed00b00ef724245b68925d3dee64b650
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -11729,14 +11747,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000171
 dccRep 2
 expId 171
-fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep2.bam.bai
 geoSampleAccession GSM765404
 grant Gingeras
 lab CSHL
 labExpId LID8470
 labProtocolId 012C+
 localization cytosol
-md5sum bam=812d9cfe01e95848de5addb95ced8693,bai=790cd58c37d00ed7db070ec68a95d33c
+md5sum 812d9cfe01e95848de5addb95ced8693,790cd58c37d00ed7db070ec68a95d33c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -11973,7 +11991,7 @@ subId 4544
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapJunctions
-objType file
+objType table
 bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -11996,6 +12014,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3632
+tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep1
@@ -12301,14 +12320,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000190
 dccRep 1
 expId 190
-fileName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767848
 grant Gingeras
 lab CSHL
 labExpId LID9200
 labProtocolId 011N-
 localization nucleus
-md5sum bam=b5b0b465507a74cf38dd3f98ea0615fa,bai=fd8ef750822258cfd2831ad3bfbbe737
+md5sum b5b0b465507a74cf38dd3f98ea0615fa,fd8ef750822258cfd2831ad3bfbbe737
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -12331,14 +12350,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000190
 dccRep 2
 expId 190
-fileName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767848
 grant Gingeras
 lab CSHL
 labExpId LID9201
 labProtocolId 012N-
 localization nucleus
-md5sum bam=ae7bf866aabe6b680fa6f5126f7c5379,bai=5898b3ea22daed2fbd60d8997abeeedf
+md5sum ae7bf866aabe6b680fa6f5126f7c5379,5898b3ea22daed2fbd60d8997abeeedf
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -12695,7 +12714,7 @@ subId 4568
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamJunctions
-objType file
+objType table
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -12718,6 +12737,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3633
+tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPamProtocolRep1
@@ -12903,14 +12923,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000172
 dccRep 1
 expId 172
-fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1.bam.bai
 geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8559
 labProtocolId 011N+
 localization nucleus
-md5sum bam=813c186380c3244c4c2ce350cffe3477,bai=ed26396192dff4d0ccc98d946c9d3bde
+md5sum 813c186380c3244c4c2ce350cffe3477,ed26396192dff4d0ccc98d946c9d3bde
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -12933,14 +12953,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000172
 dccRep 2
 expId 172
-fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep2.bam.bai
 geoSampleAccession GSM765403
 grant Gingeras
 lab CSHL
 labExpId LID8560
 labProtocolId 012N+
 localization nucleus
-md5sum bam=0458e65b9a61688a2c0765d8804bf376,bai=3704d64e820f7e0d762e35017e8d0332
+md5sum 0458e65b9a61688a2c0765d8804bf376,3704d64e820f7e0d762e35017e8d0332
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -13177,7 +13197,7 @@ subId 4550
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapJunctions
-objType file
+objType table
 bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
@@ -13200,6 +13220,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3634
+tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep1
@@ -13505,14 +13526,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000159
 dccRep 1
 expId 159
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM758567
 grant Gingeras
 lab CSHL
 labExpId LID8792
 labProtocolId 013WC-
 localization cell
-md5sum bam=e36535aa0cc2fda1c3e7f4964030549c,bai=d8bd5c48db1ab323a9c1351219b54b19
+md5sum e36535aa0cc2fda1c3e7f4964030549c,d8bd5c48db1ab323a9c1351219b54b19
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -13535,14 +13556,14 @@ dateUnrestricted 2011-10-21
 dccAccession wgEncodeEH000159
 dccRep 2
 expId 159
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM758567
 grant Gingeras
 lab CSHL
 labExpId LID8793
 labProtocolId 014WC-
 localization cell
-md5sum bam=345146c1ee46e085878700238278e732,bai=785c4b5aae4928f1b01919daec0f5de3
+md5sum 345146c1ee46e085878700238278e732,785c4b5aae4928f1b01919daec0f5de3
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -13897,7 +13918,7 @@ subId 4580
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamJunctions
-objType file
+objType table
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -13920,6 +13941,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3639
+tableName wgEncodeCshlLongRnaSeqHepg2CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPamProtocolRep1
@@ -14104,14 +14126,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000160
 dccRep 1
 expId 160
-fileName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1.bam.bai
 geoSampleAccession GSM758575
 grant Gingeras
 lab CSHL
 labExpId LID16635
 labProtocolId 013WC+
 localization cell
-md5sum bam=02767a22e4364632f70602c093b00c19,bai=bc2c3d7cfc67f7cbc1579ad3c5d43a02
+md5sum 02767a22e4364632f70602c093b00c19,bc2c3d7cfc67f7cbc1579ad3c5d43a02
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -14134,14 +14156,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000160
 dccRep 2
 expId 160
-fileName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep2.bam.bai
 geoSampleAccession GSM758575
 grant Gingeras
 lab CSHL
 labExpId LID16636
 labProtocolId 014WC+
 localization cell
-md5sum bam=e7531cb62fdf924279ff59fe98c6b7ca,bai=e32d70f193d1541d3873c9e24003e22b
+md5sum e7531cb62fdf924279ff59fe98c6b7ca,e32d70f193d1541d3873c9e24003e22b
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -14376,7 +14398,7 @@ subId 4596
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapJunctions
-objType file
+objType table
 bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -14399,6 +14421,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3640
+tableName wgEncodeCshlLongRnaSeqHepg2CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1
@@ -14703,14 +14726,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000202
 dccRep 1
 expId 202
-fileName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767840
 grant Gingeras
 lab CSHL
 labExpId LID18552
 labProtocolId 013C-
 localization cytosol
-md5sum bam=7453e2b992f3c894677616e3bb0844e6,bai=3c5cafea0e8545a2462a13b92bd4cde2
+md5sum 7453e2b992f3c894677616e3bb0844e6,3c5cafea0e8545a2462a13b92bd4cde2
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -14733,14 +14756,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000202
 dccRep 2
 expId 202
-fileName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767840
 grant Gingeras
 lab CSHL
 labExpId LID18553
 labProtocolId 014C-
 localization cytosol
-md5sum bam=eba85589846076ec0ccf33482142fccd,bai=4ffdd827c8c407cef3b6eddf5f05da2c
+md5sum eba85589846076ec0ccf33482142fccd,4ffdd827c8c407cef3b6eddf5f05da2c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -15306,14 +15329,14 @@ dateUnrestricted 2011-07-05
 dccAccession wgEncodeEH000161
 dccRep 1
 expId 161
-fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1.bam.bai
 geoSampleAccession GSM758576
 grant Gingeras
 lab CSHL
 labExpId LID8471
 labProtocolId 013C+
 localization cytosol
-md5sum bam=75cab8575bcbd0bfdeda8ab7b7ac8488,bai=2275ceaa4ef9cd977f647e7b0e4fa465
+md5sum 75cab8575bcbd0bfdeda8ab7b7ac8488,2275ceaa4ef9cd977f647e7b0e4fa465
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -15336,14 +15359,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000161
 dccRep 2
 expId 161
-fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep2.bam.bai
 geoSampleAccession GSM758576
 grant Gingeras
 lab CSHL
 labExpId LID8472
 labProtocolId 014C+
 localization cytosol
-md5sum bam=2dbfb045cfb2d0a181c791beb5f7ea38,bai=03841236805b298c8d83d6203bfec92f
+md5sum 2dbfb045cfb2d0a181c791beb5f7ea38,03841236805b298c8d83d6203bfec92f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -15578,7 +15601,7 @@ subId 4603
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolPapJunctions
-objType file
+objType table
 bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -15906,14 +15929,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000192
 dccRep 1
 expId 192
-fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767850
 grant Gingeras
 lab CSHL
 labExpId LID9202
 labProtocolId 013N-
 localization nucleus
-md5sum bam=6eeaba4c0dc3209e93db12ed5c67a448,bai=cfa24fd2e83567a3fd83f4fc3358ddda
+md5sum 6eeaba4c0dc3209e93db12ed5c67a448,cfa24fd2e83567a3fd83f4fc3358ddda
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -15936,14 +15959,14 @@ dateUnrestricted 2011-10-12
 dccAccession wgEncodeEH000192
 dccRep 2
 expId 192
-fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767850
 grant Gingeras
 lab CSHL
 labExpId LID9203
 labProtocolId 014N-
 localization nucleus
-md5sum bam=608e2548db24a551f29ad873b1e20206,bai=547f1bb7fe89b5d4eff8a37326766b70
+md5sum 608e2548db24a551f29ad873b1e20206,547f1bb7fe89b5d4eff8a37326766b70
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -16300,7 +16323,7 @@ subId 4562
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamJunctions
-objType file
+objType table
 bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -16323,6 +16346,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3637
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPamProtocolRep1
@@ -16508,14 +16532,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000158
 dccRep 1
 expId 158
-fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1.bam.bai
 geoSampleAccession GSM758568
 grant Gingeras
 lab CSHL
 labExpId LID8534
 labProtocolId 013N+
 localization nucleus
-md5sum bam=8f2301473a5ab2167df14f49001bf426,bai=d9154572c5e1fb95f584dc6cc1739ff4
+md5sum 8f2301473a5ab2167df14f49001bf426,d9154572c5e1fb95f584dc6cc1739ff4
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -16538,14 +16562,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000158
 dccRep 2
 expId 158
-fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep2.bam.bai
 geoSampleAccession GSM758568
 grant Gingeras
 lab CSHL
 labExpId LID8535
 labProtocolId 014N+
 localization nucleus
-md5sum bam=d536759e33b5fcc0aa401eef92ddffa0,bai=dd158d9b5d4504e64189bceea5e61d7f
+md5sum d536759e33b5fcc0aa401eef92ddffa0,dd158d9b5d4504e64189bceea5e61d7f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -16780,7 +16804,7 @@ subId 4584
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapJunctions
-objType file
+objType table
 bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
@@ -16803,6 +16827,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3638
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep1
@@ -17107,14 +17132,14 @@ dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000176
 dccRep 1
 expId 176
-fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM765397
 grant Gingeras
 lab CSHL
 labExpId LID8831
 labProtocolId 036WC-
 localization cell
-md5sum bam=a525be222112674b21ada5ef31bc9882,bai=762259e187b81f057fb1e077c2c684f8
+md5sum a525be222112674b21ada5ef31bc9882,762259e187b81f057fb1e077c2c684f8
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -17357,7 +17382,7 @@ subId 4547
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamJunctions
-objType file
+objType table
 bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
@@ -17382,6 +17407,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3619
+tableName wgEncodeCshlLongRnaSeqHmecCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPamProtocolRep1
@@ -17511,14 +17537,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000153
 dccRep 1
 expId 153
-fileName wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1.bam.bai
 geoSampleAccession GSM758571
 grant Gingeras
 lab CSHL
 labExpId LID8695
 labProtocolId 036WC+
 localization cell
-md5sum bam=8d555da2088148d30086f729624ebdd2,bai=daced4836ea0c925003bc87aac9bb12f
+md5sum 8d555da2088148d30086f729624ebdd2,daced4836ea0c925003bc87aac9bb12f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -17699,7 +17725,7 @@ subId 4556
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapJunctions
-objType file
+objType table
 bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
@@ -17724,6 +17750,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3620
+tableName wgEncodeCshlLongRnaSeqHmecCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHmecCellPapMinusRawSigRep1
@@ -17912,14 +17939,14 @@ dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000177
 dccRep 1
 expId 177
-fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8826
 labProtocolId 023WC-
 localization cell
-md5sum bam=f122a2f44c4afc1282e8c13692e73c04,bai=900ef946d6f4be1b8ab8fb7b32eeb08f
+md5sum f122a2f44c4afc1282e8c13692e73c04,900ef946d6f4be1b8ab8fb7b32eeb08f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -17942,14 +17969,14 @@ dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000177
 dccRep 2
 expId 177
-fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM765391
 grant Gingeras
 lab CSHL
 labExpId LID8827
 labProtocolId 024WC-
 localization cell
-md5sum bam=e80b66c54edd1e499228678fa38a8fd3,bai=da2e0b931b545d4c875a6a6320825f9f
+md5sum e80b66c54edd1e499228678fa38a8fd3,da2e0b931b545d4c875a6a6320825f9f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -18306,7 +18333,7 @@ subId 4605
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamJunctions
-objType file
+objType table
 bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
@@ -18329,6 +18356,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3621
+tableName wgEncodeCshlLongRnaSeqHsmmCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPamProtocolRep1
@@ -18514,14 +18542,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000154
 dccRep 1
 expId 154
-fileName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep1.bam.bai
 geoSampleAccession GSM758578
 grant Gingeras
 lab CSHL
 labExpId LID8710
 labProtocolId 023WC+
 localization cell
-md5sum bam=8d64b01d54312d99b29675fca5d8ec84,bai=5bb76f232d73e6e75485e3f8a8f4fdc3
+md5sum 8d64b01d54312d99b29675fca5d8ec84,5bb76f232d73e6e75485e3f8a8f4fdc3
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -18544,14 +18572,14 @@ dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000154
 dccRep 2
 expId 154
-fileName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2.bam.bai
 geoSampleAccession GSM758578
 grant Gingeras
 lab CSHL
 labExpId LID8711
 labProtocolId 024WC+
 localization cell
-md5sum bam=5ca5f66f8e40398e04dac616993e4c01,bai=022721bd91c729d852a3b24b90db2fe9
+md5sum 5ca5f66f8e40398e04dac616993e4c01,022721bd91c729d852a3b24b90db2fe9
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -18787,7 +18815,7 @@ subId 4587
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapJunctions
-objType file
+objType table
 bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
@@ -18810,6 +18838,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3622
+tableName wgEncodeCshlLongRnaSeqHsmmCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep1
@@ -19114,14 +19143,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000188
 dccRep 1
 expId 188
-fileName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767856
 grant Gingeras
 lab CSHL
 labExpId LID8788
 labProtocolId 009WC-
 localization cell
-md5sum bam=17ef75ddc34bf73f1ac66e5c7eee7acb,bai=3566d936255f186321352927dd6d2c97
+md5sum 17ef75ddc34bf73f1ac66e5c7eee7acb,3566d936255f186321352927dd6d2c97
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -19144,14 +19173,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000188
 dccRep 2
 expId 188
-fileName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767856
 grant Gingeras
 lab CSHL
 labExpId LID8789
 labProtocolId 010WC-
 localization cell
-md5sum bam=e5d6ef1eaa682847c97f9d20c8b92c8c,bai=c36f0f4506e2417e42934238ba3ae307
+md5sum e5d6ef1eaa682847c97f9d20c8b92c8c,c36f0f4506e2417e42934238ba3ae307
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -19508,7 +19537,7 @@ subId 4565
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamJunctions
-objType file
+objType table
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -19531,6 +19560,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3627
+tableName wgEncodeCshlLongRnaSeqHuvecCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPamProtocolRep1
@@ -19716,14 +19746,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000155
 dccRep 1
 expId 155
-fileName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1.bam.bai
 geoSampleAccession GSM758563
 grant Gingeras
 lab CSHL
 labExpId LID8463
 labProtocolId 009WC+
 localization cell
-md5sum bam=fbcd4ec3baa483a3517b6c60adeaf5b7,bai=81605439ed87f32639c780486c98e23e
+md5sum fbcd4ec3baa483a3517b6c60adeaf5b7,81605439ed87f32639c780486c98e23e
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -19746,14 +19776,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000155
 dccRep 2
 expId 155
-fileName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep2.bam.bai
 geoSampleAccession GSM758563
 grant Gingeras
 lab CSHL
 labExpId LID8464
 labProtocolId 010WC+
 localization cell
-md5sum bam=f7d81fc8b284e78252739950d0fc82de,bai=31ae5af8c316436c71bb85387239c757
+md5sum f7d81fc8b284e78252739950d0fc82de,31ae5af8c316436c71bb85387239c757
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -19988,7 +20018,7 @@ subId 4564
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapJunctions
-objType file
+objType table
 bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -20011,6 +20041,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3628
+tableName wgEncodeCshlLongRnaSeqHuvecCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep1
@@ -20315,14 +20346,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000200
 dccRep 1
 expId 200
-fileName wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3.bam,wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3.bam.bai
 geoSampleAccession GSM767839
 grant Gingeras
 lab CSHL
 labExpId LID18556
 labProtocolId 029C-
 localization cytosol
-md5sum bam=f50e368c0dd3ae3a4d6551ab0e8c19a7,bai=5756462bd7c1afc211e3d7ef385948ae
+md5sum f50e368c0dd3ae3a4d6551ab0e8c19a7,5756462bd7c1afc211e3d7ef385948ae
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -20565,7 +20596,7 @@ subId 4552
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamJunctions
-objType file
+objType table
 bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -20590,6 +20621,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3623
+tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPamProtocolRep3
@@ -20719,14 +20751,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000156
 dccRep 1
 expId 156
-fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3.bam,wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3.bam.bai
 geoSampleAccession GSM758569
 grant Gingeras
 lab CSHL
 labExpId LID8688
 labProtocolId 029C+
 localization cytosol
-md5sum bam=1d4d5e028c4e7d8bcacc4427b21f0769,bai=035d70a676cedd9ecd024edfa97c94e1
+md5sum 1d4d5e028c4e7d8bcacc4427b21f0769,035d70a676cedd9ecd024edfa97c94e1
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -20749,14 +20781,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000156
 dccRep 2
 expId 156
-fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep4.bam,wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep4.bam.bai
 geoSampleAccession GSM758569
 grant Gingeras
 lab CSHL
 labExpId LID8689
 labProtocolId 030C+
 localization cytosol
-md5sum bam=86a9a991dc1cccbf1b24b217e3851325,bai=7208bfb519fb95500653bc58626b20dd
+md5sum 86a9a991dc1cccbf1b24b217e3851325,7208bfb519fb95500653bc58626b20dd
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -20991,7 +21023,7 @@ subId 4595
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapJunctions
-objType file
+objType table
 bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -21014,6 +21046,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3624
+tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep3
@@ -21318,14 +21351,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000189
 dccRep 1
 expId 189
-fileName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3.bam,wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3.bam.bai
 geoSampleAccession GSM767857
 grant Gingeras
 lab CSHL
 labExpId LID9206
 labProtocolId 029N-
 localization nucleus
-md5sum bam=b7d48d6d603ad6e0403229b939de2dc8,bai=d5f86ca486efabe56c7cbf4a5aa7e392
+md5sum b7d48d6d603ad6e0403229b939de2dc8,d5f86ca486efabe56c7cbf4a5aa7e392
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -21348,14 +21381,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000189
 dccRep 2
 expId 189
-fileName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4.bam,wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4.bam.bai
 geoSampleAccession GSM767857
 grant Gingeras
 lab CSHL
 labExpId LID9207
 labProtocolId 030N-
 localization nucleus
-md5sum bam=d03216d944a8de4d64310c59eabbae37,bai=02899aa993840a6bbb6f85884a125623
+md5sum d03216d944a8de4d64310c59eabbae37,02899aa993840a6bbb6f85884a125623
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -21712,7 +21745,7 @@ subId 4563
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamJunctions
-objType file
+objType table
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -21735,6 +21768,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3625
+tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPamProtocolRep3
@@ -21920,14 +21954,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000157
 dccRep 1
 expId 157
-fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3.bam,wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3.bam.bai
 geoSampleAccession GSM758565
 grant Gingeras
 lab CSHL
 labExpId LID8690
 labProtocolId 029N+
 localization nucleus
-md5sum bam=488cfcb5a9aea8c1d2128327db09fa0a,bai=79d209fd342b0639a5256be9d91a224e
+md5sum 488cfcb5a9aea8c1d2128327db09fa0a,79d209fd342b0639a5256be9d91a224e
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -21950,14 +21984,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000157
 dccRep 2
 expId 157
-fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep4.bam,wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep4.bam.bai
 geoSampleAccession GSM758565
 grant Gingeras
 lab CSHL
 labExpId LID8691
 labProtocolId 030N+
 localization nucleus
-md5sum bam=63cdb6362d78c36b60401d803af249d8,bai=279467979b2471511d5eb88e0cbdd47a
+md5sum 63cdb6362d78c36b60401d803af249d8,279467979b2471511d5eb88e0cbdd47a
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -22192,7 +22226,7 @@ subId 4602
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapJunctions
-objType file
+objType table
 bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
@@ -22215,6 +22249,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3626
+tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep3
@@ -22519,14 +22554,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000162
 dccRep 1
 expId 162
-fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM758577
 grant Gingeras
 lab CSHL
 labExpId LID8659
 labProtocolId 001WC-
 localization cell
-md5sum bam=de9dcd8e94d9325d7d0b830a3c572b40,bai=f5db64937e061d7636be066b1c781251
+md5sum de9dcd8e94d9325d7d0b830a3c572b40,f5db64937e061d7636be066b1c781251
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -22549,14 +22584,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000162
 dccRep 2
 expId 162
-fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM758577
 grant Gingeras
 lab CSHL
 labExpId LID8660
 labProtocolId 002WC-
 localization cell
-md5sum bam=e9a9d665dc638ddddce27899426c75ab,bai=13ad0a1ddac7fc309e3ac012fa1487c2
+md5sum e9a9d665dc638ddddce27899426c75ab,13ad0a1ddac7fc309e3ac012fa1487c2
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -22911,7 +22946,7 @@ subId 4588
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamJunctions
-objType file
+objType table
 bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -22934,6 +22969,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3648
+tableName wgEncodeCshlLongRnaSeqK562CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562CellPamProtocolRep1
@@ -23118,14 +23154,14 @@ dateUnrestricted 2011-07-05
 dccAccession wgEncodeEH000163
 dccRep 1
 expId 163
-fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqK562CellPapAlnRep1.bam.bai
 geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16627
 labProtocolId 001WC+
 localization cell
-md5sum bam=fe973d06b92dd8419a1264dff247b696,bai=4d4b6abfa4ff6f0f689caa43ca8f6fc1
+md5sum fe973d06b92dd8419a1264dff247b696,4d4b6abfa4ff6f0f689caa43ca8f6fc1
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -23148,14 +23184,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000163
 dccRep 2
 expId 163
-fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqK562CellPapAlnRep2.bam.bai
 geoSampleAccession GSM765405
 grant Gingeras
 lab CSHL
 labExpId LID16628
 labProtocolId 002WC+
 localization cell
-md5sum bam=1004cf059b880cbd35ccda6a8925a808,bai=a4f4f49e92ccae73009a6b7028ed2deb
+md5sum 1004cf059b880cbd35ccda6a8925a808,a4f4f49e92ccae73009a6b7028ed2deb
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -23722,13 +23758,13 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000142
 dccRep 1
 expId 142
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId crg-45
 labProtocolId gen0131WCt
 localization cell
-md5sum bam=6240c7fb95a9a460acb47f9d50aab122,bai=8c3a1323da706273fc342ff9eb71a971
+md5sum 6240c7fb95a9a460acb47f9d50aab122,8c3a1323da706273fc342ff9eb71a971
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -23750,13 +23786,13 @@ dateUnrestricted 2010-07-22
 dccAccession wgEncodeEH000142
 dccRep 2
 expId 142
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam,wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId crg-53
 labProtocolId gen0132WCt
 localization cell
-md5sum bam=e9b5a54cab5b51c11e1996d984fc565c,bai=296b9020125f71f4d0acac97238decc9
+md5sum e9b5a54cab5b51c11e1996d984fc565c,296b9020125f71f4d0acac97238decc9
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -23941,14 +23977,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000180
 dccRep 1
 expId 180
-fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3.bam,wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3.bam.bai
 geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9185
 labProtocolId 025CHt
 localization chromatin
-md5sum bam=eea03a9edcb0f9744974dd2cbd8702c9,bai=86401a886eb232f521ccf6440d3f1e2d
+md5sum eea03a9edcb0f9744974dd2cbd8702c9,86401a886eb232f521ccf6440d3f1e2d
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -23971,14 +24007,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000180
 dccRep 2
 expId 180
-fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4.bam,wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4.bam.bai
 geoSampleAccession GSM765392
 grant Gingeras
 lab CSHL
 labExpId LID9186
 labProtocolId 026CHt
 localization chromatin
-md5sum bam=92e4e8bbf6190b9c0521f83d70ac7f45,bai=78a768bf7af375457be8e5c8bd53b13b
+md5sum 92e4e8bbf6190b9c0521f83d70ac7f45,78a768bf7af375457be8e5c8bd53b13b
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -24215,7 +24251,7 @@ subId 4551
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalJunctions
-objType file
+objType table
 bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -24238,6 +24274,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 3641
+tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3
@@ -24489,14 +24526,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000193
 dccRep 1
 expId 193
-fileName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767849
 grant Gingeras
 lab CSHL
 labExpId LID18545
 labProtocolId 001C-
 localization cytosol
-md5sum bam=5fdb7612b76789744089f3cfc15ad1da,bai=fa501c1ed029cf6e394884cc2c0bc62a
+md5sum 5fdb7612b76789744089f3cfc15ad1da,fa501c1ed029cf6e394884cc2c0bc62a
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -24519,14 +24556,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000193
 dccRep 2
 expId 193
-fileName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767849
 grant Gingeras
 lab CSHL
 labExpId LID18546
 labProtocolId 002C-
 localization cytosol
-md5sum bam=1cc9f24a47d51f908e28b9dbd150d8c6,bai=8d9aa5a6af495caa420e736ffdeec8c3
+md5sum 1cc9f24a47d51f908e28b9dbd150d8c6,8d9aa5a6af495caa420e736ffdeec8c3
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -25092,13 +25129,13 @@ dateUnrestricted 2010-04-06
 dccAccession wgEncodeEH000140
 dccRep 1
 expId 140
-fileName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1.bam,wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID8465
 labProtocolId 001C+
 localization cytosol
-md5sum bam=970d0822fe075949f8f822f20ab57b78,bai=40116eb4022a6ca0379f98911b8514de
+md5sum 970d0822fe075949f8f822f20ab57b78,40116eb4022a6ca0379f98911b8514de
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -25121,13 +25158,13 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000140
 dccRep 2
 expId 140
-fileName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep2.bam,wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 labExpId LID8466
 labProtocolId 002C+
 localization cytosol
-md5sum bam=d9959d0dfaa18f3e37539e9f6be7d47e,bai=249404a3674632d966ae511c0ccbc9a7
+md5sum d9959d0dfaa18f3e37539e9f6be7d47e,249404a3674632d966ae511c0ccbc9a7
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -25356,7 +25393,7 @@ subId 4572
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapJunctions
-objType file
+objType table
 bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -25378,6 +25415,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3643
+tableName wgEncodeCshlLongRnaSeqK562CytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep1
@@ -25673,14 +25711,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000181
 dccRep 1
 expId 181
-fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3.bam,wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3.bam.bai
 geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9187
 labProtocolId 025NLt
 localization nucleolus
-md5sum bam=117b6ad516aa9635af09df5759e4cf30,bai=fd319c0884b9b23511923d23d9c52f69
+md5sum 117b6ad516aa9635af09df5759e4cf30,fd319c0884b9b23511923d23d9c52f69
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -25703,14 +25741,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000181
 dccRep 2
 expId 181
-fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4.bam,wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4.bam.bai
 geoSampleAccession GSM765393
 grant Gingeras
 lab CSHL
 labExpId LID9188
 labProtocolId 026NLt
 localization nucleolus
-md5sum bam=75d970e4409c81da2917a66c909079a3,bai=8605961b43d41933424140a831d9c773
+md5sum 75d970e4409c81da2917a66c909079a3,8605961b43d41933424140a831d9c773
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -25947,7 +25985,7 @@ subId 4546
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions
-objType file
+objType table
 bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -25970,6 +26008,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 3644
+tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
@@ -26221,14 +26260,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000182
 dccRep 1
 expId 182
-fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3.bam,wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3.bam.bai
 geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9189
 labProtocolId 025NPt
 localization nucleoplasm
-md5sum bam=8f393acaeef9a9f75c793947242e34d5,bai=9246535b9f3da6ead533772816ba2ba2
+md5sum 8f393acaeef9a9f75c793947242e34d5,9246535b9f3da6ead533772816ba2ba2
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -26251,14 +26290,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000182
 dccRep 2
 expId 182
-fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4.bam,wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4.bam.bai
 geoSampleAccession GSM765390
 grant Gingeras
 lab CSHL
 labExpId LID9190
 labProtocolId 026NPt
 localization nucleoplasm
-md5sum bam=d942ee1a252d3141a6ddda357414560b,bai=aee06e459ea100cc1f16be858995fcaf
+md5sum d942ee1a252d3141a6ddda357414560b,aee06e459ea100cc1f16be858995fcaf
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -26495,7 +26534,7 @@ subId 4545
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalJunctions
-objType file
+objType table
 bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -26518,6 +26557,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 3645
+tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3
@@ -26769,14 +26809,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000194
 dccRep 1
 expId 194
-fileName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767844
 grant Gingeras
 lab CSHL
 labExpId LID9195
 labProtocolId 001N-
 localization nucleus
-md5sum bam=ae65b78648acd6900d466c33931c918b,bai=b2a788aec352dc1d4cab0a80691afbbb
+md5sum ae65b78648acd6900d466c33931c918b,b2a788aec352dc1d4cab0a80691afbbb
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -26799,14 +26839,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000194
 dccRep 2
 expId 194
-fileName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767844
 grant Gingeras
 lab CSHL
 labExpId LID9196
 labProtocolId 002N-
 localization nucleus
-md5sum bam=2f263aaab224f88bdd96e9799b04ac97,bai=b32e76b21e25d2fa290cab2ce6a9a474
+md5sum 2f263aaab224f88bdd96e9799b04ac97,b32e76b21e25d2fa290cab2ce6a9a474
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -27163,7 +27203,7 @@ subId 4541
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamJunctions
-objType file
+objType table
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -27186,6 +27226,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3646
+tableName wgEncodeCshlLongRnaSeqK562NucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPamProtocolRep1
@@ -27371,14 +27412,14 @@ dateUnrestricted 2011-07-05
 dccAccession wgEncodeEH000174
 dccRep 1
 expId 174
-fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1.bam,wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1.bam.bai
 geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8556
 labProtocolId 001N+
 localization nucleus
-md5sum bam=c417d4cffd914d97550b9c465601b599,bai=372fc6807675cae972c86ff248457cce
+md5sum c417d4cffd914d97550b9c465601b599,372fc6807675cae972c86ff248457cce
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -27401,14 +27442,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000174
 dccRep 2
 expId 174
-fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep2.bam,wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep2.bam.bai
 geoSampleAccession GSM765387
 grant Gingeras
 lab CSHL
 labExpId LID8557
 labProtocolId 002N+
 localization nucleus
-md5sum bam=3dbc05fb17b6bcb1a752af403011aeeb,bai=7441ce01ce057a6fdeff0368ef290e4e
+md5sum 3dbc05fb17b6bcb1a752af403011aeeb,7441ce01ce057a6fdeff0368ef290e4e
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -27645,7 +27686,7 @@ subId 4555
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapJunctions
-objType file
+objType table
 bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
@@ -27668,6 +27709,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3647
+tableName wgEncodeCshlLongRnaSeqK562NucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep1
@@ -27973,14 +28015,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000183
 dccRep 1
 expId 183
-fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767851
 grant Gingeras
 lab CSHL
 labExpId LID8824
 labProtocolId 015WC-
 localization cell
-md5sum bam=4d55aa4b90bea5a9afa6aca6434bb0f2,bai=7b2a5789cca302eee6a4a4276057bcde
+md5sum 4d55aa4b90bea5a9afa6aca6434bb0f2,7b2a5789cca302eee6a4a4276057bcde
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -28003,14 +28045,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000183
 dccRep 2
 expId 183
-fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767851
 grant Gingeras
 lab CSHL
 labExpId LID8825
 labProtocolId 016WC-
 localization cell
-md5sum bam=c41dc0bea9c5b133d145b02a8962f775,bai=6daf4830a69ff0e5df81032de0d0232f
+md5sum c41dc0bea9c5b133d145b02a8962f775,6daf4830a69ff0e5df81032de0d0232f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -28367,7 +28409,7 @@ subId 4578
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamJunctions
-objType file
+objType table
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -28390,6 +28432,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3650
+tableName wgEncodeCshlLongRnaSeqMcf7CellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPamProtocolRep1
@@ -28575,14 +28618,14 @@ dateUnrestricted 2011-07-05
 dccAccession wgEncodeEH000175
 dccRep 1
 expId 175
-fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1.bam.bai
 geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8686
 labProtocolId 015WC+
 localization cell
-md5sum bam=8a53cd697bbb102029f652c7e445fb6e,bai=f0d64145cff16bea967b5fbff9184731
+md5sum 8a53cd697bbb102029f652c7e445fb6e,f0d64145cff16bea967b5fbff9184731
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -28605,14 +28648,14 @@ dateUnrestricted 2011-07-05
 dccAccession wgEncodeEH000175
 dccRep 2
 expId 175
-fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep2.bam.bai
 geoSampleAccession GSM765388
 grant Gingeras
 lab CSHL
 labExpId LID8687
 labProtocolId 016WC+
 localization cell
-md5sum bam=4f9e470396662b6f3be3ce8d3d488f9c,bai=eadef2f3c2b511b129467a8dd7d44007
+md5sum 4f9e470396662b6f3be3ce8d3d488f9c,eadef2f3c2b511b129467a8dd7d44007
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -28849,7 +28892,7 @@ subId 4600
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapJunctions
-objType file
+objType table
 bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
@@ -28872,6 +28915,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3651
+tableName wgEncodeCshlLongRnaSeqMcf7CellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1
@@ -29177,14 +29221,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
-fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8665
 labProtocolId 007WC-
 localization cell
-md5sum bam=ba815560802acdc64f8eb11c8a11e1bb,bai=87f9e569038e345118b792de3bdea2d9
+md5sum ba815560802acdc64f8eb11c8a11e1bb,87f9e569038e345118b792de3bdea2d9
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -29207,14 +29251,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000164
 dccRep 2
 expId 164
-fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8666
 labProtocolId 008WC-
 localization cell
-md5sum bam=f94a7cfe30a0607020b0df37d8efd3ed,bai=9cbf8fa98b0d83ce9a1f2f04d061ab72
+md5sum f94a7cfe30a0607020b0df37d8efd3ed,9cbf8fa98b0d83ce9a1f2f04d061ab72
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -29238,14 +29282,14 @@ dateUnrestricted 2011-07-25
 dccAccession wgEncodeEH000164
 dccRep 1
 expId 164
-fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5.bam
+fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5.bam,wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5.bam.bai
 geoSampleAccession GSM765398
 grant Gingeras
 lab CSHL
 labExpId LID8830
 labProtocolId 035WC-
 localization cell
-md5sum bam=7bab32ad48f5740293502e56cb220a63,bai=ee9d44d24e56cb9b3e9477adeede18dd
+md5sum 7bab32ad48f5740293502e56cb220a63,ee9d44d24e56cb9b3e9477adeede18dd
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -29786,7 +29830,7 @@ subId 4594
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamJunctions
-objType file
+objType table
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -29811,6 +29855,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3657
+tableName wgEncodeCshlLongRnaSeqNhekCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPamProtocolRep1
@@ -30084,14 +30129,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
-fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1.bam.bai
 geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16631
 labProtocolId 007WC+
 localization cell
-md5sum bam=fdb107e530b460d85d2b8065046d30ca,bai=b5ed2e95c70bdc9600d29b859867cca0
+md5sum fdb107e530b460d85d2b8065046d30ca,b5ed2e95c70bdc9600d29b859867cca0
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -30114,14 +30159,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000167
 dccRep 2
 expId 167
-fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2.bam.bai
 geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID16632
 labProtocolId 008WC+
 localization cell
-md5sum bam=03533a790e8de262cfa787b6dd5b7afa,bai=597194fc38a6a12190a406a18e2da9fe
+md5sum 03533a790e8de262cfa787b6dd5b7afa,597194fc38a6a12190a406a18e2da9fe
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -30145,14 +30190,14 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
 dccRep 1
 expId 167
-fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam
+fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam,wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam.bai
 geoSampleAccession GSM765401
 grant Gingeras
 lab CSHL
 labExpId LID8694
 labProtocolId 035WC+
 localization cell
-md5sum bam=3791b2508d5c8a6f7449030edaee081e,bai=e4b80d9277f10b4eaf6163b858024771
+md5sum 3791b2508d5c8a6f7449030edaee081e,e4b80d9277f10b4eaf6163b858024771
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -30513,7 +30558,7 @@ subId 4574
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapJunctions
-objType file
+objType table
 bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -30538,6 +30583,7 @@ readType 2x76D
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 subId 3659
+tableName wgEncodeCshlLongRnaSeqNhekCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1
@@ -30993,14 +31039,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000195
 dccRep 1
 expId 195
-fileName wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3.bam,wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3.bam.bai
 geoSampleAccession GSM767843
 grant Gingeras
 lab CSHL
 labExpId LID18554
 labProtocolId 027C-
 localization cytosol
-md5sum bam=f9b10cf320669cd58973b58c54c387d5,bai=3ddedce085c3343cd4cd1a9ac35620da
+md5sum f9b10cf320669cd58973b58c54c387d5,3ddedce085c3343cd4cd1a9ac35620da
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -31243,7 +31289,7 @@ subId 4598
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamJunctions
-objType file
+objType table
 bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -31268,6 +31314,7 @@ readType 2x76D
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
 subId 3652
+tableName wgEncodeCshlLongRnaSeqNhekCytosolPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPamSpikeinsRep3
@@ -31370,14 +31417,14 @@ dateUnrestricted 2011-06-30
 dccAccession wgEncodeEH000166
 dccRep 1
 expId 166
-fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3.bam,wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3.bam.bai
 geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8795
 labProtocolId 027C+
 localization cytosol
-md5sum bam=f492340b01f4ac5ccb4382ebc380853d,bai=62d069ce47be62666b4d96627cac07a9
+md5sum f492340b01f4ac5ccb4382ebc380853d,62d069ce47be62666b4d96627cac07a9
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -31400,14 +31447,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000166
 dccRep 2
 expId 166
-fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep4.bam,wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep4.bam.bai
 geoSampleAccession GSM765400
 grant Gingeras
 lab CSHL
 labExpId LID8796
 labProtocolId 028C+
 localization cytosol
-md5sum bam=d610e44942f334acf5416d314301f44e,bai=b429c4c861bdd0c2dc389bf06ba2ab60
+md5sum d610e44942f334acf5416d314301f44e,b429c4c861bdd0c2dc389bf06ba2ab60
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -31644,7 +31691,7 @@ subId 4597
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapJunctions
-objType file
+objType table
 bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -31667,6 +31714,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3653
+tableName wgEncodeCshlLongRnaSeqNhekCytosolPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep3
@@ -31972,14 +32020,14 @@ dateUnrestricted 2011-10-11
 dccAccession wgEncodeEH000196
 dccRep 1
 expId 196
-fileName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3.bam,wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3.bam.bai
 geoSampleAccession GSM767846
 grant Gingeras
 lab CSHL
 labExpId LID9204
 labProtocolId 027N-
 localization nucleus
-md5sum bam=02099f50cf7b7c8937be7b0642e7baac,bai=ba4116e234aecfdc7012487ff4dbcda7
+md5sum 02099f50cf7b7c8937be7b0642e7baac,ba4116e234aecfdc7012487ff4dbcda7
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -32002,14 +32050,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000196
 dccRep 2
 expId 196
-fileName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep4.bam,wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep4.bam.bai
 geoSampleAccession GSM767846
 grant Gingeras
 lab CSHL
 labExpId LID9205
 labProtocolId 028N-
 localization nucleus
-md5sum bam=ba7e1230ab689959495443a9bedb560e,bai=f22059c8c7c17156a650537dd4a0dc1f
+md5sum ba7e1230ab689959495443a9bedb560e,f22059c8c7c17156a650537dd4a0dc1f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -32366,7 +32414,7 @@ subId 4566
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamJunctions
-objType file
+objType table
 bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -32389,6 +32437,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3654
+tableName wgEncodeCshlLongRnaSeqNhekNucleusPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPamProtocolRep3
@@ -32574,14 +32623,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000165
 dccRep 1
 expId 165
-fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3.bam
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3.bam,wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3.bam.bai
 geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8797
 labProtocolId 027N+
 localization nucleus
-md5sum bam=9a84331b37acc0c36a664d5ce8ac865c,bai=eafb48e28b0190f25ef83c0e2cb014d3
+md5sum 9a84331b37acc0c36a664d5ce8ac865c,eafb48e28b0190f25ef83c0e2cb014d3
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -32604,14 +32653,14 @@ dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000165
 dccRep 2
 expId 165
-fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4.bam
+fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4.bam,wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4.bam.bai
 geoSampleAccession GSM765399
 grant Gingeras
 lab CSHL
 labExpId LID8798
 labProtocolId 028N+
 localization nucleus
-md5sum bam=6cafcb02a85fd372172269decf0136b9,bai=2794f7213c79fd45a25d60754a61b61d
+md5sum 6cafcb02a85fd372172269decf0136b9,2794f7213c79fd45a25d60754a61b61d
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -32850,7 +32899,7 @@ subId 4569
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapJunctions
-objType file
+objType table
 bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
@@ -32873,6 +32922,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3655
+tableName wgEncodeCshlLongRnaSeqNhekNucleusPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep3
@@ -33178,14 +33228,14 @@ dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000178
 dccRep 1
 expId 178
-fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8828
 labProtocolId 033WC-
 localization cell
-md5sum bam=aba5a8b521e3e06534c92226b2c9c254,bai=583ae0e3b4bd355ecf84e8d70cc5308f
+md5sum aba5a8b521e3e06534c92226b2c9c254,583ae0e3b4bd355ecf84e8d70cc5308f
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -33208,14 +33258,14 @@ dateUnrestricted 2011-07-22
 dccAccession wgEncodeEH000178
 dccRep 2
 expId 178
-fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM765389
 grant Gingeras
 lab CSHL
 labExpId LID8829
 labProtocolId 034WC-
 localization cell
-md5sum bam=97687668c8dff5f0b71e7a1bc34e5875,bai=f65ce0c7f6f8031389c399d430cf003a
+md5sum 97687668c8dff5f0b71e7a1bc34e5875,f65ce0c7f6f8031389c399d430cf003a
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -33572,7 +33622,7 @@ subId 4573
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamJunctions
-objType file
+objType table
 bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
@@ -33595,6 +33645,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3660
+tableName wgEncodeCshlLongRnaSeqNhlfCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPamProtocolRep1
@@ -33780,14 +33831,14 @@ dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000168
 dccRep 1
 expId 168
-fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam.bai
 geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8692
 labProtocolId 033WC+
 localization cell
-md5sum bam=a451ea7f75cafe3427c678d9d3c5b285,bai=28bf61a235ed513c11823020b39fcb4c
+md5sum a451ea7f75cafe3427c678d9d3c5b285,28bf61a235ed513c11823020b39fcb4c
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -33811,14 +33862,14 @@ dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000168
 dccRep 2
 expId 168
-fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2.bam.bai
 geoSampleAccession GSM765394
 grant Gingeras
 lab CSHL
 labExpId LID8701
 labProtocolId 034WC+
 localization cell
-md5sum bam=924e6c1e031556fa12953ca0c6084df2,bai=eab5b0907c424c578932fb4d6771146b
+md5sum 924e6c1e031556fa12953ca0c6084df2,eab5b0907c424c578932fb4d6771146b
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -34056,7 +34107,7 @@ subId 4543
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapJunctions
-objType file
+objType table
 bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
@@ -34079,6 +34130,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3661
+tableName wgEncodeCshlLongRnaSeqNhlfCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep1
@@ -34384,14 +34436,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000197
 dccRep 1
 expId 197
-fileName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1.bam,wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1.bam.bai
 geoSampleAccession GSM767845
 grant Gingeras
 lab CSHL
 labExpId LID9003
 labProtocolId 019WC-
 localization cell
-md5sum bam=afc08c3ec34d3d2c7213993e8193adb0,bai=dfda9179413094075eaa5d1a4e8c3436
+md5sum afc08c3ec34d3d2c7213993e8193adb0,dfda9179413094075eaa5d1a4e8c3436
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -34414,14 +34466,14 @@ dateUnrestricted 2011-09-23
 dccAccession wgEncodeEH000197
 dccRep 2
 expId 197
-fileName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2.bam,wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2.bam.bai
 geoSampleAccession GSM767845
 grant Gingeras
 lab CSHL
 labExpId LID9011
 labProtocolId 020WC-
 localization cell
-md5sum bam=47dfec59d79373401f31dbd2397f3edc,bai=c24b917e287d2a651b5d2928a8aee2ae
+md5sum 47dfec59d79373401f31dbd2397f3edc,c24b917e287d2a651b5d2928a8aee2ae
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -34778,7 +34830,7 @@ subId 4561
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamJunctions
-objType file
+objType table
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
@@ -34801,6 +34853,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 3662
+tableName wgEncodeCshlLongRnaSeqSknshraCellPamJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPamSpikeinsRep1
@@ -34932,14 +34985,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000169
 dccRep 1
 expId 169
-fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1.bam
+fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1.bam,wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1.bam.bai
 geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8967
 labProtocolId 019WC+
 localization cell
-md5sum bam=0d70a10ae21a37efca8da0cb8f2214eb,bai=3ea1a45855a75f20b2d58e5bae908845
+md5sum 0d70a10ae21a37efca8da0cb8f2214eb,3ea1a45855a75f20b2d58e5bae908845
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -34962,14 +35015,14 @@ dateUnrestricted 2011-06-29
 dccAccession wgEncodeEH000169
 dccRep 2
 expId 169
-fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep2.bam
+fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep2.bam,wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep2.bam.bai
 geoSampleAccession GSM765395
 grant Gingeras
 lab CSHL
 labExpId LID8968
 labProtocolId 020WC+
 localization cell
-md5sum bam=cb43a492248399d48b68011bcffafa23,bai=c72e29a304733c67a5bad8acdefe25f0
+md5sum cb43a492248399d48b68011bcffafa23,c72e29a304733c67a5bad8acdefe25f0
 origAssembly hg19
 project wgEncode
 readType 2x76D
@@ -35206,7 +35259,7 @@ subId 4560
 view GeneGencV7
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapJunctions
-objType file
+objType table
 bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
@@ -35229,6 +35282,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 3663
+tableName wgEncodeCshlLongRnaSeqSknshraCellPapJunctions
 view Junctions
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep1
@@ -35522,4 +35576,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -877804279
+# MAGIC: -1215657903

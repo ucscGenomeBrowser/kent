@@ -1,27 +1,31 @@
-//encodeDataSummary.js - pull experiment table and metadata from server 
-//      and display in summary tables
-// Formatted: jsbeautify.py -j
-// Syntax checked: jslint indent:4, plusplus: true, continue: true, unparam: true, sloppy: true, browser: true */
+/* encodeDataSummary.js - pull experiment table and metadata from server 
+      and display in summary tables
+
+ Formatted: jsbeautify.py -j -k
+ Syntax checked: jslint indent:4, plusplus: true, continue: true, unparam: true, sloppy: true, browser: true
+*/
 /*global $, encodeProject */
 
 $(function () {
-    var requests = [
-    // Requests to server API
-    encodeProject.serverRequests.experiment, encodeProject.serverRequests.dataType, encodeProject.serverRequests.antibody],
-        selectedDataType = null,
-        dataTypeLabelHash = {};
+    var selectedDataType = null,
+        dataTypeLabelHash = {},
+        server, requests = [
+            // Requests to server API
+                    encodeProject.serverRequests.experiment,
+            encodeProject.serverRequests.dataType,
+            encodeProject.serverRequests.antibody];
 
     function tableOut(table, types, exps, selectableData) {
         // Helper function to output tables to document
         var total = 0,
             row = 0,
-            assembly = $("#var_assembly").val();
+            assembly = encodeDataSummary_assembly
 
-        // lay out table
-        $.each(exps, function (key, value) {
-            types.push(key);
-            total += parseInt(value, 10);
-        });
+            // lay out table
+            $.each(exps, function (key, value) {
+                types.push(key);
+                total += parseInt(value, 10);
+            });
         types.sort();
         $.each(types, function (i, value) {
             if (dataTypeLabelHash[value]) {
@@ -30,16 +34,14 @@ $(function () {
                 description = '';
             }
             // quote the end tags so HTML validator doesn't whine
-            $(table).append("<tr class='" +
-                (row % 2 === 0 ? "even" : "odd") +
-                "'><td title='" + description + "'>" + value + "<\/td><td id='" + value + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
+            $(table).append("<tr class='" + (row % 2 === 0 ? "even" : "odd") + "'><td title='" + description + "'>" + value + "<\/td><td id='" + value + "' class='dataItem' title='Click to search for " + value + " data'>" + exps[value] + "<\/td><\/tr>");
             row++;
         });
         if (selectableData) {
-        // TODO: suppress 'Click' title for non-selectables
-        //if (!selectableData) {
+            // TODO: suppress 'Click' title for non-selectables
+            //if (!selectableData) {
             //$(".dataItem").removeAttr("title");
-        //} else {
+            //} else {
             // set up search buttons, initially disabled (must select data to enable)
             $(".searchButton").attr("disabled", "true");
             $("#buttonTrackSearch").click(function () {
@@ -70,7 +72,7 @@ $(function () {
                 }
             });
         }
-        $(table).append("<tr><th>Total: " + types.length + "<\/th><th>" + total + "<\/th><\/tr>");
+        $(table).append("<tr><td class='totals'>Total: " + types.length + "<\/td><td class='totals'>" + total + "<\/td><\/tr>");
         if (total === 0) {
             $(table).remove();
         }
@@ -92,9 +94,9 @@ $(function () {
             organism, assembly, header;
 
         // variables passed in hidden fields
-        organism = $("#var_organism").val();
-        assembly = $("#var_assembly").val();
-        header = $("#var_pageHeader").val();
+        organism = encodeDataSummary_organism;
+        assembly = encodeDataSummary_assembly;
+        header = encodeDataSummary_pageHeader;
 
         $("#pageHeader").text(header);
         $("title").text('ENCODE ' + header);
@@ -160,12 +162,16 @@ $(function () {
             window.location = "encodeChipMatrixHuman.html";
         });
     }
-
+    // get server from calling web page (intended for genome-preview)
+    if ('encodeDataMatrix_server' in window) {
+        server = encodeDataMatrix_server;
+    } else {
+        server = document.location.hostname;
+        // or document.domain ?
+    }
     // initialize
     encodeProject.setup({
-        // todo: add hidden page variable for server
-        server: "hgwdev.cse.ucsc.edu"
-        //server: "genome-preview.ucsc.edu"
+        server: server
     });
     encodeProject.loadAllFromServer(requests, handleServerData);
 });

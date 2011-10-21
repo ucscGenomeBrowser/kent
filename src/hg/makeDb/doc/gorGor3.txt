@@ -1,0 +1,489 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Gorilla gorilla gorilla
+# ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
+#	Gorilla_gorilla/gorGor3.1/
+#
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CABD02
+#	WGS: AAMC01000001:AAMC01190823
+#
+##########################################################################
+# Download sequence (DONE - 2011-10-11 - Hiram)
+    mkdir -p /hive/data/genomes/gorGor3/genbank
+    cd /hive/data/genomes/gorGor3/genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Gorilla_gorilla/gorGor3.1/*"
+
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz 
+1511717716 bases (153400444 N's 1358317272 real 1358317272 upper 0 lower) in 19549 sequences in 1 files
+
+    cat << '_EOF_' > mkUcsc.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chrFrNameToChrN;
+
+open (FH, "< Primary_Assembly/assembled_chromosomes/chr2acc") or die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $frName) = split('\s+', $line);
+    $chrFrNameToChrN{$frName} = $chrN;
+}
+close (FH);
+
+my $firstHeader = 1;
+open (UC, "|gzip -c > ucsc.agp.gz") or die "can not write to ucsc.agp.gz";
+open (FA, "|gzip -c > ucsc.fa.gz") or die "can not write to uscs.fa.gz";
+foreach my $key (sort keys %chrFrNameToChrN) {
+    my $chrN = $chrFrNameToChrN{$key};
+    printf "%s\tchr%s\n", $key, $chrN;
+    my $fastaFile = "Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz";
+    my $agpFile = "Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.agp.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    while (my $line = <FH>) {
+	if ($line =~ m/^#/) {
+	    if ($firstHeader) {
+		printf UC "%s", $line;
+	    }
+	    next;
+	}
+	$firstHeader = 0;
+	$line =~ s/$key/chr${chrN}/;
+	printf UC "%s", $line;
+    }
+    close (FH);
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    while (my $line = <FH>) {
+	if ($line =~ m/^>/) {
+	    die "can not match fasta name $key in $fastaFile\n$line" if ($line !~ m/$key/);
+	    printf FA ">chr${chrN}\n";
+	    next;
+	}
+	printf FA "%s", $line;
+    }
+    close (FH);
+}
+close (UC);
+close (FA);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUcsc.pl
+
+    time ./mkUcsc.pl 
+    #	real    18m3.244s
+
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | \
+	sed -e 's/\.1//' | gzip -c > ucsc.unplaced.agp.gz
+
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+	| sed -e 's/^>.*emb|\([A-Z0-9]*\).*/>\1/' | gzip -c \
+	> ucsc.unplaced.fa.gz
+
+###########################################################################
+# Initial genome build (DONE - 2011-10-11 - Hiram)
+    cd /hive/data/genomes/gorGor3
+    cat << '_EOF_' > gorGor3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db gorGor3
+clade mammal
+genomeCladePriority 12
+scientificName  Gorilla gorilla gorilla
+commonName Gorilla
+assemblyDate May 2011
+assemblyLabel Wellcome Trust Sanger Institute May 2011 (NCBI project 31265, GCA_000151905.1)
+assemblyShortLabel gorGor3.1
+orderKey 25
+mitoAcc NC_011120
+fastaFiles /hive/data/genomes/gorGor3/genbank/ucsc.*fa.gz
+agpFiles /hive/data/genomes/gorGor3/genbank/ucsc.*agp.gz
+# qualFiles none
+dbDbSpeciesDir gorilla
+taxId 9595
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -stop=agp -workhorse=hgwdev -fileServer=hgwdev \
+	gorGor3.config.ra > step.agp.log 2>&1 &
+    #	real    25m45.151s
+    # take a look at the constructed AGP file to see if it has the names
+    #	desired
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+	gorGor3.config.ra > step.db.log 2>&1 &
+    #	real    86m25.408s
+
+##########################################################################
+# running repeat masker (DONE - 2011-10-12 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/repeatMasker
+    cd /hive/data/genomes/gorGor3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk gorGor3 > do.log 2>&1 &
+    #	real    1356m28.922s
+    #	real    35m31.331s
+    cat faSize.rmsk.txt
+    #	3029553646 bases (206793566 N's 2822760080 real 1446718337 upper
+    #	1376041743 lower) in 46823 sequences in 1 files
+    #	%45.42 masked total, %48.75 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+
+    featureBits -countGaps gorGor3 rmsk
+    #	1384011521 bases of 3029553646 (45.684%) in intersection
+    # why is it different than the faSize above ?
+
+##########################################################################
+# running simple repeat (DONE - 2011-10-12 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/simpleRepeat
+    cd /hive/data/genomes/gorGor3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	gorGor3 > do.log 2>&1 &
+    #	real    3208m54.385s
+    #	There were problems in three chunks.  They would not complete
+    #	after a couple days running time.  They were taken manually
+    #	and broken up into smaller parts to get completed.  Note
+    #	work in directories:
+    #	/hive/data/genomes/gorGor3/bed/simpleRepeat/stragglers
+    #	/hive/data/genomes/gorGor3/bed/simpleRepeat/moreStragglers
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-continue=filter -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk \
+	gorGor3 > filter.log 2>&1 &
+    #	real    1m1.322s
+
+    cat fb.simpleRepeat 
+    #	199433151 bases of 2822760080 (7.065%) in intersection
+    #	This is quite a large intersection, highly unusual compared to
+    #	most genomes
+
+    cd /hive/data/genomes/gorGor3
+    twoBitMask gorGor3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed gorGor3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa gorGor3.2bit stdout | faSize stdin > faSize.gorGor3.2bit.txt
+    cat faSize.gorGor3.2bit.txt
+    #	3029553646 bases (206793566 N's 2822760080 real 1445288963 upper
+    #	1377471117 lower) in 46823 sequences in 1 files
+    #	%45.47 masked total, %48.80 masked real
+
+    #  *** REMEMBER *** to reset they symLink in gbdb:
+    rm /gbdb/gorGor3/gorGor3.2bit
+    ln -s `pwd`/gorGor3.2bit /gbdb/gorGor3/gorGor3.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2011-10-13 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/gap
+    cd /hive/data/genomes/gorGor3/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../gorGor3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    1m8.647s
+
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits gorGor3 -not gap -bed=notGap.bed
+    #	3026913193 bases of 3026913193 (100.000%) in intersection
+    featureBits gorGor3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	204153113 bases of 3026913193 (6.745%) in intersection
+    #	Wow, that's a lot of unmarked gap
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" gorGor3 | sort -n | tail -1
+    #	1034
+    #	that number is used below in the script to mark all the new gaps
+    #	with a higher ix than that
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" gorGor3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps gorGor3 other.bed
+    #	204153113 bases of 3029553646 (6.739%) in intersection
+    wc -l other.bed
+    #	423025
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad gorGor3 otherGap other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" gorGor3
+    #	10836
+    hgsql gorGor3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" gorGor3
+    #	433861
+    # == 10836 + 423025
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 gorGor3 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+
+    # there are non-bridged gaps here:
+
+    hgsql -N -e "select bridge from gap;" gorGor3 | sort | uniq -c
+    #	7001 no
+    #	426860 yes
+
+##########################################################################
+#  gorGor3 - Gorilla - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3
+    cat << '_EOF_' > gorGor3.ensGene.ra
+# required db variable
+db gorGor3
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+# delete commands take out genes that are only in patch sequence
+nameTranslation '/^cutchr/d; /^unplaced/d; s/^\([0-9X][0-9ab]*\)/chr\1/; s/^MT/chrM/;'
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=64 gorGor3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3/bed/ensGene.64
+    featureBits gorGor3 ensGene
+    # 50017329 bases of 3026913193 (1.652%) in intersection
+
+############################################################################
+# set this as defaultDb (DONE - 2011-10-13 - Hiram)
+    #	and make this the default genome for Pig
+    hgsql -e 'update defaultDb set name="gorGor3" where name="gorGor1";' \
+	hgcentraltest
+############################################################################
+# scaffolds ctgPos2 track (DONE - 2011-10-13 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/ctgPos2
+    cd /hive/data/genomes/gorGor3/bed/ctgPos2
+    cat << '_EOF_' > scaffoldToCtgPos2.pl 
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chromSizes;
+
+open (FH, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chromSizes{$chr} = $size;
+}
+close (FH);
+
+my %fragToChrom;
+my %fragToPosition;
+my %fragType;
+my %fragSize;
+my %chrType;
+
+open (FH, "hgsql -N -e 'select chrom,chromStart,chromEnd,type,frag,fragStart,fragEnd,strand from gold;' gorGor3|") or die "can not select from gold.gorGor3";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chrom,$chromStart,$chromEnd,$type,$frag,$fragStart,$fragEnd,$strand) =
+	split('\t', $line);
+    next if (exists($fragToChrom{$frag}));
+    my $size = $fragEnd - $fragStart;
+    $fragToChrom{$frag} = $chrom;
+    $fragToPosition{$frag} = $chromStart;
+    $fragType{$frag} = $type;
+    if (exists($chrType{$chrom})) {
+	if ($chrType{$chrom} ne $type) {
+	    printf STDERR "WARN: different types for chrom $chrom: $type NE $chrType{$chrom}\n"; 
+	}
+    }
+    $chrType{$chrom} = $type;
+    $fragSize{$frag} = $size;
+}
+close (FH);
+
+open (FH, "</hive/data/genomes/gorGor3/genbank/Primary_Assembly/scaffold_localID2acc") or die "can not read scaffold_localID2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#Scaffold/);
+    chomp $line;
+    my ($scafName, $fragName) = split('\s+', $line);
+    my $noSuffix = $fragName;
+    $noSuffix =~ s/\.1$//;
+    if (exists($chromSizes{$noSuffix})) {
+	my $type = "";
+	$type = $chrType{$noSuffix} if (exists($chrType{$noSuffix}));
+	$type = $fragType{$fragName} if (exists($fragType{$fragName}));
+	if (length($type) > 0) {
+	my $size = $chromSizes{$noSuffix};
+	printf "%s\t%d\t%s\t0\t%d\t%s\n", $scafName, $size, $noSuffix,
+	    $size, $type;
+	} else {
+	    printf STDERR "can not find fragType for $fragName, $noSuffix\n";
+	}
+    } elsif (exists($fragToChrom{$fragName})) {
+	printf "%s\t%d\t%s\t0\t%d\t%s\n", $scafName, $fragSize{$fragName},
+	    $fragToChrom{$fragName}, $fragSize{$fragName}, $fragType{$fragName};
+    } else {
+	printf STDERR "can not find: $fragName -> $scafName\n";
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x scaffoldToCtgPos2.pl
+    ./scaffoldToCtgPos2.pl > scaffold.ctgPos2.tab
+
+    cut -f1 scaffold.ctgPos2.tab | awk '{print length($1)}' | sort -rn | head -1
+    #	23
+    cut -f3 scaffold.ctgPos2.tab | awk '{print length($1)}' | sort -rn | head -1
+    #	12
+
+    sed -e "s/20/23/; s/16/12/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+
+    hgLoadSqlTab gorGor3 ctgPos2 ctgPos2.sql scaffold.ctgPos2.tab
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-10-14 - Hiram)
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \(  2822760080 / 2897316137 \) \* 1024
+    #	( 2822760080 / 2897316137 ) * 1024 = 997.649613
+    # round up to 1000
+
+    cd /hive/data/genomes/gorGor3
+    blat gorGor3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/gorGor3.11.ooc -repMatch=1000
+    #	Wrote 29991 overused 11-mers to jkStuff/gorGor3.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    # there are non-bridged gaps, but they aren't really that, since
+    #	they are all exactly 100 bases and they are all over the normal
+    #	chromosomes:
+    hgsql -N -e "select bridge from gap;" gorGor3 | sort | uniq -c
+    #	7001 no
+    #	426860 yes
+
+    #	cd /hive/data/genomes/gorGor3/jkStuff
+    #	gapToLift gorGor3 nonBridged.lift -bedFile=nonBridged.bed
+    cd /hive/data/genomes/gorGor3
+    mkdir /hive/data/staging/data/gorGor3
+    cp -p jkStuff/gorGor3.11.ooc chrom.sizes \
+	gorGor3.2bit /hive/data/staging/data/gorGor3
+    # request rsync copy from cluster admin
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE - 2011-10-14 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Gorilla gorilla	546	4	0
+# Gorilla gorilla gorilla	1	0	0
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that gorGor3 has almost no native est's
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add gorGor3 before gorGor2 and commit to GIT
+# Gorilla
+gorGor3.serverGenome = /hive/data/genomes/gorGor3/gorGor3.2bit
+gorGor3.clusterGenome = /scratch/data/gorGor3/gorGor3.2bit
+gorGor3.ooc = /scratch/data/gorGor3/gorGor3.11.ooc
+gorGor3.lift = no
+gorGor3.perChromTables = no
+gorGor3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+gorGor3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+gorGor3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+gorGor3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+gorGor3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+gorGor3.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+gorGor3.downloadDir = gorGor3
+gorGor3.refseq.mrna.native.load  = yes
+gorGor3.refseq.mrna.xeno.load = yes
+gorGor3.refseq.mrna.xeno.loadDesc  = yes
+gorGor3.genbank.est.native.load = no
+gorGor3.upstreamGeneTbl = xenoRefGene
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding gorGor3 Gorilla" etc/genbank.conf
+    git push
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # gorGor genome information, if this is a new species, need to add stuff
+    # there
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial gorGor3 &
+    #	var/build/logs/2011.10.17-09:14:51.gorGor3.initalign.log
+    #	real    788m42.989s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad gorGor3 &
+    #	logFile: var/dbload/hgwdev/logs/2011.10.21-08:59:38.dbload.log
+    #	real    22m45.028s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add gorGor3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "daily update for gorGor3 replaces daily update for gorGor2" \
+	etc/align.dbs etc/hgwdev.dbs
+
+    git push
+    make etc-update
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-11-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor3", "blatx", "17798", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor3", "blatx", "17799", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+###########################################################################
+# lastz swap Human hg19 (DONE - 2011-10-21 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17
+    cat fb.hg19.chainGorGor3Link.txt  
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    69m39.685s
+    cat fb.gorGor3.chainHg19Link.txt 
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
+
+############################################################################

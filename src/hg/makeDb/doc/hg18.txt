@@ -29796,9 +29796,9 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 9/2/11 angie)
-# NEXT TIME: squelch multiple-mappers!
-# Updated 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
+# NHGRI GWAS CATALOG (DONE 10/3/11 angie)
+# NEXT TIME: squelch multiple-mappers?
+# Updated 9/2/11, 8/1/11, 6/9/11, 4/1/11, 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10, 4/1/10, 3/1/10
 # Originally done 1/19/10
 # Area of possible future improvement: for SNPs that can't be mapped via our SNP track,
@@ -29885,7 +29885,21 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 6419 elements of size 22
+#Loaded 6625 elements of size 22
+#Level Code Message
+#Warning 1366 Incorrect integer value: '' for column 'pubMedID' at row 467
+#Warning 1265 Data truncated for column 'initSample' at row 1897
+#load of gwasCatalog did not go as planned: 6625 record(s), 0 row(s) skipped, 1 warning(s) loading bed.tab
+    # Look at the items that had warnings, make sure to test in hgc:
+    tail -n +467 gwasCatalog.bed | head -1
+#chr1    194967673       194967674       rs380390                Klein RJ        2005-03-10 ...
+    # -- The missing pubMedId causes the pubMed link to say that no search terms were entered,
+    # but I can look up the article and manually add the pubMedId like this (I also emailed
+    # the GWAS Catalog team):
+    hgsql hg18 -e 'update gwasCatalog set pubmedId = 15761122 where name="rs380390" and pubmedId=0;'
+    tail -n +1897 gwasCatalog.bed | head -1
+#chr15   23828637        23828638        rs4906844       21810643        Bakken TE       2011-08-01      Arch Gen Psychiatry     Association of genetic variants on 15q12 with cortical thickness and cognition in schizophrenia.        Entorhinal cortical thickness       345 Norwegian ancestry schizophrenia spectrum disorder cases, 179 Norwegian ancestry bipolar spectrum disorder cases, 13 Norwegian ancestry major depressive disorder cases, 36 Norwegian ancestry other psychotic disorder cases, 481 Norwegian ancestry controls  NR      15q12   LOC100128714    rs4906844-?     NR      1E-8                .07 [NR] mm decrease        Affymetrix [597,198]    N
+    # -- the last 3 characters of the very long intial sample description are trunc'd, NBD.
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29899,7 +29913,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#356 ambigStrand.txt
+#371 ambigStrand.txt
 
 
 #############################################################################
@@ -31214,16 +31228,21 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# ISCA RETROSPECTIVE FROM DBVAR (DONE 9/14/11 angie)
+# ISCA (FORMERLY ISCA RETROSPECTIVE) FROM DBVAR (DONE 10/18/11 angie)
+# Combined submitted+remapped, w/new subcategories likely benign, likely pathogenic,
+# and removed Retrospective from names 10/18/11.
+# Split into benign/pathogenic/uncertain subtracks 9/14/11.
 # Reloaded 4/19/11 to drop the boring aggregate variants (sv; keep ssv).
 # Originally done 1/31/11
     # Redmine: Track #34 (dbVar for human)
-    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_09_14
-    cd /hive/data/genomes/hg18/bed/isca/2011_09_14
-    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_-_Retrospective/gvf/nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz
+    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_10_18
+    cd /hive/data/genomes/hg18/bed/isca/2011_10_18
+    # Get variants submitted on this assembly, and variants remapped from other assemblies.
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.NCBI36.submitted.all.germline.ucsc.gvf.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.NCBI36.remap.all.germline.ucsc.gvf.gz
     # See notes on data contents: http://redmine.soe.ucsc.edu/issues/34#note-34
     # and notes on data format plan: http://redmine.soe.ucsc.edu/issues/34#note-36
-    zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
+    zcat nstd37_ISCA*.ucsc.gvf.gz \
     | perl -wne 'next if (/^(#|browser|track)/); chomp; \
         ($c, undef, $varType, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
         ($thickS, $thickE) = ($s, $e); \
@@ -31254,23 +31273,42 @@ TMPDIR=/scratch/tmp
         @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
                       $attrCount, $attrTags, $attrVals); \
         print join("\t", @bed8Attrs) . "\n";' \
-      > iscaRetrospective.bed
-    wc -l iscaRetrospective.bed
-#6387 iscaRetrospective.bed
-    # 9/14/11: Split into subtracks by clinical_int value.
-    zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
+      > isca.bed
+    wc -l isca.bed
+#11550 isca.bed
+    # Split into subtracks by clinical_int value.
+    zcat nstd37_ISCA*.gvf.gz \
     | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
-#   1067 Benign
-#   3281 Pathogenic
-#   2039 Uncertain Significance
-    foreach subtrack (Benign Pathogenic Uncertain)
-      grep -w  $subtrack iscaRetrospective.bed > iscaRetrospective$subtrack.bed
+#   4256 Benign
+#   4066 Pathogenic
+#   2837 Uncertain Significance
+#    330 Uncertain Significance: likely benign
+#     61 Uncertain Significance: likely pathogenic
+    foreach subtrack (Benign Pathogenic)
+      grep -w  $subtrack isca.bed > isca$subtrack.bed
       hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
-        -allowStartEqualEnd hg18 iscaRetrospective$subtrack iscaRetrospective$subtrack.bed
+        -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
     end
-#Loaded 1067 elements of size 11
-#Loaded 3281 elements of size 11
-#Loaded 2039 elements of size 11
+#Loaded 4256 elements of size 11
+#Loaded 4066 elements of size 11
+
+    # The subcategories of Uncertain need a bit more sophisticated treatment:
+    set subtrack = Uncertain
+    grep -w $subtrack isca.bed \
+    | grep -v 'Uncertain Significance: likely' \
+      > isca$subtrack.bed
+    hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+      -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
+#Loaded 2837 elements of size 11
+    foreach unc (benign pathogenic)
+      set subtrack = Likely`perl -we 'print ucfirst("'$unc'");'`
+      grep -w "Uncertain Significance: likely $unc" isca.bed \
+        > isca$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg18 isca$subtrack isca$subtrack.bed
+    end
+#Loaded 330 elements of size 11
+#Loaded 61 elements of size 11
 
 
 #############################################################################
@@ -31966,4 +32004,78 @@ mkdir -p /usr/local/apache/htdocs/evoFoldV2
 
 ln -s /hive/data/genomes/gs.19/build36/bed/evofoldV2/doEvoFoldV2/evoFoldV2  /gbdb/hg18/evoFoldV2 
 ln -s /gbdb/hg18/evoFoldV2 /usr/local/apache/htdocs/evoFoldV2/hg18
+
+
+
+############################################################################
+# GENEREVIEWS TRACK (DONE 2011-09-22 - Chin)
+# This track depends on some tasks completed for hg19, specifically:
+#
+#      ~/kent/src/hg/lib/geneReviewsBB.sql
+#      ~/kent/src/hg/lib/geneReviewsBed5.as
+#      ~/kent/src/hg/lib/geneReviewsRefGene.sql
+#      ~/kent/src/hg/makeDb/trackDb/human/geneReviews.html
+#      ~/kent/src/utils/geneReviews/addGeneReviewToBed.pl
+#
+#  and data fetched from NCBI:
+#       /hive/data/outside/ncbi/geneReviews/current/disease_gene_GR.txt
+#       /hive/data/genomes/hg19/bed/geneReviews/grRefGeneData.tab
+#       /hive/data/genomes/hg19/bed/geneReviews/grRefGene.lst
+# 
+# Refer to GENEREVIEWS TRACK section in hg19.txt for details
+
+    mkdir /hive/data/genomes/hg18/bed/geneReviews
+    cd /hive/data/genomes/hg18/bed/geneReviews
+    cp /hive/data/outside/ncbi/geneReviews/current/disease_gene_GR.txt .
+    cp  /hive/data/genomes/hg19/bed/geneReviews/grRefGeneData.tab .
+
+    # load RefSeg Gene to geneReview mapping list to hg18
+    hgLoadSqlTab -warn hg18 geneReviewsRefGene \
+      $HOME/kent/src/hg/lib/geneReviewsRefGene.sql grRefGeneData.tab
+    # Scanning through 1 files
+
+    cp /hive/data/genomes/hg19/bed/geneReviews/grRefGene.lst .
+  
+    # for each refGen in grRefGene.lst, create a non-overlapping bed row.
+    cat grRefGene.lst | while read G
+      do
+        echo ${G}
+        hgsql hg18 -N -e \
+          "SELECT e.chrom,e.txStart,e.txEnd,j.geneSymbol \
+          FROM knownGene e, kgXref j WHERE e.alignID = j.kgID AND \
+          j.geneSymbol ='${G}' ORDER BY e.chrom,e.txStart;" > temp.in
+        bedRemoveOverlap temp.in temp.out
+        cat temp.out >> geneReviews.tab
+      done
+    rm temp.*
+
+    # load the collapsed bed4 file to hg18,
+    hgLoadBed hg18 geneReviews geneReviews.tab
+
+    # Use addGeneReviewToBed.pl will add the geneReviews detail in html format to 
+    # the bed 4 file
+    chmod +x $HOME/kent/src/utils/geneReviews/addGeneReviewToBed.pl
+    # Add geneReview item in html format format as field 5
+    $HOME/kent/src/utils/geneReviews//addGeneReviewToBed.pl hg18 > hg18.geneReviews.bed5
+
+    # Convert to bigBed format 
+    /cluster/bin/x86_64/bedToBigBed -bedFields=4 -tabs \
+     -as=$HOME/kent/src/hg/lib/geneReviewsBed5.as  hg18.geneReviews.bed5 \
+     /hive/data/genomes/hg18/chrom.sizes hg18.geneReviews.bb
+
+    # upload the bigBed file to genomewiki
+    /cluster/bin/scripts/gwUploadFile hg18.geneReviews.bb hg18.geneReviews.bb
+    # # loading file: hg18.geneReviews.bb
+    # # into Image name: Hg18.geneReviews.bb
+    # # login name: chinhli
+    # # siteUrl: genomewiki.ucsc.edu
+    # # traceBackLimit: 0
+    # # traceBackLimit: 0 past site.Images
+    # Image info: {u'comment': u'gwUploadFile upload', u'sha1': u'6f5009a367a6b4fdaa2739541680253bd183af12', u'url': u'http://genomewiki.ucsc.edu/images/c/cd/Hg18.geneReviews.bb', u'timestamp': u'2011-09-22T23:28:39Z', u'metadata': None, u'height': 0, u'width': 0, u'user': u'Chinhli', u'descriptionurl': u'http://genomewiki.ucsc.edu/index.php/File:Hg18.geneReviews.bb', u'size': 170249}
+    # Image File:Hg18.geneReviews.bb usage:
+
+    hgsql hg18 -e "source $HOME/kent/src/hg/lib/geneReviewsBB.sql;"
+    hgsql hg18 -e 'insert into geneReviewsBB values ("http://genomewiki.ucsc.edu/images/c/cd/Hg18.geneReviews.bb")'
+    
+
 #############################################################################
