@@ -460,6 +460,7 @@ struct customTrack *ct;
 char buf[256];
 char *pos = NULL;
 char *dataUrl;
+int colSpan = 4;
 
 /* handle 'set all' and 'clr all' */
 boolean setAllDelete = FALSE;
@@ -489,11 +490,20 @@ tableHeaderField("Description", "Long track identifier");
 tableHeaderField("Type", "Data format of track");
 tableHeaderField("Doc", "HTML track description");
 if (itemCt)
+    {
     tableHeaderField("Items", "Count of discrete items in track");
+    colSpan++;
+    }
 if (posCt)
+    {
     tableHeaderField("Pos"," Go to genome browser at default track position or first item");
+    colSpan++;
+    }
 if (errCt)
+    {
     tableHeaderField("Error"," Error in custom track");
+    colSpan++;
+    }
 
 boolean showAllButtons = FALSE;
 if (numCts > 3)
@@ -601,7 +611,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (showAllButtons)
     {
     cgiSimpleTableRowStart();
-    puts("<TD COLSPAN=6 ALIGN='RIGHT'>check all / clear all&nbsp;</TD>");
+    printf("<TD COLSPAN=%d ALIGN='RIGHT'>check all / clear all&nbsp;</TD>", colSpan);
     cgiSimpleTableFieldStart();
     cgiMakeButtonWithMsg(hgCtDoDeleteSet, "+", "Select all for deletion");
     cgiTableFieldEnd();
