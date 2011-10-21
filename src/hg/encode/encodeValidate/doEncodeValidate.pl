@@ -1067,18 +1067,16 @@ sub validateDafField {
 }
 
 sub isDeprecated {
-        my ($type, $val) = @_;
-        if ($type eq "cell") {
-                $type = "Cell Line";
-        }
-        if (exists($terms{$type}->{$val}) && exists($terms{$type}->{$val}->{'deprecated'})){
-                return("Controlled Vocabulary '$val' is deprecated: $terms{$type}->{$val}->{'deprecated'}");
-        }
-        else {
-                return ();
-        }
-
-
+    my ($type, $val) = @_;
+    if ($type eq "cell") {
+        $type = "Cell Line";
+    }
+    if (exists($terms{$type}->{$val}) && exists($terms{$type}->{$val}->{'deprecated'})){
+        return("Controlled Vocabulary '$val' is deprecated: $terms{$type}->{$val}->{'deprecated'}");
+    }
+    else {
+        return ();
+    }
 }
 
 sub validateDdfField {
