@@ -18,6 +18,8 @@
 #include "knetUdc.h"
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
+#include "jsHelper.h"
+#include <signal.h>
 
 static long loadTime = 0;
 
@@ -166,9 +168,13 @@ else
     /* add form needs clade for assembly menu */
     gotClade = hGotClade();
 
+jsIncludeFile("jquery.js", NULL);
+jsIncludeFile("hgCustom.js", NULL);
+jsIncludeFile("utils.js", NULL);
+
 /* main form */
 printf("<FORM ACTION=\"%s\" METHOD=\"%s\" "
-    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n",
+    " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\" onsubmit=\"$('input[name=Submit]').attr('disabled', 'disabled');\" >\n",
     hgCustomName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 
@@ -240,7 +246,8 @@ if (isUpdateForm)
     cgiTableFieldEnd();
     cgiTableField("&nbsp;");
     puts("<TD ALIGN='RIGHT'>");
-    cgiMakeSubmitButton();
+    cgiMakeButtonWithOnClick("Submit", "Submit", NULL, "return submitClick(this);");
+    printf("<img id='loadingImg' src='../images/loading.gif' />\n");
     cgiTableFieldEnd();
     cgiTableField("&nbsp;");
     cgiTableRowEnd();
@@ -305,7 +312,8 @@ else
 if (!isUpdateForm)
     {
     cgiSimpleTableFieldStart();
-    cgiMakeSubmitButton();
+    cgiMakeButtonWithOnClick("Submit", "Submit", NULL, "return submitClick(this);");
+    printf("<img id='loadingImg' src='../images/loading.gif' />\n");
     cgiTableFieldEnd();
     }
 cgiTableRowEnd();
@@ -336,7 +344,10 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 if (!(isUpdateForm && dataUrl))
+    {
+    printf("<span id='loadingMsg'></span>\n");
     makeClearButton(hgCtDataText);
+    }
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
@@ -1033,6 +1044,22 @@ text = skipLeadingSpaces(text);
 return startsWith("track ", text) || startsWith("browser ", text);
 }
 
+int timerCounter;
+#define TIMER_INTERVAL 10
+
+static void timer(int sig)
+{
+// Per HTML 4.01 spec (http://www.w3.org/TR/html401/struct/global.html#h-7.1):
+//
+//      White space (spaces, newlines, tabs, and comments) may appear before or after each section [including the DOCTYPE].
+//
+// So we print out comments periodically to keep this process from being killed by apache or the user's web browser.
+
+printf("<!-- processing (%d seconds) -->\n", timerCounter++ * TIMER_INTERVAL);
+fflush(stdout);
+alarm(TIMER_INTERVAL);
+}
+
 void doMiddle(struct cart *theCart)
 /* create web page */
 {
@@ -1114,6 +1141,16 @@ else if (cartVarExists(cart, hgCtTable))
 else
     {
     /* get new and existing custom tracks from cart and decide what to do */
+
+    // setup a timer to periodically print out something to stdout to make sure apache or the web browser doesn't time us out (see redmine #3002).
+    // e.g. see http://stackoverflow.com/questions/5547166/how-to-avoid-cgi-timeout
+    struct sigaction *act;
+    AllocVar(act);
+    act->sa_handler = timer;
+    act->sa_flags = SA_RESTART;
+    sigaction(SIGALRM, act, NULL);
+    alarm(TIMER_INTERVAL);
+
     char *customText = fixNewData(cart);
     /* save input so we can display if there's an error */
     char *savedCustomText = saveLines(cloneString(customText),
