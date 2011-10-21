@@ -17,6 +17,9 @@ include wgEncodeReg.ra beta,public
 include wgEncodeReg.new.ra alpha
 
 
+# UW Repli-Seq track (wrangler: venkat)
+include wgEncodeUwRepliSeq.ra alpha
+
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
