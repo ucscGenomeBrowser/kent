@@ -61,6 +61,7 @@
 #define CV_TERM_VIEW            "view"
 #define CV_TERM_SEQ_PLATFORM    "seqPlatform"
 
+#define CV_LABEL_EMPTY_IS_NONE  "None"
 
 void cvFileDeclare(const char *filePath);
 // Declare an altername cv.ra file to use
