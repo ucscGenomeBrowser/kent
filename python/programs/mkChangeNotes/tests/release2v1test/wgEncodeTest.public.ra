@@ -1,0 +1,73 @@
+metaObject wgEncodeTest
+objType composite
+composite wgEncodeTest
+expVars cell
+
+metaObject wgEncodeTestObj1
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj1.file
+tableName wgEncodeTestObj1
+
+metaObject wgEncodeTestObj2
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj2.file
+tableName wgEncodeTestObj2
+
+metaObject wgEncodeTestObj3
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj3.file
+tableName wgEncodeTestObj3
+
+metaObject wgEncodeTestObj4
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj4.file
+tableName wgEncodeTestObj4
+
+metaObject wgEncodeTestObj5
+objType table
+attic auxSup
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj5.file
+tableName wgEncodeTestObj5
+
+metaObject wgEncodeTestObj6
+objType table
+attic auxSup
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj6.file
+tableName wgEncodeTestObj6
+
+metaObject wgEncodeTestObj7
+objType file
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj7.file
+
+metaObject wgEncodeTestObj8
+objType file
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj8.file
+
+metaObject wgEncodeTestObj9
+objType file
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj9.file
+
+metaObject wgEncodeTestObj10
+objType file
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj10.file
+
