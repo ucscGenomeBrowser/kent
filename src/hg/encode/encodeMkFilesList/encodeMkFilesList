@@ -41,6 +41,7 @@ Creates files.txt and optionally md5sum.txt
 options:
 
     -md5            md5 sums the files in the directory
+    -noupdate       don't update md5sums in metaDb
     -table          selects which metadata table to use
     -verbose        verbose output (levels 1 - 3)
     -cv             custom cv directory (default is /data/apache/cgi-bin/encode)

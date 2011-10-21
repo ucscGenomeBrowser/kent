@@ -17298,10 +17298,10 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Mon Oct 17 11:43:16 PDT 2011
-    #	real    395m51.626s
+    #	real    159m46.598s
     cat fb.hg19.chainGorGor3Link.txt  
-    #	87928753 bases of 2897316137 (3.035%) in intersection
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
     cd /hive/data/genomes/hg19/bed
     ln -s lastzGorGor3.2011-10-17 lastz.gorGor3
 
@@ -17314,9 +17314,9 @@ XXX - running - Mon Oct 17 11:43:16 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-    #	real    37m7.001s
+    #	real    69m39.685s
     cat fb.gorGor3.chainHg19Link.txt 
-    #	90929066 bases of 1358334882 (6.694%) in intersection
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
 
 ############################################################################
 # ISCA FROM DBVAR (DONE 10/18/11 angie)
