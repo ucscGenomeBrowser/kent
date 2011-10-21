@@ -9,6 +9,9 @@
 #define DOWNLOADS_ONLY_TITLE "Downloadable Files"
 #define FILE_SORT_ORDER      "fileSortOrder"
 
+// Miscellaneous but useful defines
+#define ENCODE_DCC_DOWNLOADS "encodeDCC"
+
 struct fileDb
 // File in a list of downloadable files
     {
