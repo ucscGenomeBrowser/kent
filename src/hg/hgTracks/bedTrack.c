@@ -565,7 +565,7 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
 
-if (vis == tvDense && canDrawBigBedDense(tg))
+if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
     }

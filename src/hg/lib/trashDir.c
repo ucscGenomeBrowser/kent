@@ -52,8 +52,9 @@ assert(cgiName != NULL && htmlName != NULL);
 
 cgiName += 1;
 htmlName += 1;
-safef(cgiName, strlen(cgiName), "%s%s", base, suffix);  // There is room, since tempName is base_*.suffix
-safef(htmlName,strlen(htmlName),"%s%s", base, suffix);
+boolean addDot = (*suffix != '.');
+safef(cgiName, strlen(cgiName), "%s%s%s", base, (addDot?".":""),suffix);  // There is room, since tempName is base_*.suffix
+safef(htmlName,strlen(htmlName),"%s%s%s", base, (addDot?".":""),suffix);
 
 // exists?
 return fileExists(tn->forCgi);
