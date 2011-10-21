@@ -431,17 +431,16 @@ gorGor3.upstreamGeneTbl = xenoRefGene
     ssh hgwdev			# used to do this on "genbank" machine
     screen			# long running job managed in screen
     cd /cluster/data/genbank
-XXX - ready here when rsync to klusters is done XXX
     time nice -n +19 ./bin/gbAlignStep -initial gorGor3 &
-    #	var/build/logs/2011.09.12-09:03:09.gorGor3.initalign.log
-    #	real    360m20.657s
+    #	var/build/logs/2011.10.17-09:14:51.gorGor3.initalign.log
+    #	real    788m42.989s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad gorGor3 &
-    #	logFile: var/dbload/hgwdev/logs/2011.09.12-20:47:05.dbload.log
-    #	real    118m27.671s
+    #	logFile: var/dbload/hgwdev/logs/2011.10.21-08:59:38.dbload.log
+    #	real    22m45.028s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -449,8 +448,42 @@ XXX - ready here when rsync to klusters is done XXX
     # add gorGor3 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    git commit -m "Added gorGor3." etc/align.dbs etc/hgwdev.dbs
+    git commit -m "daily update for gorGor3 replaces daily update for gorGor2" \
+	etc/align.dbs etc/hgwdev.dbs
+
     git push
     make etc-update
 
 #########################################################################
+#  BLATSERVERS ENTRY (DONE - 2007-11-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor3", "blatx", "17798", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor3", "blatx", "17799", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+###########################################################################
+# lastz swap Human hg19 (DONE - 2011-10-21 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17
+    cat fb.hg19.chainGorGor3Link.txt  
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    69m39.685s
+    cat fb.gorGor3.chainHg19Link.txt 
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
+
+############################################################################
