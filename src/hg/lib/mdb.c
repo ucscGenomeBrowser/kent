@@ -1855,17 +1855,26 @@ if(mdbVar == NULL)
 return mdbVar->val;
 }
 
-struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var)
+struct slName *mdbObjsFindAllVals(struct mdbObj *mdbObjs, char *var, char *emptyToken)
 // Returns a list of all vals in mdbObjs for a requested var
+// Will add empty only if there is atleast one empty val and at least one val found
 {
 struct slName *vals = NULL;
 struct mdbObj *mdbObj = mdbObjs;
+boolean foundEmpty = FALSE;
 for (;mdbObj != NULL;mdbObj = mdbObj->next)
     {
     char *val = mdbObjFindValue(mdbObj,var);
     if (val != NULL)
         slNameStore(&vals, val);
+    else
+        foundEmpty = TRUE;
     }
+
+// Will add empty only if there is atleast one empty val and at least one val found
+if (foundEmpty && vals != NULL && (emptyToken != NULL))
+    slNameStore(&vals, emptyToken);
+
 return vals;
 }
 
