@@ -61,7 +61,8 @@ class mkChangeNotesCheck(unittest.TestCase):
 
 def main():
 
-	
+	#user this area to check if the test you're going to make will work
+	#remember to change unittest.main() to main() if you're gonna do that.
 	argsdict = {'database': 'hg19', 'composite': 'wgEncodeRikenCage', 'releaseNew': '1', 'releaseOld': 'solo', 'loose': 0, 'ignore': 1, 'summary': 1}
 	notes = CurrentMkChangeNotes.makeNotes(argsdict)
 	for i in notes.output:
