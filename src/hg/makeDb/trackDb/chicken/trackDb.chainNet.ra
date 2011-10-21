@@ -153,3 +153,7 @@ priority 650.3
 
 track chainNetBraFlo1 override
 priority 660.3
+
+track chainNetMelGal1 override
+chainMinScore 3000
+chainLinearGap medium

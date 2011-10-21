@@ -2924,7 +2924,7 @@ var trackSearch = {
                                 show: function(event, ui) {
                                     $('#currentTab').val(ui.panel.id);
                                 },
-                                select: function(event, ui) { findTracksSwitchTabs(ui); }
+                                select: function(event, ui) { findTracks.switchTabs(ui); }
                             });
             $('#tabs').show();
             $("#tabs").tabs('option', 'selected', '#' + val);
@@ -2934,8 +2934,8 @@ var trackSearch = {
             $("#tabs").css('font-family', jQuery('body').css('font-family'));
             $("#tabs").css('font-size', jQuery('body').css('font-size'));
             $('.submitOnEnter').keydown(trackSearch.searchKeydown);
-            findTracksNormalize();
-            updateMetaDataHelpLinks(0);
+            findTracks.normalize();
+            findTracks.updateMdbHelp(0);
         }
     }
 }
