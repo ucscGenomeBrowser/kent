@@ -2,7 +2,7 @@
 import sys, os, re, argparse, subprocess, math
 from ucscgenomics import ra, track
 
-class mkChangeNotes(object):
+class makeNotes(object):
     def checkMetaDbForFiles(self, mdb, files, status, loose):
         errors = []
         revokedset = set()
@@ -486,7 +486,6 @@ class mkChangeNotes(object):
                 output.append("\n")
         if not args['ignore']:
             output.append("No Errors")
-
         return output
 
     def printErrors(self, errors):
@@ -643,12 +642,9 @@ def main():
         printErrors(errors)
         return
 
-
-    c = track.CompositeTrack(args.database, args.composite)
-
     argsdict = {'database': args.database, 'composite': args.composite, 'releaseNew': args.releaseNew, 'releaseOld': args.releaseOld, 'loose': args.loose, 'ignore': args.ignore, 'summary': args.summary}
 
-    notes = mkChangeNotes(argsdict)
+    notes = makeNotes(argsdict)
 
     for line in notes.output:
         print line
