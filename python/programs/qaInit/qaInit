@@ -112,7 +112,7 @@ def parseNotes(lines):
 	return tables, gbdbs, files, supplemental, others, str(size)
 
 def writeTableMail(tables, args, user, qaDir):
-	
+	tablestr = ""
 	if tables:
 		sep = ""
 		tablestr = sep.join(list(sorted(tables)))
@@ -154,6 +154,9 @@ Thank you!
 	f.write(mail)
 	f.close
 	
+	if not tablestr:
+                return ""
+
 	f = open(qaDir + "/tableList", "w")
 	f.write(tablestr)
 	f.close
@@ -202,7 +205,7 @@ Reason: releasing ENCODE %s on %s to the RR http://redmine.soe.ucsc.edu/issues/%
 Thanks!
 
 %s
-""" % (len(files), filestr, c._rrHttpDir, args.composite, args.database, args.redmine, user)
+""" % (len(files|others), filestr, c._rrHttpDir, args.composite, args.database, args.redmine, user)
 
 	f = open(qaDir + "/pushFilesMail", "w")
 	f.write(mail)
@@ -409,7 +412,7 @@ qaInir hg19 wgEncodeSydhTfbs 1 69
 	
 	changeStatus(subIds)
 	
-	runScript(args, qaDir)
+	#runScript(args, qaDir)
 
 
 
