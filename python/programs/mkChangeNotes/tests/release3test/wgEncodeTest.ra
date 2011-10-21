@@ -33,6 +33,7 @@ fileName wgEncodeTestObj4.file
 objStatus revoked
 tableName wgEncodeTestObj4
 
+#Reattic
 metaObject wgEncodeTestObj5
 objType table
 attic auxSup
@@ -88,6 +89,13 @@ cell GM12878
 composite wgEncodeTest
 fileName wgEncodeTestObj12.file
 tableName wgEncodeTestObj12
+
+metaObject wgEncodeTestObj13
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestObj13.file
+tableName wgEncodeTestObj13
 
 metaObject wgEncodeTestObj14
 objType table
