@@ -15,7 +15,7 @@ alphaDir = comp._alphaMdbDir
 publicDir = comp._publicMdbDir
 argsdict = {'database': database, 'composite': composite, 'releaseNew': '1', 'releaseOld': 'solo', 'loose': 0, 'ignore': 0, 'summary': 0}
 
-class mkChangeNotesCheck(unittest.TestCase):
+class mkChangeNotesEndToEndCheck(unittest.TestCase):
     def testRelease1(self):
         alphafile = 'release1test/wgEncodeTest.ra'
         shutil.copy(alphafile, alphaDir)
@@ -58,7 +58,16 @@ class mkChangeNotesCheck(unittest.TestCase):
         test = mkChangeNotes.makeNotes(argsdict)
         self.assertListEqual(test.output,real.output)
 
-
+class mkChangeNotesFunctionTests(unittest.TestCase):
+    def testCheckMetaDbForFiles(self):
+        alphafile = 'release3test/wgEncodeTest.ra'
+        publicfile = 'release2test/wgEncodeTest.ra'
+        argsdict['releaseNew'] = '4'
+        argsdict['releaseOld'] = '3'
+        real = CurrentMkChangeNotes.makeNotes(argsdict)
+        test = mkChangeNotes.makeNotes(argsdict)
+        self.assertEqual(test.checkMetaDbForFiles("test", "new"), real.checkMetaDbForFiles("test",  "new"))
+        
 def main():
 
     #user this area to check if the test you're going to make will work
