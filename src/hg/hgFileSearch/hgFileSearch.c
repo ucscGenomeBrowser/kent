@@ -223,14 +223,14 @@ printf("<div id='tabs' style='display:none; %s'>\n"
 printf("<div id='simpleTab' style='max-width:inherit;'>\n");
 
 printf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
-printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracksSearchButtonsEnable(true);'>\n",
+printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracks.searchButtonsEnable(true);'>\n",
         TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
 if (selectedTab==simpleTab && descSearch)
     searchTermsExist = TRUE;
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracks.clear();'>\n");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 printf("</div>\n");
 #endif///def USE_TABS
@@ -245,7 +245,7 @@ printf("<tr><td colspan=3></td>");
 printf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-printf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
+printf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracks.searchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
         TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
 printf("</td></tr>\n");
 
@@ -254,7 +254,7 @@ printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
 printf("<td><b style='max-width:100px;'>Description:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
+printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracks.searchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
         TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 printf("</td></tr>\n");
 if (selectedTab==filesTab && descSearch)
@@ -318,7 +318,7 @@ if(metaDbExists)
 
 printf("</table>\n");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracks.clear();'>\n");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 //printf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 printf("</div>\n");
