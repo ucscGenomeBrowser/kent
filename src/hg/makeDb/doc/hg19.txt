@@ -9252,6 +9252,72 @@ TMPDIR=/scratch/tmp
 
 
 #######################################################################
+# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 10/19/11 angie)
+    # DGV has changed their data format; this is a dry-run that won't be pushed
+    # until the changes are no longer considered beta and the integration of
+    # older studies w/new-from-dbVar/DGVa is complete.
+    set today = `date +%y%m%d`
+    mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
+    cd /hive/data/genomes/hg19/bed/dgv/$today
+    wget http://dgvbeta.tcag.ca/dgv/docs/GRCh37_hg19_2011-10-17.txt
+    head -1 GRCh37_hg19_2011-10-17.txt
+#variantid       chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergeid frequency       samplesize      cohortdescription
+    # It's more complicated than Gain/Loss/Complex or Inversion now:
+    cut -f 5,6 GRCh37_hg19_2011-10-17.txt | sort | uniq -c | head -100
+# 128114 CNV     ""
+#  16941 CNV     CNV
+#   3544 CNV     Complex
+#   5574 CNV     Deletion
+#   1135 CNV     Duplication
+#  97916 CNV     Gain
+#  42816 CNV     Insertion
+# 339520 CNV     Loss
+#   1805 OTHER   ""
+#   5375 OTHER   Inversion
+#    663 OTHER   Tandem duplication
+    # shuffle fields into bed9+ w/itemRgb
+    set purple = "200,0,200"
+    set red = "200,0,0"
+    set blue = "0,0,200"
+    set brown = "139,69,19"
+    tail -n +2 GRCh37_hg19_2011-10-17.txt \
+    | perl -wpe 'chomp; \
+      ($id, $chr, $start, $end, $varType, $varSubType, $ref, $pmid, $method, $platform, \
+       undef, undef, $sampleSize, $sampleDesc) = split("\t"); \
+      $start-- unless ($start == 0); \
+      $landmark = ""; # was empty in DGV v10, now not even in the download file. \
+      $varTypeOut = "$varType ($varSubType)"; \
+      $sample = $sampleDesc; \
+      $sample .= " (sample size: $sampleSize)" if ($sampleSize); \
+      $method .= " ($platform)" if ($platform && $platform ne "Not Provided"); \
+      $rgb = "0,0,0"; \
+      if ($varType eq "CNV") { \
+        if ($varSubType eq "Gain" || $varSubType eq "Insertion" || $varSubType eq "Duplication") {\
+          $rgb = "'$blue'"; \
+        } elsif ($varSubType eq "Loss" ||$varSubType eq "Deletion") { \
+          $rgb = "'$red'"; \
+        } else { \
+          $rgb = "'$brown'"; \
+          $varTypeOut = $varType if ($varSubType ne "Complex"); \
+        } \
+      } elsif ($varType eq "OTHER") { \
+        if ($varSubType eq "Inversion") { \
+          $rgb =  "'$purple'"; \
+        } elsif ($varSubType eq "Tandem Duplication") { \
+          $rgb = "'$blue'"; \
+        } else { \
+          $varTypeOut = $varType; \
+        } \
+      } \
+      $_ = join("\t", "chr$chr", $start, $end, $id, 0, "+", \
+                $start, $start, $rgb, $landmark, $varType, \
+                $ref, $pmid, $method, $sample) . "\n";' \
+        > dgv.bed
+    hgLoadBed hg19 dgvBeta dgv.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -renameSqlTable -tab
+
+
+#######################################################################
 # felCat4 Cat BLASTZ/CHAIN/NET (DONE  - 2010-06-07 - Chin)
     screen # use a screen to manage this multi-day job
     mkdir /hive/data/genomes/hg19/bed/lastzFelCat4.2010-06-07
@@ -17298,10 +17364,10 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Mon Oct 17 11:43:16 PDT 2011
-    #	real    395m51.626s
+    #	real    159m46.598s
     cat fb.hg19.chainGorGor3Link.txt  
-    #	87928753 bases of 2897316137 (3.035%) in intersection
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
     cd /hive/data/genomes/hg19/bed
     ln -s lastzGorGor3.2011-10-17 lastz.gorGor3
 
@@ -17314,9 +17380,9 @@ XXX - running - Mon Oct 17 11:43:16 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-    #	real    37m7.001s
+    #	real    69m39.685s
     cat fb.gorGor3.chainHg19Link.txt 
-    #	90929066 bases of 1358334882 (6.694%) in intersection
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
 
 ############################################################################
 # ISCA FROM DBVAR (DONE 10/18/11 angie)

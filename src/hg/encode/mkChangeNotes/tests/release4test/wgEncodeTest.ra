@@ -33,8 +33,38 @@ fileName wgEncodeTestObj4.file
 objStatus revoked
 tableName wgEncodeTestObj4
 
+metaObject wgEncodeTestMisTableName0
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestMisTableName0.file
+objStatus revoked
+tableName wgEncodeTestMisTableName0
+
+metaObject wgEncodeTestMisTableName1
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestMisTableName1.file
+
+metaObject wgEncodeTestMisTableName2
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestMisTableName2.file
+tableName wgEncodeTestMisTableName2
+
+metaObject wgEncodeTestMisTableName3
+objType table
+cell GM12878
+composite wgEncodeTest
+fileName wgEncodeTestMisTableName3.file
+tableName wgEncodeTestMisTableName3
+
+#Reattic
 metaObject wgEncodeTestObj5
 objType table
+attic auxSup
 cell GM12878
 composite wgEncodeTest
 fileName wgEncodeTestObj5.file
