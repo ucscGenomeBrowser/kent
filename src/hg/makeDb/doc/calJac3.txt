@@ -2960,3 +2960,69 @@ liftUp /hive/data/genomes/calJac3/jkStuff/ens.62.lft
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
 
+############################################################################
+# LASTZ Gorilla calJac3 (DONE - 2011-10-21 - Hiram)
+    mkdir /hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21
+    cd /hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21
+
+    cat << '_EOF_' > DEF
+# Gorilla vs Marmoset
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Marmoset calJac3
+SEQ1_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ1_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=60
+
+# QUERY: Gorilla gorGor3
+SEQ2_DIR=/scratch/data/gorGor3/gorGor3.2bit
+SEQ2_LEN=/scratch/data/gorGor3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running - Fri Oct 21 15:38:47 PDT 2011
+    #	real    159m46.598s
+    cat fb.calJac3.chainGorGor3Link.txt  
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
+    cd /hive/data/genomes/calJac3/bed
+    ln -s lastzGorGor3.2011-10-21 lastz.gorGor3
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    69m39.685s
+    cat fb.calJac3.chainGorGor3Link.txt 
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
+
+############################################################################
