@@ -1348,7 +1348,9 @@ while(TRUE)
 	    {
 	    mustUseProxyAuth = TRUE;
 	    }
-	else if (byteRangeUsed)
+	else if (byteRangeUsed 
+	    /* hack for Apache bug 2.2.20 and 2.2.21 2011-10-21 should be OK to remove after one year. */
+		&& !(sameString(code, "200") && byteRangeStart == 0 && byteRangeEnd == -1))  
 	    {
 	    if (!sameString(code, "206"))
 		{
@@ -1411,7 +1413,9 @@ if (mustUseProxy ||  mustUseProxyAuth)
 	proxyLocation ? proxyLocation : "not given");
     return FALSE;
     }
-if (byteRangeUsed && !foundContentRange)
+if (byteRangeUsed && !foundContentRange
+	    /* hack for Apache bug 2.2.20 and 2.2.21 2011-10-21 should be OK to remove after one year. */
+		&& !(byteRangeStart == 0 && byteRangeEnd == -1))  
     {
     char bre[256];
     safef(bre, sizeof bre, "%lld", (long long)byteRangeEnd);

@@ -352,7 +352,7 @@ identifier ncbiTaxon
 identifier tRNAsId
 "ID of tRNAs"
     $tRNAsDbs.tRNAs.name dupeOk
-    $kgDb3.kgXref.tRnaName
+    hg19.kgXref.tRnaName
 
 # CGAP SAGE track Stuff
 
@@ -1583,6 +1583,8 @@ identifier knownGeneId dependency
     $kgDb.kgTargetAli.qName full
     hg19.kg4ToKg5.newId
     mm9.kg4ToKg5.newId
+    hg19.knownGeneTxMrna.name
+    hg19.knownGeneTxPep.name
 
 identifier knownGeneOld4Id dependency
 "Previous UCSC Gene build"

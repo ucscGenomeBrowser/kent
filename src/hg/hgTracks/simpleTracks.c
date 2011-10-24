@@ -3233,7 +3233,7 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw linked features items. */
 {
 clearColorBin();
-if (vis == tvDense && canDrawBigBedDense(tg))
+if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
     }
@@ -12677,6 +12677,10 @@ registerTrackHandler("snp134", snp125Methods);
 registerTrackHandler("snp134Common", snp125Methods);
 registerTrackHandler("snp134Flagged", snp125Methods);
 registerTrackHandler("snp134Mult", snp125Methods);
+registerTrackHandler("snp135", snp125Methods);
+registerTrackHandler("snp135Common", snp125Methods);
+registerTrackHandler("snp135Flagged", snp125Methods);
+registerTrackHandler("snp135Mult", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);

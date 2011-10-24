@@ -788,3 +788,65 @@ TMPDIR=/scratch/tmp
     #	sizes will set properly
 
 ############################################################################
+#  bosTau6 - Cow - Ensembl Genes version 64  (DONE - 2011-10-12 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6
+    cat << '_EOF_' > bosTau6.ensGene.ra
+# required db variable
+db bosTau6
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([0-9X][0-9]*\)/chr\1/; s/^MT/chrM/; s/^GJ\([0-9]*\).1/chrUn_GJ\1/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=64 bosTau6.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau6/bed/ensGene.64
+    featureBits bosTau6 ensGene
+    # 42264149 bases of 2649682029 (1.595%) in intersection
+
+############################################################################
+# ucscToEnsembl name translation table (DONE - 2011-10-12 - Hiram)
+    mkdir /hive/data/genomes/bosTau6/bed/ucscToEnsembl
+    cd /hive/data/genomes/bosTau6/bed/ucscToEnsembl
+
+    cut -f1 ../../chrom.sizes | while read C
+do
+E=`echo ${C} | sed -e "s/^chrM/MT/; s/chrUn_GJ\([0-9]*\)/GJ\1.1/; s/^chr//;"`
+    echo -e "${C}\t${E}"
+done > ucscToEnsembl.tab
+
+    # determine longest UCSC name:
+    cut -f1 ucscToEnsembl.tab | awk '{print length($0)}' | sort -nr | head -1
+    #	14
+
+    # use that size in this SQL definition index:
+    cat << '_EOF_' > ucscToEnsembl.sql
+# UCSC to Ensembl chr name translation
+CREATE TABLE ucscToEnsembl (
+    ucsc varchar(255) not null,        # UCSC chromosome name
+    ensembl varchar(255) not null,     # Ensembl chromosome name
+              #Indices
+    PRIMARY KEY(ucsc(14))
+);
+'_EOF_'
+
+    hgLoadSqlTab bosTau6 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
+
+#############################################################################
+# LIFTOVER TO bosTau4 (DONE - 2011-10-20 - Chin)
+
+    sh hgwdev
+    cd /hive/data/genomes/bosTau6
+    ln -s jkStuff/bosTau6.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau6 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
+    # real    110m26.710s
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau6/liftOver/
+    md5sum bosTau6ToBosTau4.over.chain.gz >> md5sum.txt
+    popd
+
+############################################################################
+

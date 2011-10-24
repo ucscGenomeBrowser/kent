@@ -1,0 +1,50 @@
+/* Style for ENCODE Data Summary page(s) */
+
+
+/* layout 3 tables horizaontally across page */ 
+.summaryTable {
+    float: left;
+    width: 30%;
+    border-spacing: 5px;
+    margin-top: 3em;
+    margin-left: 3%;
+}
+
+.summaryTable th {
+    padding: 3px;
+    background-color: #FFDB70;
+    text-align: left;
+    padding-left: 2em;
+}
+
+.odd {
+    background-color: #F6F3DF;
+}
+
+.summaryTable td {
+    text-align: left;
+    padding-left: 1em;
+}
+
+.summaryTable td+td {
+    text-align: right;
+    padding-right: 1em;
+}
+
+.summaryTable td.totals {
+    background-color: #FFDB70;
+    padding-top: 3px;
+    font-weight: bold;
+}
+
+.matrixButton {
+    float: right;
+    margin-right: 1em;
+}
+
+#searchButtons {
+    float: right;
+    margin-right: 1em;
+}
+
+

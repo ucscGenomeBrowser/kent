@@ -158,11 +158,6 @@ return *grps;
 
 static void doFileSearch(char *db,char *organism,struct cart *cart,struct trackDb *tdbList)
 {
-if (!advancedJavascriptFeaturesEnabled(cart))
-    {
-    warn("Requires advanced javascript features.");
-    return;
-    }
 struct sqlConnection *conn = hAllocConn(db);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 if (!sqlTableExists(conn, "metaDb"))
@@ -228,14 +223,14 @@ printf("<div id='tabs' style='display:none; %s'>\n"
 printf("<div id='simpleTab' style='max-width:inherit;'>\n");
 
 printf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
-printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracksSearchButtonsEnable(true);'>\n",
+printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracks.searchButtonsEnable(true);'>\n",
         TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
 if (selectedTab==simpleTab && descSearch)
     searchTermsExist = TRUE;
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracks.clear();'>\n");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 printf("</div>\n");
 #endif///def USE_TABS
@@ -250,7 +245,7 @@ printf("<tr><td colspan=3></td>");
 printf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-printf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
+printf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracks.searchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
         TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
 printf("</td></tr>\n");
 
@@ -259,7 +254,7 @@ printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
 printf("<td><b style='max-width:100px;'>Description:</b></td>");
 printf("<td align='right'>contains</td>\n");
 printf("<td colspan='%d'>", cols - 4);
-printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
+printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracks.searchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
         TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 printf("</td></tr>\n");
 if (selectedTab==filesTab && descSearch)
@@ -323,7 +318,7 @@ if(metaDbExists)
 
 printf("</table>\n");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", FILE_SEARCH);
-printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+printf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracks.clear();'>\n");
 printf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 //printf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 printf("</div>\n");
@@ -445,10 +440,10 @@ jsIncludeFile("utils.js",NULL);
 #ifdef NEW_JQUERY
 jsIncludeFile("ddcl.js",NULL);
 printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
-printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0); });</script>\n");
+printf("<script type='text/javascript'>$(document).ready(function() { findTracks.updateMdbHelp(0); });</script>\n");
 #else///ifndef NEW_JQUERY
 printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
-printf("<script type='text/javascript'>$(document).ready(function() { updateMetaDataHelpLinks(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
+printf("<script type='text/javascript'>$(document).ready(function() { findTracks.updateMdbHelp(0);  $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
 #endif///ndef NEW_JQUERY
 
 doFileSearch(db,organism,cart,tdbList);

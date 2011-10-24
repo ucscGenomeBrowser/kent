@@ -2174,5 +2174,70 @@ TMPDIR=/scratch/tmp
     #	real    146m12.301s
     cat fb.calJac3.chainHg19Link.txt 
     #	1978857628 bases of 2752505800 (71.893%) in intersection
-############################################################################
 
+############################################################################
+# LASTZ Gorilla GorGor3 (DONE - 2011-10-21 - Hiram)
+    mkdir /hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
+    cd /hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
+
+    cat << '_EOF_' > DEF
+# Orangutan vs gorilla
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Orangutan PonAbe2
+SEQ1_DIR=/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ1_LEN=/scratch/data/ponAbe2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Frog gorGor3
+SEQ2_DIR=/scratch/data/gorGor3/gorGor3.2bit
+SEQ2_LEN=/scratch/data/gorGor3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running - Fri Oct 21 13:50:22 PDT 2011
+    #	real    159m46.598s
+    cat fb.ponAbe2.chainGorGor3Link.txt  
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
+    cd /hive/data/genomes/ponAbe2/bed
+    ln -s lastzGorGor3.2011-10-21 lastz.gorGor3
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    69m39.685s
+    cat fb.gorGor3.chainPonAbe2Link.txt 
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
+
+############################################################################

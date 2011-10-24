@@ -277,8 +277,15 @@ melGal1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaF
 melGal1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 melGal1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 melGal1.downloadDir = melGal1
+melGal1.refseq.mrna.native.load  = no
 melGal1.refseq.mrna.xeno.load = yes
 melGal1.refseq.mrna.xeno.loadDesc  = yes
+melGal1.genbank.mrna.native.load = yes
+melGal1.genbank.mrna.native.loadDesc = yes
+melGal1.genbank.mrna.xeno.load = yes
+melGal1.genbank.mrna.xeno.loadDesc = yes
+melGal1.genbank.est.native.load = yes
+melGal1.genbank.est.native.loadDesc = yes
 
     git add etc/genbank.conf
     git commit -m "Added melGal1" etc/genbank.conf
@@ -316,9 +323,9 @@ melGal1.refseq.mrna.xeno.loadDesc  = yes
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad melGal1 &
     #    logFile: var/dbload/hgwdev/logs/2011.02.16-12:45:15.dbload.log
     #   real    23m10.935s
-    # Re-run load step 2011-10-07:
-    #  logFile: var/dbload/hgwdev/logs/2011.10.07-13:51:01.dbload.log
-    #   real    26m31.902s
+    # Re-run load step 2011-10-20:
+    #  logFile: var/dbload/hgwdev/logs/2011.10.20-10:10:19.dbload.log
+    #   real  53m49.262s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank

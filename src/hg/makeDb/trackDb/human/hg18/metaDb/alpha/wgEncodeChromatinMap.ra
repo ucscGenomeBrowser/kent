@@ -4316,7 +4316,7 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 2
 subId 639
@@ -4378,7 +4378,7 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2K562V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 2
 subId 640
@@ -4498,7 +4498,7 @@ fileName wgEncodeUncFAIREseqAlignmentsRep3Helas3V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 3
 subId 494
@@ -4541,7 +4541,7 @@ fileName wgEncodeUncFAIREseqAlignmentsRep3K562V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 3
 subId 483
@@ -5556,7 +5556,7 @@ expId 544
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3V2.fastq.gz
 grant Crawford
 lab UNC
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 2
 subId 639
@@ -5615,7 +5615,7 @@ expId 531
 fileName wgEncodeUncFAIREseqRawDataRep2K562V2.fastq.gz
 grant Crawford
 lab UNC
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 2
 subId 640
@@ -5729,7 +5729,7 @@ expId 544
 fileName wgEncodeUncFAIREseqRawDataRep3Helas3V2.fastq.gz
 grant Crawford
 lab UNC
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 3
 subId 494
@@ -5770,7 +5770,7 @@ expId 531
 fileName wgEncodeUncFAIREseqRawDataRep3K562V2.fastq.gz
 grant Crawford
 lab UNC
-objStatus revoked
+objStatus revoked - colliding md5sum
 project wgEncode
 replicate 3
 subId 483
