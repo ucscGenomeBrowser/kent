@@ -1,6 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math, datetime
-from ucscgenomics import ra, track
+from ucscgenomics import ra, track, mkChangeNotes
 
 def getMethods(qaDir, args, user, d):
 	cmd = "curl -X GET http://genomewiki.cse.ucsc.edu/genecats/index.php/ENCODE_QA 2>/dev/null"
@@ -362,6 +362,15 @@ def changeStatus(subIds):
 		output = p.stdout.read()
 	return
 
+def checkWithMkNotes(ourset, mkNotesSet, status):
+	compset = set()
+	errors = []
+	for i in ourset:
+		compset.add(i.rstrip())
+	if mkNotesSet != compset:
+		errors.append("The list of new %s in the notes file is out of date." % status)
+	return errors
+
 def main():
 	parser = argparse.ArgumentParser(
         prog='qaInit',
@@ -369,17 +378,36 @@ def main():
         description='Initializes QA directory for claiming a release',
         epilog=
 """Example:
-qaInir hg19 wgEncodeSydhTfbs 1 69
-
+qaInit hg19 wgEncodeSydhTfbs 1 69
+qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 """
         )
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
 	parser.add_argument('release', help='The new release to be released')
-	parser.add_argument('redmine', help='The Redmins issue number')
+	parser.add_argument('redmine', help='The Redmine issue number')
 
+
+	if len(sys.argv) == 1:
+		parser.print_help()
+		return
 
 	args = parser.parse_args(sys.argv[1:])
+
+
+	if not args.release.isdigit():
+		parser.print_help()
+
+	mkNotesArgs = { 'database': args.database,
+					'composite': args.composite,
+					'releaseNew': args.release,
+					'releaseOld': str(int(args.release) - 1),
+					'ignore' : 0,
+					'loose': 0,
+					'summary': 0}
+	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
+	errors = []
+
 	user = os.environ['USER']
 	c = track.CompositeTrack(args.database, args.composite)
 	qaDir = c.qaInitDir + "release%s" % args.release 
@@ -400,7 +428,18 @@ qaInir hg19 wgEncodeSydhTfbs 1 69
 	if not re.match('mkChangeNotes v2', lines[0]):
 		print "notes files is not the correct version"
 		return
+		
 	(tables, gbdbs, files, supplemental, others, size) = parseNotes(lines)
+	errors.extend(checkWithMkNotes(tables, genNotes.newTables, "new tables"))
+	errors.extend(checkWithMkNotes(gbdbs, genNotes.newGbdbs, "new gbdbs"))
+	errors.extend(checkWithMkNotes(files, genNotes.newFiles, "new download files"))
+	errors.extend(checkWithMkNotes(supplemental, genNotes.newSupplemental, "new supplemental files"))
+	errors.extend(checkWithMkNotes(others, genNotes.newOthers, "new other files"))
+
+	if errors:
+		for i in errors:
+			print i
+		return
 	
 	tablestr = writeTableMail(tables, args, user, qaDir)
 	gbdbstr = writeGbdbMail(gbdbs, args, user, qaDir)
