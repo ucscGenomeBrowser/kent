@@ -1,0 +1,64 @@
+track lincRNAsAll
+superTrack on
+shortLabel lincRNAsAll
+longLabel lincRNAsAll
+group expression
+visibility hide
+
+
+    track lincRNAsIsoforms
+    superTrack lincRNAsAll
+    shortLabel lincRNAsIsoforms
+    longLabel lincRNAs Isoforms
+    visibility full
+#    color 100,50,0
+    color 0, 60, 120
+    #altColor 175,150,128
+    type genePred
+    noInherit on
+
+
+    track lincRNAsAllCellTypeTop
+    superTrack lincRNAsAll
+    compositeTrack on
+    shortLabel lincRNAsAllCellTypeTop
+    longLabel lincRNAs All Cell Type Top Level
+    subGroup1 view Views lincRNAsRefseqExp=RefSeq_Expression_Ratio
+    subGroup2 tissueType Tissue_Type brain=Brain heart=Heart
+    sortOrder view=+ tissueType=+
+    dimensions dimensionY=tissueType
+    priority 0
+    dragAndDrop subTracks
+    configurable on
+    visibility full
+    noInherit on
+    type bed 5
+
+    track lincRNAsAllCellType
+    shortLabel lincRNAsAllCellType
+    longLabel lincRNAs All Cell Types
+    view lincRNAsRefseqExp
+    visibility full
+    parent lincRNAsAllCellTypeTop
+    color 0, 60, 120
+    useScore 1
+    type bed 5  
+
+
+        track lincRNAsBrain
+        parent lincRNAsAllCellType off
+        shortLabel lincRNAsBrain
+        longLabel lincRNAs from brain
+        subGroups view=lincRNAsRefseqExp tissueType=brain
+#    color 0, 60, 120
+#    useScore 1
+
+
+
+        track lincRNAsHeart
+        parent lincRNAsAllCellType on 
+        shortLabel lincRNAsHeart
+        longLabel lincRNAs from heart
+        subGroups view=lincRNAsRefseqExp tissueType=heart
+
+
