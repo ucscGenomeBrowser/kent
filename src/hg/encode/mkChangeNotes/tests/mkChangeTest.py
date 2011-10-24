@@ -1,11 +1,8 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, shutil
 import unittest 
-from ucscgenomics import track, ra, soft, cv
+from ucscgenomics import track, ra, soft, cv, mkChangeNotes
 
-sys.path.append('../')
-
-import mkChangeNotes
 import CurrentMkChangeNotes
 
 database = 'hg19'
