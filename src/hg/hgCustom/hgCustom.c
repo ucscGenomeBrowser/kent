@@ -462,7 +462,7 @@ char *pos = NULL;
 char *dataUrl;
 int colSpan = 4;
 
-/* handle 'set all' and 'clr all' */
+/* handle 'set all' and 'clr all' (won't be used if user has javascript enabled). */
 boolean setAllDelete = FALSE;
 boolean setAllUpdate = FALSE;
 if (cartVarExists(cart, hgCtDoDeleteSet))
@@ -591,7 +591,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     printf("<TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
     safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix,
             ct->tdb->track);
-    cgiMakeCheckBox(buf, setAllDelete);
+    cgiMakeCheckBoxJS(buf, setAllDelete, "class='deleteCheckbox'");
     puts("</TD>");
 
     /* Update checkboxes */
@@ -601,7 +601,11 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         safef(buf, sizeof(buf), "%s_%s", hgCtRefreshPrefix,
                 ct->tdb->track);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
-            cgiMakeCheckBoxWithMsg(buf, setAllUpdate, dataUrl);
+            {
+            char js[1024];
+            safef(js, sizeof(js), "class='updateCheckbox' title='refresh data from: %s'", dataUrl);
+            cgiMakeCheckBoxJS(buf, setAllUpdate, js);
+            }
         else
             puts("&nbsp;");
 	puts("</TD>");
@@ -613,18 +617,18 @@ if (showAllButtons)
     cgiSimpleTableRowStart();
     printf("<TD COLSPAN=%d ALIGN='RIGHT'>check all / clear all&nbsp;</TD>", colSpan);
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithMsg(hgCtDoDeleteSet, "+", "Select all for deletion");
+    cgiMakeButtonWithOnClick(hgCtDoDeleteSet, "+", "Select all for deletion", "$('.deleteCheckbox').attr('checked', true); return false;");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithMsg(hgCtDoDeleteClr, "-", "Clear all for deletion");
+    cgiMakeButtonWithOnClick(hgCtDoDeleteClr, "-", "Clear all for deletion", "$('.deleteCheckbox').attr('checked', false); return false;");
     cgiTableFieldEnd();
     if (updateCt)
         {
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithMsg(hgCtDoRefreshSet, "+", "Select all for update");
+        cgiMakeButtonWithOnClick(hgCtDoRefreshSet, "+", "Select all for update", "$('.updateCheckbox').attr('checked', true); return false;");
         cgiTableFieldEnd();
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithMsg(hgCtDoRefreshClr, "-", "Clear all for update");
+        cgiMakeButtonWithOnClick(hgCtDoRefreshClr, "-", "Clear all for update", "$('.updateCheckbox').attr('checked', false); return false;");
         cgiTableFieldEnd();
         }
     cgiTableRowEnd();
@@ -909,6 +913,7 @@ static void doManageCustom(char *warn)
  * Include warning message, if any */
 {
 cartWebStart(cart, database, "Manage Custom Tracks");
+jsIncludeFile("jquery.js", NULL);
 manageCustomForm(warn);
 webNewSection("Managing Custom Tracks");
 webIncludeHelpFile("customTrackManage", FALSE);
