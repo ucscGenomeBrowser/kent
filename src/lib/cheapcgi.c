@@ -1276,7 +1276,9 @@ cgiMakeCheckBox2Bool(name, checked, TRUE, id, buf);
 
 void cgiMakeCheckBoxWithMsg(char *name, boolean checked, char *msg)
 {
-cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, msg);
+char buf[512];
+safef(buf, sizeof(buf), "title='%s'", msg);
+cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, buf);
 }
 
 void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id)
