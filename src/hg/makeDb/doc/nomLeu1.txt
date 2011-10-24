@@ -218,8 +218,8 @@ nomLeu1.genbank.mrna.native.load = yes
 nomLeu1.genbank.mrna.native.loadDesc = yes
 nomLeu1.genbank.mrna.xeno.load = yes
 nomLeu1.genbank.mrna.xeno.loadDesc = yes
-nomLeu1.genbank.est.native.load = yes
-nomLeu1.genbank.est.native.loadDesc = yes
+nomLeu1.genbank.est.native.load = no
+nomLeu1.genbank.est.native.loadDesc = no
 
     git add etc/genbank.conf
     git commit -m "Added nomLeu1" etc/genbank.conf
