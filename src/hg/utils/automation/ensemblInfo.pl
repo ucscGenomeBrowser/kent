@@ -30,7 +30,7 @@ open (FH, "<$file") or die "can not read $file";
 my $header = <FH>;
 chomp $header;
 $header =~ s/^#//;
-my @a = split('\s+', $header);
+my @a = split('\t', $header);
 my $field1Ix = -1;
 my $field2Ix = -1;
 for (my $i = 0; $i < scalar(@a); ++$i) {
