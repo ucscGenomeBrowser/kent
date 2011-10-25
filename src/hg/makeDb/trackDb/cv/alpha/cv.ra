@@ -3133,13 +3133,31 @@ term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746, newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw ID RO 01746), newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 sex F
 tissue Monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
-vendorId Monocytes-CD14+
+vendorId Monocytes-CD14+_RO01746
+orderUrl http://labs.fhcrc.org/heimfeld/contact.html
+termId BTO:0000876
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+#formerly tier 3
+tier 3
+protocol Stam:MonoCD14_Stam_protocol.pdf
+
+term Monocytes-CD14+_RO01826
+tag MONOCD14RO1826
+type Cell Line
+organism human
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw ID RO 01826), newly promoted to tier 2: not in 2011 analysis
+lineage mesoderm
+karyotype normal
+sex F
+tissue Monocytes
+vendorName S. Heimfeld Laboratory, FHCRC
+vendorId Monocytes-CD14+_RO01826
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
