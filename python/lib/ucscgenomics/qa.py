@@ -1,19 +1,52 @@
-##!/hive/groups/encode/dcc/bin/python
-import sys, os, re, argparse, subprocess, math
+#!/hive/groups/encode/dcc/bin/python
+import sys, os, re, argparse, subprocess, math, threading, datetime, time, signal
 from ucscgenomics import ra, track
 
+"""
+	A collection of functions useful to the ENCODE QA Team.
+
+	Programs known to be dependent on it:
+	mkChangeNotes
+	qaInit
+
+	Functions:
+	getGbdbTables - takes in a database and a set of tables,
+		returns a set of tables that are gbdb files in reality
+	sorted_nicely - a neat way of alphanumerically sorting 
+		anything sortable, a nice snippet of functional programming
+		Google found.
+	countPerChrom - takes in Db & tables, returns a list of strings for 
+		outputting and a dictionary of counts
+		dict->{Table}->{Chrom} = countPerChrom
+		*automatically filters out Gbdbs*
+	checkTableDescriptions - takes in Db and tables, returns a list 
+		of strings and a set of tables with no description
+	checkTableIndex - takes in Db & tables, returns a list of strings 
+		and a set of tables with no index
+		*automatically filters out Gbdbs*
+	checkTableName - takes in a set of tables, returns string output
+		and a set of tables with underscores in the name
+	checkLabels - takes in a trackDb.ra filepath, returns a string 
+		output list and a set of tuples, ([label, #tooLongBy],[labe...)
+
+	main - runs all the checks, prints output
+
+"""
+
+
 def getGbdbTables(database, tableset):
-		sep = "','"
-		tablestr = sep.join(tableset)
-		tablestr = "'" + tablestr + "'"
+	""" Remove tables that aren't pointers to Gbdb files."""
+	sep = "','"
+	tablestr = sep.join(tableset)
+	tablestr = "'" + tablestr + "'"
 
-		cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, tablestr)
-		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-		cmdoutput = p.stdout.read()
+	cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, tablestr)
+	p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+	cmdoutput = p.stdout.read()
 
-		gbdbtableset = set(cmdoutput.split("\n")[1:-1])
+	gbdbtableset = set(cmdoutput.split("\n")[1:-1])
         
-		return gbdbtableset
+	return gbdbtableset
 
 def sorted_nicely(l): 
     """ Sort the given iterable in the way that humans expect.""" 
@@ -22,6 +55,7 @@ def sorted_nicely(l):
     return sorted(l, key = alphanum_key)
 
 def countPerChrom(database, tables):
+	""" Count the amount of rows per chromosome."""
 	notgbdbtablelist = tables - getGbdbTables(database, tables)
 	tablecounts = dict()
 	cmd = "hgsql %s -e \"select chrom from chromInfo\"" % database
@@ -59,7 +93,7 @@ def countPerChrom(database, tables):
 		used = set()
 		for j in sorted_nicely(tablecounts[i]):
 			output.append("%s = %s" % (j, tablecounts[i][j]))
-		
+
 		notused = chrlist - (localseen[i] | (chrlist - globalseen))
 		if notused:
 			output.append("Seen by others, but not used here:")
@@ -75,6 +109,7 @@ def countPerChrom(database, tables):
 	return (output, tablecounts)
 
 def checkTableDescriptions(database, tables):
+	""" Check if each table has a description or not."""
 	tablelist = list()
 	missing = set()
 	output = []
@@ -100,6 +135,7 @@ def checkTableDescriptions(database, tables):
 	return (output, missing)
 	
 def checkTableIndex(database, tables):
+	""" Check if each table has an index or not."""
 	notgbdbtablelist = tables - getGbdbTables(database, tables)
 	tablelist = list()
 	missing = set()
@@ -125,9 +161,9 @@ def checkTableIndex(database, tables):
 		output.append("")
 
 	return (output, missing)
-	
-	
-def checkTableName(database, tables):
+
+def checkTableName(tables):
+	""" Check if table name has an underscore or not."""
 	bad = set()
 	output = []
 	for i in tables:
@@ -144,6 +180,7 @@ def checkTableName(database, tables):
 	return (output, bad)
 
 def checkLabels(trackDb):
+	""" Check if long and short labels are too long."""
 	f = open(trackDb, "r")
 	lines = f.readlines()
 	seenlabel = dict()
@@ -164,10 +201,10 @@ def checkLabels(trackDb):
 				output.append("longLabel '%s' is too long: %s" % (m1.group(1), len(m1.group(1))))
 		if m2:
 			#short labels are allowed to repeat
-# 			if seenlabel.has_key(m2.group(1)):
-# 				seenlabel[m2.group(1)] = seenlabel[m2.group(1)] + 1
-# 			else:
-# 				seenlabel[m2.group(1)] = 1
+			#if seenlabel.has_key(m2.group(1)):
+				#seenlabel[m2.group(1)] = seenlabel[m2.group(1)] + 1
+			#else:
+				#seenlabel[m2.group(1)] = 1
 			if len(m2.group(1)) > 17:
 				toolong.append([m2.group(1), len(m2.group(1))])
 				output.append("shortLabel '%s' is too long: %s" % (m2.group(1), len(m2.group(1))))
@@ -184,7 +221,66 @@ def checkLabels(trackDb):
 
 	return (output, toolong)
 
+
+def checkTableCoords(database, tables):
+	"""Runs checkTableCoords externally against a set of tables, timeout is 10 seconds"""
+	notgbdbtablelist = tables - getGbdbTables(database, tables)
+	results = []
+	output = []
+	timeout = 10
+	for i in sorted(notgbdbtablelist):
+		start = datetime.datetime.now()
+		cmd = "checkTableCoords %s %s" % (database, i)
+		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+		killed = 0
+		while p.poll() is None:
+			time.sleep(0.1)
+			now = datetime.datetime.now()
+			if (now - start).seconds > timeout:
+				p.kill()
+				
+				killed = 1
+		if not killed:
+			cmdoutput = p.stdout.read()
+			if cmdoutput:
+				results.append(cmdoutput)
+		elif killed:
+			results.append("Process timeout for table: %s" % i)
+			results.append("You might want to manually run: '%s'" % cmd)
+			results.append("")
+		
+	if results:
+		output.append("These tables have coordinate errors:")
+		for i in results:
+			output.append(i)
+	else:
+		output.append("No coordinate errors")
+		output.append("")
+	return (output, results)
+
+def positionalTblCheck(database, tables):
+	notgbdbtablelist = tables - getGbdbTables(database, tables)
+	results = []
+	output = []
+	for i in notgbdbtablelist:
+		cmd = "positionalTblCheck %s %s" % (database, i)
+		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+		cmdoutput = p.stdout.read()
+		
+		if cmdoutput:
+			results.append(cmdoutput)
+	if results:
+		output.append("These tables have position errors:")
+		for i in results:
+			output.append(i)
+	else:
+		output.append("No position errors")
+		output.append("")
+	return (output, results)
+
 def main():
+
+	""" Run all the checks, print output"""
 
 	parser = argparse.ArgumentParser(
         prog='qaChecks',
@@ -222,15 +318,21 @@ qaChecks hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs
 
 	(tableIndexOut, missingIndex) = checkTableIndex(args.database, tables)
 	output.extend(tableIndexOut)
-	
-	(tableNameOut, badTableNames) = checkTableName(args.database, tables)
+
+	(tableNameOut, badTableNames) = checkTableName(tables)
 	output.extend(tableNameOut)
-	
+
 	(labelOut, badLabels) = checkLabels(args.trackDb)
 	output.extend(labelOut)
 
-	(countChromOut, tableCounts) = countPerChrom(args.database, tables)
-	output.extend(countChromOut)
+	(coordsOut, badCoords) = checkTableCoords(args.database, tables)
+	output.extend(coordsOut)
+
+	(posOut, badPos) = positionalTblCheck(args.database, tables)
+	output.extend(posOut)
+
+	#(countChromOut, tableCounts) = countPerChrom(args.database, tables)
+	#output.extend(countChromOut)
 
 	for i in output:
 		print i

@@ -1,4 +1,4 @@
-import os
+import os, re
 from ucscgenomics import ra
 
 def readMd5sums(filename):
@@ -259,12 +259,24 @@ class CompositeTrack(object):
     def organism(self):
         """The url on our site for this composite"""
         return self._organism
-        
+    @property
+    def currentTrackDb(self):
+        trackDb = self._trackDbDir + "trackDb.wgEncode.ra"
+        f = open(trackDb, "r")
+        lines = f.readlines()
+        p = re.compile(".*(%s\S+) ?(\S+)" % self._name)
+        for i in lines:
+            m = p.match(i)
+            if m and re.search('alpha', m.group(2)):
+                tdbpath = "%s%s" % (self._trackDbDir, m.group(1))
+                return tdbpath
+        return None
+
+ 
     def __init__(self, database, compositeName, trackPath=None):
         
         if trackPath == None:
             self._trackPath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
-            self._trackDbDir = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
         else:
             self._trackPath = trackPath
             
@@ -283,6 +295,7 @@ class CompositeTrack(object):
             self._trackPath = self._trackPath + '/'
         
         self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
+        self._trackDbDir = self._trackPath + self._organism + '/' + database + '/'
         if not os.path.isfile(self._trackDbPath):
             raise KeyError(self._trackDbPath + ' does not exist')
         

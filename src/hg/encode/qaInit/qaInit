@@ -1,12 +1,13 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math, datetime
-from ucscgenomics import ra, track, mkChangeNotes
+from ucscgenomics import ra, track, mkChangeNotes, qa
 
 def getMethods(qaDir, args, user, d):
 	cmd = "curl -X GET http://genomewiki.cse.ucsc.edu/genecats/index.php/ENCODE_QA 2>/dev/null"
 	p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
 	output = p.stdout.read().split("\n")
-	r = re.compile('<li class="toclevel.*="tocnumber">(\S+)<.*="toctext">(.*)<\/span>')
+	r1 = re.compile('<li class="toclevel.*="tocnumber">(\S+)<.*="toctext">(.*)<\/span>')
+	r2 = re.compile('&amp;')
 	if os.path.exists(qaDir + '/methods'):
 		return
 	
@@ -19,15 +20,18 @@ def getMethods(qaDir, args, user, d):
 	f.write("\n")
 	for line in output:
 		
-		m = r.match(line)
-		if m:
+		m1 = r1.match(line)
+		
+		if m1:
 			tabs = ""
-			for char in m.group(1):
+			for char in m1.group(1):
 				if char == ".":
 					tabs = tabs + "    "
 			if tabs == "":
 				f.write("\n")
-			f.write("%s%s %s\n" % (tabs, m.group(1), m.group(2)))
+			m2 = r2.search(line)
+			second = r2.sub('&', m1.group(2))
+			f.write("%s%s %s\n" % (tabs, m1.group(1), second))
 	return
 
 def writeClaimMail(args, user, qaDir):
@@ -251,12 +255,9 @@ def writeHtml(args, c, qaDir):
 	f.close()
 	return short, long
 	
-def runScript(args, qaDir):
-	cmd = "qaEncodeTracks.csh %s %s/tableList 2>&1" % (args.database, qaDir)
-	p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-	output = p.stdout.read()
+def writeScriptOut(qaDir, output):
 	f = open(qaDir + "/script.output", "w")
-	sep = ""
+	sep = "\n"
 	outstr = sep.join(output)
 	f.write(outstr)
 	f.close()
@@ -371,6 +372,7 @@ def checkWithMkNotes(ourset, mkNotesSet, status):
 		errors.append("The list of new %s in the notes file is out of date." % status)
 	return errors
 
+
 def main():
 	parser = argparse.ArgumentParser(
         prog='qaInit',
@@ -394,27 +396,30 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 
 	args = parser.parse_args(sys.argv[1:])
 
-
+	releaseOld = 'solo'
 	if not args.release.isdigit():
 		parser.print_help()
-
+	if int(args.release) > 1:
+		releaseOld = int(args.release) - 1
+	
 	mkNotesArgs = { 'database': args.database,
 					'composite': args.composite,
 					'releaseNew': args.release,
-					'releaseOld': str(int(args.release) - 1),
+					'releaseOld': str(releaseOld),
 					'ignore' : 0,
-					'loose': 0,
+					'loose': 1,
 					'summary': 0}
+	print "Making local mkChangeNotes"
 	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
-	errors = []
 
 	user = os.environ['USER']
 	c = track.CompositeTrack(args.database, args.composite)
+	errors = []
 	qaDir = c.qaInitDir + "release%s" % args.release 
 	d = datetime.date.today()
 	if not os.path.exists(qaDir):
 		os.makedirs(qaDir)
-		
+
 	getMethods(qaDir, args, user, d)
 	
 	makeLinks(c, args, qaDir)
@@ -428,19 +433,21 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	if not re.match('mkChangeNotes v2', lines[0]):
 		print "notes files is not the correct version"
 		return
-		
+	print "Parsing notes file"
 	(tables, gbdbs, files, supplemental, others, size) = parseNotes(lines)
+	print "Comparing notes file to local notes"
 	errors.extend(checkWithMkNotes(tables, genNotes.newTables, "new tables"))
 	errors.extend(checkWithMkNotes(gbdbs, genNotes.newGbdbs, "new gbdbs"))
 	errors.extend(checkWithMkNotes(files, genNotes.newFiles, "new download files"))
 	errors.extend(checkWithMkNotes(supplemental, genNotes.newSupplemental, "new supplemental files"))
 	errors.extend(checkWithMkNotes(others, genNotes.newOthers, "new other files"))
-
+	
 	if errors:
 		for i in errors:
 			print i
 		return
 	
+	print "Writing mails and friends"
 	tablestr = writeTableMail(tables, args, user, qaDir)
 	gbdbstr = writeGbdbMail(gbdbs, args, user, qaDir)
 	(filestr, subIds) = writeFileMail(files, supplemental | others, args, user, qaDir, c)
@@ -449,11 +456,43 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	writePushHtmlMail(args, user, qaDir)
 	writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir)
 	
+	print "Changing subIds' statuses to reviewing"
 	changeStatus(subIds)
 	
-	#runScript(args, qaDir)
+	output = []
+	
+	tables = genNotes.newTables
+	
+	print "Running qa tests"
+	(tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
+	output.extend(tableDescOutput)
 
+	(tableIndexOut, missingIndex) = qa.checkTableIndex(args.database, tables)
+	output.extend(tableIndexOut)
+	
+	(tableNameOut, badTableNames) = qa.checkTableName(tables)
+	output.extend(tableNameOut)
+	
+	trackDbPath = c.currentTrackDb
+	if trackDbPath:
+		(labelOut, badLabels) = qa.checkLabels(trackDbPath)
+		output.extend(labelOut)
+	else:
+		print "Could not determine track Db to use, does the composite have the alpha tag in trackDb.wgEncode.ra?"
+	
+	(coordsOut, badCoords) = qa.checkTableCoords(args.database, tables)
+	output.extend(coordsOut)
+	
+	(posOut, badPos) = qa.positionalTblCheck(args.database, tables)
+	output.extend(posOut)
 
+	(countChromOut, tableCounts) = qa.countPerChrom(args.database, tables)
+	output.extend(countChromOut)
+
+	writeScriptOut(qaDir, output)
+
+	print "Done!"
+	
 
 if __name__ == "__main__":
 	main()
