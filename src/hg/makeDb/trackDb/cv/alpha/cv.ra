@@ -7686,7 +7686,7 @@ tag TCF4
 type Antibody
 target TCF4
 antibodyDescription Rabbit monoclonal
-targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4 
 deprecated same as TCF7L2
 vendorName Cell Signaling Technology
 vendorId 2569S
@@ -7705,7 +7705,7 @@ validation missing
 #target TCF-4
 #antibodyDescription Rabbit monoclonal
 #targetDescription This gene encodes transcription factor 4, a basic helix-turn-helix transcription factor. The encoded protein recognizes an Ephrussi-box ('E-box') binding site ('CANNTG') - a motif first identified in immunoglobulin enhancers. (provided by RefSeq) 
-#vendorName many sources from http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
+#vendorName many sources from http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4 
 #vendorId NA
 #orderUrl NA
 #targetId GeneCard:TCF4
