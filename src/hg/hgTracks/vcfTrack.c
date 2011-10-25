@@ -18,16 +18,14 @@
 
 #ifdef USE_TABIX
 
-static boolean getMinQual(struct trackDb *tdb, double *retMinQual, boolean compositeLevel)
+static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
 /* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
 {
-char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s."VCF_APPLY_MIN_QUAL_VAR, tdb->track);
-if (cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
+if (cartUsualBooleanClosestToHome(cart, tdb, FALSE,
 				  VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL))
     {
     if (retMinQual != NULL)
-	*retMinQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
+	*retMinQual = cartUsualDoubleClosestToHome(cart, tdb, FALSE, VCF_MIN_QUAL_VAR,
 						   VCF_DEFAULT_MIN_QUAL);
     return TRUE;
     }
@@ -44,15 +42,13 @@ if (isEmpty(record->qual) ||
 return FALSE;
 }
 
-static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues,
-			       boolean compositeLevel)
+static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues)
 /* Return TRUE and set retValues if cart contains FILTER column values to exclude */
 {
-char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, tdb->track);
-if (cartListVarExists(cart, cartVar))
+if (cartListVarExistsAnyLevel(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR))
     {
-    struct slName *selectedValues = cartOptionalSlNameList(cart, cartVar);
+    struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE,
+									VCF_EXCLUDE_FILTER_VAR);
     if (retValues != NULL)
 	*retValues = selectedValues;
     return TRUE;
@@ -70,15 +66,12 @@ for (i = 0;  i < record->filterCount;  i++)
 return FALSE;
 }
 
-static boolean getMinFreq(struct trackDb *tdb, double *retMinFreq, boolean compositeLevel)
+static boolean getMinFreq(struct trackDb *tdb, double *retMinFreq)
 /* Return TRUE and set retMinFreq if cart contains nonzero minimum minor allele frequency. */
 {
-char cartVar[512];
-//#*** is there an ExistsClosestToHome?
-safef(cartVar, sizeof(cartVar), "%s."VCF_MIN_ALLELE_FREQ_VAR, tdb->track);
-if (cartVarExists(cart, cartVar))
+if (cartVarExistsAnyLevel(cart, tdb, FALSE, VCF_MIN_ALLELE_FREQ_VAR))
     {
-    double minFreq = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel,
+    double minFreq = cartUsualDoubleClosestToHome(cart, tdb, FALSE,
 					    VCF_MIN_ALLELE_FREQ_VAR, VCF_DEFAULT_MIN_ALLELE_FREQ);
     if (minFreq > 0)
 	{
@@ -150,13 +143,12 @@ return FALSE;
 static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
 /* If a filter is specified in the cart, remove any records that don't pass filter. */
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb, tdb->track);
 double minQual = VCF_DEFAULT_MIN_QUAL;
 struct slName *filterValues = NULL;
 double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
-boolean gotQualFilter = getMinQual(tdb, &minQual, compositeLevel);
-boolean gotFilterFilter = getFilterValues(tdb, &filterValues, compositeLevel);
-boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq, compositeLevel);
+boolean gotQualFilter = getMinQual(tdb, &minQual);
+boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
+boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
 if (! (gotQualFilter || gotFilterFilter || gotMinFreqFilter) )
     return;
 
@@ -597,9 +589,8 @@ if (isCenter)
     if (dy == NULL)
 	dy = dyStringNew(0);
     dyStringPrintf(dy, "%s   Haplotypes sorted on ", mouseoverText);
-    char cartVar[512];
-    safef(cartVar, sizeof(cartVar), "%s.centerVariantChrom", tg->tdb->track);
-    char *centerChrom = cartOptionalString(cart, cartVar);
+    char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE,
+							"centerVariantChrom");
     if (centerChrom == NULL || !sameString(chromName, centerChrom))
 	dyStringAppend(dy, "middle variant by default. ");
     else
@@ -618,13 +609,10 @@ static int getCenterVariantIx(struct track *tg, int seqStart, int seqEnd,
 // just use the median variant in window.
 {
 int defaultIx = (slCount(records)-1) / 2;
-char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s.centerVariantChrom", tg->tdb->track);
-char *centerChrom = cartOptionalString(cart, cartVar);
+char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "centerVariantChrom");
 if (centerChrom != NULL && sameString(chromName, centerChrom))
     {
-    safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tg->tdb->track);
-    int centerPos = cartInt(cart, cartVar);
+    int centerPos = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, "centerVariantPos", -1);
     int winSize = seqEnd - seqStart;
     if (centerPos > (seqStart - winSize) && centerPos < (seqEnd + winSize))
 	{
@@ -816,8 +804,7 @@ const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
-boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
-char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
+char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
 pushWarnHandler(ignoreEm);
@@ -854,7 +841,11 @@ if (vcff->records == NULL)
 int ploidy = sameString(chromName, "chrY") ? 1 : 2;
 int simpleHeight = ploidy * vcff->genotypeCount * tg->lineHeight;
 int defaultHeight = min(simpleHeight, VCF_DEFAULT_HAP_HEIGHT);
-int cartHeight = cartOrTdbInt(cart, tg->tdb, VCF_HAP_HEIGHT_VAR, defaultHeight);
+char *tdbHeight = trackDbSettingOrDefault(tg->tdb, VCF_HAP_HEIGHT_VAR, NULL);
+if (isNotEmpty(tdbHeight))
+    defaultHeight = atoi(tdbHeight);
+int cartHeight = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, VCF_HAP_HEIGHT_VAR,
+					   defaultHeight);
 tg->height = min(cartHeight+1, maximumTrackHeight(tg));
 return tg->height;
 }
@@ -901,8 +892,7 @@ else
     }
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
-boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
-boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,
+boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
 							VCF_HAP_ENABLED_VAR, TRUE);
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
