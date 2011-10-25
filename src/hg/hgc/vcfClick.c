@@ -259,7 +259,8 @@ printf("<B>Name:</B> %s<BR>\n", rec->name);
 printCustomUrl(tdb, rec->name, TRUE);
 static char *formName = "vcfCfgHapCenter";
 printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
-vcfCfgHaplotypeCenter(cart, tdb, rec->file, rec->name, seqName, rec->chromStart, formName);
+vcfCfgHaplotypeCenter(cart, tdb, tdb->track, FALSE, rec->file, rec->name,
+		      seqName, rec->chromStart, formName);
 printf("</FORM>\n");
 printPosOnChrom(seqName, rec->chromStart, rec->chromEnd, NULL, FALSE, rec->name);
 printf("<B>Reference allele:</B> %s<BR>\n", rec->alleles[0]);

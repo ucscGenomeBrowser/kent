@@ -264,6 +264,7 @@ class CompositeTrack(object):
         
         if trackPath == None:
             self._trackPath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
+            self._trackDbDir = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
         else:
             self._trackPath = trackPath
             
@@ -291,7 +292,7 @@ class CompositeTrack(object):
         self._alphaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/'
         self._betaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/beta/'
         self._publicMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/public/'
-	self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
+        self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
         self._httpDownloadsPath = '/usr/local/apache/htdocs-hgdownload/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
         self._rrHttpDir = '/usr/local/apache/htdocs/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
         self._notesDirectory = os.path.expanduser("~/kent/src/hg/makeDb/doc/encodeDcc%s" % database.capitalize()) + '/'

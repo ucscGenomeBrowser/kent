@@ -20,7 +20,7 @@ my $infoOut = shift;
 open (FH, "<$infoOut") or die "can not open $infoOut";
 my $line = <FH>;	#	expected first line has column titles
 $line =~ s/^#//;	#	ignore the # comment delimiter
-my @columnTitles = split('\s+',$line);
+my @columnTitles = split('\t',$line);
 my $geneIx = 0;
 my $transcriptIx = 0;
 my $proteinIx = 0;
@@ -38,7 +38,7 @@ die "can not find column headings geneId, transId or proteinId in file $infoOut"
     if (($geneIx + $transcriptIx + $proteinIx) < 3);
 
 while ($line = <FH>) {
-    my @fields = split('\s+', $line);
+    my @fields = split('\t', $line);
     my $proteinId = "";
     if (defined($fields[$proteinIx])) {
 	$proteinId = $fields[$proteinIx];
