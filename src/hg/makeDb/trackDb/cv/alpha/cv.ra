@@ -142,7 +142,7 @@ tissue Cervix
 vendorName ATCC
 vendorId CCL-2.2
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
-#lineage ectoderm
+lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
@@ -2871,14 +2871,17 @@ term IMR90
 tag IMR90
 type Cell Line
 organism human
-description Normal Human Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
+description Normal Human Fetal Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
 lineage endoderm
+karyotype normal
 vendorName ATCC
 vendorId CCL-186
 lots 58607680
+termId BTO:0001229
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001229&termName=IMR-90%20cell
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
-sex U
+sex F
 #formerly tier 3
 tier 3
 protocol Stam:IMR90_Stam_protocol.pdf
