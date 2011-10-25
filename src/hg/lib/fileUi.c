@@ -12,9 +12,7 @@
 #include "mdb.h"
 #include "jsHelper.h"
 #include "web.h"
-
-// FIXME: Move to hui.h since hui.c also needs this
-#define ENCODE_DCC_DOWNLOADS "encodeDCC"
+#include "trashDir.h"
 
 
 void fileDbFree(struct fileDb **pFileList)
@@ -31,6 +29,84 @@ while (pFileList && *pFileList)
     freeMem(oneFile->reverse);
     mdbObjsFree(&(oneFile->mdb));
     freeMem(oneFile);
+    }
+}
+
+static struct fileDb *fileDbReadFromCache(char *db, char *dir, char *subDir)
+{
+struct tempName cacheFile;
+boolean exists = trashDirReusableFile(&cacheFile, dir, subDir, db);  // encodeDCC/composite.db
+if (!exists)
+    return NULL;
+//warn("Reading: %s",cacheFile.forCgi);
+
+struct fileDb *fileList = NULL;
+struct fileDb *oneFile = NULL;
+struct lineFile *lf = lineFileOpen(cacheFile.forCgi, TRUE);
+char *words[4];
+while (lineFileChop(lf, words) >= 3)
+    {
+    AllocVar(oneFile);
+    oneFile->fileName = cloneString(words[0]);
+    oneFile->fileSize = sqlUnsignedLong(words[1]);
+    oneFile->fileDate = cloneString(words[2]);
+    slAddHead(&fileList,oneFile);
+    }
+lineFileClose(&lf);
+if (fileList == NULL)
+    unlink(cacheFile.forCgi);    // remove empty file
+
+return fileList;
+}
+
+// Cache is not faster, so just use it as a backup
+//#define CACHE_IS_FASTER_THAN_RSYNC
+#ifdef CACHE_IS_FASTER_THAN_RSYNC
+static boolean fileDbCacheAvailable(char *db, char *dir, char *subDir)
+{ // Checks if there is a recent enough cache file
+  // TODO: Add some other trick to invalidate cache at will.
+struct tempName cacheFile;
+boolean exists = trashDirReusableFile(&cacheFile, dir, subDir, db);  // encodeDCC/composite.db
+if (exists)
+    {
+    //char *clearCache = cartOptionalString(cart,"clearCache");  // where is cart coming from?
+    //if (clearCache && sameWord(clearCache,subDir))
+    //    {
+    //    cartRemove(cart,"clearCache");
+    //    unlink(cacheFile.forCgi);    // remove empty file
+    //    return FALSE;
+    //    }
+    struct stat mystat;
+    ZeroVar(&mystat);
+    if (stat(cacheFile.forCgi,&mystat)==0)
+        {
+        // how old is old?
+        int secs = (clock1() - mystat.st_ctime); // seconds since created
+        if (secs < (24 * 60 * 60)) // one date
+            return TRUE;
+        }
+    }
+return FALSE;
+}
+#endif///def CACHE_IS_FASTER_THAN_RSYNC
+
+static void fileDbWriteToCache(char *db, char *dir, char *subDir,struct fileDb *fileList)
+{
+struct tempName cacheFile;
+(void)trashDirReusableFile(&cacheFile, dir, subDir, db);  // encodeDCC/composite.db
+//warn("Writing: %s",cacheFile.forCgi);
+
+FILE *fd = NULL;
+if ((fd = fopen(cacheFile.forCgi, "w")) != NULL)
+    {
+    struct fileDb *oneFile = fileList;
+    for(;oneFile != NULL;oneFile=oneFile->next)
+        {
+        char buf[1024];
+        safef(buf,sizeof buf,"%s %ld %s\n",oneFile->fileName,oneFile->fileSize,oneFile->fileDate);
+        fwrite(buf, strlen(buf), 1, fd);
+        }
+    fclose(fd);
     }
 }
 
@@ -53,53 +129,76 @@ if (foundFiles == NULL
     freeMem(savedSubDir);
     fileDbFree(&foundFiles);
 
-    FILE *scriptOutput = NULL;
-    char buf[1024];
-    char cmd[512];
-    char *words[10];
-    char *server = hDownloadsServer();
-
-    boolean useRsync = TRUE;
-    // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
-    if (hIsBetaHost())
-        safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
-    else
-        safef(cmd,sizeof(cmd),"rsync -n rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
-
-    scriptOutput = popen(cmd, "r");
-    while(fgets(buf, sizeof(buf), scriptOutput))
+#ifdef CACHE_IS_FASTER_THAN_RSYNC
+    if (fileDbCacheAvailable(db, dir, subDir))  // check cache first
         {
-        eraseTrailingSpaces(buf);
-        if (!endsWith(buf,".md5sum")) // Just ignore these
-            {
-            int count = chopLine(buf, words);
-            if (count >= 6 && useRsync == FALSE) // hgwdev is same as hgdownloads-test so can't use rsync
-                {
-                //-rw-rw-r-- 5  502826550 2010-10-22 16:51 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdRawDataRep1.fastq.gz
-                AllocVar(oneFile);
-                oneFile->fileSize = sqlUnsignedLong(words[2]);
-                oneFile->fileDate = cloneString(words[3]);
-                char *atSlash = strrchr(words[5], '/');
-                if (atSlash != NULL)
-                    oneFile->fileName = cloneString(atSlash + 1);
-                else
-                    oneFile->fileName = cloneString(words[5]);
-                slAddHead(&foundFiles,oneFile);
-                }
-            else if (count == 5 && useRsync == TRUE)// genome and hgwbeta can use rsync because files are on different machine
-                {
-                //-rw-rw-r--    26420982 2009/09/29 14:53:30 wgEncodeBroadChipSeq/wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
-                AllocVar(oneFile);
-                oneFile->fileSize = sqlUnsignedLong(words[1]);
-                oneFile->fileDate = cloneString(words[2]);
-                strSwapChar(oneFile->fileDate,'/','-');// Standardize YYYY-MM-DD, no time
-                oneFile->fileName = cloneString(words[4]);
-                slAddHead(&foundFiles,oneFile);
-                }
-            //warn("File:%s  size:%ld",foundFiles->fileName,foundFiles->fileSize);
-            }
+        foundFiles = fileDbReadFromCache(db, dir, subDir);
         }
-    pclose(scriptOutput);
+    else
+#endif///def CACHE_IS_FASTER_THAN_RSYNC
+        {
+        FILE *scriptOutput = NULL;
+        char buf[1024];
+        char cmd[512];
+        char *words[10];
+        char *server = hDownloadsServer();
+
+        boolean useRsync = TRUE;
+        // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
+        if (hIsBetaHost())
+            safef(cmd,sizeof(cmd),"rsync -n rsync://hgdownload-test.cse.ucsc.edu/goldenPath/%s/%s/%s/beta/",  db, dir, subDir); // NOTE: Force this case because beta may think it's downloads server is "hgdownload.cse.ucsc.edu"
+        else
+            safef(cmd,sizeof(cmd),"rsync -n rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
+
+        scriptOutput = popen(cmd, "r");
+        while(fgets(buf, sizeof(buf), scriptOutput))
+            {
+            eraseTrailingSpaces(buf);
+            if (!endsWith(buf,".md5sum")) // Just ignore these
+                {
+                int count = chopLine(buf, words);
+                if (count >= 6 && useRsync == FALSE) // hgwdev is same as hgdownloads-test so can't use rsync
+                    {
+                    //-rw-rw-r-- 5  502826550 2010-10-22 16:51 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdRawDataRep1.fastq.gz
+                    AllocVar(oneFile);
+                    oneFile->fileSize = sqlUnsignedLong(words[2]);
+                    oneFile->fileDate = cloneString(words[3]);
+                    char *atSlash = strrchr(words[5], '/');
+                    if (atSlash != NULL)
+                        oneFile->fileName = cloneString(atSlash + 1);
+                    else
+                        oneFile->fileName = cloneString(words[5]);
+                    slAddHead(&foundFiles,oneFile);
+                    }
+                else if (count == 5 && useRsync == TRUE)// genome and hgwbeta can use rsync because files are on different machine
+                    {
+                    //-rw-rw-r--    26420982 2009/09/29 14:53:30 wgEncodeBroadChipSeq/wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
+                    AllocVar(oneFile);
+                    oneFile->fileSize = sqlUnsignedLong(words[1]);
+                    oneFile->fileDate = cloneString(words[2]);
+                    strSwapChar(oneFile->fileDate,'/','-');// Standardize YYYY-MM-DD, no time
+                    oneFile->fileName = cloneString(words[4]);
+                    slAddHead(&foundFiles,oneFile);
+                    }
+                //warn("File:%s  size:%ld",foundFiles->fileName,foundFiles->fileSize);
+                }
+            }
+        pclose(scriptOutput);
+        if (foundFiles == NULL)
+            {
+            foundFiles = fileDbReadFromCache(db, dir, subDir);
+            if (foundFiles == NULL)
+                {
+                AllocVar(oneFile);
+                oneFile->fileName = cloneString("No files found!");
+                oneFile->fileDate = cloneString(cmd);
+                slAddHead(&foundFiles,oneFile);
+                warn("No files found for command:\n%s",cmd);
+                }
+            }
+        else
+            fileDbWriteToCache(db, dir, subDir,foundFiles);
+        }
 
     // mark this as done to avoid excessive io
     savedDb     = cloneString(db);
@@ -107,14 +206,7 @@ if (foundFiles == NULL
     savedSubDir = cloneString(subDir);
 
     if (foundFiles == NULL)
-        {
-        AllocVar(oneFile);
-        oneFile->fileName = cloneString("No files found!");
-        oneFile->fileDate = cloneString(cmd);
-        slAddHead(&foundFiles,oneFile);
-        warn("No files found for command:\n%s",cmd);
         return NULL;
-        }
     }
 
 // special code that only gets called in debug mode
@@ -375,8 +467,9 @@ return dyStringCannibalize(&dyLink);
 }
 
 static int filterBoxesForFilesList(char *db,struct mdbObj *mdbObjs,sortOrder_t *sortOrder)
-{  // Will create filterBoxes for each sortOrder field.  Returns count of filterBoxes made
+{  // Will create filterBoxes for each sortOrder field.  Returns bitmask of sortOrder colums included
 int count = 0;
+int filterableBits = 0;
 if (sortOrder != NULL)
     {
     struct dyString *dyFilters = dyStringNew(256);
@@ -385,18 +478,48 @@ if (sortOrder != NULL)
         {
         char *var = sortOrder->column[sIx];
         enum cvSearchable searchBy = cvSearchMethod(var);
-        if (searchBy != cvSearchBySingleSelect && searchBy != cvSearchByMultiSelect)
+    //#define FILTERBY_ALL_SEARCHABLE
+    #ifdef FILTERBY_ALL_SEARCHABLE
+        if (searchBy == cvNotSearchable)
+    #else///ifndef FILTERBY_ALL_SEARCHABLE
+        if (searchBy == cvNotSearchable || searchBy == cvSearchByFreeText)
+    #endif///ndef FILTERBY_ALL_SEARCHABLE
             continue; // Only single selects and multi-select make good candidates for filtering
 
         // get all vals for var, then convert to tag/label pairs for filterBys
-        struct slName *vals = mdbObjsFindAllVals(mdbObjs, var);
+        struct slName *vals = mdbObjsFindAllVals(mdbObjs, var, CV_LABEL_EMPTY_IS_NONE);
+        if (searchBy != cvSearchByMultiSelect && searchBy != cvSearchBySingleSelect)
+            {
+            int valCount = slCount(vals);
+            if (valCount > 80 || valCount > (slCount(mdbObjs) * 0.8))
+                {
+                slNameFreeList(&vals);
+                continue;
+                }
+            }
         struct slPair *tagLabelPairs = NULL;
         while(vals != NULL)
             {
+            char buf[256];
             struct slName *term = slPopHead(&vals);
             char *tag = (char *)cvTag(var,term->name);
-            if (tag == NULL)
-                tag = term->name;
+            if (tag == NULL)                           // Does not require cv defined!
+                {
+                safecpy(buf,sizeof buf,term->name);
+                tag = buf;
+                eraseNonAlphaNum(tag);   // Bad news if tag has special chars, unfortunately this does not pretect us from dups
+                if (searchBy != cvSearchByMultiSelect
+                &&  searchBy != cvSearchBySingleSelect
+                &&  searchBy != cvSearchByDateRange)
+                    {   // filtering by terms not in cv or regularized should be abandanded at the first sign of trouble!
+                    if (strlen(term->name) > strlen(tag))
+                        {
+                        slNameFreeList(&vals);
+                        slNameFree(&term);
+                        break;
+                        }
+                    }
+                }
             slPairAdd(&tagLabelPairs,tag,cloneString((char *)cvLabel(var,term->name)));
             slNameFree(&term);
             }
@@ -424,9 +547,11 @@ if (sortOrder != NULL)
                                labelWithVocabLink(var,sortOrder->title[sIx],tagLabelPairs,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
+                filterableBits |= (0x1<<(sIx));
+                //warn("count:%d sIx:%d retBits:%X",count,sIx,filterableBits);
                 }
             }
-        if (slCount(tagLabelPairs) > 0)
+        if (tagLabelPairs != NULL)
             slPairFreeValsAndList(&tagLabelPairs);
         }
 
@@ -451,7 +576,7 @@ if (sortOrder != NULL)
         }
     dyStringFree(&dyFilters);
     }
-return count;
+return filterableBits;
 }
 
 static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
@@ -493,7 +618,7 @@ else
         "genome-preview.ucsc.edu", db, tdb->track);
 }
 
-static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,boolean filterable)
+static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,int filterable)
 // Prints filesList as a sortable table. Returns count
 {
 // Table class=sortable
@@ -566,7 +691,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
     oneFile->mdb->next = NULL; // mdbs were in list for generating sortOrder, but list no longer needed
     char *field = NULL;
 
-    printf("<TR valign='top'%s>",filterable?" class='filterable'":"");
+    printf("<TR valign='top'%s>",(filterable != 0) ?" class='filterable'":"");
     // Download button
     printf("<TD nowrap>");
     if (parentTdb)
@@ -604,22 +729,23 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                 boolean isFieldEmpty = cvTermIsEmpty(sortOrder->column[ix],field);
                 char class[128];
                 class[0] = '\0';
-                if (filterable)
+                if (filterable & (0x1<<ix))
                     {
-                    enum cvSearchable searchBy = cvSearchMethod(sortOrder->column[ix]);
-                    if (searchBy == cvSearchBySingleSelect || searchBy == cvSearchByMultiSelect)
+                    char *cleanClass = NULL;
+                    char buf[256];
+                    if (isFieldEmpty)
+                        cleanClass = CV_LABEL_EMPTY_IS_NONE;
+                    else
                         {
-                        char *cleanClass = NULL;
-                        if (isFieldEmpty)
-                            cleanClass = "None";
-                        else
+                        cleanClass = (char *)cvTag(sortOrder->column[ix],field); // class should be tag
+                        if (cleanClass == NULL)
                             {
-                            cleanClass = (char *)cvTag(sortOrder->column[ix],field); // class should be tag
-                            if (cleanClass == NULL)
-                                cleanClass = field;
+                            safecpy(buf,sizeof buf,field);
+                            cleanClass = buf;
+                            eraseNonAlphaNum(cleanClass);// This may not be needed because the filterBy code already eliminated these.
                             }
-                        safef(class,sizeof class," class='%s %s'",sortOrder->column[ix],cleanClass);
                         }
+                    safef(class,sizeof class," class='%s %s'",sortOrder->column[ix],cleanClass);
                     }
 
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
@@ -879,7 +1005,7 @@ filesDownloadsPreamble(db,tdb);
 // Now update all files with their sortable fields and sort the list
 mdbObjReorderByCv(mdbList,FALSE);// Start with cv defined order for visible vars. NOTE: will not need to reorder during print!
 sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb,mdbList);
-boolean filterable = FALSE;
+int filterable = 0;
 if (sortOrder != NULL)
     {
     char *vars = removeCommonMdbVarsNotInSortOrder(mdbList,sortOrder);
@@ -894,7 +1020,7 @@ if (sortOrder != NULL)
     fileDbSortList(&fileList,sortOrder);
 
     // FilterBoxes
-    filterable = (filterBoxesForFilesList(db,mdbList,sortOrder) > 0);
+    filterable = filterBoxesForFilesList(db,mdbList,sortOrder);
     }
 
 // Print table
@@ -968,7 +1094,7 @@ if (exceededLimit)
     //warn("Too many files found.  Displaying first %d of at least %d.<BR>Narrow search parameters and try again.\n", fileCount,filesExpected);
     }
 
-fileCount = filesPrintTable(db,NULL,fileList,sortOrder,FALSE); // FALSE=Don't offer more filtering on the file search page
+fileCount = filesPrintTable(db,NULL,fileList,sortOrder,0); // FALSE=Don't offer more filtering on the file search page
 printf("</DIV><BR>\n");
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?

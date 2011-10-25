@@ -12,6 +12,8 @@ gorGor	Haplorrhini; Catarrhini; Hominidae; Gorilla
 
 ponAbe	Haplorrhini; Catarrhini; Hominidae; Pongo
 
+nomLeu	Haplorrhini; Catarrhini; Hominidae; Hylobatidae
+
 rheMac	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Macaca
 
 papHam	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Papio

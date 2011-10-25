@@ -79,6 +79,39 @@ hashFree(&sizeHash);
 return keeperHash;
 }
 
+boolean isRfam(char *accession)
+/* isRfam - determine if the sequence comes from Rfam */
+{
+/* If the sequence comes from Rfam, its source accession should begin              
+ * with the letters RF, and then should have a string of digits                    
+ * followed by a semicolon (and subsequent characters).  No other                  
+ * known accessions match this pattern. */
+/* Note: At this time (9/15/11), Rfam accessions include five digits after         
+ * the RF.  But I wouldn't want to bet on that never changing... */
+int ii;
+if (strlen(accession) >= 3)
+    {
+    if (accession[0] == 'R' && accession[1] == 'F' && isdigit(accession[2]))
+        {
+        for (ii = 3; ii < strlen(accession); ii++)
+            {
+            if (!isdigit(accession[ii]) && accession[ii] != ';')
+                {
+                break;
+                }
+            if (accession[ii] == ';')
+                {
+                return(TRUE);
+                }
+            }
+        }
+
+    }
+return(FALSE);
+}
+
+
+
 
 boolean isNonsenseMediatedDecayTarget(struct bed *bed)
 /* Return TRUE if there's an intron more than 55 bases past
@@ -373,10 +406,19 @@ while (lineFileRow(lf, row))
     /* Figure out name, sourceAcc, and isRefSeq from bed->name */
     info.name = bed->name;
     info.category = "n/a";
-    info.sourceAcc = txAccFromTempName(bed->name);
+    if (isRfam(bed->name) || stringIn("tRNA", bed->name) != NULL)
+	{
+	info.sourceAcc = cloneString(bed->name);
+	}
+    else 
+	{
+	info.sourceAcc = txAccFromTempName(bed->name);
+	}
     info.isRefSeq = startsWith("NM_", info.sourceAcc);
 
-    if (startsWith("antibody.", info.sourceAcc) || startsWith("CCDS", info.sourceAcc))
+    if (startsWith("antibody.", info.sourceAcc) 
+	|| startsWith("CCDS", info.sourceAcc) || startsWith("RF", info.sourceAcc)
+	|| stringIn("tRNA", info.sourceAcc) != NULL)
         {
 	/* Fake up some things for antibody frag and CCDS that don't have alignments. */
 	info.sourceSize = bedTotalBlockSize(bed);

@@ -11,6 +11,7 @@ priority 220.3
 
 track chainNetAnoCar1 override
 priority 220.3
+shortLabel $o_db Chain/Net
 
 track chainNetOrnAna1 override
 priority 230.3
@@ -100,8 +101,12 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
     track netHg18 override
     shortLabel $o_db Net
 
+track chainNetXenTro3 override
+priority 590.3
+
 track chainNetXenTro2 override
 priority 590.3
+shortLabel $o_db Chain/Net
 
 track chainNetXenTro1 override
 priority 590.3
@@ -148,3 +153,7 @@ priority 650.3
 
 track chainNetBraFlo1 override
 priority 660.3
+
+track chainNetMelGal1 override
+chainMinScore 3000
+chainLinearGap medium

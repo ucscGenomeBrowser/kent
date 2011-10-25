@@ -4992,6 +4992,9 @@ XXX - done to here
 
 ##############################################################################
 # LASTZ Sea Hare aplCal1 (STARTING - 2009-06-08 - Galt)
+# To Do #1813 remove aplCal1 <-> hg19 chain/nets (2011-10-07 Chin)
+# However, only tables and download files are physically drop/removed
+# All data created stay on hive.
     mkdir /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08
     cd /hive/data/genomes/hg19/bed/lastzAplCal1.2009-06-08
 
@@ -9042,44 +9045,51 @@ TMPDIR=/scratch/tmp
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqH1hescR2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHct116R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHct116R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHsmmR2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHuvecR2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqK562R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqMcf7R2x75Il200SigPooled.bedGraph
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqMcf7R2x75Il200SigPooled.bedGraph
       bigWigMerge -adjust=-1 \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig \
 	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig stdout \
-	  | bedWeedOverlapping ../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled.bedGraph
-
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqNhekR2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHepg2R2x75Il200SigPooled.bedGraph
+      bigWigMerge -adjust=-1 \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig \
+	  /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig stdout \
+	  | bedWeedOverlapping ../../badRegions.bed stdin wgEncodeRegTxnCaltechRnaSeqHelas3R2x75Il200SigPooled.bedGraph
       # Now have to normalize.  This takes two passes.  The first just creates
       # a tab-separated file with normalization values. A batch file is made
       # by running awk on the tab file, and this batch file executes the
@@ -9104,7 +9114,7 @@ TMPDIR=/scratch/tmp
 	  echo processing $i
           bedGraphToBigWig $i /cluster/data/hg19/chrom.sizes $i:r.bw
       end
-
+      
       # Link into /gbdb
       ln -s `pwd`/*.bw /gbdb/hg19/bbi
 
@@ -9118,10 +9128,22 @@ TMPDIR=/scratch/tmp
       rm pooled/*.bedGraph normalized/*.bedGraph
 
       # Make metadata: (forgive the long line)
-      mdbQuery out=ra "select * from hg19 where obj='wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2' or obj='wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2'" \
+      # JK TODO - add Hepg2 and Helas3 from here on down
+
+      mdbQuery out=ra "select * from hg19 where \
+	  obj='wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2' or \
+	  obj='wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2'" \
       | sed 's/SigRep1V2/SigPooled/g' | sed 's/wgEncodeCal/wgEncodeRegTxnCal/' \
-      | grep -v ^replicate \
-      > ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeReg.ra
+      | grep -v ^replicate > mdb.ra 
+
+      # Now patch mdb.ra into ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeReg.ra
 
 
 
@@ -9131,7 +9153,7 @@ TMPDIR=/scratch/tmp
 
 
       # Do work to figure out how to color cells.  This is based on
-      # hierarchical clustering of wbEncodeUwAffyAllExon. 
+      # hierarchical clustering of wgEncodeUwAffyAllExon. 
       mkdir -p /hive/data/genomes/hg19/bed/wgEncodeReg/cellColors
       cd /hive/data/genomes/hg19/bed/wgEncodeReg
 
@@ -9227,6 +9249,72 @@ TMPDIR=/scratch/tmp
 #42
 
 # 2/22/11 color change (Bug #2917): swap blue and red; green -> brown
+
+
+#######################################################################
+# DGV BETA (DATABASE OF GENOMIC VARIANTS) (DONE 10/19/11 angie)
+    # DGV has changed their data format; this is a dry-run that won't be pushed
+    # until the changes are no longer considered beta and the integration of
+    # older studies w/new-from-dbVar/DGVa is complete.
+    set today = `date +%y%m%d`
+    mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
+    cd /hive/data/genomes/hg19/bed/dgv/$today
+    wget http://dgvbeta.tcag.ca/dgv/docs/GRCh37_hg19_2011-10-17.txt
+    head -1 GRCh37_hg19_2011-10-17.txt
+#variantid       chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergeid frequency       samplesize      cohortdescription
+    # It's more complicated than Gain/Loss/Complex or Inversion now:
+    cut -f 5,6 GRCh37_hg19_2011-10-17.txt | sort | uniq -c | head -100
+# 128114 CNV     ""
+#  16941 CNV     CNV
+#   3544 CNV     Complex
+#   5574 CNV     Deletion
+#   1135 CNV     Duplication
+#  97916 CNV     Gain
+#  42816 CNV     Insertion
+# 339520 CNV     Loss
+#   1805 OTHER   ""
+#   5375 OTHER   Inversion
+#    663 OTHER   Tandem duplication
+    # shuffle fields into bed9+ w/itemRgb
+    set purple = "200,0,200"
+    set red = "200,0,0"
+    set blue = "0,0,200"
+    set brown = "139,69,19"
+    tail -n +2 GRCh37_hg19_2011-10-17.txt \
+    | perl -wpe 'chomp; \
+      ($id, $chr, $start, $end, $varType, $varSubType, $ref, $pmid, $method, $platform, \
+       undef, undef, $sampleSize, $sampleDesc) = split("\t"); \
+      $start-- unless ($start == 0); \
+      $landmark = ""; # was empty in DGV v10, now not even in the download file. \
+      $varTypeOut = "$varType ($varSubType)"; \
+      $sample = $sampleDesc; \
+      $sample .= " (sample size: $sampleSize)" if ($sampleSize); \
+      $method .= " ($platform)" if ($platform && $platform ne "Not Provided"); \
+      $rgb = "0,0,0"; \
+      if ($varType eq "CNV") { \
+        if ($varSubType eq "Gain" || $varSubType eq "Insertion" || $varSubType eq "Duplication") {\
+          $rgb = "'$blue'"; \
+        } elsif ($varSubType eq "Loss" ||$varSubType eq "Deletion") { \
+          $rgb = "'$red'"; \
+        } else { \
+          $rgb = "'$brown'"; \
+          $varTypeOut = $varType if ($varSubType ne "Complex"); \
+        } \
+      } elsif ($varType eq "OTHER") { \
+        if ($varSubType eq "Inversion") { \
+          $rgb =  "'$purple'"; \
+        } elsif ($varSubType eq "Tandem Duplication") { \
+          $rgb = "'$blue'"; \
+        } else { \
+          $varTypeOut = $varType; \
+        } \
+      } \
+      $_ = join("\t", "chr$chr", $start, $end, $id, 0, "+", \
+                $start, $start, $rgb, $landmark, $varType, \
+                $ref, $pmid, $method, $sample) . "\n";' \
+        > dgv.bed
+    hgLoadBed hg19 dgvBeta dgv.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -renameSqlTable -tab
 
 
 #######################################################################
@@ -17101,7 +17189,7 @@ CREATE TABLE geneReviewsBB (
 
 
 ##############################################################################
-# hgPal downloads redone for new knownGene (DONE 2011-09-29 braney)
+# hgPal downloads redone for new knownGene (re-DONE 2011-10-18 braney)
 #   FASTA from 46way for  knownGene, knownCanonical 
 
     ssh hgwdev
@@ -17111,7 +17199,6 @@ CREATE TABLE geneReviewsBB (
 #    mkdir /cluster/data/hg19/bed/multiz46way/pal
     cd /cluster/data/hg19/bed/multiz46way/pal
     for i in `cat ../species.list`; do echo $i; done > order.lst
-
 
     mz=multiz46way
     gp=knownGene
@@ -17134,9 +17221,9 @@ CREATE TABLE geneReviewsBB (
     sleep 1
     tail -f $gp.$mz.job.log
 
-#    real    207m5.662s
-#    user    37m6.928s
-#    sys     6m24.152s
+# real    258m41.548s
+# user    37m23.511s
+# sys     6m47.978s
 
     mz=multiz46way
     gp=knownGene
@@ -17152,7 +17239,7 @@ CREATE TABLE geneReviewsBB (
     mz=multiz46way
     gp=knownGene
     db=hg19
-    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
@@ -17185,10 +17272,9 @@ CREATE TABLE geneReviewsBB (
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    302m20.489s
-# user    27m31.179s
-# sys     5m30.071s
-
+# real    255m47.897s
+# user    14m38.822s
+# sys     5m32.823s
 
     rm *.known.bed
     mz=multiz46way
@@ -17204,7 +17290,174 @@ CREATE TABLE geneReviewsBB (
     mz=multiz46way
     gp=knownCanonical
     db=hg19
-    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz/alignments
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+############################################################################
+# UPDATE COSMIC TRACK (DONE 2011-10-11 Fan)
+
+mkdir /hive/data/outside/cosmic/20111011
+# put raw data file, UCSCMutExp_v55_090911.csv, received by email to there.
+
+mkdir /hive/data/genomes/hg19/bed/cosmic/20111011
+cd /hive/data/genomes/hg19/bed/cosmic/20111011
+
+cp -p /hive/data/outside/cosmic/20111011/UCSCMutExp_v55_090911.csv .
+
+cat UCSCMutExp_v55_090911.csv|sed -e 's/\t//g' |sed -e 's/,/\t/g' |\
+grep -v COSMIC_MUTATION_ID |grep -v 'selected'|grep COSM >UCSCMutExp_v55_090911.tab
+
+hgsql hg19 -e 'drop table cosmicRaw'
+hgsql hg19 < ~/kent/src/hg/lib/cosmicRaw.sql
+
+hgLoadSqlTab hg19 cosmicRaw ~/kent/src/hg/lib/cosmicRaw.sql UCSCMutExp_v55_090911.tab
+
+# use  grch37_start-1 for our zero based chromStart and 
+# conver their chr23 and chr24 to chrX and chrY.
+
+hgsql hg19 -N -e 'select "chr", chromosome, grch37_start-1, grch37_stop, cosmic_mutation_id from cosmicRaw' \
+|grep -v NULL |sed -e 's/chr\t/chr/'|sort -u|sed -e 's/chr23/chrX/' |sed -e 's/chr24/chrY/' >cosmic.bed
+
+hgLoadBed -allowStartEqualEnd  hg19 cosmic cosmic.bed
+
+#############################################################################
+# LASTZ Gorilla GorGor3 (DONE - 2011-10-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17
+    cd /hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17
+
+    cat << '_EOF_' > DEF
+# human vs gorilla
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Frog gorGor3
+SEQ2_DIR=/scratch/data/gorGor3/gorGor3.2bit
+SEQ2_LEN=/scratch/data/gorGor3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    159m46.598s
+    cat fb.hg19.chainGorGor3Link.txt  
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
+    cd /hive/data/genomes/hg19/bed
+    ln -s lastzGorGor3.2011-10-17 lastz.gorGor3
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzGorGor3.2011-10-17/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    69m39.685s
+    cat fb.gorGor3.chainHg19Link.txt 
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
+
+############################################################################
+# ISCA FROM DBVAR (DONE 10/18/11 angie)
+    # Redmine: Track #34 (dbVar for human)
+    mkdir -p /hive/data/genomes/hg19/bed/isca/2011_10_18
+    cd /hive/data/genomes/hg19/bed/isca/2011_10_18
+    # Get variants submitted on this assembly, and variants remapped from other assemblies.
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.GRCh37.submitted.all.germline.ucsc.gvf.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.GRCh37.remap.all.germline.ucsc.gvf.gz
+    zcat nstd37_ISCA*.gvf.gz \
+    | perl -wne 'next if (/^(#|browser|track)/); chomp; \
+        ($c, undef, $varType, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
+        ($thickS, $thickE) = ($s, $e); \
+        ($attrCount, $attrTags, $attrVals, $gotVarTypeAttr) = (0, "", "", 0); \
+        foreach my $tagVal (split(";", $attrs)) { \
+          ($tag, $val) = split("=", $tagVal); \
+          if ($tag eq "ID") {$name = $val;} \
+          elsif ($tag eq "Start_range") { \
+            ($outerStart, $innerStart) = split(",", $val); \
+            $s = $outerStart if ($outerStart =~ /^\d+$/ && $outerStart < $s); \
+            $thickS = $innerStart if ($innerStart =~ /^\d+$/ && $innerStart > $thickS); \
+          } elsif ($tag eq "End_range") { \
+            ($innerEnd, $outerEnd) = split(",", $val); \
+            $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
+            $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
+          } elsif ($tag eq "var_type") { \
+            $gotVarTypeAttr = 1; \
+          } \
+          # Escape commas so the val list parses correctly in autoSql: \
+          $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
+          $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
+        } \
+        next if ($name =~ /^[ne]sv\d/); # keep only supporting variants (ssv) \
+        if (! $gotVarTypeAttr) { \
+          $varType =~ s/%/%25/g;   $varType =~ s/,/%2C/g; \
+          $attrTags .= "var_type,";  $attrVals .= "$varType,";  $attrCount++; \
+        } \
+        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
+                      $attrCount, $attrTags, $attrVals); \
+        print join("\t", @bed8Attrs) . "\n";' \
+      > isca.bed
+    wc -l isca.bed
+#11542 isca.bed
+    # Split into subtracks by clinical_int value.
+    zcat nstd37_ISCA*.gvf.gz \
+    | grep ssv | sed -e 's/.*clinical_int=//; s/;.*//;' | sort | uniq -c
+#   4250 Benign
+#   4063 Pathogenic
+#   2835 Uncertain Significance
+#    333 Uncertain Significance: likely benign
+#     61 Uncertain Significance: likely pathogenic
+    foreach subtrack (Benign Pathogenic)
+      grep -w  $subtrack isca.bed > isca$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg19 isca$subtrack isca$subtrack.bed
+    end
+#Loaded 4250 elements of size 11
+#Loaded 4063 elements of size 11
+
+    # The subcategories of Uncertain need a bit more sophisticated treatment:
+    set subtrack = Uncertain
+    grep -w $subtrack isca.bed \
+    | grep -v 'Uncertain Significance: likely' \
+      > isca$subtrack.bed
+    hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+      -allowStartEqualEnd hg19 isca$subtrack isca$subtrack.bed
+#Loaded 2835 elements of size 11
+    foreach unc (benign pathogenic)
+      set subtrack = Likely`perl -we 'print ucfirst("'$unc'");'`
+      grep -w "Uncertain Significance: likely $unc" isca.bed \
+        > isca$subtrack.bed
+      hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+        -allowStartEqualEnd hg19 isca$subtrack isca$subtrack.bed
+    end
+#Loaded 333 elements of size 11
+#Loaded 61 elements of size 11
+
+############################################################################

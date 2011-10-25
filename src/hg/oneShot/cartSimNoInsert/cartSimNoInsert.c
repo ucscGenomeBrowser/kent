@@ -12,6 +12,7 @@ static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp
 
 int userCount = 10;
 int randSeed = 0;
+boolean readOnly = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,6 +32,7 @@ errAbort(
   "options:\n"
   "   -userCount=N number of users simulating.  Default %d\n"
   "   -randSeed=N random number generator seed.  Defaults to pid\n"
+  "   -readOnly - don't write to cart\n"
   , userCount
   );
 }
@@ -113,12 +115,14 @@ for (;;)
 
 	safef(query, querySize, "update userDb set contents='%s' where id=%d",
 		userContents, userIds[randomIx]);
-	sqlUpdate(conn, query);
+	if (!readOnly)
+	    sqlUpdate(conn, query);
 	long userWriteTime = clock1000();
 
 	safef(query, querySize, "update sessionDb set contents='%s' where id=%d",
 		sessionContents, sessionIds[randomIx]);
-	sqlUpdate(conn, query);
+	if (!readOnly)
+	    sqlUpdate(conn, query);
 	long sessionWriteTime = clock1000();
 
 	sqlDisconnect(&conn);
@@ -150,6 +154,7 @@ cgiSpoof(&argc, argv);
 userCount = cgiOptionalInt("userCount", userCount);
 randSeed = cgiOptionalInt("randSeed", (int)getpid());
 verboseSetLevel(cgiOptionalInt("verbose", 1));
+readOnly = cgiVarExists("readOnly");
 srand(randSeed);
 if (argc != 7)
     usage();

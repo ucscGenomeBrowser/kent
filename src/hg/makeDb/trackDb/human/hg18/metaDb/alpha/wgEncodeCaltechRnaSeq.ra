@@ -21,6 +21,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
+md5sum 24d5dec97f69a4b5b1ae0c65d5100aaf
 project wgEncode
 readType 1x32
 replicate 1
@@ -46,6 +47,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 1a46205d470235aebedacd5ca0e5a57b
 project wgEncode
 readType 1x75D
 replicate 1
@@ -71,6 +73,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 51458c80498dfb1754a3db8f697a3146
 project wgEncode
 readType 1x75D
 replicate 1
@@ -96,6 +99,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum fcf9e63cf201d804879f7e18af11fdf9
 project wgEncode
 readType 1x75D
 replicate 1
@@ -121,6 +125,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 9105a5cc232d6274c31ea3c62a43f092
 project wgEncode
 readType 1x75D
 replicate 1
@@ -146,6 +151,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 7bc87c54d1b677ab7cec9528867e88fb
 project wgEncode
 readType 1x75D
 replicate 1
@@ -171,6 +177,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
+md5sum 1d5d7f89c4b8fe601745abb142c8c738
 project wgEncode
 readType 1x32
 replicate 1
@@ -196,6 +203,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 799b45654b0bac2db3ce82a76e54e157
 project wgEncode
 readType 1x75D
 replicate 1
@@ -221,6 +229,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 60a72c8162780c7efc44afb2071d0eac
 project wgEncode
 readType 1x75D
 replicate 1
@@ -246,6 +255,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
+md5sum 943447b6d97ae1001d64524d3309d415
 project wgEncode
 readType 1x32
 replicate 2
@@ -271,6 +281,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 5b98af06c5ba9e9c98af232faec9ad90
 project wgEncode
 readType 1x75D
 replicate 2
@@ -296,6 +307,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 9041f8c81fcbe9477a6870be2ee6db20
 project wgEncode
 readType 1x75D
 replicate 2
@@ -321,6 +333,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum d465ff852ec9e3016d3664f850ab5165
 project wgEncode
 readType 1x75D
 replicate 2
@@ -346,6 +359,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 876b3a3a521adab218ecbe93666388f2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -371,6 +385,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 89953dc613285a8cfeeb581172589d2b
 project wgEncode
 readType 1x75D
 replicate 2
@@ -396,6 +411,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm bow098
+md5sum cb30608e95f10086a807bcf60a68630c
 project wgEncode
 readType 1x32
 replicate 2
@@ -421,6 +437,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum c80333abc4fc8a1c39f536f114e2e755
 project wgEncode
 readType 1x75D
 replicate 2
@@ -447,6 +464,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum dc8bb9be22ce52f0545dae838db057b8
 project wgEncode
 readType 2x75
 replicate 1
@@ -472,6 +490,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum f6ed7d38e1dc5b295fc253f95d2f51a8
 project wgEncode
 readType 2x75
 replicate 1
@@ -497,6 +516,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 7292b0684adff3c2fcd393b64827002a
 project wgEncode
 readType 2x75
 replicate 1
@@ -522,6 +542,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 99bdafa38f0febb757a563448a9a06d6
 project wgEncode
 readType 2x75
 replicate 1
@@ -547,6 +568,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 7ff79e66df3d8bf0d9e5fa94099bf9c4
 project wgEncode
 readType 2x75
 replicate 1
@@ -572,6 +594,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 60d17600e04cb967c68a5834d36f2126
 project wgEncode
 readType 2x75
 replicate 1
@@ -597,6 +620,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 68cc3c1cf76097739ad06105d9c368ce
 project wgEncode
 readType 2x75
 replicate 2
@@ -622,6 +646,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 118c22241eb84f57c30384ad3b18d933
 project wgEncode
 readType 2x75
 replicate 2
@@ -647,6 +672,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 072b7446c857aaf5d60dee53a5a59b95
 project wgEncode
 readType 2x75
 replicate 2
@@ -672,6 +698,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 771027056705224e197eb574774d11ab
 project wgEncode
 readType 2x75
 replicate 2
@@ -697,6 +724,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 22169060a7d770b52f97021846ef9850
 project wgEncode
 readType 2x75
 replicate 2
@@ -722,6 +750,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 9c6f59420d19fa9fbfc4c613b04cb36b
 project wgEncode
 readType 2x75
 replicate 3
@@ -747,6 +776,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum c4588e6fc9dcb521ea6bfdf210d5a36f
 project wgEncode
 readType 2x75
 replicate 4
@@ -795,6 +825,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 198636e54568188e86c5fc09e02c7ef9
 project wgEncode
 readType 2x75
 replicate 1
@@ -820,6 +851,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 8212fe956d158af70952a35f652414dd
 project wgEncode
 readType 2x75
 replicate 1
@@ -845,6 +877,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 8b0ece47307d093c6b5097bef8eecb0c
 project wgEncode
 readType 2x75
 replicate 1
@@ -870,6 +903,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 702a94cdd08bb602617e2e573c240554
 project wgEncode
 readType 2x75
 replicate 1
@@ -895,6 +929,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum b0bee16b660b0548bd81997ad00ebeb4
 project wgEncode
 readType 2x75
 replicate 1
@@ -920,6 +955,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum debdc363a4f1cfcff131be9ef6b283e6
 project wgEncode
 readType 2x75
 replicate 1
@@ -945,6 +981,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum c4e2ad8eccad94ab6a1151865000c1ee
 project wgEncode
 readType 2x75
 replicate 2
@@ -970,6 +1007,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 271fa35cb16da2df6df204c494d59eb5
 project wgEncode
 readType 2x75
 replicate 2
@@ -995,6 +1033,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum a03223af24da8a958355cd3d4e9118e1
 project wgEncode
 readType 2x75
 replicate 2
@@ -1020,6 +1059,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 672fe0bde475216786948302cc1212e3
 project wgEncode
 readType 2x75
 replicate 2
@@ -1045,6 +1085,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 8323e89d30138d0b4ccb32f35971dc16
 project wgEncode
 readType 2x75
 replicate 2
@@ -1070,6 +1111,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 8c61588c72e32695e77e6b7599b364e8
 project wgEncode
 readType 2x75
 replicate 3
@@ -1095,6 +1137,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 60f28a32618302160f667b0cf927f0d8
 project wgEncode
 readType 2x75
 replicate 4
@@ -1142,6 +1185,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum e2eff567ac5f19c3d3c8c672d42d4092
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1166,6 +1210,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum a47983022f308b43c3b60787155e8f82
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1190,6 +1235,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum ad35ae607d4b613841960cd19ea9a7b3
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1214,6 +1260,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum d321469813490b7e56316285ba66a602
 project wgEncode
 readType 1x32
 replicate 1
@@ -1238,6 +1285,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 2391badd0abb18ecad574293afd92a5c
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1262,6 +1310,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 7de07dd69c086be9712c1e94e641bd93
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1286,6 +1335,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum da0c74b288f1f3f217e77ead92c7e9f7
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1310,6 +1360,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum a95f6f5100f8c74f218060f691e8db8b
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1334,6 +1385,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 52ed8b46fed1334932775ef477b52054
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1358,6 +1410,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum b548b9bc9fd1fec819631afb7cd66c99
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1382,6 +1435,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 7007da289c840ca4eee27409525d9e02
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1406,6 +1460,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 6e263c4756165d1c71716b1a207df6cd
 project wgEncode
 readType 1x32
 replicate 2
@@ -1430,6 +1485,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 42a793402a9eff588c185301e90dc843
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1454,6 +1510,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 1f4cc4c17f538f8feffbf1355be4865f
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1478,6 +1535,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm NA
+md5sum 4385485fcd1dd7de6fd50d3744c874d0
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1670,6 +1728,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 4c537dd92a9f6a6f999374bc07149d09
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1695,6 +1754,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum cec9d8eb8f13d4fa7bf9a6b8a877ad40
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1720,6 +1780,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum a6d503353f560ba92fd54cca6d823cc3
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1745,6 +1806,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 5715be29b5ccfa218e967ac1d80a13a4
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1770,6 +1832,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum be06a06e56c75a19565c60e2bb33c9d6
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1795,6 +1858,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum b4c4b93fa33c0bfa0ecd073daa00a799
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1820,6 +1884,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 64ad00d49d4a6ef597d726b36478beda
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1845,6 +1910,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 0ebebdff2e42153fff5b135bc3ff6723
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1870,6 +1936,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum f2696a3b4ef0c3091786ace8e1d4179c
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1895,6 +1962,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum dbf42a924452fba319d99c138f93df2d
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1920,6 +1988,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 84cdce5326d6ae24a508677471dcc4d1
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1945,6 +2014,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum aa5f8f931637ecad14d6ec86844c7392
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1970,6 +2040,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum a0cababddc0be752a7f8ad0311b1cdbf
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1996,6 +2067,7 @@ lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum c9fbcc811948b5eef426624412080ffb
 project wgEncode
 readType 2x75
 replicate 1
@@ -2022,6 +2094,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum af3cf05211ed9b9a79b5680d056eb828
 project wgEncode
 readType 2x75
 replicate 1
@@ -2048,6 +2121,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 1a71058d6aea9c016e656586e1946d69
 project wgEncode
 readType 2x75
 replicate 1
@@ -2074,6 +2148,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 2fe95f0db95b33ed0d91ef5d57a270b5
 project wgEncode
 readType 2x75
 replicate 1
@@ -2099,6 +2174,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 2d385025bae302b3b5b02de1a3bbd0f2
 project wgEncode
 readType 1x32
 replicate 1
@@ -2125,6 +2201,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum cc5df2c667101c29e4bc661013817608
 project wgEncode
 readType 2x75
 replicate 1
@@ -2151,6 +2228,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum c5b2fbeee0181c20164b0f00efc5bc5f
 project wgEncode
 readType 2x75
 replicate 1
@@ -2177,6 +2255,7 @@ lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 732547b84adc3439ae12ccfcf9cea81a
 project wgEncode
 readType 2x75
 replicate 1
@@ -2203,6 +2282,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 948d5dc557c9bee56513884f6c306d35
 project wgEncode
 readType 2x75
 replicate 1
@@ -2229,6 +2309,7 @@ lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum b096ef85a02525e66dccdad1349f8525
 project wgEncode
 readType 2x75
 replicate 2
@@ -2255,6 +2336,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 5a96d968c2276b657a9b30515de41aa1
 project wgEncode
 readType 2x75
 replicate 2
@@ -2281,6 +2363,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 793f4057519d36a8e4e4fb8e31d75a71
 project wgEncode
 readType 2x75
 replicate 2
@@ -2307,6 +2390,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 2a2a1a827629a58c7834bf182683e9e2
 project wgEncode
 readType 2x75
 replicate 2
@@ -2332,6 +2416,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum a9b0c0499a5da5bfa9828dd566a04b40
 project wgEncode
 readType 1x32
 replicate 2
@@ -2358,6 +2443,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 483f0cd9e44f9c7603eaf317900fbec4
 project wgEncode
 readType 2x75
 replicate 2
@@ -2384,6 +2470,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 30e12f1d42f3ccbd14110bbeedd8cc2a
 project wgEncode
 readType 2x75
 replicate 2
@@ -2410,6 +2497,7 @@ lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 672c79ab8904fbf35645df26dea58151
 project wgEncode
 readType 2x75
 replicate 2
@@ -2436,6 +2524,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 871d8e99e0ada9fd8e34fd7bb3feb2f6
 project wgEncode
 readType 2x75
 replicate 3
@@ -2462,6 +2551,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum cf78df666db89b8b6b49ec81c7e98172
 project wgEncode
 readType 2x75
 replicate 4
@@ -2511,6 +2601,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 1cb17d0c0a61e4413ee0f90a97bf9001
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2536,6 +2627,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 019d3f2552a968dcf6b4c0624d3c5dfa
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2561,6 +2653,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 6cbd90239707a168b316111f9b07bc79
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2586,6 +2679,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 072efb08771bb11410ccb078199fdaac
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2611,6 +2705,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 5da22ece1b9c1a94d8b2b14b3cd50bc5
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2636,6 +2731,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 515fc48189d4b6e94c143b18d261e6b3
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2661,6 +2757,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum e3887d21911d58aaa666effbe3b7b5de
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2686,6 +2783,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 6179719c1604c1a6a44d8e8653eadcde
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2711,6 +2809,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 25109223083ef9a333e1f361563d0724
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2736,6 +2835,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 0f3000553b536645cf9b970dd3fc39f1
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2761,6 +2861,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 09f63e60116e1c7517b15c1bc6d56380
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2786,6 +2887,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 1f91e068bea80be53ef551594344cd41
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2811,6 +2913,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum b209ed438e725d2c77e19a30a1c92931
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2837,6 +2940,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum 6d8314f9db4904007ca0612875e9e395
 project wgEncode
 readType 2x75
 replicate 1
@@ -2862,6 +2966,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum f07fd62c80653311ed035e10622ae013
 project wgEncode
 readType 2x75
 replicate 1
@@ -2887,6 +2992,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum 7a7067a3ca7fc23897e497e7e9dab665
 project wgEncode
 readType 2x75
 replicate 2
@@ -2912,6 +3018,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum 15596be509e0035d90229ae9f609127e
 project wgEncode
 readType 2x75
 replicate 2
@@ -2937,6 +3044,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum d0b3bfd7ae4964ad6bd926053268c639
 project wgEncode
 readType 2x75
 replicate 1
@@ -2962,6 +3070,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum 7ba8eb8eb489308f8f2911fb86cdc64a
 project wgEncode
 readType 2x75
 replicate 1
@@ -2987,6 +3096,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum e50367bd1177aed6d347e9aff145a8e2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3012,6 +3122,7 @@ lab Caltech
 labVersion bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum 9a4c00cd3a0dc129efd125671ea08820
 project wgEncode
 readType 2x75
 replicate 2
@@ -3037,6 +3148,7 @@ lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum a992ecb43e04508506261b549be4b926
 project wgEncode
 readType 2x75
 replicate 1
@@ -3062,6 +3174,7 @@ lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum a630fd2fa8e2e52c613c1120bccb2bed
 project wgEncode
 readType 2x75
 replicate 1
@@ -3087,6 +3200,7 @@ lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 19bba2e8a632a0e0f9b00180df4d225c
 project wgEncode
 readType 2x75
 replicate 2
@@ -3112,6 +3226,7 @@ lab Caltech
 labVersion bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 83ec36e369abb7685979dad44b13abf3
 project wgEncode
 readType 2x75
 replicate 2
@@ -3137,6 +3252,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 7b1e0910517a3df65b74e2602062e74c
 project wgEncode
 readType 2x75
 replicate 1
@@ -3161,6 +3277,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum 839324a2f9434a3c49e1aefc710134f1
 project wgEncode
 readType 1x32
 replicate 1
@@ -3185,6 +3302,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 4aa943c7d089721199546ab1b79338fb
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3209,6 +3327,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 0e56d69975b57b04a390f7b25c7708ae
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3234,6 +3353,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 49ee667fc3edaa2ca88833dd2f649f2f
 project wgEncode
 readType 2x75
 replicate 1
@@ -3259,6 +3379,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 8da1d03f28fef2813c2b12f48ab4a7ae
 project wgEncode
 readType 2x75
 replicate 1
@@ -3283,6 +3404,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 01ce3accdb751c3e2f883fe757d01cd2
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3308,6 +3430,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 333797f2e46bb4afa5dedae9a1283c14
 project wgEncode
 readType 2x75
 replicate 1
@@ -3332,6 +3455,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 420b90ed43c02c5b566c5df18d95b1d9
 project wgEncode
 readType 1x32
 replicate 1
@@ -3356,6 +3480,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum af46fe8603cd93b4f76083cab4bb7dfa
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3381,6 +3506,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum fad3deb0e2f3162639a3633f88a92b91
 project wgEncode
 readType 2x75
 replicate 1
@@ -3405,6 +3531,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 1c12dd1bf0abf24df5d29f451d405be9
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3430,6 +3557,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum a96e0810fad55db15e740ba2df1ad726
 project wgEncode
 readType 2x75
 replicate 1
@@ -3455,6 +3583,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 3bafc8976bcde3d6b6bbda0fa8b85797
 project wgEncode
 readType 2x75
 replicate 1
@@ -3479,6 +3608,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum e2b95ec6cf6acb6fe97833aacc989ede
 project wgEncode
 readType 1x32
 replicate 1
@@ -3503,6 +3633,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum d51180330ca412b04c454ae0e7dc9d35
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3527,6 +3658,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum e484377fa1946df8bf6b5087d2455ab3
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3552,6 +3684,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 509de6f07ce32b3023d80187713726fd
 project wgEncode
 readType 2x75
 replicate 1
@@ -3577,6 +3710,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 58367a28231b4921895e5633bcacd36f
 project wgEncode
 readType 2x75
 replicate 2
@@ -3601,6 +3735,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum 9c6ff8b26300be93607fca95e860a070
 project wgEncode
 readType 1x32
 replicate 2
@@ -3625,6 +3760,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 5965ba5c48f10205e9e37eae9aa36d08
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3650,6 +3786,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 76031b52a5bec888c58ed5318f0468f3
 project wgEncode
 readType 2x75
 replicate 2
@@ -3674,6 +3811,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 9e3f1f9c8ccc5cf3a7e0fc25129e35a4
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3699,6 +3837,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 7f969aa54324f68812e15909f16054c7
 project wgEncode
 readType 2x75
 replicate 2
@@ -3723,6 +3862,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 91ef3c4467ba98b44d81422c8483dafa
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3748,6 +3888,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 2e014268de0632ce41468df21495fafd
 project wgEncode
 readType 2x75
 replicate 2
@@ -3772,6 +3913,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 72fad62074f775b5faee0ee9700a0b74
 project wgEncode
 readType 1x32
 replicate 2
@@ -3796,6 +3938,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum debc1883db21e2bea56cbb08320a9016
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3821,6 +3964,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum aae33ca3daacfd50aae1aa88648d15cd
 project wgEncode
 readType 2x75
 replicate 2
@@ -3845,6 +3989,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum ee6fbfb070695b9fcfd6f10c589b9d93
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3870,6 +4015,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum ad98077bd154cac32bc490a7b86e58a4
 project wgEncode
 readType 2x75
 replicate 2
@@ -3895,6 +4041,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 7c981bf0b0a2b29e90722ad9598e11e5
 project wgEncode
 readType 2x75
 replicate 2
@@ -3919,6 +4066,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum a1a9efd3c4f1d3fe86b7d8c0d27676db
 project wgEncode
 readType 1x32
 replicate 2
@@ -3943,6 +4091,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum fb4ae500c53ff460149550c8ddea274f
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3968,6 +4117,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 886ab7286decd98678b64362b4034038
 project wgEncode
 readType 2x75
 replicate 3
@@ -3993,6 +4143,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 822dec6c20e6b0d223762ff866f8d8ff
 project wgEncode
 readType 2x75
 replicate 4
@@ -4041,6 +4192,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 9b6b8f4f3d84020266d6700a66a10335
 project wgEncode
 readType 2x75
 replicate 1
@@ -4065,6 +4217,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 83753140db34a97ce01673a83fbea8e1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4089,6 +4242,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 7be5f6289c899babaa7e4a36d1b3817d
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4114,6 +4268,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum e99aa860738dc46deb1d6da80321e12b
 project wgEncode
 readType 2x75
 replicate 1
@@ -4139,6 +4294,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum c57cc5ae2fe77fc3c1f921aa782d0604
 project wgEncode
 readType 2x75
 replicate 1
@@ -4163,6 +4319,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 9b63952a7d799d999b3c342c9c83d84c
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4188,6 +4345,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum a1773c3335ad991c12465686cabaae27
 project wgEncode
 readType 2x75
 replicate 1
@@ -4212,6 +4370,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 6f40ef2dcf39db699a84a0ca6b9bbdbe
 project wgEncode
 readType 1x32
 replicate 1
@@ -4236,6 +4395,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum af64c05a64ecdb07ef3ce7c6ac0a200c
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4261,6 +4421,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum f80cef969bab2f8995a7e3c78de8ca9a
 project wgEncode
 readType 2x75
 replicate 1
@@ -4285,6 +4446,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum c4b3caf6074ba4d88598e89f195fadb4
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4310,6 +4472,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 18524f411c7f1ab3aa23586cd35f4581
 project wgEncode
 readType 2x75
 replicate 1
@@ -4335,6 +4498,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 58443877add8448d79358975a80ab3cf
 project wgEncode
 readType 2x75
 replicate 1
@@ -4359,6 +4523,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 201b2ea7be1b52a54c6d389682867549
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4383,6 +4548,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 9d6802c23eac3887fdd6013bcf69f000
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4408,6 +4574,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum c26aa106279aa5e4eb6f95d25ed9e0d5
 project wgEncode
 readType 2x75
 replicate 1
@@ -4433,6 +4600,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 9f1ebb838dbe5a0a208d8da69122e891
 project wgEncode
 readType 2x75
 replicate 2
@@ -4457,6 +4625,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 9e86733c7bd2aea6a47add9028a384d1
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4482,6 +4651,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 9a1ae2e44f40ff63d717505eccda8e2e
 project wgEncode
 readType 2x75
 replicate 2
@@ -4506,6 +4676,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 85af34087813a9b7e8fe0cd47fa50a98
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4531,6 +4702,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 1e45f1e02778d2317025d999831c0293
 project wgEncode
 readType 2x75
 replicate 2
@@ -4555,6 +4727,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum d5672b970baacf42ee7d41a775f28ec6
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4580,6 +4753,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 46a487f08e5257d4df1a9d3c97ac1f8c
 project wgEncode
 readType 2x75
 replicate 2
@@ -4604,6 +4778,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum a9a268cd60a578ef00b7f02629d27d6a
 project wgEncode
 readType 1x32
 replicate 2
@@ -4628,6 +4803,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 457fb93d474b1622a424f8c678abf8b3
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4653,6 +4829,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 9b3c07d0d7bb4569cdd953a118e17700
 project wgEncode
 readType 2x75
 replicate 2
@@ -4677,6 +4854,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 8b84aaf9152f6c99f7b521a8c5d78d59
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4702,6 +4880,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 8c6517504fc478677bc0474f837b63e5
 project wgEncode
 readType 2x75
 replicate 2
@@ -4727,6 +4906,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 0d2f4ea32a1a7e21c4a41af81ffaac58
 project wgEncode
 readType 2x75
 replicate 2
@@ -4751,6 +4931,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum df16d1d6e2eb8b3172dc0b8fb27b3603
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4776,6 +4957,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 0b1e9cd758d32e1f6e0e5b1100c54699
 project wgEncode
 readType 2x75
 replicate 3
@@ -4801,6 +4983,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm erng32a
+md5sum 4b86b3e995973d76a2c24d91b090f5d4
 project wgEncode
 readType 2x75
 replicate 4
@@ -4849,6 +5032,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 0c92f78dabf8020205fca15779cf4117
 project wgEncode
 readType 2x75
 replicate 1
@@ -4874,6 +5058,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 86f86f71b0e6b20ea5c6b575d732fe90
 project wgEncode
 readType 2x75
 replicate 1
@@ -4899,6 +5084,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum f3b6b1de23fa8f65854db253e0ee3ffa
 project wgEncode
 readType 2x75
 replicate 2
@@ -4924,6 +5110,7 @@ lab Caltech
 labVersion erange3.0.1
 localization cell
 mapAlgorithm erng3
+md5sum 6f07e8a73a0cf4e32ea8d88236ae4f5a
 project wgEncode
 readType 2x75
 replicate 2
@@ -4948,6 +5135,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm NA
+md5sum 90e5f75cb73a0e7b14370a3091e9311f
 project wgEncode
 readType 2x75
 replicate 1
@@ -4972,6 +5160,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm NA
+md5sum fff13f743e14e1fb2227c5000e2dd76f
 project wgEncode
 readType 2x75
 replicate 1
@@ -4996,6 +5185,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm NA
+md5sum 2677807fee205e16ec9e9552b22674d4
 project wgEncode
 readType 2x75
 replicate 2
@@ -5020,6 +5210,7 @@ insertLength 200
 lab Caltech
 localization cell
 mapAlgorithm NA
+md5sum 8419718bb19e49c497b36e1dc56bfbbb
 project wgEncode
 readType 2x75
 replicate 2
@@ -5045,6 +5236,7 @@ lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum d4333a64289cac8f6a268cf18b8409e0
 project wgEncode
 readType 2x75
 replicate 1
@@ -5070,6 +5262,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum 529d7b1ddde5773fb62c2f1920baebba
 project wgEncode
 readType 1x32
 replicate 1
@@ -5096,6 +5289,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 318eab17fc8e5757d5d8e9d3455171e7
 project wgEncode
 readType 2x75
 replicate 1
@@ -5122,6 +5316,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 8eaeac6615ddf915a04f111af847724f
 project wgEncode
 readType 2x75
 replicate 1
@@ -5148,6 +5343,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum e7ee0b8fd780ad543732d345bb3fcf2f
 project wgEncode
 readType 2x75
 replicate 1
@@ -5173,6 +5369,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum ec13d750f0db90077895e6f1a5dd4ffb
 project wgEncode
 readType 1x32
 replicate 1
@@ -5199,6 +5396,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum e2ce49550153183381f9d344f87d8486
 project wgEncode
 readType 2x75
 replicate 1
@@ -5225,6 +5423,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 7c7b30da047ddfe3d89f48fd24e99809
 project wgEncode
 readType 2x75
 replicate 1
@@ -5251,6 +5450,7 @@ lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 1abb6b7c98d6e94a3450dd0715ae1d97
 project wgEncode
 readType 2x75
 replicate 1
@@ -5276,6 +5476,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum c6e1137a4ec50f3806b8012912caa30e
 project wgEncode
 readType 1x32
 replicate 1
@@ -5302,6 +5503,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum b65cc0fb8c0b507ce0ee081777f5c61f
 project wgEncode
 readType 2x75
 replicate 1
@@ -5328,6 +5530,7 @@ lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 7d8e7d3d633dba74d7a4d6df7a27f9b5
 project wgEncode
 readType 2x75
 replicate 2
@@ -5353,6 +5556,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum 98bee7ef4d8d5aa3c83475765ece92d8
 project wgEncode
 readType 1x32
 replicate 2
@@ -5379,6 +5583,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum c2294a5a6934f8887cbb86d8fed63475
 project wgEncode
 readType 2x75
 replicate 2
@@ -5405,6 +5610,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 4a57802bcfeffebbfa6b1e4dc0c35a75
 project wgEncode
 readType 2x75
 replicate 2
@@ -5431,6 +5637,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 3891ed4d526647d5f586e99bfe00a913
 project wgEncode
 readType 2x75
 replicate 2
@@ -5456,6 +5663,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum ff349fa463b2c4e61cf8c1727e98dea5
 project wgEncode
 readType 1x32
 replicate 2
@@ -5482,6 +5690,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 0bbac6e39d333de952ef392c7d7cc4ed
 project wgEncode
 readType 2x75
 replicate 2
@@ -5508,6 +5717,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 7ada79b940b7838e9ae0638c72394775
 project wgEncode
 readType 2x75
 replicate 2
@@ -5534,6 +5744,7 @@ lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum b5951f2b6d4ff40871eb1f4129395132
 project wgEncode
 readType 2x75
 replicate 2
@@ -5559,6 +5770,7 @@ lab Caltech
 labVersion erange3.0beta
 localization cell
 mapAlgorithm erng3b
+md5sum 336db7468928c0555853331b41157f8d
 project wgEncode
 readType 1x32
 replicate 2
@@ -5585,6 +5797,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 8a9b851d7b59893b976bdab8948ef7c0
 project wgEncode
 readType 2x75
 replicate 3
@@ -5611,6 +5824,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 628ff779d5c890b058908e735a62fc95
 project wgEncode
 readType 2x75
 replicate 4
@@ -5661,6 +5875,7 @@ lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum fabd5cc973c6db7b8a5a8d4619859468
 project wgEncode
 readType 2x75
 replicate 1
@@ -5687,6 +5902,7 @@ lab Caltech
 labVersion erange3.0/blat34
 localization cell
 mapAlgorithm blat34
+md5sum eaf9fc79df460bb71220b49c9cb7342c
 project wgEncode
 readType 2x75
 replicate 1
@@ -5712,6 +5928,7 @@ lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum f2773c97e84befb46e3067d548b7e20e
 project wgEncode
 readType 1x32
 replicate 1
@@ -5737,6 +5954,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 9b026d6fdaab0f1816cb6ea3bba573d8
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5762,6 +5980,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum ba3baa7c143f231cf91e503fdc4ef21e
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5787,6 +6006,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum b1f25ceb51baccb1299b07007538565e
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5813,6 +6033,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 153b1f7f1b50058b20ce684cd792bb6a
 project wgEncode
 readType 2x75
 replicate 1
@@ -5839,6 +6060,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 27ad3db3893f3bb60a146eac967c8223
 project wgEncode
 readType 2x75
 replicate 1
@@ -5864,6 +6086,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 745af83d6ed44855d8956c455561ab40
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5889,6 +6112,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 65c96dd13000938c3704387824a7bec5
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5915,6 +6139,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 393e77de77cab7452e5b3bb6c68d3bdc
 project wgEncode
 readType 2x75
 replicate 1
@@ -5940,6 +6165,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 234671115ccfbf28e5079ccc94f32a65
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5965,6 +6191,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum b936d086e3f114f9047a58fe4477d674
 project wgEncode
 readType 1x32
 replicate 1
@@ -5990,6 +6217,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum fc63da9097fc383974ed70095772ab94
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6016,6 +6244,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 9ee9922d311889044a1792e94cd2d301
 project wgEncode
 readType 2x75
 replicate 1
@@ -6041,6 +6270,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 87940fd4a4f63f81cbcc19b4781470e5
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6066,6 +6296,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum ebd811a2f61df940d48432c9f4afd28a
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6092,6 +6323,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 451d08169ed57dfaf38e7fb37696d502
 project wgEncode
 readType 2x75
 replicate 1
@@ -6117,6 +6349,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 93dbe9158d9ee54cf9eeea6651cb5a66
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6143,6 +6376,7 @@ lab Caltech
 labVersion erange3.0/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 8c892c4883107a4ef8c74422acde74ab
 project wgEncode
 readType 2x75
 replicate 1
@@ -6169,6 +6403,7 @@ lab Caltech
 labVersion erange3.0/blat34
 localization cell
 mapAlgorithm blat34
+md5sum 16be70e28ffc825f07acc4e5a86729a8
 project wgEncode
 readType 2x75
 replicate 1
@@ -6194,6 +6429,7 @@ lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum 70b81a42a937f67c44e85b386fac2518
 project wgEncode
 readType 1x32
 replicate 1
@@ -6219,6 +6455,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 67649041c9fe53519e798ef6a2023cd6
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6244,6 +6481,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 2b728ea3c4200614b9686fac1a361821
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6269,6 +6507,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum e24a71fe526222714ad72862f2b85244
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6295,6 +6534,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 98ed60083141c732fa22646d1bd83b14
 project wgEncode
 readType 2x75
 replicate 1
@@ -6320,6 +6560,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 1b40758fe5008eaf16c7a69077f9d323
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6346,6 +6587,7 @@ lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum a7372fade87bc5b736d2903efefbd544
 project wgEncode
 readType 2x75
 replicate 2
@@ -6372,6 +6614,7 @@ lab Caltech
 labVersion erange3.0.1/blat34
 localization cell
 mapAlgorithm blat34
+md5sum e7818106f8a97e9c4210dcdb1fa69dfc
 project wgEncode
 readType 2x75
 replicate 2
@@ -6397,6 +6640,7 @@ lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum 96169a590fb6bf587cde8879c5157986
 project wgEncode
 readType 1x32
 replicate 2
@@ -6422,6 +6666,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 233a4d43babebe0d5b86f3470bf2a2d8
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6448,6 +6693,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 5fc63b09cc9823cc0b3fead152deb83f
 project wgEncode
 readType 2x75
 replicate 2
@@ -6473,6 +6719,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 7a3db416ebe0f80fa6532f8497fc4080
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6498,6 +6745,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 12e42434e37ee86e6718c549b1a64dd8
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6524,6 +6772,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 08e4c61a4590bc7614b4f78a127ee7f0
 project wgEncode
 readType 2x75
 replicate 2
@@ -6549,6 +6798,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum a2c29c9c1a162dcefe0f2d2a8be5e695
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6574,6 +6824,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 26b9c6f1a67d8659641420a5ce4704db
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6600,6 +6851,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum d66eec401441fed4d75a3e7984d2d0ad
 project wgEncode
 readType 2x75
 replicate 2
@@ -6625,6 +6877,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum ec5f5aa798d607e71578ff52aada755b
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6650,6 +6903,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 21ea46d9a69bbdc2acd2e9506ef51b9e
 project wgEncode
 readType 1x32
 replicate 2
@@ -6675,6 +6929,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 787aff38ee0dfb4c1f2208b762b45f70
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6701,6 +6956,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 82eda9da20ed3ecfc649bb4b64eee251
 project wgEncode
 readType 2x75
 replicate 2
@@ -6726,6 +6982,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 91b96f9b9ab17bba34022c71d53a321b
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6751,6 +7008,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 886ece7b15737c38b49cfff8d9c738f2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6777,6 +7035,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 61775182dd19c3168801bcc5be68d0c6
 project wgEncode
 readType 2x75
 replicate 2
@@ -6802,6 +7061,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum b9d488db55e62c985dc7171b04701b2d
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6828,6 +7088,7 @@ lab Caltech
 labVersion erange3.0.1/bowtie0.981/blat34
 localization cell
 mapAlgorithm BB1
+md5sum 6fc53222516da114febec382969e678d
 project wgEncode
 readType 2x75
 replicate 2
@@ -6854,6 +7115,7 @@ lab Caltech
 labVersion erange3.0.1/blat34
 localization cell
 mapAlgorithm blat34
+md5sum 8fdd48684554a59b7fbb7595bb34cc17
 project wgEncode
 readType 2x75
 replicate 2
@@ -6879,6 +7141,7 @@ lab Caltech
 labVersion erange3.0beta/bowtie0.981
 localization cell
 mapAlgorithm bow098
+md5sum f71e2ef5ce125100256c92b9d6d2b911
 project wgEncode
 readType 1x32
 replicate 2
@@ -6904,6 +7167,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 70a913f81c9c991f9e416a70f3fe1c18
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6929,6 +7193,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm blat34
+md5sum 93c52115911f427a7436698236d3eea4
 project wgEncode
 readType 1x75D
 replicate 2
@@ -6955,6 +7220,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 345d27bbb0ef97a8308dc3a30b8bcb57
 project wgEncode
 readType 2x75
 replicate 3
@@ -6981,6 +7247,7 @@ lab Caltech
 labVersion ERANGE3.2.0alpha
 localization cell
 mapAlgorithm BB2
+md5sum 8a9f5a49df4cb55fec9dad331a79d1c3
 project wgEncode
 readType 2x75
 replicate 4
@@ -7013,4 +7280,4 @@ subId 1065
 tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: -1377812657
+# MAGIC: 601402626

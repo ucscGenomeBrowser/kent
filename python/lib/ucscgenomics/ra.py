@@ -183,7 +183,26 @@ class RaFile(OrderedDict):
 				continue
 		return ret
 				
-				
+	def filter2(self, where):
+                """
+                select useful data from matching criteria
+
+                where: the conditional function that must be met. Where takes one argument, the stanza and should return true or false
+                select: the data to return. Takes in stanza, should return whatever to be added to the list for that stanza.
+
+                For each stanza, if where(stanza) holds, it will add select(stanza) to the list of returned entities.
+                Also forces silent failure of key errors, so you don't have to check that a value is or is not in the stanza.
+                """
+
+                ret = RaFile()
+                for stanza in self.itervalues():
+                        try:
+                                if where(stanza):
+                                        ret[stanza.name] = stanza
+                        except KeyError:
+                                continue
+                return ret			
+	
 	def __str__(self):
 		str = ''
 		for item in self.iteritems():

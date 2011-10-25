@@ -13,7 +13,10 @@ include wgEncodeUncBsuProt.ra
 include wgEncodeUncBsuProtFasp.ra alpha
 
 # Integrated Regulation (wrangler: kent)
-include wgEncodeReg.ra
+include wgEncodeReg.ra beta,public
+include wgEncodeReg.new.ra alpha
+
+
 #include wgEncodeRegNorm.ra alpha
 
 # Nucleosome (wrangler: venkat)
@@ -43,7 +46,7 @@ include wgEncodeGisChiaPet.ra alpha
 include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
-include wgEncodeUw5C.ra alpha,beta
+include wgEncodeUw5C.ra 
 
 
 # Encode Affy Exon --------------------------------------------
@@ -53,8 +56,7 @@ include wgEncodeUwAffyExonArray.ra beta,public
 include wgEncodeUwAffyExonArray.new.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
-include wgEncodeDukeAffyExon.ra beta,public
-include wgEncodeDukeAffyExon.new.ra alpha
+include wgEncodeDukeAffyExon.ra 
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
@@ -70,8 +72,7 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.new.ra alpha,beta
-include wgEncodeUwDnase.ra public
+include wgEncodeUwDnase.ra 
 
 
 #UW DNase DGF (wrangler: Venkat)
@@ -146,7 +147,7 @@ include wgEncodeUwHistone.new.ra alpha
 include wgEncodeUwHistone.ra beta,public
 
 # SYDH Histone (wrangler: Venkat)
-include wgEncodeSydhHistone.ra
+include wgEncodeSydhHistone.ra 
 
 # ENCODE TFBS -------------------------------------------
 
@@ -162,8 +163,8 @@ include wgEncodeOpenChromChip.ra beta,public
 include wgEncodeHaibTfbs.ra beta,public
 include wgEncodeHaibTfbs.new.ra alpha
 # SYDH TFBS (wrangler: Venkat)
-include wgEncodeSydhTfbs.new.ra alpha
 include wgEncodeSydhTfbs.ra beta,public
+include wgEncodeSydhTfbs.new.ra alpha
 
 # U Chicago TFBS (wrangler: Venkat)
 include wgEncodeUchicagoTfbs.ra 
@@ -187,6 +188,6 @@ include wgEncodeSunyRipSeq.ra
 # Other miscellany ------------------------------------
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
-include wgEncodeMapability.ra beta,public
-include wgEncodeMapability.new.ra alpha
+include wgEncodeMapability.ra public
+include wgEncodeMapability.new.ra alpha,beta
 

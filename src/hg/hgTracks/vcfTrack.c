@@ -18,16 +18,14 @@
 
 #ifdef USE_TABIX
 
-static boolean getMinQual(struct trackDb *tdb, double *retMinQual, boolean compositeLevel)
-/* Return TRUE and set retMinQual id cart contains minimum QUAL filter */
+static boolean getMinQual(struct trackDb *tdb, double *retMinQual)
+/* Return TRUE and set retMinQual if cart contains minimum QUAL filter */
 {
-char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s."VCF_APPLY_MIN_QUAL_VAR, tdb->track);
-if (cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
+if (cartUsualBooleanClosestToHome(cart, tdb, FALSE,
 				  VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL))
     {
     if (retMinQual != NULL)
-	*retMinQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
+	*retMinQual = cartUsualDoubleClosestToHome(cart, tdb, FALSE, VCF_MIN_QUAL_VAR,
 						   VCF_DEFAULT_MIN_QUAL);
     return TRUE;
     }
@@ -44,15 +42,13 @@ if (isEmpty(record->qual) ||
 return FALSE;
 }
 
-static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues,
-			       boolean compositeLevel)
+static boolean getFilterValues(struct trackDb *tdb, struct slName **retValues)
 /* Return TRUE and set retValues if cart contains FILTER column values to exclude */
 {
-char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, tdb->track);
-if (cartListVarExists(cart, cartVar))
+if (cartListVarExistsAnyLevel(cart, tdb, FALSE, VCF_EXCLUDE_FILTER_VAR))
     {
-    struct slName *selectedValues = cartOptionalSlNameList(cart, cartVar);
+    struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE,
+									VCF_EXCLUDE_FILTER_VAR);
     if (retValues != NULL)
 	*retValues = selectedValues;
     return TRUE;
@@ -70,15 +66,90 @@ for (i = 0;  i < record->filterCount;  i++)
 return FALSE;
 }
 
+static boolean getMinFreq(struct trackDb *tdb, double *retMinFreq)
+/* Return TRUE and set retMinFreq if cart contains nonzero minimum minor allele frequency. */
+{
+if (cartVarExistsAnyLevel(cart, tdb, FALSE, VCF_MIN_ALLELE_FREQ_VAR))
+    {
+    double minFreq = cartUsualDoubleClosestToHome(cart, tdb, FALSE,
+					    VCF_MIN_ALLELE_FREQ_VAR, VCF_DEFAULT_MIN_ALLELE_FREQ);
+    if (minFreq > 0)
+	{
+	if (retMinFreq != NULL)
+	    *retMinFreq = minFreq;
+	return TRUE;
+	}
+    }
+return FALSE;
+}
+
+static boolean minFreqFail(struct vcfRecord *record, double minFreq)
+/* Return TRUE if record's INFO include AF (alternate allele frequencies) or AC+AN
+ * (alternate allele counts and total count of observed alleles) and the minor allele
+ * frequency < minFreq -- or rather, major allele frequency > (1 - minFreq) because
+ * variants with > 2 alleles might have some significant minor frequencies along with
+ * tiny minor frequencies). */
+{
+struct vcfFile *vcff = record->file;
+boolean gotInfo = FALSE;
+double refFreq = 1.0;
+double maxAltFreq = 0.0;
+int i;
+const struct vcfInfoElement *afEl = vcfRecordFindInfo(record, "AF");
+const struct vcfInfoDef *afDef = vcfInfoDefForKey(vcff, "AF");
+if (afEl != NULL && afDef != NULL && afDef->type == vcfInfoFloat)
+    {
+    // If INFO includes alt allele freqs, use them directly.
+    gotInfo = TRUE;
+    for (i = 0;  i < afEl->count;  i++)
+	{
+	double altFreq = afEl->values[i].datFloat;
+	refFreq -= altFreq;
+	if (altFreq > maxAltFreq)
+	    maxAltFreq = altFreq;
+	}
+    }
+else
+    {
+    // Calculate alternate allele freqs from AC and AN:
+    const struct vcfInfoElement *acEl = vcfRecordFindInfo(record, "AC");
+    const struct vcfInfoDef *acDef = vcfInfoDefForKey(vcff, "AC");
+    const struct vcfInfoElement *anEl = vcfRecordFindInfo(record, "AN");
+    const struct vcfInfoDef *anDef = vcfInfoDefForKey(vcff, "AN");
+    if (acEl != NULL && acDef != NULL && acDef->type == vcfInfoInteger &&
+	anEl != NULL && anDef != NULL && anDef->type == vcfInfoInteger && anEl->count == 1)
+	{
+	gotInfo = TRUE;
+	int totalCount = anEl->values[0].datFloat;
+	for (i = 0;  i < acEl->count;  i++)
+	    {
+	    int altCount = acEl->values[i].datFloat;
+	    double altFreq = (double)altCount / totalCount;
+	    refFreq -= altFreq;
+	    if (altFreq < maxAltFreq)
+		maxAltFreq = altFreq;
+	    }
+	}
+    }
+if (gotInfo)
+    {
+    double majorAlFreq = max(refFreq, maxAltFreq);
+    if (majorAlFreq > (1.0 - minFreq))
+	return TRUE;
+    }
+return FALSE;
+}
+
 static void filterRecords(struct vcfFile *vcff, struct trackDb *tdb)
 /* If a filter is specified in the cart, remove any records that don't pass filter. */
 {
-boolean compositeLevel = isNameAtCompositeLevel(tdb, tdb->track);
-double minQual = 0;
+double minQual = VCF_DEFAULT_MIN_QUAL;
 struct slName *filterValues = NULL;
-boolean gotQualFilter = getMinQual(tdb, &minQual, compositeLevel);
-boolean gotFilterFilter = getFilterValues(tdb, &filterValues, compositeLevel);
-if (! (gotQualFilter || gotFilterFilter) )
+double minFreq = VCF_DEFAULT_MIN_ALLELE_FREQ;
+boolean gotQualFilter = getMinQual(tdb, &minQual);
+boolean gotFilterFilter = getFilterValues(tdb, &filterValues);
+boolean gotMinFreqFilter = getMinFreq(tdb, &minFreq);
+if (! (gotQualFilter || gotFilterFilter || gotMinFreqFilter) )
     return;
 
 struct vcfRecord *rec, *nextRec, *newList = NULL;
@@ -86,7 +157,8 @@ for (rec = vcff->records;  rec != NULL;  rec = nextRec)
     {
     nextRec = rec->next;
     if (! ((gotQualFilter && minQualFail(rec, minQual)) ||
-	   (gotFilterFilter && filterColumnFail(rec, filterValues))) )
+	   (gotFilterFilter && filterColumnFail(rec, filterValues)) ||
+	   (gotMinFreqFilter && minFreqFail(rec, minFreq)) ))
 	slAddHead(&newList, rec);
     }
 slReverse(&newList);
@@ -100,6 +172,7 @@ static struct pgSnp *vcfFileToPgSnp(struct vcfFile *vcff, struct trackDb *tdb)
 struct pgSnp *pgsList = NULL;
 struct vcfRecord *rec;
 int maxLen = 33;
+int maxAlCount = 5;
 for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     {
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
@@ -107,25 +180,23 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     int len = strlen(pgs->name);
     if (len > maxLen)
 	{
-	if (strchr(pgs->name, '/') != NULL)
+	int maxAlLen = maxLen / min(rec->alleleCount, maxAlCount);
+	pgs->name[0] = '\0';
+	int i;
+	for (i = 0;  i < rec->alleleCount;  i++)
 	    {
-	    char *copy = cloneString(pgs->name);
-	    char *allele[8];
-	    int cnt = chopByChar(copy, '/', allele, pgs->alleleCount);
-	    int maxAlLen = maxLen / pgs->alleleCount;
-	    pgs->name[0] = '\0';
-	    int i;
-	    for (i = 0;  i < cnt;  i++)
+	    if (i > 0)
+		safencat(pgs->name, len+1, "/", 1);
+	    if (i >= maxAlCount)
 		{
-		if (i > 0)
-		    safencat(pgs->name, len+1, "/", 1);
-		if (strlen(allele[i]) > maxAlLen-3)
-		    strcpy(allele[i]+maxAlLen-3, "...");
-		safencat(pgs->name, len+1, allele[i], maxAlLen);
+		safecat(pgs->name, len+1, "...");
+		pgs->alleleCount = maxAlCount;
+		break;
 		}
+	    if (strlen(rec->alleles[i]) > maxAlLen-3)
+		strcpy(rec->alleles[i]+maxAlLen-3, "...");
+	    safencat(pgs->name, len+1, rec->alleles[i], maxAlLen);
 	    }
-	else
-	    strcpy(pgs->name+maxLen-3, "...");
 	}
     slAddHead(&pgsList, pgs);
     }
@@ -518,9 +589,8 @@ if (isCenter)
     if (dy == NULL)
 	dy = dyStringNew(0);
     dyStringPrintf(dy, "%s   Haplotypes sorted on ", mouseoverText);
-    char cartVar[512];
-    safef(cartVar, sizeof(cartVar), "%s.centerVariantChrom", tg->tdb->track);
-    char *centerChrom = cartOptionalString(cart, cartVar);
+    char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE,
+							"centerVariantChrom");
     if (centerChrom == NULL || !sameString(chromName, centerChrom))
 	dyStringAppend(dy, "middle variant by default. ");
     else
@@ -539,13 +609,10 @@ static int getCenterVariantIx(struct track *tg, int seqStart, int seqEnd,
 // just use the median variant in window.
 {
 int defaultIx = (slCount(records)-1) / 2;
-char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s.centerVariantChrom", tg->tdb->track);
-char *centerChrom = cartOptionalString(cart, cartVar);
+char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "centerVariantChrom");
 if (centerChrom != NULL && sameString(chromName, centerChrom))
     {
-    safef(cartVar, sizeof(cartVar), "%s.centerVariantPos", tg->tdb->track);
-    int centerPos = cartInt(cart, cartVar);
+    int centerPos = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, "centerVariantPos", -1);
     int winSize = seqEnd - seqStart;
     if (centerPos > (seqStart - winSize) && centerPos < (seqEnd + winSize))
 	{
@@ -737,8 +804,7 @@ const struct vcfFile *vcff = tg->extraUiData;
 if (vcff->records == NULL)
     return;
 purple = hvGfxFindColorIx(hvg, 0x99, 0x00, 0xcc);
-boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
-char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, compositeLevel,
+char *colorBy = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
 pushWarnHandler(ignoreEm);
@@ -775,7 +841,11 @@ if (vcff->records == NULL)
 int ploidy = sameString(chromName, "chrY") ? 1 : 2;
 int simpleHeight = ploidy * vcff->genotypeCount * tg->lineHeight;
 int defaultHeight = min(simpleHeight, VCF_DEFAULT_HAP_HEIGHT);
-int cartHeight = cartOrTdbInt(cart, tg->tdb, VCF_HAP_HEIGHT_VAR, defaultHeight);
+char *tdbHeight = trackDbSettingOrDefault(tg->tdb, VCF_HAP_HEIGHT_VAR, NULL);
+if (isNotEmpty(tdbHeight))
+    defaultHeight = atoi(tdbHeight);
+int cartHeight = cartUsualIntClosestToHome(cart, tg->tdb, FALSE, VCF_HAP_HEIGHT_VAR,
+					   defaultHeight);
 tg->height = min(cartHeight+1, maximumTrackHeight(tg));
 return tg->height;
 }
@@ -822,8 +892,7 @@ else
     }
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
-boolean compositeLevel = isNameAtCompositeLevel(tg->tdb, tg->tdb->track);
-boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, compositeLevel,
+boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
 							VCF_HAP_ENABLED_VAR, TRUE);
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();

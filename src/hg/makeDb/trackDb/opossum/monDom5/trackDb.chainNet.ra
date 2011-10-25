@@ -8,9 +8,15 @@ chainMinScore 3000
 
 track chainNetXenTro2 override
 chainMinScore 3000
+priority 590.3
+shortLabel $o_db Chain/Net
+
+track chainNetXenTro3 override
+priority 590.3
 
 track chainNetDanRer5 override
 chainMinScore 3000
+shortLabel $o_db Chain/Net
 
 track chainNetGalGal3 override
 chainMinScore 3000
@@ -41,10 +47,10 @@ chainLinearGap loose
 
 track chainNetBosTau6 override
 matrixHeader A, C, G, T
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 priority 450.3
-chainMinScore 3000
-chainLinearGap medium
+chainMinScore 5000
+chainLinearGap loose
+
+track chainNetBosTau4 override
 shortLabel $o_db Chain/Net
-
-
+priority 450.3
