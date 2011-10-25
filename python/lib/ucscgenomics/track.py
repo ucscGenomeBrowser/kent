@@ -272,8 +272,11 @@ class CompositeTrack(object):
                 return tdbpath
         return None
 
- 
-    def __init__(self, database, compositeName, trackPath=None):
+
+    def __init__(self, database, compositeName, trackPath=None, mdbCompositeName=None):
+        
+        if mdbCompositeName == None:
+            mdbCompositeName = compositeName
         
         if trackPath == None:
             self._trackPath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
@@ -283,7 +286,8 @@ class CompositeTrack(object):
         organisms = {
             'hg19': 'human',
             'hg18': 'human',
-            'mm9': 'mouse'
+            'mm9': 'mouse',
+            'encodeTest': 'human'
         }
         
         if database in organisms:
@@ -299,9 +303,11 @@ class CompositeTrack(object):
         if not os.path.isfile(self._trackDbPath):
             raise KeyError(self._trackDbPath + ' does not exist')
         
-        self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + compositeName + '.ra'
-        self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + compositeName + '.ra'    
-        self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + compositeName + '.ra'
+        
+        
+        self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + mdbCompositeName + '.ra'
+        self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + mdbCompositeName + '.ra'    
+        self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + mdbCompositeName + '.ra'
         self._alphaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/'
         self._betaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/beta/'
         self._publicMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/public/'
