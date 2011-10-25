@@ -100,9 +100,9 @@ class makeNotes(object):
         #at this point, I am just parsing the output form hgsql
         cmd = "hgsql %s -e \"select table_name from information_schema.TABLES where table_name in (%s)\"" % (database, tablestr)
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
+        cmdoutput = p.stdout.read()
 
-        sqltableset = set(output.split("\n")[1:-1])
+        sqltableset = set(cmdoutput.split("\n")[1:-1])
 
         missingTableNames = set(mdb.filter(lambda s: s['objType'] == 'table' and 'tableName' not in s and 'attic' not in s, lambda s: s['metaObject']))
 
@@ -167,8 +167,8 @@ class makeNotes(object):
 
         cmd = "hgsql %s -e \"SELECT ROUND(data_length/1024/1024,2) total_size_mb, ROUND(index_length/1024/1024,2) total_index_size_mb FROM information_schema.TABLES WHERE %s\"" % (database, orstr)
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
-        for i in output.split("\n")[1:-1]:
+        cmdoutput = p.stdout.read()
+        for i in cmdoutput.split("\n")[1:-1]:
             fields = i.split()
             for j in fields:
                 tablesize = tablesize + float(j)
