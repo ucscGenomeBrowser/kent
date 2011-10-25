@@ -49,9 +49,12 @@ Please let me know if there is another track you'd like me to work on instead.
 	return
 	
 def makeLinks(c, args, qaDir):
+
 	notesfile = c._notesDirectory + "%s.release%s.notes" % (args.composite, args.release)
 	downloads = c.downloadsDirectory + "release%s" % args.release
-	
+
+	if not os.path.exists(notesfile):
+		return ("Error: Notes file for %s release %s doesn't exist in %s" % (args.composite, args.release, c._notesDirectory))
 	if os.path.exists(qaDir + "/notes.file"):
 		os.remove(qaDir + "/notes.file")
 	os.symlink(notesfile, qaDir + "/notes.file")
@@ -388,6 +391,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
 	parser.add_argument('release', help='The new release to be released')
 	parser.add_argument('redmine', help='The Redmine issue number')
+	parser.add_argument('-m', '--mdb', default=0, help='use a different mdb table')
 
 
 	if len(sys.argv) == 1:
@@ -401,29 +405,34 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 		parser.print_help()
 	if int(args.release) > 1:
 		releaseOld = int(args.release) - 1
-	
+	specialMdb = None
+	if args.mdb:
+		specialMdb = args.mdb
+		
 	mkNotesArgs = { 'database': args.database,
 					'composite': args.composite,
 					'releaseNew': args.release,
 					'releaseOld': str(releaseOld),
 					'ignore' : 0,
 					'loose': 1,
-					'summary': 0}
+					'summary': 0,
+					'specialMdb': specialMdb}
 	print "Making local mkChangeNotes"
 	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
-
 	user = os.environ['USER']
-	c = track.CompositeTrack(args.database, args.composite)
+	c = track.CompositeTrack(args.database, args.composite, None, specialMdb)
 	errors = []
 	qaDir = c.qaInitDir + "release%s" % args.release 
 	d = datetime.date.today()
 	if not os.path.exists(qaDir):
 		os.makedirs(qaDir)
-
-	getMethods(qaDir, args, user, d)
 	
-	makeLinks(c, args, qaDir)
+	getMethods(qaDir, args, user, d)
 	notesFile = makeLinks(c, args, qaDir)
+	if re.search('Error', notesFile):
+		print notesFile
+		return
+	
 	writeClaimMail(args, user, qaDir)
 	
 	m = re.match('.*(kent/.*)', notesFile)
