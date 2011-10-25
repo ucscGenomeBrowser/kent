@@ -7679,6 +7679,8 @@ targetId GeneCard:TCF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
 validation TCF3_(SC-349)(WesternBlot,IP-MassSpec):human_TCF3_SC-349_validation_Myers.pdf
 
+# TCF-4 is an alias for TCF7L2 and is located on chr 10.
+# TCF-4 *IS ALSO NOT* an alias for TCF7L2 and *IS* a gene located on chr 18.
 term TCF4
 tag TCF4
 type Antibody
@@ -7694,6 +7696,21 @@ targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2&search=TCF7L2
 validation missing
 
+# TCF-4 is an alias for TCF7L2 and is located on chr 10.
+# TCF-4 *IS ALSO NOT* an alias for TCF7L2 and *IS* a gene located on chr 18.
+# This is a stub for the real TCF-4 which may be used later in ENCODE. ~Jeff
+#term TCF-4
+#tag TCF4
+#type Antibody
+#target TCF-4
+#antibodyDescription Rabbit monoclonal
+#targetDescription This gene encodes transcription factor 4, a basic helix-turn-helix transcription factor. The encoded protein recognizes an Ephrussi-box ('E-box') binding site ('CANNTG') - a motif first identified in immunoglobulin enhancers. (provided by RefSeq) 
+#vendorName many sources from http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
+#vendorId NA
+#orderUrl NA
+#targetId GeneCard:TCF4
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4 
+#validation missing
 term TCF7L2
 tag TCF7L2
 type Antibody
