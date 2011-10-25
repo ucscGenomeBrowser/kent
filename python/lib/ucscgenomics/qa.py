@@ -1,6 +1,5 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math, threading, datetime, time, signal
-from ucscgenomics import ra, track
 
 """
 	A collection of functions useful to the ENCODE QA Team.
@@ -28,9 +27,6 @@ from ucscgenomics import ra, track
 		and a set of tables with underscores in the name
 	checkLabels - takes in a trackDb.ra filepath, returns a string 
 		output list and a set of tuples, ([label, #tooLongBy],[labe...)
-
-	main - runs all the checks, prints output
-
 """
 
 
@@ -43,9 +39,7 @@ def getGbdbTables(database, tableset):
 	cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, tablestr)
 	p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
 	cmdoutput = p.stdout.read()
-
 	gbdbtableset = set(cmdoutput.split("\n")[1:-1])
-        
 	return gbdbtableset
 
 def sorted_nicely(l): 
@@ -58,14 +52,20 @@ def countPerChrom(database, tables):
 	""" Count the amount of rows per chromosome."""
 	notgbdbtablelist = tables - getGbdbTables(database, tables)
 	tablecounts = dict()
+	output = []
+	globalseen = set()
+	localseen = dict()
+	
 	cmd = "hgsql %s -e \"select chrom from chromInfo\"" % database
 	p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
 	cmdoutput = p.stdout.read()
 
 	chrlist = set(cmdoutput.split("\n")[1:-1])
-	globalseen = set()
-	localseen = dict()
-	output = []
+	if not chrlist:
+		output.append("Can't get chromInfo from %s for countPerChrom" % database)
+		return (output, tablecounts)
+	
+	
 	if not tables:
 		output.append("No Tables to count")
 		output.append("")
@@ -113,6 +113,7 @@ def checkTableDescriptions(database, tables):
 	tablelist = list()
 	missing = set()
 	output = []
+	orstr = ""
 	for i in tables:
 		tablelist.append("tableName = '%s'" % i)
 		orsep = " OR "
@@ -231,19 +232,22 @@ def checkTableCoords(database, tables):
 	for i in sorted(notgbdbtablelist):
 		start = datetime.datetime.now()
 		cmd = "checkTableCoords %s %s" % (database, i)
-		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
 		killed = 0
 		while p.poll() is None:
 			time.sleep(0.1)
 			now = datetime.datetime.now()
 			if (now - start).seconds > timeout:
 				p.kill()
-				
 				killed = 1
 		if not killed:
 			cmdoutput = p.stdout.read()
+			cmderr = p.stderr.read()
+			
 			if cmdoutput:
 				results.append(cmdoutput)
+			if cmderr:
+				results.append(cmderr)
 		elif killed:
 			results.append("Process timeout for table: %s" % i)
 			results.append("You might want to manually run: '%s'" % cmd)
@@ -264,11 +268,13 @@ def positionalTblCheck(database, tables):
 	output = []
 	for i in notgbdbtablelist:
 		cmd = "positionalTblCheck %s %s" % (database, i)
-		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)
 		cmdoutput = p.stdout.read()
-		
+		cmderr = p.stderr.read()
 		if cmdoutput:
 			results.append(cmdoutput)
+		if cmderr:
+			results.append(cmderr)
 	if results:
 		output.append("These tables have position errors:")
 		for i in results:
@@ -278,65 +284,3 @@ def positionalTblCheck(database, tables):
 		output.append("")
 	return (output, results)
 
-def main():
-
-	""" Run all the checks, print output"""
-
-	parser = argparse.ArgumentParser(
-        prog='qaChecks',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='A series of checks for QA',
-        epilog=
-    """Examples:
-
-qaChecks hg19 tableList
-qaChecks hg19 tableList /path/to/trackDb.ra
-qaChecks hg19 tableList ~/kent/src/hg/makeDb/trackDb/human/hg19/wgEncodeSydhTfbs.new.ra
-
-    """
-        )
-	parser.add_argument('database', help='The database, typically hg19 or mm9')
-	parser.add_argument('tableList', help='The file containing a list of tables')
-	parser.add_argument('trackDb', help='The trackDb file to check')
-
-	if len(sys.argv) == 1:
-		parser.print_help()
-		return
-
-	args = parser.parse_args(sys.argv[1:])
-
-	f = open(args.tableList, "r")
-	lines = f.readlines()
-	tables = set()
-	for i in lines:
-		tables.add(i.rstrip())
-
-	output = []
-
-	(tableDescOutput, noDescription) = checkTableDescriptions(args.database, tables)
-	output.extend(tableDescOutput)
-
-	(tableIndexOut, missingIndex) = checkTableIndex(args.database, tables)
-	output.extend(tableIndexOut)
-
-	(tableNameOut, badTableNames) = checkTableName(tables)
-	output.extend(tableNameOut)
-
-	(labelOut, badLabels) = checkLabels(args.trackDb)
-	output.extend(labelOut)
-
-	(coordsOut, badCoords) = checkTableCoords(args.database, tables)
-	output.extend(coordsOut)
-
-	(posOut, badPos) = positionalTblCheck(args.database, tables)
-	output.extend(posOut)
-
-	#(countChromOut, tableCounts) = countPerChrom(args.database, tables)
-	#output.extend(countChromOut)
-
-	for i in output:
-		print i
-	
-
-if __name__ == "__main__":
-	main()
