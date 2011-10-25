@@ -1,6 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math
-from ucscgenomics import ra, track
+from ucscgenomics import ra, track, qa
 
 class makeNotes(object):
     def checkMetaDbForFiles(self, status, state):
@@ -100,9 +100,9 @@ class makeNotes(object):
         #at this point, I am just parsing the output form hgsql
         cmd = "hgsql %s -e \"select table_name from information_schema.TABLES where table_name in (%s)\"" % (database, tablestr)
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
+        cmdoutput = p.stdout.read()
 
-        sqltableset = set(output.split("\n")[1:])
+        sqltableset = set(cmdoutput.split("\n")[1:-1])
 
         missingTableNames = set(mdb.filter(lambda s: s['objType'] == 'table' and 'tableName' not in s and 'attic' not in s, lambda s: s['metaObject']))
 
@@ -118,6 +118,7 @@ class makeNotes(object):
 
         return (mdbtableset, revokedtableset, errors)
 
+
     def getGbdbFiles(self, state):
         database = self.database
         revokedset = set()
@@ -127,23 +128,10 @@ class makeNotes(object):
             (tableset, mdb) = (self.oldTableSet, self.oldMdb)
 
         errors = []
-        sep = "','"
-        tablestr = sep.join(tableset)
-        tablestr = "'" + tablestr + "'"
-        revokestr = sep.join(revokedset)
-        revokestr = "'" + revokestr + "'"
 
-        cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, tablestr)
-        p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
+        gbdbtableset = qa.getGbdbTables(self.database, tableset)
 
-        gbdbtableset = set(output.split("\n")[1:])
-
-        cmd = "hgsql %s -e \"select table_name from information_schema.columns where table_name in (%s) and column_name = 'fileName'\"" % (database, revokestr)
-        p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
-
-        revokedtableset = set(output.split("\n")[1:])
+        revokedtableset = qa.getGbdbTables(self.database, revokedset)
 
         file1stanzalist = mdb.filter(lambda s: s['tableName'] in gbdbtableset, lambda s: s)
         revokedstanzalist = mdb.filter(lambda s: s['tableName'] in revokedtableset, lambda s: s)
@@ -177,10 +165,10 @@ class makeNotes(object):
         orsep = " OR "
         orstr = orsep.join(tablelist)
 
-        cmd = "hgsql %s -e \"SELECT ROUND(data_length/1024/1024,2) total_size_mb, ROUND(index_length/1024/1024,2) total_index_size_mb FROM information_schema.TABLES WHERE table_name = %s\"" % (database, orstr)
+        cmd = "hgsql %s -e \"SELECT ROUND(data_length/1024/1024,2) total_size_mb, ROUND(index_length/1024/1024,2) total_index_size_mb FROM information_schema.TABLES WHERE %s\"" % (database, orstr)
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-        output = p.stdout.read()
-        for i in output.split("\n")[1:]:
+        cmdoutput = p.stdout.read()
+        for i in cmdoutput.split("\n")[1:-1]:
             fields = i.split()
             for j in fields:
                 tablesize = tablesize + float(j)
@@ -280,45 +268,52 @@ class makeNotes(object):
         output.append("Supplemental: %d" % int(len(newSupplementalSet - oldSupplementalSet)))
         output.append("Other: %d" % int(len(additionalList)))
         output.append("\n")
+        output.append("Sizes of New:")
+
         totalsize = 0
         size = 0
-        output.append("Sizes of New:")
         tableGb = int(tableSize/1024)
+        totalsize = totalsize + tableSize
         if tableGb > 1:
             output.append("Tables: %d MB (%d GB)" % (tableSize, tableGb))
         elif tableSize:
             output.append("Tables: %d MB" % tableSize)
-        totalsize = totalsize + tableSize
+
         size = int(self.__makeFileSizes(c, args, pushFiles))
         totalsize = totalsize + size
         if int(size/1024) > 1:
             output.append("Files: %d MB (%d GB)" % (size, int(size/1024)))
         else:
             output.append("Files: %d MB" % size)
+        
         size = int(self.__makeFileSizes(c, args, pushGbdbs))
         totalsize = totalsize + size
         if int(size/1024) > 1:
             output.append("Gbdbs: %d MB (%d GB)" % (size, int(size/1024)))
         else:
             output.append("Gbdbs: %d MB" % size)
+        
         size = int(self.__makeFileSizes(c, args, (newSupplementalSet - oldSupplementalSet)))
         totalsize = totalsize + size
         if int(size/1024) > 1:
             output.append("Supplemental: %d MB (%d GB)" % (size, int(size/1024)))
         else:
             output.append("Supplemental: %d MB" % size)
+        
         size = int(self.__makeFileSizes(c, args, (additionalList)))
         totalsize = totalsize + size
         if int(size/1024) > 1:
             output.append("Other: %d MB (%d GB)" % (size, int(size/1024)))
         else:
             output.append("Other: %d MB" % size)
+      
         if int(totalsize/1024) > 1:
             output.append("Total: %d MB (%d GB)" % (totalsize, int(totalsize/1024)))
         else:
             output.append("Total: %d MB" % totalsize)
 
         tableprint = len(newTableSet | oldTableSet | revokedTableSet)
+        self.newTables = set(pushTables)
         if tableprint:
             output.append("\n")
             output.append("TABLES:")
@@ -337,7 +332,9 @@ class makeNotes(object):
             output.append("")
             output.append("Revoked/Replaced/Renamed Tables (%s):" % len(revokedTableSet))
             output.extend(self.__printIter(revokedTableSet))
+
         dlprint = len(totalFiles | oldReleaseFiles | revokedFiles)
+        self.newFiles = set(self.__printWithPath((pushFiles - revokedFiles), c, args['releaseNew']))
         if dlprint:
             output.append("\n")
             #downlaodables = total - revoked
@@ -350,7 +347,7 @@ class makeNotes(object):
         if dlprint and not args['summary']:
             output.append("")
             output.append("New Download Files (%s):" % len(pushFiles - revokedFiles))
-            output.extend(self.__printWithPath((pushFiles - revokedFiles), c, args['releaseNew']))
+            output.extend(sorted(list(self.newFiles)))
             output.append("")
             output.append("Untouched Download Files (%s):" % len((totalFiles & oldReleaseFiles) - revokedFiles))
             output.extend(self.__printWithPath(((totalFiles & oldReleaseFiles) - revokedFiles), c, args['releaseNew']))
@@ -359,6 +356,7 @@ class makeNotes(object):
             output.extend(self.__printWithPath(revokedFiles, c, args['releaseNew']))
 
         gbdbprint = len(newGbdbSet | oldGbdbSet | revokedGbdbs) 
+        self.newGbdbs = set(self.__printGbdbPath(pushGbdbs, args['database']))
         if gbdbprint:
             output.append("\n")
             output.append("GBDBS:")
@@ -370,14 +368,16 @@ class makeNotes(object):
         if gbdbprint and not args['summary']:
             output.append("")
             output.append("New Gbdb Files (%s):" % len(pushGbdbs))
-            output.extend(self.__printGbdbPath(pushGbdbs, args['database']))
+            output.extend(sorted(list(self.newGbdbs)))
             output.append("")
             output.append("Untouched Gbdb Files (%s):" % len((newGbdbSet & oldGbdbSet) - revokedGbdbs))
             output.extend(self.__printGbdbPath((newGbdbSet & oldGbdbSet) - revokedGbdbs, args['database']))
             output.append("")
             output.append("Revoked/Replaced/Renamed Gbdb Files (%s):" % len(revokedGbdbs))
             output.extend(self.__printGbdbPath(revokedGbdbs, args['database']))
+            
         supplementalprint = len(newSupplementalSet | oldSupplementalSet)
+        self.newSupplemental = set(self.__printWithPath(newSupplementalSet - oldSupplementalSet, c, args['releaseNew']))
         if supplementalprint:
             output.append("\n")
             output.append("SUPPLEMENTAL FILES:")
@@ -389,32 +389,36 @@ class makeNotes(object):
         if supplementalprint and not args['summary']:
             output.append("")
             output.append("New Supplemental Files (%s):" % len(newSupplementalSet - oldSupplementalSet))
-            output.extend(self.__printWithPath(newSupplementalSet - oldSupplementalSet, c, args['releaseNew']))
+            output.extend(sorted(list(self.newSupplemental)))
             output.append("")
             output.append("Untouched Supplemental Files (%s):" % len(oldSupplementalSet & newSupplementalSet))
             output.extend(self.__printWithPath(oldSupplementalSet & newSupplementalSet, c, args['releaseNew']))
             output.append("")
             output.append("Removed Supplemental Files (%s):" % len(oldSupplementalSet - newSupplementalSet))
             output.extend(self.__printWithPath(oldSupplementalSet - newSupplementalSet, c, args['releaseNew']))
+            
         otherprint = len(additionalList | oldAdditionalList)
+        self.newOthers = set(self.__printWithPath(additionalList, c, args['releaseNew']))
         if otherprint:
             output.append("\n")
             output.append("OTHER FILES:")
-            output.append("New: %s" % len(additionalList | (additionalList & oldAdditionalList)))
+            output.append("New: %s" % len(additionalList))
             output.append("Revoked/Replace: %s" % len(oldAdditionalList - additionalList))
             output.append("Total: %s" % len(additionalList | oldAdditionalList))
         if otherprint and not args['summary']:
             output.append("")
-            output.append("New Other Files (%s):" % len(additionalList | (additionalList & oldAdditionalList)))
-            output.extend(self.__printWithPath(additionalList, c, args['releaseNew']))
+            output.append("New Other Files (%s):" % len(additionalList))
+            output.extend(sorted(list(self.newOthers)))
             output.append("")
             output.append("Revoked Other Files (%s):" % len(oldAdditionalList - additionalList))
-            output.extend(self.__printWithPath(oldAdditionalList, c, args['releaseNew']))
+            output.extend(self.__printWithPath((oldAdditionalList - additionalList), c, args['releaseNew']))
         output.append("\n")
+        
         if len(missingFiles):
             output.append("Files that dropped between releases (%s):" % len(missingFiles))
             output.extend(self.__printWithPath(missingFiles, c, args['releaseOld']))
             output.append("\n")
+        
         if not args['ignore']:
             output.append("No Errors")
         return output
@@ -474,27 +478,32 @@ class makeNotes(object):
         else:
             output.append("Total: %d MB" % totalsize)
         output.append("\n")
+        self.newTables = set(self.__printIter(newTableSet - revokedTables))
+        self.newFiles = set(self.__printWithPath(totalFiles - revokedFiles, c, args['releaseNew']))
+        self.newGbdbs = set(self.__printGbdbPath(newGbdbSet - revokedGbdbs, args['database']))
+        self.newSupplemental = set(self.__printWithPath(newSupplementalSet, c, args['releaseNew']))
+        self.newOthers = set(self.__printWithPath(additionalList, c, args['releaseNew']))
         if not args['summary']:
             output.append("")
             if len(newTableSet - revokedTables):
-                output.append("New Tables (%s):" % len(newTableSet - revokedTables))
-                output.extend(self.__printIter(newTableSet - revokedTables))
+                output.append("New Tables (%s):" % len(self.newTables))
+                output.extend(sorted(list(self.newTables)))
                 output.append("\n")
             if len(totalFiles - revokedFiles):
-                output.append("New Download Files (%s):" % len(totalFiles - revokedFiles))
-                output.extend(self.__printWithPath(totalFiles - revokedFiles, c, args['releaseNew']))
+                output.append("New Download Files (%s):" % len(self.newFiles))
+                output.extend(sorted(list(self.newFiles)))
                 output.append("\n")
             if len(newGbdbSet - revokedGbdbs):
                 output.append("New Gbdb Files (%s):" % len(newGbdbSet - revokedGbdbs))
-                output.extend(self.__printGbdbPath(newGbdbSet - revokedGbdbs, args['database']))
+                output.extend(sorted(list(self.newGbdbs)))
                 output.append("\n")
             if len(newSupplementalSet):
                 output.append("New Supplemental Files (%s):" % len(newSupplementalSet))
-                output.extend(self.__printWithPath(newSupplementalSet, c, args['releaseNew']))
+                output.extend(sorted(list(self.newSupplemental)))
                 output.append("\n")
             if len(additionalList):
                 output.append("New Other Files (%s):" % len(additionalList))
-                output.extend(self.__printWithPath(additionalList, c, args['releaseNew']))
+                output.extend(sorted(list(self.newOthers)))
                 output.append("\n")
             if len(revokedTables):
                 output.append("Revoked Tables (%s):" % len(revokedTables))
@@ -538,8 +547,18 @@ class makeNotes(object):
         self.ignore = args['ignore']
         self.summary = args['summary']
         self.args = args
+
         errors = []
         c = track.CompositeTrack(self.database, self.composite)
+
+        #sanitize arguments
+        if not self.releaseOld.isdigit():
+            self.releaseOld = 'solo'
+        elif int(self.releaseOld) <= 0:
+            self.releaseOlf = 'solo'
+        elif self.releaseOld > self.releaseNew:
+            self.releaseOld = 'solo'
+
         if int(self.releaseNew) > 1 and str(self.releaseOld) != 'solo':
 
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
