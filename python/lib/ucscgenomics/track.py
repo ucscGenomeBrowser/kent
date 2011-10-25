@@ -163,7 +163,17 @@ class CompositeTrack(object):
                         self._files[file] = TrackFile(self.downloadsDirectory + file, None, stanza)
         
             return self._files
-        
+            
+    @property
+    def qaInitDir(self):
+        qaDir = '/hive/groups/encode/encodeQa/test/' + self._database + '/' + self._name + '/'
+        if os.path.exists(qaDir) and os.path.isdir(qaDir):
+            pass
+        else:
+            os.makedirs(qaDir)
+        self._qaDir = qaDir
+        return qaDir
+
     @property 
     def releases(self):
         """A list of all files in the release directory of this composite"""
@@ -187,7 +197,7 @@ class CompositeTrack(object):
                         for innerfile in os.listdir(releasepath + file):
                             pathfile = file + "/" + innerfile 
                             releasefiles[pathfile] = TrackFile(releasepath + pathfile, None)
-		#releasefiles.sort()
+        #releasefiles.sort()
                 self._releaseFiles.append(releasefiles)
                 count = count + 1
                 
@@ -254,6 +264,7 @@ class CompositeTrack(object):
         
         if trackPath == None:
             self._trackPath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
+            self._trackDbDir = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
         else:
             self._trackPath = trackPath
             
@@ -273,13 +284,18 @@ class CompositeTrack(object):
         
         self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
         if not os.path.isfile(self._trackDbPath):
-            raise KeyError(self._trackDbPath + ' does not exist')    
+            raise KeyError(self._trackDbPath + ' does not exist')
         
         self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + compositeName + '.ra'
         self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + compositeName + '.ra'    
         self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + compositeName + '.ra'
+        self._alphaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/'
+        self._betaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/beta/'
+        self._publicMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/public/'
         self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
-        self._httpDownloadsPath = '/usr/local/apache/htdocs-hgdownload/goldenPath/' + database + '/' + 'encodeDCC/' + compositeName + '/'
+        self._httpDownloadsPath = '/usr/local/apache/htdocs-hgdownload/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
+        self._rrHttpDir = '/usr/local/apache/htdocs/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
+        self._notesDirectory = os.path.expanduser("~/kent/src/hg/makeDb/doc/encodeDcc%s" % database.capitalize()) + '/'
         self._url = 'http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=' + database + '&g=' + compositeName
         self._database = database
         self._name = compositeName        

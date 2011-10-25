@@ -287,7 +287,6 @@ static void findBestPredecessors(struct kdTree *tree, struct kdLeaf *leafList,
 {
 static struct predScore noBest;
 struct kdLeaf *leaf;
-struct kdLeaf *bestLeaf = NULL;
 double bestScore = 0;
 
 for (leaf = leafList; leaf != NULL; leaf = leaf->next)
@@ -303,7 +302,6 @@ for (leaf = leafList; leaf != NULL; leaf = leaf->next)
     if (bestScore < leaf->totalScore)
         {
 	bestScore = leaf->totalScore;
-	bestLeaf = leaf;
 	}
     }
 }

@@ -142,7 +142,7 @@ tissue Cervix
 vendorName ATCC
 vendorId CCL-2.2
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
-#lineage ectoderm
+lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
@@ -2871,14 +2871,17 @@ term IMR90
 tag IMR90
 type Cell Line
 organism human
-description Normal Human Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
+description Normal Human Fetal Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
 lineage endoderm
+karyotype normal
 vendorName ATCC
 vendorId CCL-186
 lots 58607680
+termId BTO:0001229
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001229&termName=IMR-90%20cell
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
-sex U
+sex F
 #formerly tier 3
 tier 3
 protocol Stam:IMR90_Stam_protocol.pdf
@@ -10971,22 +10974,20 @@ projectName UNC-Giddings
 #    # NOTE: that validate rules may end comment delimited by a '#'
 #
 #     priority Like in trackDb.ra this is used for enforcing a sort order in certain circumstances, with lower numbers implying greater priority.
-#       At beginnning:
-#         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
-#       Experiment defining:
-#         expId:100  strain:110  cell:120  sex:130  age:140  rnaExtract:150  localization:160  phase:170  treatment:180  antibody:190
-#         protocol:200  restrictionEnzyme:220  control:230  replicate:240  submittedDataVersion:250
-#       DCC descriptive:
-#         origAssembly:305  dataVersion:310  dccAccession:312  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325
-#         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
-#       Lab descriptive:
-#         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460 tissueSourceType:470
-#       Miscellaneous junk which will be put into the 500 pot which will sort near the end
-#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500  expVars:500
-#         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
-#       At End:
-#         dccInternalNotes:910 sourceObj:921 tableName:970  fileName:980 type:985
-#         category:991
+#	At beginnning:
+#   	  10s: objStatus:1 project:10 grant:15 lab:20 composite:25 dataType:30 view:35
+#	Experiment defining:
+#  	  100s: expId:100 cellType:110 strain:120 sex:130 age:140 localization:150 rnaExtract:160 readType:165 insertLength:166 phase:170 treatment:180 Antibody:190 attic:190
+#	Undefine:
+#  	  200s: protocol:200 restrictionEnzyme:220 control:230 replicate:240 dccRep:241 rank:242 submittedDataVersion:250
+#	DCC descriptive:
+#  	  300s: origAssembly:305 dataVersion:310 dccAccession:312 dateSubmitted:315 dateResubmitted:320 dateUnrestricted:325 subId:335 geoSeriesAccession:340 geoSampleAccession:345 setType:350 controlId:355
+#	Lab descriptive:
+#  	  400s: labExpId:410 bioRep:415 labProtocolId:420 labVersion:430 mapAlgorithm:430 seqPlatform:430 spikeInPool:430 softwareVersion:440 privacy:450 category:470 tissueSourceType:470
+#	Miscellaneous junk which will be put into the 500 pot which will sort near the end:
+#  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
+#	At End:
+#  	  900s: dccInternalNotes:910 sourceObj:921 tableName:970 fileName:980 type:985 md5sum:999
 
 term typeOfTerm
 tag TYPEOFTERM
