@@ -276,7 +276,7 @@ class makeNotes(object):
         totalsize = totalsize + tableSize
         if tableGb > 1:
             output.append("Tables: %d MB (%d GB)" % (tableSize, tableGb))
-        elif tableSize:
+        else:
             output.append("Tables: %d MB" % tableSize)
 
         size = int(self.__makeFileSizes(c, args, pushFiles))
@@ -546,10 +546,11 @@ class makeNotes(object):
         self.loose = args['loose']
         self.ignore = args['ignore']
         self.summary = args['summary']
+        self.specialMdb = args['specialMdb']
         self.args = args
 
         errors = []
-        c = track.CompositeTrack(self.database, self.composite)
+        c = track.CompositeTrack(self.database, self.composite, None, self.specialMdb)
 
         #sanitize arguments
         if not self.releaseOld.isdigit():
@@ -644,57 +645,3 @@ class makeNotes(object):
                 self.output = self.printReportOne(args, c) 
             else:
                 self.output = self.printErrors(errors)
-
-
-def main():
-
-
-    parser = argparse.ArgumentParser(
-        prog='mkChangeNotes',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Writes out notes file for packing to QA',
-        epilog=
-    """Examples:
-
-    mkChangeNotes hg19 wgEncodeUwDnase 3 2 --loose
-    mkChangeNotes hg19 wgEncodeSydhTfbs 1 - --full
-    mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
-
-    """
-        )
-    parser.add_argument('-l', '--loose', action="store_true", default=0, help='Loose checking for legacy elements. Will be retired once all tracks go through a release cycle')
-    parser.add_argument('-i', '--ignore', action="store_true", default=0, help='Ignore errors, output.append(out report.')
-    parser.add_argument('-s', '--summary', action="store_true", default=0, help='output.append(summary stats only.')
-    parser.add_argument('database', help='The database, typically hg19 or mm9')
-    parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
-    parser.add_argument('releaseNew', help='The new release to be released')
-    parser.add_argument('releaseOld', nargs='?', default='-', help='The old release that is already released, if on release 1, or solo release mode, put anything here')
-
-    if len(sys.argv) == 1:
-        parser.print_help()
-        return
-    args = parser.parse_args(sys.argv[1:])
-    if not args.releaseNew.isdigit():
-        parser.print_help()
-        return
-
-
-
-    if not args.releaseOld.isdigit():
-        args.releaseOld = 'solo'    
-    elif int(args.releaseOld) > int(args.releaseNew):
-        errors.append("Old Release is higher than New Release")
-        args.releaseOld = args.releaseNew
-        printErrors(errors)
-        return
-
-    argsdict = {'database': args.database, 'composite': args.composite, 'releaseNew': args.releaseNew, 'releaseOld': args.releaseOld, 'loose': args.loose, 'ignore': args.ignore, 'summary': args.summary}
-
-    notes = makeNotes(argsdict)
-
-    for line in notes.output:
-        print line
-
-if __name__ == '__main__':
-    main()
-
