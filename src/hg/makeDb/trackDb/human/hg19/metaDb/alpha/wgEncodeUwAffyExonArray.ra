@@ -528,6 +528,66 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayGm06990SimpleSignalRep2
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayGm12864SimpleSignalRep1
+objType table
+cell GM12864
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayGm12864SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS12431
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayGm12864SimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1
+objType table
+cell GM12865
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS12436
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2
+objType table
+cell GM12865
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS12442
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1
 objType table
 cell GM12878
@@ -690,6 +750,46 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayHaeSimpleSignalRep2
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayHahSimpleSignalRep1
+objType table
+cell HA-h
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHahSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17565
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayHahSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHahSimpleSignalRep2
+objType table
+cell HA-h
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHahSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17566
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayHahSimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayHaspSimpleSignalRep1
 objType table
 cell HA-sp
@@ -776,6 +876,66 @@ project wgEncode
 replicate 2
 subId 3216
 tableName wgEncodeUwAffyExonArrayHbmecSimpleSignalRep2
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHbvpSimpleSignalRep1
+objType table
+cell HBVP
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHbvpSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS18997
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayHbvpSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1
+objType table
+cell HBVSMC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS18998
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5009
+tableName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2
+objType table
+cell HBVSMC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS18999
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2
+treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHcfSimpleSignalRep1
@@ -1230,6 +1390,86 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayHepg2SimpleSignalRep2
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayHffSimpleSignalRep1
+objType table
+cell HFF
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHffSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17567
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayHffSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHffSimpleSignalRep2
+objType table
+cell HFF
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHffSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17568
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayHffSimpleSignalRep2
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1
+objType table
+cell HFF-Myc
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17569
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2
+objType table
+cell HFF-Myc
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17570
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayHgfSimpleSignalRep1
 objType table
 cell HGF
@@ -1451,6 +1691,46 @@ project wgEncode
 replicate 2
 subId 2109
 tableName wgEncodeUwAffyExonArrayHmfSimpleSignalRep2
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep1
+objType table
+cell HMVEC-dAd
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19000
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2
+objType table
+cell HMVEC-dAd
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19001
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2
+treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1
@@ -1805,6 +2085,26 @@ project wgEncode
 replicate 2
 subId 2110
 tableName wgEncodeUwAffyExonArrayHnpceSimpleSignalRep2
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayHpaecSimpleSignalRep1
+objType table
+cell HPAEC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHpaecSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19002
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayHpaecSimpleSignalRep1
+treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHpafSimpleSignalRep1
@@ -2195,6 +2495,26 @@ subId 3216
 tableName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep2
+objType table
+cell HSMMtube
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17572
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1
 objType table
 cell HUVEC
@@ -2556,6 +2876,46 @@ subId 2109
 tableName wgEncodeUwAffyExonArrayNhaSimpleSignalRep2
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayNhbeSimpleSignalRep1
+objType table
+cell NHBE
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19003
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2
+objType table
+cell NHBE
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19004
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1
 objType table
 cell NHDF-Ad
@@ -2715,6 +3075,46 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep1
+objType table
+cell NT2-D1
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19005
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2
+objType table
+cell NT2-D1
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19006
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1
 objType table
 cell PANC-1
@@ -2759,6 +3159,46 @@ project wgEncode
 replicate 2
 subId 2110
 tableName wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayPrecSimpleSignalRep1
+objType table
+cell PrEC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayPrecSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19007
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayPrecSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayPrecSimpleSignalRep2
+objType table
+cell PrEC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayPrecSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS19008
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArrayPrecSimpleSignalRep2
+treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayRptecSimpleSignalRep1
@@ -2897,6 +3337,46 @@ subId 2110
 tableName wgEncodeUwAffyExonArraySkmcSimpleSignalRep2
 view SimpleSignal
 
+metaObject wgEncodeUwAffyExonArraySknmcSimpleSignalRep1
+objType table
+cell SK-N-MC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArraySknmcSimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17573
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArraySknmcSimpleSignalRep1
+treatment None
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArraySknmcSimpleSignalRep2
+objType table
+cell SK-N-MC
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArraySknmcSimpleSignalRep2.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17574
+origAssembly hg19
+project wgEncode
+replicate 2
+subId 5011
+tableName wgEncodeUwAffyExonArraySknmcSimpleSignalRep2
+treatment None
+view SimpleSignal
+
 metaObject wgEncodeUwAffyExonArraySknshraSimpleSignalRep1
 objType table
 cell SK-N-SH_RA
@@ -2964,6 +3444,26 @@ project wgEncode
 replicate 1
 subId 2110
 tableName wgEncodeUwAffyExonArrayTh1SimpleSignalRep1
+view SimpleSignal
+
+metaObject wgEncodeUwAffyExonArrayWerirb1SimpleSignalRep1
+objType table
+cell WERI-Rb-1
+composite wgEncodeUwAffyExonArray
+dataType AffyExonArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-24
+dateUnrestricted 2012-07-24
+fileName wgEncodeUwAffyExonArrayWerirb1SimpleSignalRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId RS17575
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5011
+tableName wgEncodeUwAffyExonArrayWerirb1SimpleSignalRep1
+treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1
@@ -3058,4 +3558,4 @@ tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 treatment None
 view SimpleSignal
 
-# MAGIC: -1787945528
+# MAGIC: 1710388248
