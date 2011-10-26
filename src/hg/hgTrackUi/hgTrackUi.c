@@ -3123,8 +3123,8 @@ char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
     /* configured as a supertrack member in trackDb */
-    if (tdb->parent)
-        {
+    if (tdb->parent && sameString(super,tdb->parent->track))
+        {              // check trackName because super is returned for any level child
         /* the supertrack is also configured, so use supertrack defaults */
         tdbMarkAsSuperTrack(tdb->parent);
         trackDbSuperMemberSettings(tdb);
