@@ -12,8 +12,8 @@ def addChange(changelist, obj, change):
 def main():
 	parser = argparse.ArgumentParser(
 		prog='qaUpdateMetadata',
-		description='Update a metaDb fix',
-		epilog='example: qaUpdateMetadata hg19 wgEncodeUwDnaseSeq --list "md5sum objType cell treatment"'
+		description='Update a the beta metaDb with selected items from the corresponding alpha metaDb object',
+		epilog='example: qaUpdateMetadata hg19 wgEncodeUwDnaseSeq md5sum objType cell treatment'
 		)
 	parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
 	parser.add_argument('database', help='The database, typically hg19 or mm9')

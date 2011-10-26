@@ -1,4 +1,4 @@
-import os
+import os, re
 from ucscgenomics import ra
 
 def readMd5sums(filename):
@@ -259,8 +259,24 @@ class CompositeTrack(object):
     def organism(self):
         """The url on our site for this composite"""
         return self._organism
+    @property
+    def currentTrackDb(self):
+        trackDb = self._trackDbDir + "trackDb.wgEncode.ra"
+        f = open(trackDb, "r")
+        lines = f.readlines()
+        p = re.compile(".*(%s\S+) ?(\S+)" % self._name)
+        for i in lines:
+            m = p.match(i)
+            if m and re.search('alpha', m.group(2)):
+                tdbpath = "%s%s" % (self._trackDbDir, m.group(1))
+                return tdbpath
+        return None
+
+
+    def __init__(self, database, compositeName, trackPath=None, mdbCompositeName=None):
         
-    def __init__(self, database, compositeName, trackPath=None):
+        if mdbCompositeName == None:
+            mdbCompositeName = compositeName
         
         if trackPath == None:
             self._trackPath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
@@ -270,7 +286,8 @@ class CompositeTrack(object):
         organisms = {
             'hg19': 'human',
             'hg18': 'human',
-            'mm9': 'mouse'
+            'mm9': 'mouse',
+            'encodeTest': 'human'
         }
         
         if database in organisms:
@@ -282,16 +299,19 @@ class CompositeTrack(object):
             self._trackPath = self._trackPath + '/'
         
         self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
+        self._trackDbDir = self._trackPath + self._organism + '/' + database + '/'
         if not os.path.isfile(self._trackDbPath):
             raise KeyError(self._trackDbPath + ' does not exist')
         
-        self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + compositeName + '.ra'
-        self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + compositeName + '.ra'    
-        self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + compositeName + '.ra'
+        
+        
+        self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + mdbCompositeName + '.ra'
+        self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + mdbCompositeName + '.ra'    
+        self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + mdbCompositeName + '.ra'
         self._alphaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/'
         self._betaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/beta/'
         self._publicMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/public/'
-	self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
+        self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
         self._httpDownloadsPath = '/usr/local/apache/htdocs-hgdownload/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
         self._rrHttpDir = '/usr/local/apache/htdocs/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
         self._notesDirectory = os.path.expanduser("~/kent/src/hg/makeDb/doc/encodeDcc%s" % database.capitalize()) + '/'

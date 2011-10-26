@@ -32,17 +32,16 @@ while (pFileList && *pFileList)
     }
 }
 
-static struct fileDb *fileDbReadFromCache(char *db, char *dir, char *subDir)
+static struct fileDb *fileDbReadFromBackup(char *db, char *dir, char *subDir)
 {
-struct tempName cacheFile;
-boolean exists = trashDirReusableFile(&cacheFile, dir, subDir, db);  // encodeDCC/composite.db
+struct tempName buFile;
+boolean exists = trashDirReusableFile(&buFile, dir, subDir, db);  // encodeDCC/composite.db
 if (!exists)
     return NULL;
-//warn("Reading: %s",cacheFile.forCgi);
 
 struct fileDb *fileList = NULL;
 struct fileDb *oneFile = NULL;
-struct lineFile *lf = lineFileOpen(cacheFile.forCgi, TRUE);
+struct lineFile *lf = lineFileOpen(buFile.forCgi, TRUE);
 char *words[4];
 while (lineFileChop(lf, words) >= 3)
     {
@@ -54,7 +53,7 @@ while (lineFileChop(lf, words) >= 3)
     }
 lineFileClose(&lf);
 if (fileList == NULL)
-    unlink(cacheFile.forCgi);    // remove empty file
+    unlink(buFile.forCgi);    // remove empty file
 
 return fileList;
 }
@@ -62,23 +61,16 @@ return fileList;
 // Cache is not faster, so just use it as a backup
 //#define CACHE_IS_FASTER_THAN_RSYNC
 #ifdef CACHE_IS_FASTER_THAN_RSYNC
-static boolean fileDbCacheAvailable(char *db, char *dir, char *subDir)
+static boolean fileDbBackupAvailable(char *db, char *dir, char *subDir)
 { // Checks if there is a recent enough cache file
   // TODO: Add some other trick to invalidate cache at will.
-struct tempName cacheFile;
-boolean exists = trashDirReusableFile(&cacheFile, dir, subDir, db);  // encodeDCC/composite.db
+struct tempName buFile;
+boolean exists = trashDirReusableFile(&buFile, dir, subDir, db);  // encodeDCC/composite.db
 if (exists)
     {
-    //char *clearCache = cartOptionalString(cart,"clearCache");  // where is cart coming from?
-    //if (clearCache && sameWord(clearCache,subDir))
-    //    {
-    //    cartRemove(cart,"clearCache");
-    //    unlink(cacheFile.forCgi);    // remove empty file
-    //    return FALSE;
-    //    }
     struct stat mystat;
     ZeroVar(&mystat);
-    if (stat(cacheFile.forCgi,&mystat)==0)
+    if (stat(buFile.forCgi,&mystat)==0)
         {
         // how old is old?
         int secs = (clock1() - mystat.st_ctime); // seconds since created
@@ -90,14 +82,13 @@ return FALSE;
 }
 #endif///def CACHE_IS_FASTER_THAN_RSYNC
 
-static void fileDbWriteToCache(char *db, char *dir, char *subDir,struct fileDb *fileList)
+static void fileDbWriteToBackup(char *db, char *dir, char *subDir,struct fileDb *fileList)
 {
-struct tempName cacheFile;
-(void)trashDirReusableFile(&cacheFile, dir, subDir, db);  // encodeDCC/composite.db
-//warn("Writing: %s",cacheFile.forCgi);
+struct tempName buFile;
+(void)trashDirReusableFile(&buFile, dir, subDir, db);  // encodeDCC/composite.db
 
 FILE *fd = NULL;
-if ((fd = fopen(cacheFile.forCgi, "w")) != NULL)
+if ((fd = fopen(buFile.forCgi, "w")) != NULL)
     {
     struct fileDb *oneFile = fileList;
     for(;oneFile != NULL;oneFile=oneFile->next)
@@ -130,10 +121,8 @@ if (foundFiles == NULL
     fileDbFree(&foundFiles);
 
 #ifdef CACHE_IS_FASTER_THAN_RSYNC
-    if (fileDbCacheAvailable(db, dir, subDir))  // check cache first
-        {
-        foundFiles = fileDbReadFromCache(db, dir, subDir);
-        }
+    if (fileDbBackupAvailable(db, dir, subDir))  // check backup first
+        foundFiles = fileDbReadFromBackup(db, dir, subDir);
     else
 #endif///def CACHE_IS_FASTER_THAN_RSYNC
         {
@@ -186,7 +175,7 @@ if (foundFiles == NULL
         pclose(scriptOutput);
         if (foundFiles == NULL)
             {
-            foundFiles = fileDbReadFromCache(db, dir, subDir);
+            foundFiles = fileDbReadFromBackup(db, dir, subDir);
             if (foundFiles == NULL)
                 {
                 AllocVar(oneFile);
@@ -197,7 +186,7 @@ if (foundFiles == NULL
                 }
             }
         else
-            fileDbWriteToCache(db, dir, subDir,foundFiles);
+            fileDbWriteToBackup(db, dir, subDir,foundFiles);
         }
 
     // mark this as done to avoid excessive io
@@ -490,6 +479,13 @@ if (sortOrder != NULL)
         struct slName *vals = mdbObjsFindAllVals(mdbObjs, var, CV_LABEL_EMPTY_IS_NONE);
         if (searchBy != cvSearchByMultiSelect && searchBy != cvSearchBySingleSelect)
             {
+            // We can't be too ambitious about creating filterboxes on the fly so some limitations:
+            // If there are more than 80 options, the filterBy is way too large and of limited use
+            // If there is a distinct val for each file in the table, then the filterBy is the same size
+            //    as the table and of no help.  Really the number of options should be half the number of rows
+            //    but we are being lenient and cutting off at 0.8 not 0.5
+            // If there is any non-alphanum char in a value then the filterBy will fail in js code.
+            //    Those filterBy's are abandoned a but further down.
             int valCount = slCount(vals);
             if (valCount > 80 || valCount > (slCount(mdbObjs) * 0.8))
                 {
@@ -547,8 +543,8 @@ if (sortOrder != NULL)
                                labelWithVocabLink(var,sortOrder->title[sIx],tagLabelPairs,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
-                filterableBits |= (0x1<<(sIx));
-                //warn("count:%d sIx:%d retBits:%X",count,sIx,filterableBits);
+                if (sIx < 64) // avoid bit overflow but 64 filterBoxes?  I don't think so
+                    filterableBits |= (0x1<<(sIx));
                 }
             }
         if (tagLabelPairs != NULL)

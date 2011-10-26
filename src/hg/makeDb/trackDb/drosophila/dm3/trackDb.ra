@@ -345,3 +345,34 @@ searchType genePred
 termRegex (chr)?.*\.[0-9a-z]+\.[0-9]+\.[a-z]+
 searchPriority 50
 
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex FBtr0[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex FBgn0[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensDotPrefix
+searchTable ensGene
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+shortCircuit 1
+termRegex FBtr0[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex FBpp0[0-9]+(\.[0-9]+)?
