@@ -109,7 +109,7 @@
 
     track wgEncodeRegProEnhCorrStringent
     shortLabel ENHancer/Promoter
-    longLabel Stringent Enhancers/promoters linked by H3H27Ac/mRNA level in 7 cell types by ENCODE/UCSC
+    longLabel Stringent Enhancers/promoters linked by H3H27Ac/mRNA level in 9 cell types by ENCODE/UCSC
     type bed 12
     superTrack wgEncodeReg hide
     visibility hide
@@ -128,7 +128,7 @@
 
     track wgEncodeRegProEnhCorrLoose
     shortLabel Enhancer/Promoter
-    longLabel Loose Enhancers/promoters linked by H3H27Ac/mRNA level on 7 cell types by ENCODE/UCSC
+    longLabel Loose Enhancers/promoters linked by H3H27Ac/mRNA level on 9 cell types by ENCODE/UCSC
     type bed 12
     superTrack wgEncodeReg hide
     visibility hide
