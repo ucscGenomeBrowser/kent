@@ -1831,7 +1831,7 @@ searchPriority 63
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
-termRegex GL[0-9]+\.[0-9]
+termRegex GL[0-9]+\.[0-9]|NC_001807(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
@@ -1839,7 +1839,7 @@ searchName ctgPosNoVersion
 searchTable ctgPos
 searchMethod exact
 shortCircuit 1
-termRegex GL[0-9]+
+termRegex GL[0-9]+|NC_001807(\.[0-9]+)?
 dontCheck GL[0-9]+\.[0-9]
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s._'
 searchPriority 5
