@@ -31,6 +31,7 @@ function _matSelectViewForSubTracks(obj,view)
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
+        exposeAll();  // TODO: was removed for subCfg... is there a problem?
         matSubCBsEnable(true,view);
 
         // Needed for later
@@ -101,7 +102,7 @@ function exposeAll()
         if ($(visDD).attr('selectedIndex') == 0) {
             $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
 	        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
-		}                     // and effecting inherited subtrack vis
+        }                         // and effecting inherited subtrack vis
     }
 }
 
@@ -582,7 +583,7 @@ function compositeCfgRegisterOnchangeAction(prefix)
 function subtrackCfgHideAll(table)
 {
 // hide all the subtrack configuration stuff
-    $("div[id $= '_cfg']").each( function (i) {
+    $("div[id^='div_cfg_']").each( function (i) {
         $( this ).css('display','none');
         $( this ).children("input[name$='.childShowCfg']").val("off");
     });

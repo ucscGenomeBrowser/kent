@@ -400,7 +400,11 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
             $(img).attr('src','../images/downBlue.png');
     }
     if($(divit).css('display') == 'none') {
-        $("#div_"+trackName+"_cfg").hide();  // Hide any configuration when opening metadata
+        if (typeof(subCfg) !== "undefined") {
+            var cfg = normed($("#div_cfg_"+trackName));
+            if (cfg != undefined)   // Hide any configuration when opening metadata
+                $(cfg).hide();
+        }
 
         if($(divit).find('table').length == 0) {
             lookupMetadata(trackName,showLonglabel,showShortLabel);

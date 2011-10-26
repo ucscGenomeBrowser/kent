@@ -17,6 +17,34 @@
 // populate: act of filling a subtrack cfg with controls
 // fauxVis: fake control for subtrack visDD, which will be replaced with true vis when clicked.
 
+// TESTED:
+// OK  subCBs enable/disable subVis and subCfg
+// OK  subCBs set compVis to full
+// OK  subVis faux works
+// OK  subVis ajaxed on click
+// OK  subVis change is persistent (as seen in: hgTracks image, rightClick, return to hgTrackUi)
+// OK  subVis overridden by viewVis
+// OK  subVis overridden by compVis
+// BUG subVis set compVis to full (when compVis set to hide, but subVis already populated, setting subVis to non-hide DOES NOT set compVis to full)
+// OK  subCfg wrench disabled
+// OK  subCfg wrench enable/disable by subCB
+// OK  subCfg wrench enable/disable by subVis
+// OK  subCfg populates (vias ajax) on click
+// OK  subCfg settings persist (as seen in hgTracks rightClick)
+// OK  subCfg open closes mdbArrow display
+// OK  subCfg closed by mdbArrow open
+// OK  subCfgs all closed on a table sort
+// OK  subCfg overridden by viewCfg
+//     STRANGE: clicking wrench to open does not leave viewCfg so viewCfg change isn't (yet) seen.
+// OK  subCfg overridden by compCfg
+// OK  matrix clicks enable/disable sub
+// OK  matrix clicks set compVis to full
+// OK  matrix [+][-] enable/disable subs
+// OK  matrix [+] set compVis to full
+// OK  viewVis changes set compVis to full
+// OK  subVis correct in hgTrackUi, hgTracks image, rightClick memnu, rightClick poCfg
+// -   cart limited to minimum changed
+
 // TODO:
 // - SOLVED: checkboxes: working with name = boolshad.{name}   FIXME: multishad?
 // - SOLVED: filterBy,filterComp working: they rely upon a unique id, and id with '.' screwed it all up.  So replaced '.' with '_-'
