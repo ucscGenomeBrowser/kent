@@ -4953,7 +4953,7 @@ safef(lowerCaseName, sizeof(lowerCaseName), "%s", domainDb);
 lowerCaseName[0] = tolower(lowerCaseName[0]);
 
 safef(query, sizeof(query),
-    "select acc from ucsc%s u, %sDesc p"
+    "select distinct acc from ucsc%s u, %sDesc p"
     " where ucscId  = '%s' and u.domainName=p.name "
     , domainDb, lowerCaseName, ucscGeneId);
 return sqlQuickList(conn, query);
