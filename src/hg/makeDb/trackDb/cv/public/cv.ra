@@ -5828,7 +5828,7 @@ orderUrl http://www.scbt.com/datasheet-269-gata-3-hg3-35-antibody.html
 lab Farnham
 lots A1404
 targetId Genecard:GATA3
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:GATA3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3 
 validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
 
 term GCN5
@@ -9715,7 +9715,7 @@ term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
-description ChIP-Seq
+description ChIP-seq
 
 term Cluster
 tag CLUSTER
