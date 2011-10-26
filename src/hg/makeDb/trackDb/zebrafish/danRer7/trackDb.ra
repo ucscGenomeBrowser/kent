@@ -443,3 +443,8 @@ visibility full
     configurable on
     type bed 5
 
+searchTable gold
+query select chrom,chromStart,chromEnd,frag from %s where frag = '%s'
+shortCircuit 1
+termRegex ([A-CF][A-Z][BZ0-9]+(/.[0-9]+)?(_[0-9]+)?)|((Zv[0-9]+_)?(scaffold|NA|Finished)[0-9]+(\.[0-9]+)?)|(NC_[0-9]+(\.[0-9]+)?)
+searchPriority 8

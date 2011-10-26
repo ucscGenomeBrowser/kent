@@ -73,6 +73,7 @@ if (thub != NULL)
 
 static void hgHubConnectUnlisted(struct hubConnectStatus *hubList)
 /* Put up the list of unlisted hubs and other controls for the page. */
+/* NOTE: Destroys hubList */
 {
 // put out the top of our page
 printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
@@ -112,6 +113,8 @@ for(hub = hubList; hub; hub = nextHub)
 	    }
 	}
     }
+
+hubList = NULL;  // hubList no longer valid
 
 struct hashCookie cookie = hashFirst(assHash);
 struct dyString *dy = newDyString(100);
