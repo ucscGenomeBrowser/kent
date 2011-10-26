@@ -50,7 +50,7 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
 #define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
 
-#define SUBTRACK_CFG_POPUP
+#define SUBTRACK_CFG
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
