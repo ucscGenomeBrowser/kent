@@ -30,7 +30,7 @@
 #               - Dimension X - Treatment
 #                       - treatment Order: Ordering is based on length of treatment. 
 #       - View default settings:
-#           - Peaks: dense
+#           - Peaks: pack
 #           - Signal: full
 
 
@@ -53,9 +53,9 @@ dimensionBchecked rep1
 filterComposite dimensionA=multi dimensionB=multi
 sortOrder cellType=+ factor=+ control=+ treatment=+ protocol=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target control=Control treatment=Treatment protocol=Protocol replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-controlledVocabulary encode/cv.ra cellType factor sex control treatment protocol
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex control=control treatment=treatment protocol=protocol
 dragAndDrop subTracks
-visibilityViewDefaults  Peaks=dense Signal=full
+visibilityViewDefaults  Peaks=pack Signal=full
 priority 0
 type bed 3
 wgEncode 1
@@ -65,7 +65,7 @@ noInherit on
 	track wgEncodeCaltechTfbsViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	#viewUi on
 	subTrack wgEncodeCaltechTfbs
 	signalFilter 0
