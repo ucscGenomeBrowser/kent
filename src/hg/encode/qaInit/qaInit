@@ -419,6 +419,9 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 					'specialMdb': specialMdb}
 	print "Making local mkChangeNotes"
 	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
+	if genNotes.errors:
+		print "Local mkChangeNotes found errors in the release"
+		return
 	user = os.environ['USER']
 	c = track.CompositeTrack(args.database, args.composite, None, specialMdb)
 	errors = []
