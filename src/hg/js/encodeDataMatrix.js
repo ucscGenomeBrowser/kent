@@ -8,19 +8,18 @@
 
 $(function () {
     var requests = [
-        // Requests to server API
-            encodeProject.serverRequests.experiment,
-        encodeProject.serverRequests.dataType,
-        encodeProject.serverRequests.cellType
-        ],
-        dataType, organism, assembly, server;
+    // Requests to server API
+    encodeProject.serverRequests.experiment, encodeProject.serverRequests.dataType, encodeProject.serverRequests.cellType],
+        dataType, organism, assembly, server, axisLabel;
 
     function tableOut(matrix, cellTiers, cellTypeHash, dataGroups, dataTypeTermHash, dataTypeLabelHash) {
         // Create table where rows = cell types and columns are datatypes
         // create table and first row 2 rows (column title and column headers)
         var table, tableHeader, row, td;
+        var elementHeaderLabel = "Functional Element Assays";
+        var cellHeaderLabel = "Cell Types";
 
-        table = $('<table>' + '<tr><td><td class="axisType" colspan=4>Element Types</td></tr>' + '<tr id="columnHeaders"><td class="axisType" title="Click to view information about all cell types"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=' + organism + '">Cell Types</td></tr>');
+        table = $('<table id="matrixTable"><thead>' + '<tr id="headerLabelRow"><td></td>' + '<td id="elementHeaderLabel" class="axisType" colspan=6 title="Click to view information about all assays">' + '<a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=dataType">' + elementHeaderLabel + '</td></tr>' + '<tr id="columnHeaders">' + '<td id="cellHeaderLabel" class="axisType"' + 'title="Click to view information about all cell types">' + '<a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=' + organism + '">' + cellHeaderLabel + '</td></tr>' + '</thead><tbody>');
         tableHeader = $('#columnHeaders', table);
         $.each(dataGroups, function (i, group) {
             tableHeader.append('<th class="groupType"><div class="verticalText">' + group.label + '</div></th>');
@@ -89,7 +88,36 @@ $(function () {
                 table.append(row);
             });
         });
+        table.append('</tbody>');
         $("body").append(table);
+
+        // use floating-table-header plugin
+        table.floatHeader({
+            cbFadeIn: function (header) {
+                // hide axis labels -- a bit tricy to do so
+                // as special handling needed for X axis label
+                $(".floatHeader #headerLabelRow").remove();
+                $(".floatHeader #cellHeaderLabel").html('');
+
+                // Note: user-defined callback requires 
+                // default actions from floatHeader plugin
+                // implementation (stop+fadeIn)
+                header.stop(true, true);
+                header.fadeIn(100);
+
+                // save label to restore when scrolled back to top
+                //axisLabel = $(".axisType").html();
+                //$(".axisType").html('');
+            }
+/*,
+            cbFadeOut: function (header) {
+                // show elements with class axisType
+                header.stop(true, true)
+                $(".axisType").html(axisLabel);
+                header.fadeOut(100);
+            }
+            */
+        });
     }
 
     function handleServerData(responses) {

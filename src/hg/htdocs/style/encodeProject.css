@@ -132,3 +132,6 @@ dd {
     float: right;
 }
 
+.floatHeader {
+    opacity: 1;
+}
