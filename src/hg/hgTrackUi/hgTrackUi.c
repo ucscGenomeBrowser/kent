@@ -2395,7 +2395,6 @@ struct slRef *childRef;
 for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     {
     struct trackDb *tdb = childRef->val;
-    enum trackVisibility tv = tvHide;
     #ifdef SUPERS_WITH_CHECKBOXES
     if (childRef == superTdb->children) // first time through
         {
@@ -2408,7 +2407,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     printf("<TR><TD NOWRAP>");
     if (!tdbIsDownloadsOnly(tdb))
         {
-        tv = hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
+        enum trackVisibility tv = hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
         // Don't use cheapCgi code... no name and no boolshad... just js
         printf("<INPUT TYPE=CHECKBOX id='%s' onchange='superT.childChecked(this);'%s>",tdb->track,(tv != tvHide?" CHECKED":""));
         hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
