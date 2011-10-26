@@ -411,6 +411,11 @@ withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 trackList = getTrackList(&groupList, vis);
 
+if (trackHash == NULL)
+    trackHash = makeGlobalTrackHash(trackList);
+parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+
+
 #ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
 addDownloadOnlyTracks(database,&groupList,&trackList);
 #endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
@@ -430,7 +435,6 @@ if (sameString(groupTarget, "none"))
     freez(&groupTarget);
 
 dyStringPrintf(title, "Configure Image");
-
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n", hgTracksName(),
 	cartUsualString(cart, "formMethod", "POST"));

@@ -175,3 +175,37 @@ searchType genePred
 searchMethod exact
 shortCircuit 1
 searchPriority 50
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex ENS([A-Z]{4})?T[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex ENS([A-Z]{4})?G[0-9]+(\.[0-9]+)?
+searchPriority 50
+
+searchName ensDotPrefix
+searchTable ensGene
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+shortCircuit 1
+termRegex ENS([A-Z]{4})?T[0-9]+
+dontCheck ENS([A-Z]{4})?T[0-9]+\.[0-9]+
+searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex ENS([A-Z]{4})?P[0-9]+(\.[0-9]+)?
+
