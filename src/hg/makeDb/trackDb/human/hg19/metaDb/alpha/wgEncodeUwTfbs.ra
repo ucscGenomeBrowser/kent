@@ -3,6 +3,7 @@ objType composite
 composite wgEncodeUwTfbs
 expVars lab,dataType,cell,antibody,treatment
 geoSeriesAccession GSE30263
+treatment None
 
 metaObject wgEncodeUwTfbsA549CtcfStdAlnRep1
 objType file
@@ -27,6 +28,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4385
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsA549CtcfStdAlnRep2
@@ -52,6 +54,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4384
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsA549CtcfStdHotspotsRep1
@@ -78,6 +81,7 @@ replicate 1
 setType exp
 subId 4385
 tableName wgEncodeUwTfbsA549CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsA549CtcfStdHotspotsRep2
@@ -104,6 +108,7 @@ replicate 2
 setType exp
 subId 4384
 tableName wgEncodeUwTfbsA549CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsA549CtcfStdPkRep1
@@ -130,6 +135,7 @@ replicate 1
 setType exp
 subId 4385
 tableName wgEncodeUwTfbsA549CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsA549CtcfStdPkRep2
@@ -156,6 +162,7 @@ replicate 2
 setType exp
 subId 4384
 tableName wgEncodeUwTfbsA549CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsA549CtcfStdRawDataRep1
@@ -180,6 +187,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4385
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsA549CtcfStdRawDataRep2
@@ -204,6 +212,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4384
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsA549CtcfStdRawRep1
@@ -230,6 +239,7 @@ replicate 1
 setType exp
 subId 4385
 tableName wgEncodeUwTfbsA549CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsA549CtcfStdRawRep2
@@ -256,6 +266,7 @@ replicate 2
 setType exp
 subId 4384
 tableName wgEncodeUwTfbsA549CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsA549InputStdAlnRep1
@@ -281,6 +292,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4350
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsA549InputStdRawDataRep1
@@ -305,6 +317,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4350
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsA549InputStdRawRep1
@@ -331,6 +344,7 @@ replicate 1
 setType input
 subId 4350
 tableName wgEncodeUwTfbsA549InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdAlnRep1
@@ -357,6 +371,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2596
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdAlnRep2
@@ -383,6 +398,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2595
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1
@@ -410,6 +426,7 @@ replicate 1
 setType exp
 subId 2596
 tableName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2
@@ -437,6 +454,7 @@ replicate 2
 setType exp
 subId 2595
 tableName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdPkRep1
@@ -464,6 +482,7 @@ replicate 1
 setType exp
 subId 2596
 tableName wgEncodeUwTfbsAg04449CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdPkRep2
@@ -491,6 +510,7 @@ replicate 2
 setType exp
 subId 2595
 tableName wgEncodeUwTfbsAg04449CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdRawDataRep1
@@ -516,6 +536,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2596
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdRawDataRep2
@@ -541,6 +562,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2595
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdRawRep1
@@ -568,6 +590,7 @@ replicate 1
 setType exp
 subId 2596
 tableName wgEncodeUwTfbsAg04449CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg04449CtcfStdRawRep2
@@ -595,6 +618,7 @@ replicate 2
 setType exp
 subId 2595
 tableName wgEncodeUwTfbsAg04449CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg04449InputStdAlnRep1
@@ -621,6 +645,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2597
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg04449InputStdRawDataRep1
@@ -646,6 +671,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2597
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg04449InputStdRawRep1
@@ -673,6 +699,7 @@ replicate 1
 setType input
 subId 2597
 tableName wgEncodeUwTfbsAg04449InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdAlnRep1
@@ -699,6 +726,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2663
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdAlnRep2
@@ -724,6 +752,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4386
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1
@@ -751,6 +780,7 @@ replicate 1
 setType exp
 subId 2663
 tableName wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdHotspotsRep2
@@ -777,6 +807,7 @@ replicate 2
 setType exp
 subId 4386
 tableName wgEncodeUwTfbsAg04450CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdPkRep1
@@ -804,6 +835,7 @@ replicate 1
 setType exp
 subId 2663
 tableName wgEncodeUwTfbsAg04450CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdPkRep2
@@ -830,6 +862,7 @@ replicate 2
 setType exp
 subId 4386
 tableName wgEncodeUwTfbsAg04450CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdRawDataRep1
@@ -855,6 +888,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2663
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdRawDataRep2
@@ -879,6 +913,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4386
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdRawRep1
@@ -906,6 +941,7 @@ replicate 1
 setType exp
 subId 2663
 tableName wgEncodeUwTfbsAg04450CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg04450CtcfStdRawRep2
@@ -932,6 +968,7 @@ replicate 2
 setType exp
 subId 4386
 tableName wgEncodeUwTfbsAg04450CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg04450InputStdAlnRep1
@@ -958,6 +995,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2662
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg04450InputStdRawDataRep1
@@ -983,6 +1021,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2662
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg04450InputStdRawRep1
@@ -1010,6 +1049,7 @@ replicate 1
 setType input
 subId 2662
 tableName wgEncodeUwTfbsAg04450InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdAlnRep1
@@ -1036,6 +1076,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2666
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdAlnRep2
@@ -1062,6 +1103,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2665
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1
@@ -1089,6 +1131,7 @@ replicate 1
 setType exp
 subId 2666
 tableName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2
@@ -1116,6 +1159,7 @@ replicate 2
 setType exp
 subId 2665
 tableName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdPkRep1
@@ -1143,6 +1187,7 @@ replicate 1
 setType exp
 subId 2666
 tableName wgEncodeUwTfbsAg09309CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdPkRep2
@@ -1170,6 +1215,7 @@ replicate 2
 setType exp
 subId 2665
 tableName wgEncodeUwTfbsAg09309CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdRawDataRep1
@@ -1195,6 +1241,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2666
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdRawDataRep2
@@ -1220,6 +1267,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2665
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdRawRep1
@@ -1247,6 +1295,7 @@ replicate 1
 setType exp
 subId 2666
 tableName wgEncodeUwTfbsAg09309CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg09309CtcfStdRawRep2
@@ -1274,6 +1323,7 @@ replicate 2
 setType exp
 subId 2665
 tableName wgEncodeUwTfbsAg09309CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg09309InputStdAlnRep1
@@ -1300,6 +1350,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2664
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg09309InputStdRawDataRep1
@@ -1325,6 +1376,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2664
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg09309InputStdRawRep1
@@ -1352,6 +1404,7 @@ replicate 1
 setType input
 subId 2664
 tableName wgEncodeUwTfbsAg09309InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdAlnRep1
@@ -1378,6 +1431,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2668
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdAlnRep2
@@ -1404,6 +1458,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2669
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1
@@ -1431,6 +1486,7 @@ replicate 1
 setType exp
 subId 2668
 tableName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2
@@ -1458,6 +1514,7 @@ replicate 2
 setType exp
 subId 2669
 tableName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdPkRep1
@@ -1485,6 +1542,7 @@ replicate 1
 setType exp
 subId 2668
 tableName wgEncodeUwTfbsAg09319CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdPkRep2
@@ -1512,6 +1570,7 @@ replicate 2
 setType exp
 subId 2669
 tableName wgEncodeUwTfbsAg09319CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdRawDataRep1
@@ -1537,6 +1596,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2668
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdRawDataRep2
@@ -1562,6 +1622,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2669
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdRawRep1
@@ -1589,6 +1650,7 @@ replicate 1
 setType exp
 subId 2668
 tableName wgEncodeUwTfbsAg09319CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg09319CtcfStdRawRep2
@@ -1616,6 +1678,7 @@ replicate 2
 setType exp
 subId 2669
 tableName wgEncodeUwTfbsAg09319CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg09319InputStdAlnRep1
@@ -1642,6 +1705,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2667
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg09319InputStdRawDataRep1
@@ -1667,6 +1731,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2667
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg09319InputStdRawRep1
@@ -1694,6 +1759,7 @@ replicate 1
 setType input
 subId 2667
 tableName wgEncodeUwTfbsAg09319InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdAlnRep1
@@ -1720,6 +1786,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2671
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdAlnRep2
@@ -1746,6 +1813,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2672
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1
@@ -1773,6 +1841,7 @@ replicate 1
 setType exp
 subId 2671
 tableName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2
@@ -1800,6 +1869,7 @@ replicate 2
 setType exp
 subId 2672
 tableName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdPkRep1
@@ -1827,6 +1897,7 @@ replicate 1
 setType exp
 subId 2671
 tableName wgEncodeUwTfbsAg10803CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdPkRep2
@@ -1854,6 +1925,7 @@ replicate 2
 setType exp
 subId 2672
 tableName wgEncodeUwTfbsAg10803CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdRawDataRep1
@@ -1879,6 +1951,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2671
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdRawDataRep2
@@ -1904,6 +1977,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2672
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdRawRep1
@@ -1931,6 +2005,7 @@ replicate 1
 setType exp
 subId 2671
 tableName wgEncodeUwTfbsAg10803CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg10803CtcfStdRawRep2
@@ -1958,6 +2033,7 @@ replicate 2
 setType exp
 subId 2672
 tableName wgEncodeUwTfbsAg10803CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAg10803InputStdAlnRep1
@@ -1984,6 +2060,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2670
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAg10803InputStdRawDataRep1
@@ -2009,6 +2086,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2670
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAg10803InputStdRawRep1
@@ -2036,6 +2114,7 @@ replicate 1
 setType input
 subId 2670
 tableName wgEncodeUwTfbsAg10803InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAoafCtcfStdAlnRep1
@@ -2062,6 +2141,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2675
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAoafCtcfStdAlnRep2
@@ -2088,6 +2168,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2674
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAoafCtcfStdHotspotsRep1
@@ -2115,6 +2196,7 @@ replicate 1
 setType exp
 subId 2675
 tableName wgEncodeUwTfbsAoafCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAoafCtcfStdHotspotsRep2
@@ -2142,6 +2224,7 @@ replicate 2
 setType exp
 subId 2674
 tableName wgEncodeUwTfbsAoafCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsAoafCtcfStdPkRep1
@@ -2169,6 +2252,7 @@ replicate 1
 setType exp
 subId 2675
 tableName wgEncodeUwTfbsAoafCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAoafCtcfStdPkRep2
@@ -2196,6 +2280,7 @@ replicate 2
 setType exp
 subId 2674
 tableName wgEncodeUwTfbsAoafCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsAoafCtcfStdRawDataRep1
@@ -2221,6 +2306,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2675
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAoafCtcfStdRawDataRep2
@@ -2246,6 +2332,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2674
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAoafCtcfStdRawRep1
@@ -2273,6 +2360,7 @@ replicate 1
 setType exp
 subId 2675
 tableName wgEncodeUwTfbsAoafCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAoafCtcfStdRawRep2
@@ -2300,6 +2388,7 @@ replicate 2
 setType exp
 subId 2674
 tableName wgEncodeUwTfbsAoafCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsAoafInputStdAlnRep1
@@ -2326,6 +2415,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2673
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsAoafInputStdRawDataRep1
@@ -2351,6 +2441,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2673
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsAoafInputStdRawRep1
@@ -2378,6 +2469,7 @@ replicate 1
 setType input
 subId 2673
 tableName wgEncodeUwTfbsAoafInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdAlnRep1
@@ -2403,6 +2495,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4387
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdAlnRep2
@@ -2428,6 +2521,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4388
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdHotspotsRep1
@@ -2454,6 +2548,7 @@ replicate 1
 setType exp
 subId 4387
 tableName wgEncodeUwTfbsBe2cCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdHotspotsRep2
@@ -2480,6 +2575,7 @@ replicate 2
 setType exp
 subId 4388
 tableName wgEncodeUwTfbsBe2cCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdPkRep1
@@ -2506,6 +2602,7 @@ replicate 1
 setType exp
 subId 4387
 tableName wgEncodeUwTfbsBe2cCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdPkRep2
@@ -2532,6 +2629,7 @@ replicate 2
 setType exp
 subId 4388
 tableName wgEncodeUwTfbsBe2cCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdRawDataRep1
@@ -2556,6 +2654,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4387
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdRawDataRep2
@@ -2580,6 +2679,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4388
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdRawRep1
@@ -2606,6 +2706,7 @@ replicate 1
 setType exp
 subId 4387
 tableName wgEncodeUwTfbsBe2cCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsBe2cCtcfStdRawRep2
@@ -2632,6 +2733,7 @@ replicate 2
 setType exp
 subId 4388
 tableName wgEncodeUwTfbsBe2cCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsBe2cInputStdAlnRep1
@@ -2657,6 +2759,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4359
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsBe2cInputStdRawDataRep1
@@ -2681,6 +2784,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4359
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsBe2cInputStdRawRep1
@@ -2707,6 +2811,7 @@ replicate 1
 setType input
 subId 4359
 tableName wgEncodeUwTfbsBe2cInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsBjCtcfStdAlnRep1
@@ -2734,6 +2839,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1255
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsBjCtcfStdAlnRep2
@@ -2761,6 +2867,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1262
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsBjCtcfStdHotspotsRep1
@@ -2789,6 +2896,7 @@ replicate 1
 setType exp
 subId 1255
 tableName wgEncodeUwTfbsBjCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsBjCtcfStdHotspotsRep2
@@ -2817,6 +2925,7 @@ replicate 2
 setType exp
 subId 1262
 tableName wgEncodeUwTfbsBjCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsBjCtcfStdPkRep1
@@ -2845,6 +2954,7 @@ replicate 1
 setType exp
 subId 1255
 tableName wgEncodeUwTfbsBjCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsBjCtcfStdPkRep2
@@ -2873,6 +2983,7 @@ replicate 2
 setType exp
 subId 1262
 tableName wgEncodeUwTfbsBjCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsBjCtcfStdRawDataRep1
@@ -2899,6 +3010,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1255
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsBjCtcfStdRawDataRep2
@@ -2924,6 +3036,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsBjCtcfStdRawRep1
@@ -2952,6 +3065,7 @@ replicate 1
 setType exp
 subId 1255
 tableName wgEncodeUwTfbsBjCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsBjCtcfStdRawRep2
@@ -2980,6 +3094,7 @@ replicate 2
 setType exp
 subId 1262
 tableName wgEncodeUwTfbsBjCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsBjInputStdAlnRep1
@@ -3007,6 +3122,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1283
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsBjInputStdRawDataRep1
@@ -3032,6 +3148,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsBjInputStdRawRep1
@@ -3060,6 +3177,7 @@ replicate 1
 setType input
 subId 1283
 tableName wgEncodeUwTfbsBjInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdAlnRep1
@@ -3087,6 +3205,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1269
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdAlnRep2
@@ -3114,6 +3233,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1267
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdHotspotsRep1
@@ -3142,6 +3262,7 @@ replicate 1
 setType exp
 subId 1269
 tableName wgEncodeUwTfbsCaco2CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdHotspotsRep2
@@ -3170,6 +3291,7 @@ replicate 2
 setType exp
 subId 1267
 tableName wgEncodeUwTfbsCaco2CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdPkRep1
@@ -3198,6 +3320,7 @@ replicate 1
 setType exp
 subId 1269
 tableName wgEncodeUwTfbsCaco2CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdPkRep2
@@ -3226,6 +3349,7 @@ replicate 2
 setType exp
 subId 1267
 tableName wgEncodeUwTfbsCaco2CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdRawDataRep1
@@ -3251,6 +3375,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 519
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdRawDataRep2
@@ -3276,6 +3401,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 518
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdRawRep1
@@ -3304,6 +3430,7 @@ replicate 1
 setType exp
 subId 1269
 tableName wgEncodeUwTfbsCaco2CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsCaco2CtcfStdRawRep2
@@ -3332,6 +3459,7 @@ replicate 2
 setType exp
 subId 1267
 tableName wgEncodeUwTfbsCaco2CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsCaco2InputStdAlnRep1
@@ -3359,6 +3487,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1287
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsCaco2InputStdRawDataRep1
@@ -3384,6 +3513,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsCaco2InputStdRawRep1
@@ -3412,6 +3542,7 @@ replicate 1
 setType input
 subId 1287
 tableName wgEncodeUwTfbsCaco2InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsCd20ro01778InputStdAlnRep1
@@ -3436,6 +3567,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4645
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsCd20ro01778InputStdRawDataRep1
@@ -3459,6 +3591,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4645
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsCd20ro01778InputStdRawRep1
@@ -3484,6 +3617,7 @@ replicate 1
 setType input
 subId 4645
 tableName wgEncodeUwTfbsCd20ro01778InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsCd20ro01794InputStdAlnRep1
@@ -3508,6 +3642,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4644
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsCd20ro01794InputStdRawDataRep1
@@ -3531,6 +3666,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4644
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsCd20ro01794InputStdRawRep1
@@ -3556,6 +3692,7 @@ replicate 1
 setType input
 subId 4644
 tableName wgEncodeUwTfbsCd20ro01794InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdAlnRep1
@@ -3583,6 +3720,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1268
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdAlnRep2
@@ -3610,6 +3748,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1271
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdHotspotsRep1
@@ -3638,6 +3777,7 @@ replicate 1
 setType exp
 subId 1268
 tableName wgEncodeUwTfbsGm06990CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdHotspotsRep2
@@ -3666,6 +3806,7 @@ replicate 2
 setType exp
 subId 1271
 tableName wgEncodeUwTfbsGm06990CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdPkRep1
@@ -3694,6 +3835,7 @@ replicate 1
 setType exp
 subId 1268
 tableName wgEncodeUwTfbsGm06990CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdPkRep2
@@ -3722,6 +3864,7 @@ replicate 2
 setType exp
 subId 1271
 tableName wgEncodeUwTfbsGm06990CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdRawDataRep1
@@ -3748,6 +3891,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 520
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdRawDataRep2
@@ -3773,6 +3917,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 527
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdRawRep1
@@ -3801,6 +3946,7 @@ replicate 1
 setType exp
 subId 1268
 tableName wgEncodeUwTfbsGm06990CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm06990CtcfStdRawRep2
@@ -3829,6 +3975,7 @@ replicate 2
 setType exp
 subId 1271
 tableName wgEncodeUwTfbsGm06990CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm06990InputStdAlnRep1
@@ -3856,6 +4003,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1288
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm06990InputStdRawDataRep1
@@ -3881,6 +4029,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm06990InputStdRawRep1
@@ -3909,6 +4058,7 @@ replicate 1
 setType input
 subId 1288
 tableName wgEncodeUwTfbsGm06990InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12801CtcfStdAlnRep1
@@ -3936,6 +4086,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1270
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12801CtcfStdHotspotsRep1
@@ -3964,6 +4115,7 @@ replicate 1
 setType exp
 subId 1270
 tableName wgEncodeUwTfbsGm12801CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12801CtcfStdPkRep1
@@ -3992,6 +4144,7 @@ replicate 1
 setType exp
 subId 1270
 tableName wgEncodeUwTfbsGm12801CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12801CtcfStdRawDataRep1
@@ -4018,6 +4171,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 299
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12801CtcfStdRawRep1
@@ -4046,6 +4200,7 @@ replicate 1
 setType exp
 subId 1270
 tableName wgEncodeUwTfbsGm12801CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12801InputStdAlnRep1
@@ -4073,6 +4228,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1289
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12801InputStdRawDataRep1
@@ -4098,6 +4254,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12801InputStdRawRep1
@@ -4126,6 +4283,7 @@ replicate 1
 setType input
 subId 1289
 tableName wgEncodeUwTfbsGm12801InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdAlnRep1
@@ -4153,6 +4311,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1272
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdAlnRep2
@@ -4180,6 +4339,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1273
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdAlnRep3
@@ -4206,6 +4366,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4652
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdHotspotsRep1
@@ -4234,6 +4395,7 @@ replicate 1
 setType exp
 subId 1272
 tableName wgEncodeUwTfbsGm12864CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdHotspotsRep2
@@ -4262,6 +4424,7 @@ replicate 2
 setType exp
 subId 1273
 tableName wgEncodeUwTfbsGm12864CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdHotspotsRep3
@@ -4289,6 +4452,7 @@ replicate 3
 setType exp
 subId 4652
 tableName wgEncodeUwTfbsGm12864CtcfStdHotspotsRep3
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdPkRep1
@@ -4317,6 +4481,7 @@ replicate 1
 setType exp
 subId 1272
 tableName wgEncodeUwTfbsGm12864CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdPkRep2
@@ -4345,6 +4510,7 @@ replicate 2
 setType exp
 subId 1273
 tableName wgEncodeUwTfbsGm12864CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdPkRep3
@@ -4372,6 +4538,7 @@ replicate 3
 setType exp
 subId 4652
 tableName wgEncodeUwTfbsGm12864CtcfStdPkRep3
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdRawDataRep1
@@ -4397,6 +4564,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 982
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdRawDataRep2
@@ -4422,6 +4590,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 983
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdRawDataRep3
@@ -4447,6 +4616,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4652
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdRawRep1
@@ -4475,6 +4645,7 @@ replicate 1
 setType exp
 subId 1272
 tableName wgEncodeUwTfbsGm12864CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdRawRep2
@@ -4503,6 +4674,7 @@ replicate 2
 setType exp
 subId 1273
 tableName wgEncodeUwTfbsGm12864CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12864CtcfStdRawRep3
@@ -4530,6 +4702,7 @@ replicate 3
 setType exp
 subId 4652
 tableName wgEncodeUwTfbsGm12864CtcfStdRawRep3
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12864InputStdAlnRep1
@@ -4557,6 +4730,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1290
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12864InputStdRawDataRep1
@@ -4582,6 +4756,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12864InputStdRawRep1
@@ -4610,6 +4785,7 @@ replicate 1
 setType input
 subId 1290
 tableName wgEncodeUwTfbsGm12864InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdAlnRep1
@@ -4637,6 +4813,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1275
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdAlnRep2
@@ -4664,6 +4841,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1274
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdAlnRep3
@@ -4690,6 +4868,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4653
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdHotspotsRep1
@@ -4718,6 +4897,7 @@ replicate 1
 setType exp
 subId 1275
 tableName wgEncodeUwTfbsGm12865CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdHotspotsRep2
@@ -4746,6 +4926,7 @@ replicate 2
 setType exp
 subId 1274
 tableName wgEncodeUwTfbsGm12865CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdHotspotsRep3
@@ -4773,6 +4954,7 @@ replicate 3
 setType exp
 subId 4653
 tableName wgEncodeUwTfbsGm12865CtcfStdHotspotsRep3
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdPkRep1
@@ -4801,6 +4983,7 @@ replicate 1
 setType exp
 subId 1275
 tableName wgEncodeUwTfbsGm12865CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdPkRep2
@@ -4829,6 +5012,7 @@ replicate 2
 setType exp
 subId 1274
 tableName wgEncodeUwTfbsGm12865CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdPkRep3
@@ -4856,6 +5040,7 @@ replicate 3
 setType exp
 subId 4653
 tableName wgEncodeUwTfbsGm12865CtcfStdPkRep3
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdRawDataRep1
@@ -4881,6 +5066,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 985
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdRawDataRep2
@@ -4906,6 +5092,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 984
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdRawDataRep3
@@ -4931,6 +5118,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4653
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdRawRep1
@@ -4959,6 +5147,7 @@ replicate 1
 setType exp
 subId 1275
 tableName wgEncodeUwTfbsGm12865CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdRawRep2
@@ -4987,6 +5176,7 @@ replicate 2
 setType exp
 subId 1274
 tableName wgEncodeUwTfbsGm12865CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12865CtcfStdRawRep3
@@ -5014,6 +5204,7 @@ replicate 3
 setType exp
 subId 4653
 tableName wgEncodeUwTfbsGm12865CtcfStdRawRep3
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12865InputStdAlnRep1
@@ -5041,6 +5232,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1291
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12865InputStdRawDataRep1
@@ -5066,6 +5258,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12865InputStdRawRep1
@@ -5094,6 +5287,7 @@ replicate 1
 setType input
 subId 1291
 tableName wgEncodeUwTfbsGm12865InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdAlnRep1
@@ -5120,6 +5314,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4654
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdAlnRep2
@@ -5146,6 +5341,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4655
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdHotspotsRep1
@@ -5173,6 +5369,7 @@ replicate 1
 setType exp
 subId 4654
 tableName wgEncodeUwTfbsGm12866CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdHotspotsRep2
@@ -5200,6 +5397,7 @@ replicate 2
 setType exp
 subId 4655
 tableName wgEncodeUwTfbsGm12866CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdPkRep1
@@ -5227,6 +5425,7 @@ replicate 1
 setType exp
 subId 4654
 tableName wgEncodeUwTfbsGm12866CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdPkRep2
@@ -5254,6 +5453,7 @@ replicate 2
 setType exp
 subId 4655
 tableName wgEncodeUwTfbsGm12866CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdRawDataRep1
@@ -5279,6 +5479,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4654
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdRawDataRep2
@@ -5304,6 +5505,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4655
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdRawRep1
@@ -5331,6 +5533,7 @@ replicate 1
 setType exp
 subId 4654
 tableName wgEncodeUwTfbsGm12866CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12866CtcfStdRawRep2
@@ -5358,6 +5561,7 @@ replicate 2
 setType exp
 subId 4655
 tableName wgEncodeUwTfbsGm12866CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdAlnRep1
@@ -5384,6 +5588,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4656
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdAlnRep2
@@ -5410,6 +5615,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4657
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdHotspotsRep1
@@ -5437,6 +5643,7 @@ replicate 1
 setType exp
 subId 4656
 tableName wgEncodeUwTfbsGm12867CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdHotspotsRep2
@@ -5464,6 +5671,7 @@ replicate 2
 setType exp
 subId 4657
 tableName wgEncodeUwTfbsGm12867CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdPkRep1
@@ -5491,6 +5699,7 @@ replicate 1
 setType exp
 subId 4656
 tableName wgEncodeUwTfbsGm12867CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdPkRep2
@@ -5518,6 +5727,7 @@ replicate 2
 setType exp
 subId 4657
 tableName wgEncodeUwTfbsGm12867CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdRawDataRep1
@@ -5543,6 +5753,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4656
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdRawDataRep2
@@ -5568,6 +5779,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4657
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdRawRep1
@@ -5595,6 +5807,7 @@ replicate 1
 setType exp
 subId 4656
 tableName wgEncodeUwTfbsGm12867CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12867CtcfStdRawRep2
@@ -5622,6 +5835,7 @@ replicate 2
 setType exp
 subId 4657
 tableName wgEncodeUwTfbsGm12867CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdAlnRep1
@@ -5648,6 +5862,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4658
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdAlnRep2
@@ -5674,6 +5889,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4659
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdHotspotsRep1
@@ -5701,6 +5917,7 @@ replicate 1
 setType exp
 subId 4658
 tableName wgEncodeUwTfbsGm12868CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdHotspotsRep2
@@ -5728,6 +5945,7 @@ replicate 2
 setType exp
 subId 4659
 tableName wgEncodeUwTfbsGm12868CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdPkRep1
@@ -5755,6 +5973,7 @@ replicate 1
 setType exp
 subId 4658
 tableName wgEncodeUwTfbsGm12868CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdPkRep2
@@ -5782,6 +6001,7 @@ replicate 2
 setType exp
 subId 4659
 tableName wgEncodeUwTfbsGm12868CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdRawDataRep1
@@ -5807,6 +6027,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4658
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdRawDataRep2
@@ -5832,6 +6053,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4659
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdRawRep1
@@ -5859,6 +6081,7 @@ replicate 1
 setType exp
 subId 4658
 tableName wgEncodeUwTfbsGm12868CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12868CtcfStdRawRep2
@@ -5886,6 +6109,7 @@ replicate 2
 setType exp
 subId 4659
 tableName wgEncodeUwTfbsGm12868CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdAlnRep1
@@ -5912,6 +6136,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4660
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdAlnRep2
@@ -5938,6 +6163,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4661
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdHotspotsRep1
@@ -5965,6 +6191,7 @@ replicate 1
 setType exp
 subId 4660
 tableName wgEncodeUwTfbsGm12869CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdHotspotsRep2
@@ -5992,6 +6219,7 @@ replicate 2
 setType exp
 subId 4661
 tableName wgEncodeUwTfbsGm12869CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdPkRep1
@@ -6019,6 +6247,7 @@ replicate 1
 setType exp
 subId 4660
 tableName wgEncodeUwTfbsGm12869CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdPkRep2
@@ -6046,6 +6275,7 @@ replicate 2
 setType exp
 subId 4661
 tableName wgEncodeUwTfbsGm12869CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdRawDataRep1
@@ -6071,6 +6301,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4660
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdRawDataRep2
@@ -6096,6 +6327,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4661
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdRawRep1
@@ -6123,6 +6355,7 @@ replicate 1
 setType exp
 subId 4660
 tableName wgEncodeUwTfbsGm12869CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12869CtcfStdRawRep2
@@ -6150,6 +6383,7 @@ replicate 2
 setType exp
 subId 4661
 tableName wgEncodeUwTfbsGm12869CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdAlnRep1
@@ -6176,6 +6410,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4663
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdAlnRep2
@@ -6202,6 +6437,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4662
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdHotspotsRep1
@@ -6229,6 +6465,7 @@ replicate 1
 setType exp
 subId 4663
 tableName wgEncodeUwTfbsGm12870CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdHotspotsRep2
@@ -6256,6 +6493,7 @@ replicate 2
 setType exp
 subId 4662
 tableName wgEncodeUwTfbsGm12870CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdPkRep1
@@ -6283,6 +6521,7 @@ replicate 1
 setType exp
 subId 4663
 tableName wgEncodeUwTfbsGm12870CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdPkRep2
@@ -6310,6 +6549,7 @@ replicate 2
 setType exp
 subId 4662
 tableName wgEncodeUwTfbsGm12870CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdRawDataRep1
@@ -6335,6 +6575,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4663
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdRawDataRep2
@@ -6360,6 +6601,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4662
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdRawRep1
@@ -6387,6 +6629,7 @@ replicate 1
 setType exp
 subId 4663
 tableName wgEncodeUwTfbsGm12870CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12870CtcfStdRawRep2
@@ -6414,6 +6657,7 @@ replicate 2
 setType exp
 subId 4662
 tableName wgEncodeUwTfbsGm12870CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdAlnRep1
@@ -6440,6 +6684,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4664
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdAlnRep2
@@ -6466,6 +6711,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4665
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdHotspotsRep1
@@ -6493,6 +6739,7 @@ replicate 1
 setType exp
 subId 4664
 tableName wgEncodeUwTfbsGm12871CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdHotspotsRep2
@@ -6520,6 +6767,7 @@ replicate 2
 setType exp
 subId 4665
 tableName wgEncodeUwTfbsGm12871CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdPkRep1
@@ -6547,6 +6795,7 @@ replicate 1
 setType exp
 subId 4664
 tableName wgEncodeUwTfbsGm12871CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdPkRep2
@@ -6574,6 +6823,7 @@ replicate 2
 setType exp
 subId 4665
 tableName wgEncodeUwTfbsGm12871CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdRawDataRep1
@@ -6599,6 +6849,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4664
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdRawDataRep2
@@ -6624,6 +6875,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4665
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdRawRep1
@@ -6651,6 +6903,7 @@ replicate 1
 setType exp
 subId 4664
 tableName wgEncodeUwTfbsGm12871CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12871CtcfStdRawRep2
@@ -6678,6 +6931,7 @@ replicate 2
 setType exp
 subId 4665
 tableName wgEncodeUwTfbsGm12871CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdAlnRep1
@@ -6705,6 +6959,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1277
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdAlnRep2
@@ -6732,6 +6987,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1278
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdAlnRep3
@@ -6758,6 +7014,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4666
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdHotspotsRep1
@@ -6786,6 +7043,7 @@ replicate 1
 setType exp
 subId 1277
 tableName wgEncodeUwTfbsGm12872CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdHotspotsRep2
@@ -6814,6 +7072,7 @@ replicate 2
 setType exp
 subId 1278
 tableName wgEncodeUwTfbsGm12872CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdHotspotsRep3
@@ -6841,6 +7100,7 @@ replicate 3
 setType exp
 subId 4666
 tableName wgEncodeUwTfbsGm12872CtcfStdHotspotsRep3
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdPkRep1
@@ -6869,6 +7129,7 @@ replicate 1
 setType exp
 subId 1277
 tableName wgEncodeUwTfbsGm12872CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdPkRep2
@@ -6897,6 +7158,7 @@ replicate 2
 setType exp
 subId 1278
 tableName wgEncodeUwTfbsGm12872CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdPkRep3
@@ -6924,6 +7186,7 @@ replicate 3
 setType exp
 subId 4666
 tableName wgEncodeUwTfbsGm12872CtcfStdPkRep3
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdRawDataRep1
@@ -6949,6 +7212,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 986
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdRawDataRep2
@@ -6974,6 +7238,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 987
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdRawDataRep3
@@ -6999,6 +7264,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4666
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdRawRep1
@@ -7027,6 +7293,7 @@ replicate 1
 setType exp
 subId 1277
 tableName wgEncodeUwTfbsGm12872CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdRawRep2
@@ -7055,6 +7322,7 @@ replicate 2
 setType exp
 subId 1278
 tableName wgEncodeUwTfbsGm12872CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12872CtcfStdRawRep3
@@ -7082,6 +7350,7 @@ replicate 3
 setType exp
 subId 4666
 tableName wgEncodeUwTfbsGm12872CtcfStdRawRep3
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12872InputStdAlnRep1
@@ -7109,6 +7378,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1292
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12872InputStdRawDataRep1
@@ -7134,6 +7404,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12872InputStdRawRep1
@@ -7162,6 +7433,7 @@ replicate 1
 setType input
 subId 1292
 tableName wgEncodeUwTfbsGm12872InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdAlnRep1
@@ -7189,6 +7461,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1276
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdAlnRep2
@@ -7216,6 +7489,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1279
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdAlnRep3
@@ -7242,6 +7516,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4667
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdHotspotsRep1
@@ -7270,6 +7545,7 @@ replicate 1
 setType exp
 subId 1276
 tableName wgEncodeUwTfbsGm12873CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdHotspotsRep2
@@ -7298,6 +7574,7 @@ replicate 2
 setType exp
 subId 1279
 tableName wgEncodeUwTfbsGm12873CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdHotspotsRep3
@@ -7325,6 +7602,7 @@ replicate 3
 setType exp
 subId 4667
 tableName wgEncodeUwTfbsGm12873CtcfStdHotspotsRep3
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdPkRep1
@@ -7353,6 +7631,7 @@ replicate 1
 setType exp
 subId 1276
 tableName wgEncodeUwTfbsGm12873CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdPkRep2
@@ -7381,6 +7660,7 @@ replicate 2
 setType exp
 subId 1279
 tableName wgEncodeUwTfbsGm12873CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdPkRep3
@@ -7408,6 +7688,7 @@ replicate 3
 setType exp
 subId 4667
 tableName wgEncodeUwTfbsGm12873CtcfStdPkRep3
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdRawDataRep1
@@ -7433,6 +7714,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 988
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdRawDataRep2
@@ -7458,6 +7740,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 989
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdRawDataRep3
@@ -7483,6 +7766,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 4667
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdRawRep1
@@ -7511,6 +7795,7 @@ replicate 1
 setType exp
 subId 1276
 tableName wgEncodeUwTfbsGm12873CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdRawRep2
@@ -7539,6 +7824,7 @@ replicate 2
 setType exp
 subId 1279
 tableName wgEncodeUwTfbsGm12873CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12873CtcfStdRawRep3
@@ -7566,6 +7852,7 @@ replicate 3
 setType exp
 subId 4667
 tableName wgEncodeUwTfbsGm12873CtcfStdRawRep3
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12873InputStdAlnRep1
@@ -7593,6 +7880,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1481
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12873InputStdRawDataRep1
@@ -7618,6 +7906,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12873InputStdRawRep1
@@ -7646,6 +7935,7 @@ replicate 1
 setType input
 subId 1481
 tableName wgEncodeUwTfbsGm12873InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdAlnRep1
@@ -7673,6 +7963,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1281
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdAlnRep2
@@ -7700,6 +7991,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1280
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdHotspotsRep1
@@ -7728,6 +8020,7 @@ replicate 1
 setType exp
 subId 1281
 tableName wgEncodeUwTfbsGm12874CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdHotspotsRep2
@@ -7756,6 +8049,7 @@ replicate 2
 setType exp
 subId 1280
 tableName wgEncodeUwTfbsGm12874CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdPkRep1
@@ -7784,6 +8078,7 @@ replicate 1
 setType exp
 subId 1281
 tableName wgEncodeUwTfbsGm12874CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdPkRep2
@@ -7812,6 +8107,7 @@ replicate 2
 setType exp
 subId 1280
 tableName wgEncodeUwTfbsGm12874CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdRawDataRep1
@@ -7837,6 +8133,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 991
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdRawDataRep2
@@ -7862,6 +8159,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 990
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdRawRep1
@@ -7890,6 +8188,7 @@ replicate 1
 setType exp
 subId 1281
 tableName wgEncodeUwTfbsGm12874CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12874CtcfStdRawRep2
@@ -7918,6 +8217,7 @@ replicate 2
 setType exp
 subId 1280
 tableName wgEncodeUwTfbsGm12874CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12874InputStdAlnRep1
@@ -7945,6 +8245,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1416
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12874InputStdRawDataRep1
@@ -7970,6 +8271,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12874InputStdRawRep1
@@ -7998,6 +8300,7 @@ replicate 1
 setType input
 subId 1416
 tableName wgEncodeUwTfbsGm12874InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdAlnRep1
@@ -8025,6 +8328,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1482
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdAlnRep2
@@ -8052,6 +8356,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1484
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdHotspotsRep1
@@ -8080,6 +8385,7 @@ replicate 1
 setType exp
 subId 1482
 tableName wgEncodeUwTfbsGm12875CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdHotspotsRep2
@@ -8108,6 +8414,7 @@ replicate 2
 setType exp
 subId 1484
 tableName wgEncodeUwTfbsGm12875CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdPkRep1
@@ -8136,6 +8443,7 @@ replicate 1
 setType exp
 subId 1482
 tableName wgEncodeUwTfbsGm12875CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdPkRep2
@@ -8164,6 +8472,7 @@ replicate 2
 setType exp
 subId 1484
 tableName wgEncodeUwTfbsGm12875CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdRawDataRep1
@@ -8189,6 +8498,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 992
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdRawDataRep2
@@ -8214,6 +8524,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 993
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdRawRep1
@@ -8242,6 +8553,7 @@ replicate 1
 setType exp
 subId 1482
 tableName wgEncodeUwTfbsGm12875CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12875CtcfStdRawRep2
@@ -8270,6 +8582,7 @@ replicate 2
 setType exp
 subId 1484
 tableName wgEncodeUwTfbsGm12875CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12875InputStdAlnRep1
@@ -8297,6 +8610,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1485
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12875InputStdRawDataRep1
@@ -8322,6 +8636,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12875InputStdRawRep1
@@ -8350,6 +8665,7 @@ replicate 1
 setType input
 subId 1485
 tableName wgEncodeUwTfbsGm12875InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdAlnRep1
@@ -8377,6 +8693,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1263
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdAlnRep2
@@ -8404,6 +8721,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1265
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdHotspotsRep1
@@ -8432,6 +8750,7 @@ replicate 1
 setType exp
 subId 1263
 tableName wgEncodeUwTfbsGm12878CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdHotspotsRep2
@@ -8460,6 +8779,7 @@ replicate 2
 setType exp
 subId 1265
 tableName wgEncodeUwTfbsGm12878CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdPkRep1
@@ -8488,6 +8808,7 @@ replicate 1
 setType exp
 subId 1263
 tableName wgEncodeUwTfbsGm12878CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdPkRep2
@@ -8516,6 +8837,7 @@ replicate 2
 setType exp
 subId 1265
 tableName wgEncodeUwTfbsGm12878CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdRawDataRep1
@@ -8542,6 +8864,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 690
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdRawDataRep2
@@ -8567,6 +8890,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 528
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdRawRep1
@@ -8595,6 +8919,7 @@ replicate 1
 setType exp
 subId 1263
 tableName wgEncodeUwTfbsGm12878CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12878CtcfStdRawRep2
@@ -8623,6 +8948,7 @@ replicate 2
 setType exp
 subId 1265
 tableName wgEncodeUwTfbsGm12878CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsGm12878InputStdAlnRep1
@@ -8650,6 +8976,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1293
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsGm12878InputStdRawDataRep1
@@ -8675,6 +9002,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsGm12878InputStdRawRep1
@@ -8703,6 +9031,7 @@ replicate 1
 setType input
 subId 1293
 tableName wgEncodeUwTfbsGm12878InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHacCtcfStdAlnRep1
@@ -8728,6 +9057,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4389
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHacCtcfStdAlnRep2
@@ -8754,6 +9084,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4686
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHacCtcfStdHotspotsRep1
@@ -8780,6 +9111,7 @@ replicate 1
 setType exp
 subId 4389
 tableName wgEncodeUwTfbsHacCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHacCtcfStdHotspotsRep2
@@ -8807,6 +9139,7 @@ replicate 2
 setType exp
 subId 4686
 tableName wgEncodeUwTfbsHacCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHacCtcfStdPkRep1
@@ -8833,6 +9166,7 @@ replicate 1
 setType exp
 subId 4389
 tableName wgEncodeUwTfbsHacCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHacCtcfStdPkRep2
@@ -8860,6 +9194,7 @@ replicate 2
 setType exp
 subId 4686
 tableName wgEncodeUwTfbsHacCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHacCtcfStdRawDataRep1
@@ -8884,6 +9219,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4389
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHacCtcfStdRawDataRep2
@@ -8909,6 +9245,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4686
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHacCtcfStdRawRep1
@@ -8935,6 +9272,7 @@ replicate 1
 setType exp
 subId 4389
 tableName wgEncodeUwTfbsHacCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHacCtcfStdRawRep2
@@ -8962,6 +9300,7 @@ replicate 2
 setType exp
 subId 4686
 tableName wgEncodeUwTfbsHacCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHacInputStdAlnRep1
@@ -8986,6 +9325,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4635
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHacInputStdRawDataRep1
@@ -9009,6 +9349,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4635
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHacInputStdRawRep1
@@ -9034,6 +9375,7 @@ replicate 1
 setType input
 subId 4635
 tableName wgEncodeUwTfbsHacInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHaspCtcfStdAlnRep1
@@ -9060,6 +9402,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2781
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHaspCtcfStdAlnRep2
@@ -9086,6 +9429,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4687
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHaspCtcfStdHotspotsRep1
@@ -9113,6 +9457,7 @@ replicate 1
 setType exp
 subId 2781
 tableName wgEncodeUwTfbsHaspCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHaspCtcfStdHotspotsRep2
@@ -9140,6 +9485,7 @@ replicate 2
 setType exp
 subId 4687
 tableName wgEncodeUwTfbsHaspCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHaspCtcfStdPkRep1
@@ -9167,6 +9513,7 @@ replicate 1
 setType exp
 subId 2781
 tableName wgEncodeUwTfbsHaspCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHaspCtcfStdPkRep2
@@ -9194,6 +9541,7 @@ replicate 2
 setType exp
 subId 4687
 tableName wgEncodeUwTfbsHaspCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHaspCtcfStdRawDataRep1
@@ -9219,6 +9567,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2781
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHaspCtcfStdRawDataRep2
@@ -9244,6 +9593,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4687
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHaspCtcfStdRawRep1
@@ -9271,6 +9621,7 @@ replicate 1
 setType exp
 subId 2781
 tableName wgEncodeUwTfbsHaspCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHaspCtcfStdRawRep2
@@ -9298,6 +9649,7 @@ replicate 2
 setType exp
 subId 4687
 tableName wgEncodeUwTfbsHaspCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHaspInputStdAlnRep1
@@ -9324,6 +9676,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2780
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHaspInputStdRawDataRep1
@@ -9349,6 +9702,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2780
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHaspInputStdRawRep1
@@ -9376,6 +9730,7 @@ replicate 1
 setType input
 subId 2780
 tableName wgEncodeUwTfbsHaspInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdAlnRep1
@@ -9402,6 +9757,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2677
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdAlnRep2
@@ -9428,6 +9784,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2678
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1
@@ -9455,6 +9812,7 @@ replicate 1
 setType exp
 subId 2677
 tableName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2
@@ -9482,6 +9840,7 @@ replicate 2
 setType exp
 subId 2678
 tableName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdPkRep1
@@ -9509,6 +9868,7 @@ replicate 1
 setType exp
 subId 2677
 tableName wgEncodeUwTfbsHbmecCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdPkRep2
@@ -9536,6 +9896,7 @@ replicate 2
 setType exp
 subId 2678
 tableName wgEncodeUwTfbsHbmecCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdRawDataRep1
@@ -9561,6 +9922,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2677
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdRawDataRep2
@@ -9586,6 +9948,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2678
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdRawRep1
@@ -9613,6 +9976,7 @@ replicate 1
 setType exp
 subId 2677
 tableName wgEncodeUwTfbsHbmecCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHbmecCtcfStdRawRep2
@@ -9640,6 +10004,7 @@ replicate 2
 setType exp
 subId 2678
 tableName wgEncodeUwTfbsHbmecCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHbmecInputStdAlnRep1
@@ -9666,6 +10031,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2676
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHbmecInputStdRawDataRep1
@@ -9691,6 +10057,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2676
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHbmecInputStdRawRep1
@@ -9718,6 +10085,7 @@ replicate 1
 setType input
 subId 2676
 tableName wgEncodeUwTfbsHbmecInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcfInputStdAlnRep1
@@ -9744,6 +10112,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2703
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcfInputStdRawDataRep1
@@ -9769,6 +10138,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2703
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcfInputStdRawRep1
@@ -9796,6 +10166,7 @@ replicate 1
 setType input
 subId 2703
 tableName wgEncodeUwTfbsHcfInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcfaaCtcfStdAlnRep1
@@ -9822,6 +10193,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2680
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1
@@ -9849,6 +10221,7 @@ replicate 1
 setType exp
 subId 2680
 tableName wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHcfaaCtcfStdPkRep1
@@ -9876,6 +10249,7 @@ replicate 1
 setType exp
 subId 2680
 tableName wgEncodeUwTfbsHcfaaCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHcfaaCtcfStdRawDataRep1
@@ -9901,6 +10275,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2680
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcfaaCtcfStdRawRep1
@@ -9928,6 +10303,7 @@ replicate 1
 setType exp
 subId 2680
 tableName wgEncodeUwTfbsHcfaaCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcfaaInputStdAlnRep1
@@ -9954,6 +10330,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2679
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcfaaInputStdRawDataRep1
@@ -9979,6 +10356,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2679
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcfaaInputStdRawRep1
@@ -10006,6 +10384,7 @@ replicate 1
 setType input
 subId 2679
 tableName wgEncodeUwTfbsHcfaaInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcmCtcfStdAlnRep1
@@ -10031,6 +10410,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4390
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcmCtcfStdAlnRep2
@@ -10057,6 +10437,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4688
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcmCtcfStdHotspotsRep1
@@ -10083,6 +10464,7 @@ replicate 1
 setType exp
 subId 4390
 tableName wgEncodeUwTfbsHcmCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHcmCtcfStdHotspotsRep2
@@ -10110,6 +10492,7 @@ replicate 2
 setType exp
 subId 4688
 tableName wgEncodeUwTfbsHcmCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHcmCtcfStdPkRep1
@@ -10136,6 +10519,7 @@ replicate 1
 setType exp
 subId 4390
 tableName wgEncodeUwTfbsHcmCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHcmCtcfStdPkRep2
@@ -10163,6 +10547,7 @@ replicate 2
 setType exp
 subId 4688
 tableName wgEncodeUwTfbsHcmCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHcmCtcfStdRawDataRep1
@@ -10187,6 +10572,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4390
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcmCtcfStdRawDataRep2
@@ -10212,6 +10598,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4688
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcmCtcfStdRawRep1
@@ -10238,6 +10625,7 @@ replicate 1
 setType exp
 subId 4390
 tableName wgEncodeUwTfbsHcmCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcmCtcfStdRawRep2
@@ -10265,6 +10653,7 @@ replicate 2
 setType exp
 subId 4688
 tableName wgEncodeUwTfbsHcmCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcmInputStdAlnRep1
@@ -10291,6 +10680,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2704
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcmInputStdRawDataRep1
@@ -10316,6 +10706,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2704
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcmInputStdRawRep1
@@ -10343,6 +10734,7 @@ replicate 1
 setType input
 subId 2704
 tableName wgEncodeUwTfbsHcmInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdAlnRep1
@@ -10369,6 +10761,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2682
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdAlnRep2
@@ -10395,6 +10788,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2683
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1
@@ -10422,6 +10816,7 @@ replicate 1
 setType exp
 subId 2682
 tableName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2
@@ -10449,6 +10844,7 @@ replicate 2
 setType exp
 subId 2683
 tableName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdPkRep1
@@ -10476,6 +10872,7 @@ replicate 1
 setType exp
 subId 2682
 tableName wgEncodeUwTfbsHcpeCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdPkRep2
@@ -10503,6 +10900,7 @@ replicate 2
 setType exp
 subId 2683
 tableName wgEncodeUwTfbsHcpeCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdRawDataRep1
@@ -10528,6 +10926,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2682
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdRawDataRep2
@@ -10553,6 +10952,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2683
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdRawRep1
@@ -10580,6 +10980,7 @@ replicate 1
 setType exp
 subId 2682
 tableName wgEncodeUwTfbsHcpeCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcpeCtcfStdRawRep2
@@ -10607,6 +11008,7 @@ replicate 2
 setType exp
 subId 2683
 tableName wgEncodeUwTfbsHcpeCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHcpeInputStdAlnRep1
@@ -10633,6 +11035,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2681
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHcpeInputStdRawDataRep1
@@ -10658,6 +11061,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2681
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHcpeInputStdRawRep1
@@ -10685,6 +11089,7 @@ replicate 1
 setType input
 subId 2681
 tableName wgEncodeUwTfbsHcpeInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHct116CtcfStdAlnRep1
@@ -10711,6 +11116,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4690
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHct116CtcfStdAlnRep2
@@ -10737,6 +11143,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4689
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHct116CtcfStdHotspotsRep1
@@ -10764,6 +11171,7 @@ replicate 1
 setType exp
 subId 4690
 tableName wgEncodeUwTfbsHct116CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHct116CtcfStdHotspotsRep2
@@ -10791,6 +11199,7 @@ replicate 2
 setType exp
 subId 4689
 tableName wgEncodeUwTfbsHct116CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHct116CtcfStdPkRep1
@@ -10818,6 +11227,7 @@ replicate 1
 setType exp
 subId 4690
 tableName wgEncodeUwTfbsHct116CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHct116CtcfStdPkRep2
@@ -10845,6 +11255,7 @@ replicate 2
 setType exp
 subId 4689
 tableName wgEncodeUwTfbsHct116CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHct116CtcfStdRawDataRep1
@@ -10870,6 +11281,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4690
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHct116CtcfStdRawDataRep2
@@ -10895,6 +11307,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4689
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHct116CtcfStdRawRep1
@@ -10922,6 +11335,7 @@ replicate 1
 setType exp
 subId 4690
 tableName wgEncodeUwTfbsHct116CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHct116CtcfStdRawRep2
@@ -10949,6 +11363,7 @@ replicate 2
 setType exp
 subId 4689
 tableName wgEncodeUwTfbsHct116CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHct116InputStdAlnRep1
@@ -10975,6 +11390,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2705
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHct116InputStdRawDataRep1
@@ -11000,6 +11416,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2705
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHct116InputStdRawRep1
@@ -11027,6 +11444,7 @@ replicate 1
 setType input
 subId 2705
 tableName wgEncodeUwTfbsHct116InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHeeCtcfStdAlnRep1
@@ -11053,6 +11471,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2686
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHeeCtcfStdAlnRep2
@@ -11079,6 +11498,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2685
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHeeCtcfStdHotspotsRep1
@@ -11106,6 +11526,7 @@ replicate 1
 setType exp
 subId 2686
 tableName wgEncodeUwTfbsHeeCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHeeCtcfStdHotspotsRep2
@@ -11133,6 +11554,7 @@ replicate 2
 setType exp
 subId 2685
 tableName wgEncodeUwTfbsHeeCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHeeCtcfStdPkRep1
@@ -11160,6 +11582,7 @@ replicate 1
 setType exp
 subId 2686
 tableName wgEncodeUwTfbsHeeCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHeeCtcfStdPkRep2
@@ -11187,6 +11610,7 @@ replicate 2
 setType exp
 subId 2685
 tableName wgEncodeUwTfbsHeeCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHeeCtcfStdRawDataRep1
@@ -11212,6 +11636,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2686
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHeeCtcfStdRawDataRep2
@@ -11237,6 +11662,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2685
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHeeCtcfStdRawRep1
@@ -11264,6 +11690,7 @@ replicate 1
 setType exp
 subId 2686
 tableName wgEncodeUwTfbsHeeCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHeeCtcfStdRawRep2
@@ -11291,6 +11718,7 @@ replicate 2
 setType exp
 subId 2685
 tableName wgEncodeUwTfbsHeeCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHeeInputStdAlnRep1
@@ -11317,6 +11745,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2684
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHeeInputStdRawDataRep1
@@ -11342,6 +11771,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2684
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHeeInputStdRawRep1
@@ -11369,6 +11799,7 @@ replicate 1
 setType input
 subId 2684
 tableName wgEncodeUwTfbsHeeInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHek293CtcfStdAlnRep1
@@ -11396,6 +11827,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1294
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHek293CtcfStdAlnRep2
@@ -11423,6 +11855,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1486
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHek293CtcfStdHotspotsRep1
@@ -11451,6 +11884,7 @@ replicate 1
 setType exp
 subId 1294
 tableName wgEncodeUwTfbsHek293CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHek293CtcfStdHotspotsRep2
@@ -11479,6 +11913,7 @@ replicate 2
 setType exp
 subId 1486
 tableName wgEncodeUwTfbsHek293CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHek293CtcfStdPkRep1
@@ -11507,6 +11942,7 @@ replicate 1
 setType exp
 subId 1294
 tableName wgEncodeUwTfbsHek293CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHek293CtcfStdPkRep2
@@ -11535,6 +11971,7 @@ replicate 2
 setType exp
 subId 1486
 tableName wgEncodeUwTfbsHek293CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHek293CtcfStdRawDataRep1
@@ -11561,6 +11998,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 626
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHek293CtcfStdRawDataRep2
@@ -11586,6 +12024,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 599
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHek293CtcfStdRawRep1
@@ -11614,6 +12053,7 @@ replicate 1
 setType exp
 subId 1294
 tableName wgEncodeUwTfbsHek293CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHek293CtcfStdRawRep2
@@ -11642,6 +12082,7 @@ replicate 2
 setType exp
 subId 1486
 tableName wgEncodeUwTfbsHek293CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHek293InputStdAlnRep1
@@ -11669,6 +12110,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1295
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHek293InputStdRawDataRep1
@@ -11694,6 +12136,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHek293InputStdRawRep1
@@ -11722,6 +12165,7 @@ replicate 1
 setType input
 subId 1295
 tableName wgEncodeUwTfbsHek293InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdAlnRep1
@@ -11749,6 +12193,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1297
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdAlnRep2
@@ -11776,6 +12221,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1296
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdHotspotsRep1
@@ -11804,6 +12250,7 @@ replicate 1
 setType exp
 subId 1297
 tableName wgEncodeUwTfbsHelas3CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdHotspotsRep2
@@ -11832,6 +12279,7 @@ replicate 2
 setType exp
 subId 1296
 tableName wgEncodeUwTfbsHelas3CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdPkRep1
@@ -11860,6 +12308,7 @@ replicate 1
 setType exp
 subId 1297
 tableName wgEncodeUwTfbsHelas3CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdPkRep2
@@ -11888,6 +12337,7 @@ replicate 2
 setType exp
 subId 1296
 tableName wgEncodeUwTfbsHelas3CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdRawDataRep1
@@ -11913,6 +12363,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 691
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdRawDataRep2
@@ -11938,6 +12389,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 532
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdRawRep1
@@ -11966,6 +12418,7 @@ replicate 1
 setType exp
 subId 1297
 tableName wgEncodeUwTfbsHelas3CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHelas3CtcfStdRawRep2
@@ -11994,6 +12447,7 @@ replicate 2
 setType exp
 subId 1296
 tableName wgEncodeUwTfbsHelas3CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHelas3InputStdAlnRep1
@@ -12021,6 +12475,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1423
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHelas3InputStdRawDataRep1
@@ -12046,6 +12501,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHelas3InputStdRawRep1
@@ -12074,6 +12530,7 @@ replicate 1
 setType input
 subId 1423
 tableName wgEncodeUwTfbsHelas3InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdAlnRep1
@@ -12101,6 +12558,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1298
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdAlnRep2
@@ -12128,6 +12586,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1299
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdHotspotsRep1
@@ -12156,6 +12615,7 @@ replicate 1
 setType exp
 subId 1298
 tableName wgEncodeUwTfbsHepg2CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdHotspotsRep2
@@ -12184,6 +12644,7 @@ replicate 2
 setType exp
 subId 1299
 tableName wgEncodeUwTfbsHepg2CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdPkRep1
@@ -12212,6 +12673,7 @@ replicate 1
 setType exp
 subId 1298
 tableName wgEncodeUwTfbsHepg2CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdPkRep2
@@ -12240,6 +12702,7 @@ replicate 2
 setType exp
 subId 1299
 tableName wgEncodeUwTfbsHepg2CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdRawDataRep1
@@ -12266,6 +12729,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 406
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdRawDataRep2
@@ -12292,6 +12756,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 608
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdRawRep1
@@ -12320,6 +12785,7 @@ replicate 1
 setType exp
 subId 1298
 tableName wgEncodeUwTfbsHepg2CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHepg2CtcfStdRawRep2
@@ -12348,6 +12814,7 @@ replicate 2
 setType exp
 subId 1299
 tableName wgEncodeUwTfbsHepg2CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHepg2InputStdAlnRep1
@@ -12375,6 +12842,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1435
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHepg2InputStdRawDataRep1
@@ -12400,6 +12868,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHepg2InputStdRawRep1
@@ -12428,6 +12897,7 @@ replicate 1
 setType input
 subId 1435
 tableName wgEncodeUwTfbsHepg2InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHffInputStdAlnRep1
@@ -12454,6 +12924,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4691
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHffInputStdRawDataRep1
@@ -12479,6 +12950,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4691
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHffInputStdRawRep1
@@ -12506,6 +12978,7 @@ replicate 1
 setType input
 subId 4691
 tableName wgEncodeUwTfbsHffInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdAlnRep1
@@ -12531,6 +13004,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4391
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdAlnRep2
@@ -12556,6 +13030,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4392
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdHotspotsRep1
@@ -12582,6 +13057,7 @@ replicate 1
 setType exp
 subId 4391
 tableName wgEncodeUwTfbsHffmycCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdHotspotsRep2
@@ -12608,6 +13084,7 @@ replicate 2
 setType exp
 subId 4392
 tableName wgEncodeUwTfbsHffmycCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdPkRep1
@@ -12634,6 +13111,7 @@ replicate 1
 setType exp
 subId 4391
 tableName wgEncodeUwTfbsHffmycCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdPkRep2
@@ -12660,6 +13138,7 @@ replicate 2
 setType exp
 subId 4392
 tableName wgEncodeUwTfbsHffmycCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdRawDataRep1
@@ -12684,6 +13163,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4391
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdRawDataRep2
@@ -12708,6 +13188,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4392
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdRawRep1
@@ -12734,6 +13215,7 @@ replicate 1
 setType exp
 subId 4391
 tableName wgEncodeUwTfbsHffmycCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHffmycCtcfStdRawRep2
@@ -12760,6 +13242,7 @@ replicate 2
 setType exp
 subId 4392
 tableName wgEncodeUwTfbsHffmycCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHffmycInputStdAlnRep1
@@ -12785,6 +13268,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4360
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHffmycInputStdRawDataRep1
@@ -12809,6 +13293,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4360
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHffmycInputStdRawRep1
@@ -12835,6 +13320,7 @@ replicate 1
 setType input
 subId 4360
 tableName wgEncodeUwTfbsHffmycInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHl60CtcfStdAlnRep1
@@ -12862,6 +13348,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1300
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHl60CtcfStdHotspotsRep1
@@ -12890,6 +13377,7 @@ replicate 1
 setType exp
 subId 1300
 tableName wgEncodeUwTfbsHl60CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHl60CtcfStdPkRep1
@@ -12918,6 +13406,7 @@ replicate 1
 setType exp
 subId 1300
 tableName wgEncodeUwTfbsHl60CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHl60CtcfStdRawDataRep1
@@ -12944,6 +13433,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 306
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHl60CtcfStdRawRep1
@@ -12972,6 +13462,7 @@ replicate 1
 setType exp
 subId 1300
 tableName wgEncodeUwTfbsHl60CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHl60InputStdAlnRep1
@@ -12999,6 +13490,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1438
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHl60InputStdRawDataRep1
@@ -13024,6 +13516,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHl60InputStdRawRep1
@@ -13052,6 +13545,7 @@ replicate 1
 setType input
 subId 1438
 tableName wgEncodeUwTfbsHl60InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHmecCtcfStdAlnRep1
@@ -13079,6 +13573,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1301
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHmecCtcfStdAlnRep2
@@ -13105,6 +13600,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4692
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHmecCtcfStdHotspotsRep1
@@ -13133,6 +13629,7 @@ replicate 1
 setType exp
 subId 1301
 tableName wgEncodeUwTfbsHmecCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHmecCtcfStdHotspotsRep2
@@ -13160,6 +13657,7 @@ replicate 2
 setType exp
 subId 4692
 tableName wgEncodeUwTfbsHmecCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHmecCtcfStdPkRep1
@@ -13188,6 +13686,7 @@ replicate 1
 setType exp
 subId 1301
 tableName wgEncodeUwTfbsHmecCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHmecCtcfStdPkRep2
@@ -13215,6 +13714,7 @@ replicate 2
 setType exp
 subId 4692
 tableName wgEncodeUwTfbsHmecCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHmecCtcfStdRawDataRep1
@@ -13240,6 +13740,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 676
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHmecCtcfStdRawDataRep2
@@ -13265,6 +13766,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4692
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHmecCtcfStdRawRep1
@@ -13293,6 +13795,7 @@ replicate 1
 setType exp
 subId 1301
 tableName wgEncodeUwTfbsHmecCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHmecCtcfStdRawRep2
@@ -13320,6 +13823,7 @@ replicate 2
 setType exp
 subId 4692
 tableName wgEncodeUwTfbsHmecCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHmecInputStdAlnRep1
@@ -13347,6 +13851,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1302
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHmecInputStdRawDataRep1
@@ -13372,6 +13877,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHmecInputStdRawRep1
@@ -13400,6 +13906,7 @@ replicate 1
 setType input
 subId 1302
 tableName wgEncodeUwTfbsHmecInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHmfCtcfStdAlnRep1
@@ -13426,6 +13933,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2689
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHmfCtcfStdAlnRep2
@@ -13452,6 +13960,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2688
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHmfCtcfStdHotspotsRep1
@@ -13479,6 +13988,7 @@ replicate 1
 setType exp
 subId 2689
 tableName wgEncodeUwTfbsHmfCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHmfCtcfStdHotspotsRep2
@@ -13506,6 +14016,7 @@ replicate 2
 setType exp
 subId 2688
 tableName wgEncodeUwTfbsHmfCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHmfCtcfStdPkRep1
@@ -13533,6 +14044,7 @@ replicate 1
 setType exp
 subId 2689
 tableName wgEncodeUwTfbsHmfCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHmfCtcfStdPkRep2
@@ -13560,6 +14072,7 @@ replicate 2
 setType exp
 subId 2688
 tableName wgEncodeUwTfbsHmfCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHmfCtcfStdRawDataRep1
@@ -13585,6 +14098,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2689
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHmfCtcfStdRawDataRep2
@@ -13610,6 +14124,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2688
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHmfCtcfStdRawRep1
@@ -13637,6 +14152,7 @@ replicate 1
 setType exp
 subId 2689
 tableName wgEncodeUwTfbsHmfCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHmfCtcfStdRawRep2
@@ -13664,6 +14180,7 @@ replicate 2
 setType exp
 subId 2688
 tableName wgEncodeUwTfbsHmfCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHmfInputStdAlnRep1
@@ -13690,6 +14207,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2687
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHmfInputStdRawDataRep1
@@ -13715,6 +14233,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2687
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHmfInputStdRawRep1
@@ -13742,6 +14261,7 @@ replicate 1
 setType input
 subId 2687
 tableName wgEncodeUwTfbsHmfInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHpafCtcfStdAlnRep1
@@ -13768,6 +14288,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2692
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHpafCtcfStdAlnRep2
@@ -13794,6 +14315,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2691
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHpafCtcfStdHotspotsRep1
@@ -13821,6 +14343,7 @@ replicate 1
 setType exp
 subId 2692
 tableName wgEncodeUwTfbsHpafCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHpafCtcfStdHotspotsRep2
@@ -13848,6 +14371,7 @@ replicate 2
 setType exp
 subId 2691
 tableName wgEncodeUwTfbsHpafCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHpafCtcfStdPkRep1
@@ -13875,6 +14399,7 @@ replicate 1
 setType exp
 subId 2692
 tableName wgEncodeUwTfbsHpafCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHpafCtcfStdPkRep2
@@ -13902,6 +14427,7 @@ replicate 2
 setType exp
 subId 2691
 tableName wgEncodeUwTfbsHpafCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHpafCtcfStdRawDataRep1
@@ -13927,6 +14453,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2692
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHpafCtcfStdRawDataRep2
@@ -13952,6 +14479,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2691
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHpafCtcfStdRawRep1
@@ -13979,6 +14507,7 @@ replicate 1
 setType exp
 subId 2692
 tableName wgEncodeUwTfbsHpafCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHpafCtcfStdRawRep2
@@ -14006,6 +14535,7 @@ replicate 2
 setType exp
 subId 2691
 tableName wgEncodeUwTfbsHpafCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHpafInputStdAlnRep1
@@ -14032,6 +14562,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2690
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHpafInputStdRawDataRep1
@@ -14057,6 +14588,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2690
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHpafInputStdRawRep1
@@ -14084,6 +14616,7 @@ replicate 1
 setType input
 subId 2690
 tableName wgEncodeUwTfbsHpafInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHpfCtcfStdAlnRep1
@@ -14110,6 +14643,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2694
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHpfCtcfStdAlnRep2
@@ -14136,6 +14670,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2695
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHpfCtcfStdHotspotsRep1
@@ -14163,6 +14698,7 @@ replicate 1
 setType exp
 subId 2694
 tableName wgEncodeUwTfbsHpfCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHpfCtcfStdHotspotsRep2
@@ -14190,6 +14726,7 @@ replicate 2
 setType exp
 subId 2695
 tableName wgEncodeUwTfbsHpfCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHpfCtcfStdPkRep1
@@ -14217,6 +14754,7 @@ replicate 1
 setType exp
 subId 2694
 tableName wgEncodeUwTfbsHpfCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHpfCtcfStdPkRep2
@@ -14244,6 +14782,7 @@ replicate 2
 setType exp
 subId 2695
 tableName wgEncodeUwTfbsHpfCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHpfCtcfStdRawDataRep1
@@ -14269,6 +14808,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2694
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHpfCtcfStdRawDataRep2
@@ -14294,6 +14834,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2695
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHpfCtcfStdRawRep1
@@ -14321,6 +14862,7 @@ replicate 1
 setType exp
 subId 2694
 tableName wgEncodeUwTfbsHpfCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHpfCtcfStdRawRep2
@@ -14348,6 +14890,7 @@ replicate 2
 setType exp
 subId 2695
 tableName wgEncodeUwTfbsHpfCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHpfInputStdAlnRep1
@@ -14374,6 +14917,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2693
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHpfInputStdRawDataRep1
@@ -14399,6 +14943,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2693
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHpfInputStdRawRep1
@@ -14426,6 +14971,7 @@ replicate 1
 setType input
 subId 2693
 tableName wgEncodeUwTfbsHpfInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHreCtcfStdAlnRep1
@@ -14453,6 +14999,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1304
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHreCtcfStdAlnRep2
@@ -14480,6 +15027,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1305
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHreCtcfStdHotspotsRep1
@@ -14508,6 +15056,7 @@ replicate 1
 setType exp
 subId 1304
 tableName wgEncodeUwTfbsHreCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHreCtcfStdHotspotsRep2
@@ -14536,6 +15085,7 @@ replicate 2
 setType exp
 subId 1305
 tableName wgEncodeUwTfbsHreCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHreCtcfStdPkRep1
@@ -14564,6 +15114,7 @@ replicate 1
 setType exp
 subId 1304
 tableName wgEncodeUwTfbsHreCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHreCtcfStdPkRep2
@@ -14592,6 +15143,7 @@ replicate 2
 setType exp
 subId 1305
 tableName wgEncodeUwTfbsHreCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHreCtcfStdRawDataRep1
@@ -14617,6 +15169,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 523
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHreCtcfStdRawDataRep2
@@ -14642,6 +15195,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 601
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHreCtcfStdRawRep1
@@ -14670,6 +15224,7 @@ replicate 1
 setType exp
 subId 1304
 tableName wgEncodeUwTfbsHreCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHreCtcfStdRawRep2
@@ -14698,6 +15253,7 @@ replicate 2
 setType exp
 subId 1305
 tableName wgEncodeUwTfbsHreCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHreInputStdAlnRep1
@@ -14725,6 +15281,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1303
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHreInputStdRawDataRep1
@@ -14750,6 +15307,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHreInputStdRawRep1
@@ -14778,6 +15336,7 @@ replicate 1
 setType input
 subId 1303
 tableName wgEncodeUwTfbsHreInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdAlnRep1
@@ -14804,6 +15363,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2697
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdAlnRep2
@@ -14830,6 +15390,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4693
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1
@@ -14857,6 +15418,7 @@ replicate 1
 setType exp
 subId 2697
 tableName wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdHotspotsRep2
@@ -14884,6 +15446,7 @@ replicate 2
 setType exp
 subId 4693
 tableName wgEncodeUwTfbsHrpeCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdPkRep1
@@ -14911,6 +15474,7 @@ replicate 1
 setType exp
 subId 2697
 tableName wgEncodeUwTfbsHrpeCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdPkRep2
@@ -14938,6 +15502,7 @@ replicate 2
 setType exp
 subId 4693
 tableName wgEncodeUwTfbsHrpeCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdRawDataRep1
@@ -14963,6 +15528,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2697
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdRawDataRep2
@@ -14988,6 +15554,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4693
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdRawRep1
@@ -15015,6 +15582,7 @@ replicate 1
 setType exp
 subId 2697
 tableName wgEncodeUwTfbsHrpeCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHrpeCtcfStdRawRep2
@@ -15042,6 +15610,7 @@ replicate 2
 setType exp
 subId 4693
 tableName wgEncodeUwTfbsHrpeCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHrpeInputStdAlnRep1
@@ -15068,6 +15637,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2696
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHrpeInputStdRawDataRep1
@@ -15093,6 +15663,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2696
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHrpeInputStdRawRep1
@@ -15120,6 +15691,7 @@ replicate 1
 setType input
 subId 2696
 tableName wgEncodeUwTfbsHrpeInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdAlnRep1
@@ -15147,6 +15719,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1307
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdAlnRep2
@@ -15174,6 +15747,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1306
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdHotspotsRep1
@@ -15202,6 +15776,7 @@ replicate 1
 setType exp
 subId 1307
 tableName wgEncodeUwTfbsHuvecCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdHotspotsRep2
@@ -15230,6 +15805,7 @@ replicate 2
 setType exp
 subId 1306
 tableName wgEncodeUwTfbsHuvecCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdPkRep1
@@ -15258,6 +15834,7 @@ replicate 1
 setType exp
 subId 1307
 tableName wgEncodeUwTfbsHuvecCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdPkRep2
@@ -15286,6 +15863,7 @@ replicate 2
 setType exp
 subId 1306
 tableName wgEncodeUwTfbsHuvecCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdRawDataRep1
@@ -15312,6 +15890,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 693
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdRawDataRep2
@@ -15337,6 +15916,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 692
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdRawRep1
@@ -15365,6 +15945,7 @@ replicate 1
 setType exp
 subId 1307
 tableName wgEncodeUwTfbsHuvecCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHuvecCtcfStdRawRep2
@@ -15393,6 +15974,7 @@ replicate 2
 setType exp
 subId 1306
 tableName wgEncodeUwTfbsHuvecCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHuvecInputStdAlnRep1
@@ -15420,6 +16002,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1316
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHuvecInputStdRawDataRep1
@@ -15445,6 +16028,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHuvecInputStdRawRep1
@@ -15473,6 +16057,7 @@ replicate 1
 setType input
 subId 1316
 tableName wgEncodeUwTfbsHuvecInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdAlnRep1
@@ -15499,6 +16084,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4694
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdAlnRep2
@@ -15525,6 +16111,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4695
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdHotspotsRep1
@@ -15552,6 +16139,7 @@ replicate 1
 setType exp
 subId 4694
 tableName wgEncodeUwTfbsHvmfCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdHotspotsRep2
@@ -15579,6 +16167,7 @@ replicate 2
 setType exp
 subId 4695
 tableName wgEncodeUwTfbsHvmfCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdPkRep1
@@ -15606,6 +16195,7 @@ replicate 1
 setType exp
 subId 4694
 tableName wgEncodeUwTfbsHvmfCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdPkRep2
@@ -15633,6 +16223,7 @@ replicate 2
 setType exp
 subId 4695
 tableName wgEncodeUwTfbsHvmfCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdRawDataRep1
@@ -15658,6 +16249,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4694
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdRawDataRep2
@@ -15683,6 +16275,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4695
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdRawRep1
@@ -15710,6 +16303,7 @@ replicate 1
 setType exp
 subId 4694
 tableName wgEncodeUwTfbsHvmfCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHvmfCtcfStdRawRep2
@@ -15737,6 +16331,7 @@ replicate 2
 setType exp
 subId 4695
 tableName wgEncodeUwTfbsHvmfCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsHvmfInputStdAlnRep1
@@ -15763,6 +16358,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2698
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsHvmfInputStdRawDataRep1
@@ -15788,6 +16384,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2698
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsHvmfInputStdRawRep1
@@ -15815,6 +16412,7 @@ replicate 1
 setType input
 subId 2698
 tableName wgEncodeUwTfbsHvmfInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsJurkatInputStdAlnRep1
@@ -15841,6 +16439,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2699
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsJurkatInputStdRawDataRep1
@@ -15866,6 +16465,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2699
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsJurkatInputStdRawRep1
@@ -15893,6 +16493,7 @@ replicate 1
 setType input
 subId 2699
 tableName wgEncodeUwTfbsJurkatInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsK562CtcfStdAlnRep1
@@ -15920,6 +16521,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1266
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsK562CtcfStdAlnRep2
@@ -15947,6 +16549,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1264
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsK562CtcfStdHotspotsRep1
@@ -15975,6 +16578,7 @@ replicate 1
 setType exp
 subId 1266
 tableName wgEncodeUwTfbsK562CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsK562CtcfStdHotspotsRep2
@@ -16003,6 +16607,7 @@ replicate 2
 setType exp
 subId 1264
 tableName wgEncodeUwTfbsK562CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsK562CtcfStdPkRep1
@@ -16031,6 +16636,7 @@ replicate 1
 setType exp
 subId 1266
 tableName wgEncodeUwTfbsK562CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsK562CtcfStdPkRep2
@@ -16059,6 +16665,7 @@ replicate 2
 setType exp
 subId 1264
 tableName wgEncodeUwTfbsK562CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsK562CtcfStdRawDataRep1
@@ -16085,6 +16692,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 659
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsK562CtcfStdRawDataRep2
@@ -16110,6 +16718,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 525
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsK562CtcfStdRawRep1
@@ -16138,6 +16747,7 @@ replicate 1
 setType exp
 subId 1266
 tableName wgEncodeUwTfbsK562CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsK562CtcfStdRawRep2
@@ -16166,6 +16776,7 @@ replicate 2
 setType exp
 subId 1264
 tableName wgEncodeUwTfbsK562CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsK562InputStdAlnRep1
@@ -16193,6 +16804,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1308
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsK562InputStdRawDataRep1
@@ -16218,6 +16830,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsK562InputStdRawRep1
@@ -16246,6 +16859,7 @@ replicate 1
 setType input
 subId 1308
 tableName wgEncodeUwTfbsK562InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsLncapInputStdAlnRep1
@@ -16271,6 +16885,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4361
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsLncapInputStdRawDataRep1
@@ -16295,6 +16910,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4361
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsLncapInputStdRawRep1
@@ -16321,6 +16937,7 @@ replicate 1
 setType input
 subId 4361
 tableName wgEncodeUwTfbsLncapInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdAlnRep1
@@ -16347,6 +16964,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4677
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdAlnRep2
@@ -16373,6 +16991,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4676
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdHotspotsRep1
@@ -16400,6 +17019,7 @@ replicate 1
 setType exp
 subId 4677
 tableName wgEncodeUwTfbsMcf7CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdHotspotsRep2
@@ -16427,6 +17047,7 @@ replicate 2
 setType exp
 subId 4676
 tableName wgEncodeUwTfbsMcf7CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdPkRep1
@@ -16454,6 +17075,7 @@ replicate 1
 setType exp
 subId 4677
 tableName wgEncodeUwTfbsMcf7CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdPkRep2
@@ -16481,6 +17103,7 @@ replicate 2
 setType exp
 subId 4676
 tableName wgEncodeUwTfbsMcf7CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdRawDataRep1
@@ -16506,6 +17129,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4677
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdRawDataRep2
@@ -16531,6 +17155,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4676
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdRawRep1
@@ -16558,6 +17183,7 @@ replicate 1
 setType exp
 subId 4677
 tableName wgEncodeUwTfbsMcf7CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsMcf7CtcfStdRawRep2
@@ -16585,6 +17211,7 @@ replicate 2
 setType exp
 subId 4676
 tableName wgEncodeUwTfbsMcf7CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsMcf7InputStdAlnRep1
@@ -16611,6 +17238,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2700
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsMcf7InputStdRawDataRep1
@@ -16636,6 +17264,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2700
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsMcf7InputStdRawRep1
@@ -16663,6 +17292,7 @@ replicate 1
 setType input
 subId 2700
 tableName wgEncodeUwTfbsMcf7InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1
@@ -16687,6 +17317,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4646
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsMonocd14ro1746InputStdRawDataRep1
@@ -16710,6 +17341,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4646
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsMonocd14ro1746InputStdRawRep1
@@ -16735,6 +17367,7 @@ replicate 1
 setType input
 subId 4646
 tableName wgEncodeUwTfbsMonocd14ro1746InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNb4CtcfStdAlnRep1
@@ -16760,6 +17393,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4393
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNb4CtcfStdHotspotsRep1
@@ -16786,6 +17420,7 @@ replicate 1
 setType exp
 subId 4393
 tableName wgEncodeUwTfbsNb4CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsNb4CtcfStdPkRep1
@@ -16812,6 +17447,7 @@ replicate 1
 setType exp
 subId 4393
 tableName wgEncodeUwTfbsNb4CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsNb4CtcfStdRawDataRep1
@@ -16836,6 +17472,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4393
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNb4CtcfStdRawRep1
@@ -16862,6 +17499,7 @@ replicate 1
 setType exp
 subId 4393
 tableName wgEncodeUwTfbsNb4CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNb4InputStdAlnRep1
@@ -16888,6 +17526,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2701
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNb4InputStdRawDataRep1
@@ -16913,6 +17552,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2701
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNb4InputStdRawRep1
@@ -16940,6 +17580,7 @@ replicate 1
 setType input
 subId 2701
 tableName wgEncodeUwTfbsNb4InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdAlnRep1
@@ -16966,6 +17607,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4678
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdAlnRep2
@@ -16992,6 +17634,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4679
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep1
@@ -17019,6 +17662,7 @@ replicate 1
 setType exp
 subId 4678
 tableName wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep2
@@ -17046,6 +17690,7 @@ replicate 2
 setType exp
 subId 4679
 tableName wgEncodeUwTfbsNhdfneoCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdPkRep1
@@ -17073,6 +17718,7 @@ replicate 1
 setType exp
 subId 4678
 tableName wgEncodeUwTfbsNhdfneoCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdPkRep2
@@ -17100,6 +17746,7 @@ replicate 2
 setType exp
 subId 4679
 tableName wgEncodeUwTfbsNhdfneoCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdRawDataRep1
@@ -17125,6 +17772,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4678
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdRawDataRep2
@@ -17150,6 +17798,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4679
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdRawRep1
@@ -17177,6 +17826,7 @@ replicate 1
 setType exp
 subId 4678
 tableName wgEncodeUwTfbsNhdfneoCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNhdfneoCtcfStdRawRep2
@@ -17204,6 +17854,7 @@ replicate 2
 setType exp
 subId 4679
 tableName wgEncodeUwTfbsNhdfneoCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNhdfneoInputStdAlnRep1
@@ -17230,6 +17881,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2702
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNhdfneoInputStdRawDataRep1
@@ -17255,6 +17907,7 @@ project wgEncode
 replicate 1
 setType input
 subId 2702
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNhdfneoInputStdRawRep1
@@ -17282,6 +17935,7 @@ replicate 1
 setType input
 subId 2702
 tableName wgEncodeUwTfbsNhdfneoInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNhekCtcfStdAlnRep1
@@ -17309,6 +17963,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1310
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNhekCtcfStdAlnRep2
@@ -17336,6 +17991,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1309
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNhekCtcfStdHotspotsRep1
@@ -17364,6 +18020,7 @@ replicate 1
 setType exp
 subId 1310
 tableName wgEncodeUwTfbsNhekCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsNhekCtcfStdHotspotsRep2
@@ -17392,6 +18049,7 @@ replicate 2
 setType exp
 subId 1309
 tableName wgEncodeUwTfbsNhekCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsNhekCtcfStdPkRep1
@@ -17420,6 +18078,7 @@ replicate 1
 setType exp
 subId 1310
 tableName wgEncodeUwTfbsNhekCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsNhekCtcfStdPkRep2
@@ -17448,6 +18107,7 @@ replicate 2
 setType exp
 subId 1309
 tableName wgEncodeUwTfbsNhekCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsNhekCtcfStdRawDataRep1
@@ -17474,6 +18134,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 695
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNhekCtcfStdRawDataRep2
@@ -17499,6 +18160,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 694
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNhekCtcfStdRawRep1
@@ -17527,6 +18189,7 @@ replicate 1
 setType exp
 subId 1310
 tableName wgEncodeUwTfbsNhekCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNhekCtcfStdRawRep2
@@ -17555,6 +18218,7 @@ replicate 2
 setType exp
 subId 1309
 tableName wgEncodeUwTfbsNhekCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNhekInputStdAlnRep1
@@ -17582,6 +18246,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1317
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNhekInputStdRawDataRep1
@@ -17607,6 +18272,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNhekInputStdRawRep1
@@ -17635,6 +18301,7 @@ replicate 1
 setType input
 subId 1317
 tableName wgEncodeUwTfbsNhekInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsNhlfInputStdAlnRep1
@@ -17660,6 +18327,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4362
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsNhlfInputStdRawDataRep1
@@ -17684,6 +18352,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4362
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsNhlfInputStdRawRep1
@@ -17710,6 +18379,7 @@ replicate 1
 setType input
 subId 4362
 tableName wgEncodeUwTfbsNhlfInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsPanc1InputStdAlnRep1
@@ -17735,6 +18405,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4363
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsPanc1InputStdRawDataRep1
@@ -17759,6 +18430,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4363
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsPanc1InputStdRawRep1
@@ -17785,6 +18457,7 @@ replicate 1
 setType input
 subId 4363
 tableName wgEncodeUwTfbsPanc1InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsRptecCtcfStdAlnRep1
@@ -17811,6 +18484,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4682
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsRptecCtcfStdAlnRep2
@@ -17837,6 +18511,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4681
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsRptecCtcfStdHotspotsRep1
@@ -17864,6 +18539,7 @@ replicate 1
 setType exp
 subId 4682
 tableName wgEncodeUwTfbsRptecCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsRptecCtcfStdHotspotsRep2
@@ -17891,6 +18567,7 @@ replicate 2
 setType exp
 subId 4681
 tableName wgEncodeUwTfbsRptecCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsRptecCtcfStdPkRep1
@@ -17918,6 +18595,7 @@ replicate 1
 setType exp
 subId 4682
 tableName wgEncodeUwTfbsRptecCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsRptecCtcfStdPkRep2
@@ -17945,6 +18623,7 @@ replicate 2
 setType exp
 subId 4681
 tableName wgEncodeUwTfbsRptecCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsRptecCtcfStdRawDataRep1
@@ -17970,6 +18649,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4682
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsRptecCtcfStdRawDataRep2
@@ -17995,6 +18675,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4681
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsRptecCtcfStdRawRep1
@@ -18022,6 +18703,7 @@ replicate 1
 setType exp
 subId 4682
 tableName wgEncodeUwTfbsRptecCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsRptecCtcfStdRawRep2
@@ -18049,6 +18731,7 @@ replicate 2
 setType exp
 subId 4681
 tableName wgEncodeUwTfbsRptecCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsRptecInputStdAlnRep1
@@ -18075,6 +18758,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4680
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsRptecInputStdRawDataRep1
@@ -18100,6 +18784,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4680
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsRptecInputStdRawRep1
@@ -18127,6 +18812,7 @@ replicate 1
 setType input
 subId 4680
 tableName wgEncodeUwTfbsRptecInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsSaecCtcfStdAlnRep1
@@ -18154,6 +18840,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1312
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsSaecCtcfStdAlnRep2
@@ -18181,6 +18868,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1311
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsSaecCtcfStdHotspotsRep1
@@ -18209,6 +18897,7 @@ replicate 1
 setType exp
 subId 1312
 tableName wgEncodeUwTfbsSaecCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsSaecCtcfStdHotspotsRep2
@@ -18237,6 +18926,7 @@ replicate 2
 setType exp
 subId 1311
 tableName wgEncodeUwTfbsSaecCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsSaecCtcfStdPkRep1
@@ -18265,6 +18955,7 @@ replicate 1
 setType exp
 subId 1312
 tableName wgEncodeUwTfbsSaecCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsSaecCtcfStdPkRep2
@@ -18293,6 +18984,7 @@ replicate 2
 setType exp
 subId 1311
 tableName wgEncodeUwTfbsSaecCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsSaecCtcfStdRawDataRep1
@@ -18318,6 +19010,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 697
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsSaecCtcfStdRawDataRep2
@@ -18343,6 +19036,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 696
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsSaecCtcfStdRawRep1
@@ -18371,6 +19065,7 @@ replicate 1
 setType exp
 subId 1312
 tableName wgEncodeUwTfbsSaecCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsSaecCtcfStdRawRep2
@@ -18399,6 +19094,7 @@ replicate 2
 setType exp
 subId 1311
 tableName wgEncodeUwTfbsSaecCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsSaecInputStdAlnRep1
@@ -18426,6 +19122,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1318
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsSaecInputStdRawDataRep1
@@ -18451,6 +19148,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsSaecInputStdRawRep1
@@ -18479,6 +19177,7 @@ replicate 1
 setType input
 subId 1318
 tableName wgEncodeUwTfbsSaecInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsSknmcInputStdAlnRep1
@@ -18504,6 +19203,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4364
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsSknmcInputStdRawDataRep1
@@ -18528,6 +19228,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4364
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsSknmcInputStdRawRep1
@@ -18554,6 +19255,7 @@ replicate 1
 setType input
 subId 4364
 tableName wgEncodeUwTfbsSknmcInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdAlnRep1
@@ -18581,6 +19283,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1313
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdAlnRep2
@@ -18608,6 +19311,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1314
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
@@ -18636,6 +19340,7 @@ replicate 1
 setType exp
 subId 1313
 tableName wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2
@@ -18664,6 +19369,7 @@ replicate 2
 setType exp
 subId 1314
 tableName wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdPkRep1
@@ -18692,6 +19398,7 @@ replicate 1
 setType exp
 subId 1313
 tableName wgEncodeUwTfbsSknshraCtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdPkRep2
@@ -18720,6 +19427,7 @@ replicate 2
 setType exp
 subId 1314
 tableName wgEncodeUwTfbsSknshraCtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdRawDataRep1
@@ -18745,6 +19453,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 698
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdRawDataRep2
@@ -18770,6 +19479,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 753
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdRawRep1
@@ -18798,6 +19508,7 @@ replicate 1
 setType exp
 subId 1313
 tableName wgEncodeUwTfbsSknshraCtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsSknshraCtcfStdRawRep2
@@ -18826,6 +19537,7 @@ replicate 2
 setType exp
 subId 1314
 tableName wgEncodeUwTfbsSknshraCtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsSknshraInputStdAlnRep1
@@ -18853,6 +19565,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1319
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsSknshraInputStdRawDataRep1
@@ -18878,6 +19591,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsSknshraInputStdRawRep1
@@ -18906,6 +19620,7 @@ replicate 1
 setType input
 subId 1319
 tableName wgEncodeUwTfbsSknshraInputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdAlnRep1
@@ -18933,6 +19648,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1315
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdAlnRep2
@@ -18960,6 +19676,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1492
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep1
@@ -18988,6 +19705,7 @@ replicate 1
 setType exp
 subId 1315
 tableName wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep2
@@ -19016,6 +19734,7 @@ replicate 2
 setType exp
 subId 1492
 tableName wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdPkRep1
@@ -19044,6 +19763,7 @@ replicate 1
 setType exp
 subId 1315
 tableName wgEncodeUwTfbsWerirb1CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdPkRep2
@@ -19072,6 +19792,7 @@ replicate 2
 setType exp
 subId 1492
 tableName wgEncodeUwTfbsWerirb1CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdRawDataRep1
@@ -19098,6 +19819,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 407
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdRawDataRep2
@@ -19124,6 +19846,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 407
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdRawRep1
@@ -19152,6 +19875,7 @@ replicate 1
 setType exp
 subId 1315
 tableName wgEncodeUwTfbsWerirb1CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsWerirb1CtcfStdRawRep2
@@ -19180,6 +19904,7 @@ replicate 2
 setType exp
 subId 1492
 tableName wgEncodeUwTfbsWerirb1CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsWerirb1InputStdAlnRep1
@@ -19207,6 +19932,7 @@ project wgEncode
 replicate 1
 setType input
 subId 1320
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsWerirb1InputStdRawDataRep1
@@ -19232,6 +19958,7 @@ project wgEncode
 replicate 1
 setType input
 subId 3117
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsWerirb1InputStdRawRep1
@@ -19260,6 +19987,7 @@ replicate 1
 setType input
 subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsWi38CtcfStdAlnRep1
@@ -19285,6 +20013,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4394
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsWi38CtcfStdAlnRep2
@@ -19310,6 +20039,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4395
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsWi38CtcfStdHotspotsRep1
@@ -19336,6 +20066,7 @@ replicate 1
 setType exp
 subId 4394
 tableName wgEncodeUwTfbsWi38CtcfStdHotspotsRep1
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsWi38CtcfStdHotspotsRep2
@@ -19362,6 +20093,7 @@ replicate 2
 setType exp
 subId 4395
 tableName wgEncodeUwTfbsWi38CtcfStdHotspotsRep2
+treatment None
 view Hotspots
 
 metaObject wgEncodeUwTfbsWi38CtcfStdPkRep1
@@ -19388,6 +20120,7 @@ replicate 1
 setType exp
 subId 4394
 tableName wgEncodeUwTfbsWi38CtcfStdPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsWi38CtcfStdPkRep2
@@ -19414,6 +20147,7 @@ replicate 2
 setType exp
 subId 4395
 tableName wgEncodeUwTfbsWi38CtcfStdPkRep2
+treatment None
 view Peaks
 
 metaObject wgEncodeUwTfbsWi38CtcfStdRawDataRep1
@@ -19438,6 +20172,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4394
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsWi38CtcfStdRawDataRep2
@@ -19462,6 +20197,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4395
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsWi38CtcfStdRawRep1
@@ -19488,6 +20224,7 @@ replicate 1
 setType exp
 subId 4394
 tableName wgEncodeUwTfbsWi38CtcfStdRawRep1
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsWi38CtcfStdRawRep2
@@ -19514,6 +20251,7 @@ replicate 2
 setType exp
 subId 4395
 tableName wgEncodeUwTfbsWi38CtcfStdRawRep2
+treatment None
 view RawSignal
 
 metaObject wgEncodeUwTfbsWi38InputOhtamStdAlnRep1
@@ -19620,6 +20358,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4365
+treatment None
 view Alignments
 
 metaObject wgEncodeUwTfbsWi38InputStdRawDataRep1
@@ -19644,6 +20383,7 @@ project wgEncode
 replicate 1
 setType input
 subId 4365
+treatment None
 view RawData
 
 metaObject wgEncodeUwTfbsWi38InputStdRawRep1
@@ -19670,6 +20410,7 @@ replicate 1
 setType input
 subId 4365
 tableName wgEncodeUwTfbsWi38InputStdRawRep1
+treatment None
 view RawSignal
 
-# MAGIC: 100274472
+# MAGIC: -1057052951
