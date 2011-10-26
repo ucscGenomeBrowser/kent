@@ -11,7 +11,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -37,7 +37,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -63,7 +63,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -90,7 +90,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -117,7 +117,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -144,7 +144,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -171,7 +171,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -196,7 +196,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -221,7 +221,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -248,7 +248,7 @@ antibody CTCF
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -275,7 +275,7 @@ antibody Input
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
@@ -301,7 +301,7 @@ antibody Input
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
@@ -326,7 +326,7 @@ antibody Input
 cell A549
 composite wgEncodeUwTfbs
 control std
-controlId A549/Input/std
+controlId A549/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
@@ -353,7 +353,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -380,7 +380,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -407,7 +407,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -435,7 +435,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -463,7 +463,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -491,7 +491,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -519,7 +519,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -545,7 +545,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -571,7 +571,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -599,7 +599,7 @@ antibody CTCF
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -627,7 +627,7 @@ antibody Input
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -654,7 +654,7 @@ antibody Input
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -680,7 +680,7 @@ antibody Input
 cell AG04449
 composite wgEncodeUwTfbs
 control std
-controlId AG04449/Input/std
+controlId AG04449/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
@@ -708,7 +708,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -735,7 +735,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -761,7 +761,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -789,7 +789,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -816,7 +816,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -844,7 +844,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -871,7 +871,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -897,7 +897,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -922,7 +922,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -950,7 +950,7 @@ antibody CTCF
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -977,7 +977,7 @@ antibody Input
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1004,7 +1004,7 @@ antibody Input
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1030,7 +1030,7 @@ antibody Input
 cell AG04450
 composite wgEncodeUwTfbs
 control std
-controlId AG04450/Input/std
+controlId AG04450/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1058,7 +1058,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1085,7 +1085,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1112,7 +1112,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1140,7 +1140,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1168,7 +1168,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1196,7 +1196,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1224,7 +1224,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1250,7 +1250,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1276,7 +1276,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1304,7 +1304,7 @@ antibody CTCF
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1332,7 +1332,7 @@ antibody Input
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1359,7 +1359,7 @@ antibody Input
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1385,7 +1385,7 @@ antibody Input
 cell AG09309
 composite wgEncodeUwTfbs
 control std
-controlId AG09309/Input/std
+controlId AG09309/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1413,7 +1413,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1440,7 +1440,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1467,7 +1467,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1495,7 +1495,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1523,7 +1523,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1551,7 +1551,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1579,7 +1579,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1605,7 +1605,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1631,7 +1631,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1659,7 +1659,7 @@ antibody CTCF
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1687,7 +1687,7 @@ antibody Input
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1714,7 +1714,7 @@ antibody Input
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1740,7 +1740,7 @@ antibody Input
 cell AG09319
 composite wgEncodeUwTfbs
 control std
-controlId AG09319/Input/std
+controlId AG09319/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1768,7 +1768,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1795,7 +1795,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1822,7 +1822,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1850,7 +1850,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1878,7 +1878,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1906,7 +1906,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1934,7 +1934,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1960,7 +1960,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -1986,7 +1986,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2014,7 +2014,7 @@ antibody CTCF
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2042,7 +2042,7 @@ antibody Input
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2069,7 +2069,7 @@ antibody Input
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2095,7 +2095,7 @@ antibody Input
 cell AG10803
 composite wgEncodeUwTfbs
 control std
-controlId AG10803/Input/std
+controlId AG10803/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2123,7 +2123,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2150,7 +2150,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2177,7 +2177,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2205,7 +2205,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2233,7 +2233,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2261,7 +2261,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2289,7 +2289,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2315,7 +2315,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2341,7 +2341,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2369,7 +2369,7 @@ antibody CTCF
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2397,7 +2397,7 @@ antibody Input
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2424,7 +2424,7 @@ antibody Input
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2450,7 +2450,7 @@ antibody Input
 cell AoAF
 composite wgEncodeUwTfbs
 control std
-controlId AoAF/Input/std
+controlId AoAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -2478,7 +2478,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2504,7 +2504,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2530,7 +2530,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2557,7 +2557,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2584,7 +2584,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2611,7 +2611,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2638,7 +2638,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2663,7 +2663,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2688,7 +2688,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2715,7 +2715,7 @@ antibody CTCF
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2742,7 +2742,7 @@ antibody Input
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2768,7 +2768,7 @@ antibody Input
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2793,7 +2793,7 @@ antibody Input
 cell BE2_C
 composite wgEncodeUwTfbs
 control std
-controlId BE2_C/Input/std
+controlId BE2_C/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -2820,7 +2820,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -2848,7 +2848,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -2876,7 +2876,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -2905,7 +2905,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -2934,7 +2934,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -2963,7 +2963,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -2992,7 +2992,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -3019,7 +3019,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -3045,7 +3045,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -3074,7 +3074,7 @@ antibody CTCF
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -3103,7 +3103,7 @@ antibody Input
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -3131,7 +3131,7 @@ antibody Input
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -3157,7 +3157,7 @@ antibody Input
 cell BJ
 composite wgEncodeUwTfbs
 control std
-controlId BJ/Input/std
+controlId BJ/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -3186,7 +3186,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3214,7 +3214,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3242,7 +3242,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3271,7 +3271,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3300,7 +3300,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3329,7 +3329,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3358,7 +3358,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
@@ -3384,7 +3384,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
@@ -3410,7 +3410,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3439,7 +3439,7 @@ antibody CTCF
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3468,7 +3468,7 @@ antibody Input
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -3496,7 +3496,7 @@ antibody Input
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -3522,7 +3522,7 @@ antibody Input
 cell Caco-2
 composite wgEncodeUwTfbs
 control std
-controlId Caco-2/Input/std
+controlId Caco-2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -3551,7 +3551,7 @@ antibody Input
 cell CD20+_RO01778
 composite wgEncodeUwTfbs
 control std
-controlId CD20+_RO01778/Input/std
+controlId CD20+_RO01778/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
@@ -3576,7 +3576,7 @@ antibody Input
 cell CD20+_RO01778
 composite wgEncodeUwTfbs
 control std
-controlId CD20+_RO01778/Input/std
+controlId CD20+_RO01778/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
@@ -3600,7 +3600,7 @@ antibody Input
 cell CD20+_RO01778
 composite wgEncodeUwTfbs
 control std
-controlId CD20+_RO01778/Input/std
+controlId CD20+_RO01778/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
@@ -3626,7 +3626,7 @@ antibody Input
 cell CD20+_RO01794
 composite wgEncodeUwTfbs
 control std
-controlId CD20+_RO01794/Input/std
+controlId CD20+_RO01794/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
@@ -3651,7 +3651,7 @@ antibody Input
 cell CD20+_RO01794
 composite wgEncodeUwTfbs
 control std
-controlId CD20+_RO01794/Input/std
+controlId CD20+_RO01794/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
@@ -3675,7 +3675,7 @@ antibody Input
 cell CD20+_RO01794
 composite wgEncodeUwTfbs
 control std
-controlId CD20+_RO01794/Input/std
+controlId CD20+_RO01794/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
@@ -3701,7 +3701,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3729,7 +3729,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3757,7 +3757,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3786,7 +3786,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3815,7 +3815,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3844,7 +3844,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3873,7 +3873,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
@@ -3900,7 +3900,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
@@ -3926,7 +3926,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3955,7 +3955,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -3984,7 +3984,7 @@ antibody Input
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -4012,7 +4012,7 @@ antibody Input
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -4038,7 +4038,7 @@ antibody Input
 cell GM06990
 composite wgEncodeUwTfbs
 control std
-controlId GM06990/Input/std
+controlId GM06990/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -4067,7 +4067,7 @@ antibody CTCF
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4095,7 +4095,7 @@ antibody CTCF
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4124,7 +4124,7 @@ antibody CTCF
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4153,7 +4153,7 @@ antibody CTCF
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
@@ -4180,7 +4180,7 @@ antibody CTCF
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4209,7 +4209,7 @@ antibody Input
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -4237,7 +4237,7 @@ antibody Input
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -4263,7 +4263,7 @@ antibody Input
 cell GM12801
 composite wgEncodeUwTfbs
 control std
-controlId GM12801/Input/std
+controlId GM12801/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -4292,7 +4292,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4320,7 +4320,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4348,7 +4348,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -4375,7 +4375,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4404,7 +4404,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4433,7 +4433,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -4461,7 +4461,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4490,7 +4490,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4519,7 +4519,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -4547,7 +4547,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -4573,7 +4573,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -4599,7 +4599,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -4625,7 +4625,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4654,7 +4654,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4683,7 +4683,7 @@ antibody CTCF
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -4711,7 +4711,7 @@ antibody Input
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -4739,7 +4739,7 @@ antibody Input
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -4765,7 +4765,7 @@ antibody Input
 cell GM12864
 composite wgEncodeUwTfbs
 control std
-controlId GM12864/Input/std
+controlId GM12864/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -4794,7 +4794,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4822,7 +4822,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4850,7 +4850,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -4877,7 +4877,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4906,7 +4906,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4935,7 +4935,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -4963,7 +4963,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -4992,7 +4992,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -5021,7 +5021,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5049,7 +5049,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -5075,7 +5075,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -5101,7 +5101,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5127,7 +5127,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -5156,7 +5156,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -5185,7 +5185,7 @@ antibody CTCF
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5213,7 +5213,7 @@ antibody Input
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -5241,7 +5241,7 @@ antibody Input
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -5267,7 +5267,7 @@ antibody Input
 cell GM12865
 composite wgEncodeUwTfbs
 control std
-controlId GM12865/Input/std
+controlId GM12865/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -5296,7 +5296,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5323,7 +5323,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5350,7 +5350,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5378,7 +5378,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5406,7 +5406,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5434,7 +5434,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5462,7 +5462,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5488,7 +5488,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5514,7 +5514,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5542,7 +5542,7 @@ antibody CTCF
 cell GM12866
 composite wgEncodeUwTfbs
 control std
-controlId GM12866/Input/std
+controlId GM12866/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5570,7 +5570,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5597,7 +5597,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5624,7 +5624,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5652,7 +5652,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5680,7 +5680,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5708,7 +5708,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5736,7 +5736,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5762,7 +5762,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5788,7 +5788,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5816,7 +5816,7 @@ antibody CTCF
 cell GM12867
 composite wgEncodeUwTfbs
 control std
-controlId GM12867/Input/std
+controlId GM12867/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5844,7 +5844,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5871,7 +5871,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5898,7 +5898,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5926,7 +5926,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5954,7 +5954,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -5982,7 +5982,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6010,7 +6010,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6036,7 +6036,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6062,7 +6062,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6090,7 +6090,7 @@ antibody CTCF
 cell GM12868
 composite wgEncodeUwTfbs
 control std
-controlId GM12868/Input/std
+controlId GM12868/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6118,7 +6118,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6145,7 +6145,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6172,7 +6172,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6200,7 +6200,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6228,7 +6228,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6256,7 +6256,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6284,7 +6284,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6310,7 +6310,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6336,7 +6336,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6364,7 +6364,7 @@ antibody CTCF
 cell GM12869
 composite wgEncodeUwTfbs
 control std
-controlId GM12869/Input/std
+controlId GM12869/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6392,7 +6392,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6419,7 +6419,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6446,7 +6446,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6474,7 +6474,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6502,7 +6502,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6530,7 +6530,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6558,7 +6558,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6584,7 +6584,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6610,7 +6610,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6638,7 +6638,7 @@ antibody CTCF
 cell GM12870
 composite wgEncodeUwTfbs
 control std
-controlId GM12870/Input/std
+controlId GM12870/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6666,7 +6666,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6693,7 +6693,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6720,7 +6720,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6748,7 +6748,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6776,7 +6776,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6804,7 +6804,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6832,7 +6832,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6858,7 +6858,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6884,7 +6884,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6912,7 +6912,7 @@ antibody CTCF
 cell GM12871
 composite wgEncodeUwTfbs
 control std
-controlId GM12871/Input/std
+controlId GM12871/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -6940,7 +6940,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -6968,7 +6968,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -6996,7 +6996,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7023,7 +7023,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -7052,7 +7052,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -7081,7 +7081,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7109,7 +7109,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -7138,7 +7138,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -7167,7 +7167,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7195,7 +7195,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -7221,7 +7221,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -7247,7 +7247,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7273,7 +7273,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -7302,7 +7302,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -7331,7 +7331,7 @@ antibody CTCF
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7359,7 +7359,7 @@ antibody Input
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -7387,7 +7387,7 @@ antibody Input
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -7413,7 +7413,7 @@ antibody Input
 cell GM12872
 composite wgEncodeUwTfbs
 control std
-controlId GM12872/Input/std
+controlId GM12872/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -7442,7 +7442,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7470,7 +7470,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7498,7 +7498,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7525,7 +7525,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7554,7 +7554,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7583,7 +7583,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7611,7 +7611,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7640,7 +7640,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7669,7 +7669,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7697,7 +7697,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -7723,7 +7723,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -7749,7 +7749,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7775,7 +7775,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7804,7 +7804,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7833,7 +7833,7 @@ antibody CTCF
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -7861,7 +7861,7 @@ antibody Input
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7889,7 +7889,7 @@ antibody Input
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -7915,7 +7915,7 @@ antibody Input
 cell GM12873
 composite wgEncodeUwTfbs
 control std
-controlId GM12873/Input/std
+controlId GM12873/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -7944,7 +7944,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -7972,7 +7972,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -8000,7 +8000,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -8029,7 +8029,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -8058,7 +8058,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -8087,7 +8087,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -8116,7 +8116,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -8142,7 +8142,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -8168,7 +8168,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -8197,7 +8197,7 @@ antibody CTCF
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -8226,7 +8226,7 @@ antibody Input
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -8254,7 +8254,7 @@ antibody Input
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -8280,7 +8280,7 @@ antibody Input
 cell GM12874
 composite wgEncodeUwTfbs
 control std
-controlId GM12874/Input/std
+controlId GM12874/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -8309,7 +8309,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8337,7 +8337,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8365,7 +8365,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8394,7 +8394,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8423,7 +8423,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8452,7 +8452,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8481,7 +8481,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -8507,7 +8507,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -8533,7 +8533,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8562,7 +8562,7 @@ antibody CTCF
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8591,7 +8591,7 @@ antibody Input
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8619,7 +8619,7 @@ antibody Input
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -8645,7 +8645,7 @@ antibody Input
 cell GM12875
 composite wgEncodeUwTfbs
 control std
-controlId GM12875/Input/std
+controlId GM12875/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -8674,7 +8674,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8702,7 +8702,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8730,7 +8730,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8759,7 +8759,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8788,7 +8788,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8817,7 +8817,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8846,7 +8846,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
@@ -8873,7 +8873,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
@@ -8899,7 +8899,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8928,7 +8928,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -8957,7 +8957,7 @@ antibody Input
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -8985,7 +8985,7 @@ antibody Input
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -9011,7 +9011,7 @@ antibody Input
 cell GM12878
 composite wgEncodeUwTfbs
 control std
-controlId GM12878/Input/std
+controlId GM12878/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -9040,7 +9040,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -9066,7 +9066,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9093,7 +9093,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -9120,7 +9120,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9148,7 +9148,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -9175,7 +9175,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9203,7 +9203,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -9228,7 +9228,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9254,7 +9254,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -9281,7 +9281,7 @@ antibody CTCF
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9309,7 +9309,7 @@ antibody Input
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
@@ -9334,7 +9334,7 @@ antibody Input
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
@@ -9358,7 +9358,7 @@ antibody Input
 cell HAc
 composite wgEncodeUwTfbs
 control std
-controlId HAc/Input/std
+controlId HAc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
@@ -9384,7 +9384,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9411,7 +9411,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9438,7 +9438,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9466,7 +9466,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9494,7 +9494,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9522,7 +9522,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9550,7 +9550,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9576,7 +9576,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9602,7 +9602,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9630,7 +9630,7 @@ antibody CTCF
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -9658,7 +9658,7 @@ antibody Input
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9685,7 +9685,7 @@ antibody Input
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9711,7 +9711,7 @@ antibody Input
 cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId HA-sp/Input/std
+controlId HA-sp/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
@@ -9739,7 +9739,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9766,7 +9766,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9793,7 +9793,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9821,7 +9821,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9849,7 +9849,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9877,7 +9877,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9905,7 +9905,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9931,7 +9931,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9957,7 +9957,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -9985,7 +9985,7 @@ antibody CTCF
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10013,7 +10013,7 @@ antibody Input
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10040,7 +10040,7 @@ antibody Input
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10066,7 +10066,7 @@ antibody Input
 cell HBMEC
 composite wgEncodeUwTfbs
 control std
-controlId HBMEC/Input/std
+controlId HBMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10094,7 +10094,7 @@ antibody Input
 cell HCF
 composite wgEncodeUwTfbs
 control std
-controlId HCF/Input/std
+controlId HCF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10121,7 +10121,7 @@ antibody Input
 cell HCF
 composite wgEncodeUwTfbs
 control std
-controlId HCF/Input/std
+controlId HCF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10147,7 +10147,7 @@ antibody Input
 cell HCF
 composite wgEncodeUwTfbs
 control std
-controlId HCF/Input/std
+controlId HCF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10175,7 +10175,7 @@ antibody CTCF
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10202,7 +10202,7 @@ antibody CTCF
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10230,7 +10230,7 @@ antibody CTCF
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10258,7 +10258,7 @@ antibody CTCF
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10284,7 +10284,7 @@ antibody CTCF
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10312,7 +10312,7 @@ antibody Input
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10339,7 +10339,7 @@ antibody Input
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10365,7 +10365,7 @@ antibody Input
 cell HCFaa
 composite wgEncodeUwTfbs
 control std
-controlId HCFaa/Input/std
+controlId HCFaa/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10393,7 +10393,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -10419,7 +10419,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -10446,7 +10446,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -10473,7 +10473,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -10501,7 +10501,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -10528,7 +10528,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -10556,7 +10556,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -10581,7 +10581,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -10607,7 +10607,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -10634,7 +10634,7 @@ antibody CTCF
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -10662,7 +10662,7 @@ antibody Input
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10689,7 +10689,7 @@ antibody Input
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10715,7 +10715,7 @@ antibody Input
 cell HCM
 composite wgEncodeUwTfbs
 control std
-controlId HCM/Input/std
+controlId HCM/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10743,7 +10743,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10770,7 +10770,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10797,7 +10797,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10825,7 +10825,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10853,7 +10853,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10881,7 +10881,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10909,7 +10909,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10935,7 +10935,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10961,7 +10961,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -10989,7 +10989,7 @@ antibody CTCF
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11017,7 +11017,7 @@ antibody Input
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11044,7 +11044,7 @@ antibody Input
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11070,7 +11070,7 @@ antibody Input
 cell HCPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HCPEpiC/Input/std
+controlId HCPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11098,7 +11098,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11125,7 +11125,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11152,7 +11152,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11180,7 +11180,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11208,7 +11208,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11236,7 +11236,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11264,7 +11264,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11290,7 +11290,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11316,7 +11316,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11344,7 +11344,7 @@ antibody CTCF
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -11372,7 +11372,7 @@ antibody Input
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11399,7 +11399,7 @@ antibody Input
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11425,7 +11425,7 @@ antibody Input
 cell HCT-116
 composite wgEncodeUwTfbs
 control std
-controlId HCT-116/Input/std
+controlId HCT-116/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11453,7 +11453,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11480,7 +11480,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11507,7 +11507,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11535,7 +11535,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11563,7 +11563,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11591,7 +11591,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11619,7 +11619,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11645,7 +11645,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11671,7 +11671,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11699,7 +11699,7 @@ antibody CTCF
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11727,7 +11727,7 @@ antibody Input
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11754,7 +11754,7 @@ antibody Input
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11780,7 +11780,7 @@ antibody Input
 cell HEEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HEEpiC/Input/std
+controlId HEEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -11808,7 +11808,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -11836,7 +11836,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -11864,7 +11864,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -11893,7 +11893,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -11922,7 +11922,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -11951,7 +11951,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -11980,7 +11980,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
@@ -12007,7 +12007,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -12033,7 +12033,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12062,7 +12062,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -12091,7 +12091,7 @@ antibody Input
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12119,7 +12119,7 @@ antibody Input
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -12145,7 +12145,7 @@ antibody Input
 cell HEK293
 composite wgEncodeUwTfbs
 control std
-controlId HEK293/Input/std
+controlId HEK293/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12174,7 +12174,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12202,7 +12202,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12230,7 +12230,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12259,7 +12259,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12288,7 +12288,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12317,7 +12317,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12346,7 +12346,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
@@ -12372,7 +12372,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
@@ -12398,7 +12398,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12427,7 +12427,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12456,7 +12456,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -12484,7 +12484,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -12510,7 +12510,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
-controlId HeLa-S3/Input/std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -12539,7 +12539,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12567,7 +12567,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12595,7 +12595,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12624,7 +12624,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12653,7 +12653,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12682,7 +12682,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12711,7 +12711,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
@@ -12738,7 +12738,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
@@ -12765,7 +12765,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12794,7 +12794,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -12823,7 +12823,7 @@ antibody Input
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -12851,7 +12851,7 @@ antibody Input
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -12877,7 +12877,7 @@ antibody Input
 cell HepG2
 composite wgEncodeUwTfbs
 control std
-controlId HepG2/Input/std
+controlId HepG2/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -12906,7 +12906,7 @@ antibody Input
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/Input/std
+controlId HFF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -12933,7 +12933,7 @@ antibody Input
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/Input/std
+controlId HFF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -12959,7 +12959,7 @@ antibody Input
 cell HFF
 composite wgEncodeUwTfbs
 control std
-controlId HFF/Input/std
+controlId HFF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -12987,7 +12987,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13013,7 +13013,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13039,7 +13039,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13066,7 +13066,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13093,7 +13093,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13120,7 +13120,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13147,7 +13147,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13172,7 +13172,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13197,7 +13197,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13224,7 +13224,7 @@ antibody CTCF
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13251,7 +13251,7 @@ antibody Input
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13277,7 +13277,7 @@ antibody Input
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13302,7 +13302,7 @@ antibody Input
 cell HFF-Myc
 composite wgEncodeUwTfbs
 control std
-controlId HFF-Myc/Input/std
+controlId HFF-Myc/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -13329,7 +13329,7 @@ antibody CTCF
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13357,7 +13357,7 @@ antibody CTCF
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13386,7 +13386,7 @@ antibody CTCF
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13415,7 +13415,7 @@ antibody CTCF
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
@@ -13442,7 +13442,7 @@ antibody CTCF
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13471,7 +13471,7 @@ antibody Input
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -13499,7 +13499,7 @@ antibody Input
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -13525,7 +13525,7 @@ antibody Input
 cell HL-60
 composite wgEncodeUwTfbs
 control std
-controlId HL-60/Input/std
+controlId HL-60/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -13554,7 +13554,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13582,7 +13582,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -13609,7 +13609,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13638,7 +13638,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -13666,7 +13666,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13695,7 +13695,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -13723,7 +13723,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
@@ -13749,7 +13749,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -13775,7 +13775,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13804,7 +13804,7 @@ antibody CTCF
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -13832,7 +13832,7 @@ antibody Input
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13860,7 +13860,7 @@ antibody Input
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -13886,7 +13886,7 @@ antibody Input
 cell HMEC
 composite wgEncodeUwTfbs
 control std
-controlId HMEC/Input/std
+controlId HMEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -13915,7 +13915,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -13942,7 +13942,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -13969,7 +13969,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -13997,7 +13997,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14025,7 +14025,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14053,7 +14053,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14081,7 +14081,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14107,7 +14107,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14133,7 +14133,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14161,7 +14161,7 @@ antibody CTCF
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14189,7 +14189,7 @@ antibody Input
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14216,7 +14216,7 @@ antibody Input
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14242,7 +14242,7 @@ antibody Input
 cell HMF
 composite wgEncodeUwTfbs
 control std
-controlId HMF/Input/std
+controlId HMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14270,7 +14270,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14297,7 +14297,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14324,7 +14324,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14352,7 +14352,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14380,7 +14380,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14408,7 +14408,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14436,7 +14436,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14462,7 +14462,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14488,7 +14488,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14516,7 +14516,7 @@ antibody CTCF
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14544,7 +14544,7 @@ antibody Input
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14571,7 +14571,7 @@ antibody Input
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14597,7 +14597,7 @@ antibody Input
 cell HPAF
 composite wgEncodeUwTfbs
 control std
-controlId HPAF/Input/std
+controlId HPAF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14625,7 +14625,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14652,7 +14652,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14679,7 +14679,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14707,7 +14707,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14735,7 +14735,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14763,7 +14763,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14791,7 +14791,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14817,7 +14817,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14843,7 +14843,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14871,7 +14871,7 @@ antibody CTCF
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14899,7 +14899,7 @@ antibody Input
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14926,7 +14926,7 @@ antibody Input
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14952,7 +14952,7 @@ antibody Input
 cell HPF
 composite wgEncodeUwTfbs
 control std
-controlId HPF/Input/std
+controlId HPF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -14980,7 +14980,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15008,7 +15008,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15036,7 +15036,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15065,7 +15065,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15094,7 +15094,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15123,7 +15123,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15152,7 +15152,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
@@ -15178,7 +15178,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -15204,7 +15204,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15233,7 +15233,7 @@ antibody CTCF
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15262,7 +15262,7 @@ antibody Input
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15290,7 +15290,7 @@ antibody Input
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -15316,7 +15316,7 @@ antibody Input
 cell HRE
 composite wgEncodeUwTfbs
 control std
-controlId HRE/Input/std
+controlId HRE/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15345,7 +15345,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15372,7 +15372,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -15399,7 +15399,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15427,7 +15427,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -15455,7 +15455,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15483,7 +15483,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -15511,7 +15511,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15537,7 +15537,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -15563,7 +15563,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15591,7 +15591,7 @@ antibody CTCF
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -15619,7 +15619,7 @@ antibody Input
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15646,7 +15646,7 @@ antibody Input
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15672,7 +15672,7 @@ antibody Input
 cell HRPEpiC
 composite wgEncodeUwTfbs
 control std
-controlId HRPEpiC/Input/std
+controlId HRPEpiC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -15700,7 +15700,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15728,7 +15728,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15756,7 +15756,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15785,7 +15785,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15814,7 +15814,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15843,7 +15843,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15872,7 +15872,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
@@ -15899,7 +15899,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
@@ -15925,7 +15925,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15954,7 +15954,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -15983,7 +15983,7 @@ antibody Input
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -16011,7 +16011,7 @@ antibody Input
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -16037,7 +16037,7 @@ antibody Input
 cell HUVEC
 composite wgEncodeUwTfbs
 control std
-controlId HUVEC/Input/std
+controlId HUVEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -16066,7 +16066,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16093,7 +16093,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16120,7 +16120,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16148,7 +16148,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16176,7 +16176,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16204,7 +16204,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16232,7 +16232,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16258,7 +16258,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16284,7 +16284,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16312,7 +16312,7 @@ antibody CTCF
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16340,7 +16340,7 @@ antibody Input
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -16367,7 +16367,7 @@ antibody Input
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -16393,7 +16393,7 @@ antibody Input
 cell HVMF
 composite wgEncodeUwTfbs
 control std
-controlId HVMF/Input/std
+controlId HVMF/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -16421,7 +16421,7 @@ antibody Input
 cell Jurkat
 composite wgEncodeUwTfbs
 control std
-controlId Jurkat/Input/std
+controlId Jurkat/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -16448,7 +16448,7 @@ antibody Input
 cell Jurkat
 composite wgEncodeUwTfbs
 control std
-controlId Jurkat/Input/std
+controlId Jurkat/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -16474,7 +16474,7 @@ antibody Input
 cell Jurkat
 composite wgEncodeUwTfbs
 control std
-controlId Jurkat/Input/std
+controlId Jurkat/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -16502,7 +16502,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -16530,7 +16530,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -16558,7 +16558,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -16587,7 +16587,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -16616,7 +16616,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -16645,7 +16645,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -16674,7 +16674,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
@@ -16701,7 +16701,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
@@ -16727,7 +16727,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
@@ -16756,7 +16756,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -16785,7 +16785,7 @@ antibody Input
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -16813,7 +16813,7 @@ antibody Input
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -16839,7 +16839,7 @@ antibody Input
 cell K562
 composite wgEncodeUwTfbs
 control std
-controlId K562/Input/std
+controlId K562/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -16868,7 +16868,7 @@ antibody Input
 cell LNCaP
 composite wgEncodeUwTfbs
 control std
-controlId LNCaP/Input/std
+controlId LNCaP/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -16894,7 +16894,7 @@ antibody Input
 cell LNCaP
 composite wgEncodeUwTfbs
 control std
-controlId LNCaP/Input/std
+controlId LNCaP/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -16919,7 +16919,7 @@ antibody Input
 cell LNCaP
 composite wgEncodeUwTfbs
 control std
-controlId LNCaP/Input/std
+controlId LNCaP/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -16946,7 +16946,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -16973,7 +16973,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17000,7 +17000,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17028,7 +17028,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17056,7 +17056,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17084,7 +17084,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17112,7 +17112,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17138,7 +17138,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17164,7 +17164,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17192,7 +17192,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17220,7 +17220,7 @@ antibody Input
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17247,7 +17247,7 @@ antibody Input
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17273,7 +17273,7 @@ antibody Input
 cell MCF-7
 composite wgEncodeUwTfbs
 control std
-controlId MCF-7/Input/std
+controlId MCF-7/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17301,7 +17301,7 @@ antibody Input
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwTfbs
 control std
-controlId Monocytes-CD14+_RO01746/Input/std
+controlId Monocytes-CD14+_RO01746/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
@@ -17326,7 +17326,7 @@ antibody Input
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwTfbs
 control std
-controlId Monocytes-CD14+_RO01746/Input/std
+controlId Monocytes-CD14+_RO01746/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
@@ -17350,7 +17350,7 @@ antibody Input
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwTfbs
 control std
-controlId Monocytes-CD14+_RO01746/Input/std
+controlId Monocytes-CD14+_RO01746/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
@@ -17376,7 +17376,7 @@ antibody CTCF
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -17402,7 +17402,7 @@ antibody CTCF
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -17429,7 +17429,7 @@ antibody CTCF
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -17456,7 +17456,7 @@ antibody CTCF
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -17481,7 +17481,7 @@ antibody CTCF
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -17508,7 +17508,7 @@ antibody Input
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17535,7 +17535,7 @@ antibody Input
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17561,7 +17561,7 @@ antibody Input
 cell NB4
 composite wgEncodeUwTfbs
 control std
-controlId NB4/Input/std
+controlId NB4/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17589,7 +17589,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17616,7 +17616,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17643,7 +17643,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17671,7 +17671,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17699,7 +17699,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17727,7 +17727,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17755,7 +17755,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17781,7 +17781,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17807,7 +17807,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17835,7 +17835,7 @@ antibody CTCF
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -17863,7 +17863,7 @@ antibody Input
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17890,7 +17890,7 @@ antibody Input
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17916,7 +17916,7 @@ antibody Input
 cell NHDF-neo
 composite wgEncodeUwTfbs
 control std
-controlId NHDF-neo/Input/std
+controlId NHDF-neo/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
@@ -17944,7 +17944,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -17972,7 +17972,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18000,7 +18000,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18029,7 +18029,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18058,7 +18058,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18087,7 +18087,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18116,7 +18116,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
@@ -18143,7 +18143,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
@@ -18169,7 +18169,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18198,7 +18198,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18227,7 +18227,7 @@ antibody Input
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18255,7 +18255,7 @@ antibody Input
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -18281,7 +18281,7 @@ antibody Input
 cell NHEK
 composite wgEncodeUwTfbs
 control std
-controlId NHEK/Input/std
+controlId NHEK/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18310,7 +18310,7 @@ antibody Input
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/Input/std
+controlId NHLF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -18336,7 +18336,7 @@ antibody Input
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/Input/std
+controlId NHLF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -18361,7 +18361,7 @@ antibody Input
 cell NHLF
 composite wgEncodeUwTfbs
 control std
-controlId NHLF/Input/std
+controlId NHLF/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -18388,7 +18388,7 @@ antibody Input
 cell PANC-1
 composite wgEncodeUwTfbs
 control std
-controlId PANC-1/Input/std
+controlId PANC-1/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -18414,7 +18414,7 @@ antibody Input
 cell PANC-1
 composite wgEncodeUwTfbs
 control std
-controlId PANC-1/Input/std
+controlId PANC-1/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -18439,7 +18439,7 @@ antibody Input
 cell PANC-1
 composite wgEncodeUwTfbs
 control std
-controlId PANC-1/Input/std
+controlId PANC-1/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -18466,7 +18466,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18493,7 +18493,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18520,7 +18520,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18548,7 +18548,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18576,7 +18576,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18604,7 +18604,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18632,7 +18632,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18658,7 +18658,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18684,7 +18684,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18712,7 +18712,7 @@ antibody CTCF
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18740,7 +18740,7 @@ antibody Input
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18767,7 +18767,7 @@ antibody Input
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18793,7 +18793,7 @@ antibody Input
 cell RPTEC
 composite wgEncodeUwTfbs
 control std
-controlId RPTEC/Input/std
+controlId RPTEC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-29
@@ -18821,7 +18821,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18849,7 +18849,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18877,7 +18877,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18906,7 +18906,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18935,7 +18935,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18964,7 +18964,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -18993,7 +18993,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
@@ -19019,7 +19019,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
@@ -19045,7 +19045,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19074,7 +19074,7 @@ antibody CTCF
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19103,7 +19103,7 @@ antibody Input
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19131,7 +19131,7 @@ antibody Input
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -19157,7 +19157,7 @@ antibody Input
 cell SAEC
 composite wgEncodeUwTfbs
 control std
-controlId SAEC/Input/std
+controlId SAEC/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19186,7 +19186,7 @@ antibody Input
 cell SK-N-MC
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-MC/Input/std
+controlId SK-N-MC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -19212,7 +19212,7 @@ antibody Input
 cell SK-N-MC
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-MC/Input/std
+controlId SK-N-MC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -19237,7 +19237,7 @@ antibody Input
 cell SK-N-MC
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-MC/Input/std
+controlId SK-N-MC/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -19264,7 +19264,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19292,7 +19292,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19320,7 +19320,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19349,7 +19349,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19378,7 +19378,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19407,7 +19407,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19436,7 +19436,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
@@ -19462,7 +19462,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-23
@@ -19488,7 +19488,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19517,7 +19517,7 @@ antibody CTCF
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19546,7 +19546,7 @@ antibody Input
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19574,7 +19574,7 @@ antibody Input
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -19600,7 +19600,7 @@ antibody Input
 cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
-controlId SK-N-SH_RA/Input/std
+controlId SK-N-SH_RA/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19629,7 +19629,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19657,7 +19657,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -19685,7 +19685,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19714,7 +19714,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -19743,7 +19743,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19772,7 +19772,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -19801,7 +19801,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
@@ -19828,7 +19828,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
@@ -19855,7 +19855,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19884,7 +19884,7 @@ antibody CTCF
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -19913,7 +19913,7 @@ antibody Input
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19941,7 +19941,7 @@ antibody Input
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
@@ -19967,7 +19967,7 @@ antibody Input
 cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
-controlId WERI-Rb-1/Input/std
+controlId WERI-Rb-1/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
@@ -19996,7 +19996,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20022,7 +20022,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20048,7 +20048,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20075,7 +20075,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20102,7 +20102,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20129,7 +20129,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20156,7 +20156,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20181,7 +20181,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20206,7 +20206,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20233,7 +20233,7 @@ antibody CTCF
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20341,7 +20341,7 @@ antibody Input
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20367,7 +20367,7 @@ antibody Input
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20392,7 +20392,7 @@ antibody Input
 cell WI-38
 composite wgEncodeUwTfbs
 control std
-controlId WI-38/Input/std
+controlId WI-38/None/Input/std
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-25
@@ -20413,4 +20413,4 @@ tableName wgEncodeUwTfbsWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1057052951
+# MAGIC: 493073157
