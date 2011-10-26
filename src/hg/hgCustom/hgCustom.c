@@ -460,8 +460,9 @@ struct customTrack *ct;
 char buf[256];
 char *pos = NULL;
 char *dataUrl;
+int colSpan = 4;
 
-/* handle 'set all' and 'clr all' */
+/* handle 'set all' and 'clr all' (won't be used if user has javascript enabled). */
 boolean setAllDelete = FALSE;
 boolean setAllUpdate = FALSE;
 if (cartVarExists(cart, hgCtDoDeleteSet))
@@ -489,11 +490,20 @@ tableHeaderField("Description", "Long track identifier");
 tableHeaderField("Type", "Data format of track");
 tableHeaderField("Doc", "HTML track description");
 if (itemCt)
+    {
     tableHeaderField("Items", "Count of discrete items in track");
+    colSpan++;
+    }
 if (posCt)
+    {
     tableHeaderField("Pos"," Go to genome browser at default track position or first item");
+    colSpan++;
+    }
 if (errCt)
+    {
     tableHeaderField("Error"," Error in custom track");
+    colSpan++;
+    }
 
 boolean showAllButtons = FALSE;
 if (numCts > 3)
@@ -581,7 +591,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     printf("<TD COLSPAN=%d ALIGN=CENTER>", showAllButtons ? 2 : 1);
     safef(buf, sizeof(buf), "%s_%s", hgCtDeletePrefix,
             ct->tdb->track);
-    cgiMakeCheckBox(buf, setAllDelete);
+    cgiMakeCheckBoxJS(buf, setAllDelete, "class='deleteCheckbox'");
     puts("</TD>");
 
     /* Update checkboxes */
@@ -591,7 +601,11 @@ for (ct = ctList; ct != NULL; ct = ct->next)
         safef(buf, sizeof(buf), "%s_%s", hgCtRefreshPrefix,
                 ct->tdb->track);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
-            cgiMakeCheckBoxWithMsg(buf, setAllUpdate, dataUrl);
+            {
+            char js[1024];
+            safef(js, sizeof(js), "class='updateCheckbox' title='refresh data from: %s'", dataUrl);
+            cgiMakeCheckBoxJS(buf, setAllUpdate, js);
+            }
         else
             puts("&nbsp;");
 	puts("</TD>");
@@ -601,20 +615,20 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 if (showAllButtons)
     {
     cgiSimpleTableRowStart();
-    puts("<TD COLSPAN=6 ALIGN='RIGHT'>check all / clear all&nbsp;</TD>");
+    printf("<TD COLSPAN=%d ALIGN='RIGHT'>check all / clear all&nbsp;</TD>", colSpan);
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithMsg(hgCtDoDeleteSet, "+", "Select all for deletion");
+    cgiMakeButtonWithOnClick(hgCtDoDeleteSet, "+", "Select all for deletion", "$('.deleteCheckbox').attr('checked', true); return false;");
     cgiTableFieldEnd();
     cgiSimpleTableFieldStart();
-    cgiMakeButtonWithMsg(hgCtDoDeleteClr, "-", "Clear all for deletion");
+    cgiMakeButtonWithOnClick(hgCtDoDeleteClr, "-", "Clear all for deletion", "$('.deleteCheckbox').attr('checked', false); return false;");
     cgiTableFieldEnd();
     if (updateCt)
         {
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithMsg(hgCtDoRefreshSet, "+", "Select all for update");
+        cgiMakeButtonWithOnClick(hgCtDoRefreshSet, "+", "Select all for update", "$('.updateCheckbox').attr('checked', true); return false;");
         cgiTableFieldEnd();
         cgiSimpleTableFieldStart();
-        cgiMakeButtonWithMsg(hgCtDoRefreshClr, "-", "Clear all for update");
+        cgiMakeButtonWithOnClick(hgCtDoRefreshClr, "-", "Clear all for update", "$('.updateCheckbox').attr('checked', false); return false;");
         cgiTableFieldEnd();
         }
     cgiTableRowEnd();
@@ -899,6 +913,7 @@ static void doManageCustom(char *warn)
  * Include warning message, if any */
 {
 cartWebStart(cart, database, "Manage Custom Tracks");
+jsIncludeFile("jquery.js", NULL);
 manageCustomForm(warn);
 webNewSection("Managing Custom Tracks");
 webIncludeHelpFile("customTrackManage", FALSE);

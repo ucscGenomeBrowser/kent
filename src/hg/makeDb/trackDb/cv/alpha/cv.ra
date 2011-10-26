@@ -142,7 +142,7 @@ tissue Cervix
 vendorName ATCC
 vendorId CCL-2.2
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-2.2&Template=cellBiology
-#lineage ectoderm
+lineage ectoderm
 karyotype cancer
 termId BTO:0000568
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
@@ -257,7 +257,7 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
 #formerly tier 3
-tier 3
+tier 2 
 protocol Myers:A549_protocol.pdf Crawford:A549_Crawford_protocol.pdf Stam:A549_Stam_protocol.pdf
 
 term AG04449
@@ -2772,8 +2772,8 @@ term HT-1080
 tag HT1080
 type Cell Line
 organism human
-description epithelial cell line derived from a fibrosarcoma. (PMID: 4132053)
-tissue Epithelium, pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities.
+description epithelial cell line derived from a fibrosarcoma. (PMID: 4132053), pseudo-diploid male with a modal chromosome number of 46. There are numerous chromosome abnormalities. 
+tissue Epithelium
 lineage mesoderm
 karyotype cancer
 vendorName ATCC
@@ -2871,16 +2871,19 @@ term IMR90
 tag IMR90
 type Cell Line
 organism human
-description Normal Human Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
+description Normal Human Fetal Lung Fibroblasts, newly promoted to tier 2: not in 2011 analysis
 tissue Lung
 lineage endoderm
+karyotype normal
 vendorName ATCC
 vendorId CCL-186
 lots 58607680
+termId BTO:0001229
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001229&termName=IMR-90%20cell
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
-sex U
+sex F
 #formerly tier 3
-tier 3
+tier 2
 protocol Stam:IMR90_Stam_protocol.pdf
 
 term iPS
@@ -3018,7 +3021,7 @@ termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093
 sex F
 #formerly tier 3
-tier 3
+tier 2
 protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
@@ -3113,6 +3116,7 @@ tag MONOCD14
 type Cell Line
 organism human
 description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, newly promoted to tier 2: not in 2011 analysis
+deprecated same as Monocytes-CD14+_RO01746
 lineage mesoderm
 karyotype normal
 sex F
@@ -3123,27 +3127,47 @@ orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 #formerly tier 3
-tier 3
+tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Monocytes-CD14+_RO01746
 tag MONOCD14RO1746
 type Cell Line
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746, newly promoted to tier 2: not in 2011 analysis
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw 1 ID is RO 01746, draw 2 ID is RO 01826), newly promoted to tier 2: not in 2011 analysis
 lineage mesoderm
 karyotype normal
 sex F
 tissue Monocytes
 vendorName S. Heimfeld Laboratory, FHCRC
-vendorId Monocytes-CD14+
+vendorId Monocytes-CD14+_RO01746
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 #formerly tier 3
-tier 3
+tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
+# This is going to background as the analysis so far is donor-centric, 
+# Rep 1 is draw 1 and Rep 2 is draw 2. 
+#term Monocytes-CD14+_RO01826
+#tag MONOCD14RO1826
+#type Cell Line
+#organism human
+#description Monocytes-CD14+ are CD14-positive cells from human leukapheresis production, from donor RO 01746 (draw ID RO 01826), newly promoted to tier 2: not in 2011 analysis
+#lineage mesoderm
+#karyotype normal
+#sex F
+#tissue Monocytes
+#vendorName S. Heimfeld Laboratory, FHCRC
+#vendorId Monocytes-CD14+_RO01826
+#orderUrl http://labs.fhcrc.org/heimfeld/contact.html
+#termId BTO:0000876
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+#formerly tier 3
+#tier 2
+#protocol Stam:MonoCD14_Stam_protocol.pdf
+#
 term Myometr
 tag MYOMETR
 type Cell Line
@@ -3620,7 +3644,7 @@ termId BTO:0000932 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932
 sex F
 #formerly tier 3
-tier 3
+tier 2
 protocol Myers:SK-N-SH_Myers_protocol.pdf
 
 # In the trackDb.ra this is displayed as "SK-N-SH(+RA)" but the (+) chars are not liked by some javascript functions like track filtering
@@ -5822,7 +5846,7 @@ orderUrl http://www.scbt.com/datasheet-269-gata-3-hg3-35-antibody.html
 lab Farnham
 lots A1404
 targetId Genecard:GATA3
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:GATA3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3 
 validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
 
 term GCN5
@@ -7676,12 +7700,14 @@ targetId GeneCard:TCF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
 validation TCF3_(SC-349)(WesternBlot,IP-MassSpec):human_TCF3_SC-349_validation_Myers.pdf
 
+# TCF-4 is an alias for TCF7L2 and is located on chr 10.
+# TCF-4 *IS ALSO NOT* an alias for TCF7L2 and *IS* a gene located on chr 18.
 term TCF4
 tag TCF4
 type Antibody
 target TCF4
 antibodyDescription Rabbit monoclonal
-targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+targetDescription TCF4 (now known as TCF7L2) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4  
 deprecated same as TCF7L2
 vendorName Cell Signaling Technology
 vendorId 2569S
@@ -7691,11 +7717,26 @@ targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2&search=TCF7L2
 validation missing
 
+# TCF-4 is an alias for TCF7L2 and is located on chr 10.
+# TCF-4 *IS ALSO NOT* an alias for TCF7L2 and *IS* a gene located on chr 18.
+# This is a stub for the real TCF-4 which may be used later in ENCODE. ~Jeff
+#term TCF-4
+#tag TCF4
+#type Antibody
+#target TCF-4
+#antibodyDescription Rabbit monoclonal
+#targetDescription This gene encodes transcription factor 4, a basic helix-turn-helix transcription factor. The encoded protein recognizes an Ephrussi-box ('E-box') binding site ('CANNTG') - a motif first identified in immunoglobulin enhancers. (provided by RefSeq) 
+#vendorName many sources from http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4 
+#vendorId NA
+#orderUrl NA
+#targetId GeneCard:TCF4
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4 
+#validation missing
 term TCF7L2
 tag TCF7L2
 type Antibody
 target TCF7L2
-targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4.
+targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4  
 antibodyDescription Rabbit monoclonal
 vendorName Cell Signaling Tech
 vendorId H2569S
@@ -9713,7 +9754,7 @@ term ChipSeq
 tag CHIPSEQ
 type dataType
 label ChIP-seq
-description ChIP-Seq
+description ChIP-seq
 dataGroup TFBS/Histones
 
 term Cluster

@@ -1874,7 +1874,7 @@ var rightClick = {
                     setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
                 else
                     setCartVar(id, 'hide' );
-                $('#tr_' + id).remove();
+                $(document.getElementById('tr_' + id)).remove();
                 dragReorder.init();
                 dragSelect.load(false);
                 imageV2.markAsDirtyPage();
@@ -2308,7 +2308,7 @@ var popUp = {
         else {  // On image page
             if(hide) {
                 setVarsFromHash(changedVars);
-                $('#tr_' + trackName).remove();
+                $(document.getElementById('tr_' + trackName)).remove();
                 dragReorder.init();
                 dragSelect.load(false);
             } else {
@@ -2525,7 +2525,7 @@ var imageV2 = {
         var reg = new RegExp(str);
         var a = reg.exec(html);
         if(a && a[1]) {
-            var tr = $('#tr_' + id);
+            var tr = $(document.getElementById("tr_" + id));
             if (tr.length > 0) {
                 $(tr).html(a[1]);
                 // NOTE: Want to examine the png? Uncomment:
@@ -2683,7 +2683,7 @@ var imageV2 = {
         }
         jQuery('body').css('cursor', '');
         if(this.currentId) {
-            var top = $("#tr_" + this.currentId).position().top;
+            var top = $(document.getElementById("tr_" + this.currentId)).position().top;
             $(window).scrollTop(top - this.currentIdYOffset);
         }
     },
@@ -2827,7 +2827,7 @@ var imageV2 = {
         if(keepCurrentTrackVisible) {
             var item = rightClick.currentMapItem || imageV2.lastTrack;
             if(item) {
-                var top = $("#tr_" + item.id).position().top;
+                var top = $(document.getElementById("tr_" + item.id)).position().top;
                 if(top >= $(window).scrollTop()
                 || top < $(window).scrollTop() + $(window).height()) {
                     // don't bother if the item is not currently visible.
@@ -2924,7 +2924,7 @@ var trackSearch = {
                                 show: function(event, ui) {
                                     $('#currentTab').val(ui.panel.id);
                                 },
-                                select: function(event, ui) { findTracksSwitchTabs(ui); }
+                                select: function(event, ui) { findTracks.switchTabs(ui); }
                             });
             $('#tabs').show();
             $("#tabs").tabs('option', 'selected', '#' + val);
@@ -2934,8 +2934,8 @@ var trackSearch = {
             $("#tabs").css('font-family', jQuery('body').css('font-family'));
             $("#tabs").css('font-size', jQuery('body').css('font-size'));
             $('.submitOnEnter').keydown(trackSearch.searchKeydown);
-            findTracksNormalize();
-            updateMetaDataHelpLinks(0);
+            findTracks.normalize();
+            findTracks.updateMdbHelp(0);
         }
     }
 }
