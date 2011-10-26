@@ -543,7 +543,7 @@ if (sortOrder != NULL)
                                labelWithVocabLink(var,sortOrder->title[sIx],tagLabelPairs,TRUE),dropDownHtml);  // TRUE were sending tags, not values
                 freeMem(dropDownHtml);
                 count++;
-                if (sIx < 64) // avoid bit overflow but 64 filterBoxes?  I don't think so
+                if (sIx < 32) // avoid bit overflow but 32 filterBoxes?  I don't think so
                     filterableBits |= (0x1<<(sIx));
                 }
             }
