@@ -299,7 +299,7 @@ class makeNotes(object):
             intersect = new & revoked
             if intersect:
                 output.append("")
-                output.append("The following exist in both new and revoked %s:" % title)
+                output.append("These %s objects exist in both new and revoked %s:" % (len(intersect), title))
                 for i in intersect:
                     output.append("%s" % i)
             
@@ -320,10 +320,13 @@ class makeNotes(object):
         tableSize = self.__getTableSize()
 
         output.append("mkChangeNotes v2")
-        if (args['releaseOld'] == "solo"):
-            output.append("%s %s Release %s" % (args['database'], args['composite'], args['releaseNew']))
-        else:
-            output.append("%s %s Release %s vs Release %s" % (args['database'], args['composite'], args['releaseNew'], args['releaseOld']))
+        title = "%s %s Release %s" % (args['database'], args['composite'], args['releaseNew'])
+        if args['releaseOld'] != "solo":
+            title = title + " vs Release %s" % args['releaseOld']
+        if args['summary']:
+            title = "Summary for " + title
+        output.append(title)
+
         output.append("")
         output.append("QA Count Summaries for Release %s:" % args['releaseNew'])
         output.append("Tables: %d" % int(len(newTableSet)))
