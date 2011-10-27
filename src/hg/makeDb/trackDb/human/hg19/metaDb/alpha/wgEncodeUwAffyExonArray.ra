@@ -542,6 +542,7 @@ fileName wgEncodeUwAffyExonArrayGm12864SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS12431
+md5sum 1a126534886a4e299b4aacbc1375c7c9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -564,6 +565,7 @@ fileName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS12436
+md5sum 1cba623a796921265a7b264cdd459dde
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -586,6 +588,7 @@ fileName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId DS12442
+md5sum 61aa6f6685513b587fb357066f6850ba
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -770,6 +773,7 @@ fileName wgEncodeUwAffyExonArrayHahSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17565
+md5sum e6d09e1814f39dba49f50e810c875cf9
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -792,6 +796,7 @@ fileName wgEncodeUwAffyExonArrayHahSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17566
+md5sum 528f18681f7ba2c32e86841f2a05234d
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -902,6 +907,7 @@ fileName wgEncodeUwAffyExonArrayHbvpSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS18997
+md5sum 7771acc4c15527ebf16887bbb3378866
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -924,6 +930,7 @@ fileName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS18998
+md5sum d1b5cf302faf1a624c15cb7ba4cd033a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -946,6 +953,7 @@ fileName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS18999
+md5sum 10fe54c0309628c64ecb3ad712bfef13
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1420,6 +1428,7 @@ fileName wgEncodeUwAffyExonArrayHffSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17567
+md5sum 7d3ba42a57e6f998b0e46c925b5331eb
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1442,6 +1451,7 @@ fileName wgEncodeUwAffyExonArrayHffSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17568
+md5sum b6367088c953dca00d42899688811c55
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1464,6 +1474,7 @@ fileName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17569
+md5sum 6f5f187d37cb7e5bdba645075b1ec548
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1486,6 +1497,7 @@ fileName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17570
+md5sum 606a8575029b2cb40d4680f0af5ffaaf
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1731,6 +1743,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19000
+md5sum 2f923e31278527ac6f7900cf922a9d1b
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1753,6 +1766,7 @@ fileName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19001
+md5sum 8a7737e25cbbf4fbeb5169b198b8185a
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2129,6 +2143,7 @@ fileName wgEncodeUwAffyExonArrayHpaecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19002
+md5sum b2e9149463e85bc0453a4e5b9fb8a66a
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2539,6 +2554,7 @@ fileName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17572
+md5sum c0df6f6a2c63eb4201f2f7a2fe6717f7
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -2922,6 +2938,7 @@ fileName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19003
+md5sum fc46de736060bd30adc90dc8605f4f50
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2944,6 +2961,7 @@ fileName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19004
+md5sum 338e6f0753cb1ea6e822897fc1166bb6
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3125,6 +3143,7 @@ fileName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19005
+md5sum 1faf48c69c2c652f98a9fcae072d993e
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3147,6 +3166,7 @@ fileName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19006
+md5sum 11cfb100f4c11b765818fa6edf04c040
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3215,6 +3235,7 @@ fileName wgEncodeUwAffyExonArrayPrecSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19007
+md5sum 9b00bf9212fc8a71a67f3946075ed220
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3237,6 +3258,7 @@ fileName wgEncodeUwAffyExonArrayPrecSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS19008
+md5sum cb229a705f9c0bc06ff3165af324b4f2
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3395,6 +3417,7 @@ fileName wgEncodeUwAffyExonArraySknmcSimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17573
+md5sum fdd01a9ed2778896becf731e70b9dc60
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3417,6 +3440,7 @@ fileName wgEncodeUwAffyExonArraySknmcSimpleSignalRep2.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17574
+md5sum fa6aa0baf27c28fdc131ff7ec5dc624f
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3508,6 +3532,7 @@ fileName wgEncodeUwAffyExonArrayWerirb1SimpleSignalRep1.broadPeak.gz
 grant Stam
 lab UW
 labExpId RS17575
+md5sum be41e427c0e5289c2c98645860ba5733
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3608,4 +3633,4 @@ tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 treatment None
 view SimpleSignal
 
-# MAGIC: 1330213993
+# MAGIC: 881174152
