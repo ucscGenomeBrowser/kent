@@ -363,12 +363,12 @@ ssh $ramFarm "cd $dir/txOrtho; gensub2 toDoList single template jobList"
 ssh $ramFarm "cd $dir/txOrtho; para make jobList"
 ssh $ramFarm "cd $dir/txOrtho; para time > run.time"
 cat txOrtho/run.time
-# Completed: 194 of 194 jobs
-# CPU time in finished jobs:      43309s     721.81m    12.03h    0.50d  0.001 y
-# IO & Wait Time:                  2977s      49.62m     0.83h    0.03d  0.000 y
-# Average job time:                 239s       3.98m     0.07h    0.00d
-# Longest finished job:            2148s      35.80m     0.60h    0.02d
-# Submission to last job:         55348s     922.47m    15.37h    0.64d
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:       3497s      58.28m     0.97h    0.04d  0.000 y
+# IO & Wait Time:                  6568s     109.47m     1.82h    0.08d  0.000 y
+# Average job time:                 153s       2.54m     0.04h    0.00d
+# Longest finished job:             481s       8.02m     0.13h    0.01d
+# Submission to last job:          2861s      47.68m     0.79h    0.03d
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 
@@ -525,14 +525,12 @@ ssh $cpuFarm "cd $dir/blat/rna; gensub2 toDoList single template jobList"
 ssh $cpuFarm "cd $dir/blat/rna; para make jobList"
 
 ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
-# Completed: 194 of 194 jobs
-# CPU time in finished jobs:      43309s     721.81m    12.03h    0.50d  0.001 y
-# IO & Wait Time:                  2977s      49.62m     0.83h    0.03d  0.000 y
-# Average job time:                 239s       3.98m     0.07h    0.00d
-# Longest finished job:            2148s      35.80m     0.60h    0.02d
-# Submission to last job:         55348s     922.47m    15.37h    0.64d
+# CPU time in finished jobs:      60973s    1016.22m    16.94h    0.71d  0.002 y
+# IO & Wait Time:                  4892s      81.53m     1.36h    0.06d  0.000 y
+# Average job time:                 340s       5.66m     0.09h    0.00d
+# Longest finished job:            2751s      45.85m     0.76h    0.03d
+# Submission to last job:          2808s      46.80m     0.78h    0.03d
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
-
 
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
@@ -572,11 +570,12 @@ ssh $cpuFarm "cd $dir/blat/protein; para time > run.time"
 
 cat blat/protein/run.time
 # Completed: 194 of 194 jobs
-# CPU time in finished jobs:      14718s     245.31m     4.09h    0.17d  0.000 y
-# IO & Wait Time:                   966s      16.09m     0.27h    0.01d  0.000 y
-# Average job time:                  81s       1.35m     0.02h    0.00d
-# Longest finished job:             279s       4.65m     0.08h    0.00d
-# Submission to last job:           465s       7.75m     0.13h    0.01d
+# CPU time in finished jobs:      34921s     582.01m     9.70h    0.40d  0.001 y
+# IO & Wait Time:                  8711s     145.19m     2.42h    0.10d  0.000 y
+# Average job time:                 225s       3.75m     0.06h    0.00d
+# Longest finished job:             621s      10.35m     0.17h    0.01d
+# Submission to last job:           629s      10.48m     0.17h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Sort and select best alignments. Remove raw files for space. Takes 22
 # seconds. Use pslReps not pslCdnaFilter because need -noIntrons flag,
@@ -763,12 +762,13 @@ ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para make jobList"
 ssh $cpuFarm "cd $dir/blat/uniprotVsUcsc; para time > run.time"
 
 cat run.time
-#Completed: 97 of 97 jobs
-#CPU time in finished jobs:       1150s      19.17m     0.32h    0.01d  0.000 y
-#IO & Wait Time:                   293s       4.88m     0.08h    0.00d  0.000 y
-#Average job time:                  15s       0.25m     0.00h    0.00d
-#Longest finished job:              59s       0.98m     0.02h    0.00d
-#Submission to last job:            71s       1.18m     0.02h    0.00d
+# Completed: 97 of 97 jobs
+# CPU time in finished jobs:       4111s      68.52m     1.14h    0.05d  0.000 y
+# IO & Wait Time:                   508s       8.47m     0.14h    0.01d  0.000 y
+# Average job time:                  48s       0.79m     0.01h    0.00d
+# Longest finished job:             491s       8.18m     0.14h    0.01d
+# Submission to last job:           501s       8.35m     0.14h    0.01d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 pslCat raw/*.psl > ../../ucscVsUniprot.psl
 rm -r raw
@@ -894,11 +894,6 @@ hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
-
-
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb affyGnf1h knownGene knownToGnf1h
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -947,7 +942,6 @@ hgLoadNetDist $genomes/$db/p2p/wanker/humanWanker.pathLengths $tempDb humanWanke
     -sqlRemap="select distinct locusLinkID, kgID from $db.refLink,kgXref where $db.refLink.mrnaAcc = kgXref.mRNA"
 endif
 
-exit $status # BRACKET
 
 # Run nice Perl script to make all protein blast runs for
 # Gene Sorter and Known Genes details page.  Takes about
@@ -1127,13 +1121,13 @@ doPfam $(path1) $(root1) {check out line+ result/$(root1).pf}
 gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/pfam; para make jobList"
-#
-# Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    3665959s   61099.32m  1018.32h   42.43d  0.116 y
-# IO & Wait Time:               3731399s   62189.98m  1036.50h   43.19d  0.118 y
-# Average job time:                 765s      12.75m     0.21h    0.01d
-# Longest finished job:            4941s      82.35m     1.37h    0.06d
-# Submission to last job:         10041s     167.35m     2.79h    0.12d
+
+# Completed: 9667 of 9667 jobs
+# CPU time in finished jobs:    3704753s   61745.89m  1029.10h   42.88d  0.117 y
+# IO & Wait Time:              12906097s  215101.61m  3585.03h  149.38d  0.409 y
+# Average job time:                1718s      28.64m     0.48h    0.02d
+# Longest finished job:            8907s     148.45m     2.47h    0.10d
+# Submission to last job:         29041s     484.02m     8.07h    0.34d
 # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Make up pfamDesc.tab by converting pfam to a ra file first
@@ -1153,11 +1147,11 @@ cd $dir
 
 # Convert output to knownToPfam table
 awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
-	pfamDesc.tab > sub.tab
+	pfam/pfamDesc.tab > sub.tab
 cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
-hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfamDesc.tab
+hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -1182,13 +1176,12 @@ doScop $(path1) $(root1) {check out line+ result/$(root1).pf}
 gensub2 prot.list single template jobList
 
 ssh $cpuFarm "cd $dir/scop; para make jobList"
-# Completed: 9668 of 9668 jobs
-# CPU time in finished jobs:    3953327s   65888.78m  1098.15h   45.76d  0.125 y
-# IO & Wait Time:               7723843s  128730.72m  2145.51h   89.40d  0.245 y
-# Average job time:                1208s      20.13m     0.34h    0.01d
-# Longest finished job:            4703s      78.38m     1.31h    0.05d
-# Submission to last job:         12535s     208.92m     3.48h    0.15d
-
+# CPU time in finished jobs:    3980861s   66347.69m  1105.79h   46.07d  0.126 y
+# IO & Wait Time:              11114844s  185247.39m  3087.46h  128.64d  0.352 y
+# Average job time:                1562s      26.03m     0.43h    0.02d
+# Longest finished job:            8166s     136.10m     2.27h    0.09d
+# Submission to last job:         18306s     305.10m     5.08h    0.21d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
 
 # Convert scop output to tab-separated files
 cd $dir
@@ -1285,10 +1278,8 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
 		
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
@@ -1314,7 +1305,7 @@ sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
 
 # move this exit statement to the end of the section to be done next
-#exit $status # BRACKET
+exit $status # BRACKET
 
 
 # Make full text index.  Takes a minute or so.  After this the genome browser
@@ -1329,17 +1320,8 @@ ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
 
-# Run hgKnownGeneList to generate the tree of HTML pages
-# under ./knownGeneList/$db 
-
-    hgKnownGeneList $db
-
-# copy over to /usr/local/apache/htdocs
-    
-    rm -rf /usr/local/apache/htdocs/knownGeneList/$db
-    mkdir -p /usr/local/apache/htdocs/knownGeneList/$db
-    cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
-
+# move this exit statement to the end of the section to be done next
+#exit $status # BRACKET
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms

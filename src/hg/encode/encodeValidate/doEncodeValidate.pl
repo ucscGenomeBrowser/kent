@@ -1050,6 +1050,11 @@ sub validateDafField {
     my ($type, $val, $daf) = @_;
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
+    my $deprecated;
+    $deprecated = &isDeprecated($type, $val);
+    if ($deprecated){
+		return($deprecated);
+    }
     if($validators{$type}) {
                 # Venkat: Added the return $sex to accomadate tissues for mouse
         return $validators{$type}->($val, $type, "", $daf);
@@ -1058,12 +1063,30 @@ sub validateDafField {
     }
 }
 
+sub isDeprecated {
+	my ($type, $val) = @_;
+	if (exists($terms->{$type}->{$val}->{'deprecated'}){
+		return("Controlled Vocabulary '$val' is deprecated: $terms->{$type}->{$val}->{'deprecated'}";
+	}
+	else {
+		return ();
+	}
+
+
+}
+
 sub validateDdfField {
     # validate value for type of field
 	# Venkat: Added $sex to accomadate tissues for mouse
     my ($type, $val, $track, $daf, $cell,$sex) = @_;
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
+    my $deprecated;
+    $deprecated = &isDeprecated($type, $val);
+    if ($deprecated){
+		return($deprecated)
+
+    }
     if($validators{$type}) {
 		# Venkat: Added the return $sex to accomadate tissues for mouse
         return $validators{$type}->($val, $type, $track, $daf, $cell,$sex);
