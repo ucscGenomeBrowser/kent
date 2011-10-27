@@ -117,3 +117,37 @@ visibility hide
 
 track mrna override
 visibility hide
+
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex [A-Z0-9c][A-Z0-9_][A-Za-z0-9._]+
+searchPriority 50
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [A-Z0-9c][A-Z0-9_][A-Za-z0-9._]+
+
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [A-Z0-9c][A-Z0-9_][A-Za-z0-9._]+
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+termRegex [A-Z0-9c][A-Z0-9_][A-Za-z0-9._]+
+searchPriority 50

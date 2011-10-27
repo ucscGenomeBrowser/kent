@@ -118,9 +118,22 @@ class makeNotes(object):
 
         return (mdbtableset, revokedtableset, errors)
 
+    def __checkGbdbFileStatus(self, i, set, errors):
+        filelist = i['fileName'].split(',')
+        for j in filelist:
+            if os.path.isfile("/gbdb/%s/bbi/%s" % (self.database, j)):
+                set.add(j)
+            else:
+                cmd = "hgsql %s -e \"select fileName from (%s)\"" % (self.database, i['tableName'])
+                p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
+                cmdoutput = p.stdout.read()
+                if os.path.isfile(cmdoutput.split("\n")[1]):
+                    set.add(j)
+                else:
+                    errors.append("gbdb: %s does not exist in /gbdb/%s/bbi" % (j, self.database))
+        return set, errors
 
     def getGbdbFiles(self, state):
-        database = self.database
         revokedset = set()
         if state == 'new':
             (tableset, revokedset, mdb) = (self.newTableSet, self.revokedSet, self.newMdb)
@@ -139,20 +152,10 @@ class makeNotes(object):
         revokedfileset = set()
 
         for i in file1stanzalist:
-            filelist = i['fileName'].split(',')
-            for j in filelist:
-                if os.path.isfile("/gbdb/%s/bbi/%s" % (database, j)):
-                    gbdbfileset.add(j)
-                else:
-                    errors.append("gbdb: %s does not exist in /gbdb/%s/bbi" % (j, database))
+            (gbdbfileset, errors) = self.__checkGbdbFileStatus(i, gbdbfileset, errors)
 
         for i in revokedstanzalist:
-            filelist = i['fileName'].split(',')
-            for j in filelist:
-                if os.path.isfile("/gbdb/%s/bbi/%s" % (database, j)):
-                    revokedfileset.add(j)
-                else:
-                    errors.append("gbdb: revoked gbdb %s does not exist in /gbdb/%s/bbi" % (j, database))
+            (revokedfileset, errors) = self.__checkGbdbFileStatus(i, revokedfileset, errors)
 
         return (gbdbfileset, revokedfileset, errors)
 
@@ -607,7 +610,7 @@ class makeNotes(object):
             self.pushFiles = set(sorted((self.totalFiles - self.oldTotalFiles)))
             self.pushGbdbs = set(sorted((self.newGbdbSet - self.oldGbdbSet)))
             self.tableSize = self.__getTableSize()
-            
+            self.errors = errors
             #don't output.append(report unless ignore option is on or no errors
             if (not errors) or self.ignore:
                 self.output = self.printReport(args, c)
@@ -641,6 +644,7 @@ class makeNotes(object):
             #makes list for additional files
             (self.oldTotalFiles, self.oldSupplementalSet) = (set(), set())
             (self.oldReleaseFiles, self.additionalList, self.oldAdditionalList, self.totalFiles) = self.__separateOutAdditional()
+            self.errors = errors
             if (not errors) or self.ignore:
                 self.output = self.printReportOne(args, c) 
             else:
