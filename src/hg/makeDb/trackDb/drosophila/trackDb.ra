@@ -1646,14 +1646,14 @@ searchPriority 1.3
 searchTable flyBaseNoncoding
 searchMethod exact
 searchType bed
-termRegex CR[0-9]+(-R[A-Z])?
+termRegex C[GR][0-9]+(-R[A-Z])?
 searchPriority 2
 
 searchName flyBaseNoncodingPrefix
 searchTable flyBaseNoncoding
 searchMethod exact
 termRegex CR[0-9]+
-dontCheck CR[0-9]+-R[A-Z]
+dontCheck C[GR][0-9]+-R[A-Z]
 query select chrom,chromStart,chromEnd,name from %s where name like '%s-R_'
 searchPriority 2.1
 

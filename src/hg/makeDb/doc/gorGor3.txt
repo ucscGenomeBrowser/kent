@@ -682,3 +682,43 @@ XXX - running - Fri Oct 21 15:42:09 PDT 2011
     #	2571797450 bases of 2822760080 (91.109%) in intersection
 
 ############################################################################
+# lastz swap Chimp rheMac2 (DONE - 2011-10-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/rheMac2/bed/lastzGorGor3.2011-10-21
+    cat fb.rheMac2.chainGorGor3Link.txt  
+    #	2175264883 bases of 2646704109 (82.188%) in intersection
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.rheMac2.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.rheMac2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rheMac2/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    85m16.618s
+    cat fb.gorGor3.chainRheMac2Link.txt
+    #	2236867094 bases of 2822760080 (79.244%) in intersection
+
+############################################################################
+# lastz swap Orangutan ponAbe2 (DONE - 2011-10-23 - Hiram)
+    # original alignment to Orangutan
+    cd /hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
+    cat fb.ponAbe2.chainGorGor3Link.txt  
+    #	2584628377 bases of 3093572278 (83.548%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    86m19.901s
+    cat fb.gorGor3.chainPonAbe2Link.txt 
+    #	2437562544 bases of 2822760080 (86.354%) in intersection
+
+############################################################################

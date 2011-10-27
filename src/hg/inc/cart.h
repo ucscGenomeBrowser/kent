@@ -493,6 +493,11 @@ boolean cartVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb, boolean co
 /* Returns TRUE if variable exists anywhere, looking from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
+boolean cartListVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb,
+				  boolean compositeLevel, char *suffix);
+/* Return TRUE if a list variable for tdb->track (or tdb->parent->track,
+ * or tdb->parent->parent->track, etc.) is in cart (list itself may be NULL). */
+
 char *cartUsualStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, char *usual);
 /* Returns value or {usual} for a cart string from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
