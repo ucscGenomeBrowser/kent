@@ -1,4 +1,4 @@
-# Data Agreement File for Broad ChipSeq project  $Revision: 1.8 $
+# Data Agreement File for Broad Histone project  $Revision: 1.9 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -26,7 +26,7 @@ dafVersion        2.0
 grant            Bernstein
 lab              Broad
 dataType         ChipSeq
-compositeSuffix  BroadChipSeq
+compositeSuffix  BroadHistone
 group            regulation
 variables        cell, antibody, treatment
 assembly         hg19
