@@ -23,7 +23,7 @@ use warnings;
 use warnings FATAL => 'all';
 use strict;
 
-use DataBrowser qw(browse);
+#use DataBrowser qw(browse);
 use File::stat;
 use File::Basename;
 use Getopt::Long;
