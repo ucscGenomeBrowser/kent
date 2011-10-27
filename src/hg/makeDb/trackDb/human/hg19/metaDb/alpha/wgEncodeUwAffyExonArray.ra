@@ -364,7 +364,6 @@ replicate 2
 subId 3816
 submittedDataVersion V2 - lab labeling error
 tableName wgEncodeUwAffyExonArrayBe2cSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayBjSimpleSignalRep1
@@ -548,7 +547,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayGm12864SimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1
@@ -571,7 +569,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2
@@ -594,7 +591,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayGm12865SimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1
@@ -686,7 +682,6 @@ replicate 1
 subId 3816
 submittedDataVersion V2 - lab labeling error
 tableName wgEncodeUwAffyExonArrayHacSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHacSimpleSignalRep2
@@ -710,7 +705,6 @@ replicate 2
 subId 3816
 submittedDataVersion V2 - lab labeling error
 tableName wgEncodeUwAffyExonArrayHacSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHaeSimpleSignalRep1
@@ -779,7 +773,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayHahSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHahSimpleSignalRep2
@@ -802,7 +795,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayHahSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHaspSimpleSignalRep1
@@ -913,7 +905,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayHbvpSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1
@@ -936,7 +927,6 @@ project wgEncode
 replicate 1
 subId 5009
 tableName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2
@@ -959,7 +949,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayHbvsmcSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHcfSimpleSignalRep1
@@ -1434,7 +1423,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayHffSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHffSimpleSignalRep2
@@ -1457,7 +1445,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayHffSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1
@@ -1480,7 +1467,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2
@@ -1503,7 +1489,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayHffmycSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHgfSimpleSignalRep1
@@ -1749,7 +1734,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2
@@ -1772,7 +1756,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayHmvecdadSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1
@@ -2149,7 +2132,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayHpaecSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHpafSimpleSignalRep1
@@ -2397,7 +2379,6 @@ replicate 1
 subId 3816
 submittedDataVersion V2 - lab labeling error
 tableName wgEncodeUwAffyExonArrayHrgecSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2
@@ -2421,7 +2402,6 @@ replicate 2
 subId 3816
 submittedDataVersion V2 - lab labeling error
 tableName wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1
@@ -2491,7 +2471,6 @@ replicate 1
 subId 3816
 submittedDataVersion V2 - lab labeling error
 tableName wgEncodeUwAffyExonArrayHsmmSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2
@@ -2515,7 +2494,6 @@ replicate 2
 subId 3816
 submittedDataVersion V2 - lab labeling error
 tableName wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1
@@ -2560,7 +2538,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1
@@ -2944,7 +2921,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2
@@ -2967,7 +2943,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayNhbeSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1
@@ -3149,7 +3124,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2
@@ -3172,7 +3146,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayNt2d1SimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1
@@ -3241,7 +3214,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayPrecSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayPrecSimpleSignalRep2
@@ -3264,7 +3236,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArrayPrecSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayRptecSimpleSignalRep1
@@ -3423,7 +3394,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArraySknmcSimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArraySknmcSimpleSignalRep2
@@ -3446,7 +3416,6 @@ project wgEncode
 replicate 2
 subId 5011
 tableName wgEncodeUwAffyExonArraySknmcSimpleSignalRep2
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArraySknshraSimpleSignalRep1
@@ -3538,7 +3507,6 @@ project wgEncode
 replicate 1
 subId 5011
 tableName wgEncodeUwAffyExonArrayWerirb1SimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1
@@ -3607,7 +3575,6 @@ project wgEncode
 replicate 1
 subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep1
-treatment None
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
@@ -3630,7 +3597,6 @@ project wgEncode
 replicate 2
 subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
-treatment None
 view SimpleSignal
 
 # MAGIC: 881174152
