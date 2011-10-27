@@ -274,7 +274,7 @@ nomLeu1.genbank.est.native.loadDesc = no
 
 
 ############################################################################
-#  nomLeu1 - Gibbon - Ensembl Genes version 62  (DONE - 2011-04-19 - hiram)
+#  nomLeu1 - Gibbon - Ensembl Genes version 62  (DONE - 2011-04-19 - Hiram)
     ssh hgwdev
     cd /hive/data/genomes/nomLeu1
     cat << '_EOF_' > nomLeu1.ensGene.ra
@@ -295,5 +295,28 @@ nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;
 
     hgsql -e \
 'update trackVersion set dateReference="current" where db="nomLeu1";' hgFixed
+
+############################################################################
+# lastz swap from Gorilla gorGor3 (DONE - 2011-10-27 - Hiram)
+    # original alignment on gorilla
+    cd /hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21
+    cat fb.gorGor3.chainNomLeu1Link.txt
+    #	2356321697 bases of 2822760080 (83.476%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/nomLeu1/bed/blastz.gorGor3.swap
+    cd /hive/data/genomes/nomLeu1/bed/blastz.gorGor3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    74m9.554s
+    cat fb.nomLeu1.chainGorGor3Link.txt 
+    #	2318822567 bases of 2756591777 (84.119%) in intersection
+
+    cd /hive/data/genomes/nomLeu1/bed
+    ln -s blastz.gorGor3.swap lastz.gorGor3
 
 ############################################################################

@@ -26,16 +26,16 @@ type genePred
 
 track lincRNAs
 superTrack on
-shortLabel lincRNAsAll
-longLabel lincRNAsAll
+shortLabel lincRNAs
+longLabel Human lincRNA Catalog 
 group expression
 #visibility dense 
 html lincRNAs
 
-    track lincRNAsIsoforms
+    track lincRNAsTranscripts
     superTrack lincRNAs pack
-    shortLabel lincRNAsTranscriptIsoforms
-    longLabel lincRNAs Transcript Isoforms
+    shortLabel Transcripts
+    longLabel lincRNAs Transcripts
     #shadesOfBrown
     color 100,50,0
     altColor 175,150,128
@@ -46,7 +46,7 @@ html lincRNAs
     track lincRNAsAllCellTypeTopView
     superTrack lincRNAs full
     compositeTrack on
-    shortLabel lincRNAsAllCellTypeView
+    shortLabel AllCellTypeView
     longLabel lincRNAs All Cell Type View
     subGroup1 view Views lincRNAsRefseqExp=RefSeq_Expression_Ratio
 #    subGroup2 tissueType Tissue_Type brain=Brain heart=Heart
