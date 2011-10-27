@@ -164,6 +164,10 @@ set cgapSageDbs hg18,hg19,mm8
 
 # Define the shared identifiers and the fields they appear in.
 
+identifier cosmicId
+"COSMIC entry ID"
+     $hg.cosmic.name
+     $hg.cosmicRaw.cosmic_mutation_id
 
 # GO - Gene Ontology Info
 
