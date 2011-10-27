@@ -347,8 +347,8 @@ if(!mp->multi) /* expecting multipart child parts */
 //fprintf(stderr,"GALT: Wow got past parse of MIME!\n");
 //fflush(stderr);
 
-//debug
 ct = hashFindVal(mp->hdr,"content-type");
+//debug
 //fprintf(stderr,"GALT: main content-type: %s\n",ct);
 //fflush(stderr);
 if (!startsWith("multipart/form-data",ct))
