@@ -2,6 +2,14 @@ track ctgPos override
 shortLabel Contigs
 longLabel Assembly Contigs
 
+searchTable ctgPos
+searchMethod exact
+shortCircuit 1
+termRegex [0-9]{13}(_[12])?
+query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
+searchPriority 5
+
+
 track exoniphy
 shortLabel Exoniphy
 longLabel Exoniphy lifted from Hg17 using chains
