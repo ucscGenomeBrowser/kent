@@ -348,7 +348,7 @@ if(!mp->multi) /* expecting multipart child parts */
 //fflush(stderr);
 
 //debug
-//ct = hashFindVal(mp->hdr,"content-type");
+ct = hashFindVal(mp->hdr,"content-type");
 //fprintf(stderr,"GALT: main content-type: %s\n",ct);
 //fflush(stderr);
 if (!startsWith("multipart/form-data",ct))
