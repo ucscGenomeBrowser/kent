@@ -89,7 +89,7 @@ level 2
 md5sum 053e158a4c29c0dc81401a44b01749b9
 project wgEncode
 subId 2094
-tableName wgEncodeGencodePolyAV4
+tableName wgEncodeGencodePolyaV4
 
 metaObject wgEncodeGencodeV4
 objType composite
