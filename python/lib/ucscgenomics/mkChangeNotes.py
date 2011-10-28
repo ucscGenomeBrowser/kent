@@ -296,6 +296,13 @@ class makeNotes(object):
             output.append("%s: %s" % (removeline, len(revoked)))
             output.append("New + Untouched: %s" % len(new | untouched))
             output.append("%s: %s" % (totaline, len(all)))
+            intersect = new & revoked
+            if intersect:
+                output.append("")
+                output.append("The following exist in both new and revoked %s:" % title)
+                for i in intersect:
+                    output.append("%s" % i)
+            
         if all and not summary:
             output.append("")
             output.append("New %s (%s):" % (title.title(), len(new)))
@@ -370,12 +377,12 @@ class makeNotes(object):
         output.extend(self.__qaHeader(output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, additionalList, revokedTableSet, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c))
 
         output.extend(self.__printSection(pushTables, untouchedTables, revokedTableSet, allTables, "tables", 0, args['summary']))
-        output.extend(self.__printSection(newFiles, untouchedFiles, revokedFiles, allFiles, "download", self.releasePath, args['summary']))
+        output.extend(self.__printSection(pushFiles, untouchedFiles, revokedFiles, allFiles, "download", self.releasePath, args['summary']))
         output.extend(self.__printSection(pushGbdbs, untouchedGbdbs, revokedGbdbs, allGbdbs, "gbdbs", self.gbdbPath, args['summary']))
         output.extend(self.__printSection(newSupp, untouchedSupp, removedSupp, allSupp, "supplemental", self.releasePath, args['summary']))
 
         self.newTables = set(pushTables)
-        self.newFiles = set(self.__printIter(newFiles, self.releasePath))
+        self.newFiles = set(self.__printIter(pushFiles, self.releasePath))
         self.newGbdbs = set(self.__printIter(pushGbdbs, self.gbdbPath))
         self.newSupplemental = set(self.__printIter(newSupp, self.releasePath))
         self.newOthers = set(self.__printIter(additionalList, self.releasePath))
@@ -496,6 +503,9 @@ class makeNotes(object):
             #check if all files listed in release directories have associated metaDb entries
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
             (self.oldMdb, spam, eggs, ham, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
+
+
+
 
             #checks to see that nothing has disappeared between public and alpha
             errors.extend(self.__checkAlphaForDropped("alpha metaDb", "stanza"))
