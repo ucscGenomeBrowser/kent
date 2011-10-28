@@ -2133,7 +2133,7 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "control";
             }
             #print "term = $terms\n"
-            #$subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
+            $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
         #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
         # in the table name. The below code was found to be to specific, however if there are any problems
