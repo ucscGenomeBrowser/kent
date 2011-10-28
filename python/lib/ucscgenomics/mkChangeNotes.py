@@ -345,28 +345,24 @@ class makeNotes(object):
         return errors
 
     def printReport(self, args, c):
-        (totalFiles, newGbdbSet, newTableSet, additionalList, oldAdditionalList, oldTableSet, oldReleaseFiles, oldGbdbSet, atticSet, revokedFiles, revokedTableSet, revokedGbdbs, missingFiles, newSupplementalSet, oldSupplementalSet) = (self.totalFiles, self.newGbdbSet, self.newTableSet, self.additionalList, self.oldAdditionalList, self.oldTableSet, self.oldTotalFiles, self.oldGbdbSet, self.atticSet, self.revokedFiles, self.revokedTableSet, self.revokedGbdbs, self.missingFiles, self.newSupplementalSet, self.oldSupplementalSet)
+        (totalFiles, newGbdbSet, newTableSet, additionalList, oldAdditionalList, oldTableSet, oldReleaseFiles, oldGbdbSet, atticSet, revokedFiles, revokedTableSet, revokedGbdbs, missingFiles, newSupplementalSet, oldSupplementalSet, pushTables, pushFiles, pushGbdbs, newSupp) = (self.totalFiles, self.newGbdbSet, self.newTableSet, self.additionalList, self.oldAdditionalList, self.oldTableSet, self.oldTotalFiles, self.oldGbdbSet, self.atticSet, self.revokedFiles, self.revokedTableSet, self.revokedGbdbs, self.missingFiles, self.newSupplementalSet, self.oldSupplementalSet, self.pushTables, self.pushFiles, self.pushGbdbs, self.newSupp)
         #the groups here need to be predefined, I just copied and pasted after working out what they were
         sep = "\n"
         output = []
 
         #maths
         allTables = newTableSet | oldTableSet | revokedTableSet
-        pushTables = set(sorted((self.newTableSet - self.oldTableSet)))
         untouchedTables = oldTableSet & newTableSet
 
         allFiles = totalFiles | oldReleaseFiles | revokedFiles
-        pushFiles = set(sorted((self.totalFiles - self.oldTotalFiles)))
         newFiles = pushFiles - revokedFiles
         untouchedFiles = (totalFiles & oldReleaseFiles) - revokedFiles
         filesNoRevoke = totalFiles - revokedFiles
 
         allGbdbs = newGbdbSet | oldGbdbSet | revokedGbdbs
         untouchedGbdbs = (newGbdbSet & oldGbdbSet) - revokedGbdbs
-        pushGbdbs = set(sorted((self.newGbdbSet - self.oldGbdbSet)))
 
         allSupp = newSupplementalSet | oldSupplementalSet
-        newSupp = newSupplementalSet - oldSupplementalSet
         removedSupp = oldSupplementalSet - newSupplementalSet
         untouchedSupp = oldSupplementalSet & newSupplementalSet
 
@@ -381,11 +377,7 @@ class makeNotes(object):
         output.extend(self.__printSection(newSupp, untouchedSupp, removedSupp, allSupp, "supplemental", self.releasePath, args['summary']))
 
         #These attributes are the critical ones that are used by qaInit, others could potentially use these also.
-        self.newTables = set(pushTables)
-        self.newFiles = set(ucscUtils.printIter(pushFiles, self.releasePath))
-        self.newGbdbs = set(ucscUtils.printIter(pushGbdbs, self.gbdbPath))
-        self.newSupplemental = set(ucscUtils.printIter(newSupp, self.releasePath))
-        self.newOthers = set(ucscUtils.printIter(additionalList, self.releasePath))
+
 
         otherprint = len(allOther)
         if otherprint:
@@ -513,9 +505,9 @@ class makeNotes(object):
             self.missingFiles = self.__checkFilesForDropped()
             #filter them out of old release files
 
-            
 
-            
+
+
             #check if all files listed in release directories have associated metaDb entries
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
             (self.oldMdb, spam, eggs, ham, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
@@ -561,10 +553,21 @@ class makeNotes(object):
             self.oldTotalFiles = self.__cleanSpecialFiles(oldTotalFiles)
             (self.oldTotalFiles, self.additionalList, self.oldAdditionalList, self.totalFiles) = self.__separateOutAdditional()
 
-            #get the stuff you need to push, also table sizes
+            #get the stuff you need to push
+            self.pushTables = set(sorted((self.newTableSet - self.oldTableSet)))
+            self.pushFiles = set(sorted((self.totalFiles - self.oldTotalFiles)))
+            self.pushGbdbs = set(sorted((self.newGbdbSet - self.oldGbdbSet)))
+            self.newSupp = self.newSupplementalSet - self.oldSupplementalSet
+
+            self.newTables = set(self.pushTables)
+            self.newFiles = set(ucscUtils.printIter(self.pushFiles, self.releasePath))
+            self.newGbdbs = set(ucscUtils.printIter(self.pushGbdbs, self.gbdbPath))
+            self.newSupplemental = set(ucscUtils.printIter(self.newSupp, self.releasePath))
+            self.newOthers = set(ucscUtils.printIter(self.additionalList, self.releasePath))
 
             self.errors = errors
             #don't output.append(report unless ignore option is on or no errors
+            #module mode doesn't generate output by default
             if (not errors) or self.ignore:
                 self.output = self.printReport(args, c)
             else:
@@ -583,7 +586,7 @@ class makeNotes(object):
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
 
             (self.newTableSet, self.revokedTableSet, spam, newTableError) = self.checkTableStatus("alpha metaDb", "new")
-
+            
             self.tableSize = self.__getTableSize()
 
             (self.newGbdbSet, self.revokedGbdbs, newGbdbError) = self.getGbdbFiles("new")
