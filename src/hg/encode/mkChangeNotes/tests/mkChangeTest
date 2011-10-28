@@ -9,9 +9,31 @@ database = 'encodeTest'
 composite = 'wgEncodeTest'
 
 
-argsdict = {'database': database, 'composite': composite, 'releaseNew': '1', 'releaseOld': 'solo', 'loose': 0, 'ignore': 0, 'summary': 0, 'specialMdb': None}
+argsdict = {'database': database, 'composite': composite, 'releaseNew': '2', 'releaseOld': '1', 'loose': 0, 'ignore': 0, 'summary': 0, 'specialMdb': 'wgEncodeTest2'}
+real = CurrentMkChangeNotes.makeNotes(argsdict)
+test = mkChangeNotes.makeNotes(argsdict)
 
-class mkChangeNotesEndToEndCheck(unittest.TestCase):
+class mkChangeNotesFunctionTests(unittest.TestCase):
+
+    def testCheckMetaDbForFiles(self):
+        self.assertEqual(test.checkMetaDbForFiles("test", "new"), real.checkMetaDbForFiles("test",  "new"))
+
+    def testCheckTableStatus(self):
+        self.assertEqual(test.checkTableStatus("test", "new"), real.checkTableStatus("test",  "new"))
+
+    def testGetGbdbFiles(self):
+        self.assertEqual(test.getGbdbFiles("new"), real.getGbdbFiles("new"))
+
+    def testErrors(self):
+        self.assertEqual(test.errors, real.errors)
+
+    def testImportantVariables(self):
+        reallist = [set(real.newReleaseFiles), set(real.oldReleaseFiles), set(real.newMdb), real.revokedSet, real.revokedFiles, real.atticSet, real.newSupplementalSet, set(real.oldMdb), real.oldSupplementalSet, real.newTableSet, real.revokedTableSet, real.oldTableSet, real.newGbdbSet, real.revokedGbdbs, real.oldGbdbSet, real.oldTotalFiles, real.additionalList, real.oldAdditionalList, real.totalFiles]
+        testlist = [set(test.newReleaseFiles), set(test.oldReleaseFiles), set(test.newMdb), test.revokedSet, test.revokedFiles, test.atticSet, test.newSupplementalSet, set(test.oldMdb), test.oldSupplementalSet, test.newTableSet, test.revokedTableSet, test.oldTableSet, test.newGbdbSet, test.revokedGbdbs, test.oldGbdbSet, test.oldTotalFiles, test.additionalList, test.oldAdditionalList, test.totalFiles]
+        self.assertEqual(testlist, reallist)
+
+
+class mkChangeNotesZEndToEndCheck(unittest.TestCase):
     def testRelease1(self):
         argsdict['releaseNew'] = '1'
         argsdict['releaseOld'] = 'solo'
@@ -29,7 +51,6 @@ class mkChangeNotesEndToEndCheck(unittest.TestCase):
         self.assertListEqual(test.output,real.output)
 
     def testRelease3(self):
-
         argsdict['releaseNew'] = '3'
         argsdict['releaseOld'] = '2'
         argsdict['specialMdb'] = 'wgEncodeTest3'
@@ -38,22 +59,12 @@ class mkChangeNotesEndToEndCheck(unittest.TestCase):
         self.assertListEqual(test.output,real.output)
 
     def testRelease4(self):
-
         argsdict['releaseNew'] = '4'
         argsdict['releaseOld'] = '3'
         argsdict['specialMdb'] = 'wgEncodeTest4'
         real = CurrentMkChangeNotes.makeNotes(argsdict)
         test = mkChangeNotes.makeNotes(argsdict)
         self.assertListEqual(test.output,real.output)
-
-class mkChangeNotesFunctionTests(unittest.TestCase):
-    def testCheckMetaDbForFiles(self):
-        argsdict['releaseNew'] = '3'
-        argsdict['releaseOld'] = '2'
-        argsdict['specialMdb'] = 'wgEncodeTest3'
-        real = CurrentMkChangeNotes.makeNotes(argsdict)
-        test = mkChangeNotes.makeNotes(argsdict)
-        self.assertEqual(test.checkMetaDbForFiles("test", "new"), real.checkMetaDbForFiles("test",  "new"))
         
 def main():
 

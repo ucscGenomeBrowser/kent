@@ -391,7 +391,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
 	parser.add_argument('release', help='The new release to be released')
 	parser.add_argument('redmine', help='The Redmine issue number')
-	parser.add_argument('-m', '--mdb', default=0, help='use a different mdb table')
+	parser.add_argument('-m', '--mdb', default=0, help='use a different mdb composite name')
 
 
 	if len(sys.argv) == 1:
