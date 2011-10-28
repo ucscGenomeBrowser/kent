@@ -261,6 +261,7 @@ labExpId K16,K17
 labProtocolId 021WC+cage,022WC+cage
 localization cell
 md5sum 52d88c27c4545855e132da2eeaecf85c
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4517
@@ -524,6 +525,7 @@ labExpId K12,K13
 labProtocolId 017WC+cage,018WC+cage
 localization cell
 md5sum 3016ad718c738c73a1b4464ebabfd966
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4520
@@ -787,6 +789,7 @@ labExpId K18,K19
 labProtocolId 037WC+cage,038WC+cage
 localization cell
 md5sum 92dc5d616b8527bfef4565fc4894fcb8
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4498
@@ -1050,6 +1053,7 @@ labExpId J72,J73
 labProtocolId 003WC+cage,004WC+cage
 localization cell
 md5sum 177c08c98076452c958bef6b6e1ad7a2
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4531
@@ -1208,6 +1212,7 @@ labExpId I27
 labProtocolId gen0104C-cage
 localization cytosol
 md5sum 4325ec242a56ce4d14b305a1ef2d7327
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4526
@@ -1471,6 +1476,7 @@ labExpId J84,J85
 labProtocolId 003C+cage,004C+cage
 localization cytosol
 md5sum 5ed978912ffbdbd77193e22c9471cc05
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4508
@@ -1626,6 +1632,7 @@ labExpId I69
 labProtocolId gen0109NLtcage
 localization nucleolus
 md5sum eacce8d334f65ef42d5145896f7434b0
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 4506
@@ -1778,6 +1785,7 @@ labExpId J59
 labProtocolId gen0110N-cage
 localization nucleus
 md5sum 0869c5e6ef84ba26cb24b1d356f3b598
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4509
@@ -2041,6 +2049,7 @@ labExpId J93,J94
 labProtocolId 003N+cage,004N+cage
 localization nucleus
 md5sum 4e86809330cd6d1ff3486ce84e4f205d
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4536
@@ -2199,6 +2208,7 @@ labExpId I67
 labProtocolId gen0113WC-cage
 localization cell
 md5sum 36f1f066b9e014ae349ccf85c97072c8
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4530
@@ -2462,6 +2472,7 @@ labExpId J74,J75
 labProtocolId 005WC+cage,006WC+cage
 localization cell
 md5sum d9e7aac643c14cefbd4c60c6bf2a435f
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4505
@@ -2991,6 +3002,7 @@ labExpId J80,J81
 labProtocolId 011WC+cage,012WC+cage
 localization cell
 md5sum b80e83fd659c9c5ca2957c9fec15b1b9
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4504
@@ -3143,6 +3155,7 @@ labExpId J56
 labProtocolId gen0121C-cage
 localization cytosol
 md5sum 655ca54c52650c26014ce4c38ef217f6
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4535
@@ -3406,6 +3419,7 @@ labExpId J87,J88
 labProtocolId 011C+cage,012C+cage
 localization cytosol
 md5sum 1556fe4f56a0649fee371b48a90b7dc2
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4527
@@ -3558,6 +3572,7 @@ labExpId J58
 labProtocolId gen0123NLtcage
 localization nucleolus
 md5sum 3538e885cbbbf2ca3c991acb121dc65c
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 4534
@@ -3821,6 +3836,7 @@ labExpId J96,J97
 labProtocolId 011N+cage,012N+cage
 localization nucleus
 md5sum 96a7bb5403f1fb1d328e663f7c4b1c6f
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4522
@@ -4084,6 +4100,7 @@ labExpId K01,K02
 labProtocolId 013WC+cage,014WC+cage
 localization cell
 md5sum b69fce26cd814558e21bdfe31ba93cde
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4539
@@ -4242,6 +4259,7 @@ labExpId I42
 labProtocolId gen0125C-cage
 localization cytosol
 md5sum bd0d4473bd0de3317a08852a7f95851e
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4514
@@ -4505,6 +4523,7 @@ labExpId J89,J90
 labProtocolId 013C+cage,014C+cage
 localization cytosol
 md5sum 60c5bef504aa84c8f3452a401e250af8
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4513
@@ -4660,6 +4679,7 @@ labExpId I68
 labProtocolId gen0127NLtcage
 localization nucleolus
 md5sum f73e9f94524221f59765ae0ea4ab31ef
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 4519
@@ -4818,6 +4838,7 @@ labExpId I44
 labProtocolId gen0128N-cage
 localization nucleus
 md5sum b5f4f44fde655f7e3701875095665b2b
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4512
@@ -5081,6 +5102,7 @@ labExpId J98,J99
 labProtocolId 013N+cage,014N+cage
 localization nucleus
 md5sum 193e981a4acfb1767c690433abc71fcf
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4528
@@ -5344,6 +5366,7 @@ labExpId J78,J79
 labProtocolId 009WC+cage,010WC+cage
 localization cell
 md5sum 032b9e1809a4993c2d3e8442d9d72142
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4503
@@ -5502,6 +5525,7 @@ labExpId I72
 labProtocolId gen0116C-cage
 localization cytosol
 md5sum 7a15e490341fd955c3ef48eade9746c1
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4523
@@ -5765,6 +5789,7 @@ labExpId K03,K04
 labProtocolId 029C+cage,030C+cage
 localization cytosol
 md5sum d0188926a6dd32bbf0b8768648a15c7a
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4515
@@ -6028,6 +6053,7 @@ labExpId K05,K06
 labProtocolId 029N+cage,030N+cage
 localization nucleus
 md5sum 5a1524e7996607fb768feffec68bd90b
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4497
@@ -6291,6 +6317,7 @@ labExpId J70,J71
 labProtocolId 001WC+cage,002WC+cage
 localization cell
 md5sum dc96479e4e99898c7d61bc6d1697e0ba
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4532
@@ -6449,6 +6476,7 @@ labExpId I35
 labProtocolId gen0134CHtcage
 localization chromatin
 md5sum 402b309cac2e2839a02c3c75258e235e
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 4516
@@ -6634,6 +6662,7 @@ labExpId I22
 labProtocolId gen0136C-cage
 localization cytosol
 md5sum 78f9da37fee8723be7d5a14ea59bf92e
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4501
@@ -7035,6 +7064,7 @@ labExpId J82,J83
 labProtocolId 001C+cage,002C+cage
 localization cytosol
 md5sum 6eb16316a72e6613d7898f419e9317e5
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4500
@@ -7042,7 +7072,6 @@ view TssGencV7
 
 metaObject wgEncodeRikenCageK562NucleolusTotalAln
 objType table
-attic auxExp
 bioRep gen0144NL
 cell K562
 composite wgEncodeRikenCage
@@ -7095,7 +7124,6 @@ view Clusters
 
 metaObject wgEncodeRikenCageK562NucleolusTotalMinusSignal
 objType table
-attic auxExp
 bioRep gen0144NL
 cell K562
 composite wgEncodeRikenCage
@@ -7122,7 +7150,6 @@ view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleolusTotalPlusSignal
 objType table
-attic auxExp
 bioRep gen0144NL
 cell K562
 composite wgEncodeRikenCage
@@ -7190,6 +7217,7 @@ labExpId I33
 labProtocolId gen0144NLtcage
 localization nucleolus
 md5sum c5a05dfe07287a865b65d23e159ed8a7
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 4507
@@ -7348,6 +7376,7 @@ labExpId I34
 labProtocolId gen0147NPtcage
 localization nucleoplasm
 md5sum 69a3159c51d6adc9047c038c78619127
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 4525
@@ -7530,6 +7559,7 @@ labExpId I23
 labProtocolId gen0149N-cage
 localization nucleus
 md5sum 219afcb8d1ca6063da98b32a8c788c72
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4537
@@ -7793,6 +7823,7 @@ labExpId J91,J92
 labProtocolId 001N+cage,002N+cage
 localization nucleus
 md5sum 111a88c53fd3dc0ab47d921148a8d779
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4518
@@ -7951,6 +7982,7 @@ labExpId I32
 labProtocolId gen0152P-cage
 localization polysome
 md5sum 68410324788ab99eafe2e13e6f7a3e08
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4511
@@ -7985,7 +8017,6 @@ view Alignments
 
 metaObject wgEncodeRikenCageMcf7CellPapAlnRep2
 objType table
-attic auxExp
 bioRep 016WC
 cell MCF-7
 composite wgEncodeRikenCage
@@ -8047,6 +8078,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
 dccAccession wgEncodeEH001151
+dccRep 2
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapMinusRawRep2.bigWig
 grant Gingeras
@@ -8055,6 +8087,7 @@ labExpId K11
 labProtocolId 016WC+cage
 localization cell
 md5sum cedd987a5cc19fccbbb24af8de8c7381
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8099,6 +8132,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
 dccAccession wgEncodeEH001151
+dccRep 2
 expId 1151
 fileName wgEncodeRikenCageMcf7CellPapPlusRawRep2.bigWig
 grant Gingeras
@@ -8107,6 +8141,7 @@ labExpId K11
 labProtocolId 016WC+cage
 localization cell
 md5sum 92c3da85a2c004409f982fee8327f93c
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8211,6 +8246,7 @@ labExpId K07,K11
 labProtocolId 015WC+cage,016WC+cage
 localization cell
 md5sum d06d095e747daaf1137f81da567c2d80
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4521
@@ -8474,6 +8510,7 @@ labExpId J76,J77
 labProtocolId 007WC+cage,008WC+cage
 localization cell
 md5sum ce48cf1d307b8725c4555c88b956c598
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4499
@@ -8632,6 +8669,7 @@ labExpId I70
 labProtocolId gen0155C-cage
 localization cytosol
 md5sum 7de935344118dd2c0c853d2dfcd4092a
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4533
@@ -8666,7 +8704,6 @@ view Alignments
 
 metaObject wgEncodeRikenCageNhekCytosolPapAlnRep4
 objType table
-attic auxExp
 bioRep 028C
 cell NHEK
 composite wgEncodeRikenCage
@@ -8728,6 +8765,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001153
+dccRep 2
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapMinusRawRep4.bigWig
 grant Gingeras
@@ -8736,6 +8774,7 @@ labExpId K20
 labProtocolId 028C+cage
 localization cytosol
 md5sum b4b58eda0a31f20123eb8c137c675279
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -8780,6 +8819,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001153
+dccRep 2
 expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapPlusRawRep4.bigWig
 grant Gingeras
@@ -8788,6 +8828,7 @@ labExpId K20
 labProtocolId 028C+cage
 localization cytosol
 md5sum 60e40619a63615bb8def540ced7cd844
+origAssembly hg19
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -8892,6 +8933,7 @@ labExpId K08,K20
 labProtocolId 027C+cage,028C+cage
 localization cytosol
 md5sum e2c39dc6ee97ac5872f4a2efa0cd0e31
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4502
@@ -9050,6 +9092,7 @@ labExpId I71
 labProtocolId gen0157N-cage
 localization nucleus
 md5sum f9e5b12e82965c9d1b7e8c154dcb2140
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 4538
@@ -9206,6 +9249,7 @@ labExpId K09
 labProtocolId 027N+cage
 localization nucleus
 md5sum b90e2290be56f4844f30d0e74f34affc
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4529
@@ -9375,7 +9419,6 @@ view RawData2
 
 metaObject wgEncodeRikenCageSknshraCellPapAlnRep1
 objType table
-attic auxExp
 bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
@@ -9403,7 +9446,6 @@ view Alignments
 
 metaObject wgEncodeRikenCageSknshraCellPapAlnRep2
 objType table
-attic auxExp
 bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
@@ -9465,6 +9507,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001157
+dccRep 1
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapMinusRawRep1.bigWig
 grant Gingeras
@@ -9473,6 +9516,7 @@ labExpId K14
 labProtocolId 019WC+cage
 localization cell
 md5sum c7d6b31c2be98961fbe5f56b1cdcdeff
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9482,7 +9526,6 @@ view MinusRawSignal
 
 metaObject wgEncodeRikenCageSknshraCellPapMinusSignalRep2
 objType table
-attic auxExp
 bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
@@ -9518,6 +9561,7 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001157
+dccRep 1
 expId 1157
 fileName wgEncodeRikenCageSknshraCellPapPlusRawRep1.bigWig
 grant Gingeras
@@ -9526,6 +9570,7 @@ labExpId K14
 labProtocolId 019WC+cage
 localization cell
 md5sum aba33e70ca776b71c380a163f692c867
+origAssembly hg19
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9535,7 +9580,6 @@ view PlusRawSignal
 
 metaObject wgEncodeRikenCageSknshraCellPapPlusSignalRep2
 objType table
-attic auxExp
 bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
@@ -9631,9 +9675,10 @@ labExpId K14,K15
 labProtocolId 019WC+cage,020WC+cage
 localization cell
 md5sum 8ad7deb793ed341deda73447d6d3e129
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 4524
 view TssGencV7
 
-# MAGIC: -529154346
+# MAGIC: -574821053
