@@ -25,7 +25,7 @@
 // OK  subVis change is persistent (as seen in: hgTracks image, rightClick, return to hgTrackUi)
 // OK  subVis overridden by viewVis
 // OK  subVis overridden by compVis
-// BUG subVis set compVis to full (when compVis set to hide, but subVis already populated, setting subVis to non-hide DOES NOT set compVis to full)
+// -   subVis DOES NOT set compVis to full (when compVis set to hide, but subVis already populated) OK because this slips towords reshaping.
 // OK  subCfg wrench disabled
 // OK  subCfg wrench enable/disable by subCB
 // OK  subCfg wrench enable/disable by subVis
@@ -47,23 +47,9 @@
 
 // TODO:
 // - SOLVED: checkboxes: working with name = boolshad.{name}   FIXME: multishad?
-// - SOLVED: filterBy,filterComp working: they rely upon a unique id, and id with '.' screwed it all up.  So replaced '.' with '_-'
-// - SOLVED: OpenChromSynth: subtrack filterby needs to be updated by composite filterBy.
-// - SOLVED: check subtrack to enable/disable fauxVis and wrench
-// - SOLVED: matCB should effect subCb including enable/disable fauxVis and wrench
-// - SOLVED: composite/view vis should effect subVis and enable/disable fauxVis and wrench
-// - SOLVED: inside out: changing subtrack vis should affect subCB and matCB
-// - SOLVED: Loosing checked tracks!!!  Setting vis clears checkboxes?
-// - TESTED: hui.c #ifdef SUBTRACK_CFG should switch full functionality on/off
-// - SOLVED: Make "disabled" subCB clickable!
-// - SOLVED: PROBLEM is fauxDisabled.  SOLUTION is convert fauxDisabled to true disabled on form.submit()
 // - DECIDED: When parent vis makes subs hidden, should they go to unchecked?   No, disabled!
 // - DECIDED: Should user be able to click on disabled vis to check the CB?  No, not important.
-// - DECIDED: Make vis changes "reshape" composite!  NOTE: Do we want to do this???   I am against this as too disruptive.  We may want to end reshaping in CGIs as well!
-// - DECIDED: Decide on a name (scm, subCfg, ? ) and then make a module file like ddcl.js.
-// - SOLVED: subtrack selected count is wrong!
-// - SOLVED: matCb unclick leaves vis/wrench enabled.  Vis/Wrench is usually only enabled for checked and visible.
-// - SOLVED: subCfg tracks going non-visible should have subCfg div closed.
+// - DECIDED: Make vis changes "reshape" composite!  NO, I am against this as too disruptive.  We may want to end reshaping in CGIs as well!
 //  - Verify all composites work (hg19 hg18 mm9 mm8 panTro3 galGal3 braFlo1 dm3 ce10 homPan20 sacCer3 hg19Patch5 tested so far)
 //  - Speed up massive composites!  HAIB TFBS SYDH TFBS
 //  - Remove debug code when ready
@@ -179,7 +165,7 @@ var subCfg = { // subtrack config module.
             if (viewObj == undefined)
                 viewObj = normed($(viewCfg).find("[name$='_"+suffix+"']"));
         } else
-            viewObj = normed($("[name='"+subCfg.compositeName+"\\."+viewTag+"\\.vis']"));
+            viewObj = normed($("select.viewDD."+viewTag));
 
         return viewObj;
     },
@@ -363,25 +349,17 @@ var subCfg = { // subtrack config module.
     { // returns array of all currently faux and populated vis child controls (which are not in subCfg div)
       // parentObj could be composite level or view level
 
-        var isVis = false;
-        var suffix = subCfg.objSuffixGet(parentObj);
-        isVis = (suffix == undefined || suffix == 'vis');
-        var isComposite = (suffix == undefined);
-
         var subVis = $('.subVisDD');  // select:vis or faux:div
-        if (isComposite) {
-
+        if ($(parentObj).hasClass('visDD')) // composite.  views have .viewDD and sub .subVisDD
             return subVis;
 
-        } else {
-            var classList = $( parentObj ).attr("class").split(" ");
-            classList = aryRemove(classList,["viewDD","normalText","changed"]);
-            if (classList.length != 1) {
-                warn("DEBUG: Unexpected view vis class list:"+classList);
-                return [];
-            }
-            return $(subVis).filter('.' + classList[0]);
+        var classList = $( parentObj ).attr("class").split(" ");
+        classList = aryRemove(classList,["viewDD","normalText","changed"]);
+        if (classList.length != 1) {
+            warn("DEBUG: Unexpected view vis class list:"+classList);
+            return [];
         }
+        return $(subVis).filter('.' + classList[0]);
     },
 
     checkOneSubtrack: function (subCb,check,enable)
@@ -637,7 +615,7 @@ var subCfg = { // subtrack config module.
 
         $.ajax({
             type: "GET",
-            url: "../cgi-bin/hgTrackUi?ajax=1&g=" + subtrack + "&hgsid=" + getHgsid() + "&db=" + getDb(),
+            url: "../cgi-bin/hgTrackUi?ajax=1&g="+subtrack+"&hgsid="+getHgsid()+"&db="+getDb(),
             dataType: "html",
             trueSuccess: subCfg.cfgFill,
             success: catchErrorOrDispatch,
@@ -655,12 +633,13 @@ var subCfg = { // subtrack config module.
         var classList = $( obj ).attr("class").split(" ");
         classList = aryRemove(classList,["disabled"]);
         var view = classList[classList.length - 1]; // This relies on view being the last class!!!
-        var selectHtml = "<SELECT name='"+subtrack+"' class='normalText subVisDD "+view+"' style='width:70px;'";
-        selectHtml += ">";
+        var selectHtml  = "<SELECT name='"+subtrack+"' class='normalText subVisDD "+view+"'";
+            selectHtml += " style='width:70px;'>";
         var selected = $(obj).text();
         var visibilities = ['hide','dense','squish','pack','full'];
         $(visibilities).each( function (ix) {
-             selectHtml += "<OPTION" + (visibilities[ix] == selected ? " SELECTED":"") + ">"+visibilities[ix]+"</OPTION>";
+             selectHtml += "<OPTION"+(visibilities[ix] == selected ? " SELECTED":"")+">";
+             selectHtml += visibilities[ix]+"</OPTION>";
         });
         selectHtml += "</SELECT>";
         $(obj).replaceWith(selectHtml);
@@ -692,8 +671,12 @@ var subCfg = { // subtrack config module.
                     } else {
                         warn('DEBUG: Cant find subCB for ' + this.name);
                     }
-                } else
+                } else {
                     subCfg.markChange(e,this);
+                    // if just being made visible then composite to full?  NO (implications to other subs)
+                    // Make view visible?  NO (subtrack override)
+                    // reshape?  NO (much too complex)
+                }
             });
             $(newObj).focus();
         }
@@ -786,7 +769,7 @@ var subCfg = { // subtrack config module.
         }
 
         // Now vis control
-        var viewVis = normed($("select[name='"+subCfg.compositeName+"\\."+viewTag+"\\.vis']"));
+        var viewVis = normed($("select.viewDD."+viewTag));
         if (viewVis == undefined) {
             warn('DEBUG: Did not find visibility control for view: ' + viewTag);
             return;
@@ -871,17 +854,17 @@ var subCfg = { // subtrack config module.
 
         // Because of fauxDisabled subCBs, it is necessary to truly disable them before submitting.
         $("FORM").submit(function (i) {
-            $('input.subCB.changed.disabled').attr('disabled',true);
+            $('input.subCB.changed.disabled').attr('disabled',true);  // shadows will go to cart as they should
 
             // Names will be removed for all controls that have not changed
             $('select,input').filter("[name]").not(".allOrOnly").not('.changed').each( function (i) {
-                if (this.type != 'hidden' || $(this).hasClass('trPos') || $(this).hasClass('cbShadow')) {
-                    //this.disabled = true;   // FIXME: which is faster: name or disabled ?
-                    this.name = "";  // Unname goes straight to the point: doesn't send in the form
+                if (this.type != 'hidden' || $(this).hasClass('trPos') || $(this).hasClass('cbShadow') || $(this).hasClass('sortOrder')) {
+                    // hiddens except priority and boolshad are all sent to the cart
+                    //this.disabled = true;   // QESTION: which is better: name or disabled ?
+                    this.name = "";           // Unname goes straight to the point: doesn't send in the form
                 }
             });
             // to do: other hiddens?
-            // matCb uncheck failed to update cart properly
         });
     }
 };

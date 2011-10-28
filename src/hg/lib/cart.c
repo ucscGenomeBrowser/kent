@@ -2134,9 +2134,11 @@ static int cartTdbParentShapeVis(struct cart *cart,struct trackDb *parent,char *
 ASSERT(view || (tdbIsContainer(parent) && tdbIsContainerChild(parent->subtracks)));
 struct trackDb *subtrack = NULL;
 char setting[512];
+#ifndef SUBTRACK_CFG
 if (view != NULL)
     safef(setting,sizeof(setting),"%s.%s.vis",parent->parent->track,view);
 else
+#endif///def SUBTRACK_CFG
     safef(setting,sizeof(setting),"%s",parent->track);
 
 enum trackVisibility visMax  = tvHide;
@@ -2405,9 +2407,14 @@ if (hasViews)
         if (viewVisChanged)
             {
             // If just created and if vis is the same as tdb default then vis has not changed
+        #ifdef SUBTRACK_CFG
+            char *cartVis = cartOptionalString(newCart,tdbView->track);
+            char *oldValue = hashFindVal(oldVars,tdbView->track);
+        #else///ifndef SUBTRACK_CFG
             safef(setting,sizeof(setting),"%s.%s.vis",tdb->track,view);
             char *cartVis = cartOptionalString(newCart,setting);
             char *oldValue = hashFindVal(oldVars,setting);
+        #endif///ndef SUBTRACK_CFG
             if (cartVis && oldValue == NULL && hTvFromString(cartVis) != tdbView->visibility)
                 viewVisChanged = FALSE;
             }

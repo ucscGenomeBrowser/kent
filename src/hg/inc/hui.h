@@ -8,6 +8,9 @@
 #include "customTrack.h"
 #include "wiggle.h"
 
+// This temporary define shouuld be removed after rollout of hgTrackUi subtrack cfg changes
+#define SUBTRACK_CFG
+
 struct lineFile;
 
 void setUdcCacheDir();

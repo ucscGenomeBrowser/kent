@@ -1,7 +1,6 @@
 // JavaScript Especially for hui.c
 // $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.59 2010/06/03 20:27:26 tdreszer Exp $
 
-var compositeName = "";
 //var browser;                // browser ("msie", "safari" etc.)
 //var now = new Date();
 //var start = now.getTime();
@@ -30,7 +29,6 @@ function _matSelectViewForSubTracks(obj,view)
         classesHidden = classesHidden.concat( matAbcCBclasses(false) );
     } else {
         // Make main display dropdown show full if currently hide
-        compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
         exposeAll();  // TODO: was removed for subCfg... is there a problem?
         matSubCBsEnable(true,view);
 
@@ -569,7 +567,7 @@ function compositeCfgUpdateSubtrackCfgs(inp)
     return true;
 }
 
-function compositeCfgRegisterOnchangeAction(prefix)
+function compositeCfgRegisterOnchangeAction(prefix)    // FIXME: OBSOLETE when subCfg is released
 {
 // After composite level cfg settings written to HTML it is necessary to go back and
 // make sure that each time they change, any matching subtrack level cfg setting are changed.
@@ -608,24 +606,6 @@ function subtrackCfgShow(tableName)
     // 3) know whether so composite view level value has changed since hgTrackUi displayed (if so composite view level value overrides)
     $(divit).toggle();
     return false;
-}
-
-function enableViewCfgLink(enable,view)
-{
-// Enables or disables a single configuration link.
-    var link = $('#a_cfg_'+view);
-    if(enable)
-        $(link).attr('href','#'+$(link).attr('id'));
-    else
-        $(link).removeAttr('href');
-}
-
-function enableAllViewCfgLinks()
-{
-    $( ".viewDD").each( function (i) {
-        var view = this.name.substring(this.name.indexOf(".") + 1,lastIndexOf(".vis"));
-        enableViewCfgLink((this.selectedIndex > 0),view);
-    });
 }
 
 function hideConfigControls(view)

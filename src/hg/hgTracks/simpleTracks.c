@@ -529,9 +529,13 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
 
     if(setView)
         {
+    #ifdef SUBTRACK_CFG
+        dyStringPrintf(dy, "&%s=%s", toggleGroup->tdb->parent->track, hStringFromTv(vis));
+    #else///ifndef SUBTRACK_CFG
         char *encodeView = cgiEncode(view);
         dyStringPrintf(dy, "&%s.%s.vis=%s", encodedTableName,encodeView, hStringFromTv(vis));
         freeMem(encodeView);
+    #endif///ndef SUBTRACK_CFG
         }
     else
         {

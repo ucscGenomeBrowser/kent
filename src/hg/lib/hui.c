@@ -50,8 +50,6 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
 #define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
 
-#define SUBTRACK_CFG
-
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
  * where the downloads are. */
@@ -3144,7 +3142,7 @@ void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items)
 if(items != NULL && *items != NULL)
     {
     slSort(items, sortableTdbItemsCmp);
-    int priority=10001; // Setting priorities high allows new subtracks without cart entries to fall after existing subtracks
+    int priority=1;
     sortableTdbItem *item;
     for (item = *items; item != NULL; item = item->next)
         item->tdb->priority = (float)priority++;
@@ -6201,7 +6199,11 @@ for (ix = 0; ix < membersOfView->count; ix++)
             printf("<B>%s</B>",membersOfView->titles[ix]);
         puts("</TD>");
 
+    #ifdef SUBTRACK_CFG
+        safef(varName, sizeof(varName), "%s", matchedViewTracks[ix]->track);
+    #else///ifndef SUBTRACK_CFG
         safef(varName, sizeof(varName), "%s.%s.vis", parentTdb->track, viewName);  // FIXME: Time to get rid of "track.view.vis" since viewInTheMiddle
+    #endif///ndef SUBTRACK_CFG
         enum trackVisibility tv =
             hTvFromString(cartUsualString(cart, varName,hStringFromTv(visCompositeViewDefault(parentTdb,viewName))));
 
@@ -7175,6 +7177,7 @@ if (tdbIsSuperTrack(tdb))
 if (cart != NULL) // cart is optional
     {
     char *cartVis = NULL;
+    #ifndef SUBTRACK_CFG
     if (tdbIsCompositeView(tdb))
         {
         char *view = trackDbLocalSetting(tdb,"view"); // views have funky cart setting
@@ -7184,6 +7187,7 @@ if (cart != NULL) // cart is optional
         cartVis = cartOptionalString(cart, setting);
         }
     else
+    #endif///ndef SUBTRACK_CFG
         cartVis = cartOptionalString(cart, tdb->track);
     if (cartVis != NULL)
         {

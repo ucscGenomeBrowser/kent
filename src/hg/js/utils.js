@@ -1152,8 +1152,10 @@ function tableDragAndDropRegister(thisTable)
         onDragClass: "trDrag",
         dragHandle: "dragHandle",
         onDrop: function(table, row, dragStartIndex) {
-                if(tableSetPositions) {
-                    tableSetPositions(table);
+                if (row.rowIndex != dragStartIndex) {
+                    if(tableSetPositions) {
+                        tableSetPositions(table);
+                    }
                 }
             }
     });
@@ -1426,8 +1428,11 @@ function sortOrderUpdate(table,sortColumns,addSuperscript)
         }
         // There may be a hidden input that gets updated to the cart
         var inp = $(tr).find('input.sortOrder')[0];
-        if (inp)
+        if (inp) {
             $(inp).val(sortOrderFromColumns(sortColumns));
+            if (!addSuperscript && typeof(subCfg) !== "undefined")
+                subCfg.markChange(null,inp);     // use instead of change() because type=hidden!
+        }
     }
 }
 
