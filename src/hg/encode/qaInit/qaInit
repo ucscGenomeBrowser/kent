@@ -40,9 +40,10 @@ def writeClaimMail(args, user, qaDir):
 
 I am claiming the %s (Release %s) %s track.
 Please let me know if there is another track you'd like me to work on instead.
+http://redmine.soe.ucsc.edu/issues/%s
 
 %s
-""" % (args.composite, args.release, args.database, user)
+""" % (args.composite, args.release, args.database, args.redmine, user)
 	
 	f.write(mail)
 	f.close()
@@ -162,7 +163,7 @@ Thank you!
 	f.close
 	
 	if not tablestr:
-                return ""
+		return ""
 
 	f = open(qaDir + "/tableList", "w")
 	f.write(tablestr)
@@ -223,12 +224,17 @@ Thanks!
 	for i in files:
 		m = p.match(i)
 		file = m.group(1)
-		filestanza = mdb.filter(lambda s: re.match(".*%s.*" % file,s['fileName']), lambda s: s)
+		filestanza = mdb.filter(lambda s: re.match(".*%s.*" % file, s['fileName']), lambda s: s)
 		if filestanza:
 			for j in filestanza:
 				if 'subId' in j:
 					if not j['subId'] in subIds:
 						subIds[j['subId']] = 1
+
+	f = open(qaDir + "/subIds", "w")
+	for i in subIds.keys():
+		f.write(i + "\n")
+	f.close()
             
 	return filestr, set(sorted(subIds.keys()))
 
@@ -372,7 +378,7 @@ def checkWithMkNotes(ourset, mkNotesSet, status):
 	for i in ourset:
 		compset.add(i.rstrip())
 	if mkNotesSet != compset:
-		errors.append("The list of new %s in the notes file is out of date." % status)
+		errors.append("The list of %s in the notes file is out of date." % status)
 	return errors
 
 
@@ -391,7 +397,9 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
 	parser.add_argument('release', help='The new release to be released')
 	parser.add_argument('redmine', help='The Redmine issue number')
+	parser.add_argument('-t', '--test', action="store_true", default=0, help="Test mode:doesn't change status to reviewing, outputs to test qa Directory")
 	parser.add_argument('-m', '--mdb', default=0, help='use a different mdb composite name')
+
 
 
 	if len(sys.argv) == 1:
@@ -417,27 +425,29 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 					'loose': 1,
 					'summary': 0,
 					'specialMdb': specialMdb}
-	print "Making local mkChangeNotes"
-	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
-	if genNotes.errors:
-		print "NON-FATAL ERROR: Local mkChangeNotes found errors in the release"
-	#	return
-	user = os.environ['USER']
-	c = track.CompositeTrack(args.database, args.composite, None, specialMdb)
 	errors = []
-	qaDir = c.qaInitDir + "release%s" % args.release 
+	c = track.CompositeTrack(args.database, args.composite, None, specialMdb)
+	qaDir = ""
+	if args.test:
+		qaDir = c.qaInitDirTest + "release%s" % args.release 
+	else:
+		qaDir = c.qaInitDir + "release%s" % args.release 
 	d = datetime.date.today()
+	user = os.environ['USER']
+	
 	if not os.path.exists(qaDir):
 		os.makedirs(qaDir)
-	
-	getMethods(qaDir, args, user, d)
+
+	print "Making QA directory"
 	notesFile = makeLinks(c, args, qaDir)
+	
+	print "Getting methods"
+	getMethods(qaDir, args, user, d)
+	
+	print "Checking notes file"
 	if re.search('Error', notesFile):
 		print notesFile
 		return
-	
-	writeClaimMail(args, user, qaDir)
-	
 	m = re.match('.*(kent/.*)', notesFile)
 	notes = m.group(1)
 	f = open(notesFile, "r")
@@ -445,6 +455,17 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	if not re.match('mkChangeNotes v2', lines[0]):
 		print "notes files is not the correct version"
 		return
+	
+	writeClaimMail(args, user, qaDir)
+	print "Making local mkChangeNotes"
+	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
+	if genNotes.errors:
+		print "NON-FATAL ERROR: Local mkChangeNotes found errors in the release"
+	#	return
+
+
+	
+
 	print "Parsing notes file"
 	(tables, gbdbs, files, supplemental, others, size) = parseNotes(lines)
 	print "Comparing notes file to local notes"
@@ -467,9 +488,9 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	
 	writePushHtmlMail(args, user, qaDir)
 	writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir)
-	
-	print "Changing subIds' statuses to reviewing"
-	changeStatus(subIds)
+	if not args.test:
+		print "Changing subIds' statuses to reviewing"
+		changeStatus(subIds)
 	
 	output = []
 	
