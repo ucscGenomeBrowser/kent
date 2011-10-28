@@ -232,7 +232,7 @@ def checkTableCoords(database, tables):
 	notgbdbtablelist = tables - getGbdbTables(database, tables)
 	results = []
 	output = []
-	timeout = 10
+	timeout = 20
 	for i in sorted(notgbdbtablelist):
 		start = datetime.datetime.now()
 		cmd = "checkTableCoords %s %s" % (database, i)
