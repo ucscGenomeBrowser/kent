@@ -1,6 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math
-from ucscgenomics import ra, track, qa
+from ucscgenomics import ra, track, qa, ucscUtils
 
 class makeNotes(object):
     def checkMetaDbForFiles(self, status, state):
@@ -43,7 +43,7 @@ class makeNotes(object):
 
     def __checkAlphaForDropped(self, status, type):
         errors=[]
-        diff = set(self.oldMdb) -set(self.newMdb)
+        diff = set(self.oldMdb) - set(self.newMdb)
         for i in diff:
             errors.append("%s: %s missing from %s" % (type, i, status))
         return errors
@@ -123,16 +123,10 @@ class makeNotes(object):
     def __checkGbdbFileStatus(self, i, set, errors, state):
         filelist = i['fileName'].split(',')
         for j in filelist:
-            if os.path.isfile("%s/%s" % (self.gbdbPath, j)):
+            if ucscUtils.isGbdbFile(j, i['tableName'], self.database):
                 set.add(j)
             else:
-                cmd = "hgsql %s -e \"select fileName from (%s)\"" % (self.database, i['tableName'])
-                p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
-                cmdoutput = p.stdout.read()
-                if os.path.isfile(cmdoutput.split("\n")[1]):
-                    set.add(j)
-                else:
-                    errors.append("gbdb: %s%s does not exist in %s" % (state, j, self.gbdbPath))
+                errors.append("gbdb: %s%s does not exist in %s" % (state, j, self.gbdbPath))
         return set, errors
 
     def getGbdbFiles(self, state):
@@ -199,21 +193,6 @@ class makeNotes(object):
         else:
             return errors
 
-    def __makeFileSizes(self, args, inlist):
-        checklist = list()
-
-        for i in inlist:
-            checklist.append("%s/%s" % (self.releasePath, i))    
-
-        filesizes = 0
-        for i in checklist:
-            realpath = os.path.realpath(i)
-            filesizes = filesizes + int(os.path.getsize(realpath))
-
-        filesizes = math.ceil(float(filesizes) / (1024**2))
-
-        return int(filesizes)
-
     def __cleanSpecialFiles(self, inlist):
         specialRemoveList = ['md5sum.history']
         for i in specialRemoveList:
@@ -249,16 +228,6 @@ class makeNotes(object):
         oldReleaseFiles = newOld
 
         return(newOld, additionalList, oldAdditionalList, newTotal)
-
-    def __printIter(self, set, path):
-        output = []
-        for i in sorted(set):
-            if path:
-                output.append("%s/%s" % (path, i))
-            else:
-                output.append("%s" % (i))
-        return output
-
 
     def __printSize(self, size, output, totalsize, type):
 
@@ -299,20 +268,20 @@ class makeNotes(object):
             intersect = new & revoked
             if intersect:
                 output.append("")
-                output.append("The following exist in both new and revoked %s:" % title)
+                output.append("These %s objects exist in both new and revoked %s:" % (len(intersect), title))
                 for i in intersect:
                     output.append("%s" % i)
             
         if all and not summary:
             output.append("")
             output.append("New %s (%s):" % (title.title(), len(new)))
-            output.extend(self.__printIter(new, path))
+            output.extend(ucscUtils.printIter(new, path))
             output.append("")
             output.append("Untouched %s (%s):" % (title.title(), len(untouched)))
-            output.extend(self.__printIter(untouched, path))
+            output.extend(ucscUtils.printIter(untouched, path))
             output.append("")
             output.append("%s %s (%s):" % (removeline, title.title(), len(revoked)))
-            output.extend(self.__printIter(revoked, path))
+            output.extend(ucscUtils.printIter(revoked, path))
         return output
 
     def __qaHeader(self, output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, additionalList, revokedTables, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c):
@@ -320,10 +289,13 @@ class makeNotes(object):
         tableSize = self.__getTableSize()
 
         output.append("mkChangeNotes v2")
-        if (args['releaseOld'] == "solo"):
-            output.append("%s %s Release %s" % (args['database'], args['composite'], args['releaseNew']))
-        else:
-            output.append("%s %s Release %s vs Release %s" % (args['database'], args['composite'], args['releaseNew'], args['releaseOld']))
+        title = "%s %s Release %s" % (args['database'], args['composite'], args['releaseNew'])
+        if args['releaseOld'] != "solo":
+            title = title + " vs Release %s" % args['releaseOld']
+        if args['summary']:
+            title = "Summary for " + title
+        output.append(title)
+
         output.append("")
         output.append("QA Count Summaries for Release %s:" % args['releaseNew'])
         output.append("Tables: %d" % int(len(newTableSet)))
@@ -342,10 +314,10 @@ class makeNotes(object):
         totalsize = 0
 
         (output, totalsize) = self.__printSize(tableSize, output, totalsize, "Table")
-        (output, totalsize) = self.__printSize(int(self.__makeFileSizes(args, pushFiles)), output, totalsize, "Files")
-        (output, totalsize) = self.__printSize(int(self.__makeFileSizes(args, pushGbdbs)), output, totalsize, "Gbdbs")
-        (output, totalsize) = self.__printSize(int(self.__makeFileSizes(args, newSupp)), output, totalsize, "Supplemental")
-        (output, totalsize) = self.__printSize(int(self.__makeFileSizes(args, additionalList)), output, totalsize, "Other")
+        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(pushFiles, self.releasePath)), output, totalsize, "Files")
+        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(pushGbdbs, self.releasePath)), output, totalsize, "Gbdbs")
+        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(newSupp, self.releasePath)), output, totalsize, "Supplemental")
+        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(additionalList, self.releasePath)), output, totalsize, "Other")
         (output, totalsize) = self.__printSize(totalsize, output, 0, "Total")
 
         return output
@@ -382,10 +354,10 @@ class makeNotes(object):
         output.extend(self.__printSection(newSupp, untouchedSupp, removedSupp, allSupp, "supplemental", self.releasePath, args['summary']))
 
         self.newTables = set(pushTables)
-        self.newFiles = set(self.__printIter(pushFiles, self.releasePath))
-        self.newGbdbs = set(self.__printIter(pushGbdbs, self.gbdbPath))
-        self.newSupplemental = set(self.__printIter(newSupp, self.releasePath))
-        self.newOthers = set(self.__printIter(additionalList, self.releasePath))
+        self.newFiles = set(ucscUtils.printIter(pushFiles, self.releasePath))
+        self.newGbdbs = set(ucscUtils.printIter(pushGbdbs, self.gbdbPath))
+        self.newSupplemental = set(ucscUtils.printIter(newSupp, self.releasePath))
+        self.newOthers = set(ucscUtils.printIter(additionalList, self.releasePath))
 
         otherprint = len(allOther)
         if otherprint:
@@ -400,12 +372,12 @@ class makeNotes(object):
             output.extend(sorted(list(self.newOthers)))
             output.append("")
             output.append("Revoked Other Files (%s):" % len(removedOther))
-            output.extend(self.__printIter((removedOther), self.releasePath))
+            output.extend(ucscUtils.printIter((removedOther), self.releasePath))
         output.append("\n")
 
         if len(missingFiles):
             output.append("Files that dropped between releases (%s):" % len(missingFiles))
-            output.extend(self.__printIter(missingFiles, self.releasePath))
+            output.extend(ucscUtils.printIter(missingFiles, self.releasePath))
             output.append("\n")
 
         if not args['ignore']:
@@ -429,10 +401,10 @@ class makeNotes(object):
 
         output.extend(self.__qaHeader(output, newTables, newFiles, newGbdbSet, newSupplementalSet, additionalList, revokedTables, revokedFiles, revokedGbdbs, totalFiles, newGbdbSet, args, c))
         self.newTables = set(newTables)
-        self.newFiles = set(self.__printIter(newFiles, self.releasePath))
-        self.newGbdbs = set(self.__printIter(newGbdbs, self.releasePath))
-        self.newSupplemental = set(self.__printIter(newSupplementalSet, self.releasePath))
-        self.newOthers = set(self.__printIter(additionalList, self.releasePath))
+        self.newFiles = set(ucscUtils.printIter(newFiles, self.releasePath))
+        self.newGbdbs = set(ucscUtils.printIter(newGbdbs, self.releasePath))
+        self.newSupplemental = set(ucscUtils.printIter(newSupplementalSet, self.releasePath))
+        self.newOthers = set(ucscUtils.printIter(additionalList, self.releasePath))
 
         if not args['summary']:
             output.append("")
@@ -441,9 +413,9 @@ class makeNotes(object):
             output.extend(self.__printSectionOne(output, self.newGbdbs, "New Gbdb Files"))
             output.extend(self.__printSectionOne(output, self.newSupplemental, "New Supplemental Files"))
             output.extend(self.__printSectionOne(output, self.newOthers, "New Other Files"))
-            output.extend(self.__printSectionOne(output, self.__printIter(revokedTables, 0), "Revoked Tables"))
-            output.extend(self.__printSectionOne(output, self.__printIter(revokedFiles, self.releasePath), "Revoked Files"))
-            output.extend(self.__printSectionOne(output, self.__printIter(revokedGbdbs, self.gbdbPath), "Revoked Gbdbs"))
+            output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedTables, 0), "Revoked Tables"))
+            output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedFiles, self.releasePath), "Revoked Files"))
+            output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedGbdbs, self.gbdbPath), "Revoked Gbdbs"))
         if not args['ignore']:
             output.append("No Errors")
         return output
@@ -538,7 +510,7 @@ class makeNotes(object):
             self.oldTotalFiles = self.__cleanSpecialFiles(oldTotalFiles)
             (self.oldTotalFiles, self.additionalList, self.oldAdditionalList, self.totalFiles) = self.__separateOutAdditional()
 
-            #get the stuff you need to push, also table sizes        
+            #get the stuff you need to push, also table sizes
 
             self.errors = errors
             #don't output.append(report unless ignore option is on or no errors
