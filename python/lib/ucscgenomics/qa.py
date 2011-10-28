@@ -232,7 +232,7 @@ def checkTableCoords(database, tables):
 	notgbdbtablelist = tables - getGbdbTables(database, tables)
 	results = []
 	output = []
-	timeout = 10
+	timeout = 20
 	for i in sorted(notgbdbtablelist):
 		start = datetime.datetime.now()
 		cmd = "checkTableCoords %s %s" % (database, i)
@@ -253,7 +253,7 @@ def checkTableCoords(database, tables):
 			if cmderr:
 				results.append(cmderr)
 		elif killed:
-			results.append("Process timeout for table: %s" % i)
+			results.append("Process timeout after %d seconds, for table: %s" % (timeout, i))
 			results.append("You might want to manually run: '%s'" % cmd)
 			results.append("")
 		
