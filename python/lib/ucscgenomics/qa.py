@@ -253,7 +253,7 @@ def checkTableCoords(database, tables):
 			if cmderr:
 				results.append(cmderr)
 		elif killed:
-			results.append("Process timeout for table: %s" % i)
+			results.append("Process timeout after %d seconds, for table: %s" % (timeout, i))
 			results.append("You might want to manually run: '%s'" % cmd)
 			results.append("")
 		
