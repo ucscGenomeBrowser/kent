@@ -1498,9 +1498,7 @@ about VCF custom tracks.</P>
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
-        browser (0-1000).  
-        <b><br>Note: there is an issue about handling 0's here as
-        well as with narrowPeaks, broadPeaks and gappedPeaks.</b>
+        browser (0-1000). If score is '0', the DCC will assign scores 1-1000. 
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
         <li><b>level</b> - Expression level such as RPKM or FPKM.
@@ -1549,7 +1547,7 @@ about VCF custom tracks.</P>
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
-        browser (0-1000). 
+        browser (0-1000). If score is '0', the DCC will assign scores 1-1000. 
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
 	<li><b>signalValue</b> - Measurement of overall (usually, average) 
@@ -1608,7 +1606,8 @@ This format is used to provide called regions of signal enrichment based on pool
         chromosome or scaffold. The <i>chromEnd</i> base is not included in the
         display of the feature. For example, the first 100 bases of a
         chromosome are defined as <i>chromStart=0, chromEnd=100</i>, and span
-        the bases numbered 0-99.
+        the bases numbered 0-99. If score is '0', the DCC will assign scores 
+	1-1000.
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
@@ -1668,7 +1667,7 @@ This format is used to provide called regions of signal enrichment based on pool
         <li><b>name</b> - Name given to a region (preferably unique). 
         Use '.' if no name is assigned.
         <li><b>score</b> - Indicates how dark the peak will be displayed in the 
-        browser (0-1000).  
+        browser (0-1000). If score is '0', the DCC will assign scores 1-1000. 
         <li><b>strand</b> - +/- to denote strand or orientation (whenever 
         applicable). Use '.' if no orientation is assigned.
 	<li><b>thickStart</b> - The starting position at which the feature is drawn thickly.
