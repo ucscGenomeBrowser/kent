@@ -26,16 +26,16 @@ type genePred
 
 track lincRNAs
 superTrack on
-shortLabel lincRNAsAll
-longLabel lincRNAsAll
+shortLabel lincRNAs
+longLabel Human Body Map lincRNAs and TUCP Transcripts 
 group expression
 #visibility dense 
 html lincRNAs
 
-    track lincRNAsIsoforms
+    track lincRNAsTranscripts
     superTrack lincRNAs pack
-    shortLabel lincRNAsTranscriptIsoforms
-    longLabel lincRNAs Transcript Isoforms
+    shortLabel Transcripts
+    longLabel lincRNAs and TUCP transcripts
     #shadesOfBrown
     color 100,50,0
     altColor 175,150,128
@@ -46,8 +46,8 @@ html lincRNAs
     track lincRNAsAllCellTypeTopView
     superTrack lincRNAs full
     compositeTrack on
-    shortLabel lincRNAsAllCellTypeView
-    longLabel lincRNAs All Cell Type View
+    shortLabel RNA-Seq reads
+    longLabel RNA-Seq expression abundances
     subGroup1 view Views lincRNAsRefseqExp=RefSeq_Expression_Ratio
 #    subGroup2 tissueType Tissue_Type brain=Brain heart=Heart
         subGroup2 tissueType Tissue_Type adipose=Adipose adrenal=Adrenal brain=Brain breast=Breast colon=Colon heart=Heart kidney=Kidney liver=Liver lung=Lung lymphnode=LymphNode ovary=Ovary prostate=Prostate skeletalmuscle=SkeletalMuscle whitebloodcell=WhiteBloodCell testes=Testes thyroid=Thyroid testes_r=Testes_R brain_r=Brain_R placenta_r=Placenta_R foreskin_r=Foreskin_R hlf_r2=hLF_r2 hlf_r1=hLF_r1
@@ -61,17 +61,16 @@ html lincRNAs
 
     track lincRNAsAllCellType
     shortLabel lincRNAsAllCellType
-    longLabel lincRNAs All Cell Types
+    longLabel RNA-Seq expression abundances
     view lincRNAsRefseqExp
     visibility dense
     parent lincRNAsAllCellTypeTopView
     # shadesOfSea
     color 0, 60, 120
     useScore 1
-    extraFields rawScore=[f]Raw_Score \
-                log2RawScore=[f]log2(Raw_Score)
+    extraFields rawScore=[f]RNA-seq_expression_raw_score \
+                log2RawScore=[f]log2_of_expression_raw_score
 
-#edge
 
 	track lincRNAsCTAdipose 
 	parent lincRNAsAllCellType on
