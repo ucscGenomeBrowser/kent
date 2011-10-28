@@ -1,5 +1,5 @@
 #!/hive/groups/encode/dcc/bin/python
-import sys, os, re, argparse, subprocess, math
+import sys, os, re, argparse, subprocess, math, datetime
 from ucscgenomics import ra, track, qa, ucscUtils
 
 class makeNotes(object):
@@ -299,7 +299,8 @@ class makeNotes(object):
         if args['summary']:
             title = "Summary for " + title
         output.append(title)
-
+        d = datetime.date.today()
+        output.append("%s" % str(d))
         output.append("")
         output.append("QA Count Summaries for Release %s:" % args['releaseNew'])
         output.append("Tables: %d" % int(len(newTableSet)))
