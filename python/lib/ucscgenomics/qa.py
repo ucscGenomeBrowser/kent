@@ -189,9 +189,13 @@ def checkLabels(trackDb):
 	toolong = list()
 	p1 = re.compile('^\s+longLabel\s+(.*)$')
 	p2 = re.compile('^\s+shortLabel\s+(.*)$')
+	p3 = re.compile('^\s+#.*$')
 	for i in lines:
 		m1 = p1.match(i)
 		m2 = p2.match(i)
+		m3 = p3.match(i)
+		if m3:
+			continue
 		if m1:
 			if seenlabel.has_key(m1.group(1)):
 				seenlabel[m1.group(1)] = seenlabel[m1.group(1)] + 1
