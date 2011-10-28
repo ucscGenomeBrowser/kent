@@ -2132,7 +2132,6 @@ foreach my $ddfLine (@ddfLines) {
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
-            #print "term = $terms\n"
             $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
         #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
