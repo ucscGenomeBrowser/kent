@@ -43,10 +43,10 @@ def getGbdbTables(database, tableset):
 	return gbdbtableset
 
 def sorted_nicely(l): 
-    """ Sort the given iterable in the way that humans expect.""" 
-    convert = lambda text: int(text) if text.isdigit() else text 
-    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
-    return sorted(l, key = alphanum_key)
+	""" Sort the given iterable in the way that humans expect.""" 
+	convert = lambda text: int(text) if text.isdigit() else text 
+	alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+	return sorted(l, key = alphanum_key)
 
 def countPerChrom(database, tables):
 	""" Count the amount of rows per chromosome."""
@@ -66,8 +66,8 @@ def countPerChrom(database, tables):
 		return (output, tablecounts)
 	
 	
-	if not tables:
-		output.append("No Tables to count")
+	if not notgbdbtablelist:
+		output.append("No tables to count chroms")
 		output.append("")
 		return (output, tablecounts)
 	for i in notgbdbtablelist:
@@ -141,6 +141,11 @@ def checkTableIndex(database, tables):
 	tablelist = list()
 	missing = set()
 	output = []
+
+	if not notgbdbtablelist:
+		output.append("No tables require an index")
+		output.append("")
+		return (output, missing)
 
 	for i in notgbdbtablelist:
 		cmd = "hgsql %s -e \"show indexes from %s\"" % (database, i)
@@ -232,7 +237,14 @@ def checkTableCoords(database, tables):
 	notgbdbtablelist = tables - getGbdbTables(database, tables)
 	results = []
 	output = []
-	timeout = 10
+	
+	if not notgbdbtablelist:
+		output.append("No tables have coordinates")
+		output.append("")
+		return (output, results)
+
+
+	timeout = 20
 	for i in sorted(notgbdbtablelist):
 		start = datetime.datetime.now()
 		cmd = "checkTableCoords %s %s" % (database, i)
@@ -253,7 +265,7 @@ def checkTableCoords(database, tables):
 			if cmderr:
 				results.append(cmderr)
 		elif killed:
-			results.append("Process timeout for table: %s" % i)
+			results.append("Process timeout after %d seconds, for table: %s" % (timeout, i))
 			results.append("You might want to manually run: '%s'" % cmd)
 			results.append("")
 		
@@ -268,8 +280,16 @@ def checkTableCoords(database, tables):
 
 def positionalTblCheck(database, tables):
 	notgbdbtablelist = tables - getGbdbTables(database, tables)
+
+
 	results = []
 	output = []
+	
+	if not notgbdbtablelist:
+		output.append("No tables are positional")
+		output.append("")
+		return (output, results)
+
 	for i in notgbdbtablelist:
 		cmd = "positionalTblCheck %s %s" % (database, i)
 		p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True)

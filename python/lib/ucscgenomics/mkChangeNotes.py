@@ -1,5 +1,5 @@
 #!/hive/groups/encode/dcc/bin/python
-import sys, os, re, argparse, subprocess, math
+import sys, os, re, argparse, subprocess, math, datetime
 from ucscgenomics import ra, track, qa, ucscUtils
 
 class makeNotes(object):
@@ -106,7 +106,6 @@ class makeNotes(object):
         cmdoutput = p.stdout.read()
         sqltableset = set(cmdoutput.split("\n")[1:-1])
 
-
         missingTableNames = set(mdb.filter(lambda s: s['objType'] == 'table' and 'tableName' not in s and 'attic' not in s, lambda s: s['metaObject']))
         if missingTableNames:
             for i in missingTableNames:
@@ -118,10 +117,14 @@ class makeNotes(object):
 
 
 
-        return (mdbtableset, revokedtableset, errors)
+        return (mdbtableset, revokedtableset, missingFromDb, errors)
 
     def __checkGbdbFileStatus(self, i, set, errors, state):
         filelist = i['fileName'].split(',')
+        #preprocess filelist, delete after bai in mdb issue is revoled
+        #print filelist[0]
+        if re.match('\S+.bam', filelist[0]) and filelist[0] in self.oldReleaseFiles and (filelist[0] + '.bai') not in filelist:
+            filelist.append(filelist[0] + '.bai')
         for j in filelist:
             if ucscUtils.isGbdbFile(j, i['tableName'], self.database):
                 set.add(j)
@@ -153,6 +156,7 @@ class makeNotes(object):
 
         for i in revokedstanzas:
             (revokedfileset, errors) = self.__checkGbdbFileStatus(i, revokedfileset, errors, "revoked gbdb ")
+
 
         return (gbdbfileset, revokedfileset, errors)
 
@@ -295,7 +299,8 @@ class makeNotes(object):
         if args['summary']:
             title = "Summary for " + title
         output.append(title)
-
+        d = datetime.date.today()
+        output.append("%s" % str(d))
         output.append("")
         output.append("QA Count Summaries for Release %s:" % args['releaseNew'])
         output.append("Tables: %d" % int(len(newTableSet)))
@@ -322,29 +327,48 @@ class makeNotes(object):
 
         return output
 
+    def __addMissingToReport(self, missing, type, path=None):
+        output = []
+        if missing:
+            output.append("%s that dropped between releases (%s):" % (type, len(missing)))
+            output.extend(ucscUtils.printIter(missing, path))
+            output.append("\n")
+        return output
+
+    def __checkAtticNotInTrackDb(self):
+        errors = []
+        atticTables = self.newMdb.filter(lambda s: s['objType'] == 'table' and 'attic' in s, lambda s: s['tableName'])
+        for i in atticTables:
+            foo = self.trackDb.filter(lambda s: i in s['track'], lambda s: s['track'])
+            if foo:
+                errors.append("trackDb: %s is attic in metaDb, has an active trackDb entry" % i)
+
+        return errors
+
     def printReport(self, args, c):
-        (totalFiles, newGbdbSet, newTableSet, additionalList, oldAdditionalList, oldTableSet, oldReleaseFiles, oldGbdbSet, atticSet, revokedFiles, revokedTableSet, revokedGbdbs, missingFiles, newSupplementalSet, oldSupplementalSet) = (self.totalFiles, self.newGbdbSet, self.newTableSet, self.additionalList, self.oldAdditionalList, self.oldTableSet, self.oldTotalFiles, self.oldGbdbSet, self.atticSet, self.revokedFiles, self.revokedTableSet, self.revokedGbdbs, self.missingFiles, self.newSupplementalSet, self.oldSupplementalSet)
+        (totalFiles, newGbdbSet, newTableSet, additionalList, oldAdditionalList, oldTableSet, oldReleaseFiles, oldGbdbSet, atticSet, revokedFiles, revokedTableSet, revokedGbdbs, missingFiles, newSupplementalSet, oldSupplementalSet, pushTables, pushFiles, pushGbdbs, newSupp) = (self.totalFiles, self.newGbdbSet, self.newTableSet, self.additionalList, self.oldAdditionalList, self.oldTableSet, self.oldTotalFiles, self.oldGbdbSet, self.atticSet, self.revokedFiles, self.revokedTableSet, self.revokedGbdbs, self.missingFiles, self.newSupplementalSet, self.oldSupplementalSet, self.pushTables, self.pushFiles, self.pushGbdbs, self.newSupp)
         #the groups here need to be predefined, I just copied and pasted after working out what they were
         sep = "\n"
         output = []
-        pushTables = set(sorted((self.newTableSet - self.oldTableSet)))
-        pushFiles = set(sorted((self.totalFiles - self.oldTotalFiles)))
-        pushGbdbs = set(sorted((self.newGbdbSet - self.oldGbdbSet)))
-        filesNoRevoke = totalFiles - revokedFiles
+
+        #maths
         allTables = newTableSet | oldTableSet | revokedTableSet
         untouchedTables = oldTableSet & newTableSet
+
         allFiles = totalFiles | oldReleaseFiles | revokedFiles
         newFiles = pushFiles - revokedFiles
         untouchedFiles = (totalFiles & oldReleaseFiles) - revokedFiles
+        filesNoRevoke = totalFiles - revokedFiles
+
         allGbdbs = newGbdbSet | oldGbdbSet | revokedGbdbs
         untouchedGbdbs = (newGbdbSet & oldGbdbSet) - revokedGbdbs
+
         allSupp = newSupplementalSet | oldSupplementalSet
-        newSupp = newSupplementalSet - oldSupplementalSet
         removedSupp = oldSupplementalSet - newSupplementalSet
         untouchedSupp = oldSupplementalSet & newSupplementalSet
+
         allOther = additionalList | oldAdditionalList
         removedOther = oldAdditionalList - additionalList
-
 
         output.extend(self.__qaHeader(output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, additionalList, revokedTableSet, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c))
 
@@ -353,11 +377,8 @@ class makeNotes(object):
         output.extend(self.__printSection(pushGbdbs, untouchedGbdbs, revokedGbdbs, allGbdbs, "gbdbs", self.gbdbPath, args['summary']))
         output.extend(self.__printSection(newSupp, untouchedSupp, removedSupp, allSupp, "supplemental", self.releasePath, args['summary']))
 
-        self.newTables = set(pushTables)
-        self.newFiles = set(ucscUtils.printIter(pushFiles, self.releasePath))
-        self.newGbdbs = set(ucscUtils.printIter(pushGbdbs, self.gbdbPath))
-        self.newSupplemental = set(ucscUtils.printIter(newSupp, self.releasePath))
-        self.newOthers = set(ucscUtils.printIter(additionalList, self.releasePath))
+        #These attributes are the critical ones that are used by qaInit, others could potentially use these also.
+
 
         otherprint = len(allOther)
         if otherprint:
@@ -375,13 +396,14 @@ class makeNotes(object):
             output.extend(ucscUtils.printIter((removedOther), self.releasePath))
         output.append("\n")
 
-        if len(missingFiles):
-            output.append("Files that dropped between releases (%s):" % len(missingFiles))
-            output.extend(ucscUtils.printIter(missingFiles, self.releasePath))
-            output.append("\n")
+        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePath))
+        output.append("\n")
+        output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
 
         if not args['ignore']:
             output.append("No Errors")
+        else:
+            output.append("The counts here were generated by ignoring errors, they may not be correct")
         return output
 
     def __printSectionOne(self, output, set, title):
@@ -389,7 +411,6 @@ class makeNotes(object):
         if set:
             output.append("%s (%s):" % (title, len(set)))
             output.extend(sorted(list(set)))
-            output.append("\n")
         return output
 
     def printReportOne(self, args, c):
@@ -416,11 +437,14 @@ class makeNotes(object):
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedTables, 0), "Revoked Tables"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedFiles, self.releasePath), "Revoked Files"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedGbdbs, self.gbdbPath), "Revoked Gbdbs"))
+
         if not args['ignore']:
             output.append("No Errors")
+        else:
+            output.append("The counts here were generated by ignoring errors, they may not be correct")
         return output
 
-    def printErrors(self, errors):
+    def printErrors(self, errors, missingFiles):
         errorsDict = {}
         output = []
         for i in errors:
@@ -435,6 +459,10 @@ class makeNotes(object):
             output.append("%s:" % i)
             for j in sorted(errorsDict[i]):
                 output.append("%s" % j)
+        output.append("\n")
+        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePath))
+        output.append("\n")
+        output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
         return output
 
     def __init__(self, args):
@@ -461,6 +489,11 @@ class makeNotes(object):
 
         self.releasePath = c.httpDownloadsPath + 'release' + args['releaseNew']
         self.gbdbPath = "/gbdb/%s/bbi" % args['database']
+        self.trackDbFile = c.currentTrackDb
+        if not self.trackDbFile:
+            errors.append("track: There is no entry in trackDb.wgEncode.ra for %s with the alpha tag" % self.composite)
+        else:
+            self.trackDb = ra.RaFile(self.trackDbFile)
         if int(self.releaseNew) > 1 and str(self.releaseOld) != 'solo':
 
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
@@ -471,11 +504,17 @@ class makeNotes(object):
 
             #make a list of missing files
             self.missingFiles = self.__checkFilesForDropped()
-            
+            #filter them out of old release files
+
+
+
+
             #check if all files listed in release directories have associated metaDb entries
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
             (self.oldMdb, spam, eggs, ham, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
 
+            #check that attic fiels aren't in trackDb
+            errors.extend(self.__checkAtticNotInTrackDb())
 
 
 
@@ -484,12 +523,17 @@ class makeNotes(object):
             errors.extend(self.__checkMd5sums())
 
             #checks and gets tables that are present, also returns a revoked set of tables for new
-            (self.newTableSet, self.revokedTableSet, newTableError) = self.checkTableStatus("alpha metaDb", "new")
-            (self.oldTableSet, spam, oldTableError) = self.checkTableStatus("public metaDb", "old")
+            (self.newTableSet, self.revokedTableSet, self.newMissingTables, newTableError) = self.checkTableStatus("alpha metaDb", "new")
+            (self.oldTableSet, spam, self.droppedTables, oldTableError) = self.checkTableStatus("public metaDb", "old")
 
             #same as above except for gbdbs
             (self.newGbdbSet, self.revokedGbdbs, newGbdbError) = self.getGbdbFiles("new")
             (self.oldGbdbSet, eggs, oldGbdbError) = self.getGbdbFiles("old")
+            #remove missing files from gbdbs
+            self.oldGbdbSet = self.oldGbdbSet - self.missingFiles
+            for i in self.missingFiles:
+                if i in self.oldReleaseFiles:
+                    del self.oldReleaseFiles[i]
 
             #fill in the errors
             errors.extend(newFileErrors)
@@ -510,14 +554,25 @@ class makeNotes(object):
             self.oldTotalFiles = self.__cleanSpecialFiles(oldTotalFiles)
             (self.oldTotalFiles, self.additionalList, self.oldAdditionalList, self.totalFiles) = self.__separateOutAdditional()
 
-            #get the stuff you need to push, also table sizes
+            #get the stuff you need to push
+            self.pushTables = set(sorted((self.newTableSet - self.oldTableSet)))
+            self.pushFiles = set(sorted((self.totalFiles - self.oldTotalFiles)))
+            self.pushGbdbs = set(sorted((self.newGbdbSet - self.oldGbdbSet)))
+            self.newSupp = self.newSupplementalSet - self.oldSupplementalSet
+
+            self.newTables = set(self.pushTables)
+            self.newFiles = set(ucscUtils.printIter(self.pushFiles, self.releasePath))
+            self.newGbdbs = set(ucscUtils.printIter(self.pushGbdbs, self.gbdbPath))
+            self.newSupplemental = set(ucscUtils.printIter(self.newSupp, self.releasePath))
+            self.newOthers = set(ucscUtils.printIter(self.additionalList, self.releasePath))
 
             self.errors = errors
             #don't output.append(report unless ignore option is on or no errors
+            #module mode doesn't generate output by default
             if (not errors) or self.ignore:
                 self.output = self.printReport(args, c)
             else:
-                self.output = self.printErrors(errors)
+                self.output = self.printErrors(errors, self.missingFiles)
 
 
         elif self.releaseOld == 'solo':
@@ -526,10 +581,13 @@ class makeNotes(object):
 
             self.newMdb = c.alphaMetaDb
 
+            #check that attic fiels aren't in trackDb
+            errors.extend(self.__checkAtticNotInTrackDb())
+
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
 
-            (self.newTableSet, self.revokedTableSet, newTableError) = self.checkTableStatus("alpha metaDb", "new")
-
+            (self.newTableSet, self.revokedTableSet, spam, newTableError) = self.checkTableStatus("alpha metaDb", "new")
+            
             self.tableSize = self.__getTableSize()
 
             (self.newGbdbSet, self.revokedGbdbs, newGbdbError) = self.getGbdbFiles("new")
@@ -552,4 +610,4 @@ class makeNotes(object):
             if (not errors) or self.ignore:
                 self.output = self.printReportOne(args, c) 
             else:
-                self.output = self.printErrors(errors)
+                self.output = self.printErrors(errors, self.missingFiles)

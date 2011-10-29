@@ -4403,7 +4403,7 @@ printf("<H3>Coloring Information and Examples</H3>\n");
 puts("The color values range from 0 (darkest) to 255 (lightest) and are additive.\n");
 puts("The examples below show a few ways to highlight individual tracks, "
      "and their interplay. It's good to keep it simple at first.  It's easy "
-     "to make pretty but completely cryptic displays with this feature.");
+     "to make pretty, but completely cryptic, displays with this feature.");
 puts(
      "<UL>"
      "<LI>To put exons from RefSeq Genes in upper case red text, check the "
@@ -4426,7 +4426,7 @@ puts(
      "</UL>");
 puts("<H3>Further Details and Ideas</H3>");
 puts("<P>Copying and pasting the web page output to a text editor such as Word "
-     "will retain upper case but lose colors and other formatting. That's still "
+     "will retain upper case but lose colors and other formatting. That is still "
      "useful because other web tools such as "
      "<A HREF=\"http://www.ncbi.nlm.nih.gov/blast\" TARGET=_BLANK>NCBI Blast</A> "
      "can be set to ignore lower case.  To fully capture formatting such as color "
