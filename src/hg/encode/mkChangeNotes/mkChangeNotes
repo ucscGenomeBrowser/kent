@@ -1,6 +1,6 @@
 #!/hive/groups/encode/dcc/bin/python
 import sys, os, re, argparse, subprocess, math
-from ucscgenomics import ra, track, mkChangeNotes
+from ucscgenomics import mkChangeNotes
 
 
 def main():
@@ -16,12 +16,14 @@ def main():
     mkChangeNotes hg19 wgEncodeUwDnase 3 2 --loose
     mkChangeNotes hg19 wgEncodeSydhTfbs 1 - --full
     mkChangeNotes hg19 wgEncodeCshlLongRnaSeq 1 -
+    mkChangeNotes encodeTest wgEncodeTest 2 1 --mdb wgEncodeTest2
 
     """
         )
     parser.add_argument('-l', '--loose', action="store_true", default=0, help='Loose checking for legacy elements. Will be retired once all tracks go through a release cycle')
     parser.add_argument('-i', '--ignore', action="store_true", default=0, help='Ignore errors, output.append(out report.')
     parser.add_argument('-s', '--summary', action="store_true", default=0, help='output.append(summary stats only.')
+    parser.add_argument('-m', '--mdb', default=0, help='use a different mdb table')
     parser.add_argument('database', help='The database, typically hg19 or mm9')
     parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
     parser.add_argument('releaseNew', help='The new release to be released')
@@ -44,8 +46,10 @@ def main():
         args.releaseOld = args.releaseNew
         printErrors(errors)
         return
-
-    argsdict = {'database': args.database, 'composite': args.composite, 'releaseNew': args.releaseNew, 'releaseOld': args.releaseOld, 'loose': args.loose, 'ignore': args.ignore, 'summary': args.summary}
+    specialMdb = None
+    if args.mdb:
+        specialMdb = args.mdb
+    argsdict = {'database': args.database, 'composite': args.composite, 'releaseNew': args.releaseNew, 'releaseOld': args.releaseOld, 'loose': args.loose, 'ignore': args.ignore, 'summary': args.summary, 'specialMdb': specialMdb}
 
     notes = mkChangeNotes.makeNotes(argsdict)
 

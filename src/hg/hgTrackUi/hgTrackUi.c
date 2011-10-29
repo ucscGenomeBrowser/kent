@@ -2382,12 +2382,53 @@ return FALSE;
 void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 /* List tracks in this collection, with visibility controls and UI links */
 {
-printf("<P><TABLE CELLPADDING=2>");
+#define SUPERS_WITH_CHECKBOXES
+#ifdef SUPERS_WITH_CHECKBOXES
+#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" id='btn_%s' src='../images/%s'>"
+#define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
+jsIncludeFile("hui.js",NULL);
+#endif///def SUPERS_WITH_CHECKBOXES
+printf("\n<P><TABLE CELLPADDING=2>");
 tdbRefSortPrioritiesFromCart(cart, &superTdb->children);
 struct slRef *childRef;
 for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     {
     struct trackDb *tdb = childRef->val;
+    #ifdef SUPERS_WITH_CHECKBOXES
+    if (childRef == superTdb->children) // first time through
+        {
+        printf("\n<TR><TD NOWRAP colspan=2>");
+        BUTTON_PLUS_ALL_GLOBAL();
+        BUTTON_MINUS_ALL_GLOBAL();
+        printf("&nbsp;<B>All</B><BR>");
+        printf("</TD></TR>\n");
+        }
+    printf("<TR><TD NOWRAP>");
+    if (!tdbIsDownloadsOnly(tdb))
+        {
+        enum trackVisibility tv = hTvFromString(cartUsualString(cart, tdb->track,hStringFromTv(tdb->visibility)));
+        // Don't use cheapCgi code... no name and no boolshad... just js
+        printf("<INPUT TYPE=CHECKBOX id='%s' onchange='superT.childChecked(this);'%s>",tdb->track,(tv != tvHide?" CHECKED":""));
+        hTvDropDownClassVisOnlyAndExtra(tdb->track, tv, tdb->canPack,
+                                        (tv == tvHide ? "hiddenText":"normalText"),
+                                        trackDbSetting(tdb, "onlyVisibility"),
+                                        "onchange='superT.selChanged(this);'");
+        printf("</TD>\n<TD>");
+        printf("<A HREF='%s?%s=%u&c=%s&g=%s' onclick='return superT.submitAndLink(this);'>%s</A>&nbsp;",
+                (tdbIsDownloadsOnly(tdb)? hgFileUiName(): hgTrackUiName()),
+                cartSessionVarName(), cartSessionId(cart),
+                chromosome, cgiEncode(tdb->track), tdb->shortLabel);
+        }
+    else
+        {
+        printf("<A HREF='%s?%s=%u&g=%s'>Downloads</A>",
+                hgFileUiName(),cartSessionVarName(), cartSessionId(cart), cgiEncode(tdb->track));
+        printf("</TD>\n<TD>");
+        printf("%s&nbsp;",tdb->shortLabel);
+        }
+    printf("</TD>\n");
+    #else///ifndef SUPERS_WITH_CHECKBOXES
     printf("<TR><TD NOWRAP>");
     if (tdbIsDownloadsOnly(tdb))
         printf("%s&nbsp;",tdb->shortLabel);
@@ -2411,6 +2452,7 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
                                 tv == tvHide ?  "hiddenText" : "normalText",
                                 trackDbSetting(tdb, "onlyVisibility"));
         }
+    #endif///ndef SUPERS_WITH_CHECKBOXES
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
@@ -3081,8 +3123,8 @@ char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {
     /* configured as a supertrack member in trackDb */
-    if (tdb->parent)
-        {
+    if (tdb->parent && sameString(super,tdb->parent->track))
+        {              // check trackName because super is returned for any level child
         /* the supertrack is also configured, so use supertrack defaults */
         tdbMarkAsSuperTrack(tdb->parent);
         trackDbSuperMemberSettings(tdb);
