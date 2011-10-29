@@ -36,7 +36,7 @@ wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
-wgEncodeUwTfbs.ra 
+wgEncodeUwTfbs.ra \
 wgEncodeSydhTfbs.ra \
 
 include ../../../../makefile.metaDb
