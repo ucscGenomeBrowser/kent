@@ -37,6 +37,7 @@ wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwTfbs.ra 
+wgEncodeSydhTfbs.ra \
 
 include ../../../../makefile.metaDb
 
