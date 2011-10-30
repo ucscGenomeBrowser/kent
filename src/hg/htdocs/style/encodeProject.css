@@ -40,6 +40,10 @@ table, th, td {
     border: 2px solid black;
 }
 
+.panel {
+    border: 2px solid #CCC;
+}
+
 .wrapper {
 	border: 1px solid gray;
 	padding:0px;
@@ -108,28 +112,6 @@ dd {
 
 .selectable {
     color: #004D99;
-}
-
-/* colored bullets on cell types based on karyotype CV field */
-
-.cancer {
-    color: brown;
-    font-size: large;
-    text-align: right;
-    float: right;
-}
-
-.normal {
-    color: green;
-    font-size: large;
-    text-align: right;
-    float: right;
-}
-
-.unknown {
-    color: lightgrey;
-    text-align: right;
-    float: right;
 }
 
 .floatHeader {

@@ -66,9 +66,10 @@ $(function () {
                         if (targetHash[target].count === undefined) {
                             return true;
                         }
-                        td = '<td class="cellType';
+                        td = $('<td></td>');
+                        td.addClass('matrixCell');
                         if (matrix[cellType][target]) {
-                            td += ' experiment';
+                            td.addClass('experiment');
                         }
                         td += '">';
                         if (matrix[cellType][target]) {
@@ -138,7 +139,7 @@ $(function () {
         header = encodeChipMatrix_pageHeader;
 
         $("#pageHeader").text(header);
-        $("title").text('ENCODE ' + header);
+        document.title = 'ENCODE ' + header;
 
         // set up structures for antibodies and their groups
         $.each(antibodies, function (i, item) {
