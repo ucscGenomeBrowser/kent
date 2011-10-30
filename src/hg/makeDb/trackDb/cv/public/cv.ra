@@ -3555,7 +3555,7 @@ termId BTO:0002397
 termUrl missing
 sex M
 tier 3
-protocol Crawford(Missing):RWPE_protocol.pdf
+protocol Crawford(missing):RWPE_protocol.pdf
 
 term SAEC
 tag SAEC
@@ -5179,7 +5179,7 @@ lab Myers
 lots I1010
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
-validation CEBPB_(SC-150)(Missing):human_CEBPB_SC-150_validation_Myers.pdf
+validation CEBPB_(SC-150)(missing):human_CEBPB_SC-150_validation_Myers.pdf
 
 term CEBPD_(SC-636)
 tag CEBPDSC636
@@ -5194,7 +5194,7 @@ lab Myers
 lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
-validation CEBPD_(SC-636)(Missing)(WesternBlot,IP-MassSpec):human_CEBPD_SC-636_validation_Myers.pdf
+validation CEBPD_(SC-636)(Missing):human_CEBPD_SC-636_validation_Myers.pdf
 
 term CHD1_(A301-218A)
 tag CHD1A301218A
@@ -5238,7 +5238,7 @@ lab Myers
 lots C2306
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
-validation CREB1_(SC-240)(Missing):human_CREB1_SC-240_sc-240_validation_Myers.pdf
+validation CREB1_(SC-240)(missing):human_CREB1_SC-240_sc-240_validation_Myers.pdf
 
 term CTCF
 tag CTCF
@@ -5591,7 +5591,7 @@ vendorId 39875
 orderUrl http://www.activemotif.com/catalog/details/39875/ezh2-antibody-mab-clone-ac22
 lab Bernstein
 lots 27210001
-targetId GeneCard:EZH2
+targetId GeneCards:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf 
 
@@ -5623,7 +5623,7 @@ lab Wold
 lots G0109
 targetId Genecard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation FOSL1_(sc-605)(Missing):human_FOSL1-SC605_validation_Wold.pdf
+validation FOSL1_(sc-605)(missing):human_FOSL1-SC605_validation_Wold.pdf
 
 term FOSL2
 tag FOSL2
@@ -5794,12 +5794,12 @@ target GATA2
 targetDescription The GATA family of transcription factors share a conserved zinc finger DNA-binding domain and are capable of binding the WGATAR consensus sequence. GATA1 is erythroid-specific and is essential for normal erythropeisis. By comparison, GATA2 is expressed at high levels in hematopoeitic progenitors, including early erythroid cells, but is strong repressed during erythroblast differentiaion.
 vendorName Santa Cruz Biotech
 vendorId sc-9008
-orderUrl
+orderUrl http://www.scbt.com/datasheet-9008-gata-2-h-116-antibody.html
 lab Hardison
 lots J2108
 targetId GeneCard: GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
-validation GATA2_(SC-9008)(Missing):human_GATA2_SC-9008_validation_Hardison.pdf
+validation GATA2_(SC-9008)(missing):human_GATA2_SC-9008_validation_Hardison.pdf
 
 term  GATA3_(SC-268)
 tag  GATA3
@@ -5814,7 +5814,7 @@ lab Farnham
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(Missing):human_GATA3-SC-268_validation_Farnham.pdf
+validation GATA3_SC-268(missing):human_GATA3-SC-268_validation_Farnham.pdf
 
 term GATA3_(SC-269)
 tag GATA3SC269
@@ -5827,8 +5827,8 @@ vendorId sc-269
 orderUrl http://www.scbt.com/datasheet-269-gata-3-hg3-35-antibody.html
 lab Farnham
 lots A1404
-targetId GeneCards:Genecard:GATA3
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:GATA3
+targetId Genecard:GATA3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3 
 validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
 
 term GCN5
@@ -6070,7 +6070,7 @@ vendorName Cell Signaling
 vendorId 9649
 orderUrl http://www.cellsignal.com/products/9649.html
 lab Farnham
-lots Lot#1
+lots 1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9Ac_(9649)(WesternBlot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
@@ -6417,7 +6417,7 @@ lab Farnham
 lots N/A
 targetId GeneCard:IKZF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IKZF1
-validation IKZF1_(IkN)_(UCLA)(Missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
+validation IKZF1_(IkN)_(UCLA)(missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
 
 term Ini1
 tag INI1
@@ -6504,7 +6504,7 @@ lab Bernstein
 lots 910477
 # JARID1A is an aliase for KDM5A in genecards.org
 targetId GeneCard:KDM5A
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5A 
 validation JARID1A_(ab26049)(ChIP-String,ChIP-seq):human_JARID1A_validation_Bernstein.pdf
 
 term JunD
@@ -6771,7 +6771,7 @@ lab Myers
 lots L0808
 targetId GeneCard:NFIC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
-validation NFIC_(SC-81335)(Missing):human_NFIC_SC-81335_validation_Myers.pdf
+validation NFIC_(SC-81335)(missing):human_NFIC_SC-81335_validation_Myers.pdf
 
 term NF-E2
 tag NFE2
@@ -7276,7 +7276,7 @@ lab Myers
 lots B0909
 targetId GeneCard:RUNX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
-validation RUNX3_(SC-101553)(Missing):human_RUNX3_SC-101553_validation_Myers.pdf
+validation RUNX3_(SC-101553)(missing):human_RUNX3_SC-101553_validation_Myers.pdf
 
 term RXRA
 tag RXRA
@@ -7319,7 +7319,7 @@ orderUrl http://www.ptglab.com/Products/SETDB1-Antibody-11231-1-AP.htm
 lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation SETDB1(Missing):human_SETDB1_validation_Farnham.pdf
+validation SETDB1(missing):human_SETDB1_validation_Farnham.pdf
 
 term  SETDB1_(SC-66884)
 tag  SETDB1b
@@ -7332,7 +7332,7 @@ vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 lab Farnham
 #lots
-targetId Genecards:SETDB1
+targetId Genecard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
 validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
 
@@ -7724,7 +7724,7 @@ lab Myers
 lots A1811
 targetId GeneCard:TEAD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
-validation TEAD4_(SC-101184)(Missing):human_TEAD4_SC-101184_validation_Myers.pdf
+validation TEAD4_(SC-101184)(missing):human_TEAD4_SC-101184_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term TFIIB
@@ -8030,7 +8030,7 @@ lab Farnham
 lots 08064-4C12
 targetId GeneCards:Genecard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF274
-validation ZNF274_(M01)(Missing):human_ZNF274_M01_validation_Farnham.pdf
+validation ZNF274_(M01)(missing):human_ZNF274_M01_validation_Farnham.pdf
 
 term ZZZ3
 tag ZZZ3
@@ -9697,6 +9697,7 @@ type dataType
 label Exon-array
 description Affymetrix Exon Array
 
+
 #not currently in metaDb
 term Bip
 tag BIP
@@ -11056,6 +11057,8 @@ searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 110
+# If this is ever changed to term Cell Line, you will also have to modify the cv Validator
+# to not special case the cellType term.
 ### Warning should be "term cell line", but the term here has to be a single
 ### word.  Or, "term cell line" in the cell type definitions should be
 ### "term cellType", but that requires changing a huge amount of existing code.

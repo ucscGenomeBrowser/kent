@@ -1271,48 +1271,6 @@ replicate 4
 subId 4304
 view FastqRd2
 
-metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
-objType table
-antibody Pol2
-cell MCF-7
-composite wgEncodeGisChiaPet
-dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-dccAccession wgEncodeEH001430
-expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1.bed.gz
-grant Ruan
-lab GIS-Ruan
-labVersion CHM040M_hg19
-project wgEncode
-replicate 1
-subId 4841
-tableName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
-view Interactions
-
-metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
-objType table
-antibody Pol2
-cell MCF-7
-composite wgEncodeGisChiaPet
-dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-dccAccession wgEncodeEH001430
-expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2.bed.gz
-grant Ruan
-lab GIS-Ruan
-labVersion CHM053T_hg19
-project wgEncode
-replicate 2
-subId 4842
-tableName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
-view Interactions
-
 metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep3
 objType table
 antibody Pol2
@@ -1541,4 +1499,4 @@ subId 4873
 tableName wgEncodeGisChiaPetNb4Pol2SigRep1
 view Signal
 
-# MAGIC: 2104900369
+# MAGIC: -396034055

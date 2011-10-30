@@ -205,7 +205,7 @@ taxId 9315
     #    /scratch/data/macEug2
 
 ########################################################################
-# GENBANK AUTO UPDATE (working - ???? - Chin)
+# GENBANK AUTO UPDATE (working - 2011-10-20 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -225,11 +225,17 @@ macEug2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaF
 macEug2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 macEug2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 macEug2.downloadDir = macEug2
-macEug2.refseq.mrna.native.load  = yes
+macEug2.refseq.mrna.native.load  = no
 macEug2.refseq.mrna.xeno.load = yes
 macEug2.refseq.mrna.xeno.loadDesc  = yes
 macEug2.genbank.est.native.load = yes
-macEug1.upstreamGeneTbl = xenoRefGene
+macEug2.genbank.est.native.loadDesc = yes
+macEug2.genbank.mrna.native.load = yes
+macEug2.genbank.mrna.native.loadDesc = yes
+macEug2.genbank.mrna.xeno.load = yes
+macEug2.genbank.mrna.xeno.loadDesc = yes
+macEug2.genbank.est.native.load = yes
+macEug2.genbank.est.native.loadDesc = yes
 
     git add etc/genbank.conf
     git commit -m "Added macEug2" etc/genbank.conf
@@ -264,8 +270,10 @@ macEug1.upstreamGeneTbl = xenoRefGene
 
     cd /cluster/data/genbank
      time nice -n +19 ./bin/gbAlignStep -initial macEug2 &
-    #   logFile: var/build/logs/2010.04.16-10:04:13.macEug2.initalign.log
-    #   real    365m55.393s
+    #  logFile: var/build/logs/2011.10.20-16:26:25.macEug2.initalign.log
+XXXX 2011-10-20 aligning, stop here see screen
+
+    #   real    ????
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/data/aligned/genbank.176.0/macEug2
 

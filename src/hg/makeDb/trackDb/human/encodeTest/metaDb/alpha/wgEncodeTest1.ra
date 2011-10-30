@@ -41,7 +41,6 @@ tableName wgEncodeTestObj5
 
 metaObject wgEncodeTestObj6
 objType table
-attic auxSup
 cell GM12878
 composite wgEncodeTest
 fileName wgEncodeTestObj6.file
