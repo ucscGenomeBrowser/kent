@@ -15,8 +15,9 @@ $(function () {
 
     var dataTypeLabelHash = {}, dataTypeTermHash = {}, cellTypeHash = {};
     var dataType, cellType;
-    var organism, assembly, server;
+    var organism, assembly, server, header;
     var karyotype;
+    var spinner;
 
     function tableOut(matrix, cellTiers, dataGroups) {
         // create table with rows for each cell types and columns for each data type
@@ -40,7 +41,7 @@ $(function () {
         });
         // fill in matrix --
         // add rows with cell type labels (column 1) and cells for experiments
-        table = $("#matrixTable");
+        table = $('#matrixTable');
 
         // add sections for each Tier of cell type
         $.each(cellTiers, function (i, tier) {
@@ -114,7 +115,6 @@ $(function () {
                 table.append(row);
             });
         });
-        table.append('</tbody>');
         $("body").append(table);
 
         // callback for floating table header feature
@@ -140,6 +140,9 @@ $(function () {
         var experiments = responses[0], dataTypes = responses[1], cellTypes = responses[2];
         var matrix = {};
         var dataGroups, cellTiers, header;
+
+        hideLoadingImage(spinner);
+        $('#matrixTable').show();
 
         // variables from calling page
         organism = encodeDataMatrix_organism;
@@ -209,9 +212,13 @@ $(function () {
         server: server
     });
 
+    // show only spinner until data is retrieved
+    $('#matrixTable').hide();
+    spinner = showLoadingImage("spinner");
+
     // add radio buttons for search type to specified div on page
     encodeProject.addSearchPanel('#searchTypePanel');
-    
+
     // load data from server and do callback
     encodeProject.loadAllFromServer(requests, handleServerData);
 });

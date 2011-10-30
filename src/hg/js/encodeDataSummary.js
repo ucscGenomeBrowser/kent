@@ -82,6 +82,10 @@ $(function () {
         assembly = encodeDataSummary_assembly;
         header = encodeDataSummary_pageHeader;
 
+        hideLoadingImage(spinner);
+        $('.summaryTable').show();
+        $('#searchTypePanel').show();
+
         $("#pageHeader").text(header);
         document.title = 'ENCODE ' + header;
 
@@ -159,8 +163,13 @@ $(function () {
         server: server
     });
 
+    // show only spinner until data is retrieved
+    spinner = showLoadingImage("spinner");
+
     // add radio buttons for search type to specified div on page
     encodeProject.addSearchPanel('#searchTypePanel');
+    $('#searchTypePanel').hide();
+    $('.summaryTable').hide();
 
     // load data from server
     encodeProject.loadAllFromServer(requests, handleServerData);
