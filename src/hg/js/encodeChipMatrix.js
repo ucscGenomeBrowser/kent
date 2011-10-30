@@ -15,8 +15,10 @@ $(function () {
         // Create table where rows = cell types and columns are datatypes
         // create table and first row 2 rows (column title and column headers)
         var table, tableHeader, row, td;
+        var antibodyHeaderLabel = "Antibody Targets";
+        var cellHeaderLabel = "Cell Types";
 
-        table = $('<table>' + '<tr><td><td class="axisType" colspan=6>Antibody Targets</td></tr>' + '<tr id="columnHeaders"><td class="axisType">Cell Types</td></tr>');
+        table = $('<table id="matrixTable"><thead><tr id="headerLabelRow"><td></td><td id="antibodyHeaderLabel" class="axisType" colspan=6 title="Click to view information about all element types">' + antibodyHeaderLabel + '</td></tr>' + '<tr id="columnHeaders"><td id="cellHeaderLabel" class="axisType" title="Click to view information about all cell types"><a href="/cgi-bin/hgEncodeVocab?ra=encode/cv.ra&type=Cell+Line&organism=' + organism + '">' + cellHeaderLabel + '</td></tr></thead><tbody>');
         tableHeader = $('#columnHeaders', table);
         $.each(antibodyGroups, function (i, group) {
             tableHeader.append('<th class="groupType"><div class="verticalText">' + group.label + '</div></th>');
@@ -39,6 +41,8 @@ $(function () {
             }
             // td or th here ?
             table.append($('<tr class="matrix"><th class="groupType">' + "Tier " + tier.term + '</th></td></tr>'));
+
+
             $.each(tier.cellTypes, function (i, cellType) {
                 if (!cellType) {
                     return true;
@@ -62,9 +66,10 @@ $(function () {
                         if (targetHash[target].count === undefined) {
                             return true;
                         }
-                        td = '<td class="cellType';
+                        td = $('<td></td>');
+                        td.addClass('matrixCell');
                         if (matrix[cellType][target]) {
-                            td += ' experiment';
+                            td.addClass('experiment');
                         }
                         td += '">';
                         if (matrix[cellType][target]) {
@@ -87,7 +92,34 @@ $(function () {
                 table.append(row);
             });
         });
+        table.append('</tbody>');
         $("body").append(table);
+
+        // use floating-table-header plugin
+        table.floatHeader({
+            cbFadeIn: function (header) {
+                // hide axis labels -- a bit tricky to do so
+                // as special handling needed for X axis label
+                $(".floatHeader #headerLabelRow").remove();
+                $(".floatHeader #cellHeaderLabel").html('');
+
+                // Note: user-defined callback requires 
+                // default actions from floatHeader plugin
+                // implementation (stop+fadeIn)
+                header.stop(true, true);
+                header.fadeIn(100);
+                //header.fadeIn(100);
+
+            }/*,
+            cbFadeOut: function (header) {
+                // show elements with class axisType
+                header.stop(true, true)
+                header.fadeOut(100);
+                $("#cellHeaderLabel").html(cellHeaderLabel);
+                $("#antibodyHeaderLabel").html(antibodyHeaderLabel);
+            }
+            */
+        });
     }
 
     function handleServerData(responses) {
@@ -107,7 +139,7 @@ $(function () {
         header = encodeChipMatrix_pageHeader;
 
         $("#pageHeader").text(header);
-        $("title").text('ENCODE ' + header);
+        document.title = 'ENCODE ' + header;
 
         // set up structures for antibodies and their groups
         $.each(antibodies, function (i, item) {
