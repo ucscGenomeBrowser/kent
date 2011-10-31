@@ -417,7 +417,7 @@ while (lineFileRow(lf, row))
     info.isRefSeq = startsWith("NM_", info.sourceAcc);
 
     if (startsWith("antibody.", info.sourceAcc) 
-	|| startsWith("CCDS", info.sourceAcc) || startsWith("RF", info.sourceAcc)
+	|| startsWith("CCDS", info.sourceAcc) || isRfam(info.sourceAcc)
 	|| stringIn("tRNA", info.sourceAcc) != NULL)
         {
 	/* Fake up some things for antibody frag and CCDS that don't have alignments. */

@@ -14,7 +14,7 @@ dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001427
 expId 1427
-fileName wgEncodeGisChiaPetHct116Pol2AlnRep1.bam
+fileName wgEncodeGisChiaPetHct116Pol2AlnRep1.bam,wgEncodeGisChiaPetHct116Pol2AlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHH524M
@@ -116,7 +116,7 @@ dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001426
 expId 1426
-fileName wgEncodeGisChiaPetHelas3Pol2AlnRep1.bam
+fileName wgEncodeGisChiaPetHelas3Pol2AlnRep1.bam,wgEncodeGisChiaPetHelas3Pol2AlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion IHH025M_hg19
@@ -218,7 +218,7 @@ dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002075
 expId 2075
-fileName wgEncodeGisChiaPetK562CtcfAlnRep1.bam
+fileName wgEncodeGisChiaPetK562CtcfAlnRep1.bam,wgEncodeGisChiaPetK562CtcfAlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CTCF_K562M_L7
@@ -319,7 +319,7 @@ dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
-fileName wgEncodeGisChiaPetK562Pol2AlnRep1.bam
+fileName wgEncodeGisChiaPetK562Pol2AlnRep1.bam,wgEncodeGisChiaPetK562Pol2AlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane13
@@ -340,7 +340,7 @@ dateSubmitted 2011-02-05
 dateUnrestricted 2011-11-04
 dccAccession wgEncodeEH001428
 expId 1428
-fileName wgEncodeGisChiaPetK562Pol2AlnRep2.bam
+fileName wgEncodeGisChiaPetK562Pol2AlnRep2.bam,wgEncodeGisChiaPetK562Pol2AlnRep2.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHK019M_L2_lane24
@@ -532,7 +532,7 @@ dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
 expId 2076
-fileName wgEncodeGisChiaPetMcf7CtcfAlnRep1.bam
+fileName wgEncodeGisChiaPetMcf7CtcfAlnRep1.bam,wgEncodeGisChiaPetMcf7CtcfAlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM076M
@@ -552,7 +552,7 @@ dateSubmitted 2011-08-30
 dateUnrestricted 2012-05-30
 dccAccession wgEncodeEH002076
 expId 2076
-fileName wgEncodeGisChiaPetMcf7CtcfAlnRep2.bam
+fileName wgEncodeGisChiaPetMcf7CtcfAlnRep2.bam,wgEncodeGisChiaPetMcf7CtcfAlnRep2.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM077M
@@ -736,7 +736,7 @@ dateSubmitted 2011-09-20
 dateUnrestricted 2012-06-20
 dccAccession wgEncodeEH001429
 expId 1429
-fileName wgEncodeGisChiaPetMcf7EraaAlnRep1.bam
+fileName wgEncodeGisChiaPetMcf7EraaAlnRep1.bam,wgEncodeGisChiaPetMcf7EraaAlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion IHM001T_hg19
@@ -756,7 +756,7 @@ dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
 dccAccession wgEncodeEH001429
 expId 1429
-fileName wgEncodeGisChiaPetMcf7EraaAlnRep2.bam
+fileName wgEncodeGisChiaPetMcf7EraaAlnRep2.bam,wgEncodeGisChiaPetMcf7EraaAlnRep2.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion IHH015T_hg19
@@ -776,7 +776,7 @@ dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001429
 expId 1429
-fileName wgEncodeGisChiaPetMcf7EraaAlnRep3.bam
+fileName wgEncodeGisChiaPetMcf7EraaAlnRep3.bam,wgEncodeGisChiaPetMcf7EraaAlnRep3.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion IHM096M
@@ -1042,7 +1042,7 @@ dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
 dccAccession wgEncodeEH001430
 expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2AlnRep1.bam
+fileName wgEncodeGisChiaPetMcf7Pol2AlnRep1.bam,wgEncodeGisChiaPetMcf7Pol2AlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM040M_hg19
@@ -1062,7 +1062,7 @@ dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001430
 expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2AlnRep2.bam
+fileName wgEncodeGisChiaPetMcf7Pol2AlnRep2.bam,wgEncodeGisChiaPetMcf7Pol2AlnRep2.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM053T_hg19
@@ -1082,7 +1082,7 @@ dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
 expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2AlnRep3.bam
+fileName wgEncodeGisChiaPetMcf7Pol2AlnRep3.bam,wgEncodeGisChiaPetMcf7Pol2AlnRep3.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM160M_L4
@@ -1102,7 +1102,7 @@ dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH001430
 expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2AlnRep4.bam
+fileName wgEncodeGisChiaPetMcf7Pol2AlnRep4.bam,wgEncodeGisChiaPetMcf7Pol2AlnRep4.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion CHM163M_L4
@@ -1271,48 +1271,6 @@ replicate 4
 subId 4304
 view FastqRd2
 
-metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
-objType table
-antibody Pol2
-cell MCF-7
-composite wgEncodeGisChiaPet
-dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-dccAccession wgEncodeEH001430
-expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1.bed.gz
-grant Ruan
-lab GIS-Ruan
-labVersion CHM040M_hg19
-project wgEncode
-replicate 1
-subId 4841
-tableName wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
-view Interactions
-
-metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
-objType table
-antibody Pol2
-cell MCF-7
-composite wgEncodeGisChiaPet
-dataType ChiaPet
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-dccAccession wgEncodeEH001430
-expId 1430
-fileName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2.bed.gz
-grant Ruan
-lab GIS-Ruan
-labVersion CHM053T_hg19
-project wgEncode
-replicate 2
-subId 4842
-tableName wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
-view Interactions
-
 metaObject wgEncodeGisChiaPetMcf7Pol2InteractionsRep3
 objType table
 antibody Pol2
@@ -1450,7 +1408,7 @@ dateSubmitted 2011-09-24
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEH001431
 expId 1431
-fileName wgEncodeGisChiaPetNb4Pol2AlnRep1.bam
+fileName wgEncodeGisChiaPetNb4Pol2AlnRep1.bam,wgEncodeGisChiaPetNb4Pol2AlnRep1.bam.bai
 grant Ruan
 lab GIS-Ruan
 labVersion IHN009M_hg19
@@ -1541,4 +1499,4 @@ subId 4873
 tableName wgEncodeGisChiaPetNb4Pol2SigRep1
 view Signal
 
-# MAGIC: 991376878
+# MAGIC: -396034055

@@ -479,8 +479,8 @@ char *s;
 
         printSetting(ra, "tier");
         printDescription(ra,NULL,-1);
-        printSetting(ra,"tissue");
         printSetting(ra,"lineage");
+        printSetting(ra,"tissue");
         printSetting(ra,"karyotype");
         printSetting(ra,"sex");
         printDocumentLink(ra,term,"protocol",pathBuffer,NULL,TRUE);

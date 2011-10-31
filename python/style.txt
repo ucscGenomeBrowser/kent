@@ -38,6 +38,11 @@ identified by its containing module:
     For more information, see the "Imports" section:
         http://www.python.org/dev/peps/pep-0008/
 
+    All lowercase names, no spaces. Underscores if it would improve
+readability in modules, but not for use in packages. A package
+contains many modules. All classes for a module exist within 1
+file. Structure follows python package and module standards.  
+
 Classes
     CapitalCase names. Note the leading captial letter to distinguish between a
 ClassName and a functionName. Underscores are not used, except for private

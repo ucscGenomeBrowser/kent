@@ -3898,45 +3898,59 @@ type gvf
 noScoreFilter .
 release beta,public
 
-track iscaRetrospectiveComposite
+track iscaComposite
 compositeTrack on
-shortLabel ISCA Retro
-longLabel International Standards for Cytogenetic Arrays Consortium - Retrospective variants
+shortLabel ISCA
+longLabel International Standards for Cytogenetic Arrays Consortium
 group varRep
 priority 110
 visibility hide
 type gvf
+urlLabel ISCA details: 
+url https://www.iscaconsortium.org/isca/ucsc/$D/DetailsPages/$$.html
 noScoreFilter .
 
-    track iscaRetrospectiveBenign
-    parent iscaRetrospectiveComposite
-    shortLabel ISCA Ret Benign
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Benign)
+    track iscaCuratedPathogenic
+    parent iscaComposite
+    shortLabel ISCA Cur. Pathog.
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Curated Pathogenic
     priority 1
 
-    track iscaRetrospectiveLikelyBenign
-    parent iscaRetrospectiveComposite
-    shortLabel ISCA Ret Lik.Ben
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Likely Benign)
+    track iscaPathogenic
+    parent iscaComposite
+    shortLabel ISCA Pathogenic
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Pathogenic
     priority 2
 
-    track iscaRetrospectivePathogenic
-    parent iscaRetrospectiveComposite
-    shortLabel ISCA Ret Pathog.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Pathogenic)
+    track iscaLikelyPathogenic
+    parent iscaComposite
+    shortLabel ISCA Likely Path.
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Likely Pathogenic
     priority 3
 
-    track iscaRetrospectiveLikelyPathogenic
-    parent iscaRetrospectiveComposite
-    shortLabel ISCA Ret Lik.Path.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Likely Pathogenic)
+    track iscaUncertain
+    parent iscaComposite
+    shortLabel ISCA Uncertain
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Uncertain
     priority 4
 
-    track iscaRetrospectiveUncertain
-    parent iscaRetrospectiveComposite
-    shortLabel ISCA Ret Uncert.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) - Retrospective (Uncertain)
+    track iscaLikelyBenign
+    parent iscaComposite
+    shortLabel ISCA Likely Ben.
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Likely Benign
     priority 5
+
+    track iscaBenign
+    parent iscaComposite
+    shortLabel ISCA Benign
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Benign
+    priority 6
+
+    track iscaCuratedBenign
+    parent iscaComposite
+    shortLabel ISCA Cur. Benign
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Curated Benign
+    priority 7
 
 searchName decipherId
 searchTable decipher
@@ -3997,35 +4011,49 @@ termRegex [ne]ss?v[0-9]+
 searchPriority 20
 release beta,public
 
-searchTable iscaRetrospectiveBenign
+searchTable iscaCuratedBenign
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
-searchTable iscaRetrospectiveLikelyBenign
+searchTable iscaBenign
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
-searchTable iscaRetrospectivePathogenic
+searchTable iscaLikelyBenign
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
-searchTable iscaRetrospectiveLikelyPathogenic
+searchTable iscaCuratedPathogenic
 searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex [ne]ss?v[0-9]+
 searchPriority 20
 
-searchTable iscaRetrospectiveUncertain
+searchTable iscaPathogenic
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20
+
+searchTable iscaLikelyPathogenic
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex [ne]ss?v[0-9]+
+searchPriority 20
+
+searchTable iscaUncertain
 searchMethod exact
 searchType bed
 semiShortCircuit 1

@@ -111,7 +111,7 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<IMG class='toggleButton' onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
+    hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
         group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
     hPrintf("<B>&nbsp;%s</B> ", group->label);
     hPrintf("&nbsp;&nbsp;&nbsp;");
@@ -411,6 +411,11 @@ withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
 trackList = getTrackList(&groupList, vis);
 
+if (trackHash == NULL)
+    trackHash = makeGlobalTrackHash(trackList);
+parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+
+
 #ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
 addDownloadOnlyTracks(database,&groupList,&trackList);
 #endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
@@ -430,7 +435,6 @@ if (sameString(groupTarget, "none"))
     freez(&groupTarget);
 
 dyStringPrintf(title, "Configure Image");
-
 
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n", hgTracksName(),
 	cartUsualString(cart, "formMethod", "POST"));
@@ -524,12 +528,6 @@ hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 
-hPrintf("<TR><TD>");
-hCheckBox("enableAdvancedJavascript", advancedJavascriptFeaturesEnabled(cart));
-hPrintf("</TD><TD>");
-hPrintf("Enable advanced javascript features");
-hPrintf("</TD></TR>\n");
-
 hTableEnd();
 cgiDown(0.9);
 
@@ -554,9 +552,9 @@ cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome a
 hPrintf(" ");
 cgiMakeButtonWithMsg(configDefaultAll, "default","Display only default tracks");
 hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
-hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return setAllTrackGroupVisibility(false)");
+hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return vis.expandAllGroups(false)");
 hPrintf(" ");
-hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return setAllTrackGroupVisibility(true)");
+hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return vis.expandAllGroups(true)");
 hPrintf("<div style='margin-top:.2em; margin-bottom:.9em;'>Control track and group visibility more selectively below.</div>");
 trackConfig(trackList, groupList, groupTarget, vis);
 

@@ -920,6 +920,27 @@ boolean cartListVarExists(struct cart *cart, char *var)
 return cartVarExists(cart, cartMultShadowVar(cart, var));
 }
 
+boolean cartListVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb,
+				  boolean compositeLevel, char *suffix)
+/* Return TRUE if a list variable for tdb->track (or tdb->parent->track,
+ * or tdb->parent->parent->track, etc.) is in cart (list itself may be NULL). */
+{
+if (compositeLevel)
+    tdb = tdb->parent;
+for ( ; tdb != NULL; tdb = tdb->parent)
+    {
+    char var[PATH_LEN];
+    if (suffix[0] == '.' || suffix[0] == '_')
+        safef(var, sizeof var, "%s%s%s", cgiMultListShadowPrefix(), tdb->track, suffix);
+    else
+        safef(var, sizeof var, "%s%s.%s", cgiMultListShadowPrefix(), tdb->track, suffix);
+    char *cartSetting = hashFindVal(cart->hash, var);
+    if (cartSetting != NULL)
+	return TRUE;
+    }
+return FALSE;
+}
+
 char *cartString(struct cart *cart, char *var)
 /* Return string valued cart variable. */
 {
