@@ -43,7 +43,9 @@
 // OK  matrix [+] set compVis to full
 // OK  viewVis changes set compVis to full
 // OK  subVis correct in hgTrackUi, hgTracks image, rightClick memnu, rightClick poCfg
-// -   cart limited to minimum changed
+// OK  cart limited to minimum changed
+// -   sort of subtracks overides imgord - ONLY works if "priority" has changed!
+// OK  viewVis override fixed: viewSig:squish+sub:Full reshapes fine. viewSig->dense overrides all back to dense.
 
 // TODO:
 // - SOLVED: checkboxes: working with name = boolshad.{name}   FIXME: multishad?
