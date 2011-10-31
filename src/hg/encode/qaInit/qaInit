@@ -263,7 +263,7 @@ def writeHtml(args, c, qaDir):
 	f.write(html)
 	f.close()
 	return short, long
-	
+
 def writeScriptOut(qaDir, output):
 	f = open(qaDir + "/script.output", "w")
 	sep = "\n"
@@ -271,12 +271,26 @@ def writeScriptOut(qaDir, output):
 	f.write(outstr)
 	f.close()
 	return
-    
-def writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir):
+
+def lastInitDate(sqlfile):
+	if not os.path.exists(sqlfile):
+		return 0
+	else:
+		f = open(sqlfile, "r")
+		lines = f.readlines()
+		f.close()
+		grab = 0
+		for i in lines:
+			if grab == 1:
+				return i.rstrip()
+			if re.match('initdate={', i):
+				grab = 1
+
+def writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir, initDate):
 	newYN = "Y"
 	if int(args.release) > 1:
 		newYN = "N"
-		
+
 	sql = """tbls={
 %s
 }
@@ -339,7 +353,7 @@ releaseLogUrl={
 }
 pushState={
 D
-}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(d), str(d), short, long, args.database, newYN, args.redmine, notes, args.database, args.composite) 
+}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(initDate), str(d), short, long, args.database, newYN, args.redmine, notes, args.database, args.composite) 
 	f = open(qaDir + "/release.sql", "w")
 	f.write(sql)
 	f.close()
@@ -438,7 +452,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	if not os.path.exists(qaDir):
 		os.makedirs(qaDir)
 
-	print "Making QA directory"
+	print "Making QA directory: %s" % qaDir
 	notesFile = makeLinks(c, args, qaDir)
 	
 	print "Getting methods"
@@ -487,7 +501,12 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	(short, long) = writeHtml(args, c, qaDir)
 	
 	writePushHtmlMail(args, user, qaDir)
-	writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir)
+
+	initDate = lastInitDate(qaDir + "/release.sql")
+	if not initDate:
+		initdate = d
+	writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir, initDate)
+
 	if not args.test:
 		print "Changing subIds' statuses to reviewing"
 		changeStatus(subIds)
