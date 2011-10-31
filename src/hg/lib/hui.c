@@ -4989,6 +4989,7 @@ if (!bigBed)  // bigBed filters are limited!
         skipScoreFilter = TRUE;
 
     // Add any multi-selects next
+    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
     if(filterBySet != NULL)
         {
         if(!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
@@ -5007,6 +5008,8 @@ if (!bigBed)  // bigBed filters are limited!
         {
         if (isBoxOpened)
             cfgEndBox(boxed);
+
+        return; // Cannot have both '*filter' and 'scoreFilter'
         }
     }
 
