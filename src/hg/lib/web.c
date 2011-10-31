@@ -19,6 +19,7 @@
 #include "axtInfo.h"
 #include "wikiLink.h"
 #include "googleAnalytics.h"
+#include "jsHelper.h"
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
 /* phoneHome business */
@@ -94,6 +95,10 @@ webInTextMode = TRUE;
 webPushErrHandlers();
 }
 
+// NEW_MENUS is used to experiment with using jabico derived menus (see redmine #5245)
+// curently only used in larrym's tree
+// #define NEW_MENUS
+
 static void webStartWrapperDetailedInternal(struct cart *theCart,
 	char *db, char *headerText, char *textOutBuf,
 	boolean withHttpHeader, boolean withLogo, boolean skipSectionHeader,
@@ -103,8 +108,10 @@ static void webStartWrapperDetailedInternal(struct cart *theCart,
 char uiState[256];
 char *scriptName = cgiScriptName();
 boolean isEncode = FALSE;
+#ifndef NEW_MENUS
 boolean isGsid   = hIsGsidServer();
 boolean isGisaid = hIsGisaidServer();
+#endif
 if (theCart)
     {
     char *theGenome = NULL;
@@ -220,6 +227,41 @@ if (withLogo)
     }
 
 /* Put up the hot links bar. */
+
+#ifdef NEW_MENUS
+
+    char *docRoot = hDocumentRoot();
+    jsIncludeFile("jquery.js", NULL);
+    if(docRoot != NULL)
+        {
+        struct dyString *file = dyStringCreate("%s/%s", docRoot, "NavBar.html");
+        FILE *fd = fopen(dyStringContents(file), "r");
+        if(fd == NULL)
+            // fail some other way (e.g. HTTP 500)?
+            errAbort("Couldn't open header file '%s' for reading", dyStringContents(file));
+        else
+            {
+            char buf[4096];
+            while(TRUE)
+                {
+                size_t n = fread(buf, 1, sizeof(buf), fd);
+                if(n)
+                    fwrite(buf, 1, n, stdout);
+                else
+                    break;
+                }
+            fclose(fd);
+            printf("<base href='http://hgwdev-larrym.cse.ucsc.edu/'>\n");
+            }
+        }
+    else
+        {
+        // tolerate missing docRoot (i.e. when running from command line)
+        // XXXX ????
+        }
+
+#else
+
 if (isGisaid)
     {
     printf("<TABLE WIDTH='100%%' class='topBlueBar' BORDER='0' CELLSPACING='0' CELLPADDING='2'><TR>\n");
@@ -342,6 +384,8 @@ else if (dbIsFound)
     }
     printf("<TD style='width:95%%'>&nbsp;</TD></TR></TABLE>\n"); // last column squeezes other columns left
     puts("</TD></TR>\n");
+
+#endif
 
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
