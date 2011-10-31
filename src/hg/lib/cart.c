@@ -23,6 +23,10 @@
 #include "hgMaf.h"
 #include "hui.h"
 
+// NOTE: using '.' as delimiter in trackName.var cart vars is too pervasive to
+//       to support '_' so don't bother!
+//////// #define SUPPORT_UNDERBAR_DELIMIT
+
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
 
@@ -2034,12 +2038,21 @@ struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?t
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *descendentTdb = tdbRef->val;
-    char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+    char setting[512];
     if (vis)
-        safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
+        safef(setting,sizeof(setting),"%s",descendentTdb->track);
     else
-        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
-    removed += cartRemoveAndCount(cart,settingName);
+        safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
+#ifdef SUPPORT_UNDERBAR_DELIMIT
+    int count = cartRemoveAndCount(cart,setting);
+    if (count > 0 || vis)
+        {
+        removed += count;
+        continue;
+        }
+    *(setting + strlen(descendentTdb->track)) = '_'; // Try '_'
+#endif///def SUPPORT_UNDERBAR_DELIMIT
+    removed += cartRemoveAndCount(cart,setting);
     }
 return removed;
 }
@@ -2054,16 +2067,23 @@ struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?t
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *descendentTdb = tdbRef->val;
-    char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+    char setting[512];
     if (vis)
-        safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
+        safef(setting,sizeof(setting),"%s",descendentTdb->track);
     else
-        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
-    char *newVal = cartOptionalString(newCart,settingName);
+        safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
+    char *newVal = cartOptionalString(newCart,setting);
+#ifdef SUPPORT_UNDERBAR_DELIMIT
+    if (newVal == NULL && !vis)                          // NOTE: assumed '.' not '_'
+        {
+        *(setting + strlen(descendentTdb->track)) = '_'; // Try '_'
+        newVal = cartOptionalString(newCart,setting);
+        }
+#endif///def SUPPORT_UNDERBAR_DELIMIT
     if (    newVal    != NULL
     && (   (parentVal != NULL && sameString(newVal,parentVal))
-        || (FALSE == cartValueHasChanged(newCart,oldVars,settingName,TRUE,FALSE))))
-        removed += cartRemoveAndCount(newCart,settingName);
+        || (FALSE == cartValueHasChanged(newCart,oldVars,setting,TRUE,FALSE))))
+        removed += cartRemoveAndCount(newCart,setting);
     }
 return removed;
 }
@@ -2379,29 +2399,46 @@ if (hasViews)
         if (!tdbIsView(tdbView,&view))
             break;
 
+    #ifndef SUBTRACK_CFG
         safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // unfortunatly setting name could be containerName.View.???
-        char settingAlt[512];
-        safef(settingAlt,sizeof(settingAlt),"%s.",tdbView->track);  // or viewTrackName.???
+    #endif///ndef SUBTRACK_CFG
         struct slPair *leftOvers = NULL;
         // Walk through settings that match this view
         while ((oneName = slPopHead(&changedSettings)) != NULL)
             {
-            if(startsWith(setting,oneName->name))
+            suffix = NULL;
+            if(startsWith(tdbView->track,oneName->name))
+                {
+                suffix = oneName->name + strlen(tdbView->track);
+            #ifdef SUPPORT_UNDERBAR_DELIMIT
+                if (*suffix == '.' || *suffix == '_')
+            #else///ifndef SUPPORT_UNDERBAR_DELIMIT
+                if (*suffix == '.') // NOTE: standardize on '.' since its is so pervasive
+            #endif///ndef SUPPORT_UNDERBAR_DELIMIT
+                    suffix++;
+                else if (isalnum(*suffix)) // viewTrackName is subset of another track!
+                    suffix = NULL;         // add back to list for next round
+                }
+        #ifndef SUBTRACK_CFG
+            else if(startsWith(setting,oneName->name))
                 suffix = oneName->name + strlen(setting);
-            else if(startsWith(settingAlt,oneName->name))
-                suffix = oneName->name + strlen(settingAlt);
-            else
+        #endif///ndef SUBTRACK_CFG
+
+            if (suffix == NULL)
                 {
                 slAddHead(&leftOvers,oneName);
                 continue;
                 }
 
-            if (sameString(suffix,"vis"))
-                {
+        #ifdef SUBTRACK_CFG
+            if (*suffix == '\0')
+        #else///ifndef SUBTRACK_CFG
+            if (*suffix == '\0' || sameString(suffix,"vis"))
+        #endif///ndef SUBTRACK_CFG
                 viewVisChanged = TRUE;
-                }
-            else if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
-                    clensed++;
+            else  // be certain to exclude vis settings here
+                if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
+                clensed++;
 
             }
         if (viewVisChanged)
