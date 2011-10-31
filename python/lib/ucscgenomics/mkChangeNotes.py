@@ -1,5 +1,5 @@
 #!/hive/groups/encode/dcc/bin/python
-import sys, os, re, argparse, subprocess, math, datetime
+import sys, os, re, argparse, subprocess, math, datetime, time
 from ucscgenomics import ra, track, qa, ucscUtils
 
 class makeNotes(object):
@@ -45,6 +45,8 @@ class makeNotes(object):
         errors=[]
         diff = set(self.oldMdb) - set(self.newMdb)
         for i in diff:
+            if re.match('.*MAGIC.*', i):
+                continue
             errors.append("%s: %s missing from %s" % (type, i, status))
         return errors
 
@@ -379,7 +381,6 @@ class makeNotes(object):
 
         #These attributes are the critical ones that are used by qaInit, others could potentially use these also.
 
-
         otherprint = len(allOther)
         if otherprint:
             output.append("\n")
@@ -396,7 +397,7 @@ class makeNotes(object):
             output.extend(ucscUtils.printIter((removedOther), self.releasePath))
         output.append("\n")
 
-        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePath))
+        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
 
@@ -460,7 +461,7 @@ class makeNotes(object):
             for j in sorted(errorsDict[i]):
                 output.append("%s" % j)
         output.append("\n")
-        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePath))
+        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
         return output
@@ -498,6 +499,7 @@ class makeNotes(object):
 
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
             self.oldReleaseFiles = c.releases[int(self.releaseOld)-1]
+            self.releasePathOld = c.httpDownloadsPath + 'release' + args['releaseOld']
 
             self.newMdb = c.alphaMetaDb
             self.oldMdb = c.publicMetaDb
