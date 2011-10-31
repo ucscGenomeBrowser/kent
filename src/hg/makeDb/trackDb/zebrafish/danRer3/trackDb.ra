@@ -106,7 +106,7 @@ otherDb danRer3
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex (ctg|BX|AL|Zv5_scaffold)[0-9\.]+
+termRegex (ctg|AC|BX|CR|AL|Zv5_scaffold|Zv5_NA)[0-9\.]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
