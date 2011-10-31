@@ -184,7 +184,7 @@ canPack off
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex (AC|AL|BX|CR|CT|Zv7_scaffold)[0-9\.]+
+termRegex (AC|AL|BX|CR|CT|CU|Zv7_scaffold|Zv7_NA|NC_)[0-9\.]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
@@ -227,3 +227,11 @@ searchPriority 15
 track ensGene override
 priority 32.8
 
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+semiShortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [a-z0-9][a-z0-9_][:a-z0-9._-]*

@@ -36,3 +36,26 @@ longLabel Human(hg17) proteins mapped by chained tBLASTn
 track nscanGene override
 informant Tetraodon N-SCAN uses Zebrafish (danRer4) as the informant.
 
+searchTable ensGene
+searchType genePred
+shortCircuit 1
+termRegex [AEGH][OSVY][TX3][0-9a-z-]+
+searchPriority 50
+
+searchName ensGeneGtpGene
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+termRegex [AEGH][OSVY][TX3][0-9a-z-]+
+xrefTable ensGtp
+xrefQuery select transcript,gene from %s where gene like '%s%%'
+searchPriority 50
+
+searchName ensDotPrefix
+searchTable ensGene
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
+shortCircuit 1
+termRegex [AEGH][OSVY][TX3][0-9a-z-]+
+dontCheck [AEGH][OSVY][TX3][0-9a-z-]+\.[0-9]+
+searchPriority 50
