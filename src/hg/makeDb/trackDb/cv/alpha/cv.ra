@@ -1056,7 +1056,6 @@ type Cell Line
 tier 3
 organism human
 description B cells from donors RO01778 and RO01794.
-lineage missing
 sex F
 tissue blood
 vendorName Heimfeld Lab, FHCRC
@@ -1072,7 +1071,6 @@ type Cell Line
 tier 3
 organism human
 description B cells, caucasian, draw number 1
-lineage missing
 sex F
 age 43
 tissue blood
@@ -1089,7 +1087,6 @@ type Cell Line
 tier 3
 organism human
 description B cells, African American, draw number 1
-lineage missing
 sex F
 age 27
 tissue blood
@@ -1106,7 +1103,6 @@ type Cell Line
 tier 3
 organism human
 description B cells, caucasian, draw number 2
-lineage missing
 sex F
 age 27
 tissue blood
@@ -1123,7 +1119,6 @@ type Cell Line
 tier 3
 organism human
 description hematopoietic progenitor cells- mobilized, from donor RO01679.
-lineage missing
 sex M
 tissue blood
 vendorName Heimfeld Lab,
@@ -1172,7 +1167,7 @@ tag CHORION
 type Cell Line
 organism human
 description chorion cells (outermost of two fetal membranes), fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
-tissue Fetal Membrane
+tissue fetal membrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
 orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
 lineage extraembryonic mesoderm, trophectoderm
@@ -1205,7 +1200,6 @@ type Cell Line
 tier 3
 organism human
 description malignant melanoma
-lineage missing
 karyotype cancer
 sex M
 tissue skin
@@ -1253,7 +1247,7 @@ term ECC-1
 tag ECC1
 type Cell Line
 organism human
-description ECC-1 is a human epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
+description epithelial cell line derived from an endometrium adenocarcinoma, fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes
 tissue luminal epithelium
 vendorName ATCC
 vendorId CRL-2923
@@ -2004,7 +1998,6 @@ type Cell Line
 tier 3
 organism human
 description brain vascular pericytes
-lineage missing
 sex U
 tissue brain
 vendorName ScienCell
@@ -2020,7 +2013,6 @@ type Cell Line
 tier 3
 organism human
 description brain vascular smooth muscle cells.
-lineage missing
 sex F
 tissue brain
 vendorName ScienCell
@@ -2364,7 +2356,6 @@ type Cell Line
 tier 3
 organism human
 description adult dermal microvascular endothelial cells.
-lineage missing
 sex F
 tissue skin
 vendorName Lonza
@@ -2491,7 +2482,6 @@ type Cell Line
 tier 3
 organism human
 description pulmonary artery endothelial cells.
-lineage missing
 sex F
 tissue heart
 vendorName Lonza
@@ -2703,7 +2693,6 @@ type Cell Line
 tier 3
 organism human
 description embryonic myotube
-lineage missing
 derivedFrom HSMM_emb
 vendorName Duke/UNC/UT/EBI ENCODE group
 vendorId fetal myoblast cell strain (H246 and H275) from Dr Stephen Hauschka- U. of Washington 1980
@@ -2768,10 +2757,10 @@ type Cell Line
 organism human
 tier 3
 description trophoblast (HTR-8/SVneo) cell line, a thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo
-lineage Blastula
+lineage blastula
 karyotype normal
 sex F
-tissue Ectoderm
+tissue ectoderm
 vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada
 vendorId HTR8svn
 orderUrl http://anatomy.queensu.ca/faculty/graham.cfm
@@ -2867,7 +2856,6 @@ type Cell Line
 tier 3
 organism human
 description endometrial adenocarcinoma
-lineage missing
 sex F
 tissue uterus
 vendorName SIGMA-ALDRICH
@@ -3161,7 +3149,7 @@ organism human
 tissue nervous
 lineage ectoderm
 karyotype normal
-description normal human astrocytes (also called Astrocy)
+description astrocytes (also called Astrocy)
 vendorName Lonza
 vendorId CC-2565
 orderUrl http://www.lonza.com/
@@ -3194,10 +3182,9 @@ type Cell Line
 tier 3
 organism human
 description bronchial epithelial cells with retinoic acid
-lineage missing
 karyotype normal
 sex F
-tissue Bronchial Epithelium
+tissue bronchial epithelium
 vendorName Lonza
 vendorId CC-2540, CC3170
 orderUrl http://www.lonza.com
