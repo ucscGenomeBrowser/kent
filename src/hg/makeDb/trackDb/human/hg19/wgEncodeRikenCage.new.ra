@@ -132,7 +132,7 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageSknshraCellPapClusters
         subTrack wgEncodeRikenCageViewClusters off
         shortLabel SKSH cell pA+
-        longLabel SK-N-SH retinoic acid whole cell polyA+ CAGE Clusters from ENCODE/RIKEN
+        longLabel SK-N-SH_RA whole cell polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=SKNSHRA localization=cell rnaExtract=pAP
         type bed 6 +
         # subId=3979 dateSubmitted=2011-04-28
@@ -1019,7 +1019,7 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageSknshraCellPapPlusSignalRep2
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH cell pA+ + 2
-        longLabel SK-N-SH retinoic acid whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
+        longLabel SK-N-SH_RA whole cell polyA+ CAGE Plus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep2
         type bigWig 1.000000 232069.000000
         origAssembly hg19
@@ -1160,7 +1160,7 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageSknshraCellPapPlusRawRep1
         subTrack wgEncodeRikenCageViewPlusSignal off
         shortLabel SKSH cell pA+ + 1
-        longLabel SK-N-SH retinoic acid whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
+        longLabel SK-N-SH_RA whole cell polyA+ CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 185567.000000
         # subId=4167 dateSubmitted=2011-05-31
@@ -1762,7 +1762,7 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageSknshraCellPapMinusSignalRep2
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH cell pA+ - 2
-        longLabel SK-N-SH retinoic acid whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
+        longLabel SK-N-SH_RA whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep2
         type bigWig 1.000000 118040.000000
         origAssembly hg19
@@ -1901,7 +1901,7 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageSknshraCellPapMinusRawRep1
         subTrack wgEncodeRikenCageViewMinusSignal off
         shortLabel SKSH cell pAP - 1
-        longLabel SK-N-SH retinoic acid whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
+        longLabel SK-N-SH_RA whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 134321.000000
         # subId=4167 dateSubmitted=2011-05-31
@@ -2517,7 +2517,7 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageSknshraCellPapAlnRep1
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel SKSH cell pA+ A 1
-        longLabel SK-N-SH retinoic acid whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
+        longLabel SK-N-SH_RA whole cell polyA+ CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
         type bam
         origAssembly hg19
@@ -2554,7 +2554,7 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageSknshraCellPapAlnRep2
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel SKSH cell pA+ A 2
-        longLabel SK-N-SH retinoic acid whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
+        longLabel SK-N-SH_RA whole cell polyA+ CAGE Alignments Rep 2 from ENCODE/RIKEN
         subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep2
         type bam
         origAssembly hg19
