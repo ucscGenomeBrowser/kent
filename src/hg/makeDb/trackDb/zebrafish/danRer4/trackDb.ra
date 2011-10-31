@@ -98,7 +98,7 @@ informant Zebrafish N-SCAN uses fugu (fr1) as the informant.
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex (AC|AL|BX|CR|CT|Zv6_scaffold)[0-9\.]+
+termRegex (AC|AL|BX|CR|CT|Zv6_scaffold|Zv6_NA)[0-9\.]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
@@ -111,3 +111,8 @@ searchPriority 11
 track ensGene override
 priority 32.8
 
+searchTable gold
+query select chrom,chromStart,chromEnd,frag from %s where frag = '%s'
+shortCircuit 1
+termRegex ([A-CF][A-Z][BZ0-9]+(/.[0-9]+)?(_[0-9]+)?)|((Zv[0-9]+_)?(scaffold|NA|Finished)[0-9]+(\.[0-9]+)?)|(NC_[0-9]+(\.[0-9]+)?)
+searchPriority 8

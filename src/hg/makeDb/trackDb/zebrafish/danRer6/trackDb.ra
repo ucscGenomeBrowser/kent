@@ -52,3 +52,11 @@ showTopScorers 200
 type bed 5 .
 html ../../phastConsElements
 
+searchName ensGeneGtpProtein
+searchTable ensGene
+searchType genePred
+searchMethod prefix
+semiShortCircuit 1
+xrefTable ensGtp
+xrefQuery select transcript,protein from %s where protein like '%s%%'
+termRegex [a-z0-9][a-z0-9_][:a-z0-9._-]*
