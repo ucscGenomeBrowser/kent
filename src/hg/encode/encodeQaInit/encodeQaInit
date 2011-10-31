@@ -398,7 +398,7 @@ def checkWithMkNotes(ourset, mkNotesSet, status):
 
 def main():
 	parser = argparse.ArgumentParser(
-        prog='qaInit',
+        prog='encodeQaInit',
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description='Initializes QA directory for claiming a release',
         epilog=
