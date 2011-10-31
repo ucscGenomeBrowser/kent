@@ -188,6 +188,7 @@ rnaExtract longPolyA
 subId 1849
 treatment DEX_100nM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep2
 objType file
@@ -214,6 +215,7 @@ rnaExtract longPolyA
 subId 1849
 treatment DEX_100nM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1
 objType table
@@ -400,6 +402,7 @@ rnaExtract longPolyA
 subId 3274
 treatment DEX_100pM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep2
 objType file
@@ -426,6 +429,7 @@ rnaExtract longPolyA
 subId 2974
 treatment DEX_100pM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
 objType table
@@ -612,6 +616,7 @@ rnaExtract longPolyA
 subId 2974
 treatment DEX_1nM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep2
 objType file
@@ -638,6 +643,7 @@ rnaExtract longPolyA
 subId 2974
 treatment DEX_1nM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1
 objType table
@@ -824,6 +830,7 @@ rnaExtract longPolyA
 subId 2974
 treatment DEX_500pM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep2
 objType file
@@ -850,6 +857,7 @@ rnaExtract longPolyA
 subId 2974
 treatment DEX_500pM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
 objType table
@@ -1036,6 +1044,7 @@ rnaExtract longPolyA
 subId 2974
 treatment DEX_5nM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep2
 objType file
@@ -1062,6 +1071,7 @@ rnaExtract longPolyA
 subId 2974
 treatment DEX_5nM
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
 objType table
@@ -1408,6 +1418,7 @@ rnaExtract longPolyA
 subId 1849
 treatment EtOH_0.02pct
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep2
 objType file
@@ -1434,6 +1445,7 @@ rnaExtract longPolyA
 subId 1849
 treatment EtOH_0.02pct
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep3
 objType file
@@ -1460,6 +1472,7 @@ rnaExtract longPolyA
 subId 2974
 treatment EtOH_0.02pct
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep4
 objType file
@@ -1486,6 +1499,7 @@ rnaExtract longPolyA
 subId 2974
 treatment EtOH_0.02pct
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqBe2cShortpolyaAlnRep1
 objType table
@@ -1673,6 +1687,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
 objType table
@@ -1700,6 +1715,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1
 objType table
@@ -1886,6 +1902,7 @@ rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep2
 objType file
@@ -1912,6 +1929,7 @@ rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hAlnRep1
 objType table
@@ -2098,6 +2116,7 @@ rnaExtract longPolyA
 subId 2976
 treatment DMSO_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDm002p4hTranscriptGencV3Rep2
 objType file
@@ -2124,6 +2143,7 @@ rnaExtract longPolyA
 subId 2976
 treatment DMSO_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1
 objType table
@@ -2310,6 +2330,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep2
 objType file
@@ -2336,6 +2357,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1
 objType table
@@ -2522,6 +2544,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep2
 objType file
@@ -2548,6 +2571,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqJurkatShortpolyaAlnRep1
 objType table
@@ -2708,6 +2732,7 @@ subId 3868
 tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
 objType table
@@ -2735,6 +2760,7 @@ subId 3868
 tableName wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaAlnRep1
 objType table
@@ -2922,6 +2948,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
 objType table
@@ -2949,6 +2976,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaAlnRep1
 objType table
@@ -3136,6 +3164,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
 objType table
@@ -3163,6 +3192,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqSknshShortpolyaAlnRep1
 objType table
@@ -3350,6 +3380,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
 objType table
@@ -3377,6 +3408,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
 objType table
@@ -3563,6 +3595,7 @@ rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep2
 objType file
@@ -3589,6 +3622,7 @@ rnaExtract longPolyA
 subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hAlnRep1
 objType table
@@ -3775,6 +3809,7 @@ rnaExtract longPolyA
 subId 2975
 treatment DMSO_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaDm002p4hTranscriptGencV3Rep2
 objType file
@@ -3801,6 +3836,7 @@ rnaExtract longPolyA
 subId 2975
 treatment DMSO_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1
 objType table
@@ -3987,6 +4023,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep2
 objType file
@@ -4013,6 +4050,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Estradiol_10nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1
 objType table
@@ -4199,6 +4237,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep2
 objType file
@@ -4225,6 +4264,7 @@ rnaExtract longPolyA
 subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqU87ShortpolyaAlnRep1
 objType table
@@ -4412,6 +4452,7 @@ subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 metaObject wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
 objType table
@@ -4439,5 +4480,6 @@ subId 3838
 tableName wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
 treatment None
 view TranscriptGencV3c
+attic auxValid
 
 # MAGIC: 1747581588
