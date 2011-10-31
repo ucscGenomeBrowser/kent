@@ -7101,7 +7101,7 @@ project wgEncode
 readType 1x75D
 replicate 1
 rnaExtract longPolyA
-subId 3521
+subId 4798
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 view MinusRawSignal
@@ -7128,7 +7128,7 @@ project wgEncode
 readType 1x75D
 replicate 2
 rnaExtract longPolyA
-subId 3522
+subId 4797
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
 view MinusRawSignal

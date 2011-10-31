@@ -713,7 +713,7 @@ else if(startsWithWord("genePred",type)
 else if(sameWord("bedLogR",type)
      || sameWord("peptideMapping", type))
     cType = cfgBedScore;
-else if(startsWithWord("bed", type))
+else if(startsWith("bed ", type) || startsWith("bigBed", type))
     {
     if (trackDbSetting(tdb, "bedFilter") != NULL)
            cType = cfgBedFilt;
