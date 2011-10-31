@@ -2374,10 +2374,26 @@ for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
     if (!tdbIsView(tdbView,&view))
         break;
     hasViews = TRUE;
-    safef(setting,sizeof(setting),"%s.",tdbView->track);          // unfortunatly setting name could be viewTrackName.???
-    //safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // or containerName.Sig.???   HOWEVER: this are picked up by containerName prefix
+#ifdef SUBTRACK_CFG
+    char *cartVis = cartOptionalString(newCart,tdbView->track);
+    if (cartVis != NULL)  // special to get viewVis in the list
+        {
+        lmAllocVar(lm, oneName);
+        oneName->name = lmCloneString(lm, tdbView->track);
+        oneName->val = lmCloneString(lm, cartVis);
+        slAddHead(&changedSettings,oneName);
+        }
+#endif///ndef SUBTRACK_CFG
+
+    // Now the non-vis settings
+    safef(setting,sizeof(setting),"%s.",tdbView->track);
     struct slPair *changeViewSettings = cartVarsWithPrefixLm(newCart, setting, lm);
     changedSettings = slCat(changedSettings, changeViewSettings);
+#ifdef SUPPORT_UNDERBAR_DELIMIT
+    safef(setting,sizeof(setting),"%s_",tdbView->track);
+    changeViewSettings = cartVarsWithPrefixLm(newCart, setting, lm);
+    changedSettings = slCat(changedSettings, changeViewSettings);
+#endif///ndef SUPPORT_UNDERBAR_DELIMIT
     }
 if (changedSettings == NULL && !containerVisChanged)
     return anythingChanged;
@@ -2395,6 +2411,7 @@ if (hasViews)
     {
     for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
         {
+        char *cartVis = NULL;
         boolean viewVisChanged = FALSE;
         if (!tdbIsView(tdbView,&view))
             break;
@@ -2435,21 +2452,23 @@ if (hasViews)
         #else///ifndef SUBTRACK_CFG
             if (*suffix == '\0' || sameString(suffix,"vis"))
         #endif///ndef SUBTRACK_CFG
+                {
                 viewVisChanged = TRUE;
+                cartVis = oneName->val;
+                }
             else  // be certain to exclude vis settings here
-                if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
+            if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
                 clensed++;
 
+            //slPairFree(&oneName); // lm memory so free not needed
             }
         if (viewVisChanged)
             {
             // If just created and if vis is the same as tdb default then vis has not changed
         #ifdef SUBTRACK_CFG
-            char *cartVis = cartOptionalString(newCart,tdbView->track);
             char *oldValue = hashFindVal(oldVars,tdbView->track);
         #else///ifndef SUBTRACK_CFG
             safef(setting,sizeof(setting),"%s.%s.vis",tdb->track,view);
-            char *cartVis = cartOptionalString(newCart,setting);
             char *oldValue = hashFindVal(oldVars,setting);
         #endif///ndef SUBTRACK_CFG
             if (cartVis && oldValue == NULL && hTvFromString(cartVis) != tdbView->visibility)
