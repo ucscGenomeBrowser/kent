@@ -596,3 +596,7 @@ visibility hide
 track blastHg18KG override
 visibility hide
 
+searchTable nscanGene
+searchType genePred
+termRegex chr[0-9LRUnX]+.[0-9]+.seq.masked.[0-9]{3}.1
+searchPriority 50
