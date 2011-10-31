@@ -5204,4 +5204,12 @@ html wgEncodeUwHistone.new
         origAssembly hg19
         # subId=4640 dateSubmitted=2011-09-08
 
+        track wgEncodeUwHistoneSkmcInputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel SKMC In Sg 1
+        longLabel SKMC Input Histone Mod Raw Sig Rep 1 from ENCODE/UW
+        subGroups view=zRSig factor=zInput cellType=SKMC rep=1 treatment=aNone
+        type bigWig 1.000000 16362.000000
+        # subId=5032 dateSubmitted=2011-10-27
+
 

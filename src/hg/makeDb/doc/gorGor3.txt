@@ -487,3 +487,325 @@ gorGor3.upstreamGeneTbl = xenoRefGene
     #	2571797450 bases of 2822760080 (91.109%) in intersection
 
 ############################################################################
+# LASTZ Gorilla NomLeu1 (DONE - 2011-10-21,27 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21
+    cd /hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21
+
+    cat << '_EOF_' > DEF
+# Gorilla vs Gibbon
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Gorilla gorGor3
+SEQ1_DIR=/scratch/data/gorGor3/gorGor3.2bit
+SEQ1_LEN=/scratch/data/gorGor3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# QUERY: Gibbon nomLeu1
+SEQ2_DIR=/scratch/data/nomLeu1/nomLeu1.2bit
+SEQ2_LEN=/scratch/data/nomLeu1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	after recovering manually after a hive filesystem outage
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+    #	Elapsed time: 160m12s
+    cat fb.gorGor3.chainNomLeu1Link.txt
+    #	2356321697 bases of 2822760080 (83.476%) in intersection
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s lastzNomLeu1.2011-10-21 lastz.nomLeu1
+
+    #	running the swap
+    mkdir /hive/data/genomes/nomLeu1/bed/blastz.gorGor3.swap
+    cd /hive/data/genomes/nomLeu1/bed/blastz.gorGor3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/gorGor3/bed/lastzNomLeu1.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    74m9.554s
+    cat fb.nomLeu1.chainGorGor3Link.txt 
+    #	2318822567 bases of 2756591777 (84.119%) in intersection
+
+    cd /hive/data/genomes/nomLeu1/bed
+    ln -s blastz.gorGor3.swap lastz.gorGor3
+
+############################################################################
+# LASTZ Baboon papHam1 (DONE - 2011-10-21 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/lastzPapHam1.2011-10-21
+    cd /hive/data/genomes/gorGor3/bed/lastzPapHam1.2011-10-21
+
+    cat << '_EOF_' > DEF
+# Gorilla vs Gibbon
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Gorilla gorGor3
+SEQ1_DIR=/scratch/data/gorGor3/gorGor3.2bit
+SEQ1_LEN=/scratch/data/gorGor3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# QUERY: Gibbon papHam1
+SEQ2_DIR=/scratch/data/papHam1/papHam1.2bit
+SEQ2_LEN=/scratch/data/papHam1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/gorGor3/bed/lastzPapHam1.2011-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running - Fri Oct 21 14:37:43 PDT 2011
+    #	real    159m46.598s
+    cat fb.gorGor3.chainPapHam1Link.txt  
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s lastzPapHam1.2011-10-21 lastz.papHam1
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/papHam1/bed/blastz.gorGor3.swap
+    cd /hive/data/genomes/papHam1/bed/blastz.gorGor3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/gorGor3/bed/lastzPapHam1.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    69m39.685s
+    cat fb.gorGor3.chainPapHam1Link.txt 
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
+
+############################################################################
+# LASTZ Bushbaby otoGar1 (DONE - 2011-10-21 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/lastzOtoGar1.2011-10-21
+    cd /hive/data/genomes/gorGor3/bed/lastzOtoGar1.2011-10-21
+
+    cat << '_EOF_' > DEF
+# Gorilla vs Bushbaby
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+# other parameters on advice from Webb
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Gorilla gorGor3
+SEQ1_DIR=/scratch/data/gorGor3/gorGor3.2bit
+SEQ1_LEN=/scratch/data/gorGor3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# QUERY: Bushbaby otoGar1
+SEQ2_DIR=/scratch/data/otoGar1/otoGar1.2bit
+SEQ2_LEN=/scratch/data/otoGar1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/hive/data/genomes/gorGor3/bed/lastzOtoGar1.2011-10-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    # after manually finishing the batch after hive filesystem outage
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=cat -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> cat.log 2>&1 &
+XXX - running - Thu Oct 27 13:34:25 PDT 2011
+    #	real    159m46.598s
+    cat fb.gorGor3.chainOtoGar1Link.txt  
+    #	2603997992 bases of 2897316137 (89.876%) in intersection
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s lastzOtoGar1.2011-10-21 lastz.otoGar1
+
+    #	running the swap
+    mkdir /hive/data/genomes/otoGar1/bed/blastz.gorGor3.swap
+    cd /hive/data/genomes/otoGar1/bed/blastz.gorGor3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/gorGor3/bed/lastzOtoGar1.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    69m39.685s
+    cat fb.gorGor3.chainOtoGar1Link.txt 
+    #	2571797450 bases of 2822760080 (91.109%) in intersection
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s  blastz.otoGar1.swap lastz.otoGar1
+
+############################################################################
+# lastz swap Chimp rheMac2 (DONE - 2011-10-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/rheMac2/bed/lastzGorGor3.2011-10-21
+    cat fb.rheMac2.chainGorGor3Link.txt  
+    #	2175264883 bases of 2646704109 (82.188%) in intersection
+
+    #	running the swap - DONE - 2011-09-21
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.rheMac2.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.rheMac2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/rheMac2/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    85m16.618s
+    cat fb.gorGor3.chainRheMac2Link.txt
+    #	2236867094 bases of 2822760080 (79.244%) in intersection
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s  blastz.rheMac2.swap lastz.rheMac2
+
+############################################################################
+# lastz swap Orangutan ponAbe2 (DONE - 2011-10-23 - Hiram)
+    # original alignment to Orangutan
+    cd /hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21
+    cat fb.ponAbe2.chainGorGor3Link.txt  
+    #	2584628377 bases of 3093572278 (83.548%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.ponAbe2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ponAbe2/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    86m19.901s
+    cat fb.gorGor3.chainPonAbe2Link.txt 
+    #	2437562544 bases of 2822760080 (86.354%) in intersection
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s  blastz.ponAbe2.swap lastz.ponAbe2
+
+############################################################################
+# lastz swap Marmoset calJac3 (DONE - 2011-10-27 - Hiram)
+    # the original alignment
+    cd /hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21
+    cat fb.calJac3.chainGorGor3Link.txt
+    #	1928768328 bases of 2752505800 (70.073%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.calJac3.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.calJac3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/calJac3/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	real    86m1.559s
+
+    cat fb.gorGor3.chainCalJac3Link.txt 
+    #	1933784568 bases of 2822760080 (68.507%) in intersection
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s  blastz.calJac3.swap lastz.calJac3
+
+############################################################################
+# lastz swap Chimp panTro3 (DONE - 2011-10-27 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/panTro3/bed/lastzGorGor3.2011-10-21
+    cat fb.panTro3.chainGorGor3Link.txt  
+    #	2553716156 bases of 2900529764 (88.043%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/gorGor3/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/gorGor3/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzGorGor3.2011-10-21/DEF \
+	-swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+    #	about 48 minutes
+    # an odd error:
+# netClass -verbose=0 -noAr noClass.net gorGor3 panTro3 gorGor3.panTro3.net
+# hashMustFindVal: 'chr2' not found
+    #	I can't find any chr2 in any of these files ...
+    #	This was due to a bogus simpleRepeat table in panTro3, mistakenly
+    #	loaded 09 May 2011, backpushed from the RR 27 October 2011
+    cat fb.gorGor3.chainPanTro3Link.txt 
+    #	2513463838 bases of 2822760080 (89.043%) in intersection
+    # after replacing the simpleRepeat table, finish off the
+    # axtChain/loadUp.csh script and 
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzGorGor3.2011-10-21/DEF \
+	-continue=download -swap -syntenicNet \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> download.log 2>&1 &
+    #	real    25m50.173s
+
+    cd /hive/data/genomes/gorGor3/bed
+    ln -s blastz.panTro3.swap lastz.panTro3
+
+############################################################################

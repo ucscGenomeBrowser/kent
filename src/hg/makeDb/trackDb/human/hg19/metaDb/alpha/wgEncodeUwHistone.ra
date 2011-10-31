@@ -23318,6 +23318,78 @@ subId 4672
 tableName wgEncodeUwHistoneSkmcH3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneSkmcInputStdAlnRep1
+objType file
+antibody Input
+cell SKMC
+composite wgEncodeUwHistone
+control std
+controlId SKMC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwHistoneSkmcInputStdAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS16208
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5032
+treatment None
+view Alignments
+
+metaObject wgEncodeUwHistoneSkmcInputStdRawDataRep1
+objType file
+antibody Input
+cell SKMC
+composite wgEncodeUwHistone
+control std
+controlId SKMC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwHistoneSkmcInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS16208
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5032
+treatment None
+view RawData
+
+metaObject wgEncodeUwHistoneSkmcInputStdRawRep1
+objType table
+antibody Input
+cell SKMC
+composite wgEncodeUwHistone
+control std
+controlId SKMC/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwHistoneSkmcInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS16208
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5032
+tableName wgEncodeUwHistoneSkmcInputStdRawRep1
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwHistoneSknmcH3k04me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -25489,4 +25561,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -1860110701
+# MAGIC: -932921043

@@ -54,14 +54,32 @@ puts(str);
 ourCellEnd();
 }
 
+static void addGenomesToHash(struct hubConnectStatus *hub, struct hash *hash)
+/* add supported assembly names from trackHub to hash */
+{
+if (hub == NULL)
+    return;
+
+struct trackHub *thub = hub->trackHub;
+if (thub != NULL)
+    {
+    /* List of associated genomes. */
+    struct trackHubGenome *genomes = thub->genomeList;	
+
+    for(; genomes; genomes = genomes->next)
+	hashStore(hash, genomes->name);
+    }
+}
+
 static void hgHubConnectUnlisted(struct hubConnectStatus *hubList)
 /* Put up the list of unlisted hubs and other controls for the page. */
+/* NOTE: Destroys hubList */
 {
 // put out the top of our page
 printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
     "<table id=\"unlistedHubsTable\"> "
     "<thead><tr> "
-	"<th colspan=\"5\" id=\"addHubBar\"><label>URL:</label> "
+	"<th colspan=\"5\" id=\"addHubBar\"><label for \"hubUrl\">URL:</label> "
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
 	    "type=\"text\" size=\"65\"> "
 	"<input name=\"hubAddButton\""
@@ -72,21 +90,55 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
     "</tr> ");
 
 // count up the number of unlisted hubs we currently have
-int count = 0;
-struct hubConnectStatus *hub;
-for(hub = hubList; hub; hub = hub->next)
+int unlistedHubCount = 0;
+int otherHubCount = 0;
+struct hubConnectStatus *unlistedHubList = NULL;
+struct hubConnectStatus *hub, *nextHub;
+struct hash *assHash = newHash(5);
+
+for(hub = hubList; hub; hub = nextHub)
     {
-    if (isHubUnlisted(hub) && ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) ))
-	count++;
+    nextHub = hub->next;
+    if (isHubUnlisted(hub) )
+	{
+	addGenomesToHash(hub, assHash);
+	if ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) )
+	    {
+	    unlistedHubCount++;
+	    slAddHead(&unlistedHubList, hub);
+	    }
+	else
+	    {
+	    otherHubCount++;
+	    }
+	}
     }
 
-if (count == 0)
+hubList = NULL;  // hubList no longer valid
+
+struct hashCookie cookie = hashFirst(assHash);
+struct dyString *dy = newDyString(100);
+struct hashEl *hel;
+int numAssemblies = 0;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    dyStringPrintf(dy,"%s,", hel->name);
+    numAssemblies++;
+    }
+if (numAssemblies)   // take off the final ','
+    dy->string[strlen(dy->string) - 1]  = 0;
+
+if (unlistedHubCount == 0)
     {
     // nothing to see here
     printf(
 	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
-	"</td></table>");
-    printf("</thead></div>");
+	"</td>");
+    if (otherHubCount)
+	printf(
+	    "<tr><td>%d Track Hubs for other genome assemblies: %s</tr></td>",
+	    otherHubCount, dy->string);
+    printf("</table></thead></div>");
     return;
     }
 
@@ -103,13 +155,9 @@ printf(
 // start first row
 printf("<tbody><tr>");
 
-count = 0;
-for(hub = hubList; hub; hub = hub->next)
+int count = 0;
+for(hub = unlistedHubList; hub; hub = hub->next)
     {
-    /* if the hub is public, then don't list it here */
-    if (!(isHubUnlisted(hub) && ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) )))
-	continue;
-
     if (count)
 	webPrintLinkTableNewRow();  // ends last row and starts a new one
     count++;
@@ -131,7 +179,7 @@ for(hub = hubList; hub; hub = hub->next)
 	"<input name=\"hubClearButton\""
 	    "onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
 		"document.resetHubForm.submit();return true;\" "
-		"class=\"hubField\" type=\"button\" value=\"clear error\">"
+		"class=\"hubField\" type=\"button\" value=\"check hub\">"
 		, hub->hubUrl);
 	ourCellEnd();
 	}
@@ -162,6 +210,9 @@ for(hub = hubList; hub; hub = hub->next)
     }
 
 printf("</TR></tbody></TABLE>\n");
+    if (otherHubCount)
+	printf( "%d Track Hubs for other genome assemblies: %s", 
+	    otherHubCount, dy->string);
 printf("</div>");
 }
 
@@ -233,7 +284,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    "<input name=\"hubClearButton\""
 		"onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
 		    "document.resetHubForm.submit();return true;\" "
-		    "class=\"hubField\" type=\"button\" value=\"clear error\">"
+		    "class=\"hubField\" type=\"button\" value=\"check hub\">"
 		    , url);
 	    ourCellEnd();
 	    }

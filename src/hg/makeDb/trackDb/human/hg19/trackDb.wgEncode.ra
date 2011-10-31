@@ -32,7 +32,8 @@ include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
-include wgEncodeHaibGenotype.ra
+include wgEncodeHaibGenotype.ra beta,public
+include wgEncodeHaibGenotype.new.ra alpha
 
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra
@@ -59,7 +60,8 @@ include wgEncodeUwAffyExonArray.ra beta,public
 include wgEncodeUwAffyExonArray.new.ra alpha
 
 # Duke Affy Exon (wrangler: cricket)
-include wgEncodeDukeAffyExon.ra 
+include wgEncodeDukeAffyExon.ra beta,public
+include wgEncodeDukeAffyExon.new.ra alpha
 
 ###Open Chromatin by DNaseI HS and FAIRE Tracks (super track: wgEncodeDNAseSuper)###
 #UNC FAIRE (wrangler: Matt)
@@ -105,7 +107,8 @@ include wgEncodeCaltechRnaSeq.ra beta,public
 include wgEncodeCaltechRnaSeq.new.ra alpha
 
 # CSHL Long Rna Seq (wrangler: cricket)
-include wgEncodeCshlLongRnaSeq.ra
+include wgEncodeCshlLongRnaSeq.ra beta,public
+include wgEncodeCshlLongRnaSeq.new.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
@@ -191,6 +194,6 @@ include wgEncodeSunyRipSeq.ra
 # Other miscellany ------------------------------------
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
-include wgEncodeMapability.ra public
-include wgEncodeMapability.new.ra alpha,beta
+include wgEncodeMapability.ra
+
 

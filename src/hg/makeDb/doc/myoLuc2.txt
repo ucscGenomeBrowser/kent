@@ -131,6 +131,10 @@ taxId 59463
     # 662899175 lower) in 11654 sequences in 1 files
     # %32.58 masked total, %33.71 masked real
 
+    # set up 2bit for download (2011-10-24 - Chin)
+    rm /gbdb/myoLuc2/myoLuc2.2bit
+    ln -s `pwd`/myoLuc2.2bit /gbdb/myoLuc2/myoLuc2.2bit
+
 #########################################################################
 # Marking *all* gaps - they are all in the AGP file
 #	(DONE - 2010-11-04 - Chin)
