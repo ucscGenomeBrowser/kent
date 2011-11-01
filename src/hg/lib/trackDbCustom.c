@@ -710,7 +710,7 @@ else if(sameWord("genePred",type))
         cType = cfgGenePred;
 else if(sameWord("bedLogR",type) || sameWord("peptideMapping", type))
     cType = cfgBedScore;
-else if(startsWith("bed ", type))
+else if(startsWith("bed ", type) || startsWith("bigBed", type))
     {
     char *words[3];
     chopLine(cloneString( type), words);

@@ -1,5 +1,5 @@
 #!/hive/groups/encode/dcc/bin/python
-import sys, os, re, argparse, subprocess, math, datetime
+import sys, os, re, argparse, subprocess, math, datetime, time
 from ucscgenomics import ra, track, qa, ucscUtils
 
 class makeNotes(object):
@@ -45,6 +45,8 @@ class makeNotes(object):
         errors=[]
         diff = set(self.oldMdb) - set(self.newMdb)
         for i in diff:
+            if re.match('.*MAGIC.*', i):
+                continue
             errors.append("%s: %s missing from %s" % (type, i, status))
         return errors
 
@@ -125,6 +127,7 @@ class makeNotes(object):
         #print filelist[0]
         if re.match('\S+.bam', filelist[0]) and filelist[0] in self.oldReleaseFiles and (filelist[0] + '.bai') not in filelist:
             filelist.append(filelist[0] + '.bai')
+
         for j in filelist:
             if ucscUtils.isGbdbFile(j, i['tableName'], self.database):
                 set.add(j)
@@ -233,11 +236,25 @@ class makeNotes(object):
 
         return(newOld, additionalList, oldAdditionalList, newTotal)
 
+    def __determineNiceSize(self, bytes):
+
+        bytes = float(bytes)
+        if bytes >= (1024**2):
+            terabytes = bytes / (1024**2)
+            size = '%.2f TB' % terabytes
+            
+        elif bytes >= (1024):
+            gigabytes = bytes / (1024)
+            size = '%.0f GB' % gigabytes
+        else:
+            return 0
+        return size
+
     def __printSize(self, size, output, totalsize, type):
 
-        sizeGb = int(size/1024)
-        if sizeGb > 1:
-            output.append("%s: %d MB (%d GB)" % (type, size, sizeGb))
+        nicesize = self.__determineNiceSize(size)
+        if nicesize:
+            output.append("%s: %d MB (%s)" % (type, size, nicesize))
         else:
             output.append("%s: %d MB" % (type, size))
 
@@ -262,7 +279,7 @@ class makeNotes(object):
             title = title + " files"
             caps = title.upper()
         if all:
-            output.append("\n")
+            output.append("")
             output.append("%s:" % caps)
             output.append("New: %s" % len(new))
             output.append("Untouched: %s" % len(untouched))
@@ -286,6 +303,8 @@ class makeNotes(object):
             output.append("")
             output.append("%s %s (%s):" % (removeline, title.title(), len(revoked)))
             output.extend(ucscUtils.printIter(revoked, path))
+        if all:
+            output.append("")
         return output
 
     def __qaHeader(self, output, newTableSet, filesNoRevoke, newGbdbSet, newSupp, additionalList, revokedTables, revokedFiles, revokedGbdbs, pushFiles, pushGbdbs, args, c):
@@ -324,6 +343,7 @@ class makeNotes(object):
         (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(newSupp, self.releasePath)), output, totalsize, "Supplemental")
         (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(additionalList, self.releasePath)), output, totalsize, "Other")
         (output, totalsize) = self.__printSize(totalsize, output, 0, "Total")
+        output.append("")
 
         return output
 
@@ -379,7 +399,6 @@ class makeNotes(object):
 
         #These attributes are the critical ones that are used by qaInit, others could potentially use these also.
 
-
         otherprint = len(allOther)
         if otherprint:
             output.append("\n")
@@ -396,7 +415,7 @@ class makeNotes(object):
             output.extend(ucscUtils.printIter((removedOther), self.releasePath))
         output.append("\n")
 
-        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePath))
+        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
 
@@ -411,6 +430,9 @@ class makeNotes(object):
         if set:
             output.append("%s (%s):" % (title, len(set)))
             output.extend(sorted(list(set)))
+        else:
+            return output
+        output.append("\n")
         return output
 
     def printReportOne(self, args, c):
@@ -460,7 +482,7 @@ class makeNotes(object):
             for j in sorted(errorsDict[i]):
                 output.append("%s" % j)
         output.append("\n")
-        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePath))
+        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
         return output
@@ -498,6 +520,7 @@ class makeNotes(object):
 
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
             self.oldReleaseFiles = c.releases[int(self.releaseOld)-1]
+            self.releasePathOld = c.httpDownloadsPath + 'release' + args['releaseOld']
 
             self.newMdb = c.alphaMetaDb
             self.oldMdb = c.publicMetaDb
