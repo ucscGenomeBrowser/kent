@@ -2825,6 +2825,11 @@ identifier tfbsCons
     $hg.tfbsConsSites.name dupeOk
     $hg.tfbsConsFactors.name
 
+identifier cosmic
+"Catalogue Of Somatic Mutations In Cancer"
+    $hg.cosmic.name
+    $hg.cosmicRaw.cosmic_mutation_id
+
 identifier esRegModule
 "Eran Segal's collection of motifs that appear together in a regulatory module"
     $sacCer.esRegModuleToMotif.module dupeOk
