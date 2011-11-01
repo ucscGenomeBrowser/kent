@@ -1,7 +1,7 @@
 track wgEncodeUncBsuProtFasp
 compositeTrack on
-superTrack wgEncodeProtGenoFaspSuper dense #validate?
-shortLabel UNC/BSU ProtGenoFasp
+superTrack wgEncodeProtGenoSuper dense 
+shortLabel UNC/BSU FASP
 longLabel Proteogenomics FASP from ENCODE/Univ. North Carolina/Boise State Univ.
 group expression
 subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)

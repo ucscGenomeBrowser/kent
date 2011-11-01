@@ -164,8 +164,17 @@ class CompositeTrack(object):
         
             return self._files
             
-    @property
+    @property 
     def qaInitDir(self):
+        qaDir = '/hive/groups/encode/encodeQa/' + self._database + '/' + self._name + '/'
+        if os.path.exists(qaDir) and os.path.isdir(qaDir):
+            pass
+        else:
+            os.makedirs(qaDir)
+        self._qaDir = qaDir
+        return qaDir
+    @property 
+    def qaInitDirTest(self):
         qaDir = '/hive/groups/encode/encodeQa/test/' + self._database + '/' + self._name + '/'
         if os.path.exists(qaDir) and os.path.isdir(qaDir):
             pass
@@ -259,7 +268,8 @@ class CompositeTrack(object):
     def organism(self):
         """The url on our site for this composite"""
         return self._organism
-    @property
+
+    @property 
     def currentTrackDb(self):
         trackDb = self._trackDbDir + "trackDb.wgEncode.ra"
         f = open(trackDb, "r")
