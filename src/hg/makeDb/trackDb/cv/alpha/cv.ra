@@ -9846,6 +9846,12 @@ type view
 label TSS Gencode V7
 description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
+term TssHmm   
+tag TssHmm
+type view
+label TSS HMM       
+description Expression level estimates for transcription start sites (TSS) 
+
 term UniformSignal
 tag UNISIG
 type view
