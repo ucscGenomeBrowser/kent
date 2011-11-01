@@ -954,7 +954,6 @@ tier 3
 organism human
 description uterus, donor BN0765, age 44, Asian, DNA extract
 tissue uterus
-lineage uterus
 karyotype normal
 sex F
 vendorName BioChain
@@ -2199,7 +2198,6 @@ type Cell Line
 tier 3
 organism human
 description foreskin fibroblast
-lineage fibroblast
 karyotype normal
 sex M
 tissue foreskin
@@ -2372,6 +2370,7 @@ organism human
 description lymphatic microvascular endothelial cells, lung-derived
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2814, CC-2814T25
 orderUrl http://www.lonza.com/
@@ -2386,6 +2385,7 @@ organism human
 description adult blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2811, CC-2811T75
 orderUrl http://www.lonza.com/
@@ -2400,6 +2400,7 @@ organism human
 description neonatal blood microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2813, CC-2813T75
 orderUrl http://www.lonza.com/
@@ -2414,6 +2415,7 @@ organism human
 description adult lymphatic microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2810, CC-2810T75
 orderUrl http://www.lonza.com/
@@ -2428,6 +2430,7 @@ organism human
 description neonatal lymphatic microvascular endothelial cells, dermal-derived
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2812, CC-2812T25
 orderUrl http://www.lonza.com/
@@ -2442,6 +2445,7 @@ organism human
 description neonatal microvascular endothelial cells (single donor), dermal-derived
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2505, CC-2505T225
 orderUrl http://www.lonza.com/
@@ -2456,6 +2460,7 @@ organism human
 description blood microvascular endothelial cells, lung-derived
 tissue blood
 lineage mesoderm
+karyotype normal
 vendorName Lonza
 vendorId CC-2815, CC-2815T75
 orderUrl http://www.lonza.com/
@@ -2527,6 +2532,7 @@ description pancreatic duct cells immortalized with E6E7 gene of HPV
 lineage endoderm
 sex F
 tissue pancreatic duct
+karyotype normal
 vendorName Dr. Ming-Sound Tsao, Ontario Cancer Institute
 vendorId HPDE6-E6E7
 orderUrl http://www.uhnresearch.ca/researchers/profile.php?lookup=6118
@@ -2757,10 +2763,10 @@ type Cell Line
 organism human
 tier 3
 description trophoblast (HTR-8/SVneo) cell line, a thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo
-lineage blastula
+tissue blastula
+lineage ectoderm 
 karyotype normal
 sex F
-tissue ectoderm
 vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada
 vendorId HTR8svn
 orderUrl http://anatomy.queensu.ca/faculty/graham.cfm
@@ -3393,7 +3399,7 @@ term PFSK-1
 tag PFSK1
 type Cell Line
 organism human
-description neuroectodermal cell line derived from a human cerebral brain tumor, (PMID: 1316433)
+description neuroectodermal cell line derived from a cerebral brain tumor, (PMID: 1316433)
 tissue brain
 vendorName ATCC
 vendorId CRL-2060
