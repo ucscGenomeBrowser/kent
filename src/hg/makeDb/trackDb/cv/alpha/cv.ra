@@ -3094,7 +3094,7 @@ orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 #formerly tier 3
-tier 3
+tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
 
 term Monocytes-CD14+_RO01826
@@ -7816,8 +7816,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
 validation TCF3_(SC-349)(WesternBlot,IP-MassSpec):human_TCF3_SC-349_validation_Myers.pdf
 label sc-349 TCF3
 
-# TCF-4 is an alias for TCF7L2 and is located on chr 10.
-# TCF-4 *IS ALSO NOT* an alias for TCF7L2 and *IS* a gene located on chr 18.
+# TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
+# TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
 term TCF4
 tag TCF4
 type Antibody
@@ -7834,8 +7834,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2&search=TCF7L2
 validation missing
 label 2569S TCF4
 
-# TCF-4 is an alias for TCF7L2 and is located on chr 10.
-# TCF-4 *IS ALSO NOT* an alias for TCF7L2 and *IS* a gene located on chr 18.
+# TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
+# TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
 # This is a stub for the real TCF-4 which may be used later in ENCODE. ~Jeff
 #term TCF-4
 #tag TCF4
