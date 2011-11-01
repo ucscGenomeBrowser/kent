@@ -1232,4 +1232,27 @@ void printUpdateTime(char *database, struct trackDb *tdb,
 void printBbiUpdateTime(time_t *timep);
 /* for bbi files, print out the timep value */
 
+enum fieldType {
+    ftString  =0,
+    ftInteger =1,
+    ftFloat   =2,
+};
+
+struct extraField {
+// extraFileds are defined in trackDb and provide labls and can be used in filtering
+    struct extraField *next;
+    char *name;                 // name of field
+    char *label;                // Label (which could include HTML)
+    enum fieldType type;        // string, int, float
+    };
+
+struct extraField *extraFieldsGet(struct trackDb *tdb);
+// returns any extraFields defined in trackDb
+
+struct extraField *extraFieldsFind(struct extraField *extras, char *name);
+// returns the extraField matching the name (case insensitive).  Note: slNameFind does NOT work.
+
+void extraFieldsFree(struct extraField **pExtras);
+// frees all mem for extraFields list
+
 #endif /* HUI_H */
