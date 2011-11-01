@@ -8,10 +8,12 @@
 
 $(function () {
     var requests = [
-    // Requests to server API
+    // requests to server API
         encodeProject.serverRequests.experiment, 
         encodeProject.serverRequests.dataType, 
-        encodeProject.serverRequests.cellType];
+        encodeProject.serverRequests.cellType,
+        encodeProject.serverRequests.expId
+        ];
 
     var dataTypeLabelHash = {}, dataTypeTermHash = {}, cellTypeHash = {};
     var dataType, cellType;
@@ -86,12 +88,13 @@ $(function () {
                             td.addClass('experiment');
                             td.text(matrix[cellType][dataType]);
                             td.data({
-                                'dataType' : dataTypeTermHash[dataType].label,
+                                'dataType' : dataType,
                                 'cellType' : cellType
                             });
                             td.mouseover(function() {
                                 $(this).attr('title', 'Click to select: ' + 
-                                                $(this).data().dataType + ' ' + ' in ' + 
+                                                dataTypeTermHash[$(this).data().dataType].label +
+                                                ' ' + ' in ' + 
                                                 $(this).data().cellType +' cells');
                             });
                             td.click(function() {
@@ -100,8 +103,8 @@ $(function () {
 
                                 // TODO: encapsulate var names
                                 url +=
-                                   ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType +
-                                   '&hgt_mdbVar2=cell&hgt_mdbVal2=' + cellType +
+                                   ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + $(this).data().dataType +
+                                   '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
                                    '&hgt_mdbVar3=view&hgt_mdbVal3=Any');
                                 // TODO: open search window 
                                 //window.open(url, "searchWindow");
@@ -137,20 +140,14 @@ $(function () {
 
     function handleServerData(responses) {
         // main actions, called when loading data from server is complete
-        var experiments = responses[0], dataTypes = responses[1], cellTypes = responses[2];
+        var experiments = responses[0], dataTypes = responses[1], 
+                        cellTypes = responses[2], expIds = responses[3];
         var matrix = {};
-        var dataGroups, cellTiers, header;
+        var dataGroups, cellTiers, expIdHash, header;
 
         hideLoadingImage(spinner);
         $('#matrixTable').show();
 
-        // variables from calling page
-        organism = encodeDataMatrix_organism;
-        assembly = encodeDataMatrix_assembly;
-        header = encodeDataMatrix_pageHeader;
-
-        $("#pageHeader").text(header);
-        document.title = 'ENCODE ' + header;
 
         // set up structures for data types and their groups
         $.each(dataTypes, function (i, item) {
@@ -166,6 +163,9 @@ $(function () {
         });
         cellTiers = encodeProject.getCellTiers(cellTypes);
 
+        // use to filter out experiments not in this assembly
+        expIdHash = encodeProject.getExpIdHash(expIds);
+
         // gather experiments into matrix
         $.each(experiments, function (i, exp) {
             // todo: filter out with arg to hgApi
@@ -174,6 +174,9 @@ $(function () {
             }
             // exclude ref genome annotations
             if (exp.cellType === 'None') {
+                return true;
+            }
+            if (expIdHash[exp.ix] === undefined) {
                 return true;
             }
             // count experiments per dataType so we can prune those having none
@@ -208,8 +211,17 @@ $(function () {
         server = document.location.hostname;
         // or document.domain ?
     }
+    // variables from calling page
+    organism = encodeDataMatrix_organism;
+    assembly = encodeDataMatrix_assembly;
+    $("#assemblyLabel").text(assembly);
+    header = encodeDataMatrix_pageHeader;
+    $("#pageHeader").text(header);
+    document.title = 'ENCODE ' + header;
+
     encodeProject.setup({
-        server: server
+        server: server,
+        assembly: assembly
     });
 
     // show only spinner until data is retrieved
