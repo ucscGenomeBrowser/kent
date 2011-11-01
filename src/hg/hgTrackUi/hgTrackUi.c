@@ -2683,7 +2683,7 @@ else if (tdb->type != NULL)
             expRatioCtUi(tdb);
             }
         /* if bed has score then show optional filter based on score */
-        else if (sameWord(words[0], "bed") && wordCount == 3)
+        else if ((sameWord(words[0], "bed") || sameWord(words[0], "bigBed")) && wordCount == 3)
             {
             /* Note: jaxQTL3 is a bed 8 format track because of
                 thickStart/thickStart, but there is no valid score.

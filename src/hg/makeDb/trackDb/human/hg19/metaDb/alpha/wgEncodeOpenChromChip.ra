@@ -1372,7 +1372,6 @@ dateUnrestricted 2009-12-20
 dccAccession wgEncodeEH000532
 expId 532
 fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep2.fastq.gz
-geoSampleAccession GSM822312
 grant Crawford
 lab UT-A
 md5sum 8857dc283de4486075d9220966431943
@@ -4373,7 +4372,6 @@ dateUnrestricted 2010-06-29
 dccAccession wgEncodeEH000554
 expId 554
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep1.fastq.gz
-geoSampleAccession GSM822284
 grant Crawford
 lab UT-A
 md5sum 603257a462a1010ba9d09d0266cc07b8
@@ -7622,4 +7620,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 64088780
+# MAGIC: -140363302
