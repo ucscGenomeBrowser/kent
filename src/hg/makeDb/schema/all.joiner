@@ -1578,30 +1578,19 @@ identifier knownGeneId dependency
     $hg.humanWankerP2P.target
     $kgDb.kgColor.kgID full
     $kgDb.kg2ToKg3.newId minCheck=0.5 exclude=
-    $kgDb.kg3ToKg4.oldId minCheck=0.5
-    $kgDb.kg3ToKg4.newId exclude=
+    $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
+    $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
+    hg19.kg4ToKg5.newId minCheck=0.5 exclude=
+    hg19.kg5ToKg6.newId exclude=
     $kgDb.kgTargetAli.qName full
-    hg19.kg4ToKg5.newId
     mm9.kg4ToKg5.newId
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
 
-identifier knownGeneOld4Id dependency
+identifier knownGeneOld5Id dependency
 "Previous UCSC Gene build"
-    $kgDb.knownGeneOld4.name
-    $kgDb.kg4ToKg5.oldId full
-
-identifier knownGeneOld3Id dependency
-"Previous UCSC Gene build"
-    $kgDb.knownGeneOld3.name
-    $kgDb.kg3ToKg4.oldId full
-
-identifier knownGeneOld2Id dependency
-"Old knownGene (KGII) and kgXref tables kept after KGIII implementation"
-    $kgDb.knownGeneOld2.name dupeOk
-    $kgDb.kgXrefOld2.kgID full
-    $kgDb.humanBlastTab.query
-    $kgDb.humanBlastTab.target
+    $kgDb.knownGeneOld5.name
+    $kgDb.kg5ToKg6.oldId full
 
 identifier knownToHprdName
 "Dependencies on knownToHprd.name"
