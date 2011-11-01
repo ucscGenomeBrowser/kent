@@ -1593,6 +1593,23 @@ identifier knownGeneOld5Id dependency
     $kgDb.knownGeneOld5.name
     $kgDb.kg5ToKg6.oldId full
 
+identifier knownGeneOldId dependency
+"Still-previous UCSC Genes build"
+    $kgDb.knownGeneOld4.name
+    $kgDb.kg4ToKg5.oldId full
+
+identifier knownGeneOld3Id dependency
+"Still-still previous UCSC Genes build"
+    $kgDb.knownGeneOld3.name
+    $kgDb.kg3ToKg4.oldId full
+
+identifier knownGeneOld2Id dependency
+"Old knownGene (KGII) and kgXref tables kept after KGIII implementation - still needed?"
+    $kgDb.knownGeneOld2.name dupeOk
+    $kgDb.kgXrefOld2.kgID full
+    $kgDb.humanBlastTab.query
+    $kgDb.humanBlastTab.target
+
 identifier knownToHprdName
 "Dependencies on knownToHprd.name"
     $kgDb.knownToHprd.name dupeOk
@@ -2808,6 +2825,11 @@ identifier tfbsCons
     $hg.tfbsConsSites.name dupeOk
     $hg.tfbsConsFactors.name
 
+identifier cosmic
+"Catalogue Of Somatic Mutations In Cancer"
+    $hg.cosmic.name
+    $hg.cosmicRaw.cosmic_mutation_id
+
 identifier esRegModule
 "Eran Segal's collection of motifs that appear together in a regulatory module"
     $sacCer.esRegModuleToMotif.module dupeOk
@@ -3618,9 +3640,16 @@ tablesIgnored $galGal
     caCondor454
 
 tablesIgnored $danRer
-	ncbiIncidentDb
+    ncbiIncidentDb
     phastConsElements
     wz_ests
+    UMassInput 
+    UMassME1 
+    UMassME1Hotspot 
+    UMassME1Peak 
+    UMassME3 
+    UMassME3Hotspot 
+    UMassME3Peak
 
 tablesIgnored $canFam
     genomicSuperDups
