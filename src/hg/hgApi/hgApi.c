@@ -355,6 +355,27 @@ else if(!strcmp(cmd, "encodeExperiments"))
     dyStringPrintf(output, "\n");
     sqlDisconnect(&connExp);
     }
+else if (!strcmp(cmd, "encodeExpId"))
+    {
+    // Return list of ENCODE expID's found in a database 
+    struct sqlResult *sr;
+    char **row;
+    char query[256];
+    struct sqlConnection *conn = hAllocConn(database);
+    safef(query, sizeof(query), "select distinct(%s) from %s where %s='%s' order by (%s + 0)",
+                        MDB_VAL, MDB_DEFAULT_NAME, MDB_VAR, MDB_VAR_ENCODE_EXP_ID, MDB_VAL);
+    sr = sqlGetResult(conn, query);
+    dyStringPrintf(output, "[\n");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        dyStringPrintf(output, "{\"expId\": \"%s\"},\n", row[0]);
+        }
+    output->string[dyStringLen(output)-2] = '\n';
+    output->string[dyStringLen(output)-1] = ']';
+    dyStringPrintf(output, "\n");
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
 else if (!strcmp(cmd, "cv"))
     {
     // Return list of CV terms for the specified term type

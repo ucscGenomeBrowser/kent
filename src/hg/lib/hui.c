@@ -4757,45 +4757,42 @@ if (filterSettings)
     {
     puts("<BR>");
     struct slName *filter = NULL;
-    struct slPair *extras = NULL;
-    char *extraFields = trackDbSetting(tdb, "extraFields");  // TODo: seems like there should be a cleaner way
-    if (extraFields != NULL)
-        extras = slPairListFromString(extraFields,TRUE); // Quoted strings may be okay
+    struct extraField *extras = extraFieldsGet(tdb);
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
         if (differentString(filter->name,"noScoreFilter") && differentString(filter->name,"scoreFilter")) // TODO: scoreFilter could be included
             {
-            char *field = cloneString(filter->name);
+            // Determine floating point or integer
+            char *setting = trackDbSetting(tdb, filter->name);
+            boolean isFloat = (strchr(setting,'.') != NULL);
+
+            char *scoreName = cloneString(filter->name);
+            char *field = filter->name;   // No need to clone: will be thrown away at end of cycle
             int ix = strlen(field) - strlen("Filter");
             assert(ix > 0);
             field[ix] = '\0';
-            // Could lookup extraFields  // TODO: Should we be using extra fields?  Could this be sorted by the order in extraFields?
+
             if (extras != NULL)
                 {
-                char *foundLabel = slPairFindVal(extras, field);
-                if (foundLabel != NULL)
+                struct extraField *extra = extraFieldsFind(extras, field);
+                if (extra != NULL)
                     { // Found label so replace field
-                    freeMem(field);
-                    field = strchr(foundLabel,']');
-                    if (field == NULL)
-                        field = cloneString(foundLabel);
-                    else
-                        field = cloneString(field + 1);
-                    strSwapChar(field,'_',' ');
+                    field = extra->label;
+                    if (!isFloat)
+                        isFloat = (extra->type == ftFloat);
                     }
                 }
             char label[128];
             safef(label,sizeof(label),"Minimum %s",field);
-            freeMem(field);
-            // Determine floating point or integer
-            char *setting = trackDbSetting(tdb, filter->name);
-            boolean isFloat = (strchr(setting,'.') != NULL);
-            showScoreFilter(cart,tdb,opened,boxed,compositeLevel,name,title,label,filter->name,isFloat);
+            showScoreFilter(cart,tdb,opened,boxed,compositeLevel,name,title,label,scoreName,isFloat);
+            freeMem(scoreName);
             count++;
             }
         slNameFree(&filter);
         }
+    if (extras != NULL)
+        extraFieldsFree(&extras);
     }
 if (count > 0)
     puts("</TABLE>");
@@ -4810,45 +4807,49 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 boolean skipScoreFilter = FALSE;
-filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+boolean bigBed = startsWith("bigBed",tdb->type);
 
-#ifdef ALL_SCORE_FILTERS_LOGIC
-// Numeric filters are first
-boolean isBoxOpened = FALSE;
-if (numericFiltersShowAll(cart, tdb, &isBoxOpened, boxed, compositeLevel, name, title) > 0)
-    skipScoreFilter = TRUE;
-#endif///def ALL_SCORE_FILTERS_LOGIC
-
-// Add any multi-selects next
-if(filterBySet != NULL)
+if (!bigBed)  // bigBed filters are limited!
     {
-    if(!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
-        jsIncludeFile("hui.js",NULL);
+    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 
-    if (!isBoxOpened)   // Note filterBy boxes are not double "boxed", if there are no other filters
-        printf("<BR>");
-    filterBySetCfgUi(tdb,filterBySet,TRUE);
-    filterBySetFree(&filterBySet);
-    skipScoreFilter = TRUE;
-    }
-
-// For no good reason scoreFilter is incompatible with filterBy and or numericFilters
-// FIXME scoreFilter should be implemented inside numericFilters and is currently specificly excluded to avoid unexpected changes
-if (skipScoreFilter)
-    {
     #ifdef ALL_SCORE_FILTERS_LOGIC
-    if (isBoxOpened)
-        cfgEndBox(boxed);
+    // Numeric filters are first
+    boolean isBoxOpened = FALSE;
+    if (numericFiltersShowAll(cart, tdb, &isBoxOpened, boxed, compositeLevel, name, title) > 0)
+        skipScoreFilter = TRUE;
     #endif///def ALL_SCORE_FILTERS_LOGIC
 
-    return; // Cannot have both '*filter' and 'scoreFilter'
+    // Add any multi-selects next
+    if(filterBySet != NULL)
+        {
+        if(!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
+            jsIncludeFile("hui.js",NULL);
+
+        if (!isBoxOpened)   // Note filterBy boxes are not double "boxed", if there are no other filters
+            printf("<BR>");
+        filterBySetCfgUi(tdb,filterBySet,TRUE);
+        filterBySetFree(&filterBySet);
+        skipScoreFilter = TRUE;
+        }
+
+    // For no good reason scoreFilter is incompatible with filterBy and or numericFilters
+    // FIXME scoreFilter should be implemented inside numericFilters and is currently specificly excluded to avoid unexpected changes
+    if (skipScoreFilter)
+        {
+        #ifdef ALL_SCORE_FILTERS_LOGIC
+        if (isBoxOpened)
+            cfgEndBox(boxed);
+        #endif///def ALL_SCORE_FILTERS_LOGIC
+
+        return; // Cannot have both '*filter' and 'scoreFilter'
+        }
     }
 
 boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
 if (! (scoreFilterOk || glvlScoreMin))
     return;
-
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 if (scoreFilterOk)
@@ -4857,7 +4858,7 @@ if (scoreFilterOk)
     getScoreIntRangeFromCart(cart,tdb,SCORE_FILTER,&minLimit,&maxLimit,&minVal,&maxVal);
 
     boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, SCORE_FILTER _BY_RANGE);
-    if (filterByRange)
+    if (!bigBed && filterByRange)
         {
         puts("<B>Filter score range:  min:</B>");
         snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER _MIN);
@@ -4873,36 +4874,41 @@ if (scoreFilterOk)
         snprintf(option, sizeof(option), "%s.%s", name,SCORE_FILTER);
         cgiMakeIntVarWithLimits(option, minVal, "Minimum score",0, minLimit,maxLimit);
         printf("&nbsp;&nbsp;(range: %d to %d)", minLimit, maxLimit);
+        if (!boxed)
+            printf("<BR>\n");
         }
     }
 
 if (glvlScoreMin)
     scoreGrayLevelCfgUi(cart, tdb, name, maxScore);
 
-/* filter top-scoring N items in track */
-char *scoreCtString = trackDbSettingClosestToHome(tdb, "filterTopScorers");
-if (scoreCtString != NULL)
+if (!bigBed)
     {
-    /* show only top-scoring items. This option only displayed if trackDb
-     * setting exists.  Format:  filterTopScorers <on|off> <count> <table> */
-    char *words[2];
-    char *scoreFilterCt = NULL;
-    chopLine(cloneString(scoreCtString), words);
-    safef(option, sizeof(option), "%s.filterTopScorersOn", name);
-    bool doScoreCtFilter =
-        cartUsualBooleanClosestToHome(cart, tdb, compositeLevel, "filterTopScorersOn", sameString(words[0], "on"));
-    puts("<P>");
-    cgiMakeCheckBox(option, doScoreCtFilter);
-    safef(option, sizeof(option), "%s.filterTopScorersCt", name);
-    scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, compositeLevel, "filterTopScorersCt", words[1]);
+    /* filter top-scoring N items in track */
+    char *scoreCtString = trackDbSettingClosestToHome(tdb, "filterTopScorers");
+    if (scoreCtString != NULL)
+        {
+        /* show only top-scoring items. This option only displayed if trackDb
+        * setting exists.  Format:  filterTopScorers <on|off> <count> <table> */
+        char *words[2];
+        char *scoreFilterCt = NULL;
+        chopLine(cloneString(scoreCtString), words);
+        safef(option, sizeof(option), "%s.filterTopScorersOn", name);
+        bool doScoreCtFilter =
+            cartUsualBooleanClosestToHome(cart, tdb, compositeLevel, "filterTopScorersOn", sameString(words[0], "on"));
+        puts("<P>");
+        cgiMakeCheckBox(option, doScoreCtFilter);
+        safef(option, sizeof(option), "%s.filterTopScorersCt", name);
+        scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, compositeLevel, "filterTopScorersCt", words[1]);
 
-    puts("&nbsp; <B> Show only items in top-scoring </B>");
-    cgiMakeIntVarWithLimits(option,atoi(scoreFilterCt),"Top-scoring count",0,1,100000);
-    /* Only check size of table if track does not have subtracks */
-    if ( !compositeLevel && hTableExists(db, tdb->table))
-        printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->table));
-    else
-        printf("&nbsp; (range: 1 to 100,000)\n");
+        puts("&nbsp; <B> Show only items in top-scoring </B>");
+        cgiMakeIntVarWithLimits(option,atoi(scoreFilterCt),"Top-scoring count",0,1,100000);
+        /* Only check size of table if track does not have subtracks */
+        if ( !compositeLevel && hTableExists(db, tdb->table))
+            printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->table));
+        else
+            printf("&nbsp; (range: 1 to 100,000)\n");
+        }
     }
 cfgEndBox(boxed);
 }
@@ -7245,4 +7251,76 @@ void printBbiUpdateTime(time_t *timep)
 {
     printf ("<B>Data last updated:&nbsp;</B>%s<BR>\n",
 	sqlUnixTimeToDate(timep, FALSE));
+}
+
+struct extraField *extraFieldsGet(struct trackDb *tdb)
+// returns any extraFields defined in trackDb
+{
+char *fields = trackDbSetting(tdb, "extraFields"); // showFileds pValue=P_Value qValue=qValue
+if (fields == NULL)
+    return NULL;
+
+char *field = NULL;
+struct extraField *extras = NULL;
+struct extraField *extra = NULL;
+while(NULL != (field  = cloneNextWord(&fields)))
+    {
+    AllocVar(extra);
+    extra->name = field;
+    extra->label = field; // defaults to name
+    char *equal = strchr(field,'=');
+    if (equal != NULL)
+        {
+        *equal = '\0';
+        extra->label = equal + 1;
+        assert(*(extra->label)!='\0');
+        }
+
+    extra->type = ftString;
+    if (*(extra->label) == '[')
+        {
+        if (startsWith("[i",extra->label))
+            extra->type = ftInteger;
+        else if (startsWith("[f",extra->label))
+            extra->type = ftFloat;
+        extra->label = strchr(extra->label,']');
+        assert(extra->label != NULL);
+        extra->label += 1;
+        }
+    // clone independently of 'field' and swap in blanks
+    extra->label = cloneString(strSwapChar(extra->label,'_',' '));
+    slAddHead(&extras,extra);
+    }
+
+if (extras != NULL)
+    slReverse(&extras);
+return extras;
+}
+
+struct extraField *extraFieldsFind(struct extraField *extras, char *name)
+// returns the extraField matching the name (case insensitive).  Note: slNameFind does NOT work.
+{
+struct extraField *extra = extras;
+for (; extra != NULL; extra = extra->next)
+    {
+    if (sameWord(name, extra->name))
+        break;
+    }
+return extra;
+}
+
+void extraFieldsFree(struct extraField **pExtras)
+// frees all mem for extraFields list
+{
+if (pExtras != NULL)
+    {
+    struct extraField *extra = NULL;
+    while(NULL != (extra  = slPopHead(pExtras)))
+        {
+        freeMem(extra->name);
+        freeMem(extra->label);
+        freeMem(extra);
+        }
+    *pExtras = NULL;
+    }
 }
