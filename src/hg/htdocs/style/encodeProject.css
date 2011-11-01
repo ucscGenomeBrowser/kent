@@ -36,6 +36,12 @@ body {
     width: 30%;
 }
 
+#assemblyLabel {
+    font-size: medium;
+    font-style: italic;
+    color: grey;
+}
+
 
 a {
     color: #003366;

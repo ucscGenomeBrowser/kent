@@ -11,6 +11,8 @@ var encodeProject = (function () {
         assembly = "hg19",
         cgi = "/cgi-bin/hgApi?";
 
+    var accessionPrefix = 'wgEncodeE?';
+
     function cmpNoCase(a, b) {
         // Helper function for case-insensitive sort
         var A, B;
@@ -48,7 +50,7 @@ var encodeProject = (function () {
                 server = settings.server;
             }
             if (settings.assembly) {
-                server = settings.assembly;
+                assembly = settings.assembly;
             }
         },
 
@@ -155,6 +157,9 @@ var encodeProject = (function () {
 
         isHistone: function (target) {
             // Helper function, returns true if antibody target histone modification
+            if (target === undefined) {
+               return false;
+            }
             return target.match(/^H[234]/);
         },
 
@@ -209,14 +214,26 @@ var encodeProject = (function () {
             return antibodyGroups;
         },
 
+        getExpIdHash: function (expIds) {
+            // Return hash of experiment ID's
+            var expIdHash = {};
+            $.each(expIds, function (i, expId) {
+                expIdHash[expId.expId] = true;
+            });
+            return expIdHash;
+        },
+
+        // UNTESTED
+        expIdFromAccession: function(accession) {
+            return accession.slice(accessionPrefix.length);
+        },
+
         serverRequests: {
             // Requests for data from server API
             experiment: "cmd=encodeExperiments",
-
+            expId: "cmd=encodeExpId",
             dataType: "cmd=cv&type=dataType",
-
             cellType: "cmd=cv&type=cellType",
-
             antibody: "cmd=cv&type=antibody"
         },
 
