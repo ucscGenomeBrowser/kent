@@ -44,13 +44,12 @@ html lincRNAs
 
 
     track lincRNAsAllCellTypeTopView
-    superTrack lincRNAs full
+    superTrack lincRNAs dense
     compositeTrack on
     shortLabel RNA-Seq reads
     longLabel RNA-Seq expression abundances
     subGroup1 view Views lincRNAsRefseqExp=RefSeq_Expression_Ratio
-#    subGroup2 tissueType Tissue_Type brain=Brain heart=Heart
-        subGroup2 tissueType Tissue_Type adipose=Adipose adrenal=Adrenal brain=Brain breast=Breast colon=Colon heart=Heart kidney=Kidney liver=Liver lung=Lung lymphnode=LymphNode ovary=Ovary prostate=Prostate skeletalmuscle=SkeletalMuscle whitebloodcell=WhiteBloodCell testes=Testes thyroid=Thyroid testes_r=Testes_R brain_r=Brain_R placenta_r=Placenta_R foreskin_r=Foreskin_R hlf_r2=hLF_r2 hlf_r1=hLF_r1
+    subGroup2 tissueType Tissue_Type adipose=Adipose adrenal=Adrenal brain=Brain brain_r=Brain_R breast=Breast colon=Colon foreskin_r=Foreskin_R heart=Heart hlf_r1=hLF_r1 hlf_r2=hLF_r2 kidney=Kidney liver=Liver lung=Lung lymphnode=LymphNode ovary=Ovary placenta_r=Placenta_R prostate=Prostate skeletalmuscle=SkeletalMuscle testes=Testes testes_r=Testes_R thyroid=Thyroid whitebloodcell=WhiteBloodCell
     sortOrder view=+ tissueType=+
     dimensions dimensionY=tissueType
     priority 0

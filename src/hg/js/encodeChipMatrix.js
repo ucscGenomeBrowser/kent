@@ -9,7 +9,9 @@ $(function () {
         // requests to server API
         encodeProject.serverRequests.experiment,
         encodeProject.serverRequests.cellType,
-        encodeProject.serverRequests.antibody];
+        encodeProject.serverRequests.antibody,
+        encodeProject.serverRequests.expId
+        ];
 
     var cellTypeHash = {}, antibodyHash = {}, targetHash = {};
     var cellType, antibody, target;
@@ -138,20 +140,13 @@ $(function () {
 
     function handleServerData(responses) {
         // main actions, called when loading data from server is complete
-        var experiments = responses[0], cellTypes = responses[1], antibodies = responses[2];
-        var antibodyGroups, cellTiers;
+        var experiments = responses[0], cellTypes = responses[1], 
+                antibodies = responses[2], expIds = responses[3];
+        var antibodyGroups, cellTiers, expIdHash;
         var matrix = {};
 
         hideLoadingImage(spinner);
         $('#matrixTable').show();
-
-  // variables passed in hidden fields
-        organism = encodeChipMatrix_organism;
-        assembly = encodeChipMatrix_assembly;
-        header = encodeChipMatrix_pageHeader;
-
-        $("#pageHeader").text(header);
-        document.title = 'ENCODE ' + header;
 
         // set up structures for antibodies and their groups
         $.each(antibodies, function (i, item) {
@@ -165,6 +160,9 @@ $(function () {
         });
         cellTiers = encodeProject.getCellTiers(cellTypes);
 
+        // use to filter out experiments not in this assembly
+        expIdHash = encodeProject.getExpIdHash(expIds);
+
         // gather experiments into matrix
         $.each(experiments, function (i, exp) {
             // todo: filter out with arg to hgApi
@@ -173,6 +171,9 @@ $(function () {
             }
             // exclude ref genome annotations
             if (exp.cellType === 'None') {
+                return true;
+            }
+            if (expIdHash[exp.ix] === undefined) {
                 return true;
             }
             // todo: filter out with arg to hgApi ?
@@ -209,6 +210,8 @@ $(function () {
         tableOut(matrix, cellTiers, antibodyGroups);
     }
 
+    // initialize
+
     // get server from calling web page (intended for genome-preview)
     if ('encodeDataMatrix_server' in window) {
         server = encodeDataMatrix_server;
@@ -216,9 +219,17 @@ $(function () {
         server = document.location.hostname;
     }
 
-    // initialize
+    // variables passed from calling page
+    organism = encodeChipMatrix_organism;
+    assembly = encodeChipMatrix_assembly;
+    $("#assemblyLabel").text(assembly);
+    header = encodeChipMatrix_pageHeader;
+    $("#pageHeader").text(header);
+    document.title = 'ENCODE ' + header;
+
     encodeProject.setup({
-        server: server
+        server: server,
+        assembly: assembly
     });
 
     // show only spinner until data is retrieved
