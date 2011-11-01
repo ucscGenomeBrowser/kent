@@ -5979,6 +5979,51 @@ subId 4648
 tableName wgEncodeUwHistoneGm12864H3k04me3StdRawRep2
 view RawSignal
 
+metaObject wgEncodeUwHistoneGm12864InputStdAlnRep1
+objType file
+antibody Input
+cell GM12864
+composite wgEncodeUwHistone
+control std
+controlId GM12864/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2010-06-15
+dateUnrestricted 2010-11-18
+fileName wgEncodeUwHistoneGm12864InputStdAlnRep1.bam,wgEncodeUwHistoneGm12864InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 5041
+view Alignments
+
+metaObject wgEncodeUwHistoneGm12864InputStdRawRep1
+objType table
+antibody Input
+cell GM12864
+composite wgEncodeUwHistone
+control std
+controlId GM12864/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2010-06-15
+dateUnrestricted 2010-11-18
+fileName wgEncodeUwHistoneGm12864InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 5041
+tableName wgEncodeUwHistoneGm12864InputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwHistoneGm12865H3k04me3StdAlnRep1
 objType file
 antibody H3K4me3
@@ -6109,6 +6154,51 @@ replicate 1
 setType exp
 subId 4649
 tableName wgEncodeUwHistoneGm12865H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneGm12865InputStdAlnRep1
+objType file
+antibody Input
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2010-06-15
+dateUnrestricted 2010-11-18
+fileName wgEncodeUwHistoneGm12865InputStdAlnRep1.bam,wgEncodeUwHistoneGm12865InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 5046
+view Alignments
+
+metaObject wgEncodeUwHistoneGm12865InputStdRawRep1
+objType table
+antibody Input
+cell GM12865
+composite wgEncodeUwHistone
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2010-06-15
+dateUnrestricted 2010-11-18
+fileName wgEncodeUwHistoneGm12865InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 5046
+tableName wgEncodeUwHistoneGm12865InputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwHistoneGm12866H3k04me3StdAlnRep1
@@ -6373,6 +6463,51 @@ replicate 1
 setType exp
 subId 4651
 tableName wgEncodeUwHistoneGm12875H3k04me3StdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwHistoneGm12875InputStdAlnRep1
+objType file
+antibody Input
+cell GM12875
+composite wgEncodeUwHistone
+control std
+controlId GM12875/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2010-06-15
+dateUnrestricted 2010-11-18
+fileName wgEncodeUwHistoneGm12875InputStdAlnRep1.bam,wgEncodeUwHistoneGm12875InputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 5044
+view Alignments
+
+metaObject wgEncodeUwHistoneGm12875InputStdRawRep1
+objType table
+antibody Input
+cell GM12875
+composite wgEncodeUwHistone
+control std
+controlId GM12875/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2010-06-15
+dateUnrestricted 2010-11-18
+fileName wgEncodeUwHistoneGm12875InputStdRawRep1.bigWig
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 5044
+tableName wgEncodeUwHistoneGm12875InputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1
@@ -25561,4 +25696,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: -932921043
+# MAGIC: 1308046413

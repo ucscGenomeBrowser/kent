@@ -1558,13 +1558,13 @@ html wgEncodeUwHistone.new
         origAssembly hg19
         # subId=4675 dateSubmitted=2011-08-10
 
-        track wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM66 H3K4M3 Ht 1
-        longLabel GM12866 H3K4me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=H3K04ME3 cellType=GM12866 treatment=aNone rep=1
-        type broadPeak
-        origAssembly hg19
+        #track wgEncodeUwHistoneGm12866H3k04me3StdHotspotsRep1
+        #parent wgEncodeUwHistoneViewHot off
+        #shortLabel GM66 H3K4M3 Ht 1
+        #longLabel GM12866 H3K4me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
+        #subGroups view=Hot factor=H3K04ME3 cellType=GM12866 treatment=aNone rep=1
+        #type broadPeak
+        #origAssembly hg19
         # subId=4650 dateSubmitted=2011-07-29
 
         track wgEncodeUwHistoneCd20ro01794H3k04me3StdHotspotsRep3
@@ -3099,13 +3099,13 @@ html wgEncodeUwHistone.new
         origAssembly hg19
         # subId=4675 dateSubmitted=2011-08-10
 
-        track wgEncodeUwHistoneGm12866H3k04me3StdPkRep1
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM66 H3K4M3 Pk 1
-        longLabel GM12866 H3K4me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=H3K04ME3 cellType=GM12866 treatment=aNone rep=1
-        type narrowPeak
-        origAssembly hg19
+        #track wgEncodeUwHistoneGm12866H3k04me3StdPkRep1
+        #parent wgEncodeUwHistoneViewPeaks off
+        #shortLabel GM66 H3K4M3 Pk 1
+        #longLabel GM12866 H3K4me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
+        #subGroups view=Peaks factor=H3K04ME3 cellType=GM12866 treatment=aNone rep=1
+        #type narrowPeak
+        #origAssembly hg19
         # subId=4650 dateSubmitted=2011-07-29
 
         track wgEncodeUwHistoneCd20ro01794H3k04me3StdPkRep3
@@ -5123,13 +5123,13 @@ html wgEncodeUwHistone.new
         origAssembly hg19
         # subId=4675 dateSubmitted=2011-08-10
 
-        track wgEncodeUwHistoneGm12866H3k04me3StdRawRep1
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM66 H3K4M3 Sg 1
-        longLabel GM12866 H3K4me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
-        subGroups view=zRSig factor=H3K04ME3 cellType=GM12866 treatment=aNone rep=1
-        type bigWig 1.000000 6689.000000
-        origAssembly hg19
+        #track wgEncodeUwHistoneGm12866H3k04me3StdRawRep1
+        #parent wgEncodeUwHistoneViewRawSig off
+        #shortLabel GM66 H3K4M3 Sg 1
+        #longLabel GM12866 H3K4me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
+        #subGroups view=zRSig factor=H3K04ME3 cellType=GM12866 treatment=aNone rep=1
+        #type bigWig 1.000000 6689.000000
+        #origAssembly hg19
         # subId=4650 dateSubmitted=2011-07-29
 
         track wgEncodeUwHistoneCd20ro01794H3k04me3StdRawRep3
@@ -5211,5 +5211,32 @@ html wgEncodeUwHistone.new
         subGroups view=zRSig factor=zInput cellType=SKMC rep=1 treatment=aNone
         type bigWig 1.000000 16362.000000
         # subId=5032 dateSubmitted=2011-10-27
+
+        track wgEncodeUwHistoneGm12864InputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel GM64 In Sg 1
+        longLabel GM12864 Input Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
+        subGroups view=zRSig factor=zInput cellType=GM12864 rep=1 treatment=aNone
+        type bigWig 1.000000 8541.000000
+        origAssembly hg18
+        # subId=5041 dateSubmitted=2011-11-01
+
+        track wgEncodeUwHistoneGm12875InputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel GM75 In Sg 1
+        longLabel GM12875 Input Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
+        subGroups view=zRSig factor=zInput cellType=GM12875 rep=1 treatment=aNone
+        type bigWig 1.000000 7544.000000
+        origAssembly hg18
+        # subId=5044 dateSubmitted=2011-11-01
+
+        track wgEncodeUwHistoneGm12865InputStdRawRep1
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel GM65 In Sg 1
+        longLabel GM12865 Input Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
+        subGroups view=zRSig factor=zInput cellType=GM12865 rep=1 treatment=aNone
+        type bigWig 1.000000 9831.000000
+        origAssembly hg18
+        # subId=5046 dateSubmitted=2011-11-01
 
 
