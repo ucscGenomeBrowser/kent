@@ -1738,7 +1738,6 @@ wgEncode 1
         # subId=4165 dateSubmitted=2011-06-03
         # was wgEncodeSydhTfbsK562bGata2UcdPk wong Fri Jul  1 12:16:20 2011
 
-        #problem item
         track wgEncodeSydhTfbsK562Setdb1MnasedUcdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 MNas STDB UC
@@ -2246,7 +2245,6 @@ wgEncode 1
         color 46,0,184
         # subId=4458 dateSubmitted=2011-06-29
 
-        #problem item, no control
         track wgEncodeSydhTfbsHepg2Mxi1StdPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HEPG Mxi1 Std
@@ -4850,7 +4848,6 @@ wgEncode 1
         # subId=3056 dateSubmitted=2010-12-02
         # was wgEncodeSydhTfbsK562bInputUcdSig wong Fri Jul  1 12:16:21 2011
 
-        #problem item
         track wgEncodeSydhTfbsK562Setdb1MnasedUcdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 MNas STDB UC
@@ -5542,7 +5539,6 @@ wgEncode 1
         color 46,0,184
         # subId=4458 dateSubmitted=2011-06-29
 
-        #problem item, no control
         track wgEncodeSydhTfbsHepg2Mxi1StdSig
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HEPG Mxi1 Std
