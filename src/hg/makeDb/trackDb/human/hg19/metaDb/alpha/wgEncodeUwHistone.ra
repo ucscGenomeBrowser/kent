@@ -5990,6 +5990,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
+dccAccession wgEncodeEH000457
+expId 457
 fileName wgEncodeUwHistoneGm12864InputStdAlnRep1.bam,wgEncodeUwHistoneGm12864InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6012,6 +6014,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
+dccAccession wgEncodeEH000457
+expId 457
 fileName wgEncodeUwHistoneGm12864InputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -6167,6 +6171,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
+dccAccession wgEncodeEH000458
+expId 458
 fileName wgEncodeUwHistoneGm12865InputStdAlnRep1.bam,wgEncodeUwHistoneGm12865InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6189,6 +6195,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
+dccAccession wgEncodeEH000458
+expId 458
 fileName wgEncodeUwHistoneGm12865InputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -6476,6 +6484,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
+dccAccession wgEncodeEH000462
+expId 462
 fileName wgEncodeUwHistoneGm12875InputStdAlnRep1.bam,wgEncodeUwHistoneGm12875InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6498,6 +6508,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-11-18
+dccAccession wgEncodeEH000462
+expId 462
 fileName wgEncodeUwHistoneGm12875InputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -24976,6 +24988,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH000475
+expId 475
 fileName wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam,wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -24999,6 +25013,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH000475
+expId 475
 fileName wgEncodeUwHistoneWerirb1InputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -25696,4 +25712,4 @@ subId 4358
 tableName wgEncodeUwHistoneWi38InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1308046413
+# MAGIC: -188023999
