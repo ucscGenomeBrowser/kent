@@ -11,6 +11,8 @@ var encodeProject = (function () {
         assembly = "hg19",
         cgi = "/cgi-bin/hgApi?";
 
+    var accessionPrefix = 'wgEncodeE?';
+
     function cmpNoCase(a, b) {
         // Helper function for case-insensitive sort
         var A, B;
@@ -26,7 +28,6 @@ var encodeProject = (function () {
     }
 
     // TODO: modularize by extending Array.sort ?
-
 
     function cmpCV(a, b) {
         // Helper function for case-insensitive sort of CV objects
@@ -49,8 +50,34 @@ var encodeProject = (function () {
                 server = settings.server;
             }
             if (settings.assembly) {
-                server = settings.assembly;
+                assembly = settings.assembly;
             }
+        },
+
+        addSearchPanel: function (divId) {
+            // Create panel of radio buttons for user to select search type
+            // Add to passed in HTML div ID; e.g. #searchTypePanel
+            return $(divId).append('<span id="searchPanelTitle"><strong>Search for:</strong></span><input type="radio" name="searchType" id="searchTracks" value="tracks" checked="checked">Tracks<input type="radio" name="searchType" id="searchFiles" value="files">Files');
+        },
+
+        getSearchUrl: function (assembly, vars) {
+            // Return URL for search of type requested in search panel
+
+            var prog, cartVar, url;
+            if ($('input:radio[name=searchType]:checked').val() === "tracks") {
+                prog = 'hgTracks';
+                cartVar = 'hgt_tSearch';
+            } else {
+                prog = "hgFileSearch";
+                cartVar = "hgfs_Search";
+            }
+             url = '/cgi-bin/' + prog + '?db=' + assembly + '&' + cartVar + '=search' +
+                    '&tsCurTab=advancedTab&hgt_tsPage=';
+            return (url);
+        },
+
+        getSearchType: function () {
+            return $('input:radio[name=searchType]:checked').val();
         },
 
         getServer: function () {
@@ -130,6 +157,9 @@ var encodeProject = (function () {
 
         isHistone: function (target) {
             // Helper function, returns true if antibody target histone modification
+            if (target === undefined) {
+               return false;
+            }
             return target.match(/^H[234]/);
         },
 
@@ -184,14 +214,26 @@ var encodeProject = (function () {
             return antibodyGroups;
         },
 
+        getExpIdHash: function (expIds) {
+            // Return hash of experiment ID's
+            var expIdHash = {};
+            $.each(expIds, function (i, expId) {
+                expIdHash[expId.expId] = true;
+            });
+            return expIdHash;
+        },
+
+        // UNTESTED
+        expIdFromAccession: function(accession) {
+            return accession.slice(accessionPrefix.length);
+        },
+
         serverRequests: {
             // Requests for data from server API
             experiment: "cmd=encodeExperiments",
-
+            expId: "cmd=encodeExpId",
             dataType: "cmd=cv&type=dataType",
-
             cellType: "cmd=cv&type=cellType",
-
             antibody: "cmd=cv&type=antibody"
         },
 

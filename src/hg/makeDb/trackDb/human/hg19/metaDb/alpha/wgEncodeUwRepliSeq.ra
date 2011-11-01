@@ -1,0 +1,5587 @@
+metaObject wgEncodeUwRepliSeqBjG1bAlnRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9021
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4863
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjG1bAlnRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG1bAlnRep2.bam
+grant Stam
+lab UW
+labExpId DS10029
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 2
+subId 4864
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjG1bPctSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9021
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjG1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjG1bPctSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG1bPctSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId DS10029
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjG1bPctSignalRep2
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjG1bRawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9021
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4863
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjG1bRawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG1bRawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS10029
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 2
+subId 4864
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjG2AlnRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9022
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4863
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjG2AlnRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG2AlnRep2.bam
+grant Stam
+lab UW
+labExpId DS10030
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 2
+subId 4864
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjG2PctSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9022
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjG2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjG2PctSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG2PctSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId DS10030
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjG2PctSignalRep2
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjG2RawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9022
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4863
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjG2RawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjG2RawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS10030
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 2
+subId 4864
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjPkRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjPkRep1.bed.gz
+grant Stam
+lab UW
+labExpId BJ-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjPkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqBjPkRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjPkRep2.bed.gz
+grant Stam
+lab UW
+labExpId BJ-2
+origAssembly hg19
+phase None
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjPkRep2
+view Peaks
+
+metaObject wgEncodeUwRepliSeqBjS1AlnRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9023
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4863
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS1AlnRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS1AlnRep2.bam
+grant Stam
+lab UW
+labExpId DS10031
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 2
+subId 4864
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS1PctSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9023
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjS1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS1PctSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS1PctSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId DS10031
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjS1PctSignalRep2
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS1RawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9023
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4863
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjS1RawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS1RawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS10031
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 2
+subId 4864
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjS2AlnRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9024
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4863
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS2AlnRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS2AlnRep2.bam
+grant Stam
+lab UW
+labExpId DS10032
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 2
+subId 4864
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS2PctSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9024
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjS2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS2PctSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS2PctSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId DS10032
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjS2PctSignalRep2
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS2RawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9024
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4863
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjS2RawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS2RawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS10032
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 2
+subId 4864
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjS3AlnRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9025
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4863
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS3AlnRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS3AlnRep2.bam
+grant Stam
+lab UW
+labExpId DS10033
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 2
+subId 4864
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS3PctSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9025
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjS3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS3PctSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS3PctSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId DS10033
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjS3PctSignalRep2
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS3RawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9025
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4863
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjS3RawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS3RawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS10033
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 2
+subId 4864
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjS4AlnRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9026
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4863
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS4AlnRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS4AlnRep2.bam
+grant Stam
+lab UW
+labExpId DS10034
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 2
+subId 4864
+view Alignments
+
+metaObject wgEncodeUwRepliSeqBjS4PctSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9026
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjS4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS4PctSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS4PctSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId DS10034
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjS4PctSignalRep2
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqBjS4RawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9026
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4863
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjS4RawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjS4RawDataRep2.fastq.gz
+grant Stam
+lab UW
+labExpId DS10034
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 2
+subId 4864
+view RawData
+
+metaObject wgEncodeUwRepliSeqBjSumSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjSumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId BJ-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjSumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqBjSumSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjSumSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId BJ-2
+origAssembly hg19
+phase None
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjSumSignalRep2
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqBjValleysRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId BJ-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqBjValleysRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjValleysRep2.bed.gz
+grant Stam
+lab UW
+labExpId BJ-2
+origAssembly hg19
+phase None
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjValleysRep2
+view Valleys
+
+metaObject wgEncodeUwRepliSeqBjWaveSignalRep1
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjWaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId BJ-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4863
+tableName wgEncodeUwRepliSeqBjWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqBjWaveSignalRep2
+objType table
+cell BJ
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqBjWaveSignalRep2.bigWig
+grant Stam
+lab UW
+labExpId BJ-2
+origAssembly hg19
+phase None
+project wgEncode
+replicate 2
+subId 4864
+tableName wgEncodeUwRepliSeqBjWaveSignalRep2
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqGm06990G1bAlnRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990G1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9015
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4865
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm06990G1bPctSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990G1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9015
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990G1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm06990G1bRawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990G1bRawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS9015
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4865
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm06990G2AlnRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9016
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4865
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm06990G2PctSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9016
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm06990G2RawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990G2RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS9016
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4865
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm06990PkRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId GM06990-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqGm06990S1AlnRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9017
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4865
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm06990S1PctSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9017
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm06990S1RawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S1RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS9017
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4865
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm06990S2AlnRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9018
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4865
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm06990S2PctSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9018
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm06990S2RawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S2RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS9018
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4865
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm06990S3AlnRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9019
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4865
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm06990S3PctSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9019
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm06990S3RawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S3RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS9019
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4865
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm06990S4AlnRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9020
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4865
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm06990S4PctSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9020
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm06990S4RawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990S4RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS9020
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4865
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm06990SumSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId GM06990-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqGm06990ValleysRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId GM06990-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqGm06990WaveSignalRep1
+objType table
+cell GM06990
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm06990WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId GM06990-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4865
+tableName wgEncodeUwRepliSeqGm06990WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqGm12801G1bAlnRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801G1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9813
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4866
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12801G1bPctSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801G1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9813
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801G1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12801G1bRawDataRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801G1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9813
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4866
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12801G2AlnRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9814
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4866
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12801G2PctSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9814
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12801G2RawDataRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801G2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9814
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4866
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12801PkRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId GM12801-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqGm12801S1AlnRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9815
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4866
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12801S1PctSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9815
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12801S1RawDataRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9815
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4866
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12801S2AlnRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9816
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4866
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12801S2PctSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9816
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12801S2RawDataRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9816
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4866
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12801S3AlnRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9817
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4866
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12801S3PctSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9817
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12801S3RawDataRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9817
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4866
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12801S4AlnRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9818
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4866
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12801S4PctSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9818
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12801S4RawDataRep1
+objType file
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801S4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9818
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4866
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12801SumSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId GM12801-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqGm12801ValleysRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId GM12801-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqGm12801WaveSignalRep1
+objType table
+cell GM12801
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12801WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId GM12801-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4866
+tableName wgEncodeUwRepliSeqGm12801WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqGm12878G1bAlnRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878G1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9806
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4828
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12878G1bPctSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878G1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9806
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878G1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12878G1bRawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878G1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9806
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4828
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12878G2AlnRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9807
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4828
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12878G2PctSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9807
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12878G2RawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878G2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9807
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4828
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12878PkRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId GM12878-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqGm12878S1AlnRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9808
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4828
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12878S1PctSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9808
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12878S1RawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9808
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4828
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12878S2AlnRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9809
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4828
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12878S2PctSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9809
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12878S2RawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9809
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4828
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12878S3AlnRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9810
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4828
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12878S3PctSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9810
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12878S3RawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9810
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4828
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12878S4AlnRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9811
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4828
+view Alignments
+
+metaObject wgEncodeUwRepliSeqGm12878S4PctSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9811
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqGm12878S4RawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878S4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9811
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4828
+view RawData
+
+metaObject wgEncodeUwRepliSeqGm12878SumSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId GM12878-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqGm12878ValleysRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId GM12878-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqGm12878WaveSignalRep1
+objType table
+cell GM12878
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqGm12878WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId GM12878-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4828
+tableName wgEncodeUwRepliSeqGm12878WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqHelas3G1bAlnRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3G1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9941
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4869
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHelas3G1bPctSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3G1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9941
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3G1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHelas3G1bRawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3G1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9941
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4869
+view RawData
+
+metaObject wgEncodeUwRepliSeqHelas3G2AlnRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9942
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4869
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHelas3G2PctSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9942
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHelas3G2RawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3G2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9942
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4869
+view RawData
+
+metaObject wgEncodeUwRepliSeqHelas3PkRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId HeLa-S3-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqHelas3S1AlnRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9943
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4869
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHelas3S1PctSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9943
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHelas3S1RawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9943
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4869
+view RawData
+
+metaObject wgEncodeUwRepliSeqHelas3S2AlnRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9944
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4869
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHelas3S2PctSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9944
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHelas3S2RawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9944
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4869
+view RawData
+
+metaObject wgEncodeUwRepliSeqHelas3S3AlnRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9945
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4869
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHelas3S3PctSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9945
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHelas3S3RawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9945
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4869
+view RawData
+
+metaObject wgEncodeUwRepliSeqHelas3S4AlnRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9946
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4869
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHelas3S4PctSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9946
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHelas3S4RawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3S4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9946
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4869
+view RawData
+
+metaObject wgEncodeUwRepliSeqHelas3SumSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId HeLa-S3-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqHelas3ValleysRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId HeLa-S3-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqHelas3WaveSignalRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHelas3WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId HeLa-S3-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4869
+tableName wgEncodeUwRepliSeqHelas3WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqHepg2G1bAlnRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2G1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS19717
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4870
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHepg2G1bPctSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2G1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS19717
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2G1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHepg2G1bRawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2G1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS19717
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4870
+view RawData
+
+metaObject wgEncodeUwRepliSeqHepg2G2AlnRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS19718
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4870
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHepg2G2PctSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS19718
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHepg2G2RawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2G2RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS19718
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4870
+view RawData
+
+metaObject wgEncodeUwRepliSeqHepg2PkRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId HepG2-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqHepg2S1AlnRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS19719
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4870
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHepg2S1PctSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS19719
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHepg2S1RawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S1RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS19719
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4870
+view RawData
+
+metaObject wgEncodeUwRepliSeqHepg2S2AlnRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS19720
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4870
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHepg2S2PctSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS19720
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHepg2S2RawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S2RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS19720
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4870
+view RawData
+
+metaObject wgEncodeUwRepliSeqHepg2S3AlnRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS19721
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4870
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHepg2S3PctSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS19721
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHepg2S3RawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S3RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS19721
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4870
+view RawData
+
+metaObject wgEncodeUwRepliSeqHepg2S4AlnRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS19722
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4870
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHepg2S4PctSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS19722
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHepg2S4RawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2S4RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS19722
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4870
+view RawData
+
+metaObject wgEncodeUwRepliSeqHepg2SumSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId HepG2-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqHepg2ValleysRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId HepG2-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqHepg2WaveSignalRep1
+objType table
+cell HepG2
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHepg2WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId HepG2-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4870
+tableName wgEncodeUwRepliSeqHepg2WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqHuvecG1bAlnRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecG1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9851
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4871
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHuvecG1bPctSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecG1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9851
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecG1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHuvecG1bRawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecG1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9851
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4871
+view RawData
+
+metaObject wgEncodeUwRepliSeqHuvecG2AlnRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecG2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9852
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4871
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHuvecG2PctSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecG2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9852
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecG2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHuvecG2RawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecG2RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS9852
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4871
+view RawData
+
+metaObject wgEncodeUwRepliSeqHuvecPkRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecPkRep1.bed.gz
+grant Stam
+lab UW
+labExpId HUVEC-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecPkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqHuvecS1AlnRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9853
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4871
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHuvecS1PctSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9853
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecS1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHuvecS1RawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9853
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4871
+view RawData
+
+metaObject wgEncodeUwRepliSeqHuvecS2AlnRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9854
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4871
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHuvecS2PctSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9854
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecS2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHuvecS2RawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9854
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4871
+view RawData
+
+metaObject wgEncodeUwRepliSeqHuvecS3AlnRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9855
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4871
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHuvecS3PctSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9855
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecS3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHuvecS3RawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9855
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4871
+view RawData
+
+metaObject wgEncodeUwRepliSeqHuvecS4AlnRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9856
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4871
+view Alignments
+
+metaObject wgEncodeUwRepliSeqHuvecS4PctSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9856
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecS4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqHuvecS4RawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecS4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9856
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4871
+view RawData
+
+metaObject wgEncodeUwRepliSeqHuvecSumSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecSumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId HUVEC-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecSumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqHuvecValleysRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId HUVEC-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqHuvecWaveSignalRep1
+objType table
+cell HUVEC
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqHuvecWaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId HUVEC-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4871
+tableName wgEncodeUwRepliSeqHuvecWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqImr90G1bAlnRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90G1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS17625
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4858
+view Alignments
+
+metaObject wgEncodeUwRepliSeqImr90G1bPctSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90G1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17625
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90G1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqImr90G1bRawDataRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90G1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS17625
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4858
+view RawData
+
+metaObject wgEncodeUwRepliSeqImr90G2AlnRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS17626
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4858
+view Alignments
+
+metaObject wgEncodeUwRepliSeqImr90G2PctSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17626
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqImr90G2RawDataRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90G2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS17626
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4858
+view RawData
+
+metaObject wgEncodeUwRepliSeqImr90PkRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId IMR90-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqImr90S1AlnRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS17627
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4858
+view Alignments
+
+metaObject wgEncodeUwRepliSeqImr90S1PctSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17627
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqImr90S1RawDataRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS17627
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4858
+view RawData
+
+metaObject wgEncodeUwRepliSeqImr90S2AlnRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS17628
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4858
+view Alignments
+
+metaObject wgEncodeUwRepliSeqImr90S2PctSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17628
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqImr90S2RawDataRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS17628
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4858
+view RawData
+
+metaObject wgEncodeUwRepliSeqImr90S3AlnRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS17629
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4858
+view Alignments
+
+metaObject wgEncodeUwRepliSeqImr90S3PctSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17629
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqImr90S3RawDataRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS17629
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4858
+view RawData
+
+metaObject wgEncodeUwRepliSeqImr90S4AlnRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS17630
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4858
+view Alignments
+
+metaObject wgEncodeUwRepliSeqImr90S4PctSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS17630
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqImr90S4RawDataRep1
+objType file
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90S4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS17630
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4858
+view RawData
+
+metaObject wgEncodeUwRepliSeqImr90SumSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId IMR90-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqImr90ValleysRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId IMR90-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqImr90WaveSignalRep1
+objType table
+cell IMR90
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqImr90WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId IMR90-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4858
+tableName wgEncodeUwRepliSeqImr90WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqK562G1AlnRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562G1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS8837
+origAssembly hg19
+phase G1
+project wgEncode
+replicate 1
+subId 4859
+view Alignments
+
+metaObject wgEncodeUwRepliSeqK562G1PctSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562G1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS8837
+origAssembly hg19
+phase G1
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562G1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqK562G1RawDataRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562G1RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS8837
+origAssembly hg19
+phase G1
+project wgEncode
+replicate 1
+subId 4859
+view RawData
+
+metaObject wgEncodeUwRepliSeqK562G2AlnRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS8838
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4859
+view Alignments
+
+metaObject wgEncodeUwRepliSeqK562G2PctSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS8838
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqK562G2RawDataRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562G2RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS8838
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4859
+view RawData
+
+metaObject wgEncodeUwRepliSeqK562PkRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId K562-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqK562S1AlnRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS8839
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4859
+view Alignments
+
+metaObject wgEncodeUwRepliSeqK562S1PctSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS8839
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqK562S1RawDataRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S1RawDataRep1.fastq.tgz
+grant Stam
+lab UW
+labExpId DS8839
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4859
+view RawData
+
+metaObject wgEncodeUwRepliSeqK562S2AlnRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS8840
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4859
+view Alignments
+
+metaObject wgEncodeUwRepliSeqK562S2PctSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS8840
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqK562S2RawDataRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS8840
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4859
+view RawData
+
+metaObject wgEncodeUwRepliSeqK562S3AlnRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS8841
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4859
+view Alignments
+
+metaObject wgEncodeUwRepliSeqK562S3PctSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS8841
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqK562S3RawDataRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS8841
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4859
+view RawData
+
+metaObject wgEncodeUwRepliSeqK562S4AlnRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS8842
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4859
+view Alignments
+
+metaObject wgEncodeUwRepliSeqK562S4PctSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS8842
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqK562S4RawDataRep1
+objType file
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562S4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS8842
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4859
+view RawData
+
+metaObject wgEncodeUwRepliSeqK562SumSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId K562-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqK562ValleysRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId K562-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqK562WaveSignalRep1
+objType table
+cell K562
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqK562WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId K562-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4859
+tableName wgEncodeUwRepliSeqK562WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqMcf7G1bAlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7G1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9795
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4860
+view Alignments
+
+metaObject wgEncodeUwRepliSeqMcf7G1bPctSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7G1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9795
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7G1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqMcf7G1bRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7G1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9795
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4860
+view RawData
+
+metaObject wgEncodeUwRepliSeqMcf7G2AlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7G2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9796
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4860
+view Alignments
+
+metaObject wgEncodeUwRepliSeqMcf7G2PctSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7G2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9796
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7G2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqMcf7G2RawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7G2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9796
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4860
+view RawData
+
+metaObject wgEncodeUwRepliSeqMcf7PkRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7PkRep1.bed.gz
+grant Stam
+lab UW
+labExpId MCF-7-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7PkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqMcf7S1AlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9797
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4860
+view Alignments
+
+metaObject wgEncodeUwRepliSeqMcf7S1PctSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9797
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7S1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqMcf7S1RawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9797
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4860
+view RawData
+
+metaObject wgEncodeUwRepliSeqMcf7S2AlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9798
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4860
+view Alignments
+
+metaObject wgEncodeUwRepliSeqMcf7S2PctSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9798
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7S2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqMcf7S2RawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9798
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4860
+view RawData
+
+metaObject wgEncodeUwRepliSeqMcf7S3AlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9799
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4860
+view Alignments
+
+metaObject wgEncodeUwRepliSeqMcf7S3PctSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9799
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7S3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqMcf7S3RawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9799
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4860
+view RawData
+
+metaObject wgEncodeUwRepliSeqMcf7S4AlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9800
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4860
+view Alignments
+
+metaObject wgEncodeUwRepliSeqMcf7S4PctSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9800
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7S4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqMcf7S4RawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7S4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9800
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4860
+view RawData
+
+metaObject wgEncodeUwRepliSeqMcf7SumSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7SumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId MCF-7-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7SumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqMcf7ValleysRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7ValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId MCF-7-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7ValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqMcf7WaveSignalRep1
+objType table
+cell MCF-7
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqMcf7WaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId MCF-7-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4860
+tableName wgEncodeUwRepliSeqMcf7WaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqNhekG1bAlnRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekG1bAlnRep1.bam,wgEncodeUwRepliSeqNhekG1bAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS9947
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view Alignments
+
+metaObject wgEncodeUwRepliSeqNhekG1bPctSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekG1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9947
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekG1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqNhekG1bRawDataRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekG1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9947
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view RawData
+
+metaObject wgEncodeUwRepliSeqNhekG2AlnRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekG2AlnRep1.bam,wgEncodeUwRepliSeqNhekG2AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS9948
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view Alignments
+
+metaObject wgEncodeUwRepliSeqNhekG2PctSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekG2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9948
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekG2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqNhekG2RawDataRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekG2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9948
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view RawData
+
+metaObject wgEncodeUwRepliSeqNhekPkRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekPkRep1.bed.gz
+grant Stam
+lab UW
+labExpId NHEK-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekPkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqNhekS1AlnRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS1AlnRep1.bam,wgEncodeUwRepliSeqNhekS1AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS9949
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view Alignments
+
+metaObject wgEncodeUwRepliSeqNhekS1PctSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9949
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekS1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqNhekS1RawDataRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9949
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view RawData
+
+metaObject wgEncodeUwRepliSeqNhekS2AlnRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS2AlnRep1.bam,wgEncodeUwRepliSeqNhekS2AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS9950
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view Alignments
+
+metaObject wgEncodeUwRepliSeqNhekS2PctSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9950
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekS2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqNhekS2RawDataRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9950
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view RawData
+
+metaObject wgEncodeUwRepliSeqNhekS3AlnRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS3AlnRep1.bam,wgEncodeUwRepliSeqNhekS3AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS9951
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view Alignments
+
+metaObject wgEncodeUwRepliSeqNhekS3PctSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9951
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekS3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqNhekS3RawDataRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9951
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view RawData
+
+metaObject wgEncodeUwRepliSeqNhekS4AlnRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS4AlnRep1.bam,wgEncodeUwRepliSeqNhekS4AlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS9952
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view Alignments
+
+metaObject wgEncodeUwRepliSeqNhekS4PctSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9952
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekS4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqNhekS4RawDataRep1
+objType file
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekS4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9952
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+sex F
+subId 4861
+view RawData
+
+metaObject wgEncodeUwRepliSeqNhekSumSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekSumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId NHEK-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekSumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqNhekValleysRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId NHEK-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqNhekWaveSignalRep1
+objType table
+cell NHEK
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodeUwRepliSeqNhekWaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId NHEK-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+sex F
+subId 4861
+tableName wgEncodeUwRepliSeqNhekWaveSignalRep1
+view WaveSignal
+
+metaObject wgEncodeUwRepliSeqSknshraG1bAlnRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraG1bAlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9913
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4862
+view Alignments
+
+metaObject wgEncodeUwRepliSeqSknshraG1bPctSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraG1bPctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9913
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraG1bPctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqSknshraG1bRawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraG1bRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9913
+origAssembly hg19
+phase G1b
+project wgEncode
+replicate 1
+subId 4862
+view RawData
+
+metaObject wgEncodeUwRepliSeqSknshraG2AlnRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraG2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9914
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4862
+view Alignments
+
+metaObject wgEncodeUwRepliSeqSknshraG2PctSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraG2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9914
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraG2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqSknshraG2RawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraG2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9914
+origAssembly hg19
+phase G2
+project wgEncode
+replicate 1
+subId 4862
+view RawData
+
+metaObject wgEncodeUwRepliSeqSknshraPkRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraPkRep1.bed.gz
+grant Stam
+lab UW
+labExpId SK-N-SH_RA-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraPkRep1
+view Peaks
+
+metaObject wgEncodeUwRepliSeqSknshraS1AlnRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS1AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9915
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4862
+view Alignments
+
+metaObject wgEncodeUwRepliSeqSknshraS1PctSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS1PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9915
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraS1PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqSknshraS1RawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9915
+origAssembly hg19
+phase S1
+project wgEncode
+replicate 1
+subId 4862
+view RawData
+
+metaObject wgEncodeUwRepliSeqSknshraS2AlnRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS2AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9916
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4862
+view Alignments
+
+metaObject wgEncodeUwRepliSeqSknshraS2PctSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS2PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9916
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraS2PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqSknshraS2RawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9916
+origAssembly hg19
+phase S2
+project wgEncode
+replicate 1
+subId 4862
+view RawData
+
+metaObject wgEncodeUwRepliSeqSknshraS3AlnRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS3AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9917
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4862
+view Alignments
+
+metaObject wgEncodeUwRepliSeqSknshraS3PctSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS3PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9917
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraS3PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqSknshraS3RawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9917
+origAssembly hg19
+phase S3
+project wgEncode
+replicate 1
+subId 4862
+view RawData
+
+metaObject wgEncodeUwRepliSeqSknshraS4AlnRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS4AlnRep1.bam
+grant Stam
+lab UW
+labExpId DS9918
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4862
+view Alignments
+
+metaObject wgEncodeUwRepliSeqSknshraS4PctSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS4PctSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId DS9918
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraS4PctSignalRep1
+view PctSignal
+
+metaObject wgEncodeUwRepliSeqSknshraS4RawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraS4RawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS9918
+origAssembly hg19
+phase S4
+project wgEncode
+replicate 1
+subId 4862
+view RawData
+
+metaObject wgEncodeUwRepliSeqSknshraSumSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraSumSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId SK-N-SH_RA-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraSumSignalRep1
+view SumSignal
+
+metaObject wgEncodeUwRepliSeqSknshraValleysRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraValleysRep1.bed.gz
+grant Stam
+lab UW
+labExpId SK-N-SH_RA-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraValleysRep1
+view Valleys
+
+metaObject wgEncodeUwRepliSeqSknshraWaveSignalRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwRepliSeq
+dataType RepliSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeUwRepliSeqSknshraWaveSignalRep1.bigWig
+grant Stam
+lab UW
+labExpId SK-N-SH_RA-1
+origAssembly hg19
+phase None
+project wgEncode
+replicate 1
+subId 4862
+tableName wgEncodeUwRepliSeqSknshraWaveSignalRep1
+view WaveSignal
+
+# MAGIC: -824135687
