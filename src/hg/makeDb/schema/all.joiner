@@ -1605,7 +1605,7 @@ identifier knownGeneOld3Id dependency
 
 identifier knownGeneOld2Id dependency
 "Old knownGene (KGII) and kgXref tables kept after KGIII implementation - still needed?"
-    $kgDb.knownGeneOld2.name dupOK
+    $kgDb.knownGeneOld2.name dupeOk
     $kgDb.kgXrefOld2.kgID full
     $kgDb.humanBlastTab.query
     $kgDb.humanBlastTab.target
@@ -3635,9 +3635,16 @@ tablesIgnored $galGal
     caCondor454
 
 tablesIgnored $danRer
-	ncbiIncidentDb
+    ncbiIncidentDb
     phastConsElements
     wz_ests
+    UMassInput 
+    UMassME1 
+    UMassME1Hotspot 
+    UMassME1Peak 
+    UMassME3 
+    UMassME3Hotspot 
+    UMassME3Peak
 
 tablesIgnored $canFam
     genomicSuperDups
