@@ -3,7 +3,7 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	qaInit
+	encodeQaSqlRelease
 
 SCRIPT_INSTALL = "/cluster/bin/scripts"
 

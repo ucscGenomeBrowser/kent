@@ -144,7 +144,7 @@ class CompositeTrack(object):
             md5sums = readMd5sums(self._md5path)
             
             radict = dict()
-            for stanza in self.alphaMetaDb:
+            for stanza in self.alphaMetaDb.itervalues():
                 if 'fileName' in stanza:
                     for file in stanza['fileName'].split(','):
                         radict[file] = stanza
@@ -152,7 +152,7 @@ class CompositeTrack(object):
             self._files = dict()
             for file in os.listdir(self.downloadsDirectory):
                 if os.path.isfile(self.downloadsDirectory + file):
-                    
+                
                     stanza = None
                     if file in radict:
                         stanza = radict[file]
