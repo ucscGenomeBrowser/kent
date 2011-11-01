@@ -4917,7 +4917,7 @@ if (filterSettings)
                 }
             char label[128];
             safef(label,sizeof(label),"Minimum %s",field);
-            showScoreFilter(cart,tdb,opened,boxed,compositeLevel,name,title,label,scoreName,isFloat);
+            showScoreFilter(cart,tdb,opened,boxed,viewLevel,name,title,label,scoreName,isFloat);
             freeMem(scoreName);
             count++;
             }
