@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel UW RepliSeq
 longLabel ENCODE UW Stam RepliSeq
 group regulation
-subGroup1 view Views 1PctSignal=Percentage-normalized_Signal 2Peaks=Peaks 3Valleys=Vallyes 4WaveSignal=Wavelet_Smoothed_Signal 5SumSignal=Summed_Densities
+subGroup1 view Views 1PctSignal=Percentage-normalized_Signal 2Peaks=Peaks 3Valleys=Valleys 4WaveSignal=Wavelet_Smoothed_Signal 5SumSignal=Summed_Densities
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HEPG2=HepG2&nbsp;(Tier_2) HELAS3=HeLa-S3&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ BG02ES=BG02ES GM06990=GM06990 GM12801=GM12801 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSHRA=SK-N-SH_RA
 subGroup3 phase Phase 1G1=G1 1G1B=G1b 2S1=S1 3S2=S2 4S3=S3 5S4=S4 6G2=G2 zNONE=None
 subGroup4 rep Replicate rep1=1 rep2=2
