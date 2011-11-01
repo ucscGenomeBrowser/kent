@@ -1064,9 +1064,6 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
@@ -1091,6 +1088,11 @@ rnaFoldBig split/$(path1) fold
 gensub2 in.lst single template jobList
 cp template ../utr5
 cd ../utr5
+
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+cd $dir/rnaStruct/utr5
+
 gensub2 in.lst single template jobList
 
 # Do cluster runs for UTRs
