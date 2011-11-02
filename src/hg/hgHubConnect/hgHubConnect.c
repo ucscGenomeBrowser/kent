@@ -437,7 +437,6 @@ webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("hgHubConnect.js", NULL);
 jsIncludeFile("jquery.cookie.js", NULL);
-webIncludeResourceFile("hgHubConnect.css");
 
 printf("<div id=\"hgHubConnectUI\"> <div id=\"description\"> \n");
 printf(
@@ -456,6 +455,13 @@ printf("</div>\n");
 
 // figure out and print out genome name
 makeGenomePrint();
+
+char *survey = cfgOptionEnv("HGDB_HUB_SURVEY", "hubSurvey");
+char *surveyLabel = cfgOptionEnv("HGDB_HUB_SURVEY_LABEL", "hubSurveyLabel");
+
+if (survey && differentWord(survey, "off"))
+    hPrintf("<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+hPutc('\n');
 
 // check to see if we have any new hubs
 hubCheckForNew(database, cart);

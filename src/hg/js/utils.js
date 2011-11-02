@@ -1,5 +1,6 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.31 2010/06/02 19:11:53 tdreszer Exp $
+
+// "use strict";
 
 var debug = false;
 
@@ -2034,7 +2035,7 @@ var findTracks = {
         waitOnFunction( findTracks.normalize );
     },
 
-    checkAll: function (check)
+    _checkAll: function (check)
     { // Checks/unchecks all found tracks.
         var selCbs = $('input.selCb');
         $(selCbs).attr('checked',check);
@@ -2049,7 +2050,7 @@ var findTracks = {
 
     checkAll: function (check)
     {
-        waitOnFunction( findTracks.checkAll, check);
+        waitOnFunction( findTracks._checkAll, check);
     },
 
     searchButtonsEnable: function (enable)

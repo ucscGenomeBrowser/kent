@@ -9,7 +9,9 @@ $(function () {
         // requests to server API
         encodeProject.serverRequests.experiment,
         encodeProject.serverRequests.cellType,
-        encodeProject.serverRequests.antibody];
+        encodeProject.serverRequests.antibody,
+        encodeProject.serverRequests.expId
+        ];
 
     var cellTypeHash = {}, antibodyHash = {}, targetHash = {};
     var cellType, antibody, target;
@@ -27,12 +29,14 @@ $(function () {
             tableHeader.append('<th class="groupType"><div class="verticalText">' + 
                                 group.label + '</div></th>');
             $.each(group.targets, function (i, target) {
+                // prune out targets with no experiments 
                 if (targetHash[target] === undefined) {
                     return true;
                 }
-                // prune out targets with no experiments 
                 if (targetHash[target].count !== undefined) {
-                    tableHeader.append('<th class="elementType"><div class="verticalText">' + 
+                    tableHeader.append('<th class="elementType" title="' +
+                                        targetHash[target].description +
+                                        '"><div class="verticalText">' + 
                                         target + '</div></th>');
                 }
             });
@@ -99,11 +103,14 @@ $(function () {
                                 // TODO: encapsulate var names
                                 // TODO: search on antibody
                                 url +=
-                                   ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
+                                   '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
                                    '&hgt_mdbVar2=cell&hgt_mdbVal2=' + cellType +
-                                    // TODO: all antibodies for target
-                                   '&hgt_mdbVar3=target&hgt_mdbVal3=' + target +
-                                   '&hgt_mdbVar4=view&hgt_mdbVal4=Any');
+                                   '&hgt_mdbVar3=antibody';
+                                // TODO: html encode ?
+                                $.each(targetHash[target].antibodies, function (i, antibody) {
+                                    url += '&hgt_mdbVal3=' + antibody;
+                                });
+                                url += '&hgt_mdbVar4=view&hgt_mdbVal4=Any';
                                 // TODO: open search window 
                                 //window.open(url, "searchWindow");
                                 window.location = url;
@@ -138,32 +145,37 @@ $(function () {
 
     function handleServerData(responses) {
         // main actions, called when loading data from server is complete
-        var experiments = responses[0], cellTypes = responses[1], antibodies = responses[2];
-        var antibodyGroups, cellTiers;
+        var experiments = responses[0], cellTypes = responses[1], 
+                antibodies = responses[2], expIds = responses[3];
+        var antibodyGroups, cellTiers, expIdHash;
         var matrix = {};
 
         hideLoadingImage(spinner);
         $('#matrixTable').show();
 
-  // variables passed in hidden fields
-        organism = encodeChipMatrix_organism;
-        assembly = encodeChipMatrix_assembly;
-        header = encodeChipMatrix_pageHeader;
-
-        $("#pageHeader").text(header);
-        document.title = 'ENCODE ' + header;
-
         // set up structures for antibodies and their groups
-        $.each(antibodies, function (i, item) {
-            antibodyHash[item.term] = item;
+        $.each(antibodies, function (i, antibody) {
+            antibodyHash[antibody.term] = antibody;
+            target = antibody.target;
+            if (targetHash[target] === undefined) {
+                targetHash[target] = {
+                    count: 0,   // experiments
+                    description: antibody.targetDescription,
+                    antibodies: []
+                };
+            }
+            targetHash[target].antibodies.push(antibody.term)
         });
         antibodyGroups = encodeProject.getAntibodyGroups(antibodies);
 
         // set up structures for cell types and their tiers
-        $.each(cellTypes, function (i, item) {
-            cellTypeHash[item.term] = item;
+        $.each(cellTypes, function (i, cellType) {
+            cellTypeHash[cellType.term] = cellType;
         });
         cellTiers = encodeProject.getCellTiers(cellTypes);
+
+        // use to filter out experiments not in this assembly
+        expIdHash = encodeProject.getExpIdHash(expIds);
 
         // gather experiments into matrix
         $.each(experiments, function (i, exp) {
@@ -175,6 +187,9 @@ $(function () {
             if (exp.cellType === 'None') {
                 return true;
             }
+            if (expIdHash[exp.ix] === undefined) {
+                return true;
+            }
             // todo: filter out with arg to hgApi ?
             if (exp.dataType !== 'ChipSeq') {
                 return true;
@@ -184,16 +199,9 @@ $(function () {
             // so don't need hash for those
             antibody = encodeProject.antibodyFromExp(exp);
             target = encodeProject.targetFromAntibody(antibody, antibodyHash);
-            if (!targetHash[target]) {
-                targetHash[target] = {
-                    count: 0,
-                    antibodies: {}
-                };
+            if (targetHash[target] !== undefined) {
+                targetHash[target].count++;
             }
-            if (!targetHash[target].antibodies[antibody]) {
-                targetHash[target].antibodies[antibody] = antibody;
-            }
-            targetHash[target].count++;
 
             cellType = exp.cellType;
             if (!matrix[cellType]) {
@@ -209,6 +217,8 @@ $(function () {
         tableOut(matrix, cellTiers, antibodyGroups);
     }
 
+    // initialize
+
     // get server from calling web page (intended for genome-preview)
     if ('encodeDataMatrix_server' in window) {
         server = encodeDataMatrix_server;
@@ -216,9 +226,17 @@ $(function () {
         server = document.location.hostname;
     }
 
-    // initialize
+    // variables passed from calling page
+    organism = encodeChipMatrix_organism;
+    assembly = encodeChipMatrix_assembly;
+    $("#assemblyLabel").text(assembly);
+    header = encodeChipMatrix_pageHeader;
+    $("#pageHeader").text(header);
+    document.title = 'ENCODE ' + header;
+
     encodeProject.setup({
-        server: server
+        server: server,
+        assembly: assembly
     });
 
     // show only spinner until data is retrieved

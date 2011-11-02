@@ -8,10 +8,12 @@
 
 $(function () {
     var requests = [
-    // Requests to server API
+    // requests to server API
         encodeProject.serverRequests.experiment, 
         encodeProject.serverRequests.dataType, 
-        encodeProject.serverRequests.cellType];
+        encodeProject.serverRequests.cellType,
+        encodeProject.serverRequests.expId
+        ];
 
     var dataTypeLabelHash = {}, dataTypeTermHash = {}, cellTypeHash = {};
     var dataType, cellType;
@@ -86,12 +88,13 @@ $(function () {
                             td.addClass('experiment');
                             td.text(matrix[cellType][dataType]);
                             td.data({
-                                'dataType' : dataTypeTermHash[dataType].label,
+                                'dataType' : dataType,
                                 'cellType' : cellType
                             });
                             td.mouseover(function() {
                                 $(this).attr('title', 'Click to select: ' + 
-                                                $(this).data().dataType + ' ' + ' in ' + 
+                                                dataTypeTermHash[$(this).data().dataType].label +
+                                                ' ' + ' in ' + 
                                                 $(this).data().cellType +' cells');
                             });
                             td.click(function() {
@@ -100,8 +103,8 @@ $(function () {
 
                                 // TODO: encapsulate var names
                                 url +=
-                                   ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + dataType +
-                                   '&hgt_mdbVar2=cell&hgt_mdbVal2=' + cellType +
+                                   ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + $(this).data().dataType +
+                                   '&hgt_mdbVar2=cell&hgt_mdbVal2=' + $(this).data().cellType +
                                    '&hgt_mdbVar3=view&hgt_mdbVal3=Any');
                                 // TODO: open search window 
                                 //window.open(url, "searchWindow");
@@ -137,34 +140,30 @@ $(function () {
 
     function handleServerData(responses) {
         // main actions, called when loading data from server is complete
-        var experiments = responses[0], dataTypes = responses[1], cellTypes = responses[2];
+        var experiments = responses[0], dataTypes = responses[1], 
+                        cellTypes = responses[2], expIds = responses[3];
+        var dataGroups, cellTiers, expIdHash, header;
         var matrix = {};
-        var dataGroups, cellTiers, header;
 
         hideLoadingImage(spinner);
         $('#matrixTable').show();
 
-        // variables from calling page
-        organism = encodeDataMatrix_organism;
-        assembly = encodeDataMatrix_assembly;
-        header = encodeDataMatrix_pageHeader;
-
-        $("#pageHeader").text(header);
-        document.title = 'ENCODE ' + header;
-
         // set up structures for data types and their groups
-        $.each(dataTypes, function (i, item) {
-            dataTypeTermHash[item.term] = item;
-            dataTypeLabelHash[item.label] = item;
+        $.each(dataTypes, function (i, dataType) {
+            dataTypeTermHash[dataType.term] = dataType;
+            dataTypeLabelHash[dataType.label] = dataType;
         });
         // data type labels tucked into their tiers
         dataGroups = encodeProject.getDataGroups(dataTypes);
 
         // set up structures for cell types and their tiers
-        $.each(cellTypes, function (i, item) {
-            cellTypeHash[item.term] = item;
+        $.each(cellTypes, function (i, cellType) {
+            cellTypeHash[cellType.term] = cellType;
         });
         cellTiers = encodeProject.getCellTiers(cellTypes);
+
+        // use to filter out experiments not in this assembly
+        expIdHash = encodeProject.getExpIdHash(expIds);
 
         // gather experiments into matrix
         $.each(experiments, function (i, exp) {
@@ -176,6 +175,9 @@ $(function () {
             if (exp.cellType === 'None') {
                 return true;
             }
+            if (expIdHash[exp.ix] === undefined) {
+                return true;
+            }
             // count experiments per dataType so we can prune those having none
             // (the matrix[cellType] indicates this for cell types 
             // so don't need hash for those
@@ -183,7 +185,7 @@ $(function () {
             if (!dataTypeTermHash[dataType].count) {
                 dataTypeTermHash[dataType].count = 0;
             }
-            dataTypeTermHash[dataType].count++;
+            ataTypeTermHash[dataType].count++;
 
             cellType = exp.cellType;
             if (!matrix[cellType]) {
@@ -208,8 +210,17 @@ $(function () {
         server = document.location.hostname;
         // or document.domain ?
     }
+    // variables from calling page
+    organism = encodeDataMatrix_organism;
+    assembly = encodeDataMatrix_assembly;
+    $("#assemblyLabel").text(assembly);
+    header = encodeDataMatrix_pageHeader;
+    $("#pageHeader").text(header);
+    document.title = 'ENCODE ' + header;
+
     encodeProject.setup({
-        server: server
+        server: server,
+        assembly: assembly
     });
 
     // show only spinner until data is retrieved

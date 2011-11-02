@@ -335,7 +335,8 @@ wgEncode 1
         color 46,0,184
         # subId=1984 dateSubmitted=2010-08-18
 
-        parent wgEncodeGisRnaPetViewAlignments off
+        track wgEncodeGisRnaPetNhekNucleusPapAlnRep
+		parent wgEncodeGisRnaPetViewAlignments off
         shortLabel NHEK nucl pA+ A 1
         longLabel NHEK nucleus polyA+ clone-free RNA PET Alignments Rep 1 from ENCODE/GIS
         subGroups view=Alignments cellType=NHEK cloned=Free localization=nucleus rnaExtract=PAP rep=rep1
