@@ -17460,4 +17460,148 @@ TMPDIR=/scratch/tmp
 #Loaded 333 elements of size 11
 #Loaded 61 elements of size 11
 
+
+############################################################################
+# LINCRNAS FROM ISCA FROM BROAD (DONE 2011-10-10 Chin)
+# Human lincRNA Catalog
+
+    # unzip data from Board to /hive/data/outside/lincRnaFromCabili
+    mkdir /hive/data/genomes/hg19/bed/lincRnaFromCabili
+    cd /hive/data/genomes/hg19/bed/lincRnaFromCabili
+    cp /hive/data/outside/lincRnaFromCabili/Cabili_etal_BodyMaplincRNAs.key.txt .
+    cp /hive/data/outside/lincRnaFromCabili/Cabili_etal_description.doc .
+    cp /hive/data/outside/lincRnaFromCabili/Cabili_etal_BodyMapLincRNAs.bed .
+    cp /hive/data/outside/lincRnaFromCabili/lincRNAs_transcripts.gtf .
+
+    # Load data for lincRNAsTranscripts track	
+    cd /hive/data/genomes/hg19/bed/lincRnaFromCabili
+    ldHgGene -gtf hg19 lincRNAsTranscripts lincRNAs_transcripts.gtf
+    # Read 21630 transcripts in 67096 lines in 1 files
+    #   21630 groups 43 seqs 7 sources 1 feature types
+    # 21630 gene predictions
+
+    cat << '_EOF_' > createExpDataByCellType.pl
+#!/usr/bin/perl
+# Create expData table form a microarray bed15 file
+# for further analysis
+# usage: ./createExpDataByCellType.pl <bed15File> 
+use strict;
+use warnings;
+my $line;
+my @bF;
+my $i;
+my $outFname;
+my $name;
+my $expCount;
+my $expIds;
+my $expScores;
+my @expId;
+my @expScore;
+my $score;
+my $tScore;
+my $fScore;
+my $log2 = log(2);
+my $sLog2;
+my $tLog2;
+# Define the 22 cell type array
+my @cellType = ("Adipose","Adrenal","Brain","Breast","Colon","Heart","Kidney",
+              "Liver","Lung","LymphNode","Ovary","Prostate","SkeletalMuscle",
+              "WhiteBloodCell","Testes","Thyroid","Testes_R","Brain_R",
+              "Placenta_R","Foreskin_R","hLF_r2","hLF_r1");
+#Read in the microarray (bed15) files
+# Assume number of exp and score agreed
+my $argc=scalar(@ARGV);
+if ($argc < 1)
+   {
+      print "usage: ./createExpDataByCellType.pl <bed15File>";
+    }
+my $fName = $ARGV[0];
+my $outFName;
+# Loop thru each cell type
+for($i = 0; $i < scalar(@cellType); $i++) {
+  open(FHIN, $fName) or die "Can not open $fName";
+  $outFName= "lincRNAsCT" . $cellType[$i] . "\.tab";
+  open(FHOUT, ">$outFName") or die "Can not open $outFName";
+  while ($line = <FHIN>) {
+     chomp($line);
+     @bF = split('\t', $line);
+     printf(FHOUT "%s\t%s\t%s\t%s\t",
+                  $bF[0],$bF[1],$bF[2],$bF[3]); 
+     $bF[14] =~ s/,$//;
+     $expScores = $bF[14];
+     @expScore = split(",",$expScores);
+     # Process the expRatio
+     $tLog2 = log($expScore[$i] + 0.5)/$log2;
+     $sLog2 = sprintf("%.3f",$tLog2);
+     # scale sLog2 using 0 (-1) .. 1000 (4)
+     if ($sLog2 <= 4.0) {
+         $tScore = ($sLog2 + 1) * (1000/5);
+         $fScore = sprintf("%3d",$tScore);
+       } else {
+         $tScore = 1000;
+       }
+     if ($tScore >= 1000) {
+         $fScore = 1000;
+       } else {
+         $fScore = sprintf("%3d",$tScore);
+       }
+     printf(FHOUT "%s\t%s\t%s\n",$fScore, $expScore[$i],$sLog2);     
+  } # end while
+  close FHIN;
+  close FHOUT;
+} # for loop
+'_EOF_'
+    # << happy emacs
+    chmod +x createExpDataByCellType.pl
+    ./createExpDataByCellType.pl Cabili_etal_BodyMapLincRNAs.bed 
+
+    cat << '_EOF_' > deleteCTTables.sh
+#!/bin/sh
+#
+cellType=(Adipose Adrenal Brain Breast Colon Heart Kidney
+              Liver Lung LymphNode Ovary Prostate SkeletalMuscle
+              WhiteBloodCell Testes Thyroid Testes_R Brain_R
+              Placenta_R Foreskin_R hLF_r2 hLF_r1)
+for c in "${cellType[@]}"
+do
+    echo Processing lincRNAs$c
+    hgsql  hg19 -e "DROP TABLE IF EXISTS  lincRNAsCT$c;"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x deleteCTTables.sh
+    ./deleteCTTables.sh
+   
+    cat << '_EOF_' > lincRNAsCTTemp.sql
+CREATE TABLE lincRNAsCTTemp (
+    chrom varchar(255) not null,        # Human chromosome or FPC contig
+    chromStart int unsigned not null,   # Start position in chromosome
+    chromEnd int unsigned not null,     # End position in chromosome
+    name varchar(255) not null,         # Name of item
+    score int unsigned not null,        # Score from 0-1000
+    rawScore float not null,            # Raw Signal Score
+    log2RawScore float not null         # log2 of raw score
+);
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > loadLincRNAsAllCellType.sh
+#!/bin/sh
+#
+cellType=(Adipose Adrenal Brain Breast Colon Heart Kidney
+              Liver Lung LymphNode Ovary Prostate SkeletalMuscle
+              WhiteBloodCell Testes Thyroid Testes_R Brain_R
+              Placenta_R Foreskin_R hLF_r2 hLF_r1)
+for c in "${cellType[@]}"
+do
+    echo Processing lincRNAsCT$c.tab
+    hgLoadBed -tab -sqlTable=lincRNAsCTTemp.sql hg19 lincRNAsCTTemp lincRNAsCT$c.tab
+    hgsql hg19 -e "RENAME TABLE lincRNAsCTTemp to lincRNAsCT$c"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x loadLincRNAsAllCellType.sh
+    ./loadLincRNAsAllCellType.sh
+
+
 ############################################################################

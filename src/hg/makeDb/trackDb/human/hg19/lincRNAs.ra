@@ -1,7 +1,7 @@
 ###### Harvard University large intergenic non-coding RNAs (lincRNAs)
 track xlincRNAs
 shortLabel linc RNAs
-longLabel Large intergenic noncoding RNAs
+longLabel Large intergenic noncoding RNAs in microarray format
 group x
 #priority 45.25
 visibility hide
@@ -12,16 +12,6 @@ expDrawExons on
 expTable lincRNAsExpAll
 groupings lincRNAsExpGroups
 html lincRNAs
-
-track xlincRNAsTranscripts
-shortLabel lincRNAs Transcripts
-longLabel lincRNAsTranscripts
-group x
-#priority 45.5
-visibility hide
-color 100,50,0
-altColor 175,150,128
-type genePred
 
 
 track lincRNAs
