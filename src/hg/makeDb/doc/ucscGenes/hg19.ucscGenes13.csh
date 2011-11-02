@@ -1045,7 +1045,6 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
-
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
@@ -1070,6 +1069,7 @@ rnaFoldBig split/$(path1) fold
 gensub2 in.lst single template jobList
 cp template ../utr5
 cd ../utr5
+
 gensub2 in.lst single template jobList
 
 # Do cluster runs for UTRs
@@ -1089,7 +1089,6 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
-
 
 
 # Make pfam run.  Actual cluster run is about 6 hours.
@@ -1256,6 +1255,12 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     >keggPathway.tab
     hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
+   # Finally, update the knownToKeggEntrez table from the keggPathway table.
+   hgsql $tempDb -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' \
+        |sort -u| sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+   hgLoadSqlTab $tempDb knownToKeggEntrez ~/kent/src/hg/lib/knownToKeggEntrez.sql \
+        knownToKeggEntrez.tab
+
 # Make spMrna table (useful still?)
    cd $dir
    hgsql $db -N -e "select spDisplayID,kgID from kgXref where spDisplayID != ''" > spMrna.tab;
@@ -1277,6 +1282,38 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
     hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+
+
+# Make PCR target for UCSC Genes, Part 1.
+# 1. Get a set of IDs that consist of the UCSC Gene accession concatenated with the
+#    gene symbol, e.g. uc010nxr.1__DDX11L1
+hgsql $tempDb -NBe 'select kgId,geneSymbol from kgXref' \                            
+    | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \                             
+      > idSub.txt
+# 2. Get a file of per-transcript fasta sequences that contain the sequences of each 
+#    UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.
+#    Convert that file to TwoBit format and soft-link it into /gbdb/hg19/targetDb/
+subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
+sequenceForBed -keepName -db=hg19 -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout \
+    | faToTwoBit stdin kgTargetSeq.2bit 
+mkdir -p /gbdb/hg19/targetDb/
+ln -s $dir/kgTargetSeq.2bit /gbdb/hg19/targetDb/
+# Load the table kgTargetAli, which shows where in the genome these targets are.
+cut -f 1-10 ucscGenes.gp \                        
+    | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
+hgLoadPsl $tempDb kgTargetAli.psl
+
+# 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
+# /gbdb/hg19/targetDb/kgTargetSeq.2bit .          
+# On hgwdev, insert new records into blatServers and targetDb, using the 
+# host (field 2) and port (field 3) specified by cluster-admin.
+hgsql hgcentraltest -e \                                                    
+      'INSERT into blatServers values ("hg19Kg", "blat5", 17783, 0, 1);'
+hgsql hgcentraltest -e \                                                    
+      'INSERT into targetDb values("hg19Kg", "UCSC Genes", \                    
+         "hg19", "kgTargetAli", "", "", \                                       
+         "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+
 		
 # move this endif statement past business that has successfully been completed
 endif # BRACKET		
@@ -1340,4 +1377,7 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 synBlastp.csh $xdb $db
 synBlastp.csh $ratDb $db
 
-# final breakpoint
+#
+# Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
+# is released, take down the old isPcr gfServer  
+#

@@ -11,19 +11,8 @@ var encodeProject = (function () {
         assembly = "hg19",
         cgi = "/cgi-bin/hgApi?";
 
-    function cmpNoCase(a, b) {
-        // Helper function for case-insensitive sort
-        var A, B;
-        A = a.toUpperCase();
-        B = b.toUpperCase();
-        if (A < B) {
-            return -1;
-        }
-        if (A > B) {
-            return 1;
-        }
-        return 0;
-    }
+    var accessionPrefix = 'wgEncodeE?';
+
 
     // TODO: modularize by extending Array.sort ?
 
@@ -48,7 +37,7 @@ var encodeProject = (function () {
                 server = settings.server;
             }
             if (settings.assembly) {
-                server = settings.assembly;
+                assembly = settings.assembly;
             }
         },
 
@@ -117,7 +106,7 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                dataGroups[i].dataTypes.sort(cmpNoCase);
+                dataGroups[i].dataTypes.sort(this.cmpNoCase);
             });
             return dataGroups;
         },
@@ -148,13 +137,16 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                cellTiers[i].cellTypes.sort(cmpNoCase);
+                cellTiers[i].cellTypes.sort(this.cmpNoCase);
             });
             return cellTiers;
         },
 
         isHistone: function (target) {
             // Helper function, returns true if antibody target histone modification
+            if (target === undefined) {
+               return false;
+            }
             return target.match(/^H[234]/);
         },
 
@@ -186,14 +178,9 @@ var encodeProject = (function () {
                     antibodyGroupHash[group] = {
                         label: group,
                         targets: [],
-                        targetHash: {}
                     };
                 }
-                target = antibody.target;
-                if (antibodyGroupHash[group].targetHash[target] === undefined) {
-                    antibodyGroupHash[group].targetHash[target] = target;
-                    antibodyGroupHash[group].targets.push(target);
-                }
+                antibodyGroupHash[group].targets.push(antibody.target);
             });
             $.each(antibodyGroupHash, function (key, item) {
                 antibodyGroups.push(item);
@@ -204,19 +191,46 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                antibodyGroups[i].targets.sort(cmpNoCase);
+                antibodyGroups[i].targets.sort(this.cmpNoCase);
             });
             return antibodyGroups;
+        },
+
+        getExpIdHash: function (expIds) {
+            // Return hash of experiment ID's
+            var expIdHash = {};
+            $.each(expIds, function (i, expId) {
+                expIdHash[expId.expId] = true;
+            });
+            return expIdHash;
+        },
+
+        // UNTESTED
+        expIdFromAccession: function(accession) {
+            return accession.slice(accessionPrefix.length);
+        },
+
+        cmpNoCase: function (a, b) {
+        // Helper function for case-insensitive sort - belongs in
+        // more generic lib
+            var A, B;
+            A = a.toUpperCase();
+            B = b.toUpperCase();
+            if (A < B) {
+                return -1;
+            }
+            if (A > B) {
+                return 1;
+            }
+            return 0;
         },
 
         serverRequests: {
             // Requests for data from server API
             experiment: "cmd=encodeExperiments",
-
+            expId: "cmd=encodeExpId",
             dataType: "cmd=cv&type=dataType",
-
             cellType: "cmd=cv&type=cellType",
-
             antibody: "cmd=cv&type=antibody"
         },
 
