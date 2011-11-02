@@ -4828,8 +4828,8 @@ term BAF155
 tag BAF155
 type Antibody
 target BAF155
-antibodyDescription BAF155 (SMARCC1, Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex. Antibody Target: BAF155
-targetDescription BAF155 (H-76) is a rabbit polyclonal antibody raised against amino acids 998-1073 of BAF155 of human origin.
+antibodyDescription BAF155 (H-76) is a rabbit polyclonal antibody raised against amino acids 998-1073 of BAF155 of human origin. Antibody Target: BAF155
+targetDescription BAF155 (SMARCC1, Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10756
@@ -4843,8 +4843,8 @@ term BAF170
 tag BAF170
 type Antibody
 target BAF170
-antibodyDescription BAF170 (Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex. Antibody Target: BAF170
-targetDescription BAF170 (H-116) is a rabbit polyclonal antibody raised against amino acids 1093-1208 of BAF170 of human origin.
+antibodyDescription BAF170 (H-116) is a rabbit polyclonal antibody raised against amino acids 1093-1208 of BAF170 of human origin. Antibody Target: BAF170
+targetDescription BAF170 (Brg1-Associated Factor, 170 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10757
@@ -5369,8 +5369,8 @@ label sc-137065 EBF1
 term eGFP-FOS
 tag FOSe
 type Antibody
-target eGFP-FOS
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-FOS
+target FOS
+antibodyDescription Goat polyclonal. Antibody Target: FOS
 targetDescription Fos
 vendorName Kevin White
 vendorId (None)
@@ -6087,9 +6087,9 @@ label 07-352 H3K9ac
 term H3K9Ac_(9649)
 tag H3K09ACc
 type Antibody
-antibodyDescription Monoclonal antibody was produced by immunizing rabbits with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is acetylated. Antibody Target: H3K9Ac
+antibodyDescription Rabbit monoclonal antibody corrresponds to the amino terminus of acetyl-histone H3 (Lys9), this antibody does not cross-react with other acetylated histones. Antibody Target: H3K9Ac
 target H3K9Ac
-targetDescription Acetyl-Histone H3 (Lys9) (C5B11) Rabbit mAb detects endogenous levels of histone target H3 only when acetylated on Lys9. This antibody does not cross-react with other acetylated histones.
+targetDescription H3K9Ac, acetyl-histone H3 (Lys9) 
 vendorName Cell Signaling
 vendorId 9649
 orderUrl http://www.cellsignal.com/products/9649.html
@@ -7542,8 +7542,8 @@ label sc-643 SP2
 term SP4_(V-20)
 tag SP4V20
 type Antibody
-target SP4_(V-20)
-antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Sp4 of human origin. Antibody Target: SP4_(V-20)
+target SP4
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Sp4 of human origin. Antibody Target: SP4
 targetDescription  Binds to GT and GC boxes promoters elements. Probable transcriptional activator.
 vendorName Santa Cruz Biotech
 vendorId sc-645
@@ -8008,8 +8008,8 @@ label ab60931 USF2
 term USF2_(C-20)
 tag USF2b
 type Antibody
-target  USF2_(C-20)
-antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of USF-2 of mouse origin.  Recommended for detection of USF-2 p44 of mouse, rat and human. Antibody Target:  USF2_(C-20)
+target  USF2
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of USF-2 of mouse origin.  Recommended for detection of USF-2 p44 of mouse, rat and human. Antibody Target:  USF2
 targetDescription  This gene encodes a member of the basic helix-loop-helix leucine zipper family, and can function as a cellular transcription factor. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs. Two transcript variants encoding distinct isoforms have been identified for this gene (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-862
