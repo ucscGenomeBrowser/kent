@@ -3556,6 +3556,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
+dccAccession wgEncodeEH002170
+expId 2170
 fileName wgEncodeUwTfbsCd20ro01778InputStdAlnRep1.bam,wgEncodeUwTfbsCd20ro01778InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3581,6 +3583,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
+dccAccession wgEncodeEH002170
+expId 2170
 fileName wgEncodeUwTfbsCd20ro01778InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3605,6 +3609,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-25
+dccAccession wgEncodeEH002170
+expId 2170
 fileName wgEncodeUwTfbsCd20ro01778InputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -3631,6 +3637,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH002172
+expId 2172
 fileName wgEncodeUwTfbsCd20ro01794InputStdAlnRep1.bam,wgEncodeUwTfbsCd20ro01794InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3656,6 +3664,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH002172
+expId 2172
 fileName wgEncodeUwTfbsCd20ro01794InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3680,6 +3690,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEH002172
+expId 2172
 fileName wgEncodeUwTfbsCd20ro01794InputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -9314,6 +9326,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002165
+expId 2165
 fileName wgEncodeUwTfbsHacInputStdAlnRep1.bam,wgEncodeUwTfbsHacInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -9339,6 +9353,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002165
+expId 2165
 fileName wgEncodeUwTfbsHacInputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -9363,6 +9379,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002165
+expId 2165
 fileName wgEncodeUwTfbsHacInputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -17306,6 +17324,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH002169
+expId 2169
 fileName wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1.bam,wgEncodeUwTfbsMonocd14ro1746InputStdAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -17331,6 +17351,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH002169
+expId 2169
 fileName wgEncodeUwTfbsMonocd14ro1746InputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -17355,6 +17377,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-21
 dateUnrestricted 2012-06-21
+dccAccession wgEncodeEH002169
+expId 2169
 fileName wgEncodeUwTfbsMonocd14ro1746InputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -19191,6 +19215,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002173
+expId 2173
 fileName wgEncodeUwTfbsSkmcInputStdAlnRep1.bam
 grant Stam
 lab UW
@@ -19215,6 +19241,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002173
+expId 2173
 fileName wgEncodeUwTfbsSkmcInputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -19238,6 +19266,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002173
+expId 2173
 fileName wgEncodeUwTfbsSkmcInputStdRawRep1.bigWig
 grant Stam
 lab UW
@@ -20485,4 +20515,4 @@ tableName wgEncodeUwTfbsWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 2134090401
+# MAGIC: -670992426
