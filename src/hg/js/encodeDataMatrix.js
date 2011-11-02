@@ -142,24 +142,23 @@ $(function () {
         // main actions, called when loading data from server is complete
         var experiments = responses[0], dataTypes = responses[1], 
                         cellTypes = responses[2], expIds = responses[3];
-        var matrix = {};
         var dataGroups, cellTiers, expIdHash, header;
+        var matrix = {};
 
         hideLoadingImage(spinner);
         $('#matrixTable').show();
 
-
         // set up structures for data types and their groups
-        $.each(dataTypes, function (i, item) {
-            dataTypeTermHash[item.term] = item;
-            dataTypeLabelHash[item.label] = item;
+        $.each(dataTypes, function (i, dataType) {
+            dataTypeTermHash[dataType.term] = dataType;
+            dataTypeLabelHash[dataType.label] = dataType;
         });
         // data type labels tucked into their tiers
         dataGroups = encodeProject.getDataGroups(dataTypes);
 
         // set up structures for cell types and their tiers
-        $.each(cellTypes, function (i, item) {
-            cellTypeHash[item.term] = item;
+        $.each(cellTypes, function (i, cellType) {
+            cellTypeHash[cellType.term] = cellType;
         });
         cellTiers = encodeProject.getCellTiers(cellTypes);
 
@@ -186,7 +185,7 @@ $(function () {
             if (!dataTypeTermHash[dataType].count) {
                 dataTypeTermHash[dataType].count = 0;
             }
-            dataTypeTermHash[dataType].count++;
+            ataTypeTermHash[dataType].count++;
 
             cellType = exp.cellType;
             if (!matrix[cellType]) {

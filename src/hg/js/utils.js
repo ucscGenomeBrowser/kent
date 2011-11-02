@@ -1040,12 +1040,13 @@ function showLoadingImage(id)
     var loadingId = id + "LoadingOverlay";
     // make an opaque overlay to partially hide the image
     var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    var ele = $(document.getElementById(id));
     overlay.appendTo("body");
-    overlay.css("top", $('#'+ id).position().top);
-    var divLeft = $('#'+ id).position().left + 2;
+    overlay.css("top", ele.position().top);
+    var divLeft = ele.position().left + 2;
     overlay.css("left",divLeft);
-    var width = $('#'+ id).width() - 5;
-    var height = $('#'+ id).height();
+    var width = ele.width() - 5;
+    var height = ele.height();
     overlay.width(width);
     overlay.height(height);
     overlay.css("background", "white");
@@ -1060,7 +1061,7 @@ function showLoadingImage(id)
 
 function hideLoadingImage(id)
 {
-    $('#' + id).remove();
+    $(document.getElementById(id)).remove();
 }
 
 function codonColoringChanged(name)
@@ -2695,3 +2696,8 @@ function filterTableExcludeOptions(filter)
     return true;
 }
 
+function escapeJQuerySelectorChars(str)
+{
+    // replace characters which are reserved in jQuery selectors (surprisingly jQuery does not have a built in function to do this).
+    return str.replace(/([!"#$%&'()*+,./:;<=>?@[\]^`{|}~"])/g,'\\$1');
+}

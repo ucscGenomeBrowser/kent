@@ -29,12 +29,14 @@ $(function () {
             tableHeader.append('<th class="groupType"><div class="verticalText">' + 
                                 group.label + '</div></th>');
             $.each(group.targets, function (i, target) {
+                // prune out targets with no experiments 
                 if (targetHash[target] === undefined) {
                     return true;
                 }
-                // prune out targets with no experiments 
                 if (targetHash[target].count !== undefined) {
-                    tableHeader.append('<th class="elementType"><div class="verticalText">' + 
+                    tableHeader.append('<th class="elementType" title="' +
+                                        targetHash[target].description +
+                                        '"><div class="verticalText">' + 
                                         target + '</div></th>');
                 }
             });
@@ -101,11 +103,14 @@ $(function () {
                                 // TODO: encapsulate var names
                                 // TODO: search on antibody
                                 url +=
-                                   ('&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
+                                   '&hgt_mdbVar1=dataType&hgt_mdbVal1=' + 'ChipSeq' +
                                    '&hgt_mdbVar2=cell&hgt_mdbVal2=' + cellType +
-                                    // TODO: all antibodies for target
-                                   '&hgt_mdbVar3=target&hgt_mdbVal3=' + target +
-                                   '&hgt_mdbVar4=view&hgt_mdbVal4=Any');
+                                   '&hgt_mdbVar3=antibody';
+                                // TODO: html encode ?
+                                $.each(targetHash[target].antibodies, function (i, antibody) {
+                                    url += '&hgt_mdbVal3=' + antibody;
+                                });
+                                url += '&hgt_mdbVar4=view&hgt_mdbVal4=Any';
                                 // TODO: open search window 
                                 //window.open(url, "searchWindow");
                                 window.location = url;
@@ -149,14 +154,23 @@ $(function () {
         $('#matrixTable').show();
 
         // set up structures for antibodies and their groups
-        $.each(antibodies, function (i, item) {
-            antibodyHash[item.term] = item;
+        $.each(antibodies, function (i, antibody) {
+            antibodyHash[antibody.term] = antibody;
+            target = antibody.target;
+            if (targetHash[target] === undefined) {
+                targetHash[target] = {
+                    count: 0,   // experiments
+                    description: antibody.targetDescription,
+                    antibodies: []
+                };
+            }
+            targetHash[target].antibodies.push(antibody.term)
         });
         antibodyGroups = encodeProject.getAntibodyGroups(antibodies);
 
         // set up structures for cell types and their tiers
-        $.each(cellTypes, function (i, item) {
-            cellTypeHash[item.term] = item;
+        $.each(cellTypes, function (i, cellType) {
+            cellTypeHash[cellType.term] = cellType;
         });
         cellTiers = encodeProject.getCellTiers(cellTypes);
 
@@ -185,16 +199,9 @@ $(function () {
             // so don't need hash for those
             antibody = encodeProject.antibodyFromExp(exp);
             target = encodeProject.targetFromAntibody(antibody, antibodyHash);
-            if (!targetHash[target]) {
-                targetHash[target] = {
-                    count: 0,
-                    antibodies: {}
-                };
+            if (targetHash[target] !== undefined) {
+                targetHash[target].count++;
             }
-            if (!targetHash[target].antibodies[antibody]) {
-                targetHash[target].antibodies[antibody] = antibody;
-            }
-            targetHash[target].count++;
 
             cellType = exp.cellType;
             if (!matrix[cellType]) {

@@ -4971,7 +4971,7 @@ safef(lowerCaseName, sizeof(lowerCaseName), "pfam");
 lowerCaseName[0] = tolower(lowerCaseName[0]);
 
 safef(query, sizeof(query),
-    "select value from knownToPfam k, %sDesc p"
+    "select distinct value from knownToPfam k, %sDesc p"
     " where name = '%s' and value=p.pfamAC "
     , lowerCaseName, ucscGeneId);
 return sqlQuickList(conn, query);

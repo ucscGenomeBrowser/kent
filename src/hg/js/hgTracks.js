@@ -392,7 +392,7 @@ var vis = {
         // returns true if we modify at least one select in the group list
         var rec = hgTracks.trackDb[track];
         var selectUpdated = false;
-        $("select[name=" + track + "]").each(function(t) {
+        $("select[name=" + escapeJQuerySelectorChars(track) + "]").each(function(t) {
             $(this).attr('class', visibility == 'hide' ? 'hiddenText' : 'normalText');
             $(this).val(visibility);
             selectUpdated = true;
@@ -1988,7 +1988,7 @@ var rightClick = {
 
                         // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                         // Move functionality to a hidden variable?
-                        var select = $("select[name=" + id + "]");
+                        var select = $("select[name=" + escapeJQuerySelectorChars(id) + "]");
                         if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
                             select =  [ $(select)[0] ];
                         var cur = $(select).val();
