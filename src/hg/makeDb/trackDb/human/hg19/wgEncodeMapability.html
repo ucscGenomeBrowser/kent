@@ -14,7 +14,7 @@ Instructions for configuring multi-view tracks are
 <DL>
 <DT><I>Alignability</I></DT>
 <DD>These tracks provide a measure of how often the sequence found at the particular
-location will align with the whole genome.  Unlike measures of uniqueness, alignability
+location will align within the whole genome.  Unlike measures of uniqueness, alignability
 will tolerate up to 2 mismatches. These tracks are in the form of signals ranging from
 0 to 1 and have several configuration options.</DD>
 </P>
@@ -46,12 +46,12 @@ generated independently of the ENCODE project, in the framework of the GEM
 (GEnome Multitool) project.
 
 <H4>Uniqueness</H4>
-The <em>Duke uniqueness</em> tracks display how unique is each sequence on the
+The <em>Duke Uniqueness</em> tracks display how unique each sequence is on the
 positive strand starting at a particular base and of a particular length.
 Thus, the 20 bp track reflects the uniqueness of all 20 base sequences with
-the score being assigned to the first base of the sequence. Scores are
-normalized to between 0 and 1 with 1 representing a completely unique
-sequence and 0 representing the sequence occurs &#62; 4 times in the genome
+the score being assigned to the first base of the sequence. Scores are 
+normalized to between 0 and 1, with 1 representing a completely unique sequence 
+and 0 representing a sequence that occurs more than 4 times in the genome
 (excluding chrN_random and alternative haplotypes).  A score of 0.5
 indicates the sequence occurs exactly twice, likewise 0.33 for three times
 and 0.25 for four times. The <em>Duke uniqueness</em> tracks were generated
@@ -63,12 +63,12 @@ for the ENCODE project as tools in the development of the
 <A HREF="hgTrackUi?g=wgEncodeOpenChromSynth">Synthesis</A></B> tracks.
 
 <H4>Blacklisted Regions</H4>
-The <em>DAC Blacklist regions</em> aim to identify a comprehensive set of
+The <em>DAC Blacklist Regions</em> aim to identify a comprehensive set of
 regions in the human genome that have anomalous, unstructured, high
 signal/read counts in next gen sequencing experiments independent of
-cell line and type of experiment. We use 80 open chromatin tracks
+cell line and type of experiment. There were 80 open chromatin tracks
 (DNase and FAIRE datasets) and 20 ChIP-seq input/control tracks spanning
-&#126;60 human tissue types/cell lines in total to identify these regions
+&#126;60 human tissue types/cell lines in total used to identify these regions
 with signal artifacts. These regions tend to have a very high ratio of
 multi-mapping to unique mapping reads and high variance in mapability.
 Some of these regions overlap pathological repeat elements such as satellite,
@@ -81,7 +81,7 @@ blacklist alongside mapability filters.  The
 -->
 
 <P>
-The <em>Duke excluded regions</em> track displays genomic regions for
+The <em>Duke Excluded Regions</em> track displays genomic regions for
 which mapped sequence tags were filtered out before signal generation
 and peak calling for
 <A HREF="hgTrackUi?g=wgEncodeDNAseSuper">Open Chromatin</A>:
