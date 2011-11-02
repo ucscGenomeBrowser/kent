@@ -6325,6 +6325,10 @@ printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 static int matrixSqueeze(membersForAll_t* membersForAll)
 // Returns non-zero if the matrix will be squeezed.  Non-zero is actually squeezedLabelHeight
 {
+char *browserVersion;
+if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '9')
+    return 0;
+
 boolean labelHeight = 0;
 members_t *dimensionX = membersForAll->members[dimX];
 members_t *dimensionY = membersForAll->members[dimY];
@@ -6402,7 +6406,7 @@ if(dimensionX)
                 {
                 char *label =replaceChars(dimensionX->titles[ixX]," (","<BR>(");
         #ifdef MATRIX_SQUEEZE
-                printf("<TH WIDTH='60' class='%s'>&nbsp;%s&nbsp;</TH>",dimensionX->tags[ixX],
+                printf("<TH WIDTH='60' class='matCell %s all'>&nbsp;%s&nbsp;</TH>",dimensionX->tags[ixX],
         #else///ifndef MATRIX_SQUEEZE
                 printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",
         #endif///ndef MATRIX_SQUEEZE
