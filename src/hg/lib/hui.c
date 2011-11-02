@@ -6320,7 +6320,7 @@ if (vertical)
 printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 }
 
-//#define MATRIX_SQUEEZE 10
+#define MATRIX_SQUEEZE 10
 #ifdef MATRIX_SQUEEZE
 static int matrixSqueeze(membersForAll_t* membersForAll)
 // Returns non-zero if the matrix will be squeezed.  Non-zero is actually squeezedLabelHeight
@@ -6395,7 +6395,7 @@ if(dimensionX)
             {
         #ifdef MATRIX_SQUEEZE
             if(dimensionY && squeeze>0)
-                printf("<TH nowrap='' class='%s'><div class='%s'>%s</div></TH>",dimensionX->tags[ixX],(top?"up45":"dn45"),
+                printf("<TH nowrap='' class='%s'><div class='%s'>%s</div></TH>\n",dimensionX->tags[ixX],(top?"up45":"dn45"),
                        compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,dimensionX->titles[ixX]));
             else
         #endif///def MATRIX_SQUEEZE
@@ -6460,7 +6460,7 @@ if(dimensionX && dimensionY)
             {
             char objName[SMALLBUF];
             #ifdef MATRIX_SQUEEZE
-            puts("<TD nowrap>");
+            printf("<TD nowrap class='matCell %s all'>\n",dimensionX->tags[ixX]);
             #else///ifndef MATRIX_SQUEEZE
             puts("<TD>");
             #endif///ndef MATRIX_SQUEEZE
@@ -6511,7 +6511,7 @@ if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of
     {
     char objName[SMALLBUF];
     #ifdef MATRIX_SQUEEZE
-    printf("<TH class='%s' ALIGN=%s nowrap colspan=2>",dimensionY->tags[ixY],left?"RIGHT":"LEFT");
+    printf("<TH class='matCell all %s' ALIGN=%s nowrap colspan=2>",dimensionY->tags[ixY],left?"RIGHT":"LEFT");
     #else///ifndef MATRIX_SQUEEZE
     printf("<TH ALIGN=%s nowrap colspan=2>",left?"RIGHT":"LEFT");
     #endif///ndef MATRIX_SQUEEZE
@@ -6531,7 +6531,7 @@ else if (dimensionX)
     }
 else if (left && dimensionY && childTdb != NULL)
     #ifdef MATRIX_SQUEEZE
-    printf("<TH class='%s' ALIGN=RIGHT nowrap>%s</TH>\n",dimensionY->tags[ixY],
+    printf("<TH class='matCell all %s' ALIGN=RIGHT nowrap>%s</TH>\n",dimensionY->tags[ixY],
            compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
     #else///ifndef MATRIX_SQUEEZE
     printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
