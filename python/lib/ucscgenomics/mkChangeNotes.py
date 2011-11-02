@@ -125,10 +125,9 @@ class makeNotes(object):
         filelist = i['fileName'].split(',')
         #preprocess filelist, delete after bai in mdb issue is revoled
         #print filelist[0]
-        
-        if self.loose:
-            if re.match('\S+.bam', filelist[0]) and filelist[0] in self.oldReleaseFiles and (filelist[0] + '.bai') not in filelist:
-                filelist.append(filelist[0] + '.bai')
+        if re.match('\S+.bam', filelist[0]) and filelist[0] in self.oldReleaseFiles and (filelist[0] + '.bai') not in filelist:
+            filelist.append(filelist[0] + '.bai')
+
         for j in filelist:
             if ucscUtils.isGbdbFile(j, i['tableName'], self.database):
                 set.add(j)
