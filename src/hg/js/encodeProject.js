@@ -13,19 +13,6 @@ var encodeProject = (function () {
 
     var accessionPrefix = 'wgEncodeE?';
 
-    function cmpNoCase(a, b) {
-        // Helper function for case-insensitive sort
-        var A, B;
-        A = a.toUpperCase();
-        B = b.toUpperCase();
-        if (A < B) {
-            return -1;
-        }
-        if (A > B) {
-            return 1;
-        }
-        return 0;
-    }
 
     // TODO: modularize by extending Array.sort ?
 
@@ -119,7 +106,7 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                dataGroups[i].dataTypes.sort(cmpNoCase);
+                dataGroups[i].dataTypes.sort(this.cmpNoCase);
             });
             return dataGroups;
         },
@@ -150,7 +137,7 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                cellTiers[i].cellTypes.sort(cmpNoCase);
+                cellTiers[i].cellTypes.sort(this.cmpNoCase);
             });
             return cellTiers;
         },
@@ -191,14 +178,9 @@ var encodeProject = (function () {
                     antibodyGroupHash[group] = {
                         label: group,
                         targets: [],
-                        targetHash: {}
                     };
                 }
-                target = antibody.target;
-                if (antibodyGroupHash[group].targetHash[target] === undefined) {
-                    antibodyGroupHash[group].targetHash[target] = target;
-                    antibodyGroupHash[group].targets.push(target);
-                }
+                antibodyGroupHash[group].targets.push(antibody.target);
             });
             $.each(antibodyGroupHash, function (key, item) {
                 antibodyGroups.push(item);
@@ -209,7 +191,7 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                antibodyGroups[i].targets.sort(cmpNoCase);
+                antibodyGroups[i].targets.sort(this.cmpNoCase);
             });
             return antibodyGroups;
         },
@@ -226,6 +208,21 @@ var encodeProject = (function () {
         // UNTESTED
         expIdFromAccession: function(accession) {
             return accession.slice(accessionPrefix.length);
+        },
+
+        cmpNoCase: function (a, b) {
+        // Helper function for case-insensitive sort - belongs in
+        // more generic lib
+            var A, B;
+            A = a.toUpperCase();
+            B = b.toUpperCase();
+            if (A < B) {
+                return -1;
+            }
+            if (A > B) {
+                return 1;
+            }
+            return 0;
         },
 
         serverRequests: {
