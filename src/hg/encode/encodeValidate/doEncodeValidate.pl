@@ -33,13 +33,16 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
-use Encode;
-use HgAutomate;
-use HgDb;
-use RAFile;
-use SafePipe;
+BEGIN{
 
+unshift(@INC, ".");
+require Encode; Encode->import;
+require HgAutomate; HgAutomate->import;
+require HgDb; HgDb->import;
+require RAFile; RAFile->import;
+require SafePipe; SafePipe->import;
+
+}
 use vars qw/
     $opt_allowReloads
     $opt_configDir
