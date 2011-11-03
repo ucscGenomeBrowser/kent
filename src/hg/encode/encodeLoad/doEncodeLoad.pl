@@ -343,15 +343,16 @@ my $tableSuffix = "";
 if ($submitDir eq ".") { # make sure command-line use specifies full path and directory
     die "ERROR: please specify full path to directory\n";
 }
-if(dirname($submitDir) =~ /_(.*)/) {
+#if(dirname($submitDir) =~ /_(.*)/) {
 
-    if($1 ne 'prod' or $1 ne 'beta') {
-        # yank out "beta" from encinstance_beta
-        $tableSuffix = "_$1_" . basename($submitDir);;
-    }
-} else {
-    $tableSuffix = "_" . basename($submitDir);;
-}
+#    if($1 ne 'prod') {
+#        # yank out "beta" from encinstance_beta
+#        $tableSuffix = "_$1_" . basename($submitDir);;
+#    }
+#} else {
+#    print "here11111\n";
+#    $tableSuffix = "_" . basename($submitDir);;
+#}
 
 chdir($submitDir);
 my $programDir = dirname($0);
