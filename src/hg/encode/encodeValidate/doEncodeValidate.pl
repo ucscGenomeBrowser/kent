@@ -1714,7 +1714,6 @@ while (@{$lines}) {
                 next;
             }
             my $cell = $line{cell};
-            #my $sex = $terms{'Cell Line'}{$cell}{'sex'};
             my $sex = $line{sex};
             my $mdbError = validateDdfField($field, $line{$field}, $view, $daf, $cell, $sex, \%terms);
             if ($mdbError) {
