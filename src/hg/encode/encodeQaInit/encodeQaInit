@@ -286,6 +286,16 @@ def lastInitDate(sqlfile):
 			if re.match('initdate={', i):
 				grab = 1
 
+def writeBetaMdb(mdb, qaDir):
+
+	f = open(qaDir + "/beta.mdb.ra", "w")
+	for i in sorted(mdb):
+		for j in mdb[i]:
+			f.write("%s %s\n" % (j, mdb[i][j]))
+		f.write("\n")
+
+	f.close()
+
 def writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir, initDate):
 	newYN = "Y"
 	if int(args.release) > 1:
@@ -454,6 +464,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 
 	print "Making QA directory: %s" % qaDir
 	notesFile = makeLinks(c, args, qaDir)
+
 	
 	print "Getting methods"
 	getMethods(qaDir, args, user, d)
@@ -477,7 +488,9 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 		print "NON-FATAL ERROR: Local mkChangeNotes found errors in the release"
 	#	return
 
-
+	betaMdb = genNotes.newMdb
+	betaMdb[args.composite] = c.alphaMetaDb[args.composite]
+	writeBetaMdb(betaMdb, qaDir)
 	
 
 	print "Parsing notes file"
