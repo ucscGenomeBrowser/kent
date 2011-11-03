@@ -19,7 +19,7 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/beta/scripts";
+use lib "/cluster/bin/scripts";
 use Encode;
 use RAFile;
 use HgDb;
