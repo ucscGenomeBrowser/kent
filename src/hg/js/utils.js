@@ -1696,7 +1696,7 @@ function sortTableInitialize(table,addSuperscript,altColors)
         }
         if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work (note pointer and hand because older IE calls it hand)
             $(this).hover(
-                function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'pointer', cursor: 'hand' } ); },
+                function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'hand' } ); },
                 function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }
             );
         }
