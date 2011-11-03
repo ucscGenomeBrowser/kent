@@ -134,11 +134,7 @@ sub doTime
 sub dieTellWrangler
 {
     my ($msg) = @_;
-    my $email;
-    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-        $email = $grants->{$daf->{grant}}{wranglerEmail};
-    }
-    $msg .= "Please contact your wrangler" . (defined($email) ? " at $email" : "") . "\n";
+    $msg .= "Please contact the encode staff at encode-staff\@soe.ucsc.edu\n";
     die $msg;
 }
 
@@ -237,7 +233,16 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    return @errors;
+    if (@errors) {
+        my $errorstr = "";
+        for my $line (@errors) {
+            $errorstr = $errorstr . "$line\n";
+        }
+        return $errorstr;
+    }
+    else {
+        return ();
+    }
 }
 
 sub validateDatasetName {
@@ -1517,33 +1522,23 @@ if(!$opt_validateDaf) {
 }
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
-$grants = Encode::getGrants($configPath);
 $fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
-        Encode::parseDaf($submitDir, $grants, $fields);
+        Encode::parseDaf($submitDir, $fields);
     } else {
-        Encode::getDaf($submitDir, $grants, $fields);
+        Encode::getDaf($submitDir, $fields);
     }
     print STDERR "DAF is valid\n";
     exit(0);
 }
 
-$daf = Encode::getDaf($submitDir, $grants, $fields);
+$daf = Encode::getDaf($submitDir, $fields);
 $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
-
-if($opt_sendEmail) {
-    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-        my $email = $grants->{$daf->{grant}}{wranglerEmail};
-        if($email) {
-            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab has been submitted for validation." $email`;
-        }
-    }
-}
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
