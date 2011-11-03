@@ -1222,8 +1222,10 @@ var mat = { // Beginings of matrix object
         }
         if (on && obj.title.length == 0) {
             for (var ix=0;ix < classList.length;ix++) {
-                if (classList[ix] == 'all')
-                    continue;
+                if (classList[ix] == 'all') { // on a label already
+                    obj.title = "";
+                    break;
+                }
                 if (obj.title.length > 0)
                     obj.title += " and ";
                 obj.title += $("th."+classList[ix]).first().text();
