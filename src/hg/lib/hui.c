@@ -80,7 +80,7 @@ else if(trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this
     {
     struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
     char *compositeDir = (sameWord(dirKeeper->type,"downloadsOnly")?dirKeeper->track:dirKeeper->table);
-    struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download %s' TARGET=ucscDownloads>%s</A>",
+    struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download %s' class='file' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
             trackDbSettingOrDefault(dirKeeper, "origAssembly",database),  // This may not be wise!!!
             ENCODE_DCC_DOWNLOADS, compositeDir, (nameIsFile?name:""), nameIsFile?"file":"files",name);
@@ -144,8 +144,8 @@ return FALSE;
 char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
 // returns allocated string of HTML link to controlled vocabulary term
 {
-#define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+#define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' class='cv' TARGET=ucscVocab>%s</A>"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?%s=\"%s\"' title='%s details' class='cv' TARGET=ucscVocab>%s</A>"
 struct dyString *dyLink = NULL;
 char *encTerm = cgiEncode(term);
 char *encValue = cgiEncode(value);
@@ -6118,13 +6118,53 @@ static void buttonsForAll()
 printf(PM_BUTTON_UC,"true", "", "", "", "", "",  "plus_all",    "add_sm.gif");
 printf(PM_BUTTON_UC,"false","", "", "", "", "", "minus_all", "remove_sm.gif");
 }
-static void buttonsForOne(char *name,char *class)
+static void buttonsForOne(char *name,char *class,boolean vertical)
 {
 printf(PM_BUTTON_UC, "true",  ",'", class, "'", "", "", name,    "add_sm.gif");
+if (vertical)
+    puts("<BR>");
 printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 }
 
-static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb, membersForAll_t* membersForAll,boolean top)
+//#define MATRIX_SQUEEZE 10
+#ifdef MATRIX_SQUEEZE
+static int matrixSqueeze(membersForAll_t* membersForAll)
+// Returns non-zero if the matrix will be squeezed.  Non-zero is actually squeezedLabelHeight
+{
+boolean labelHeight = 0;
+members_t *dimensionX = membersForAll->members[dimX];
+members_t *dimensionY = membersForAll->members[dimY];
+if(dimensionX && dimensionY)
+    {
+    if(dimensionX->count>MATRIX_SQUEEZE)
+        {
+        int ixX,cntX=0;
+        for (ixX = 0; ixX < dimensionX->count; ixX++)
+            {
+            if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
+                {
+                cntX++;
+                char *ptr = dimensionX->titles[ixX];
+                int ttlLen = strlen(ptr);
+                while((ptr = strstr(ptr+1,"&nbsp;")) != NULL)  // &nbsp; ????
+                    ttlLen -= 5;
+                if (labelHeight < ttlLen)
+                    labelHeight = ttlLen;
+                }
+            }
+        if(cntX>MATRIX_SQUEEZE)
+            labelHeight = (labelHeight * 8) + 5;//0.50;
+        else
+            labelHeight = 0;
+        }
+    }
+return labelHeight;
+}
+#else///ifndef MATRIX_SQUEEZE
+#define matrixSqueeze(membersForAll) 0
+#endif///ndef MATRIX_SQUEEZE
+
+static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb,int squeeze, membersForAll_t* membersForAll,boolean top)
 /* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
 {
 members_t *dimensionX = membersForAll->members[dimX];
@@ -6143,7 +6183,15 @@ if(dimensionX)
     {
     int ixX,cntX=0;
     if(dimensionY)
-        printf("<TH align=RIGHT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
+        {
+        #ifdef MATRIX_SQUEEZE
+        if(squeeze>0)
+            printf("<TH align=RIGHT style='height:%dpx;'><div class='%s'><B><EM>%s</EM></B></div></TH>",
+                   squeeze, (top?"up45":"dn45"), dimensionX->groupTitle);
+        else
+        #endif///def MATRIX_SQUEEZE
+            printf("<TH align=RIGHT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
+        }
     else
         printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<B><EM>%s</EM></B></TH>",(top?"TOP":"BOTTOM"), dimensionX->groupTitle);
 
@@ -6151,9 +6199,22 @@ if(dimensionX)
         {
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
             {
-            char *label =replaceChars(dimensionX->titles[ixX]," (","<BR>(");
-            printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,label));
-            freeMem(label);
+        #ifdef MATRIX_SQUEEZE
+            if(dimensionY && squeeze>0)
+                printf("<TH nowrap='' class='%s'><div class='%s'>%s</div></TH>",dimensionX->tags[ixX],(top?"up45":"dn45"),
+                       compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,dimensionX->titles[ixX]));
+            else
+        #endif///def MATRIX_SQUEEZE
+                {
+                char *label =replaceChars(dimensionX->titles[ixX]," (","<BR>(");
+        #ifdef MATRIX_SQUEEZE
+                printf("<TH WIDTH='60' class='%s'>&nbsp;%s&nbsp;</TH>",dimensionX->tags[ixX],
+        #else///ifndef MATRIX_SQUEEZE
+                printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",
+        #endif///ndef MATRIX_SQUEEZE
+                       compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,label));
+                freeMem(label);
+                }
             cntX++;
             }
         }
@@ -6162,7 +6223,13 @@ if(dimensionX)
         {
         if(dimensionY)
             {
-            printf("<TH align=LEFT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
+            #ifdef MATRIX_SQUEEZE
+            if(squeeze>0)
+                printf("<TH align=LEFT><div class='%s'><B><EM>%s</EM></B></div></TH>",
+                    (top?"up45":"dn45"), dimensionX->groupTitle);
+            else
+            #endif///def MATRIX_SQUEEZE
+                printf("<TH align=LEFT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
             printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
             buttonsForAll();
             puts("</TH>");
@@ -6182,7 +6249,7 @@ else if(dimensionY)
 puts("</TR>\n");
 }
 
-static void matrixXheadingsRow2(struct trackDb *parentTdb, membersForAll_t* membersForAll)
+static void matrixXheadingsRow2(struct trackDb *parentTdb, int squeeze, membersForAll_t* membersForAll)
 /* prints the 2nd row of a matrix: Y title; X buttons; title Y */
 {
 members_t *dimensionX = membersForAll->members[dimX];
@@ -6198,9 +6265,17 @@ if(dimensionX && dimensionY)
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
             {
             char objName[SMALLBUF];
+            #ifdef MATRIX_SQUEEZE
+            puts("<TD nowrap>");
+            #else///ifndef MATRIX_SQUEEZE
             puts("<TD>");
+            #endif///ndef MATRIX_SQUEEZE
             safef(objName, sizeof(objName), "plus_%s_all", dimensionX->tags[ixX]);
-            buttonsForOne( objName, dimensionX->tags[ixX] );
+            boolean vertical = FALSE;
+            #ifdef MATRIX_SQUEEZE
+            vertical = (squeeze>0);
+            #endif///def MATRIX_SQUEEZE
+            buttonsForOne( objName, dimensionX->tags[ixX], vertical );
             puts("</TD>");
             cntX++;
             }
@@ -6212,16 +6287,20 @@ if(dimensionX && dimensionY)
     }
 }
 
-static void matrixXheadings(char *db,struct trackDb *parentTdb, membersForAll_t* membersForAll,boolean top)
+static int matrixXheadings(char *db,struct trackDb *parentTdb, membersForAll_t* membersForAll,boolean top)
 /* UI for X headings in matrix */
 {
-if(top)
-    matrixXheadingsRow1(db,parentTdb,membersForAll,top);
+int squeeze = matrixSqueeze(membersForAll);
 
-    matrixXheadingsRow2(parentTdb,membersForAll);
+if(top)
+    matrixXheadingsRow1(db,parentTdb,squeeze,membersForAll,top);
+
+    matrixXheadingsRow2(parentTdb,squeeze,membersForAll);
 
 if(!top)
-    matrixXheadingsRow1(db,parentTdb,membersForAll,top);
+    matrixXheadingsRow1(db,parentTdb,squeeze,membersForAll,top);
+
+return squeeze;
 }
 
 static void matrixYheadings(char *db,struct trackDb *parentTdb, membersForAll_t* membersForAll,int ixY,boolean left)
@@ -6237,11 +6316,15 @@ if(dimensionY && dimensionY->subtrackList && dimensionY->subtrackList[ixY] && di
 if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of buttons
     {
     char objName[SMALLBUF];
+    #ifdef MATRIX_SQUEEZE
+    printf("<TH class='%s' ALIGN=%s nowrap colspan=2>",dimensionY->tags[ixY],left?"RIGHT":"LEFT");
+    #else///ifndef MATRIX_SQUEEZE
     printf("<TH ALIGN=%s nowrap colspan=2>",left?"RIGHT":"LEFT");
+    #endif///ndef MATRIX_SQUEEZE
     if(left)
         printf("%s&nbsp;",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
     safef(objName, sizeof(objName), "plus_all_%s", dimensionY->tags[ixY]);
-    buttonsForOne( objName, dimensionY->tags[ixY] );
+    buttonsForOne( objName, dimensionY->tags[ixY], FALSE );
     if(!left)
         printf("&nbsp;%s",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
     puts("</TH>");
@@ -6253,7 +6336,12 @@ else if (dimensionX)
     puts("</TH>");
     }
 else if (left && dimensionY && childTdb != NULL)
+    #ifdef MATRIX_SQUEEZE
+    printf("<TH class='%s' ALIGN=RIGHT nowrap>%s</TH>\n",dimensionY->tags[ixY],
+           compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
+    #else///ifndef MATRIX_SQUEEZE
     printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
+    #endif///ndef MATRIX_SQUEEZE
 }
 
 static int displayABCdimensions(char *db,struct cart *cart, struct trackDb *parentTdb, struct slRef *subtrackRefList, membersForAll_t* membersForAll)
@@ -6555,9 +6643,14 @@ if(membersForAll->abcCount > 0 && membersForAll->filters == FALSE)
 if(dimensionX == NULL && dimensionY == NULL) // Could have been just filterComposite. Must be an X or Y dimension
     return FALSE;
 
+#ifdef MATRIX_SQUEEZE
+printf("<TABLE class='greenBox' cellspacing=0 style='background-color:%s;'>\n",COLOR_BG_ALTDEFAULT);
+#else///ifndef MATRIX_SQUEEZE
 printf("<TABLE class='greenBox' style='background-color:%s;'>\n",COLOR_BG_DEFAULT);
+#endif///ndef MATRIX_SQUEEZE
 
-matrixXheadings(db,parentTdb,membersForAll,TRUE);
+//int squeeze = matrixXheadings(db,parentTdb,membersForAll,TRUE); // right side labels could be dependent upon squeeze
+(void)matrixXheadings(db,parentTdb,membersForAll,TRUE);
 
 // Now the Y by X matrix
 int cntX=0,cntY=0;
@@ -6567,7 +6660,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
         {
         cntY++;
         assert(!dimensionY || ixY < dimensionY->count);
-        printf("<TR ALIGN=CENTER BGCOLOR=\"#FFF9D2\">");
+        printf("<TR ALIGN=CENTER BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
 
         matrixYheadings(db,parentTdb, membersForAll,ixY,TRUE);
 
@@ -6612,10 +6705,17 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                         safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
                         }
                     //printf("<TD title='subCBs:%d  checked:%d enabled:%d'>\n",cells[ixX][ixY],chked[ixX][ixY],enabd[ixX][ixY]);
+                #ifdef MATRIX_SQUEEZE
+                    if(ttlX && ttlY)
+                        printf("<TD class='matCell %s %s'>\n",dimensionX->tags[ixX],dimensionY->tags[ixY]);
+                    else
+                        printf("<TD class='matCell %s'>\n", (dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
+                #else///ifndef MATRIX_SQUEEZE
                     if(ttlX && ttlY)
                         printf("<TD title='%s and %s'>\n",ttlX,ttlY);
                     else
                         printf("<TD title='%s'>\n",(ttlX ? ttlX : ttlY));
+                #endif///ndef MATRIX_SQUEEZE
                     dyStringPrintf(dyJS, " class=\"matCB");
                     if(halfChecked)
                         dyStringPrintf(dyJS, " halfVis");  // needed for later js identification!
@@ -6636,10 +6736,17 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     }
                 else
                     {
+                #ifdef MATRIX_SQUEEZE
+                    if(ttlX && ttlY)
+                        printf("<TD class='matCell %s %s'></TD>\n",dimensionX->tags[ixX],dimensionY->tags[ixY]);
+                    else
+                        printf("<TD class='matCell %s'></TD>\n", (dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
+                #else///ifndef MATRIX_SQUEEZE
                     if(ttlX && ttlY)
                         printf("<TD title='%s and %s'></TD>\n",ttlX,ttlY);
                     else
                         printf("<TD title='%s'></TD>\n",(ttlX ? ttlX : ttlY));
+                #endif///ndef MATRIX_SQUEEZE
                     //puts("<TD>&nbsp;</TD>");
                     }
                 }
