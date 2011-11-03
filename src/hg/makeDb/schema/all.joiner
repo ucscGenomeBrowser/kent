@@ -897,6 +897,7 @@ identifier agilentHumanProbeId external=agilent fuzzy
     $hg.agilentHrd1x1m.name
     $hg.agilentCghSnp2x400k.name
     $hg.agilentCgh2x400k.name
+    $hg.agilentCghSnpCancer4x180k.name
     $hg.agilentCghSnp4x180k.name
     $hg.agilentCgh4x180k.name
     $hg.agilentCgh8x60k.name
