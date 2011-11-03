@@ -6272,6 +6272,7 @@ fileName wgEncodeUwHistoneGm12864InputStdAlnRep1.bam,wgEncodeUwHistoneGm12864Inp
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum 7b9f3dd8bc08f47c25197c191c145a5c,6784ed910a4548c34b2e8eb959773281
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6297,6 +6298,7 @@ fileName wgEncodeUwHistoneGm12864InputStdRawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 6d8981a4d0c977ff31c8f50ff26b3f05
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6460,6 +6462,7 @@ fileName wgEncodeUwHistoneGm12865InputStdAlnRep1.bam,wgEncodeUwHistoneGm12865Inp
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum 2f328680d744eb80d163c7e82906c77b,84e3480584c0aea613c5d54d798250d3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6485,6 +6488,7 @@ fileName wgEncodeUwHistoneGm12865InputStdRawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 908d58fff8c1d729db8037d628899b4a
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6785,6 +6789,7 @@ fileName wgEncodeUwHistoneGm12875InputStdAlnRep1.bam,wgEncodeUwHistoneGm12875Inp
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
+md5sum f6b1900bb87a5608a6e002bb5e2d64b1,0feda859999d52a96c03c9aa290dddd3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -6810,6 +6815,7 @@ fileName wgEncodeUwHistoneGm12875InputStdRawRep1.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
+md5sum 4c82eb4298a677bdcdf855e2d14a3a5b
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -24473,6 +24479,7 @@ grant Stam
 lab UW
 labExpId DS16208
 labVersion Bowtie 0.12.7
+md5sum 91ab42d3d35a9faaebe5b187a6e82998
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24498,6 +24505,7 @@ fileName wgEncodeUwHistoneSkmcInputStdRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS16208
+md5sum d8ceb8d559de14e46a49b926eb1c1217
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -24524,6 +24532,7 @@ grant Stam
 lab UW
 labExpId DS16208
 labVersion WindowDensity-bin20-win+/-75
+md5sum 5eb5cbf4221a2575284ea6ff5c21abf8
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26779,4 +26788,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -15143829
+# MAGIC: -1755259958
