@@ -24,8 +24,8 @@ html lincRNAs
 
     track lincRNAsTranscripts
     superTrack lincRNAs pack
-    shortLabel lincRNAs Transcripts
-    longLabel lincRNAs and TUCP transcripts
+    shortLabel lincRNA Transcripts
+    longLabel lincRNA and TUCP transcripts
     #shadesOfBrown
     color 100,50,0
     altColor 175,150,128
@@ -38,8 +38,9 @@ html lincRNAs
     track lincRNAsAllCellTypeTopView
     superTrack lincRNAs dense
     compositeTrack on
-    shortLabel lincRNAs RNA-Seq Reads
-    longLabel lincRNAs RNA-Seq reads expression abundances
+    onlyVisibility dense
+    shortLabel lincRNA RNA-Seq Reads
+    longLabel lincRNA RNA-Seq reads expression abundances
     subGroup1 view Views lincRNAsRefseqExp=RefSeq_Expression_Ratio
     subGroup2 tissueType Tissue_Type adipose=Adipose adrenal=Adrenal brain=Brain brain_r=Brain_R breast=Breast colon=Colon foreskin_r=Foreskin_R heart=Heart hlf_r1=hLF_r1 hlf_r2=hLF_r2 kidney=Kidney liver=Liver lung=Lung lymphnode=LymphNode ovary=Ovary placenta_r=Placenta_R prostate=Prostate skeletalmuscle=SkeletalMuscle testes=Testes testes_r=Testes_R thyroid=Thyroid whitebloodcell=WhiteBloodCell
     sortOrder view=+ tissueType=+
@@ -53,7 +54,7 @@ html lincRNAs
 
     track lincRNAsAllCellType
     shortLabel lincRNAsAllCellType
-    longLabel lincRNAs RNA-Seq expression abundances
+    longLabel lincRNA RNA-Seq reads expression abundances
     view lincRNAsRefseqExp
     visibility dense
     parent lincRNAsAllCellTypeTopView
