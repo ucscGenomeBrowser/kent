@@ -233,16 +233,7 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    if (@errors) {
-        my $errorstr = "";
-        for my $line (@errors) {
-            $errorstr = $errorstr . "$line\n";
-        }
-        return $errorstr;
-    }
-    else {
-        return ();
-    }
+    return @errors;
 }
 
 sub validateDatasetName {
@@ -294,14 +285,8 @@ sub validateControlledVocabOrControl {
     my ($val, $type) = @_;
     if ($type eq 'antibody') {
         $type = 'Antibody';
-        if (defined($terms{$type}->{$val} || $terms{'control'}->{$val})) {
-            return ();
-        } else {
-            return ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
-        }
+        return defined($terms{$type}->{$val} || $terms{'control'}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
     }
-
-
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -1936,6 +1921,10 @@ if(!$opt_skipOutput && !$compositeExists) {
 
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
+
+# use pi.ra file to map pi/lab/institution/grant/project for metadata line
+#my $labRef = Encode::getLabs($configPath);
+#my %labs = %{$labRef};
 
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
