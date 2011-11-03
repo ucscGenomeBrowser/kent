@@ -233,7 +233,16 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    return @errors;
+    if (@errors) {
+        my $errorstr = "";
+        for my $line (@errors) {
+            $errorstr = $errorstr . "$line\n";
+        }
+        return $errorstr;
+    }
+    else {
+        return ();
+    }
 }
 
 sub validateDatasetName {
@@ -285,8 +294,14 @@ sub validateControlledVocabOrControl {
     my ($val, $type) = @_;
     if ($type eq 'antibody') {
         $type = 'Antibody';
-        return defined($terms{$type}->{$val} || $terms{'control'}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
+        if (defined($terms{$type}->{$val} || $terms{'control'}->{$val})) {
+            return ();
+        } else {
+            return ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
+        }
     }
+
+
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -1714,7 +1729,7 @@ while (@{$lines}) {
                 next;
             }
             my $cell = $line{cell};
-            my $sex = $line{sex};
+            my $sex = $terms{'Cell Line'}{$cell}{'sex'};
             my $mdbError = validateDdfField($field, $line{$field}, $view, $daf, $cell, $sex, \%terms);
             if ($mdbError) {
                 push(@metadataErrors, $mdbError);
@@ -1920,10 +1935,6 @@ if(!$opt_skipOutput && !$compositeExists) {
 
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
-
-# use pi.ra file to map pi/lab/institution/grant/project for metadata line
-#my $labRef = Encode::getLabs($configPath);
-#my %labs = %{$labRef};
 
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
