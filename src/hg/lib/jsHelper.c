@@ -376,10 +376,18 @@ cgiMakeOnClickSubmitButton(jsCheckAllOnClickHandler(idPrefix, state), name, valu
 }
 
 char *stripRegEx(char *str, char *regEx, int flags)
+{
 /* Strip out text matching regEx from str.
    flags is passed through to regcomp as the cflags argument.
    Returned string should be free'ed after use. */
+return replaceRegEx(str, NULL, regEx, flags);
+}
+
+char *replaceRegEx(char *str, char *replace, char *regEx, int flags)
 {
+/* Replace text matching regEx in str with replace string.
+   flags is passed through to regcomp as the cflags argument.
+   Returned string should be free'ed after use. */
 regex_t re;
 regmatch_t match[1];
 int err = regcomp(&re, regEx, flags);
@@ -391,6 +399,8 @@ size_t offset = 0;
 while(offset < len && !regexec(&re, str + offset, 1, match, 0))
     {
     dyStringAppendN(dy, str + offset, match[0].rm_so);
+    if(replace != NULL)
+        dyStringAppend(dy, replace);
     offset += match[0].rm_eo;
     }
 if(offset < len)
