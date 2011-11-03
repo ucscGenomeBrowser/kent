@@ -85,7 +85,7 @@ var ddcl = {
         // Find the active 'items' and original 'options'
         var id = $(control).attr('id').substring('ddcl-'.length);
         var dropWrapper = $('#ddcl-' + id + '-ddw');//.first();
-        var multiSelect = $('#' + id);
+        var multiSelect = $(document.getElementById(id));
         var allCheckboxes = $(dropWrapper).find("input.active");
         var selectOptions = multiSelect[0].options;
 

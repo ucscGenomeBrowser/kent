@@ -308,10 +308,9 @@ class CompositeTrack(object):
         if not self._trackPath.endswith('/'):
             self._trackPath = self._trackPath + '/'
         
-        self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
+        #self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
         self._trackDbDir = self._trackPath + self._organism + '/' + database + '/'
-        if not os.path.isfile(self._trackDbPath):
-            raise KeyError(self._trackDbPath + ' does not exist')
+        
         
         
         
@@ -329,4 +328,9 @@ class CompositeTrack(object):
         self._database = database
         self._name = compositeName        
         self._md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/md5sum.txt'
+        self._trackDbPath = self.currentTrackDb
+        if self._trackDbPath == None:
+            self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra' 
+        if not os.path.isfile(self._trackDbPath):
+            raise KeyError(self._trackDbPath + ' does not exist')
         
