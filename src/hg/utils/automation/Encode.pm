@@ -185,18 +185,6 @@ sub projectDir
     return "/cluster/data/encode/pipeline/encpipeline_$instance/$id";
 }
 
-sub getLabs
-{
-# file with lab/pi/project/grant -- used for reporting purposes
-# Captures conventions in reporting spreadsheet and pipeline metadata
-    my ($configPath) = @_;
-    my %labs = ();
-    if(-e "$configPath/$labConfigFile") {
-        %labs = RAFile::readRaFile("$configPath/$labConfigFile", "lab");
-    }
-    return \%labs;
-}
-
 sub getExpVars
 {
 # Returns hash indexed by the composite name in the experiments.ra file
@@ -278,7 +266,7 @@ sub getDaf
 # hash keys are RA style plus an additional TRACKS key which is a nested hash for
 # the track list at the end of the DAF file; e.g.:
 # (lab => 'Myers', TRACKS => {'Alignments => {}, Signal => {}})
-    my ($submitDirs, $fields) = @_;
+    my ($submitDir, $fields) = @_;
 
     # Verify required fields
     # are present and that the project is marked active.
