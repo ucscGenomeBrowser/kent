@@ -5009,8 +5009,8 @@ term Brg1
 tag BRG1
 type Antibody
 target BRG1
-antibodyDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex. Antibody Target: BRG1
-targetDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin.
+antibodyDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: BRG1  
+targetDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex. 
 orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId 16189
@@ -6134,9 +6134,9 @@ label ab8898 H3K9me3
 term H3K9me3_(9754)
 tag H3K09ME3b
 type Antibody
-antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibody was purified by protein A and peptide affinity chromatography. Antibody Target: H3K9me3
+antibodyDescription Rabbit polyclonal antibody was produced by immunizing animals with a synthetic peptide corresponding to the amino terminus of histone H3 in which Lys9 is tri-methylated. Antibody was purified by protein A and peptide affinity chromatography. Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 only when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methylated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, mono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20. Antibody Target: H3K9me3
 target H3K9me3
-targetDescription Tri-Methyl-Histone H3 (Lys9) Antibody detects endogenous levels of histone H3 only when tri-methylated on Lys9. The antibody does not cross-react with non-methylated, mono-methylated, or di-methylated Lys9. In addition, the antibody does not cross-react with non-methylated, mono-methylated, di-methylated or tri-methylated histone H3 Lys4, Lys27, Lys36 or histone H4 Lys20.
+targetDescription histone cluster 2, H3c, HIST2H3C
 vendorName Cell Signaling
 vendorId 9754
 orderUrl http://www.cellsignal.com/products/9754.html
@@ -6298,8 +6298,8 @@ term HA-E2F1
 tag HAE2F1
 type Antibody
 target HA-E2F1
-targetDescription The HA-E2F1 protein is a derivative of E2F1, a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses. The E2F proteins contain several evolutionary conserved domains found in most members of the family. These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. This version of E2F1 includes an N terminal HA tag and a modified ER ligand binding domain to allow regulated translocation to the nucleus.antibodyDescription Mouse monoclonal - HA.11 clone 16B12 is a mouse monoclonal antibody raised against the twelve amino acids peptide CYPYDVPDYASL. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus.
-antibodyDescription Monoclonal antibody HA.11 was raised against the twelve amino acid peptide CYPYDVPDYASL. This second-generation HA antibody is an excellent substitute for the 12CA5 monoclonal antibody. The HA.11 antibody recognizes the influenza hemagglutinin epitope (YPYDVPDYA) which has been used extensively as a general epitope tag in expression vectors. The extreme specificity of the antibody allows unambiguous identification and quantitative analysis of the tagged protein. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus. Antibody Target: HA-E2F1
+targetDescription The HA-E2F1 protein is a derivative of E2F1, a member of the E2F family of transcription factors. The E2F family plays a crucial role in the control of cell cycle and action of tumor suppressor proteins and is also a target of the transforming proteins of small DNA tumor viruses. The E2F proteins contain several evolutionary conserved domains found in most members of the family. These domains include a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. This version of E2F1 includes an N terminal HA tag and a modified ER ligand binding domain to allow regulated translocation to the nucleus.
+antibodyDescription Mouse Monoclonal antibody HA.11 clone 16B12 was raised against the twelve amino acid peptide CYPYDVPDYASL. This second-generation HA antibody is an excellent substitute for the 12CA5 monoclonal antibody. The HA.11 antibody recognizes the influenza hemagglutinin epitope (YPYDVPDYA) which has been used extensively as a general epitope tag in expression vectors. The extreme specificity of the antibody allows unambiguous identification and quantitative analysis of the tagged protein. The HA.11 antibody recognizes HA epitopes located in the middle of protein sequences as well as at the N- or C-terminus. Antibody Target: HA-E2F1
 orderUrl https://store.crpinc.com/datasheet.aspx?catalogno=MMS-101P
 vendorName Covance
 vendorId MMS-101P
@@ -6471,8 +6471,8 @@ term Ini1
 tag INI1
 type Antibody
 target INI1
-antibodyDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex. Antibody Target: INI1
-targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin.
+antibodyDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1 
+targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex. 
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-17796
@@ -8402,8 +8402,8 @@ term hnRNPM
 tag HNRNPM
 type Antibody
 target hnRNPM
-targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
-antibodyDescription Anti-hnRNP M1-M4, clone 1D8. Antibody Target: hnRNPM
+targetDescription Heterogeneous nuclear ribonucleoprotein M
+antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM 
 vendorName Millipore
 vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620

@@ -134,11 +134,7 @@ sub doTime
 sub dieTellWrangler
 {
     my ($msg) = @_;
-    my $email;
-    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-        $email = $grants->{$daf->{grant}}{wranglerEmail};
-    }
-    $msg .= "Please contact your wrangler" . (defined($email) ? " at $email" : "") . "\n";
+    $msg .= "Please contact the encode staff at encode-staff\@soe.ucsc.edu\n";
     die $msg;
 }
 
@@ -1163,8 +1159,6 @@ sub isDownloadOnly {
     } else {
         return 0;
     }
-    #return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative'
-    #    or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
 
 }
 
@@ -1517,33 +1511,24 @@ if(!$opt_validateDaf) {
 }
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
-$grants = Encode::getGrants($configPath);
 $fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
-        Encode::parseDaf($submitDir, $grants, $fields);
+        Encode::parseDaf($submitDir, $fields);
     } else {
-        Encode::getDaf($submitDir, $grants, $fields);
+        Encode::getDaf($submitDir, $fields);
     }
     print STDERR "DAF is valid\n";
     exit(0);
 }
 
-$daf = Encode::getDaf($submitDir, $grants, $fields);
+$daf = Encode::getDaf($submitDir, $fields);
 $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
 
-if($opt_sendEmail) {
-    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-        my $email = $grants->{$daf->{grant}}{wranglerEmail};
-        if($email) {
-            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab has been submitted for validation." $email`;
-        }
-    }
-}
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
@@ -1937,8 +1922,9 @@ my $priority = $db->quickQuery("select max(priority) from trackDb where settings
 $ddfLineNumber = 1;
 
 # use pi.ra file to map pi/lab/institution/grant/project for metadata line
-my $labRef = Encode::getLabs($configPath);
-my %labs = %{$labRef};
+#my $labRef = Encode::getLabs($configPath);
+#my %labs = %{$labRef};
+
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;

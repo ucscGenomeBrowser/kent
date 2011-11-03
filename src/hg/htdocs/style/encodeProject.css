@@ -28,6 +28,8 @@ body {
      normally displayed to right of header */
 
 #spinner {
+    position: absolute;
+    left: 30%;
     height: 35px;
 }
 
@@ -132,3 +134,4 @@ dd {
 .floatHeader {
     opacity: 1;
 }
+
