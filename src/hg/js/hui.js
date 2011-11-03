@@ -1205,46 +1205,67 @@ var superT = {
 
 var mat = { // Beginings of matrix object
 
+    matrix: undefined,
     dimensions: 0,
+    cellInFocus: undefined,
 
-    cellHover: function (obj,on)
+    cellHover: function (cell,on)
     {
-        var classList = $( obj ).attr("class").split(" ");
+        if (on) {
+            if (mat.cellInFocus != undefined)
+                mat.clearGhostHilites();  // Necessary to clear ghosts
+            mat.cellInFocus = cell;
+        } else
+            mat.cellInFocus = undefined;
+
+        var classList = $( cell ).attr("class").split(" ");
         classList = aryRemove(classList,["matCell"]);
+        var color = (on ? "#FCECC0" : "");// "#FFF9D2");  setting to "" removes the hilite
         for (var ix=0;ix < classList.length;ix++) {
             if (classList[ix] == 'all')
                 continue;
-            var cells = $(".matCell."+classList[ix]);
-            if (on)
-                $(cells).css({backgroundColor:"#FCECC0"});
-            else
-                $(cells).css({backgroundColor:"#FFF9D2"});
+            if (ix == 0) {
+                $(".matCell."+classList[ix]).css({backgroundColor: color });
+            } else {
+                $(cell).closest('tr').css({backgroundColor: color }) // faster?
+            }
         }
-        if (on && obj.title.length == 0) {
+        if (on && cell.title.length == 0) {
             for (var ix=0;ix < classList.length;ix++) {
                 if (classList[ix] == 'all') { // on a label already
-                    obj.title = "";
+                    cell.title = "";
                     break;
                 }
-                if (obj.title.length > 0)
-                    obj.title += " and ";
-                obj.title += $("th."+classList[ix]).first().text();
+                if (cell.title.length > 0)
+                    cell.title += " and ";
+                cell.title += $("th."+classList[ix]).first().text();
             }
         }
     },
 
+    clearGhostHilites: function ()
+    {
+        $('.matCell').css({backgroundColor:""});
+        $(mat.matrix).find('tr').css({backgroundColor:""});
+    },
+
     init: function ()
     {
-        var cells = $('td.matCell');
-        if (cells != undefined && cells.length > 0) {
-            var classList = $( cells[0] ).attr("class").split(" ");
-            classList = aryRemove(classList,["matCell"]);
-            mat.dimensions = classList.length;
-            if (mat.dimensions > 1) { // No need unless this is a 2D matrix
-                $('.matCell').hover(
-                    function (e) {mat.cellHover(this,true)},
-                    function (e) {mat.cellHover(this,false)}
-                );
+        mat.matrix = normed($('table.matrix'));
+        if (mat.matrix != undefined) {
+            var cells = $('td.matCell');
+            if (cells != undefined && cells.length > 0) {
+                var classList = $( cells[0] ).attr("class").split(" ");
+                classList = aryRemove(classList,["matCell"]);
+                mat.dimensions = classList.length;
+                if (mat.dimensions > 1) { // No need unless this is a 2D matrix
+                    $('.matCell').hover(
+                        function (e) {mat.cellHover(this,true)},
+                        function (e) {mat.cellHover(this,false)}
+                    );
+                    $(mat.matrix).blur(mat.clearGhostHilites());
+                    $(window).bind('focus',function (e) {mat.clearGhostHilites();}); // blur doesn't work because the screen isn't repainted
+                }
             }
         }
     }

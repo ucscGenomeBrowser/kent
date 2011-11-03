@@ -6368,7 +6368,11 @@ static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb,int squeeze, 
 members_t *dimensionX = membersForAll->members[dimX];
 members_t *dimensionY = membersForAll->members[dimY];
 
+#ifdef MATRIX_SQUEEZE
+printf("<TR ALIGN=CENTER valign=%s>\n",top?"BOTTOM":"TOP");
+#else///ifndef MATRIX_SQUEEZE
 printf("<TR ALIGN=CENTER BGCOLOR='%s' valign=%s>\n",COLOR_BG_ALTDEFAULT,top?"BOTTOM":"TOP");
+#endif///ndef MATRIX_SQUEEZE
 if(dimensionX && dimensionY)
     {
     printf("<TH ALIGN=LEFT valign=%s>",top?"TOP":"BOTTOM");
@@ -6457,7 +6461,11 @@ members_t *dimensionY = membersForAll->members[dimY];
 if(dimensionX && dimensionY)
     {
     int ixX,cntX=0;
+    #ifdef MATRIX_SQUEEZE
+    printf("<TR ALIGN=CENTER><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",dimensionY->groupTitle);
+    #else///ifndef MATRIX_SQUEEZE
     printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->groupTitle);
+    #endif///ndef MATRIX_SQUEEZE
     for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
         {
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
@@ -6839,7 +6847,7 @@ if(dimensionX == NULL && dimensionY == NULL) // Could have been just filterCompo
     return FALSE;
 
 #ifdef MATRIX_SQUEEZE
-printf("<TABLE class='greenBox' cellspacing=0 style='background-color:%s;'>\n",COLOR_BG_ALTDEFAULT);
+printf("<TABLE class='greenBox matrix' cellspacing=0 style='background-color:%s;'>\n",COLOR_BG_ALTDEFAULT);
 #else///ifndef MATRIX_SQUEEZE
 printf("<TABLE class='greenBox' style='background-color:%s;'>\n",COLOR_BG_DEFAULT);
 #endif///ndef MATRIX_SQUEEZE
@@ -6855,7 +6863,11 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
         {
         cntY++;
         assert(!dimensionY || ixY < dimensionY->count);
+    #ifdef MATRIX_SQUEEZE
+        printf("<TR ALIGN=CENTER>");
+    #else///ifndef MATRIX_SQUEEZE
         printf("<TR ALIGN=CENTER BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
+    #endif///ndef MATRIX_SQUEEZE
 
         matrixYheadings(db,parentTdb, membersForAll,ixY,TRUE);
 
