@@ -4775,7 +4775,7 @@ lab Farnham
 targetId GeneCard:TFAP2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
 validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
-label AP-2alpha sc-8975
+label AP-2alpha (sc-8975)
 
 term AP-2gamma
 tag AP2GAMMA
@@ -4790,7 +4790,7 @@ lab Farnham
 targetId GeneCard:GTFAP2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
 validation AP-2alpha_(siRNA,ChIP):human_AP-2alpha_validation_Farnham.pdf
-label AP-2gamma sc-8977
+label AP-2gamma (sc-8977)
 
 term ATF2_(SC-81188)
 tag ATF2SC81188
@@ -4806,7 +4806,7 @@ lots A1111
 targetId GeneCard:ATF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
 validation ATF2_(SC-81188)(WesternBlot,IP-MassSpec):human_ATF2_SC-81188_sc-81188_validation_Myers.pdf
-label ATF2 sc-81188
+label ATF2 (sc-81188)
 
 term ATF3
 tag ATF3
@@ -4822,7 +4822,7 @@ lab Myers
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
 validation ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
-label ATF3 sc-188
+label ATF3 (sc-188)
 
 term BAF155
 tag BAF155
@@ -4837,7 +4837,7 @@ lab Snyder
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
 validation missing
-label BAF155 sc-10756
+label BAF155 (sc-10756)
 
 term BAF170
 tag BAF170
@@ -4852,7 +4852,7 @@ lab Snyder
 targetId GeneCard:SMARCC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
 validation missing
-label BAF170 sc-10757
+label BAF170 (sc-10757)
 
 term BATF
 tag BATF
@@ -4867,7 +4867,7 @@ lab Myers
 targetId GeneCard:BATF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BATF
 validation missing
-label BATF sc-100974
+label BATF (sc-100974)
 
 term BCL11A
 tag BCL11A
@@ -4882,7 +4882,7 @@ lab Myers
 targetId GeneCard:BCL11A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
 validation missing
-label BCL11A ab19489
+label BCL11A (ab19489)
 
 term BCL3
 tag BCL3
@@ -4897,7 +4897,7 @@ lab Myers
 targetId GeneCard:BCL3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
 validation BCL3(Immunoblot):human_BCl3_C-14_validation_Myers.pdf
-label BCL3 sc-185
+label BCL3 (sc-185)
 
 term BCLAF1_(SC-101388)
 tag BCLAF1
@@ -4912,7 +4912,7 @@ lab Myers
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
 validation BCLAF1(Immunoblot):human_BCLAF1_SC101388_validation_Myers.pdf
-label BCLAF1 sc-101388
+label BCLAF1 (sc-101388)
 
 term BDP1
 tag BDP1
@@ -4927,7 +4927,7 @@ lab Struhl
 targetId GeneCard:BDP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
 validation missing
-label BDP1 2663
+label BDP1 (2663)
 
 term BHLHE40
 tag BHLHE40
@@ -4942,7 +4942,7 @@ lab Myers
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf
-label BHLHE40 sc-101023
+label BHLHE40 (sc-101023)
 
 term BHLHE40_(NB100-1800)
 tag BHLHE40c
@@ -4958,7 +4958,7 @@ lots N/A
 targetId GeneCards:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation missing
-label BHLHE40 NB100-1800
+label BHLHE40 (NB100-1800)
 
 term BRCA1_(A300-000A)
 tag BRCA1
@@ -4973,7 +4973,7 @@ lab Snyder
 targetId GeneCard:BRCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1
 validation missing
-label BRCA1 A300-000A
+label BRCA1 (A300-000A)
 
 term BRF1
 tag BRF1
@@ -4988,7 +4988,7 @@ lab Struhl
 targetId GeneCard:BRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
 validation missing
-label BRF1 128
+label BRF1 (128)
 
 term BRF2
 tag BRF2
@@ -5003,7 +5003,7 @@ lab Struhl
 targetId GeneCard:BRF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2
 validation missing
-label BRF2 4295
+label BRF2 (4295)
 
 term Brg1
 tag BRG1
@@ -5018,7 +5018,7 @@ lab Snyder
 targetId GeneCard:SMARCA4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation missing
-label BRG1 16189
+label BRG1 (16189)
 
 term BTF3_(SC-166093)
 tag BTF3SC166093
@@ -5034,7 +5034,7 @@ lots G2209
 targetId GeneCard:BTF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BTF3
 validation BTF3_(SC-166093):human_BTF3_SC-166093_validation_Myers.pdf
-label BTF3 sc-166093
+label BTF3 (sc-166093)
 
 term c-Fos
 tag CFOS
@@ -5049,7 +5049,7 @@ lab Snyder
 targetId GeneCard:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation missing
-label c-Fos sc-7202
+label c-Fos (sc-7202)
 
 term c-Jun
 tag CJUN
@@ -5064,7 +5064,7 @@ lab Snyder
 targetId GeneCard:JUN
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUN
 validation missing
-label c-Jun sc-1694
+label c-Jun (sc-1694)
 
 term c-Myb_(SC-7874)
 tag CMYB
@@ -5079,7 +5079,7 @@ lab Snyder
 targetId GeneCard:MYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYB
 validation missing
-label c-Myb sc-7874
+label c-Myb (sc-7874)
 
 term c-Myc
 tag CMYC
@@ -5095,7 +5095,7 @@ lots H0107
 targetId GeneCard:MYC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
 validation missing
-label c-Myc sc-764
+label c-Myc (sc-764)
 
 term CCNT2
 tag CCNT2
@@ -5111,7 +5111,7 @@ lots H2306
 targetId GeneCard:CCNT2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CCNT2
 validation missing
-label CCNT2 sc-12419
+label CCNT2 (sc-12419)
 
 term CEBPB
 tag CEBPB
@@ -5127,7 +5127,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 lab Snyder, Myers
 lots I1010 (Myers)
 validation missing
-label CEBPB sc-150
+label CEBPB (sc-150)
 
 #This antibody had the wrong vendorId SC-49548, it should be SC-150.
 term CEBPB_(SC-150)
@@ -5144,7 +5144,7 @@ lots I1010
 targetId GeneCard:CEBPB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPB
 validation CEBPB_(SC-150)(Western_blot,IP-Mass_Spec):human_CEBPB_SC-150_validation_Myers.pdf
-label CEBPB sc-150
+label CEBPB (sc-150)
 
 term CEBPD_(SC-636)
 tag CEBPDSC636
@@ -5160,7 +5160,7 @@ lots C1010
 targetId GeneCard:CEBPD
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CEBPD
 validation CEBPD_(SC-636)(Western_blot,IP-Mass_Spec):human_CEBPD_SC-636_validation_Myers.pdf
-label CEBPD sc-636
+label CEBPD (sc-636)
 
 term CHD1_(A301-218A)
 tag CHD1A301218A
@@ -5176,7 +5176,7 @@ lots A301-218A-1
 targetId GeneCards:CHD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD1
 validation CHD1_(A301-218A)(ChIP-String,ChIP-seq):human_CHD1_validation_Bernstein.pdf
-label CHD1 A301-218A
+label CHD1 (A301-218A)
 
 term CHD2_(AB68301)
 tag CHD2
@@ -5191,7 +5191,7 @@ lab Snyder
 targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation missing
-label CHD2 ab68301
+label CHD2 (ab68301)
 
 term CREB1_(SC-240)
 tag CREB1SC240
@@ -5207,7 +5207,7 @@ lots C2306
 targetId GeneCard:CREB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CREB1
 validation CREB1_(SC-240)(Western_blot,IP-Mass_Spec):human_CREB1_SC-240_validation_Myers.pdf
-label CREB1 sc-240
+label CREB1 (sc-240)
 
 term CTCF
 tag CTCF
@@ -5223,7 +5223,7 @@ lots 1350637, DAM1472197
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
-label CTCF 07-729
+label CTCF (07-729)
 
 term CTCF_(SC-15914)
 tag CTCFb
@@ -5238,7 +5238,7 @@ lab Snyder
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
-label CTCF sc-15914
+label CTCF (sc-15914)
 
 term CTCF_(SC-5916)
 tag CTCFc
@@ -5254,7 +5254,7 @@ lots K0902
 targetId GeneCards:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
-label CTCF sc-5916
+label CTCF (sc-5916)
 
 term CTCFL_(SC-98982)
 tag CTCFL
@@ -5270,7 +5270,7 @@ lots E0109
 targetId GeneCards:CTCFL
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCFL
 validation missing
-label CTCFL sc-98982
+label CTCFL (sc-98982)
 
 ##This does not appear in metaDb
 term CtBP1
@@ -5286,7 +5286,7 @@ lab Farnham
 targetId GeneCard:CTBP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1
 validation missing
-label CtBP1 612042
+label CtBP1 (612042)
 
 ##This does not appear in metaDb
 term CtBP2
@@ -5302,7 +5302,7 @@ lab Farnham
 targetId GeneCard:CTBP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2
 validation CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
-label CtBP2 612044
+label CtBP2 (612044)
 
 term E2F1
 tag E2F1
@@ -5317,7 +5317,7 @@ lab Farnham
 targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
-label E2F1 05-379
+label E2F1 (05-379)
 
 term E2F4
 tag E2F4
@@ -5332,7 +5332,7 @@ lab Farnham
 targetId GeneCard:E2F4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F4
 validation E2F4(Immunoprecipitation-Western_blot,ChIP):human_E2F4_validation_Farnham.pdf
-label E2F4 sc-866
+label E2F4 (sc-866)
 
 term E2F6
 tag E2F6
@@ -5348,7 +5348,7 @@ lots D1206 (Myers)
 targetId GeneCard:E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf E2F6_(Myers)(WesternBlot,IP-MassSpec):human_E2F6_validation_Myers.pdf
-label E2F6 sc-22823
+label E2F6 (sc-22823)
 
 term EBF1_(SC-137065)
 tag EBF1
@@ -5364,7 +5364,7 @@ lots J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_(SC-137065)(Immunoprecipitation-WesternBlotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
-label EBF1 sc-137065
+label EBF1 (sc-137065)
 
 term eGFP-FOS
 tag FOSe
@@ -5476,7 +5476,7 @@ lots L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
 validation ELF1_(SC-631)(WesternBlot,IP-MassSpec):human_ELF1_SC-631_validation_Myers.pdf
-label  ELF1 sc-631
+label  ELF1 (sc-631)
 
 term ELK4
 tag ELK4
@@ -5491,7 +5491,7 @@ lab Farnham
 targetId GeneCard:ELK4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
 validation ELK4(Missing)(WesternBlot,ChIPseq):human_ELK4_validation_Farnham.pdf
-label ELK4 sc-13030
+label ELK4 (sc-13030)
 
 term ERalpha_a
 tag ERAA
@@ -5507,7 +5507,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
 validation ERalpha_a(Immunoprecipitation-WesternBlot,MassSpect):human_ERalpha_a_validation_Myers.pdf
-label ERalpha_a sc-543
+label ERalpha_a (sc-543)
 
 ##This does not appear in metaDb
 term ERalpha_b
@@ -5523,7 +5523,7 @@ lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation missing
-label ERalpha_b MAb-009-050
+label ERalpha_b (MAb-009-050)
 
 term Egr-1
 tag EGR1
@@ -5538,7 +5538,7 @@ lab Farnham
 targetId GeneCard:EGR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1
 validation Egr-1(Immunoblot):human_Egr-1_588_validation_Myers.pdf
-label EGR1 sc-110
+label EGR1 (sc-110)
 
 term ERRA
 tag ERRA
@@ -5553,7 +5553,7 @@ targetId GeneCard:ESRRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESRRA
 lab Snyder
 validation missing
-label ERRA sc-66882
+label ERRA (sc-66882)
 
 ##This does not appear in metaDb
 term ETS1
@@ -5570,7 +5570,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ETS1
 lots A1608
 lab Myers
 validation ETS1(Immunoprecipitation-WesternBlot,MassSpec):human_ETS1_validation_Myers.pdf
-label ETS1 sc-350
+label ETS1 (sc-350)
 
 term EZH2_(39875)
 tag EZH239875
@@ -5586,7 +5586,7 @@ lots 27210001
 targetId GeneCards:EZH2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EZH2
 validation EZH2_(39875)(ChIP-String,ChIP-seq):human_EZH2_validation_Bernstein.pdf
-label EZH2 39875
+label EZH2 (39875)
 
 term  FOSL1_(SC-183)
 tag  FOSL1
@@ -5602,7 +5602,7 @@ lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
 validation FOSL1_(SC-183)(Western_blot,IP-MassSpec):human_FOSL1-SC183_validation_Myers.pdf
-label  FOSL1 sc-183
+label  FOSL1 (sc-183)
 
 term FOSL1_(sc-605)
 tag FOSL1SC605
@@ -5618,7 +5618,7 @@ lots G0109
 targetId Genecard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
 validation FOSL1_(sc-605)(missing):human_FOSL1-SC605_validation_Wold.pdf
-label FOSL1 sc-605
+label FOSL1 (sc-605)
 
 term FOSL2
 tag FOSL2
@@ -5633,7 +5633,7 @@ lab Myers
 targetId GeneCard:FOSL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
 validation FOSL2(Immunoblot):human_FOSL2_Q-20_validation_Myers.pdf
-label FOSL2 sc-604
+label FOSL2 (sc-604)
 
 term FOXA1_(SC-6553)
 tag FOXA1b
@@ -5648,7 +5648,7 @@ lab Myers
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
-label FOXA1 sc-6553
+label FOXA1 (sc-6553)
 
 term  FOXA1_(SC-101058)
 tag  FOXA1
@@ -5664,7 +5664,7 @@ lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
-label  FOXA1 sc-101058
+label  FOXA1 (sc-101058)
 
 term FOXA2_(SC-6554)
 tag FOXA2
@@ -5680,7 +5680,7 @@ lots L1409
 targetId GeneCards:FOXA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA2
 validation missing
-label FOXA2 sc-6554
+label FOXA2 (sc-6554)
 
 term FOXP2
 tag FOXP2
@@ -5696,7 +5696,7 @@ lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
 validation FOXP2(WesternBlot,siRNA):human_FOXP2_validation_Myers.pdf
-label FOXP2 ab16046
+label FOXP2 (ab16046)
 
 term GABP
 tag GABP
@@ -5712,7 +5712,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPB1
 lab Myers
 lots F1804
 validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP_validation_Myers.pdf
-label GABP sc-28312
+label GABP (sc-28312)
 
 term GATA-1
 tag GATA1
@@ -5727,7 +5727,7 @@ targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
 validation GATA-1_(WesternBlot,ChIP):human_GATA-1_validation_Farnham.pdf
-label GATA1 GATA-1
+label GATA1 (GATA-1)
 
 term GATA1_(SC-265)
 tag GATA1a
@@ -5742,7 +5742,7 @@ targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
 validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
-label GATA1  sc-265
+label GATA1 ( sc-265)
 
 term  GATA1_(SC-266)
 tag  GATA1b
@@ -5758,7 +5758,7 @@ lab Snyder
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 validation GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf
-label  GATA1 sc-266
+label  GATA1 (sc-266)
 
 
 term GATA-2
@@ -5768,13 +5768,13 @@ target GATA2
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal. Antibody Target: GATA2
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId Missing
+vendorId   ;
 orderUrl http://molpharm.wisc.edu/people/faculty/bresnick/bresnick.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
-label GATA2
+label GATA2 (  ;)
 
 term GATA2_(SC-267)
 tag GATA2b
@@ -5790,7 +5790,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
 lots E2708
 validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
-label GATA2  sc-267
+label GATA2 ( sc-267)
 
 term GATA2_(SC-9008)
 tag GATA2SC9008
@@ -5806,7 +5806,7 @@ lots J2108
 targetId GeneCard: GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation GATA2_(SC-9008)(Western_blot):human_GATA2_SC-9008_validation_Hardison.pdf
-label GATA2 sc-9008
+label GATA2 (sc-9008)
 
 term  GATA3_(SC-268)
 tag  GATA3
@@ -5822,7 +5822,7 @@ lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
 validation GATA3_SC-268(missing):human_GATA3-SC-268_validation_Farnham.pdf
-label  GATA3 sc-268
+label  GATA3 (sc-268)
 
 term GATA3_(SC-269)
 tag GATA3SC269
@@ -5838,7 +5838,7 @@ lots A1404
 targetId Genecard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
 validation GATA3_SC-269_(siRNA,ChIP):human_GATA3_SC-269_validation_Farnham.pdf
-label GATA3 sc-269
+label GATA3 (sc-269)
 
 term GCN5
 tag GCN5
@@ -5870,7 +5870,7 @@ lots A2508, E1908
 targetId GeneCard:NR3C2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
 validation GR(Immunoblot):human_GR_M-20_validation_Myers.pdf
-label GR sc-1004
+label GR (sc-1004)
 
 term GRp20
 tag GRP20
@@ -5885,7 +5885,7 @@ lab Snyder
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation missing
-label GRp20 sc-1002
+label GRp20 (sc-1002)
 
 term GTF2B
 tag GTF2B
@@ -5900,7 +5900,7 @@ lab Struhl
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation missing
-label GTF2B sc-225
+label GTF2B (sc-225)
 
 term GTF2F1_(AB28179)
 tag GTF2F1
@@ -5915,7 +5915,7 @@ lab Snyder
 targetId GeneCard:GTF2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2F1
 validation GTF2F1_(AB28179)(Western_blot,Immunoprecipitation):human_GTF2F1_AB28179_validation_Snyder.pdf
-label GTF2F1 ab28179
+label GTF2F1 (ab28179)
 
 ##This does not appear in metaDb
 term H2A.Z
@@ -5932,7 +5932,7 @@ lots DAM1540736
 targetId GeneCard:H2AFZ
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation missing
-label H2AZ 07-594
+label H2AZ (07-594)
 
 term H3ac_(06-599)
 tag H3AC06599
@@ -5948,7 +5948,7 @@ lots missing
 targetId Genecard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
-label H3ac 06-599
+label H3ac (06-599)
 
 term H3K4me1
 tag H3K04ME1
@@ -5964,7 +5964,7 @@ lots 383111
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf
-label H3K4me1 ab8895
+label H3K4me1 (ab8895)
 
 term H3K4me1_(pAb-037-050)
 tag H3K04ME1b
@@ -5980,7 +5980,7 @@ lots Lot# A399-002341P
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me1_(pAb-037-050)(WesternBlot,DotBlot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
-label H3K4me1 pAb-037-050
+label H3K4me1 (pAb-037-050)
 
 term H3K4me2
 tag H3K04ME2
@@ -5996,7 +5996,7 @@ lots 56293
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me2(Dot_blot):human_H3K4me2_validation_Bernstein.pdf
-label H3K4me2 ab7766
+label H3K4me2 (ab7766)
 
 term H3K4me2_(ab32356)
 tag AB32356
@@ -6012,7 +6012,7 @@ lots 870402
 targetId Genecard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
-label H3K4me2 ab32356
+label H3K4me2 (ab32356)
 
 term H3K4me3
 tag H3K04ME3
@@ -6031,7 +6031,7 @@ lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf
-label H3K4me3 07-473
+label H3K4me3 (07-473)
 
 ##This does not appear in metaDb 5/23/11
 term H3K4me3B
@@ -6049,7 +6049,7 @@ lots 1,2
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me3B(Western_blot,Competitor_peptides):human_H3K4me3B_validation_Farnham.pdf
-label H3K4me3 9751S
+label H3K4me3 (9751S)
 
 term H3K9ac
 tag H3K09AC
@@ -6065,7 +6065,7 @@ lots 455103
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
-label H3K9ac ab4441
+label H3K9ac (ab4441)
 
 term H3K9acB
 tag H3K09ACb
@@ -6082,7 +6082,7 @@ lab Farnham
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
-label H3K9ac 07-352
+label H3K9ac (07-352)
 
 term H3K9Ac_(9649)
 tag H3K09ACc
@@ -6098,7 +6098,7 @@ lots 1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9Ac_(9649)(WesternBlot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
-label H3K9Ac 9649
+label H3K9Ac (9649)
 
 term H3K9me1
 tag H3K09ME1
@@ -6114,7 +6114,7 @@ lots 104560
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
-label H3K9me1 ab8896
+label H3K9me1 (ab8896)
 
 term H3K9me3
 tag H3K09ME3
@@ -6129,7 +6129,7 @@ lab Farnham
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
-label H3K9me3 ab8898
+label H3K9me3 (ab8898)
 
 term H3K9me3_(9754)
 tag H3K09ME3b
@@ -6145,7 +6145,7 @@ lots Lot#1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K9me3_(9754)(WesternBlot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
-label H3K9me3 9754
+label H3K9me3 (9754)
 
 term H3K27ac
 tag H3K27AC
@@ -6161,7 +6161,7 @@ lots 31456
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K27ac(Dot_blot):human_H3K27ac_validation_Bernstein.pdf
-label H3K27ac ab4729
+label H3K27ac (ab4729)
 
 term H3K27me3
 tag H3K27ME3
@@ -6177,7 +6177,7 @@ lots DAM1387952
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf
-label H3K27me3 07-449
+label H3K27me3 (07-449)
 
 ##This does not appear in metaDb
 term H3K27me3B
@@ -6195,7 +6195,7 @@ lots 1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K27me3B(Western_blot,Peptide_ELISA):human_H3K27me3B_validation_Farnham.pdf
-label H3K27me3 9733S
+label H3K27me3 (9733S)
 
 term H3K36me3
 tag H3K36ME3
@@ -6211,7 +6211,7 @@ lots 136353
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf
-label H3K36me3 ab9050
+label H3K36me3 (ab9050)
 
 term H3K36me3B
 tag H3K36ME3b
@@ -6228,7 +6228,7 @@ lab Farnham
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K36me3B(Western_blot,Peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
-label H3K36me3 9763S
+label H3K36me3 (9763S)
 
 term H3K79me2
 tag H3K79ME2
@@ -6244,7 +6244,7 @@ lots 177/0100800
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
-label H3K79me2 39143
+label H3K79me2 (39143)
 
 term H3K79me2_(ab3594)
 tag AB3594
@@ -6260,7 +6260,7 @@ lots 836403
 targetId Genecard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
-label H3K79me2 ab3594
+label H3K79me2 (ab3594)
 
 term H3K79me3_(ab2621)
 tag AB2621
@@ -6276,7 +6276,7 @@ lots 805949
 targetId Genecard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
-label H3K79me3 ab2621
+label H3K79me3 (ab2621)
 
 term H4K20me1
 tag H4K20ME1
@@ -6292,7 +6292,7 @@ lots 104513
 targetId GeneCard:HIST2H4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H4A
 validation H4K20me1(Dot_blot):human_H4K20me1_validation_Bernstein.pdf
-label H4K20me1 ab9051
+label H4K20me1 (ab9051)
 
 term HA-E2F1
 tag HAE2F1
@@ -6307,7 +6307,7 @@ lab Farnham
 targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
-label HA-E2F1 MMS-101P
+label HA-E2F1 (MMS-101P)
 
 term HDAC1_(SC-6298)
 tag HDAC1SC6298
@@ -6323,7 +6323,7 @@ lots H0509
 targetId GeneCards:HDAC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC1
 validation HDAC1_(SC-6298)(ChIP-String,ChIP-seq):human_HDAC1_validation_Bernstein.pdf
-label HDAC1 sc-6298
+label HDAC1 (sc-6298)
 
 term HDAC2_(A300-705A)
 tag HDAC2A300705A
@@ -6339,7 +6339,7 @@ lots A300-705A-1
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
 validation HDAC2_(A300-705A)(ChIP-String,ChIP-seq):human_HDAC2_validation_Bernstein.pdf
-label HDAC2 A300-705A
+label HDAC2 (A300-705A)
 
 term  HDAC2_(SC-6296)
 tag  HDAC2SC6296
@@ -6355,7 +6355,7 @@ lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
 validation HDAC2_(SC-6296)(Immunoprecipitation-WesternBlot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
-label  HDAC2 sc-6296
+label  HDAC2 (sc-6296)
 
 term HEY1
 tag HEY1
@@ -6370,7 +6370,7 @@ lab Myers
 targetId GeneCard:HEY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
 validation missing
-label HEY1 sc-16424
+label HEY1 (sc-16424)
 
 term HMGN3
 tag HMGN3
@@ -6387,7 +6387,7 @@ lab Struhl
 targetId GeneCard:HMGN3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HMGN3
 validation missing
-label HMGN3 NB100-61076
+label HMGN3 (NB100-61076)
 
 term HNF4A
 tag HNF4A
@@ -6402,7 +6402,7 @@ lab Snyder
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation missing
-label HNF4A sc-6556
+label HNF4A (sc-6556)
 
 term HNF4A_(SC-8987)
 tag HNF4ASC8987
@@ -6418,7 +6418,7 @@ lots G1309
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation HNF4A_(SC-8987)(Immunoprecipitation-WesternBlot,MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
-label HNF4A sc-8987
+label HNF4A (sc-8987)
 
 term HNF4G_(SC-6558)
 tag HNF4G
@@ -6434,7 +6434,7 @@ lots I299
 targetId GeneCards:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation HNF4G_(SC-6558)(ChIP,MassSpec):human_HNF4G_SC-6558_validation_Myers.pdf
-label HNF4G sc-6558
+label HNF4G (sc-6558)
 
 term HSF1
 tag HSF1
@@ -6449,7 +6449,7 @@ lab Snyder
 targetId GeneCard:HSF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation missing
-label HSF1 sc-9144
+label HSF1 (sc-9144)
 
 term IKZF1_(IkN)_(UCLA)
 tag IKZF1IKNUCLA
@@ -6465,7 +6465,7 @@ lots N/A
 targetId GeneCard:IKZF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IKZF1
 validation IKZF1_(IkN)_(UCLA)(missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
-label IKZF1 IKZF1_(IkN)
+label IKZF1 (IKZF1_(IkN))
 
 term Ini1
 tag INI1
@@ -6480,7 +6480,7 @@ lab Snyder
 targetId GeneCard:SMARCB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
 validation missing
-label INI1 sc-17796
+label INI1 (sc-17796)
 
 term IRF1
 tag IRF1
@@ -6495,7 +6495,7 @@ lab Farnham
 targetId GeneCard:IRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF1&search=IRF1
 validation missing
-label IRF1 sc-497
+label IRF1 (sc-497)
 
 term IRF3
 tag IRF3
@@ -6510,7 +6510,7 @@ lab Snyder
 targetId GeneCard:IRF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
-label IRF3 sc-9082
+label IRF3 (sc-9082)
 
 term  IRF4_(SC-6059)
 tag  IRF4
@@ -6526,7 +6526,7 @@ lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
 validation IRF4_(SC-6059)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
-label  IRF4 sc-6059
+label  IRF4 (sc-6059)
 
 term IRF9_(SC-496)
 tag IRF9SC496
@@ -6542,7 +6542,7 @@ lots A1111
 targetId GeneCard:IRF9
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF9
 validation IRF9_(SC-496)(WesternBlot,IP-MassSpec):human_IRF9_SC-496_sc-496_validation_Myers.pdf
-label IRF9 sc-496
+label IRF9 (sc-496)
 
 term JARID1A_(ab26049)
 tag JARID1AAB26049
@@ -6559,7 +6559,7 @@ lots 910477
 targetId GeneCard:KDM5A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5A
 validation JARID1A_(ab26049)(ChIP-String,ChIP-seq):human_JARID1A_validation_Bernstein.pdf
-label JARID1A ab26049
+label JARID1A (ab26049)
 
 term JunD
 tag JUND
@@ -6574,7 +6574,7 @@ lab Snyder
 targetId GeneCard:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation missing
-label JunD sc-74
+label JunD (sc-74)
 
 term KAP1
 tag KAP1
@@ -6589,7 +6589,7 @@ lab Farnham
 targetId GeneCard:TRIM2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
-label KAP1 ab10483
+label KAP1 (ab10483)
 
 term LEF1_(SC-8592)
 tag LEF1
@@ -6604,7 +6604,7 @@ lab Myers
 targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation LEF1_(SC-8592)(Immunoprecipitation-WesternBlot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
-label LEF1 sc-8592
+label LEF1 (sc-8592)
 
 term MafF_(M8194)
 tag MAFF
@@ -6620,7 +6620,7 @@ lab Snyder
 targetId GeneCards:MAFF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
 validation missing
-label MafF M8194
+label MafF (M8194)
 
 term MafK_(ab50322)
 tag MAFK
@@ -6636,7 +6636,7 @@ lab Snyder
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
-label MafK ab50322
+label MafK (ab50322)
 
 term MafK_(SC-477)
 tag MAFKb
@@ -6652,7 +6652,7 @@ lab Snyder
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
-label MafK SC-477
+label MafK (SC-477)
 
 term Max
 tag MAX
@@ -6668,7 +6668,7 @@ lots  J0809
 targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
 validation MAX(Immunoprecipitation-WesternBlot,MassSpec):human_Max_validation_Myers.pdf
-label Max sc-197
+label Max (sc-197)
 
 term MBD4_(SC-271530)
 tag MBD4SC271530
@@ -6684,7 +6684,7 @@ lots A1111
 targetId GeneCard:MBD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MBD4
 validation MBD4_(SC-271530)(WesternBlot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
-label MBD4 sc-271530
+label MBD4 (sc-271530)
 
 ##This does not appear in metaDb
 term MEF2A
@@ -6700,7 +6700,7 @@ lab Myers
 targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
 validation MEF2A(Immunoblot):human_MEF2A_validation_Myers.pdf
-label MEF2A sc-313
+label MEF2A (sc-313)
 
 term MEF2C_(SC-13268)
 tag MEF2C
@@ -6716,7 +6716,7 @@ lots K2009
 targetId GeneCards:MEF2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
 validation missing
-label MEF2C sc-13268
+label MEF2C (sc-13268)
 
 term MTA3_(SC-81325)
 tag MTA3SC81325
@@ -6732,7 +6732,7 @@ lots F1110
 targetId GeneCard:MTA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MTA3
 validation MTA3_(SC-81325)(WesternBlot,IP-MassSpec):human_MTA3_SC-81325_sc-81325_validation_Myers.pdf
-label MTA3 sc-81325
+label MTA3 (sc-81325)
 
 term MYBL2_(SC-81192)
 tag MYBL2SC81192
@@ -6748,7 +6748,7 @@ lots B1611
 targetId GeneCard:MYBL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYBL2
 validation MYBL2_(SC-81192)(WesternBlot,IP-MassSpec):human_MYBL2_SC-81192_sc-81192_validation_Myers.pdf
-label MYBL2 sc-81192
+label MYBL2 (sc-81192)
 
 term MyoD_(sc-32758)
 tag SC32758
@@ -6764,7 +6764,7 @@ lots missing
 targetId Genecard:MyoD1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MyoD1
 validation missing
-label MyoD sc-32758
+label MyoD (sc-32758)
 
 term Myogenin_(sc-12732)
 tag SC12732
@@ -6780,7 +6780,7 @@ lots missing
 targetId Genecard:Myog
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Myog
 validation missing
-label Myogenin sc-12732
+label Myogenin (sc-12732)
 
 term MEF2_(sc-17785)
 tag MEF2SC17785
@@ -6796,7 +6796,7 @@ lots missing
 targetId Genecard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
 validation missing
-label MEF2 sc-17785
+label MEF2 (sc-17785)
 
 term NANOG_(SC-33759)
 tag NANOG
@@ -6812,7 +6812,7 @@ lots C0909
 targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
 validation NANOG_(SC-33759)(Western_blot,IP-MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
-label NANOG sc-33759
+label NANOG (sc-33759)
 
 term NELFe
 tag NELFE
@@ -6827,7 +6827,7 @@ lab Struhl
 targetId GeneCard:RDBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
 validation missing
-label NELFe sc-32912
+label NELFe (sc-32912)
 
 term NFIC_(SC-81335)
 tag NFICSC81335
@@ -6843,7 +6843,7 @@ lots L0808
 targetId GeneCard:NFIC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFIC
 validation NFIC_(SC-81335)(Western_blot,IP-Mass_Spec):human_NFIC_SC-81335_validation_Myers.pdf
-label NFIC sc-81335
+label NFIC (sc-81335)
 
 term NF-E2
 tag NFE2
@@ -6859,7 +6859,7 @@ lots D1703
 targetId GeneCard:NFE2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2
 validation missing
-label NF-E2 sc-291
+label NF-E2 (sc-291)
 
 term NF-E2_(SC-22827)
 tag NFE2b
@@ -6874,7 +6874,7 @@ lab Snyder
 targetId GeneCard:NFE2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2
 validation missing
-label NF-E2 sc-22827
+label NF-E2 (sc-22827)
 
 term NFATC1_(SC-17834)
 tag NFATC1SC17834
@@ -6890,7 +6890,7 @@ lots G2007
 targetId GeneCard:NFATC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFATC1
 validation NFATC1_(SC-17834)(WesternBlot,IP-MassSpec):human_NFATC1_SC-17834_sc-17834_validation_Myers.pdf
-label NFATC1 sc-17834
+label NFATC1 (sc-17834)
 
 term NFKB
 tag NFKB
@@ -6905,7 +6905,7 @@ lab Snyder
 targetId GeneCard:NFKB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
 validation missing
-label NFKB sc-372
+label NFKB (sc-372)
 
 term NF-YA
 tag NFYA
@@ -6920,7 +6920,7 @@ lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
 validation missing
-label NF-YA missing
+label NF-YA (missing)
 
 term NF-YB
 tag NFYB
@@ -6935,7 +6935,7 @@ lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 validation missing
-label NF-YB missing
+label NF-YB (missing)
 
 term Nrf1
 tag NRF1
@@ -6950,7 +6950,7 @@ lab Snyder
 targetId GeneCard:NRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1
 validation missing
-label NRF1 ab55744
+label NRF1 (ab55744)
 
 term Nrf2
 tag NRF2
@@ -6965,7 +6965,7 @@ lab Snyder
 targetId GeneCard:GABPA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPA
 validation missing
-label Nrf2 sc-22810
+label Nrf2 (sc-22810)
 
 term NRSF
 tag NRSF
@@ -6981,7 +6981,7 @@ lots 20070905JV
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation missing
-label NRSF  (Made by Protein Expression Center: pec@caltech.edu)
+label NRSF ( (Made by Protein Expression Center: pec@caltech.edu))
 
 
 term p300
@@ -6997,7 +6997,7 @@ lab Myers
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
-label P300 sc-585
+label P300 (sc-585)
 
 term p300_(SC-584)
 tag P300b
@@ -7012,7 +7012,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
-label P300 sc-584
+label P300 (sc-584)
 
 term p300_(SC-48343)
 tag P300c
@@ -7027,7 +7027,7 @@ lab Snyder
 targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
-label P300 sc-48343
+label P300 (sc-48343)
 
 term PAX5-C20
 tag PAX5
@@ -7042,7 +7042,7 @@ lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation PAX5-C20(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-C20_validation_Myers.pdf
-label PAX5 sc-1974
+label PAX5 (sc-1974)
 
 term PAX5-N19
 tag PAX5b
@@ -7057,7 +7057,7 @@ lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-N19_validation_Myers.pdf
-label PAX5 sc-1975
+label PAX5 (sc-1975)
 
 term PAX5_(N-15)
 tag PAX5c
@@ -7072,7 +7072,7 @@ lab Hardison
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation PAX_N-15(Western_blot):mouse_PAX_N-15_validation_Hardison.pdf
-label PAX5 ab12000
+label PAX5 (ab12000)
 
 term Pbx3
 tag PBX3
@@ -7087,7 +7087,7 @@ lab Myers
 targetId GeneCard:PBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PBX3
 validation missing
-label PBX3 sc-891
+label PBX3 (sc-891)
 
 term PGC1A
 tag PGC1A
@@ -7102,7 +7102,7 @@ lab Snyder
 targetId GeneCard:PPARGC1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PPARGC1A
 validation missing
-label PGC1A sc-13067
+label PGC1A (sc-13067)
 
 term PHF8_(A301-772A)
 tag PHF8A301772A
@@ -7118,7 +7118,7 @@ lots A301-772A-1
 targetId GeneCards:PHF8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PHF8
 validation PHF8_(A301-772A)(ChIP-String,ChIP-seq):human_PHF8_validation_Bernstein.pdf
-label PHF8 A301-772A
+label PHF8 (A301-772A)
 
 term PITX1_(SC-81979)
 tag PITX1
@@ -7134,7 +7134,7 @@ lots J0109
 targetId GeneCards:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
 validation PITX1_(SC-81979)(Immunoprecipitation-WesternBlot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
-label PITX1 sc-81979
+label PITX1 (sc-81979)
 
 term PLU1
 tag PLU1
@@ -7151,7 +7151,7 @@ targetId GeneCards:KDM5B
 #PLU1 is a alias for KDM5B ~Jeff
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
-label PLU1 PLU1
+label PLU1 (PLU1)
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7167,7 +7167,7 @@ lots H1908
 targetId GeneCard:PML
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PML
 validation PML_(SC-71910)(WesternBlot,IP-MassSpec):human_PML_SC-71910_sc-71910_validation_Myers.pdf
-label PML sc-71910
+label PML (sc-71910)
 
 term Pol2
 tag POL2
@@ -7183,7 +7183,7 @@ lots 14861301, 14922701
 targetId GeneCard:POL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation Pol2(Immunoblot):human_Pol2_validation_Snyder.pdf
-label POL2 MMS-126R
+label POL2 (MMS-126R)
 
 term Pol2(b)
 tag POL2b
@@ -7199,7 +7199,7 @@ lots 147337002
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation missing
-label POL2B MMS-128P
+label POL2B (MMS-128P)
 
 term Pol2-4H8
 tag POL24H8
@@ -7214,7 +7214,7 @@ lab Myers
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation Pol2-4H8(ChIP,MassSpec):human_Pol2-4H8_validation_Myers.pdf
-label POL24H8 ab5408
+label POL24H8 (ab5408)
 
 term Pol2(phosphoS2)
 tag POL2S2
@@ -7229,7 +7229,7 @@ lab Snyder
 targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation missing
-label POL2S2 ab5095
+label POL2S2 (ab5095)
 
 term Pol3
 tag POL3
@@ -7244,7 +7244,7 @@ lab Snyder
 targetId GeneCard:POLR3G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3G
 validation missing
-label POL3 sc-21754
+label POL3 (sc-21754)
 
 term POU5F1_(SC-9081)
 tag POU5F1
@@ -7260,7 +7260,7 @@ lots F2609
 targetId GeneCards:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
 validation POU5F1_(SC-9081)(WesternBlot,IP-MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
-label POU5F1 sc-9081
+label POU5F1 (sc-9081)
 
 term POU2F2
 tag POU2F2
@@ -7275,7 +7275,7 @@ lab Myers
 targetId GeneCard:POU2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
 validation POU2F2(Immunoprecipitation-WesternBlot,MassSpec):human_POU2F2_validation_Myers.pdf
-label POU2F2 sc-233
+label POU2F2 (sc-233)
 
 term PRDM1_(9115)
 tag PRDM1
@@ -7290,7 +7290,7 @@ lab Snyder
 targetId GeneCard:PRDM1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PRDM1
 validation missing
-label PRDM1 9115
+label PRDM1 (9115)
 
 term PU.1
 tag PU1
@@ -7305,7 +7305,7 @@ lab Myers
 targetId GeneCard:SPI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
 validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
-label PU1 sc-22805
+label PU1 (sc-22805)
 
 term Rad21
 tag RAD21
@@ -7321,7 +7321,7 @@ lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
 validation RAD21(Immunoblot):human_RAD21_validation_Myers.pdf
-label RAD21 ab992
+label RAD21 (ab992)
 
 term RBBP5_(A300-109A)
 tag RBBP5A300109A
@@ -7337,7 +7337,7 @@ lots A300-109A-2
 targetId GeneCards:RBBP5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RBBP5
 validation RBBP5_(A300-109A)(ChIP-String,ChIP-seq):human_RBBP5_validation_Bernstein.pdf
-label RBBP5 A300-109A
+label RBBP5 (A300-109A)
 
 term RPC155
 tag RPC155
@@ -7352,7 +7352,7 @@ lab Struhl
 targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
 validation missing
-label RPC155 1900
+label RPC155 (1900)
 
 term RFX5_(200-401-194)
 tag RFX5
@@ -7367,7 +7367,7 @@ lab Snyder
 targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_200-401-194_validation_Snyder.pdf
-label RFX5 200-401-194
+label RFX5 (200-401-194)
 
 term RUNX3_(SC-101553)
 tag RUNX3SC101553
@@ -7383,7 +7383,7 @@ lots B0909
 targetId GeneCard:RUNX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RUNX3
 validation RUNX3_(SC-101553)(Western_blot,IP-Mass_Spec):human_RUNX3_SC-101553_validation_Myers.pdf
-label RUNX3 sc-101553
+label RUNX3 (sc-101553)
 
 term RXRA
 tag RXRA
@@ -7398,7 +7398,7 @@ lab Myers
 targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
 validation RXRA(Immunoprecipitation-WesternBlot,MassSpec):human_RXRA_validation_Myers.pdf
-label RXRA sc-553
+label RXRA (sc-553)
 
 term SAP30_(39731)
 tag SAP3039731
@@ -7414,7 +7414,7 @@ lots 4710001
 targetId GeneCards:SAP30
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SAP30
 validation SAP30_(39731)(ChIP-String,ChIP-seq):human_SAP30_validation_Bernstein.pdf
-label SAP30 39731
+label SAP30 (39731)
 
 term SETDB1
 tag SETDB1
@@ -7429,7 +7429,7 @@ lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation SETDB1(missing):human_SETDB1_validation_Farnham.pdf
-label SETDB1  11231-1-AP
+label SETDB1 ( 11231-1-AP)
 
 term  SETDB1_(SC-66884)
 tag  SETDB1b
@@ -7445,7 +7445,7 @@ lab Farnham
 targetId Genecard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
 validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
-label  SETDB1 sc-66884
+label  SETDB1 (sc-66884)
 
 term Sin3Ak-20
 tag SIN3AK20
@@ -7460,7 +7460,7 @@ lab Myers
 targetId GeneCard:SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
 validation Sin3Ak-20(Immunoprecipitation-WesternBlot,MassSpec):human_Sin3Ak-20_validation_Myers.pdf
-label SIN3AK20 sc-994
+label SIN3AK20 (sc-994)
 
 term SIRT6
 tag SIRT6
@@ -7475,7 +7475,7 @@ lab Struhl
 targetId GeneCard:SIRT6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
 validation missing
-label SIRT6 ab48192
+label SIRT6 (ab48192)
 
 term SIX5
 tag SIX5
@@ -7490,7 +7490,7 @@ lab Myers
 targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
 validation SIX5(ChIP,MassSpec):human_SIX5_validation_Myers.pdf
-label SIX5 sc-55706
+label SIX5 (sc-55706)
 
 term SMC3_(ab9263)
 tag SMC3
@@ -7506,7 +7506,7 @@ lab Snyder
 targetId GeneCards:SMC3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
 validation missing
-label SMC3 ab9263
+label SMC3 (ab9263)
 
 term SP1
 tag SP1
@@ -7521,7 +7521,7 @@ lab Myers
 targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
 validation SP1(Immunoprecipitation-WesternBlot,MassSpec):human_SP1_validation_Myers.pdf
-label SP1 sc-17824
+label SP1 (sc-17824)
 
 term SP2_(SC-643)
 tag SP2
@@ -7537,7 +7537,7 @@ lots K1803
 targetId GeneCards:SP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP2
 validation missing
-label SP2 sc-643
+label SP2 (sc-643)
 
 term SP4_(V-20)
 tag SP4V20
@@ -7553,7 +7553,7 @@ lots  F2609
 targetId SP4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
 validation SP4_V-20(Immunoblot):human_SP4_V-20_validation_Myers.pdf
-label SP4 sc-645
+label SP4 (sc-645)
 
 term SPT20
 tag SPT20
@@ -7569,7 +7569,7 @@ lab Struhl
 targetId GeneCards:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation missing
-label SPT20 missing
+label SPT20 (missing)
 
 term SREBP1
 tag SREBP1
@@ -7584,7 +7584,7 @@ lab Snyder
 targetId GeneCards:SREBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF1
 validation missing
-label SREBP1 sc-8984
+label SREBP1 (sc-8984)
 
 term SREBP2
 tag SREBP2
@@ -7599,7 +7599,7 @@ lab Snyder
 targetId GeneCards:SREBF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SREBF2
 validation missing
-label SREBP2 10007663
+label SREBP2 (10007663)
 
 term SRF
 tag SRF
@@ -7615,7 +7615,7 @@ lots F3006 L2005 H2604
 targetId GeneCard:SRF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SRF
 validation SRF(Immunoprecipitation-WesternBlot,MassSpec):human_SRF_validation_Myers.pdf
-label SRF sc-335
+label SRF (sc-335)
 
 term STAT1
 tag STAT1
@@ -7631,7 +7631,7 @@ lots G2406 and K2106
 targetId GeneCard:STAT1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT1&search=STAT1
 validation missing
-label STAT1 sc-345
+label STAT1 (sc-345)
 
 term STAT2
 tag STAT2
@@ -7646,7 +7646,7 @@ lab Snyder
 targetId GeneCard:STAT2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2
 validation missing
-label STAT2 sc-476x
+label STAT2 (sc-476x)
 
 term STAT3
 tag STAT3
@@ -7661,7 +7661,7 @@ lab Snyder
 targetId GeneCard:STAT3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT3
 validation STAT3(Western_blot,Immunoprecipitation):human_STAT3_validation_Snyder.pdf
-label STAT3 sc-482
+label STAT3 (sc-482)
 
 term STAT5A_(SC-74442)
 tag STAT5ASC74442
@@ -7677,7 +7677,7 @@ lots G0208
 targetId GeneCard:STAT5A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT5A
 validation STAT5A_(SC-74442):human_STAT5A_SC-74442_validation_Myers.pdf
-label STAT5A sc-74442
+label STAT5A (sc-74442)
 
 term SUZ12_(05-1317)
 tag SUZ12051317
@@ -7693,7 +7693,7 @@ lots NRG1665726
 targetId GeneCards:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
 validation SUZ12_(05-1317)(ChIP-String,ChIP-seq):human_SUZ12_validation_Bernstein.pdf
-label SUZ12 05-1317
+label SUZ12 (05-1317)
 
 term SUZ12
 tag SUZ12
@@ -7708,7 +7708,7 @@ lab Farnham
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
 validation SUZ12_(WesternBlot,ChIP):human_SUZ12_validation_Farnham.pdf
-label SUZ12 SUZ12
+label SUZ12 (SUZ12)
 
 term TAF1
 tag TAF1
@@ -7724,7 +7724,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF1
 lab Myers, Wold
 lots K0905 F2706
 validation TAF1(ChIP,MassSpec):human_TAF1_validation_Myers.pdf
-label TAF1 sc-735
+label TAF1 (sc-735)
 
 
 term  TAF7_(SC-101167)
@@ -7741,7 +7741,7 @@ lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
 validation TAF7_(SC-101167)(Immunoprecipitation-WesternBlot,MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
-label  TAF7 sc-101167
+label  TAF7 (sc-101167)
 
 term TAL1_(SC-12984)
 tag TAL1
@@ -7756,7 +7756,7 @@ targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
 validation TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
-label TAL1 sc-12984
+label TAL1 (sc-12984)
 
 #term TAF-II
 #type Antibody
@@ -7783,7 +7783,7 @@ lab Snyder
 targetId GeneCard:TBP
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation TBP(Immunoblot):human_TBP_validation_Snyder.pdf
-label TBP ab62126
+label TBP (ab62126)
 
 term TCF12
 tag TCF12
@@ -7798,7 +7798,7 @@ lab Myers
 targetId GeneCard:TCF12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
 validation TCF12(Immunoprecipitation-WesternBlot,MassSpec):human_TCF12_validation_Myers.pdf
-label TCF12 sc-357
+label TCF12 (sc-357)
 
 term TCF3_(SC-349)
 tag TCF3
@@ -7814,7 +7814,7 @@ lots A1111
 targetId GeneCard:TCF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
 validation TCF3_(SC-349)(WesternBlot,IP-MassSpec):human_TCF3_SC-349_validation_Myers.pdf
-label TCF3 sc-349
+label TCF3 (sc-349)
 
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
 # TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
@@ -7832,7 +7832,7 @@ lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2&search=TCF7L2
 validation missing
-label TCF4 2569S
+label TCF4 (2569S)
 
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
 # TCF-4 *IS ALSO NOT AN ALIAS* for TCF7L2 and *IS* a gene located on chr 18.
@@ -7862,7 +7862,7 @@ lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
 validation missing
-label TCF7L2 H2569S
+label TCF7L2 (H2569S)
 
 term TEAD4_(SC-101184)
 tag TEAD4SC101184
@@ -7878,7 +7878,7 @@ lots A1811
 targetId GeneCard:TEAD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TEAD4
 validation TEAD4_(SC-101184)(Western_blot,IP-Mass_Spec):human_TEAD4_SC-101184_validation_Myers.pdf
-label TEAD4 sc-101184
+label TEAD4 (sc-101184)
 
 ##This does not appear in metaDb
 term TFIIB
@@ -7895,7 +7895,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
 validation missing
-label TFIIB sc-225
+label TFIIB (sc-225)
 
 term TFIIIC-110
 tag TF3C110
@@ -7910,7 +7910,7 @@ lab Struhl
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation missing
-label TFIIIC-110 4286
+label TFIIIC-110 (4286)
 
 term THAP1_(SC-98174)
 tag THAP1
@@ -7926,7 +7926,7 @@ lots D1910
 targetId GeneCards:THAP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=THAP1
 validation missing
-label THAP1 sc-98174
+label THAP1 (sc-98174)
 
 term TR4
 tag TR4
@@ -7941,7 +7941,7 @@ lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation TR4_(WesternBlot,ChIP):mouse_TR4_validation_Farnham.pdf
-label TR4 TR4
+label TR4 (TR4)
 
 term TRIM37_(SC-49548)
 tag TRIM37
@@ -7957,7 +7957,7 @@ lots F2507
 targetId GeneCard:TRIM37
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM37
 validation TRIM37_(SC-49548)(ChIP,MassSpec):human_TRIM37_SC-49548_validation_Myers.pdf
-label TRIM37 sc-49548
+label TRIM37 (sc-49548)
 
 term USF-1
 tag USF1
@@ -7972,7 +7972,7 @@ lab Myers
 targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
 validation USF1_SC-229(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_SC-229_validation_Myers.pdf
-label USF1 sc-229
+label USF1 (sc-229)
 
 term USF1_(SC-8983)
 tag USF1b
@@ -7988,7 +7988,7 @@ lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
 validation USF1_SC-8983(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_SC-8983_validation_Myers.pdf
-label  USF1 sc-8983
+label  USF1 (sc-8983)
 
 term USF2
 tag USF2
@@ -8003,7 +8003,7 @@ lab Snyder
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
 validation USF2(Immunoblot):human_USF2_validation_Snyder.pdf
-label USF2 ab60931
+label USF2 (ab60931)
 
 term USF2_(C-20)
 tag USF2b
@@ -8019,7 +8019,7 @@ lots  J0908
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
 validation USF2_(C-20)(Immunoblot):human_USF2_C-20_validation_Myers.pdf
-label  USF2 sc-862
+label  USF2 (sc-862)
 
 term WHIP
 tag WHIP
@@ -8034,7 +8034,7 @@ lab Snyder
 targetId GeneCard:WRNIP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WRNIP1
 validation missing
-label WHIP ab4731
+label WHIP (ab4731)
 
 term XRCC4
 tag XRCC4
@@ -8049,7 +8049,7 @@ lab Snyder
 targetId GeneCard:XRCC4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=XRCC4
 validation XRCC4(Immunoblot):human_XRCC4_validation_Snyder.pdf
-label XRCC4 ab145
+label XRCC4 (ab145)
 
 term YY1
 tag YY1
@@ -8064,7 +8064,7 @@ lab Farnham
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
 validation missing
-label YY1 sc-1703
+label YY1 (sc-1703)
 
 term YY1_(SC-281)
 tag YY1c
@@ -8079,7 +8079,7 @@ lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
 validation YY1_(SC-281)(Immunoprecipitation-WesternBlot,MassSpec):human_YY1_SC-281_validation_Myers.pdf
-label YY1 sc-281
+label YY1 (sc-281)
 
 term ZBTB33
 tag ZBTB33
@@ -8094,7 +8094,7 @@ lab Myers
 targetId GeneCard:ZBTB33
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
 validation ZBTB33(WesternBlot,IP-MassSpec):human_ZBTB33_6F8_validation_Myers.pdf
-label ZBTB33 sc-23871
+label ZBTB33 (sc-23871)
 
 term ZBTB7A_(SC-34508)
 tag ZBTB7A
@@ -8110,7 +8110,7 @@ lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
 validation ZBTB7A_SC-34508(Immunoprecipitation-WesternBlot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
-label  ZBTB7A sc-34508
+label  ZBTB7A (sc-34508)
 
 term ZEB1_(SC-25388)
 tag ZEB1
@@ -8126,7 +8126,7 @@ lots D2010
 targetId GeneCards:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
 validation ZEB1_(SC-25388)(WesternBlot,IP-MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
-label ZEB1 sc-25388
+label ZEB1 (sc-25388)
 
 term Znf143_(16618-1-AP)
 tag ZNF143
@@ -8142,7 +8142,7 @@ lab Snyder
 targetId GeneCards:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation missing
-label Znf143 16618-1-AP
+label Znf143 (16618-1-AP)
 
 term ZNF217
 tag ZNF217
@@ -8158,7 +8158,7 @@ lots N/A
 targetId GeneCards:ZNF217
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF217
 validation ZNF217_(WesternBlot,SiRNA):human_ZNF217_validation_Farnham.pdf
-label ZNF217 ZNF217
+label ZNF217 (ZNF217)
 
 term ZNF263
 tag ZNF263
@@ -8173,7 +8173,7 @@ lab Farnham
 targetId GeneCard:ZNF263
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF263
 validation ZNF263_(WesternBlot,siRNA):human_ZNF263_validation_Farnham.pdf
-label ZNF263 H00010127-A01
+label ZNF263 (H00010127-A01)
 
 term ZNF274
 tag ZNF274
@@ -8189,7 +8189,7 @@ lots 060729QCS1
 targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274
 validation ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
-label ZNF274 H00010782-A01
+label ZNF274 (H00010782-A01)
 
 term ZNF274_(M01)
 tag ZNF274M01
@@ -8205,7 +8205,7 @@ lots 08064-4C12
 targetId GeneCards:Genecard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF274
 validation ZNF274_(M01)(missing):human_ZNF274_M01_validation_Farnham.pdf
-label ZNF274 M01
+label ZNF274 (M01)
 
 term ZZZ3
 tag ZZZ3
@@ -8220,7 +8220,7 @@ lab Struhl
 targetId GeneCard:ZZZ3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
-label ZZZ3 missing
+label ZZZ3 (missing)
 
 
 ###  Antibodies
@@ -8243,7 +8243,7 @@ lab Tenenbaum
 targetId GeneCards:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
 validation missing
-label CBX5 05-689
+label CBX5 (05-689)
 
 
 term CELF1
@@ -8260,7 +8260,7 @@ lab Tenenbaum
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation missing
-label CELF1 05621
+label CELF1 (05621)
 
 ##This does not appear in metaDb
 term CELF2
@@ -8277,7 +8277,7 @@ lab Tenenbaum
 targetId GeneCards:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
 validation missing
-label CELF2 04-047
+label CELF2 (04-047)
 
 ##This does not appear in metaDb
 term EEF1A1
@@ -8294,7 +8294,7 @@ lab Tenenbaum
 targetId Gene:1915
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
 validation missing
-label EEF1A1 05-235
+label EEF1A1 (05-235)
 
 ##This does not appear in metaDb
 term EIF4E
@@ -8311,7 +8311,7 @@ lab Tenenbaum
 targetId Gene:45525
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
 validation missing
-label EIF4E 04-1058
+label EIF4E (04-1058)
 
 ##This does not appear in metaDb
 term EIF4EBP1
@@ -8328,7 +8328,7 @@ lab Tenenbaum
 targetId Gene:1978
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
 validation missing
-label EIF4EBP1 04-1010
+label EIF4EBP1 (04-1010)
 
 term ELAVL1
 tag ELAVL1
@@ -8344,7 +8344,7 @@ lots 1) B2508(Nov2008)
 targetId Gene:1994
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
 validation missing
-label ELAVL1 SC-5261; 07-1735 is recommended replacement for AB5831
+label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
 
 ##This does not appear in metaDb
 term FXR1
@@ -8361,7 +8361,7 @@ lab Tenenbaum
 targetId Gene:8087
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
 validation missing
-label FXR1 05-1529
+label FXR1 (05-1529)
 
 ##This does not appear in metaDb
 term Hexim1
@@ -8378,7 +8378,7 @@ lab Tenenbaum
 targetId Gene:10614
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation missing
-label Hexim1 07-955
+label Hexim1 (07-955)
 
 ##This does not appear in metaDb
 term HNRNPD
@@ -8395,7 +8395,7 @@ lab Tenenbaum
 targetId Gene:3184
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
 validation missing
-label HNRNPD 07-260
+label HNRNPD (07-260)
 
 ##This does not appear in metaDb
 term hnRNPM
@@ -8412,7 +8412,7 @@ lab Tenenbaum
 targetId Gene:76936
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
 validation missing
-label hnRNPM 05-620
+label hnRNPM (05-620)
 
 
 term IGF2BP1
@@ -8429,7 +8429,7 @@ lots I0607(Nov2008)
 targetId Gene:10642
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation missing
-label IGF2BP1 SC-21027
+label IGF2BP1 (SC-21027)
 
 
 term Mxi1_(AF4185)
@@ -8446,7 +8446,7 @@ lots ZIJ01
 targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
 validation missing
-label Mxi1 AF4185
+label Mxi1 (AF4185)
 
 
 ##This does not appear in metaDb
@@ -8464,7 +8464,7 @@ lab Tenenbaum
 targetId GeneCard:NONO
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
 validation missing
-label NONO 05-950
+label NONO (05-950)
 
 ##This does not appear in metaDb
 term PABP
@@ -8481,7 +8481,7 @@ lab Tenenbaum
 targetId Gene:37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
 validation missing
-label PABP 04-1467
+label PABP (04-1467)
 
 term PABPC1
 tag PABPC1
@@ -8497,7 +8497,7 @@ lots 044K4810 (Nov 2008)
 targetId 26986
 targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
 validation missing
-label PABPC1 P6246
+label PABPC1 (P6246)
 
 ##This does not appear in metaDb
 term QKI
@@ -8514,7 +8514,7 @@ lab Tenenbaum
 targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
 validation missing
-label QKI AB9904
+label QKI (AB9904)
 
 
 ##This does not appear in metaDb
@@ -8532,7 +8532,7 @@ lab Tenenbaum
 targetId 6195
 targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
 validation missing
-label RPS6KA1 07-1477
+label RPS6KA1 (07-1477)
 
 
 term ripInput
@@ -8549,7 +8549,7 @@ lab Tenenbaum
 targetId (input)
 #targetUrl ;
 validation missing
-label ripInput RIP Input
+label ripInput (RIP Input)
 
 term SLBP
 tag SLBP
@@ -8565,7 +8565,7 @@ lots 3) 7308-S2
 targetId 7884
 targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
 validation missing
-label SLBP 06-1376; 26522; MA156353
+label SLBP (06-1376; 26522; MA156353)
 
 term T7Tag
 tag T7
@@ -8581,7 +8581,7 @@ lab Tenenbaum
 targetId (input)
 #targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 validation missing
-label T7Tag AB3790; Nov_69522
+label T7Tag (AB3790; Nov_69522)
 
 ### mapAlgorithm : Comparing map algorithms
 # term (human-readable map algorithm name)
@@ -11907,9 +11907,6 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
-
-
-
 
 
 
