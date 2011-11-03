@@ -74,13 +74,14 @@ var genomePos = {
     original: null,
     originalSize: 0,
 
-    linkFixup: function (pos, name, reg, endParamName)
+    linkFixup: function (pos, id, reg, endParamName)
     {   // fixup external links (e.g. ensembl)
-        if($('#' + name).length) {
-            var link = $('#' + name).attr('href');
+        var ele = $(document.getElementById(id));
+        if(ele.length) {
+            var link = ele.attr('href');
             var a = reg.exec(link);
             if(a && a[1]) {
-                $('#' + name).attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
+                ele.attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
             }
         }
     },
