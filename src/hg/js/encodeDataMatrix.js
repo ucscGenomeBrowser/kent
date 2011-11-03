@@ -185,7 +185,7 @@ $(function () {
             if (!dataTypeTermHash[dataType].count) {
                 dataTypeTermHash[dataType].count = 0;
             }
-            ataTypeTermHash[dataType].count++;
+            dataTypeTermHash[dataType].count++;
 
             cellType = exp.cellType;
             if (!matrix[cellType]) {

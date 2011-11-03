@@ -1238,9 +1238,54 @@ var superT = {
     }
 }
 
+/* SOON TO BE ENABLED
+var mat = { // Beginings of matrix object
+
+    dimensions: 0,
+
+    cellHover: function (obj,on)
+    {
+        var classList = $( obj ).attr("class").split(" ");
+        classList = aryRemove(classList,"matCell");
+        for (var ix=0;ix < classList.length;ix++) {
+            var cells = $(".matCell."+classList[ix]);
+            if (on)
+                $(cells).css({backgroundColor:"#FCECC0"});
+            else
+                $(cells).css({backgroundColor:"#FFF9D2"});
+        }
+        if (on && obj.title.length == 0) {
+            for (var ix=0;ix < classList.length;ix++) {
+                if (ix > 0)
+                    obj.title += " and ";
+                obj.title += $("th."+classList[ix]).first().text();
+            }
+        }
+    },
+
+    init: function ()
+    {
+        var cells = $('td.matCell');
+        if (cells != undefined && cells.length > 0) {
+            var classList = $( cells[0] ).attr("class").split(" ");
+            classList = aryRemove(classList,"matCell");
+            mat.dimensions = classList.length;
+            if (mat.dimensions > 1) { // No need unless this is a 2D matrix
+                $('td.matCell').hover(
+                    function (e) {mat.cellHover(this,true)},
+                    function (e) {mat.cellHover(this,false)}
+                );
+            }
+        }
+    }
+}
+*/
+
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
+    // SOON TO BE ENABLED: mat.init();
+
     // Initialize sortable tables
     $('table.sortable').each(function (ix) {
         sortTableInitialize(this,true,true);

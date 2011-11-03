@@ -74,13 +74,14 @@ var genomePos = {
     original: null,
     originalSize: 0,
 
-    linkFixup: function (pos, name, reg, endParamName)
+    linkFixup: function (pos, id, reg, endParamName)
     {   // fixup external links (e.g. ensembl)
-        if($('#' + name).length) {
-            var link = $('#' + name).attr('href');
+        var ele = $(document.getElementById(id));
+        if(ele.length) {
+            var link = ele.attr('href');
             var a = reg.exec(link);
             if(a && a[1]) {
-                $('#' + name).attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
+                ele.attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
             }
         }
     },
@@ -392,7 +393,7 @@ var vis = {
         // returns true if we modify at least one select in the group list
         var rec = hgTracks.trackDb[track];
         var selectUpdated = false;
-        $("select[name=" + track + "]").each(function(t) {
+        $("select[name=" + escapeJQuerySelectorChars(track) + "]").each(function(t) {
             $(this).attr('class', visibility == 'hide' ? 'hiddenText' : 'normalText');
             $(this).val(visibility);
             selectUpdated = true;
@@ -1988,7 +1989,7 @@ var rightClick = {
 
                         // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                         // Move functionality to a hidden variable?
-                        var select = $("select[name=" + id + "]");
+                        var select = $("select[name=" + escapeJQuerySelectorChars(id) + "]");
                         if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
                             select =  [ $(select)[0] ];
                         var cur = $(select).val();

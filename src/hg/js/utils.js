@@ -1054,19 +1054,21 @@ function yieldingIterator(interatingFunc,continuingFunc,args)
     ro.step(1,args);                      // kick-off
 }
 
-function showLoadingImage(id)
+function showLoadingImage(id, absolute)
 {
 // Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
 // This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
+// If absolute is TRUE, then we use and absolute reference for the src tag.
     var loadingId = id + "LoadingOverlay";
     // make an opaque overlay to partially hide the image
     var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    var ele = $(document.getElementById(id));
     overlay.appendTo("body");
-    overlay.css("top", $('#'+ id).position().top);
-    var divLeft = $('#'+ id).position().left + 2;
+    overlay.css("top", ele.position().top);
+    var divLeft = ele.position().left + 2;
     overlay.css("left",divLeft);
-    var width = $('#'+ id).width() - 5;
-    var height = $('#'+ id).height();
+    var width = ele.width() - 5;
+    var height = ele.height();
     overlay.width(width);
     overlay.height(height);
     overlay.css("background", "white");
@@ -1075,13 +1077,14 @@ function showLoadingImage(id)
     var imgWidth = 220;   // hardwired based on width of loading.gif
     var imgLeft = (width / 2) - (imgWidth / 2);
     var imgTop = (height / 2 ) - 10;
-    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
+    var src = absolute ? "/images/loading.gif" : "../images/loading.gif";
+    $("<img src='" + src + "'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
     return loadingId;
 }
 
 function hideLoadingImage(id)
 {
-    $('#' + id).remove();
+    $(document.getElementById(id)).remove();
 }
 
 function codonColoringChanged(name)
@@ -2634,3 +2637,8 @@ function filterTableExcludeOptions(filter)
     return true;
 }
 
+function escapeJQuerySelectorChars(str)
+{
+    // replace characters which are reserved in jQuery selectors (surprisingly jQuery does not have a built in function to do this).
+    return str.replace(/([!"#$%&'()*+,./:;<=>?@[\]^`{|}~"])/g,'\\$1');
+}
