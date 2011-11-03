@@ -19,7 +19,7 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/beta/scripts";
+use lib "/cluster/bin/scripts";
 use Encode;
 use RAFile;
 use HgDb;
@@ -144,7 +144,6 @@ if(dirname($submitDir) =~ /_(.*)/) {
     $tableSuffix = "_" . basename($submitDir);;
 }
 
-my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
 my $daf = Encode::getDaf($submitDir, $fields);
 my $downloadDir = Encode::downloadDir($daf);

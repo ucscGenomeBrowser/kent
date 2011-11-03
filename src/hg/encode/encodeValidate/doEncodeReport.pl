@@ -88,6 +88,9 @@ my %terms = Encode::getControlledVocab($configPath);
 my %tags = Encode::getControlledVocabTags($configPath);
 
 # use pi.ra file to map pi/lab/institution/grant/project
+
+#### This function has been deprecated in Encode.pm. It was the understanding of the wranglers that
+#### this program is going to be retired. Therefore no patches were made.
 my $labRef = Encode::getLabs($configPath);
 my %labs = %{$labRef};
 
