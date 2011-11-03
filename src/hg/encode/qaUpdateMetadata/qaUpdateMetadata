@@ -19,11 +19,11 @@ def main():
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
 	parser.add_argument('vars', metavar='VARS', type=str, nargs='+', help='The list of metadata variables to update from alpha to beta')
-	
+
+	if len(sys.argv) <= 1:
+		parser.print_help()
 	args = parser.parse_args(sys.argv[1:])
 	vars = args.vars
-
-
 	
 	c = track.CompositeTrack(args.database, args.composite)
 	newMdb = c.alphaMetaDb
