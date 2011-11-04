@@ -33,13 +33,16 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
-use Encode;
-use HgAutomate;
-use HgDb;
-use RAFile;
-use SafePipe;
+BEGIN{
 
+unshift(@INC, ".");
+require Encode; Encode->import;
+require HgAutomate; HgAutomate->import;
+require HgDb; HgDb->import;
+require RAFile; RAFile->import;
+require SafePipe; SafePipe->import;
+
+}
 use vars qw/
     $opt_allowReloads
     $opt_configDir
@@ -294,14 +297,8 @@ sub validateControlledVocabOrControl {
     my ($val, $type) = @_;
     if ($type eq 'antibody') {
         $type = 'Antibody';
-        if (defined($terms{$type}->{$val} || $terms{'control'}->{$val})) {
-            return ();
-        } else {
-            return ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
-        }
+        return defined($terms{$type}->{$val} || $terms{'control'}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
     }
-
-
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -1174,6 +1171,8 @@ sub isDownloadOnly {
     } else {
         return 0;
     }
+    #return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative'
+    #    or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
 
 }
 
@@ -1544,7 +1543,6 @@ $assembly = $daf->{assembly};
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
 
-
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
     for my $variable (keys %{$daf->{variableHash}}) {
@@ -1729,7 +1727,6 @@ while (@{$lines}) {
                 next;
             }
             my $cell = $line{cell};
-            #my $sex = $terms{'Cell Line'}{$cell}{'sex'};
             my $sex = $line{sex};
             my $mdbError = validateDdfField($field, $line{$field}, $view, $daf, $cell, $sex, \%terms);
             if ($mdbError) {

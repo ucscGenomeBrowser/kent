@@ -21,12 +21,16 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
-use Encode;
-use RAFile;
-use SafePipe;
-use HgDb;
+BEGIN{
 
+unshift(@INC, ".");
+require Encode; Encode->import;
+require HgAutomate; HgAutomate->import;
+require HgDb; HgDb->import;
+require RAFile; RAFile->import;
+require SafePipe; SafePipe->import;
+
+}
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad $opt_skipDownload/;
 
 my $loadRa = "out/$Encode::loadFile";
@@ -39,6 +43,7 @@ my $tempDir = "/data/tmp";
 my $encInstance = "";
 
 my $PROG = basename $0;
+
 sub usage
 {
     die <<END
@@ -336,7 +341,6 @@ my $db = HgDb->new(DB => $daf->{assembly});
 my $email;
 my %labels;
 
-
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
 my $tableSuffix = "";
@@ -344,8 +348,7 @@ if ($submitDir eq ".") { # make sure command-line use specifies full path and di
     die "ERROR: please specify full path to directory\n";
 }
 if(dirname($submitDir) =~ /_(.*)/) {
-
-    if($1 ne 'prod' or $1 ne 'beta') {
+    if($1 ne 'prod') {
         # yank out "beta" from encinstance_beta
         $tableSuffix = "_$1_" . basename($submitDir);;
     }
@@ -551,7 +554,7 @@ for my $key (keys %ra) {
 my $readme = "$downloadDir/README.txt";
 unless (-e $readme){
 	my @template;
-	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt" or die "downloadsReadmeTemplate.txt is missing\n";
+	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt" or die "can't open template for README.txt in config dir\n";
 	while (<TEMPLATE>){
 	
 		my $line = $_;

@@ -3,19 +3,19 @@ objType composite
 composite wgEncodePsuHistone
 expVars lab,dataType,cell,antibody
 
-metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bAlnRep1
+metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep1
 objType file
 age immortalized
 antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
-fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bAlnRep1.bam,wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bAlnRep1.bam.bai
+fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -27,19 +27,19 @@ strain B10.H-2aH-4bp/Wts
 subId 5039
 view Alignments
 
-metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bAlnRep2
+metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep2
 objType file
 age immortalized
 antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
-fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bAlnRep2.bam,wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bAlnRep2.bam.bai
+fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -74,6 +74,54 @@ strain B10.H-2aH-4bp/Wts
 subId 5039
 tableName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep1
+objType file
+age immortalized
+antibody H3K4me1
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5039
+view RawData
+
+metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody H3K4me1
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-31
+dateUnrestricted 2012-07-31
+fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5039
+view RawData
 
 metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep1
 objType file
@@ -195,67 +243,19 @@ subId 5039
 tableName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputSig
 view Signal
 
-metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bRawDataRep1
-objType file
-age immortalized
-antibody H3K4me1
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-31
-dateUnrestricted 2012-07-31
-fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 5039
-view RawData
-
-metaObject wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bRawDataRep2
-objType file
-age immortalized
-antibody H3K4me1
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-31
-dateUnrestricted 2012-07-31
-fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 5039
-view RawData
-
-metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bAlnRep1
+metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep1
 objType file
 age immortalized
 antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bAlnRep1.bam
+fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -267,19 +267,19 @@ strain B10.H-2aH-4bp/Wts
 subId 5036
 view Alignments
 
-metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bAlnRep2
+metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep2
 objType file
 age immortalized
 antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bAlnRep2.bam
+fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -314,6 +314,54 @@ strain B10.H-2aH-4bp/Wts
 subId 5036
 tableName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep1
+objType file
+age immortalized
+antibody H3K4me3
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-28
+dateUnrestricted 2012-07-28
+fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5036
+view RawData
+
+metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody H3K4me3
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-28
+dateUnrestricted 2012-07-28
+fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5036
+view RawData
 
 metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep1
 objType file
@@ -435,67 +483,19 @@ subId 5036
 tableName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputSig
 view Signal
 
-metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bRawDataRep1
-objType file
-age immortalized
-antibody H3K4me3
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-28
-dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 5036
-view RawData
-
-metaObject wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bRawDataRep2
-objType file
-age immortalized
-antibody H3K4me3
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-28
-dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 5036
-view RawData
-
-metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bAlnRep1
+metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep1
 objType file
 age immortalized
 antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bAlnRep1.bam
+fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -507,19 +507,19 @@ strain B10.H-2aH-4bp/Wts
 subId 4876
 view Alignments
 
-metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bAlnRep2
+metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep2
 objType file
 age immortalized
 antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bAlnRep2.bam
+fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -554,6 +554,54 @@ strain B10.H-2aH-4bp/Wts
 subId 4876
 tableName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep1
+objType file
+age immortalized
+antibody H3K27me3
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4876
+view RawData
+
+metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody H3K27me3
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4876
+view RawData
 
 metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep1
 objType file
@@ -675,67 +723,19 @@ subId 4876
 tableName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputSig
 view Signal
 
-metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bRawDataRep1
-objType file
-age immortalized
-antibody H3K27me3
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 4876
-view RawData
-
-metaObject wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bRawDataRep2
-objType file
-age immortalized
-antibody H3K27me3
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 4876
-view RawData
-
-metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bAlnRep1
+metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep1
 objType file
 age immortalized
 antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bAlnRep1.bam
+fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -747,19 +747,19 @@ strain B10.H-2aH-4bp/Wts
 subId 5013
 view Alignments
 
-metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bAlnRep2
+metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep2
 objType file
 age immortalized
 antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bAlnRep2.bam
+fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -794,6 +794,54 @@ strain B10.H-2aH-4bp/Wts
 subId 5013
 tableName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep1
+objType file
+age immortalized
+antibody H3K36me3
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-25
+dateUnrestricted 2012-07-24
+fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5013
+view RawData
+
+metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody H3K36me3
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-25
+dateUnrestricted 2012-07-24
+fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5013
+view RawData
 
 metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep1
 objType file
@@ -915,68 +963,20 @@ subId 5013
 tableName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputSig
 view Signal
 
-metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bRawDataRep1
-objType file
-age immortalized
-antibody H3K36me3
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-25
-dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 5013
-view RawData
-
-metaObject wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bRawDataRep2
-objType file
-age immortalized
-antibody H3K36me3
-cell CH12
-composite wgEncodePsuHistone
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-25
-dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 5013
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129AlnRep1
+metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuHistoneG1eH3k04me1ME0S129AlnRep1.bam,wgEncodePsuHistoneG1eH3k04me1ME0S129AlnRep1.bam.bai
+fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -988,20 +988,20 @@ strain 129
 subId 3043
 view Alignments
 
-metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129AlnRep2
+metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuHistoneG1eH3k04me1ME0S129AlnRep2.bam,wgEncodePsuHistoneG1eH3k04me1ME0S129AlnRep2.bam.bai
+fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1037,6 +1037,56 @@ strain 129
 subId 3043
 tableName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep1
+objType file
+age E0
+antibody H3K4me1
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-10-31
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-08-30
+fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3043
+view RawData
+
+metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep2
+objType file
+age E0
+antibody H3K4me1
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-10-31
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-08-30
+fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 3043
+view RawData
 
 metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep1
 objType file
@@ -1163,70 +1213,20 @@ subId 3043
 tableName wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129RawDataRep1
-objType file
-age E0
-antibody H3K4me1
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-10-31
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
-fileName wgEncodePsuHistoneG1eH3k04me1ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3043
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129RawDataRep2
-objType file
-age E0
-antibody H3K4me1
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-10-31
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
-fileName wgEncodePsuHistoneG1eH3k04me1ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 3043
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129AlnRep1
+metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eH3k04me3ME0S129AlnRep1.bam
+fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1238,20 +1238,20 @@ strain 129
 subId 3042
 view Alignments
 
-metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129AlnRep2
+metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eH3k04me3ME0S129AlnRep2.bam
+fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1288,6 +1288,56 @@ subId 3042
 tableName wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk
 view Peaks
 
+metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep1
+objType file
+age E0
+antibody H3K4me3
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-10-27
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-08-31
+fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3042
+view RawData
+
+metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep2
+objType file
+age E0
+antibody H3K4me3
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-10-27
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-08-31
+fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 3042
+view RawData
+
 metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep1
 objType file
 age E0
@@ -1307,6 +1357,31 @@ lab PSU-m
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3042
+view RepPeaks
+
+metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2
+objType file
+age E0
+antibody H3K4me3
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-10-27
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-08-31
+fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
@@ -1388,94 +1463,19 @@ subId 3042
 tableName wgEncodePsuHistoneG1eH3k04me3ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129RawDataRep1
-objType file
-age E0
-antibody H3K4me3
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-10-27
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eH3k04me3ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3042
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129RawDataRep2
-objType file
-age E0
-antibody H3K4me3
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-10-27
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eH3k04me3ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 3042
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k04me3ME0S129RepPeaksRep2
-objType file
-age E0
-antibody H3K4me3
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-10-27
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eH3k04me3ME0S129RepPeaksRep2.broadPeak.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 3042
-view RepPeaks
-
-metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129AlnRep1
+metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
-fileName wgEncodePsuHistoneG1eH3k27me3ME0S129AlnRep1.bam
+fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1487,19 +1487,19 @@ strain 129
 subId 3047
 view Alignments
 
-metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129AlnRep2
+metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
-fileName wgEncodePsuHistoneG1eH3k27me3ME0S129AlnRep2.bam
+fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1534,6 +1534,54 @@ strain 129
 subId 3047
 tableName wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep1
+objType file
+age E0
+antibody H3K27me3
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-29
+fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3047
+view RawData
+
+metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep2
+objType file
+age E0
+antibody H3K27me3
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-30
+dateUnrestricted 2012-06-29
+fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3047
+view RawData
 
 metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep1
 objType file
@@ -1655,67 +1703,19 @@ subId 3047
 tableName wgEncodePsuHistoneG1eH3k27me3ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129RawDataRep1
-objType file
-age E0
-antibody H3K27me3
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
-fileName wgEncodePsuHistoneG1eH3k27me3ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3047
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k27me3ME0S129RawDataRep2
-objType file
-age E0
-antibody H3K27me3
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-30
-dateUnrestricted 2012-06-29
-fileName wgEncodePsuHistoneG1eH3k27me3ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3047
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129AlnRep1
+metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneG1eH3k36me3ME0S129AlnRep1.bam
+fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1727,19 +1727,19 @@ strain 129
 subId 5012
 view Alignments
 
-metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129AlnRep2
+metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneG1eH3k36me3ME0S129AlnRep2.bam
+fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1774,6 +1774,54 @@ strain 129
 subId 5012
 tableName wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep1
+objType file
+age E0
+antibody H3K36me3
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-25
+dateUnrestricted 2012-07-24
+fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5012
+view RawData
+
+metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep2
+objType file
+age E0
+antibody H3K36me3
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-25
+dateUnrestricted 2012-07-24
+fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5012
+view RawData
 
 metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep1
 objType file
@@ -1895,68 +1943,20 @@ subId 5012
 tableName wgEncodePsuHistoneG1eH3k36me3ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129RawDataRep1
-objType file
-age E0
-antibody H3K36me3
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-25
-dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneG1eH3k36me3ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 5012
-view RawData
-
-metaObject wgEncodePsuHistoneG1eH3k36me3ME0S129RawDataRep2
-objType file
-age E0
-antibody H3K36me3
-cell G1E
-composite wgEncodePsuHistone
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-25
-dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneG1eH3k36me3ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 5012
-view RawData
-
-metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129AlnRep1
+metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129AlnRep1.bam
+fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -1968,20 +1968,20 @@ strain 129
 subId 3041
 view Alignments
 
-metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129AlnRep2
+metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129AlnRep2.bam
+fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2017,6 +2017,56 @@ strain 129
 subId 3041
 tableName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep1
+objType file
+age E0
+antibody H3K4me3
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-10-26
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-08-31
+fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3041
+view RawData
+
+metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep2
+objType file
+age E0
+antibody H3K4me3
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-10-26
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-08-31
+fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 3041
+view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1
 objType file
@@ -2143,68 +2193,18 @@ subId 3041
 tableName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129RawDataRep1
-objType file
-age E0
-antibody H3K4me3
-cell G1E-ER4+E2
-composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-10-26
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3041
-view RawData
-
-metaObject wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129RawDataRep2
-objType file
-age E0
-antibody H3K4me3
-cell G1E-ER4+E2
-composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-10-26
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 3041
-view RawData
-
-metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129AlnRep1
+metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1
 objType file
 age E0
 antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-23
-fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129AlnRep1.bam
+fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2216,18 +2216,18 @@ strain 129
 subId 4875
 view Alignments
 
-metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129AlnRep2
+metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2
 objType file
 age E0
 antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-23
-fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129AlnRep2.bam
+fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2262,6 +2262,52 @@ strain 129
 subId 4875
 tableName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1
+objType file
+age E0
+antibody H3K27me3
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-23
+fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4875
+view RawData
+
+metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2
+objType file
+age E0
+antibody H3K27me3
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-23
+fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 4875
+view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1
 objType file
@@ -2379,65 +2425,19 @@ subId 4875
 tableName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129RawDataRep1
-objType file
-age E0
-antibody H3K27me3
-cell G1E-ER4+E2
-composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
-fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 4875
-view RawData
-
-metaObject wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129RawDataRep2
-objType file
-age E0
-antibody H3K27me3
-cell G1E-ER4+E2
-composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
-fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 4875
-view RawData
-
-metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129AlnRep1
+metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep1
 objType file
 age E0
 antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129AlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129AlnRep1.bam.bai
+fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2449,19 +2449,19 @@ strain 129
 subId 5037
 view Alignments
 
-metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129AlnRep2
+metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep2
 objType file
 age E0
 antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129AlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129AlnRep2.bam.bai
+fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2496,6 +2496,54 @@ strain 129
 subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep1
+objType file
+age E0
+antibody H3K36me3
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-30
+dateUnrestricted 2012-07-30
+fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain 129
+subId 5037
+view RawData
+
+metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep2
+objType file
+age E0
+antibody H3K36me3
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-30
+dateUnrestricted 2012-07-30
+fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain 129
+subId 5037
+view RawData
 
 metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep1
 objType file
@@ -2617,67 +2665,19 @@ subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129RawDataRep1
-objType file
-age E0
-antibody H3K36me3
-cell G1E-ER4+E2
-composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-30
-dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex B
-strain 129
-subId 5037
-view RawData
-
-metaObject wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129RawDataRep2
-objType file
-age E0
-antibody H3K36me3
-cell G1E-ER4+E2
-composite wgEncodePsuHistone
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-30
-dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex B
-strain 129
-subId 5037
-view RawData
-
-metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1AlnRep1
+metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1
 objType file
 age E14.5
 antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1AlnRep1.bam.bai
+fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2689,19 +2689,19 @@ strain CD-1
 subId 5038
 view Alignments
 
-metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1AlnRep2
+metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep2
 objType file
 age E14.5
 antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1AlnRep2.bam.bai
+fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2736,6 +2736,54 @@ strain CD-1
 subId 5038
 tableName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep1
+objType file
+age E14.5
+antibody H3K4me1
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-30
+dateUnrestricted 2012-07-30
+fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5038
+view RawData
+
+metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep2
+objType file
+age E14.5
+antibody H3K4me1
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-30
+dateUnrestricted 2012-07-30
+fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5038
+view RawData
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep1
 objType file
@@ -2857,67 +2905,19 @@ subId 5038
 tableName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1RawDataRep1
-objType file
-age E14.5
-antibody H3K4me1
-cell Megakaryo
-composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-30
-dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex B
-strain CD-1
-subId 5038
-view RawData
-
-metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1RawDataRep2
-objType file
-age E14.5
-antibody H3K4me1
-cell Megakaryo
-composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-30
-dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex B
-strain CD-1
-subId 5038
-view RawData
-
-metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1AlnRep1
+metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep1
 objType file
 age E14.5
 antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1AlnRep1.bam
+fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2929,19 +2929,19 @@ strain CD-1
 subId 5035
 view Alignments
 
-metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1AlnRep2
+metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep2
 objType file
 age E14.5
 antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1AlnRep2.bam
+fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep2.bam
 grant Hardison
 lab PSU-m
 project wgEncode
@@ -2976,6 +2976,54 @@ strain CD-1
 subId 5035
 tableName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk
 view Peaks
+
+metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-28
+dateUnrestricted 2012-07-28
+fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5035
+view RawData
+
+metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-28
+dateUnrestricted 2012-07-28
+fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5035
+view RawData
 
 metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep1
 objType file
@@ -3097,52 +3145,4 @@ subId 5035
 tableName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputSig
 view Signal
 
-metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1RawDataRep1
-objType file
-age E14.5
-antibody H3K4me3
-cell Megakaryo
-composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-28
-dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex B
-strain CD-1
-subId 5035
-view RawData
-
-metaObject wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1RawDataRep2
-objType file
-age E14.5
-antibody H3K4me3
-cell Megakaryo
-composite wgEncodePsuHistone
-control None
-controlId Megakaryo/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-28
-dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex B
-strain CD-1
-subId 5035
-view RawData
-
-# MAGIC: 1398808681
+# MAGIC: 1914521997
