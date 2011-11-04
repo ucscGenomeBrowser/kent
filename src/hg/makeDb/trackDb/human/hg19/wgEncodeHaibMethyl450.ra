@@ -6,21 +6,22 @@ longLabel CpG Methylation by Methyl 450K  Bead Arrays from ENCODE/HAIB
 group regulation
 subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ CACO2=Caco-2 CMK=CMK ECC1=ECC-1 Fibrobl=Fibrobl GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTB11=HTB-11 HEPATO=Hepatocytes HTR8=HTR-8 IMR90=IMR90  JURKAT=Jurkat LNCAP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast OVCAR3=ovcar-3 PANC1=PANC-1 PanIslets=PanIslets PFSK1=PFSK-1 PrEC=PrEC PROGFIB=ProgFib RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCAdiposeUHN00001=BC_Adipose_UHN00001 BCAdrenalGlandH12803N=BC_Adrenal_Gland_H12803N BCBladder0111002=BC_Bladder_01-11002 BCBrainH11058N=BC_Brain_H11058N BCBreast0203015=BC_Breast_02-03015 BCColon0111002=BC_Colon_01-11002 BCColonH12817N=BC_Colon_H12817N BCEsophagus0111002=BC_Esophagus_01-11002 BCEsophagusH12817N=BC_Esophagus_H12817N BCJejunumH12817N=BC_Jejunum_H12817N BCKidney0111002=BC_Kidney_01-11002 BCKidneyH12817N=BC_Kidney_H12817N BCLeftVentricleN41=BC_Left_Ventricle_N41 BCLeukocyteUHN00204=BC_Leukocyte_UHN00204 BCLiver0111002=BC_Liver_01-11002 BCLung0111002=BC_Lung_01-11002 BCLungH12817N=BC_Lung_H12817N BCPancreasH12817N=BC_Pancreas_H12817N BCPenisH12817N=BC_Penis_H12817N BCPericardiumH12529N=BC_Pericardium_H12529N BCPlacentaUHN00189=BC_Placenta_UHN00189 BCProstateGlandH12817N=BC_Prostate_Gland_H12817N BCRectumN29=BC_Rectum_N29 BCSkeletalMuscle0111002=BC_Skeletal_Muscle_01-11002 BCSkeletalMuscleH12817N=BC_Skeletal_Muscle_H12817N BCSkin0111002=BC_Skin_01-11002 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 
 subGroup2 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
-subGroup3 treatment Treatment NONE=None ETOH02=ETOH02 DM002P24H=DM002P24H TAM=4OHTAM_1uM_36hr
+subGroup3 treatment Treatment NONE=None ETOH02=EtOH_.02%_1h DM002P24H=DMSO_.02%_24h TAM=Tamoxifen_1uM_36h
 dimensions dimY=cellType dimX=treatment dimZ=rep
 dimensionZchecked rep1
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep obtainedBy=Obtained_By dccAccession=UCSC_Accession geoSampleAccession=GEO_Accesion fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 sortOrder cellType=+ treatment=+ rep=+ 
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
+visibility hide
+canPack On
 priority 0
-type bed 9
+type bed 6 +
 wgEncode 1
 itemRgb on
-visibility dense
-#canPack On
 scoreFilter 0
 scoreFilterLimits 0:1000
+boxedCfg on
 #maxWindowToQuery 10000000
 
         track wgEncodeHaibMethyl450Mcf7SitesRep1
@@ -33,8 +34,8 @@ scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethyl450A549Etoh02SitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel A549 1
-        longLabel A549 ETOH02 Methylation 450K Bead Array Rep 1 from ENCODE/HAIB #81
+        shortLabel A549 ETOH 1
+        longLabel A549 EtOH Methylation 450K Bead Array Rep 1 from ENCODE/HAIB 
         subGroups cellType=A549 treatment=ETOH02 rep=rep1
         type bed 9
         # subId=4444 dateSubmitted=2011-06-29
@@ -74,8 +75,8 @@ scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethyl450T47dDm002p24hSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel T-47D 1
-        longLabel T-47D DM002P24H Methylation 450K Bead Array Rep 1 from ENCODE/HAIB #85
+        shortLabel T-47D DMSO 1
+        longLabel T-47D DMSO Methylation 450K Bead Array Rep 1 from ENCODE/HAIB
         subGroups cellType=T47D treatment=DM002P24H rep=rep1
         type bed 9
         # subId=4444 dateSubmitted=2011-06-29
@@ -157,8 +158,8 @@ scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethyl450HepatoSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel Hepatocytes 1
-        longLabel Hepatocytes Methylation 450K Bead Array Rep 1 from ENCODE/HAIB #81
+        shortLabel Hepatocyte 1
+        longLabel Hepatocyte Methylation 450K Bead Array Rep 1 from ENCODE/HAIB
         subGroups cellType=HEPATO treatment=NONE rep=rep1
         type bed 9
         # subId=4802 dateSubmitted=2011-08-29
@@ -424,16 +425,16 @@ scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethyl450Mcf10aesTamSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel MCF10A-Er-Src 1
-        longLabel MCF10A-Er-Src TAM Methylation 450K Bead Array Rep 1 from ENCODE/HAIB #87
+        shortLabel MCF10A TAM 1
+        longLabel MCF10A TAM Methylation 450K Bead Array Rep 1 from ENCODE/HAIB
         subGroups cellType=MCF10AES treatment=TAM rep=rep1
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
 
         track wgEncodeHaibMethyl450Mcf10aesSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel MCF10A-Er-Src 1
-        longLabel MCF10A-Er-Src Methylation 450K Bead Array Rep 1 from ENCODE/HAIB #83
+        shortLabel MCF10A 1
+        longLabel MCF10A Methylation 450K Bead Array Rep 1 from ENCODE/HAIB
         subGroups cellType=MCF10AES treatment=NONE rep=rep1
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
