@@ -4187,5 +4187,10 @@ color 0, 80, 0
 type bed 4
 html geneReviews
 
-
-
+searchName geneReviews
+searchTable geneReviews
+searchType bed
+searchPriority 50
+xrefTable geneReviewsRefGene
+xrefQuery select geneSymbol,diseaseName from %s where diseaseName like '%%%s%%'
+searchBoth on
