@@ -501,7 +501,7 @@ labVersion Methyl450K
 md5sum f640d32bb7cc3f4724436ff431f9b589
 obtainedBy HudsonAlpha
 project wgEncode
-replicate 2
+replicate 1
 subId 4942
 tableName wgEncodeHaibMethyl450Hct116StanfordSitesRep1
 treatment None
