@@ -8,23 +8,17 @@ group expression
 subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 6HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AOAF BE2C=BE2_C BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7es=H7es HAc=HAc HA-sp=HA-sp HAE=HAE HAH=HAH HBMEC=HBMEC HBVP=HBVP HBVSMC=HBVSMC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPE HCONF=HCONF HCT116=HCT116 HEE=HEE HEK293=HEK293 HFF=HFF HFFMYC=HFFMYC HGF=HGF HIPE=HIPE HL60=HL60 HMEC=HMEC HMF=HMF HMVECDAD=HMVECDAD HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-Lbl HMVECLLy=HMVEC-LLy HNPCE=HNPCE HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCE HRCEpiC=HRCEpiC HRE=HRE HRGEC=HRGEC HRPE=HRPE HSMM=HSMM HSMMt=HSMMtube HVMF=HVMF Jurkat=Jurkat LNCaP=LNCaP MCF7=MCF-7 NB4=NB4 NHA=NHA NHBE=NHBE NHEK=NHEK NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHLF=NHLF NT2D1=NT2D1 PANC1=PANC-1 PREC=PREC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SKNMC SKNSHRA=SK-N-SH_RA Th1=Th1 WERIRB1=WERIRB1 WI38=WI-38 WI38t=WI-38_<i>Tamoxifen<\i>
 subGroup2 rep Rep rep1=1 rep2=2
 dimensions dimensionX=rep dimensionY=cellType 
-boxedCfg on
 sortOrder cellType=+ rep=+
 fileSortOrder cell=Cell_Line replicate=Rep dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Assembly<BR>originally<BR>mapped<BR>to fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibility hide
+boxedCfg on
 canPack On
 priority 0
-type broadPeak
+type bed 6 +
 wgEncode 1
 superTrack wgEncodeExonArraySuper dense
-maxHeightPixels 100:24:16
-minLimit .005
-maxLimit 25183
-viewLimits 0:30
-autoScale off
-windowingFunction mean
 html wgEncodeUwAffyExonArray.new
 
         track wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1
