@@ -351,21 +351,23 @@ boxedCfg on
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
 
-        track wgEncodeHaibMethyl450Hct116SitesRep1
+        track wgEncodeHaibMethyl450Hct116HaibSitesRep1
         parent wgEncodeHaibMethyl450 off
         shortLabel HCT-116 1
         longLabel HCT-116 Methylation 450K Bead Array Rep 1 from ENCODE/HAIB
         subGroups cellType=HCT116 treatment=NONE rep=rep1
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
+        # was wgEncodeHaibMethyl450Hct116SitesRep1 cricket Fri Nov  4 15:15:55 2011
 
-        track wgEncodeHaibMethyl450Hct116SitesRep2
+        track wgEncodeHaibMethyl450Hct116StanfordSitesRep1
         parent wgEncodeHaibMethyl450 off
         shortLabel HCT-116 2
         longLabel HCT-116 Methylation 450K Bead Array Rep 1 from ENCODE/HAIB
         subGroups cellType=HCT116 treatment=NONE rep=rep2
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
+        # was wgEncodeHaibMethyl450Hct116SitesRep2 cricket Fri Nov  4 15:24:12 2011
 
         track wgEncodeHaibMethyl450Hl60SitesRep1
         parent wgEncodeHaibMethyl450 off
