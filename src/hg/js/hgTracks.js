@@ -2668,8 +2668,8 @@ var imageV2 = {
         // We do this last b/c it's least important.
         var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
         if(a && a[1]) {
-            b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-            if(b[1]) {
+            var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+            if(b && b[1]) {
                 $('#chrom').attr('src', b[1]);
             }
         }

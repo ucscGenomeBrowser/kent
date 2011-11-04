@@ -41,6 +41,21 @@ var encodeProject = (function () {
             }
         },
 
+        cmpNoCase: function (a, b) {
+        // Helper function for case-insensitive sort - belongs in
+        // more generic lib
+            var A, B;
+            A = a.toUpperCase();
+            B = b.toUpperCase();
+            if (A < B) {
+                return -1;
+            }
+            if (A > B) {
+                return 1;
+            }
+            return 0;
+        },
+
         addSearchPanel: function (divId) {
             // Create panel of radio buttons for user to select search type
             // Add to passed in HTML div ID; e.g. #searchTypePanel
@@ -106,7 +121,7 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                dataGroups[i].dataTypes.sort(this.cmpNoCase);
+                dataGroups[i].dataTypes.sort(encodeProject.cmpNoCase);
             });
             return dataGroups;
         },
@@ -137,7 +152,7 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                cellTiers[i].cellTypes.sort(this.cmpNoCase);
+                cellTiers[i].cellTypes.sort(encodeProject.cmpNoCase);
             });
             return cellTiers;
         },
@@ -177,7 +192,7 @@ var encodeProject = (function () {
                 if (!antibodyGroupHash[group]) {
                     antibodyGroupHash[group] = {
                         label: group,
-                        targets: [],
+                        targets: []
                     };
                 }
                 antibodyGroupHash[group].targets.push(antibody.target);
@@ -191,7 +206,7 @@ var encodeProject = (function () {
                     // for some reason there's  __ element here (not my property)
                     return true;
                 }
-                antibodyGroups[i].targets.sort(this.cmpNoCase);
+                antibodyGroups[i].targets.sort(encodeProject.cmpNoCase);
             });
             return antibodyGroups;
         },
@@ -208,21 +223,6 @@ var encodeProject = (function () {
         // UNTESTED
         expIdFromAccession: function(accession) {
             return accession.slice(accessionPrefix.length);
-        },
-
-        cmpNoCase: function (a, b) {
-        // Helper function for case-insensitive sort - belongs in
-        // more generic lib
-            var A, B;
-            A = a.toUpperCase();
-            B = b.toUpperCase();
-            if (A < B) {
-                return -1;
-            }
-            if (A > B) {
-                return 1;
-            }
-            return 0;
         },
 
         serverRequests: {

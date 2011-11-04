@@ -35,8 +35,6 @@ our $compositePrefix = "wgEncode";
 
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
-#our $grantConfigFile = "labs.ra";
-#our $labConfigFile = "pi.ra";    # for reporting purposes
 our $expVarsFile= "expVars.ra";
 our $autoCreatedPrefix = "auto";
 
@@ -185,18 +183,6 @@ sub projectDir
     return "/cluster/data/encode/pipeline/encpipeline_$instance/$id";
 }
 
-sub getLabs
-{
-# file with lab/pi/project/grant -- used for reporting purposes
-# Captures conventions in reporting spreadsheet and pipeline metadata
-    my ($configPath) = @_;
-    my %labs = ();
-    if(-e "$configPath/$labConfigFile") {
-        %labs = RAFile::readRaFile("$configPath/$labConfigFile", "lab");
-    }
-    return \%labs;
-}
-
 sub getExpVars
 {
 # Returns hash indexed by the composite name in the experiments.ra file
@@ -265,8 +251,8 @@ sub getFields
 
 sub validateAssembly {
     my ($val) = @_;
-    if($val ne 'hg19' && $val ne 'mm9') {
-        return "Assembly '$val' is invalid (must be 'hg19 or mm9')";
+    if($val ne 'hg19' && $val ne 'mm9' && $val ne 'encodeTest') {
+        return "Assembly '$val' is invalid (must be 'hg19 or mm9 or encodeTest')";
     } else {
         return ();
     }
@@ -278,7 +264,7 @@ sub getDaf
 # hash keys are RA style plus an additional TRACKS key which is a nested hash for
 # the track list at the end of the DAF file; e.g.:
 # (lab => 'Myers', TRACKS => {'Alignments => {}, Signal => {}})
-    my ($submitDirs, $fields) = @_;
+    my ($submitDir, $fields) = @_;
 
     # Verify required fields
     # are present and that the project is marked active.

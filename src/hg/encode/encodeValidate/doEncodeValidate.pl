@@ -33,13 +33,16 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
-use Encode;
-use HgAutomate;
-use HgDb;
-use RAFile;
-use SafePipe;
+BEGIN{
 
+unshift(@INC, ".");
+require Encode; Encode->import;
+require HgAutomate; HgAutomate->import;
+require HgDb; HgDb->import;
+require RAFile; RAFile->import;
+require SafePipe; SafePipe->import;
+
+}
 use vars qw/
     $opt_allowReloads
     $opt_configDir
@@ -233,7 +236,16 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    return @errors;
+    if (@errors) {
+        my $errorstr = "";
+        for my $line (@errors) {
+            $errorstr = $errorstr . "$line\n";
+        }
+        return $errorstr;
+    }
+    else {
+        return ();
+    }
 }
 
 sub validateDatasetName {
@@ -1159,6 +1171,8 @@ sub isDownloadOnly {
     } else {
         return 0;
     }
+    #return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative'
+    #    or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
 
 }
 
@@ -1528,7 +1542,6 @@ $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
-
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
@@ -1920,10 +1933,6 @@ if(!$opt_skipOutput && !$compositeExists) {
 
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
-
-# use pi.ra file to map pi/lab/institution/grant/project for metadata line
-#my $labRef = Encode::getLabs($configPath);
-#my %labs = %{$labRef};
 
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
