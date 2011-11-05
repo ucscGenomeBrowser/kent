@@ -35,8 +35,6 @@ our $compositePrefix = "wgEncode";
 
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
-#our $grantConfigFile = "labs.ra";
-#our $labConfigFile = "pi.ra";    # for reporting purposes
 our $expVarsFile= "expVars.ra";
 our $autoCreatedPrefix = "auto";
 
@@ -253,8 +251,8 @@ sub getFields
 
 sub validateAssembly {
     my ($val) = @_;
-    if($val ne 'hg19' && $val ne 'mm9') {
-        return "Assembly '$val' is invalid (must be 'hg19 or mm9')";
+    if($val ne 'hg19' && $val ne 'mm9' && $val ne 'encodeTest') {
+        return "Assembly '$val' is invalid (must be 'hg19 or mm9 or encodeTest')";
     } else {
         return ();
     }
