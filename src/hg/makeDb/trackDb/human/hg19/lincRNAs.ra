@@ -18,7 +18,7 @@ track lincRNAs
 superTrack on
 shortLabel lincRNAs
 longLabel Human Body Map lincRNAs and TUCP Transcripts 
-group regulation
+group genes
 #visibility dense 
 html lincRNAs
 

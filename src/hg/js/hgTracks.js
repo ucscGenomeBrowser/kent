@@ -1891,7 +1891,7 @@ var rightClick = {
                         document.TrackHeaderForm.submit();
                 }
             } else {
-                imageV2.requestImgUpdate(id, id+"="+cmd, "");
+                imageV2.requestImgUpdate(id, id + "=" + cmd, "", cmd);
             }
         }
     },
@@ -2547,8 +2547,9 @@ var imageV2 = {
         return false;
     },
 
-    requestImgUpdate: function (trackName,extraData,loadingId)
+    requestImgUpdate: function (trackName,extraData,loadingId,newVisibility)
     {
+        // extraData, loadingId and newVisibility are optional
         var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
         if(extraData != undefined && extraData != "")
             data += "&" + extraData;
@@ -2568,6 +2569,7 @@ var imageV2 = {
                     cmd: 'refresh',
                     loadingId: loadingId,
                     id: trackName,
+                    newVisibility: newVisibility,
                     cache: false
                 });
     },
