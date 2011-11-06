@@ -76,7 +76,34 @@ deleted from the track.<br>
   </li>
 </ul>
 <h2>Methods</h2>
-
+<p>ENCODE cell lines K562 and GM12878 were used for large scale
+proteomic analysis. Cell lines were cultured according to standard
+<A HREF="http://genome.ucsc.edu/ENCODE/protocols/cell" target="_blank">ENCODE cell culture protocols</A>
+and in-gel digestion was completed according to the standard
+protocol (Shevchenko, et al. 2007). </p>
+The proteolytic enzyme trypsin was used to digest the proteins
+in order to produce short, MS/MS analyzable peptides. Trypsin is a
+common protease that typically cleaves proteins after Arginine or Lysine. The
+metadata parameter <i>enzyme</i> specifies the restriction enzyme used
+for digestion. Tandem mass spectrometry (RPLC-MS/MS) analysis was then
+performed on an Eksigent Ultra-LTQ Orbitrap system. However, due
+to enzyme inefficiency, it does not always cleave at Arginine or Lysine, so there
+may be peptides that include an uncleaved Arg/Lys site. The number of such
+missed cleavages allowed in the search is described by the metadata
+parameter <i>miscleavages</i>.
+<p>We performed proteogenomic mapping (Jaffe, et al., 2004) with two missed cleavages
+allowed and using the whole human genomic sequence (UCSC hg19) via the
+genome fingerprint scanning (GFS) program (Giddings, et al. 2003)  and newly 
+developed Peppy 
+(<a href="http://www.peppyresearch.com/">http://www.peppyresearch.com</a>/). 
+We used HMM_Score (Khatun, et al. 2008) to accurately match MS/MS
+spectra to their corresponding genome sequences.  E-values are
+calculated, which estimate the number of results at the given score
+level which would be expected by random chance. We then empirically
+derived the false discovery rate for a given E-Value using a decoy
+database search and only those matches falling within the specified 5%
+FDR rate (E-Value &lt;0.01) are included in the track. The results with
+10% FDR (E-Value &lt;0.05) are available under the Downloads page as Raw Signal.</a> </p>
 <h2>Credits</h2>
 <p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
 Ahamed, Christopher Maier, Dr. John Wrobel and Dennis Crenshaw (<A HREF=http://giddingslab.org/>Giddings Lab</A>). </p>

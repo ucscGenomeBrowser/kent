@@ -35,8 +35,6 @@ our $compositePrefix = "wgEncode";
 
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
-our $grantConfigFile = "labs.ra";
-our $labConfigFile = "pi.ra";    # for reporting purposes
 our $expVarsFile= "expVars.ra";
 our $autoCreatedPrefix = "auto";
 
@@ -185,30 +183,6 @@ sub projectDir
     return "/cluster/data/encode/pipeline/encpipeline_$instance/$id";
 }
 
-sub getGrants
-{
-# The grants are called "labs" in the labs.ra file (for historical reasons).
-    my ($configPath) = @_;
-    my %grants;
-    if(-e "$configPath/$grantConfigFile") {
-        # tolerate missing labs.ra in dev trees.
-        %grants = RAFile::readRaFile("$configPath/$grantConfigFile", "lab");
-    }
-    return \%grants;
-}
-
-sub getLabs
-{
-# file with lab/pi/project/grant -- used for reporting purposes
-# Captures conventions in reporting spreadsheet and pipeline metadata
-    my ($configPath) = @_;
-    my %labs = ();
-    if(-e "$configPath/$labConfigFile") {
-        %labs = RAFile::readRaFile("$configPath/$labConfigFile", "lab");
-    }
-    return \%labs;
-}
-
 sub getExpVars
 {
 # Returns hash indexed by the composite name in the experiments.ra file
@@ -277,8 +251,8 @@ sub getFields
 
 sub validateAssembly {
     my ($val) = @_;
-    if($val ne 'hg19' && $val ne 'mm9') {
-        return "Assembly '$val' is invalid (must be 'hg19 or mm9')";
+    if($val ne 'hg19' && $val ne 'mm9' && $val ne 'encodeTest') {
+        return "Assembly '$val' is invalid (must be 'hg19 or mm9 or encodeTest')";
     } else {
         return ();
     }
@@ -290,7 +264,7 @@ sub getDaf
 # hash keys are RA style plus an additional TRACKS key which is a nested hash for
 # the track list at the end of the DAF file; e.g.:
 # (lab => 'Myers', TRACKS => {'Alignments => {}, Signal => {}})
-    my ($submitDir, $grants, $fields) = @_;
+    my ($submitDir, $fields) = @_;
 
     # Verify required fields
     # are present and that the project is marked active.
@@ -305,13 +279,13 @@ sub getDaf
     $dafFile = cwd() . "/" . $dafFile;
     HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
     chdir($wd);
-    return parseDaf($dafFile, $grants, $fields);
+    return parseDaf($dafFile, $fields);
 }
 
 sub parseDaf
 {
 # Identical to getDaf, but first argument is the DAF filename.
-    my ($dafFile, $grants, $fields) = @_;
+    my ($dafFile, $fields) = @_;
     my %daf = ();
     $daf{TRACKS} = {};
     my $lines = readFile("$dafFile");
@@ -376,9 +350,6 @@ sub parseDaf
 
     if(!keys(%{$daf{TRACKS}})) {
         push(@errors, "no views defined for project \'$daf{project}\' in DAF '$dafFile'");
-    }
-    if(!defined($grants->{$daf{grant}})) {
-        push(@errors, "invalid lab '$daf{grant}' in DAF '$dafFile'");
     }
     push(@errors, validateAssembly($daf{assembly}));
 

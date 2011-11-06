@@ -26,7 +26,8 @@ td {
 
 /* vertical column headers (th child of columnHeaders row) */
 #columnHeaders th {
-    height: 150px;
+    /*height: 150px;    restore when data types labels are cleaned up */
+    height: 180px;
 }
 
 .matrix {
