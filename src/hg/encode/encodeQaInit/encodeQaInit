@@ -402,7 +402,10 @@ def checkWithMkNotes(ourset, mkNotesSet, status):
 	for i in ourset:
 		compset.add(i.rstrip())
 	if mkNotesSet != compset:
-		errors.append("FATAL ERROR: The list of %s in the notes file is out of date." % status)
+		errors.append("""
+FATAL ERROR: The list of %s in the notes file is out of date.
+You may need to do a 'git pull'.
+""" % status)
 	return errors
 
 
