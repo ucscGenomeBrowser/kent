@@ -36,6 +36,7 @@ our $compositePrefix = "wgEncode";
 our $fieldConfigFile = "fields.ra";
 our $vocabConfigFile = "cv.ra";
 our $grantConfigFile = "labs.ra";
+our $labConfigFile = "pi.ra";    # for reporting purposes
 our $expVarsFile= "expVars.ra";
 our $autoCreatedPrefix = "auto";
 
@@ -194,6 +195,18 @@ sub getGrants
         %grants = RAFile::readRaFile("$configPath/$grantConfigFile", "lab");
     }
     return \%grants;
+}
+
+sub getLabs
+{
+# file with lab/pi/project/grant -- used for reporting purposes
+# Captures conventions in reporting spreadsheet and pipeline metadata
+    my ($configPath) = @_;
+    my %labs = ();
+    if(-e "$configPath/$labConfigFile") {
+        %labs = RAFile::readRaFile("$configPath/$labConfigFile", "lab");
+    }
+    return \%labs;
 }
 
 sub getExpVars
