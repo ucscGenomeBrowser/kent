@@ -276,6 +276,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001158
+expId 1158
 fileName wgEncodeRikenCageA549CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -283,6 +285,7 @@ labExpId K16,K17
 labProtocolId 021WC+cage,022WC+cage
 labVersion IDR
 localization cell
+md5sum 90b1f1f807c5b5bbf416814185427425
 project wgEncode
 rnaExtract longPolyA
 subId 5067
@@ -561,6 +564,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001159
+expId 1159
 fileName wgEncodeRikenCageAg04450CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -568,6 +573,7 @@ labExpId K12,K13
 labProtocolId 017WC+cage,018WC+cage
 labVersion IDR
 localization cell
+md5sum d2c02648c526bee76c4e0de95c40d6cc
 project wgEncode
 rnaExtract longPolyA
 subId 5070
@@ -846,6 +852,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001160
+expId 1160
 fileName wgEncodeRikenCageBjCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -853,6 +861,7 @@ labExpId K18,K19
 labProtocolId 037WC+cage,038WC+cage
 labVersion IDR
 localization cell
+md5sum 88225b49eca770419d470bb2a8092559
 project wgEncode
 rnaExtract longPolyA
 subId 5048
@@ -1131,6 +1140,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001680
+expId 1680
 fileName wgEncodeRikenCageGm12878CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -1138,6 +1149,7 @@ labExpId J72,J73
 labProtocolId 003WC+cage,004WC+cage
 labVersion IDR
 localization cell
+md5sum 16b7f46fc29362165e8898e0f2852057
 project wgEncode
 rnaExtract longPolyA
 subId 5082
@@ -1311,6 +1323,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000338
+expId 338
 fileName wgEncodeRikenCageGm12878CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -1318,6 +1332,7 @@ labExpId I27
 labProtocolId gen0104C-cage
 labVersion IDR
 localization cytosol
+md5sum 329b5534c170df31bb68a5ec85fa29c7
 project wgEncode
 rnaExtract longNonPolyA
 subId 5075
@@ -1596,6 +1611,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001679
+expId 1679
 fileName wgEncodeRikenCageGm12878CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -1603,6 +1620,7 @@ labExpId J84,J85
 labProtocolId 003C+cage,004C+cage
 labVersion IDR
 localization cytosol
+md5sum 713e78e09fc205e3529406dffdbb9f66
 project wgEncode
 rnaExtract longPolyA
 subId 5058
@@ -1773,6 +1791,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000340
+expId 340
 fileName wgEncodeRikenCageGm12878NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -1780,6 +1800,7 @@ labExpId I69
 labProtocolId gen0109NLtcage
 labVersion IDR
 localization nucleolus
+md5sum 4df3a4e87e01560e0815ae7f67cd95fc
 project wgEncode
 rnaExtract total
 subId 5057
@@ -1947,6 +1968,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000339
+expId 339
 fileName wgEncodeRikenCageGm12878NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -1954,6 +1977,7 @@ labExpId J59
 labProtocolId gen0110N-cage
 labVersion IDR
 localization nucleus
+md5sum d40d8717b6b1ec35024af5464aa7b766
 project wgEncode
 rnaExtract longNonPolyA
 subId 5059
@@ -2232,6 +2256,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001678
+expId 1678
 fileName wgEncodeRikenCageGm12878NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -2239,6 +2265,7 @@ labExpId J93,J94
 labProtocolId 003N+cage,004N+cage
 labVersion IDR
 localization nucleus
+md5sum af79b5a6ea092efa030183b72aea24a6
 project wgEncode
 rnaExtract longPolyA
 subId 5086
@@ -2412,6 +2439,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000341
+expId 341
 fileName wgEncodeRikenCageH1hescCellPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -2419,6 +2448,7 @@ labExpId I67
 labProtocolId gen0113WC-cage
 labVersion IDR
 localization cell
+md5sum f296e6036fcdafb7b93a666b3a74c584
 project wgEncode
 rnaExtract longNonPolyA
 subId 5080
@@ -2697,6 +2727,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001138
+expId 1138
 fileName wgEncodeRikenCageH1hescCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -2704,6 +2736,7 @@ labExpId J74,J75
 labProtocolId 005WC+cage,006WC+cage
 labVersion IDR
 localization cell
+md5sum f95209c8c18d35775e9831be8a7fd447
 project wgEncode
 rnaExtract longPolyA
 subId 5055
@@ -3248,6 +3281,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001146
+expId 1146
 fileName wgEncodeRikenCageHelas3CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -3255,6 +3290,7 @@ labExpId J80,J81
 labProtocolId 011WC+cage,012WC+cage
 labVersion IDR
 localization cell
+md5sum db9b55e8796d075bb77e1a31446b80ec
 project wgEncode
 rnaExtract longPolyA
 subId 5054
@@ -3422,6 +3458,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001155
+expId 1155
 fileName wgEncodeRikenCageHelas3CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -3429,6 +3467,7 @@ labExpId J56
 labProtocolId gen0121C-cage
 labVersion IDR
 localization cytosol
+md5sum 5f12a5131874544169d78864a0c7a75c
 project wgEncode
 rnaExtract longNonPolyA
 subId 5085
@@ -3707,6 +3746,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001144
+expId 1144
 fileName wgEncodeRikenCageHelas3CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -3714,6 +3755,7 @@ labExpId J87,J88
 labProtocolId 011C+cage,012C+cage
 labVersion IDR
 localization cytosol
+md5sum ace9bafdfb0dfdc597846e1a33cacdcf
 project wgEncode
 rnaExtract longPolyA
 subId 5079
@@ -3881,6 +3923,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001156
+expId 1156
 fileName wgEncodeRikenCageHelas3NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -3888,6 +3932,7 @@ labExpId J58
 labProtocolId gen0123NLtcage
 labVersion IDR
 localization nucleolus
+md5sum deb96e4d8a0a676cb6fed674a76ef8e7
 project wgEncode
 rnaExtract total
 subId 5083
@@ -4166,6 +4211,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001145
+expId 1145
 fileName wgEncodeRikenCageHelas3NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -4173,6 +4220,7 @@ labExpId J96,J97
 labProtocolId 011N+cage,012N+cage
 labVersion IDR
 localization nucleus
+md5sum 723016c9e8a199c7f2b4d0c1f80140f3
 project wgEncode
 rnaExtract longPolyA
 subId 5072
@@ -4451,6 +4499,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001149
+expId 1149
 fileName wgEncodeRikenCageHepg2CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -4458,6 +4508,7 @@ labExpId K01,K02
 labProtocolId 013WC+cage,014WC+cage
 labVersion IDR
 localization cell
+md5sum b4b91192506fd7d6b626f1518d4f197c
 project wgEncode
 rnaExtract longPolyA
 subId 5060
@@ -4631,6 +4682,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000343
+expId 343
 fileName wgEncodeRikenCageHepg2CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -4638,6 +4691,7 @@ labExpId I42
 labProtocolId gen0125C-cage
 labVersion IDR
 localization cytosol
+md5sum d4cdb1627833ec5a2f31391ea545acb4
 project wgEncode
 rnaExtract longNonPolyA
 subId 5064
@@ -4916,6 +4970,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001147
+expId 1147
 fileName wgEncodeRikenCageHepg2CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -4923,6 +4979,7 @@ labExpId J89,J90
 labProtocolId 013C+cage,014C+cage
 labVersion IDR
 localization cytosol
+md5sum a1e50774aba263f7d22efde4b6f8af3f
 project wgEncode
 rnaExtract longPolyA
 subId 5063
@@ -5093,6 +5150,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000344
+expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -5100,6 +5159,7 @@ labExpId I68
 labProtocolId gen0127NLtcage
 labVersion IDR
 localization nucleolus
+md5sum baa3c52dcd332cd280df71b425357178
 project wgEncode
 rnaExtract total
 subId 5069
@@ -5273,6 +5333,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000345
+expId 345
 fileName wgEncodeRikenCageHepg2NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -5280,6 +5342,7 @@ labExpId I44
 labProtocolId gen0128N-cage
 labVersion IDR
 localization nucleus
+md5sum da9c284d8022126f3e65fb4aa9a9b673
 project wgEncode
 rnaExtract longNonPolyA
 subId 5061
@@ -5558,6 +5621,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001148
+expId 1148
 fileName wgEncodeRikenCageHepg2NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -5565,6 +5630,7 @@ labExpId J98,J99
 labProtocolId 013N+cage,014N+cage
 labVersion IDR
 localization nucleus
+md5sum 0093055adfe3e39c0c696d66b964a1d4
 project wgEncode
 rnaExtract longPolyA
 subId 5077
@@ -5843,6 +5909,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001141
+expId 1141
 fileName wgEncodeRikenCageHuvecCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -5850,6 +5918,7 @@ labExpId J78,J79
 labProtocolId 009WC+cage,010WC+cage
 labVersion IDR
 localization cell
+md5sum 6f8915c37b529c02a74e04b22d29df08
 project wgEncode
 rnaExtract longPolyA
 subId 5053
@@ -6023,6 +6092,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000342
+expId 342
 fileName wgEncodeRikenCageHuvecCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -6030,6 +6101,7 @@ labExpId I72
 labProtocolId gen0116C-cage
 labVersion IDR
 localization cytosol
+md5sum 9857646f0380943ac53a48cb5f9b18c1
 project wgEncode
 rnaExtract longNonPolyA
 subId 5073
@@ -6308,6 +6380,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001142
+expId 1142
 fileName wgEncodeRikenCageHuvecCytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -6315,6 +6389,7 @@ labExpId K03,K04
 labProtocolId 029C+cage,030C+cage
 labVersion IDR
 localization cytosol
+md5sum 8fff822347d3fa7bfbd534203764efb2
 project wgEncode
 rnaExtract longPolyA
 subId 5066
@@ -6593,6 +6668,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH001143
+expId 1143
 fileName wgEncodeRikenCageHuvecNucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -6600,6 +6677,7 @@ labExpId K05,K06
 labProtocolId 029N+cage,030N+cage
 labVersion IDR
 localization nucleus
+md5sum 80b8cf95b0e532ded04c2a10c26081c0
 project wgEncode
 rnaExtract longPolyA
 subId 5030
@@ -6878,6 +6956,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001150
+expId 1150
 fileName wgEncodeRikenCageK562CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -6885,6 +6965,7 @@ labExpId J70,J71
 labProtocolId 001WC+cage,002WC+cage
 labVersion IDR
 localization cell
+md5sum 8393f675a18b70a6b38d51a1895ee6b5
 project wgEncode
 rnaExtract longPolyA
 subId 5081
@@ -7058,6 +7139,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000334
+expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -7065,6 +7148,7 @@ labExpId I35
 labProtocolId gen0134CHtcage
 labVersion IDR
 localization chromatin
+md5sum eb338642e7ec879be9ec11fe43da98e0
 project wgEncode
 rnaExtract total
 subId 5065
@@ -7265,6 +7349,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000329
+expId 329
 fileName wgEncodeRikenCageK562CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -7272,6 +7358,7 @@ labExpId I22
 labProtocolId gen0136C-cage
 labVersion IDR
 localization cytosol
+md5sum 3de7ed2820eaf82676ec0f717108f428
 project wgEncode
 rnaExtract longNonPolyA
 subId 5051
@@ -7688,6 +7775,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000332
+expId 332
 fileName wgEncodeRikenCageK562CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -7695,6 +7784,7 @@ labExpId J82,J83
 labProtocolId 001C+cage,002C+cage
 labVersion IDR
 localization cytosol
+md5sum 6631928c3b2ca4fecbf4d271b9e4011f
 project wgEncode
 rnaExtract longPolyA
 subId 5050
@@ -7862,6 +7952,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000335
+expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -7869,6 +7961,7 @@ labExpId I33
 labProtocolId gen0144NLtcage
 labVersion IDR
 localization nucleolus
+md5sum 25a8b99de440b531dd14432df0274159
 project wgEncode
 rnaExtract total
 subId 5056
@@ -8042,6 +8135,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000336
+expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -8049,6 +8144,7 @@ labExpId I34
 labProtocolId gen0147NPtcage
 labVersion IDR
 localization nucleoplasm
+md5sum bd5cf0866d75661595d208f490df77a4
 project wgEncode
 rnaExtract total
 subId 5076
@@ -8246,6 +8342,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000330
+expId 330
 fileName wgEncodeRikenCageK562NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -8253,6 +8351,7 @@ labExpId I23
 labProtocolId gen0149N-cage
 labVersion IDR
 localization nucleus
+md5sum 3b004e336fb499508db2071e0dd28256
 project wgEncode
 rnaExtract longNonPolyA
 subId 5087
@@ -8531,6 +8630,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000333
+expId 333
 fileName wgEncodeRikenCageK562NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -8538,6 +8639,7 @@ labExpId J91,J92
 labProtocolId 001N+cage,002N+cage
 labVersion IDR
 localization nucleus
+md5sum 71d1a025b69a374ca6acc9a597bb6468
 project wgEncode
 rnaExtract longPolyA
 subId 5068
@@ -8711,6 +8813,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000337
+expId 337
 fileName wgEncodeRikenCageK562PolysomePamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -8718,6 +8822,7 @@ labExpId I32
 labProtocolId gen0152P-cage
 labVersion IDR
 localization polysome
+md5sum b8b0edaab7470ec3b5a23fc10352f63b
 project wgEncode
 rnaExtract longNonPolyA
 subId 5062
@@ -8996,6 +9101,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001151
+expId 1151
 fileName wgEncodeRikenCageMcf7CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -9003,6 +9110,7 @@ labExpId K07,K11
 labProtocolId 015WC+cage,016WC+cage
 labVersion IDR
 localization cell
+md5sum 08d38b68204206fb5637d59071691b61
 project wgEncode
 rnaExtract longPolyA
 subId 5071
@@ -9281,6 +9389,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001152
+expId 1152
 fileName wgEncodeRikenCageNhekCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -9288,6 +9398,7 @@ labExpId J76,J77
 labProtocolId 007WC+cage,008WC+cage
 labVersion IDR
 localization cell
+md5sum a827c719b5d6e89885040e066992c87b
 project wgEncode
 rnaExtract longPolyA
 subId 5049
@@ -9461,6 +9572,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000346
+expId 346
 fileName wgEncodeRikenCageNhekCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -9468,6 +9581,7 @@ labExpId I70
 labProtocolId gen0155C-cage
 labVersion IDR
 localization cytosol
+md5sum a865b900474c1946fbe8e96550b0dbde
 project wgEncode
 rnaExtract longNonPolyA
 subId 5084
@@ -9746,6 +9860,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001153
+expId 1153
 fileName wgEncodeRikenCageNhekCytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -9753,6 +9869,7 @@ labExpId K08,K20
 labProtocolId 027C+cage,028C+cage
 labVersion IDR
 localization cytosol
+md5sum 9893028f253c73c0b837fb743c99c6e0
 project wgEncode
 rnaExtract longPolyA
 subId 5052
@@ -9926,6 +10043,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH000347
+expId 347
 fileName wgEncodeRikenCageNhekNucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -9933,6 +10052,7 @@ labExpId I71
 labProtocolId gen0157N-cage
 labVersion IDR
 localization nucleus
+md5sum a5e0ef187812b3a05f84f09605d74799
 project wgEncode
 rnaExtract longNonPolyA
 subId 5088
@@ -10104,6 +10224,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001154
+expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -10111,6 +10233,7 @@ labExpId K09
 labProtocolId 027N+cage
 labVersion IDR
 localization nucleus
+md5sum 61b623a918f76f2b37d4c2dd36528213
 project wgEncode
 rnaExtract longPolyA
 subId 5078
@@ -10551,6 +10674,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
+dccAccession wgEncodeEH001157
+expId 1157
 fileName wgEncodeRikenCageSknshraCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -10558,9 +10683,10 @@ labExpId K14,K15
 labProtocolId 019WC+cage,020WC+cage
 labVersion IDR
 localization cell
+md5sum 85a826f3bb0ae4fa64ab1fb890532b74
 project wgEncode
 rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: -759416819
+# MAGIC: 1528425544
