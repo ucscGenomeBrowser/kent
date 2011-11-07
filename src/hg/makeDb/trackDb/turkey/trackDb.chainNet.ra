@@ -38,7 +38,6 @@ shortLabel $o_db Chain/Net
 
 track chainNetXenTro3 override
 priority 590.3
-shortLabel $o_db Chain/Net
 
 track chainNetDanRer7 override
 priority 600.3
