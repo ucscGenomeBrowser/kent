@@ -1937,8 +1937,6 @@ my $priority = $db->quickQuery("select max(priority) from trackDb where settings
 $ddfLineNumber = 1;
 
 # use pi.ra file to map pi/lab/institution/grant/project for metadata line
-my $labRef = Encode::getLabs($configPath);
-my %labs = %{$labRef};
 
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
