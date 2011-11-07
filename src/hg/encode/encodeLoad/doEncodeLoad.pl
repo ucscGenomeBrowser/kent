@@ -21,16 +21,12 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-BEGIN{
+use lib "/cluster/bin/scripts";
+use Encode;
+use RAFile;
+use SafePipe;
+use HgDb;
 
-unshift(@INC, ".");
-require Encode; Encode->import;
-require HgAutomate; HgAutomate->import;
-require HgDb; HgDb->import;
-require RAFile; RAFile->import;
-require SafePipe; SafePipe->import;
-
-}
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad $opt_skipDownload/;
 
 my $loadRa = "out/$Encode::loadFile";
