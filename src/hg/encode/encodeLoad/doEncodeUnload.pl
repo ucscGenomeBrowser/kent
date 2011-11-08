@@ -19,16 +19,12 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-BEGIN{
+use lib "/cluster/bin/scripts";
+use Encode;
+use RAFile;
+use HgDb;
+use HgAutomate;
 
-unshift(@INC, ".");
-require Encode; Encode->import;
-require HgAutomate; HgAutomate->import;
-require HgDb; HgDb->import;
-require RAFile; RAFile->import;
-require SafePipe; SafePipe->import;
-
-}
 use vars qw/$opt_verbose $opt_configDir/;
 my $PROG = basename $0;
 
@@ -148,8 +144,9 @@ if(dirname($submitDir) =~ /_(.*)/) {
     $tableSuffix = "_" . basename($submitDir);;
 }
 
+my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $fields);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 my $downloadDir = Encode::downloadDir($daf);
 
 chdir($submitDir) || die "Couldn't chdir to '$submitDir'";

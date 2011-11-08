@@ -888,7 +888,7 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
 cd $dir
-hgMapToGene $db ensGene knownGene knownToEnsembl -noLoad
+hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl -noLoad
 ~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
 
 grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
@@ -1090,7 +1090,6 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
     cd ../utr5
     rm -r split fold err batch.bak
 
-
 # Make pfam run.  Actual cluster run is about 6 hours.
 # First get pfam global HMMs into /hive/data/outside/pfam/current/Pfam_fs somehow.
 # Did this with
@@ -1221,7 +1220,7 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
-    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    kgBioCyc1 genes.tab pathways.tab $tempDb bioCycPathway.tab bioCycMapDesc.tab
     hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
@@ -1245,12 +1244,12 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     # in the keggPathway table, overloading the schema.
     wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
     cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
-    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
+    hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql j.tmp
 
     # Next, use the temporary contents of the keggPathway table to join with
     # knownToLocusLink, creating the real content of the keggPathway table.
     # Load this data, erasing the old temporary content
-    hgsql hg19 -N -e \
+    hgsql $tempDb -N -e \
     'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
     >keggPathway.tab
     hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
@@ -1297,6 +1296,7 @@ subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
 sequenceForBed -keepName -db=hg19 -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout \
     | faToTwoBit stdin kgTargetSeq.2bit 
 mkdir -p /gbdb/hg19/targetDb/
+rm -f /gbdb/hg19/targetDb/kgTargetSeq.2bit
 ln -s $dir/kgTargetSeq.2bit /gbdb/hg19/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
 cut -f 1-10 ucscGenes.gp \                        
@@ -1328,8 +1328,9 @@ sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 # Create backup database
 hgsqladmin create ${db}Backup
 
-# Drop tempDb history table, we don't want to swap it in!
+# Drop tempDb chromInfo and history tables, we don't want to swap them in!
 hgsql -e "drop table history" $tempDb
+hgsql -e "drop table chromInfo" $tempDb
 
 # Swap in new tables, moving old tables to backup database.
 sudo ~kent/bin/swapInMysqlTempDb $tempDb $db ${db}Backup
