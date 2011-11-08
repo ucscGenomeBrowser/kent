@@ -644,10 +644,8 @@ static int rDrawTreeInLabelArea(struct hacTree *ht, struct hvGfx *hvg, enum yRet
 /* Recursively draw the haplotype clustering tree in the left label area.
  * Returns pixel height for use at non-leaf levels of tree. */
 {
-const int branchW = 3;
-const Color boundaryColor = MG_RED;
-const int labelEnd = leftLabelX + leftLabelWidth;
-const int rightEdge = labelEnd - 1;
+const int branchW = 4;
+int labelEnd = leftLabelX + leftLabelWidth;
 if (yType == yrtStart || yType == yrtEnd)
     {
     // We're just getting vertical span of a leaf cluster, not drawing any lines.
@@ -668,7 +666,6 @@ if (yType == yrtStart || yType == yrtEnd)
 // Otherwise yType is yrtMidPoint.  If we have 2 children, we'll be drawing some lines:
 if (ht->left != NULL && ht->right != NULL)
     {
-    const int nextX = x + branchW;
     int midY;
     if (ht->childDistance == 0 || x+(2*branchW) > labelEnd)
 	{
@@ -677,33 +674,31 @@ if (ht->left != NULL && ht->right != NULL)
 	// returned both yStart and yEnd. However, the time to draw a tree of
 	// 2188 hap's (1kG phase1 interim) is in the noise, so I consider it
 	// not worth the effort of refactoring to save a sub-millisecond here.
-	int yStartLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtStart, nextX,
+	int yStartLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtStart, x+branchW,
 					      yFromNode, extraData);
-	int yEndLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtEnd, nextX,
+	int yEndLeft = rDrawTreeInLabelArea(ht->left, hvg, yrtEnd, x+branchW,
 					    yFromNode, extraData);
-	int yStartRight = rDrawTreeInLabelArea(ht->right, hvg, yrtStart, nextX,
+	int yStartRight = rDrawTreeInLabelArea(ht->right, hvg, yrtStart, x+branchW,
 					       yFromNode, extraData);
-	int yEndRight = rDrawTreeInLabelArea(ht->right, hvg, yrtEnd, nextX,
+	int yEndRight = rDrawTreeInLabelArea(ht->right, hvg, yrtEnd, x+branchW,
 					     yFromNode, extraData);
 	int yStart = min(yStartLeft, yStartRight);
 	int yEnd = max(yEndLeft, yEndRight);
 	midY = (yStart + yEnd) / 2;
-	Color branchColor = (ht->childDistance == 0) ? MG_BLACK : shadesOfGray[5];
-	hvGfxLine(hvg, x, midY, rightEdge, midY, branchColor);
-	hvGfxLine(hvg, rightEdge, yStart, rightEdge, yEnd-1, branchColor);
-	hvGfxLine(hvg, max(rightEdge-1, x), yStart, rightEdge, yStart, boundaryColor);
-	hvGfxLine(hvg, max(rightEdge-1, x), yEnd-1, rightEdge, yEnd-1, boundaryColor);
+	hvGfxLine(hvg, x+branchW-1, yStart, x+branchW-1, yEnd-1, MG_BLACK);
+	hvGfxLine(hvg, x+branchW, yStart, labelEnd, yStart, MG_BLACK);
+	hvGfxLine(hvg, x+branchW, yEnd-1, labelEnd, yEnd-1, MG_BLACK);
 	}
     else
 	{
-	int leftMid = rDrawTreeInLabelArea(ht->left, hvg, yrtMidPoint, nextX,
+	int leftMid = rDrawTreeInLabelArea(ht->left, hvg, yrtMidPoint, x+branchW,
 					   yFromNode, extraData);
-	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, nextX,
+	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, x+branchW,
 					    yFromNode, extraData);
 	midY = (leftMid + rightMid) / 2;
-	hvGfxLine(hvg, nextX-1, leftMid, nextX-1, rightMid, MG_BLACK);
-	hvGfxLine(hvg, x, midY, nextX-1, midY, MG_BLACK);
+	hvGfxLine(hvg, x+branchW-1, leftMid, x+branchW-1, rightMid, MG_BLACK);
 	}
+    hvGfxLine(hvg, x, midY, x+branchW-1, midY, MG_BLACK);
     return midY;
     }
 else if (ht->left != NULL)
@@ -713,10 +708,7 @@ else if (ht->right != NULL)
 // Leaf node -- return pixel height. Draw a line if yType is midpoint.
 int y = yFromNode(ht->itemOrCluster, extraData, yType);
 if (yType == yrtMidPoint && x < labelEnd)
-    {
-    hvGfxLine(hvg, x, y, rightEdge, y, MG_BLACK);
-    hvGfxLine(hvg, max(rightEdge-1, x), y, rightEdge, y, boundaryColor);
-    }
+    hvGfxLine(hvg, x, y, labelEnd, y, MG_BLACK);
 return y;
 }
 
