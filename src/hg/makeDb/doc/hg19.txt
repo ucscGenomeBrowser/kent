@@ -13868,6 +13868,11 @@ for bed in agilent*.bed; do
     tail -n +2 $bed | hgLoadBed hg19 ${bed%.bed} stdin
 done
 rm bed.tab
+### Update (2011-11-01 Andy Pohl
+# (acquired bed file in e-mail attachment)
+cd /hive/data/genomes/hg19/bed/agilentProbes
+ln -s 030587_D_BED_20101006_Colored.bed agilentCghSnpCancer4x180k.bed
+tail +3 agilentCghSnpCancer4x180k.bed | hgLoadBed hg19 agilentCghSnpCancer4x180k stdin
 
 
 #################################################################################
