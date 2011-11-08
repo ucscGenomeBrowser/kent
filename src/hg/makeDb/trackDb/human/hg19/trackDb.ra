@@ -1547,6 +1547,49 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp135Common override
+snpSeqFile /gbdb/hg19/snp/snp135.fa
+chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp135CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp135CodingDbSnp dbSNP
+
+track snp135Flagged override
+snpSeqFile /gbdb/hg19/snp/snp135.fa
+chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp135CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp135CodingDbSnp dbSNP
+
+track snp135Mult override
+snpSeqFile /gbdb/hg19/snp/snp135.fa
+chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp135CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp135CodingDbSnp dbSNP
+
+track snp135 override
+chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp135CodingDbSnp,
+# Need to request new tag
+#codingAnnoLabel_snp135CodingDbSnp dbSNP
+
 track snp134Common override
 snpSeqFile /gbdb/hg19/snp/snp134.fa
 chimpOrangMacOrthoTable snp134OrthoPt3Pa2Rm2
