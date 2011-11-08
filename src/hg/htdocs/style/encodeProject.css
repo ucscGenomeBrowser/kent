@@ -24,9 +24,26 @@ body {
     line-height:  70px;
 }
 
+/* image shown when ajax is loading data
+     normally displayed to right of header */
+
+#spinner {
+    position: absolute;
+    left: 30%;
+    height: 35px;
+}
+
 .encodeHeader span {
     vertical-align: middle;
+    width: 30%;
 }
+
+#assemblyLabel {
+    font-size: medium;
+    font-style: italic;
+    color: grey;
+}
+
 
 a {
     color: #003366;
@@ -38,6 +55,10 @@ table {
 
 table, th, td {
     border: 2px solid black;
+}
+
+.panel {
+    border: 2px solid #CCC;
 }
 
 .wrapper {
@@ -110,25 +131,7 @@ dd {
     color: #004D99;
 }
 
-/* colored bullets on cell types based on karyotype CV field */
-
-.cancer {
-    color: brown;
-    font-size: large;
-    text-align: right;
-    float: right;
-}
-
-.normal {
-    color: green;
-    font-size: large;
-    text-align: right;
-    float: right;
-}
-
-.unknown {
-    color: lightgrey;
-    text-align: right;
-    float: right;
+.floatHeader {
+    opacity: 1;
 }
 

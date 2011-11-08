@@ -205,7 +205,7 @@ taxId 9315
     #    /scratch/data/macEug2
 
 ########################################################################
-# GENBANK AUTO UPDATE (working - 2011-10-20 - Chin)
+# GENBANK AUTO UPDATE (DONE - 2011-10-20 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -259,40 +259,35 @@ macEug2.genbank.est.native.loadDesc = yes
     git pull
     git push
 
-    ssh genbank
-    screen      #  control this business with a screen since it takes a while
-
-
-
-    ssh genbank
+    ssh hgwsev
     screen	#  control this business with a screen since it takes a while
-
-
     cd /cluster/data/genbank
      time nice -n +19 ./bin/gbAlignStep -initial macEug2 &
-    #  logFile: var/build/logs/2011.10.20-16:26:25.macEug2.initalign.log
-XXXX 2011-10-20 aligning, stop here see screen
-
-    #   real    ????
-    #   To re-do, rm the dir first:
+    #   logFile: var/build/logs/2011.10.23-21:57:16.macEug2.initalign.log
+    #   real    4810m43.818s
     #     /cluster/data/genbank/data/aligned/genbank.176.0/macEug2
-
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad macEug2 &
-    #    logFile: var/dbload/hgwdev/logs/2010.04.19-08:17:28.dbload.log
-    #   real    37m49.454s
+    #   logFile: var/dbload/hgwdev/logs/2011.10.27-08:35:00.dbload.log 
+    #   real    66m57.028s
 
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
-    cvsup
+    git pull
     # add macEug2 to:
         etc/align.dbs
         etc/hgwdev.dbs
-    cvs ci -m "Added macEug2 - Sheep" etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs
+    git add etc/hgwdev.dbs
+    git commit  -m "Added macEug2 - Wallaby" etc/align.dbs etc/hgwdev.dbs
+    git push
     make etc-update
+
+    doGenbankTests macEug2 genbankTest.out
+    # no error
 
 #########################################################################

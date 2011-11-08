@@ -1,4 +1,4 @@
-import os
+import os, re
 from ucscgenomics import ra
 
 def readMd5sums(filename):
@@ -144,7 +144,7 @@ class CompositeTrack(object):
             md5sums = readMd5sums(self._md5path)
             
             radict = dict()
-            for stanza in self.alphaMetaDb:
+            for stanza in self.alphaMetaDb.itervalues():
                 if 'fileName' in stanza:
                     for file in stanza['fileName'].split(','):
                         radict[file] = stanza
@@ -152,7 +152,7 @@ class CompositeTrack(object):
             self._files = dict()
             for file in os.listdir(self.downloadsDirectory):
                 if os.path.isfile(self.downloadsDirectory + file):
-                    
+                
                     stanza = None
                     if file in radict:
                         stanza = radict[file]
@@ -164,8 +164,17 @@ class CompositeTrack(object):
         
             return self._files
             
-    @property
+    @property 
     def qaInitDir(self):
+        qaDir = '/hive/groups/encode/encodeQa/' + self._database + '/' + self._name + '/'
+        if os.path.exists(qaDir) and os.path.isdir(qaDir):
+            pass
+        else:
+            os.makedirs(qaDir)
+        self._qaDir = qaDir
+        return qaDir
+    @property 
+    def qaInitDirTest(self):
         qaDir = '/hive/groups/encode/encodeQa/test/' + self._database + '/' + self._name + '/'
         if os.path.exists(qaDir) and os.path.isdir(qaDir):
             pass
@@ -259,8 +268,25 @@ class CompositeTrack(object):
     def organism(self):
         """The url on our site for this composite"""
         return self._organism
+
+    @property 
+    def currentTrackDb(self):
+        trackDb = self._trackDbDir + "trackDb.wgEncode.ra"
+        f = open(trackDb, "r")
+        lines = f.readlines()
+        p = re.compile(".*(%s\S+) ?(\S+)" % self._name)
+        for i in lines:
+            m = p.match(i)
+            if m and re.search('alpha', m.group(2)):
+                tdbpath = "%s%s" % (self._trackDbDir, m.group(1))
+                return tdbpath
+        return None
+
+
+    def __init__(self, database, compositeName, trackPath=None, mdbCompositeName=None):
         
-    def __init__(self, database, compositeName, trackPath=None):
+        if mdbCompositeName == None:
+            mdbCompositeName = compositeName
         
         if trackPath == None:
             self._trackPath = os.path.expanduser('~/kent/src/hg/makeDb/trackDb/')
@@ -270,7 +296,8 @@ class CompositeTrack(object):
         organisms = {
             'hg19': 'human',
             'hg18': 'human',
-            'mm9': 'mouse'
+            'mm9': 'mouse',
+            'encodeTest': 'human'
         }
         
         if database in organisms:
@@ -281,13 +308,18 @@ class CompositeTrack(object):
         if not self._trackPath.endswith('/'):
             self._trackPath = self._trackPath + '/'
         
-        self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
-        if not os.path.isfile(self._trackDbPath):
-            raise KeyError(self._trackDbPath + ' does not exist')
+        #self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra'
+        self._trackDbDir = self._trackPath + self._organism + '/' + database + '/'
         
-        self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + compositeName + '.ra'
-        self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + compositeName + '.ra'    
-        self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + compositeName + '.ra'
+        
+        
+        
+        self._alphaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/' + mdbCompositeName + '.ra'
+        self._betaMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/beta/' + mdbCompositeName + '.ra'    
+        self._publicMdbPath = self._trackPath + self._organism + '/' + database + '/metaDb/public/' + mdbCompositeName + '.ra'
+        self._alphaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/alpha/'
+        self._betaMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/beta/'
+        self._publicMdbDir = self._trackPath + self._organism + '/' + database + '/metaDb/public/'
         self._downloadsDirectory = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/'
         self._httpDownloadsPath = '/usr/local/apache/htdocs-hgdownload/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
         self._rrHttpDir = '/usr/local/apache/htdocs/goldenPath/' + database + '/encodeDCC/' + compositeName + '/'
@@ -296,4 +328,9 @@ class CompositeTrack(object):
         self._database = database
         self._name = compositeName        
         self._md5path = '/hive/groups/encode/dcc/analysis/ftp/pipeline/' + database + '/' + compositeName + '/md5sum.txt'
+        self._trackDbPath = self.currentTrackDb
+        if self._trackDbPath == None:
+            self._trackDbPath = self._trackPath + self._organism + '/' + database + '/' + compositeName + '.ra' 
+        if not os.path.isfile(self._trackDbPath):
+            raise KeyError(self._trackDbPath + ' does not exist')
         

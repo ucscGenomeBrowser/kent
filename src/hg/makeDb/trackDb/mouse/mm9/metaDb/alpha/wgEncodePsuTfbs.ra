@@ -3,22 +3,23 @@ objType composite
 composite wgEncodePsuTfbs
 expVars lab,dataType,cell,antibody
 
-metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bAlnRep1
+metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1
 objType file
 age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
-fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bAlnRep1.bam
+fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 754bc2adc51fec6a7228d683c8f6cfbe
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -28,22 +29,23 @@ strain B10.H-2aH-4bp/Wts
 subId 4809
 view Alignments
 
-metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bAlnRep2
+metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2
 objType file
 age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
-fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bAlnRep2.bam
+fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum a61dddd59b2e8daa7f7b160c492bb689
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -77,6 +79,58 @@ strain B10.H-2aH-4bp/Wts
 subId 4809
 tableName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep1
+objType file
+age immortalized
+antibody CTCF
+cell CH12
+composite wgEncodePsuTfbs
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-30
+dateSubmitted 2010-11-12
+dateUnrestricted 2011-08-12
+fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 13cb55536563e2f404ef8356ca31096c
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4809
+view RawData
+
+metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody CTCF
+cell CH12
+composite wgEncodePsuTfbs
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-30
+dateSubmitted 2010-11-12
+dateUnrestricted 2011-08-12
+fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum cb106f71623b64b241c3bf8647d34d52
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4809
+view RawData
 
 metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepPeaksRep1
 objType file
@@ -203,72 +257,23 @@ subId 4809
 tableName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig
 view Signal
 
-metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bRawDataRep1
-objType file
-age immortalized
-antibody CTCF
-cell CH12
-composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-30
-dateSubmitted 2010-11-12
-dateUnrestricted 2011-08-12
-fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 4809
-view RawData
-
-metaObject wgEncodePsuTfbsCh12CtcfFImmortal2a4bRawDataRep2
-objType file
-age immortalized
-antibody CTCF
-cell CH12
-composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-30
-dateSubmitted 2010-11-12
-dateUnrestricted 2011-08-12
-fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 4809
-view RawData
-
-metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bAlnRep1
+metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1
 objType file
 age immortalized
 antibody Input
 cell CH12
 composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12InputFImmortal2a4bAlnRep1.bam
+fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum ddfc7e2c4668f26bb7669b59a7928ec6
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -278,14 +283,39 @@ strain B10.H-2aH-4bp/Wts
 subId 4844
 view Alignments
 
+metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuTfbs
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 063e1387eda0386748b1e9bd117f012d
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4844
+view RawData
+
 metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bRawDataRep1
 objType file
 age immortalized
 antibody Input
 cell CH12
 composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
@@ -303,45 +333,22 @@ strain B10.H-2aH-4bp/Wts
 subId 4809
 view RawData
 
-metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bRawDataRep2
-objType file
-age immortalized
-antibody Input
-cell CH12
-composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12InputFImmortal2a4bRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 4844
-view RawData
-
-metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bAlnRep1
+metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep1
 objType file
 age immortalized
 antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bAlnRep1.bam
+fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum de5d4629c0ec07d258c596f8da39ddb2
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -351,21 +358,22 @@ strain B10.H-2aH-4bp/Wts
 subId 4844
 view Alignments
 
-metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bAlnRep2
+metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep2
 objType file
 age immortalized
 antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
+control Input
+controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bAlnRep2.bam
+fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 798e9c9341b47f11414c669e194c786e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -390,6 +398,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 44344e161b113ad887f55677da75a14c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -398,6 +407,56 @@ strain B10.H-2aH-4bp/Wts
 subId 4844
 tableName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRawDataRep1
+objType file
+age immortalized
+antibody PAX5_(N-15)
+cell CH12
+composite wgEncodePsuTfbs
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 9a16d0d5e4cfc78189f04a81e48afcd0
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4844
+view RawData
+
+metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody PAX5_(N-15)
+cell CH12
+composite wgEncodePsuTfbs
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 5c858d8a6d5ea1e35d4ad3872a435e8a
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 4844
+view RawData
 
 metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepPeaksRep1
 objType file
@@ -414,6 +473,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum ebcce043ffef64122950292d9fd64ff3
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -438,6 +498,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 650c8c2e98de8efa474db29726ce1593
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -462,6 +523,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 410fcae895710fa0e6ebe1e2912fa499
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -486,6 +548,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 11392f02acf54b2c08db65b3336a78c4
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -510,6 +573,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 845899d7cc22449de83b77a9b53b2d50
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -518,54 +582,6 @@ strain B10.H-2aH-4bp/Wts
 subId 4844
 tableName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputSig
 view Signal
-
-metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bRawDataRep1
-objType file
-age immortalized
-antibody PAX5_(N-15)
-cell CH12
-composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bRawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 4844
-view RawData
-
-metaObject wgEncodePsuTfbsCh12Pax5cFImmortal2a4bRawDataRep2
-objType file
-age immortalized
-antibody PAX5_(N-15)
-cell CH12
-composite wgEncodePsuTfbs
-control None
-controlId CH12/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bRawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 4844
-view RawData
 
 metaObject wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1
 objType file
@@ -667,21 +683,22 @@ subId 2972
 tableName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
 view Signal
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1AlnRep1
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1AlnRep1.bam
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum d710b0fecfee7bc8d6d1c60a7f4a4a9f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -691,21 +708,22 @@ strain CD-1
 subId 4782
 view Alignments
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1AlnRep2
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1AlnRep2.bam
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum b8d44593ae622ef4af732b5cd2787337
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -715,45 +733,47 @@ strain CD-1
 subId 4782
 view Alignments
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1Pk
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputPk
 objType table
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1Pk.broadPeak.gz
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 0e0f66a5ba556556f17446eba4e511c0
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex B
 strain CD-1
 subId 4782
-tableName wgEncodePsuTfbsErythroblGata1aBE14halfCd1Pk
+tableName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputPk
 view Peaks
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1RawDataRep1
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep1
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1RawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum aea61365ec4d36dfc069a18a8c6835f1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -763,21 +783,22 @@ strain CD-1
 subId 4782
 view RawData
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1RawDataRep2
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep2
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1RawDataRep2.fastq.gz
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum aa0c4fea1e9363807eb250de135bf26d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -787,21 +808,22 @@ strain CD-1
 subId 4782
 view RawData
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepPeaksRep1
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep1
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepPeaksRep1.broadPeak.gz
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 6b01ed2a628768d5e8a031949b0e00e0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -811,21 +833,22 @@ strain CD-1
 subId 4782
 view RepPeaks
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepPeaksRep2
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep2
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepPeaksRep2.broadPeak.gz
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum d03450ff31046c39cd5214e6df6eaa71
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -835,21 +858,22 @@ strain CD-1
 subId 4782
 view RepPeaks
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepSignalRep1
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep1
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepSignalRep1.bigWig
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 184745560224cae5ab20ba67fdbad87a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -859,21 +883,22 @@ strain CD-1
 subId 4782
 view RepSignal
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepSignalRep2
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep2
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1RepSignalRep2.bigWig
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum e14035e0b530fc62ac9701a83dc4a0c5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -883,45 +908,47 @@ strain CD-1
 subId 4782
 view RepSignal
 
-metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1Sig
+metaObject wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputSig
 objType table
 age E14.5
 antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1Sig.bigWig
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 560b8bbdd19ccf638b2d3583f61d6b59
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
 sex B
 strain CD-1
 subId 4782
-tableName wgEncodePsuTfbsErythroblGata1aBE14halfCd1Sig
+tableName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1AlnRep1
+metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1
 objType file
 age E14.5
 antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblInputBE14halfCd1AlnRep1.bam
+fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum faebb817130e576844cedcbb1fdb9a49
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -931,21 +958,22 @@ strain CD-1
 subId 4782
 view Alignments
 
-metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1AlnRep2
+metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2
 objType file
 age E14.5
 antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblInputBE14halfCd1AlnRep2.bam
+fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum b3c7f2a773b231ebe3fd64c252d0dbff
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -955,21 +983,22 @@ strain CD-1
 subId 4782
 view Alignments
 
-metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1RawDataRep1
+metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep1
 objType file
 age E14.5
 antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblInputBE14halfCd1RawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum d2ee05d7b1d9e18ff1c6c7b1a20bc66f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -979,21 +1008,22 @@ strain CD-1
 subId 4782
 view RawData
 
-metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1RawDataRep2
+metaObject wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep2
 objType file
 age E14.5
 antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
-control None
-controlId Erythrobl/Input/None
+control Input
+controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblInputBE14halfCd1RawDataRep2.fastq.gz
+fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 0d328ce731aae7216cbbd494742fc666
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1003,22 +1033,23 @@ strain CD-1
 subId 4782
 view RawData
 
-metaObject wgEncodePsuTfbsG1eCtcfME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1
 objType file
 age E0
 antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eCtcfME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 1acdd455b9275d5efb04c9d9bf4659cd
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1028,22 +1059,23 @@ strain 129
 subId 4792
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eCtcfME0S129AlnRep2
+metaObject wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep2
 objType file
 age E0
 antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eCtcfME0S129AlnRep2.bam
+fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 2bf8b94d738e90dd51cdce3a6506a0ca
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1070,6 +1102,7 @@ fileName wgEncodePsuTfbsG1eCtcfME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln4-ctcf-g1e-groomed-canonical
+md5sum aa39700ec32bb13480653ed76d0e4d3e
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -1078,6 +1111,58 @@ strain 129
 subId 4792
 tableName wgEncodePsuTfbsG1eCtcfME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsG1eCtcfME0S129InputRawDataRep1
+objType file
+age E0
+antibody CTCF
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-31
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodePsuTfbsG1eCtcfME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 9075ac7bcb26c6ad9c92e5729e27523e
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4792
+view RawData
+
+metaObject wgEncodePsuTfbsG1eCtcfME0S129InputRawDataRep2
+objType file
+age E0
+antibody CTCF
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-31
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodePsuTfbsG1eCtcfME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum cab53378da43a11ab9a3c918927e9a4c
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4792
+view RawData
 
 metaObject wgEncodePsuTfbsG1eCtcfME0S129InputRepPeaksRep1
 objType file
@@ -1095,6 +1180,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5b60df8e605ee0b72b14ebd9b73c6f67
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1120,6 +1206,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5b84c91b8d8f0cbe07fe75c5d24c4756
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1145,6 +1232,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 2558eafa7ae5c20e7d36677504e0dbe3
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1170,6 +1258,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum e9dfbea84a2b9062f231e5d6cdef5efe
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1196,6 +1285,7 @@ fileName wgEncodePsuTfbsG1eCtcfME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln4-ctcf-g1e-groomed-canonical
+md5sum e1b5adab26205c4e06fbbbf782798dbb
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -1205,72 +1295,523 @@ subId 4792
 tableName wgEncodePsuTfbsG1eCtcfME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsG1eCtcfME0S129RawDataRep1
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep1
 objType file
 age E0
-antibody CTCF
+antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-31
-dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eCtcfME0S129RawDataRep1.fastq.gz
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum e3553169cfb849ece1cead4962da2eae
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 4792
-view RawData
+subId 5028
+view Alignments
 
-metaObject wgEncodePsuTfbsG1eCtcfME0S129RawDataRep2
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep2
 objType file
 age E0
-antibody CTCF
+antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-31
-dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eCtcfME0S129RawDataRep2.fastq.gz
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 8ea9db71f247b72fa9f46efc2d928170
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5028
+view Alignments
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputPk
+objType table
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum aa63041d295c60462b95ac0a4edbb724
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5028
+tableName wgEncodePsuTfbsG1eGata1aME0S129InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputRawDataRep1
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 1b6eb374e03692c7d3dd31e4d472727f
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 5028
+view RawData
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputRawDataRep2
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum da25b76b3d6485473a134f5959becbe2
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5028
+view RawData
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputRepPeaksRep1
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 664dde7a080bfc508387c207e53d59ee
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 5028
+view RepPeaks
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputRepPeaksRep2
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 5926f716b44a2839feb3966053ad5603
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5028
+view RepPeaks
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputRepSignalRep1
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum 024bf467aa54974ba5681b3a77ee4657
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 5028
+view RepSignal
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputRepSignalRep2
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum d4ee235c7a4b67316a5a4dfc1ae128eb
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5028
+view RepSignal
+
+metaObject wgEncodePsuTfbsG1eGata1aME0S129InputSig
+objType table
+age E0
+antibody GATA1_(SC-265)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum 314e8c959d6beb5a6c312439232b425b
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 5028
+tableName wgEncodePsuTfbsG1eGata1aME0S129InputSig
+view Signal
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam
+grant Hardison
+lab PSU-m
+md5sum 7d0c91e460584cf4aab282839cbde458
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+view Alignments
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam
+grant Hardison
+lab PSU-m
+md5sum 31e6c4a4c7fc57ecb66db13a5a3d0363
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
 strain 129
-subId 4792
+subId 3046
+view Alignments
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputPk
+objType table
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum fa1932b0fd15ca38c6c1022564faefe1
+project wgEncode
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+tableName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 03208b484979faeebc8888ef15c6f8cb
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
 view RawData
 
-metaObject wgEncodePsuTfbsG1eInputME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum e83b2b76f35ed6c0574e5a7ae07a6a99
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+view RawData
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 05950aefda89deec473b3282a62188be
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+view RepPeaks
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 07a171d28430b1b3805293194352d642
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+view RepPeaks
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum aae34ec4e7ec0f60ce072b61ae1b2fba
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+view RepSignal
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum 0b387dec2bec27dfb39ab125378fb304
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+view RepSignal
+
+metaObject wgEncodePsuTfbsG1eGata2sc9008ME0S129InputSig
+objType table
+age E0
+antibody GATA2_(SC-9008)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum c6b8582ab304fca82aa1f5611159111c
+project wgEncode
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3046
+tableName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputSig
+view Signal
+
+metaObject wgEncodePsuTfbsG1eInputME0S129InputAlnRep1
 objType file
 age E0
 antibody Input
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eInputME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 838449db7c5ec7dcba984b8004db81c6
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1280,22 +1821,73 @@ strain 129
 subId 4792
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eInputME0S129RawDataRep1
+metaObject wgEncodePsuTfbsG1eInputME0S129InputAlnRep2
 objType file
 age E0
 antibody Input
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam
+grant Hardison
+lab PSU-m
+md5sum 48d0d98edf01ee67944d54588b2762e6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5028
+view Alignments
+
+metaObject wgEncodePsuTfbsG1eInputME0S129InputAlnRep3
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep3.bam
+grant Hardison
+lab PSU-m
+md5sum d456d8f2e9f810b9ccc78eebfa9d15e5
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5028
+view Alignments
+
+metaObject wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eInputME0S129RawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 88da556cde39f4db41c25d00cb511956
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1305,21 +1897,72 @@ strain 129
 subId 4792
 view RawData
 
-metaObject wgEncodePsuTfbsG1ePol24h8ME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eInputME0S129InputRawDataRep2
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum fa9ed13a9154e21f1a40164150a73c4a
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5028
+view RawData
+
+metaObject wgEncodePsuTfbsG1eInputME0S129InputRawDataRep3
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep3.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 1aacae6ebfac1c54621f530a289b2376
+project wgEncode
+replicate 3
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5028
+view RawData
+
+metaObject wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep1
 objType file
 age E0
 antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1ePol24h8ME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 58040ef0e8ffe759853a9c12d65079c4
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1329,21 +1972,22 @@ strain 129
 subId 3049
 view Alignments
 
-metaObject wgEncodePsuTfbsG1ePol24h8ME0S129AlnRep2
+metaObject wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep2
 objType file
 age E0
 antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
+control Input
+controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1ePol24h8ME0S129AlnRep2.bam
+fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 2d13c2efc363be94c686c560c7d93178
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1368,6 +2012,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5d1618a7703ec902942e8c2e6ed73677
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -1376,6 +2021,56 @@ strain 129
 subId 3049
 tableName wgEncodePsuTfbsG1ePol24h8ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsG1ePol24h8ME0S129InputRawDataRep1
+objType file
+age E0
+antibody Pol2-4H8
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum bfb161fce38c72de2613b2fbb270215a
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3049
+view RawData
+
+metaObject wgEncodePsuTfbsG1ePol24h8ME0S129InputRawDataRep2
+objType file
+age E0
+antibody Pol2-4H8
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum b775d7cede438636de04c28dd1105d5b
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3049
+view RawData
 
 metaObject wgEncodePsuTfbsG1ePol24h8ME0S129InputRepPeaksRep1
 objType file
@@ -1392,6 +2087,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum d1aee42fbf4876a5afabb5c3ae428057
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1416,6 +2112,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum cd17516a819ef7f30b2e7cf12693fb68
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1440,6 +2137,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 122acd32cb5f5d704bcf587189ea2fca
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1464,6 +2162,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 7678396218ca6d5703d4a1e5d2de22e9
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1488,6 +2187,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum b38ba86773f35c42810db72c095ef328
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -1496,54 +2196,6 @@ strain 129
 subId 3049
 tableName wgEncodePsuTfbsG1ePol24h8ME0S129InputSig
 view Signal
-
-metaObject wgEncodePsuTfbsG1ePol24h8ME0S129RawDataRep1
-objType file
-age E0
-antibody Pol2-4H8
-cell G1E
-composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1ePol24h8ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3049
-view RawData
-
-metaObject wgEncodePsuTfbsG1ePol24h8ME0S129RawDataRep2
-objType file
-age E0
-antibody Pol2-4H8
-cell G1E
-composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1ePol24h8ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3049
-view RawData
 
 metaObject wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1
 objType file
@@ -1561,6 +2213,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum b508ec2542bce708b5c853c316bb463f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1586,6 +2239,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum cf78ef6afb127a363aa393a74f26fe12
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1611,6 +2265,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum de42d1b1b655238552344d86bc62d72f
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -1619,6 +2274,58 @@ strain 129
 subId 4800
 tableName wgEncodePsuTfbsG1eTal1ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep1
+objType file
+age E0
+antibody TAL1_(SC-12984)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-26
+dateSubmitted 2011-02-11
+dateUnrestricted 2011-11-11
+fileName wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum ae7b53f47a2b2820ef60d3f3bd861f13
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4800
+view RawData
+
+metaObject wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep2
+objType file
+age E0
+antibody TAL1_(SC-12984)
+cell G1E
+composite wgEncodePsuTfbs
+control Input
+controlId G1E/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-26
+dateSubmitted 2011-02-11
+dateUnrestricted 2011-11-11
+fileName wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum c0812f961ec1c6fcc58818a990421be3
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4800
+view RawData
 
 metaObject wgEncodePsuTfbsG1eTal1ME0S129InputRepPeaksRep1
 objType file
@@ -1636,6 +2343,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum c4d55b0a83ce5fdacc2a452f3ec386aa
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1661,6 +2369,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 43b6f99f90ddee89c039b95d7e5c2b8c
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1686,6 +2395,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 0bf363e406767f8fcd427598ef23781c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1711,6 +2421,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum fc9ff8bd708564b1f4c3d45f1204df5f
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1736,6 +2447,7 @@ dateUnrestricted 2011-11-11
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 3c0425e1f1805645b26a7a373e816d99
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -1745,64 +2457,14 @@ subId 4800
 tableName wgEncodePsuTfbsG1eTal1ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsG1eTal1ME0S129RawDataRep1
-objType file
-age E0
-antibody TAL1_(SC-12984)
-cell G1E
-composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-26
-dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
-fileName wgEncodePsuTfbsG1eTal1ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 4800
-view RawData
-
-metaObject wgEncodePsuTfbsG1eTal1ME0S129RawDataRep2
-objType file
-age E0
-antibody TAL1_(SC-12984)
-cell G1E
-composite wgEncodePsuTfbs
-control None
-controlId G1E/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-26
-dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
-fileName wgEncodePsuTfbsG1eTal1ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 4800
-view RawData
-
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129AlnRep1
 objType file
 age E0
 antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
@@ -1811,33 +2473,9 @@ dateUnrestricted 2011-08-25
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129AlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 7c3767a82699dc32136171179c48805a
 project wgEncode
 replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 4793
-view Alignments
-
-metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129AlnRep2
-objType file
-age E0
-antibody CTCF
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-19
-dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-25
-fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129AlnRep2.bam
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
 seqPlatform Illumina_GA2x
 setType exp
 sex M
@@ -1870,6 +2508,32 @@ strain 129
 subId 3032
 view Alignments
 
+metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2
+objType file
+age E0
+antibody CTCF
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-19
+dateSubmitted 2010-11-26
+dateUnrestricted 2011-08-25
+fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2.bam
+grant Hardison
+lab PSU-m
+md5sum b8648516ae1667a01c8ab1d4886816fd
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4793
+view Alignments
+
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk
 objType table
 age E0
@@ -1887,6 +2551,7 @@ fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
+md5sum eceb7b84d7a1435cdd675ca27969dd4e
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -1921,6 +2586,32 @@ strain 129
 subId 3032
 view RawData
 
+metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep2
+objType file
+age E0
+antibody CTCF
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-19
+dateSubmitted 2010-11-26
+dateUnrestricted 2011-08-25
+fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 4c8898b087a582a4a43399e43b4e1c3f
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4793
+view RawData
+
 metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep1
 objType file
 age E0
@@ -1937,6 +2628,7 @@ dateUnrestricted 2011-08-25
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum c7037bca8f00efff65b4b64a4d5cd0e1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1962,6 +2654,7 @@ dateUnrestricted 2011-08-25
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum b7fce43e7cafd07c2003a7df9097bf12
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1987,6 +2680,7 @@ dateUnrestricted 2011-08-25
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 5dfe95b0176ad68802482fb4973e2294
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2012,6 +2706,7 @@ dateUnrestricted 2011-08-25
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 54326e55de39c443436dc469f2db85fb
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -2038,6 +2733,7 @@ fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
+md5sum d288601f84500ad7faf78c87828f92c8
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -2053,8 +2749,8 @@ age E0
 antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
@@ -2063,6 +2759,7 @@ dateUnrestricted 2011-08-25
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 270a7ff3d4c265fbf436b644ebd66b3b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2072,47 +2769,23 @@ strain 129
 subId 4793
 view RawData
 
-metaObject wgEncodePsuTfbsG1eer4e2CtcfME0S129RawDataRep2
-objType file
-age E0
-antibody CTCF
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-19
-dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-25
-fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 4793
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 6e3f825bf353d320b5a22abd87bacf4e
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2122,22 +2795,23 @@ strain 129
 subId 4723
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129AlnRep2
+metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129AlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 5f384e3ae61ced211f2f8eb02ac667de
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2163,6 +2837,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5486b3b6eb4ab3eb57e1387f38299c46
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2171,6 +2846,58 @@ strain 129
 subId 4723
 tableName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep1
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-09
+dateSubmitted 2010-11-26
+dateUnrestricted 2011-08-26
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 7f77ac95f075cf8991f861c05e61c350
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+strain 129
+subId 4723
+view RawData
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep2
+objType file
+age E0
+antibody GATA1_(SC-265)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-08-09
+dateSubmitted 2010-11-26
+dateUnrestricted 2011-08-26
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum f5397ecb7935af5ff6b84f39fe2705bd
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+strain 129
+subId 4723
+view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep1
 objType file
@@ -2188,6 +2915,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum c4110164197586aeedfa9f2cdfe44b1f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2213,6 +2941,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 02ed1c307f26ee405caacf6ae7356c29
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2222,72 +2951,23 @@ strain 129
 subId 4723
 view RepPeaks
 
-metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129RawDataRep1
+metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep1
 objType file
 age E0
 antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129RawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2
-setType exp
-sex M
-strain 129
-subId 4723
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129RawDataRep2
-objType file
-age E0
-antibody GATA1_(SC-265)
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
-dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex M
-strain 129
-subId 4723
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129RepSignalRep1
-objType file
-age E0
-antibody GATA1_(SC-265)
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-08-09
-dateSubmitted 2010-11-26
-dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129RepSignalRep1.bigWig
-grant Hardison
-lab PSU-m
+md5sum fc9f2d881606ba21b501f809b302427c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -2297,22 +2977,23 @@ strain 129
 subId 4723
 view RepSignal
 
-metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129RepSignalRep2
+metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep2
 objType file
 age E0
 antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129RepSignalRep2.bigWig
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 52a285132cd68a17adf222c3949504a0
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2322,29 +3003,30 @@ strain 129
 subId 4723
 view RepSignal
 
-metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129Sig
+metaObject wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig
 objType table
 age E0
 antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129Sig.bigWig
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum b490ee19344d43b2f45108ece769a90e
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
 sex M
 strain 129
 subId 4723
-tableName wgEncodePsuTfbsG1eer4e2Gata1aME0S129Sig
+tableName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig
 view Signal
 
 metaObject wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1
@@ -2447,24 +3129,274 @@ subId 3033
 tableName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam
+grant Hardison
+lab PSU-m
+md5sum 94d5cb3600298b460a27061ef222c300
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view Alignments
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam
+grant Hardison
+lab PSU-m
+md5sum 09b582042b7e999c0813dc43b2059301
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view Alignments
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk
+objType table
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 1cfadc123ec2dd4a1fbbee6931e68162
+project wgEncode
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+tableName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk
+view Peaks
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 5e66b53545c7066dda46d73a62b52f24
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view RawData
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum bbc6f0394807ff7cd0f014e61f943a9f
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view RawData
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum b3dfdc8df544dcd0588a63fe2b93e985
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view RepPeaks
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+md5sum 18c464a0a94c1a1f85df08aa1554901b
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view RepPeaks
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep1
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum 6c20c6a672f2199cb0c6261fcf4758da
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view RepSignal
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep2
+objType file
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum 0d2f614c8308a8afb192c85a6a3c5d47
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+view RepSignal
+
+metaObject wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig
+objType table
+age E0
+antibody GATA2_(SC-9008)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-21
+dateUnrestricted 2012-07-21
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum 5e83ad635cd1afbbd8727aec488e7a6c
+project wgEncode
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3045
+tableName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig
+view Signal
+
+metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1
 objType file
 age E0
 antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
-md5sum 9417fc24c48d74e3b2f76a0efd1652fc,65f06dde79e1cffdafb56bb2229df21a
+md5sum 9417fc24c48d74e3b2f76a0efd1652fc
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2474,22 +3406,23 @@ strain 129
 subId 4723
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep2
+metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2
 objType file
 age E0
 antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2InputME0S129AlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 1e4e8e0ef2c253295cae7179b576d1bd
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2499,20 +3432,20 @@ strain 129
 subId 4723
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eer4e2InputME0S129RawDataRep1
+metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1
 objType file
 age E0
 antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2InputME0S129RawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
@@ -2526,22 +3459,23 @@ strain 129
 subId 4723
 view RawData
 
-metaObject wgEncodePsuTfbsG1eer4e2InputME0S129RawDataRep2
+metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2
 objType file
 age E0
 antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2InputME0S129RawDataRep2.fastq.gz
+fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 341e968a3d4f087136ab2a181442a241
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2551,21 +3485,22 @@ strain 129
 subId 4723
 view RawData
 
-metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1
 objType file
 age E0
 antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 88db0a4233d4152742a90d42dfb7c900
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2575,21 +3510,22 @@ strain 129
 subId 3050
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129AlnRep2
+metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2
 objType file
 age E0
 antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129AlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum b416e831c3f55da5f8323f64b42647cd
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -2599,21 +3535,22 @@ strain 129
 subId 3050
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129AlnRep3
+metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3
 objType file
 age E0
 antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129AlnRep3.bam
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3.bam
 grant Hardison
 lab PSU-m
+md5sum e96ca67fc1416395167882e9741c39eb
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2x
@@ -2638,6 +3575,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum b053e22347759caa8b5fba90e12d4096
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -2646,6 +3584,81 @@ strain 129
 subId 3050
 tableName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep1
+objType file
+age E0
+antibody Pol2-4H8
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 4ce38cf1ae9c5e5fb411592cd025479a
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3050
+view RawData
+
+metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep2
+objType file
+age E0
+antibody Pol2-4H8
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum c71e503a65e500f1e10bcabf977170fd
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3050
+view RawData
+
+metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep3
+objType file
+age E0
+antibody Pol2-4H8
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-09-26
+dateUnrestricted 2012-06-26
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep3.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 4351f9ccd2005630d560b7bb33d153ec
+project wgEncode
+replicate 3
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 3050
+view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep1
 objType file
@@ -2662,6 +3675,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 0009f1dee7b3fddb061d658319f98ab8
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2686,6 +3700,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum a8cab9c6ed4244ccce3dd15bd0f257ff
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -2710,6 +3725,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep3.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 80dfb3aec259405a3001df9cc063dd9c
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2x
@@ -2734,6 +3750,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 54722071ab74c8b9c9c964ee183177ac
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2758,6 +3775,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum a66420897156cd8846e4e8a748e7961c
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -2782,6 +3800,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep3.bigWig
 grant Hardison
 lab PSU-m
+md5sum 37be3b4b1b58fce322245f1e6788e6c7
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2x
@@ -2806,6 +3825,7 @@ dateUnrestricted 2012-06-26
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum f7aca7d79fa7ed23bcff16f490472d37
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -2815,93 +3835,22 @@ subId 3050
 tableName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129RawDataRep1
-objType file
-age E0
-antibody Pol2-4H8
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3050
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129RawDataRep2
-objType file
-age E0
-antibody Pol2-4H8
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3050
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129RawDataRep3
-objType file
-age E0
-antibody Pol2-4H8
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-26
-dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129RawDataRep3.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 3
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 3050
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129AlnRep1
+metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1
 objType file
 age E0
 antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
-fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129AlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 7ef13178b86436e9b83b7176b4eef420
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2911,21 +3860,22 @@ strain 129
 subId 4783
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129AlnRep2
+metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2
 objType file
 age E0
 antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
+control Input
+controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
-fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129AlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum cd15944bc03e23408a58cbdecae01d94
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -2950,6 +3900,7 @@ dateUnrestricted 2012-05-15
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5fa9ccb670e593bda00fd2493ce80506
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -2958,6 +3909,56 @@ strain 129
 subId 4783
 tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep1
+objType file
+age E0
+antibody TAL1_(SC-12984)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-15
+dateUnrestricted 2012-05-15
+fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum b7292d33c5b4f3eca34ac2b678494bc8
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4783
+view RawData
+
+metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep2
+objType file
+age E0
+antibody TAL1_(SC-12984)
+cell G1E-ER4+E2
+composite wgEncodePsuTfbs
+control Input
+controlId G1E-ER4+E2/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-15
+dateUnrestricted 2012-05-15
+fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum e0f1b28b34d6313a59b7f7f06328ce29
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain 129
+subId 4783
+view RawData
 
 metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep1
 objType file
@@ -2974,6 +3975,7 @@ dateUnrestricted 2012-05-15
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 1c6d51cd1d159de92b158de179e6f6f0
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2998,6 +4000,7 @@ dateUnrestricted 2012-05-15
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 3f91ac3994370db7b8ccc4924f4fedfd
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -3022,6 +4025,7 @@ dateUnrestricted 2012-05-15
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 86bc5a27ec88aa218c249320a05aa627
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3046,6 +4050,7 @@ dateUnrestricted 2012-05-15
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 9551bbc4ee40001b9425b94f38c89795
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -3070,6 +4075,7 @@ dateUnrestricted 2012-05-15
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 2135c242402d6f84da74b392b2fb4fbc
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -3079,69 +4085,22 @@ subId 4783
 tableName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129RawDataRep1
-objType file
-age E0
-antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
-fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 4783
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2Tal1ME0S129RawDataRep2
-objType file
-age E0
-antibody TAL1_(SC-12984)
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control None
-controlId G1E-ER4+E2/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-15
-dateUnrestricted 2012-05-15
-fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain 129
-subId 4783
-view RawData
-
-metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep1
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep1.bam
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 167d1a00b98d9b8e6cb09bca8ac08256
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3151,21 +4110,22 @@ strain CD-1
 subId 4791
 view Alignments
 
-metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep2
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep2
 objType file
 age E14.5
 antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1AlnRep2.bam
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 943093266d20b8e64f0e74a41a8f09fd
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3190,6 +4150,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 3b21622ad16e0d1618b6ecaabd19413f
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3198,6 +4159,56 @@ strain CD-1
 subId 4791
 tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep1
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-18
+dateUnrestricted 2012-05-18
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 8f3fba6741cb9ec4940bc041c6a66a89
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex B
+strain CD-1
+subId 4791
+view RawData
+
+metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep2
+objType file
+age E14.5
+antibody GATA1_(SC-265)
+cell Megakaryo
+composite wgEncodePsuTfbs
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-08-18
+dateUnrestricted 2012-05-18
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 633085f27acbb716c4629dd093383aac
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 4791
+view RawData
 
 metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep1
 objType file
@@ -3214,6 +4225,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5fafb711ee5608de50da78a858cde800
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3238,6 +4250,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 071833a24933da62dad6a33728bbebd7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3262,6 +4275,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 187dee205c417543cf50e8d2468b233a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3286,6 +4300,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 7d826ee50d8978afec0c44777a348df7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3310,6 +4325,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 766dd51a7a454c36db5aaa554118c895
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3319,69 +4335,22 @@ subId 4791
 tableName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep1
-objType file
-age E14.5
-antibody GATA1_(SC-265)
-cell Megakaryo
-composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-18
-dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex B
-strain CD-1
-subId 4791
-view RawData
-
-metaObject wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep2
-objType file
-age E14.5
-antibody GATA1_(SC-265)
-cell Megakaryo
-composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-08-18
-dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType exp
-sex B
-strain CD-1
-subId 4791
-view RawData
-
-metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1AlnRep1
+metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1
 objType file
 age E14.5
 antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1AlnRep1.bam
+fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum 1f597fa1055753484263dc9fff39fce4
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3391,21 +4360,22 @@ strain CD-1
 subId 4791
 view Alignments
 
-metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1AlnRep2
+metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2
 objType file
 age E14.5
 antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1AlnRep2.bam
+fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum b77634e4ce55f89a02680cd9b89978fb
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3415,21 +4385,22 @@ strain CD-1
 subId 4791
 view Alignments
 
-metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1RawDataRep1
+metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep1
 objType file
 age E14.5
 antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1RawDataRep1.fastq.gz
+fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum c20687ed67142d8e65d9351706363546
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3439,21 +4410,22 @@ strain CD-1
 subId 4791
 view RawData
 
-metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1RawDataRep2
+metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep2
 objType file
 age E14.5
 antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
-control None
-controlId Megakaryo/Input/None
+control Input
+controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1RawDataRep2.fastq.gz
+fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 93594c6b192fbcb6a15e341f60e6587e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3463,22 +4435,23 @@ strain CD-1
 subId 4791
 view RawData
 
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep1
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1
 objType file
 age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
-control None
-controlId MEL/Input/None
+control Input
+controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep1.bam
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam
 grant Hardison
 lab PSU-m
+md5sum f16d4c620c344bbc6daa9c62eb94ce1c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3488,22 +4461,23 @@ strain C57BL/6
 subId 4817
 view Alignments
 
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep2
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2
 objType file
 age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
-control None
-controlId MEL/Input/None
+control Input
+controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6AlnRep2.bam
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2.bam
 grant Hardison
 lab PSU-m
+md5sum 765b7128388284be505fbb216e91d50e
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -3537,6 +4511,58 @@ strain C57BL/6
 subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
 view Peaks
+
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep1
+objType file
+age immortalized
+antibody CTCF
+cell MEL
+composite wgEncodePsuTfbs
+control Input
+controlId MEL/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-08
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-08-30
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum c0c827d51cbd8179ee9e54c090f1f20f
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain C57BL/6
+subId 4817
+view RawData
+
+metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep2
+objType file
+age immortalized
+antibody CTCF
+cell MEL
+composite wgEncodePsuTfbs
+control Input
+controlId MEL/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-09-08
+dateSubmitted 2010-12-01
+dateUnrestricted 2011-08-30
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 12a2d5932444ee5c3196b5038db710d8
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2x
+setType exp
+sex M
+strain C57BL/6
+subId 4817
+view RawData
 
 metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep1
 objType file
@@ -3663,64 +4689,14 @@ subId 4817
 tableName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
 view Signal
 
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep1
-objType file
-age immortalized
-antibody CTCF
-cell MEL
-composite wgEncodePsuTfbs
-control None
-controlId MEL/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-08
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep1.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 1
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain C57BL/6
-subId 4817
-view RawData
-
-metaObject wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep2
-objType file
-age immortalized
-antibody CTCF
-cell MEL
-composite wgEncodePsuTfbs
-control None
-controlId MEL/Input/None
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-08
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6RawDataRep2.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 2
-seqPlatform Illumina_GA2x
-setType exp
-sex M
-strain C57BL/6
-subId 4817
-view RawData
-
 metaObject wgEncodePsuTfbsMelInputMImmortalC57bl6AlnRep1
 objType file
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodePsuTfbs
-control None
-controlId MEL/Input/None
+control Input
+controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
@@ -3744,8 +4720,8 @@ age immortalized
 antibody Input
 cell MEL
 composite wgEncodePsuTfbs
-control None
-controlId MEL/Input/None
+control Input
+controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
@@ -3763,4 +4739,4 @@ strain C57BL/6
 subId 4817
 view RawData
 
-# MAGIC: 1076917208
+# MAGIC: -1248551024

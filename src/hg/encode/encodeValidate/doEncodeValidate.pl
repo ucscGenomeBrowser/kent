@@ -23,7 +23,7 @@ use warnings;
 use warnings FATAL => 'all';
 use strict;
 
-use DataBrowser qw(browse);
+#use DataBrowser qw(browse);
 use File::stat;
 use File::Basename;
 use Getopt::Long;
@@ -237,7 +237,15 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    return @errors;
+    unless (@errors) {
+        return ();
+    } else {
+        my $errstr = "";
+        for my $error (@errors) {
+            $errstr = $errstr . "$error\n";
+        }
+        return $errstr;
+    }
 }
 
 sub validateDatasetName {
@@ -1937,8 +1945,7 @@ my $priority = $db->quickQuery("select max(priority) from trackDb where settings
 $ddfLineNumber = 1;
 
 # use pi.ra file to map pi/lab/institution/grant/project for metadata line
-my $labRef = Encode::getLabs($configPath);
-my %labs = %{$labRef};
+
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
@@ -2132,8 +2139,7 @@ foreach my $ddfLine (@ddfLines) {
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
-            #print "term = $terms\n"
-            #$subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
+            $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
         #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
         # in the table name. The below code was found to be to specific, however if there are any problems

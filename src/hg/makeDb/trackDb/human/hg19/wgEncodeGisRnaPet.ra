@@ -136,14 +136,6 @@ wgEncode 1
         color 46,0,184
         # subId=1984 dateSubmitted=2010-08-18
 
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel NHEK nucl pA+ 1
-        longLabel NHEK nucleus polyA+ clone-free RNA PET Clusters Rep 1 from ENCODE/GIS
-        subGroups view=Clusters cellType=NHEK cloned=Free localization=nucleus rnaExtract=PAP rep=rep1
-        type bed 12
-        color 179,0,134
-        # subId=4028 dateSubmitted=2011-05-05
-
         track wgEncodeGisRnaPetNhekCytosolPapClustersRep1
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel NHEK cyto pA+ 1
@@ -343,7 +335,8 @@ wgEncode 1
         color 46,0,184
         # subId=1984 dateSubmitted=2010-08-18
 
-        parent wgEncodeGisRnaPetViewAlignments off
+        track wgEncodeGisRnaPetNhekNucleusPapAlnRep
+		parent wgEncodeGisRnaPetViewAlignments off
         shortLabel NHEK nucl pA+ A 1
         longLabel NHEK nucleus polyA+ clone-free RNA PET Alignments Rep 1 from ENCODE/GIS
         subGroups view=Alignments cellType=NHEK cloned=Free localization=nucleus rnaExtract=PAP rep=rep1

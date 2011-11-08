@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style/encodeProject.css" type="text/css">
     <link rel="stylesheet" href="dataSummary.css" type="text/css">
     <script src="/js/jquery.js" type="text/javascript"></script>
+    <script src="/js/utils.js" type="text/javascript"></script>
     <script src="/js/encodeProject.js" type="text/javascript"></script>
 </head>
 
@@ -18,35 +19,36 @@
     <div class="encodeHeader">
         <a href="http://www.genome.gov/10005107"><img src="/images/ENCODE_scaleup_logo.png" alt="ENCODE Project at NHGRI" title="ENCODE Project at NHGRI"></a>
         <span id="pageHeader" class="txt">Data Summary</span>
+        <span id="assemblyLabel"></span>
+        <span id="spinner"></span>
     </div>
 
-    <!-- Main content:  3 tables summarizing ENCODE experiment table.
+    <!-- Radiobuttons to select Files or Tracks -->
+    <div id="searchTypePanel" class="panel"></div>
+
+    <!-- Main content: Three tables summarizing ENCODE experiment table.
         Script adds rows to the tables, based on data from the server -->
 
     <!-- Table 1: Reference genome datasets -->
     <table id="refGenomeTable" class="summaryTable">
     <tr>
-        <th colspan=2>Elements in Reference Genome
-            <span id="searchButtons">
-            <button id="buttonTrackSearch" class="searchButton" title="Search for tracks in genome browser">search tracks</button>
-            <button id="buttonFileSearch" class="searchButton" title="Search for files on download server">search files</button>
-            </span></th>
+        <th colspan=2>Elements in Reference Genome</th>
     </tr>
     </table>
 
     <!-- Table 2: Cell-based datasets -->
     <table id="elementTable" class="summaryTable">
     <tr>
-        <th colspan=2>Elements in Cell Lines <button id="buttonDataMatrix" class="matrixButton">view by cell line</button></span></th>
+        <th colspan=2>Elements in Cell Lines <button type="button" id="buttonDataMatrix" class="matrixButton">view by cell line</button></th>
     </tr>
     </table>
 
     <!-- Table 3: TFBS datasets -->
     <table id="tfbsTable" class="summaryTable">
     <tr>
-        <th colspan=2>Transcription Factor Elements
-            <button id="buttonChipMatrix" class="matrixButton">view by cell line</button></span></th>
+        <th colspan=2>Transcription Factors and Histone Marks
+            <button type="button" id="buttonChipMatrix" class="matrixButton">view by cell line</button></th>
     </tr>
-    </table>
+</table>
 </body>
 </html>

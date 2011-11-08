@@ -30,6 +30,12 @@ static boolean clNoBlank = FALSE;	/* If set suppress blank lines in output. */
 static char *clRewrite = NULL;		/* Rewrite to given directory. */
 static boolean clNoCompSub = FALSE;	/* If set don't do subtrack inheritence of fields. */
 
+static int shortLabelLength;		
+/* if non-zero check that short labels are no longer than this */
+
+static int longLabelLength;		
+/* if non-zero check that long labels are no longer than this */
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -65,6 +71,10 @@ errAbort(
 "Don't print out blank lines separating records\n"
 "   -noCompSub\n"
 "Subtracks don't inherit fields from parents\n"
+"   -shortLabelLength=N\n"
+"Complain if shortLabels are over N characters\n"
+"   -longLabelLength=N\n"
+"Complain if longLabels are over N characters\n"
 );
 }
 
@@ -77,6 +87,8 @@ static struct optionSpec options[] = {
    {"noBlank", OPTION_BOOLEAN},
    {"rewrite", OPTION_STRING},
    {"noCompSub", OPTION_BOOLEAN},
+   {"shortLabelLength", OPTION_INT},
+   {"longLabelLength", OPTION_INT},
    {NULL, 0},
 };
 
@@ -1023,6 +1035,21 @@ for (record = recordList; record != NULL; record = record->next)
     }
 }
 
+static void checkLabelLength(struct tdbRecord *record, char *name, int maxLength)
+/* check to make sure labels conform to max length settings */
+{
+if (maxLength != 0)
+    {
+    struct tdbField *labelField = tdbRecordField(record, name);
+    if (labelField == NULL)
+	recordAbort(record, "missing %s", name);
+    int length = strlen(labelField->val);
+    if (length > maxLength)
+	recordWarn(record, "%s is %s which is %d chars, max is %d", 
+	    name, labelField->val,length,maxLength);
+    }
+}
+	    
 void tdbQuery(char *sql)
 /* tdbQuery - Query the trackDb system using SQL syntax.. */
 {
@@ -1096,6 +1123,10 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 	    {
 	    if (!clStrict || tableExistsInSelfOrOffspring(p->db, record, 1, NULL))
 		{
+		/* check labels if asked */
+		checkLabelLength(record, "shortLabel", shortLabelLength);
+		checkLabelLength(record, "longLabel", longLabelLength);
+
 		matchCount += 1;
 		if (doSelect)
 		    {
@@ -1345,6 +1376,8 @@ releaseBit = getReleaseBit(release);
 clNoBlank = optionExists("noBlank");
 clRewrite = optionVal("rewrite", clRewrite);
 clNoCompSub = optionExists("noCompSub");
+longLabelLength = optionInt("longLabelLength", longLabelLength);
+shortLabelLength = optionInt("shortLabelLength", shortLabelLength);
 if (clRewrite)
     {
     doRewrite(clRewrite, clRoot, "trackDb.ra", "visibility.ra", "priority.ra");

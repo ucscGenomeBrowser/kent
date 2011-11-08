@@ -1,5 +1,6 @@
 // Utility JavaScript
-// $Header: /projects/compbio/cvsroot/kent/src/hg/js/utils.js,v 1.31 2010/06/02 19:11:53 tdreszer Exp $
+
+// "use strict";
 
 var debug = false;
 
@@ -1053,19 +1054,21 @@ function yieldingIterator(interatingFunc,continuingFunc,args)
     ro.step(1,args);                      // kick-off
 }
 
-function showLoadingImage(id)
+function showLoadingImage(id, absolute)
 {
 // Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
 // This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
+// If absolute is TRUE, then we use and absolute reference for the src tag.
     var loadingId = id + "LoadingOverlay";
     // make an opaque overlay to partially hide the image
     var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    var ele = $(document.getElementById(id));
     overlay.appendTo("body");
-    overlay.css("top", $('#'+ id).position().top);
-    var divLeft = $('#'+ id).position().left + 2;
+    overlay.css("top", ele.position().top);
+    var divLeft = ele.position().left + 2;
     overlay.css("left",divLeft);
-    var width = $('#'+ id).width() - 5;
-    var height = $('#'+ id).height();
+    var width = ele.width() - 5;
+    var height = ele.height();
     overlay.width(width);
     overlay.height(height);
     overlay.css("background", "white");
@@ -1074,13 +1077,14 @@ function showLoadingImage(id)
     var imgWidth = 220;   // hardwired based on width of loading.gif
     var imgLeft = (width / 2) - (imgWidth / 2);
     var imgTop = (height / 2 ) - 10;
-    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
+    var src = absolute ? "/images/loading.gif" : "../images/loading.gif";
+    $("<img src='" + src + "'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
     return loadingId;
 }
 
 function hideLoadingImage(id)
 {
-    $('#' + id).remove();
+    $(document.getElementById(id)).remove();
 }
 
 function codonColoringChanged(name)
@@ -1692,7 +1696,7 @@ function sortTableInitialize(table,addSuperscript,altColors)
         }
         if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work (note pointer and hand because older IE calls it hand)
             $(this).hover(
-                function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'pointer', cursor: 'hand' } ); },
+                function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'hand' } ); },
                 function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }
             );
         }
@@ -1755,316 +1759,8 @@ function hgTracksSetWidth()
     }
 }
 
-/////////////////////////////////////////////////////
-// findTracks functions
-
-function updateMetaDataHelpLinks(index)
-{
-// update the metadata help links based on currently selected values.
-// If index == 0 we update all help items, otherwise we only update the one == index.
-    var db = getDb();
-    var disabled = {  // blackList
-        'accession': 1, 'dataType':        1, 'dataVersion': 1, 'geoSample':    1, 'grant':     1,
-        'lab':       1, 'labExpId':        1, 'labVersion':  1, 'origAssembly': 1, 'replicate': 1,
-        'setType':   1, 'softwareVersion': 1, 'subId':       1, 'view':         1
-    }
-    var expected = $('tr.mdbSelect').length;
-    var ix=1;
-    if (index!=0) {
-        ix=index;
-        expected=index;
-    }
-    for(;ix <= expected;ix++) {
-        var helpLink = $("span#helpLink" + ix);
-        if (helpLink.length > 0) {
-            var val = $("select[name='hgt_mdbVar" + ix + "']").val();  // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-            var text = $("select[name='hgt_mdbVar" + ix + "'] option:selected").text();
-            helpLink.html("&nbsp;"); // Do not want this with length == 0 later!
-            if (typeof(disabled[val]) == 'undefined') {
-                var str;
-                if (val == 'cell') {
-                    if (db.substr(0, 2) == "mm") {
-                        str = "../ENCODE/cellTypesMouse.html";
-                    } else {
-                        str = "../ENCODE/cellTypes.html";
-                    }
-                } else if (val.toLowerCase() == 'antibody') {
-                    str = "../ENCODE/antibodies.html";
-                } else {
-                    str = "../ENCODE/otherTerms.html#" + val;
-                }
-                helpLink.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
-            }
-        }
-    }
-}
-
-function findTracksMdbVarChanged(obj)
-{ // Ajax call to repopulate a metadata vals select when mdb var changes
-  // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
-
-    findTracksClearFound();  // Changing values so abandon what has been found
-
-    var newVar = $(obj).val();
-    var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-    if(newVar != undefined && a && a[1]) {
-        var num = a[1];
-        if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
-            $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
-        }
-        var cgiVars = "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
-        if (document.URL.search('hgFileSearch') != -1)
-            cgiVars += "&fileSearch=1";
-        else
-            cgiVars += "&fileSearch=0";
-
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgApi",
-                   data: cgiVars,
-                   dataType: 'html',
-                   trueSuccess: findTracksHandleNewMdbVals,
-                   success: catchErrorOrDispatch,
-                   error: errorHandler,
-                   cache: true,
-                   cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
-                   num: num
-               });
-    }
-    // NOTE: with newJquery, the response is getting a new error (missing ; before statement)
-    //       There were also several XML parsing errors.
-    // This error is fixed with the addition of "dataType: 'html'," above.
-}
-
-function findTracksHandleNewMdbVals(response, status)
-{ // Handle ajax response (repopulate a metadata val select)
-  // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
-
-    var td = $('td#' + this.cmd );
-    if (td != undefined) {
-        var usesFilterBy = ($("select.mdbVar[name='hgt_mdbVar"+this.num+"']").hasClass('noMulti') == false);
-        td.empty();
-        td.append(response);
-        var inp = $(td).find('.mdbVal');
-        var tdIsLike = $('td#isLike'+this.num);
-        if (inp != undefined && tdIsLike != undefined) {
-            if ($(inp).hasClass('freeText')) {
-                $(tdIsLike).text('contains');
-            } else if ($(inp).hasClass('wildList')
-                   || (usesFilterBy && $(inp).hasClass('filterBy'))) {
-                $(tdIsLike).text('is among');
-            } else {
-                $(tdIsLike).text('is');
-            }
-        }
-        $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
-            if (usesFilterBy) {
-                if (newJQuery)
-                    ddcl.setup(this,'noneIsAll');
-                else
-                    $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
-            } else {
-                $(this).attr("multiple",false);
-                $(this).removeClass('filterBy');
-                $(this).show();
-            }
-        });
-    }
-    updateMetaDataHelpLinks(this.num);
-}
-
-function findTracksMdbValChanged(obj)
-{ // Keep all tabs with same selects in sync  TODO: Change from name to id based identification and only have one set of inputs in form
-  // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
-
-    findTracksClearFound();  // Changing values so abandon what has been found
-
-    if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
-        var newVal = $(obj).val();
-        var a = /hgt_mdbVal(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-        if(newVal != undefined && a && a[1]) {
-            var num = a[1];
-            $("input.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").val(newVal);
-            $("select.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").each( function (i) {
-                $(this).val(newVal);
-                if ($(this).hasClass('filterBy')) {
-                    $(this).dropdownchecklist("destroy");
-                    if (newJQuery)
-                        ddcl.setup(this,'noneIsAll');
-                    else
-                        $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
-                }
-            });
-        }
-    }
-    //findTracksSearchButtonsEnable(true);
-}
-
-function findTracksChangeVis(seenVis)
-{ // called by onchange of vis
-    var visName = $(seenVis).attr('id');
-    var trackName = visName.substring(0,visName.length - "_id".length)
-    var hiddenVis = $("input[name='"+trackName+"']");
-    var tdb = tdbGetJsonRecord(trackName);
-    if($(seenVis).val() != "hide")
-        $(hiddenVis).val($(seenVis).val());
-    else {
-        var selCb = $("input#"+trackName+"_sel_id");
-        $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        var needSel = (tdb.parentTrack != undefined);
-        if (needSel) {
-            var hiddenSel = $("input[name='"+trackName+"_sel']");
-            $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-            $(hiddenSel).attr('disabled',false);
-        }
-        if(tdbIsSubtrack(tdb))
-            $(hiddenVis).val("[]");
-        else
-            $(hiddenVis).val("hide");
-    }
-    $(hiddenVis).attr('disabled',false);
-
-    $('input.viewBtn').val('View in Browser');
-    //warn("Changed "+trackName+" to "+$(hiddenVis).val())
-}
-
-function findTracksClickedOne(selCb,justClicked)
-{ // called by on click of CB and findTracksCheckAll()
-    var selName = $(selCb).attr('id');
-    var trackName = selName.substring(0,selName.length - "_sel_id".length)
-    var hiddenSel = $("input[name='"+trackName+"_sel']");
-    var seenVis = $('select#' + trackName + "_id");
-    var hiddenVis = $("input[name='"+trackName+"']");
-    var tr = $(selCb).parents('tr.found');
-    var tdb = tdbGetJsonRecord(trackName);
-    var needSel = (tdb.parentTrack != undefined);
-    var shouldPack = tdb.canPack && tdb.kindOfParent == 0; // If parent then not pack but full
-    if (shouldPack && tdb.shouldPack != undefined && !tdb.shouldPack)
-        shouldPack = false;
-    var checked = $(selCb).attr('checked');
-    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" needSel:"+needSel +" shouldPack:"+shouldPack);
-
-    // First deal with seenVis control
-    if(checked) {
-        $(seenVis).attr('disabled', false);
-        if($(seenVis).attr('selectedIndex') == 0) {
-            if(shouldPack)
-                $(seenVis).attr('selectedIndex',3);  // packed
-            else
-                $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
-        }
-    } else {
-        $(seenVis).attr('selectedIndex',0);  // hide
-        $(seenVis).attr('disabled', true );
-    }
-
-    // Deal with hiddenSel and hiddenVis so that submit does the right thing
-    // Setting these requires justClicked OR seen vs. hidden to be different
-    var setHiddenInputs = justClicked;
-    if(!justClicked) {
-        if(needSel)
-            setHiddenInputs = (checked != ($(hiddenSel).val() == '1'));
-        else if (checked)
-            setHiddenInputs = ($(seenVis).val() != $(hiddenVis).val());
-        else
-            setHiddenInputs = ($(hiddenVis).val() != "hide" && $(hiddenVis).val() != "[]");
-    }
-    if(setHiddenInputs) {
-        if(checked)
-            $(hiddenVis).val($(seenVis).val());
-        else if(tdbIsSubtrack(tdb))
-            $(hiddenVis).val("[]");
-        else
-            $(hiddenVis).val("hide");
-        $(hiddenVis).attr('disabled',false);
-
-        if(needSel) {
-            if(checked)
-                $(hiddenSel).val('1');
-            else
-                $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-            $(hiddenSel).attr('disabled',false);
-        }
-    }
-
-    // The "view in browser" button should be enabled/disabled
-    if(justClicked) {
-        $('input.viewBtn').val('View in Browser');
-        findTracksCounts();
-    }
-}
-
-
-function findTracksNormalize()
-{ // Normalize the page based upon current state of all found tracks
-    $('div#found').show()
-    var selCbs = $('input.selCb');
-
-    // All should have their vis enabled/disabled appropriately (false means don't update cart)
-    $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
-
-    findTracksCounts();
-}
-
-function findTracksNormalizeWaitOn()
-{ // Put up wait mask then Normalize the page based upon current state of all found tracks
-    waitOnFunction( findTracksNormalize );
-}
-
-function findTracksCheckAll(check)
-{ // Checks/unchecks all found tracks.
-    var selCbs = $('input.selCb');
-    $(selCbs).attr('checked',check);
-
-    // All should have their vis enabled/disabled appropriately (false means don't update cart)
-    $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
-
-    $('input.viewBtn').val('View in Browser');
-    findTracksCounts();
-    return false;  // Pressing button does nothing more
-}
-
-function findTracksCheckAllWithWait(check)
-{
-    waitOnFunction( findTracksCheckAll, check);
-}
-
-function findTracksSearchButtonsEnable(enable)
-{ // Displays visible and checked track count
-    var searchButton = $('input[name="hgt_tSearch"]'); // NOTE: must match TRACK_SEARCH in hg/inc/searchTracks.h
-    var clearButton  = $('input.clear');
-    if(enable) {
-        $(searchButton).attr('disabled',false);
-        $(clearButton).attr('disabled',false);
-    } else {
-        $(searchButton).attr('disabled',true);
-        $(clearButton).attr('disabled',true);
-    }
-}
-
-function findTracksCounts()
-{// Displays visible and checked track count
-    var counter = $('.selCbCount');
-    if(counter != undefined) {
-        var selCbs =  $("input.selCb");
-        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
-    }
-}
-
-function findTracksClearFound()
-{// Clear found tracks and all input controls
-    var found = $('div#found');
-    if(found != undefined)
-        $(found).remove();
-    found = $('div#filesFound');
-    if(found != undefined)
-        $(found).remove();
-    return false;
-}
-
 function filterByMaxHeight(multiSel)
-{   // Setting a max hieght to scroll dropdownchecklists but
+{   // Setting a max height to scroll dropdownchecklists but
     // multiSel is hidden when this is done, so it's position and height must be estimated.
     var pos = $(multiSel).closest(':visible').offset().top + 30;
     if (pos <= 0)
@@ -2088,203 +1784,501 @@ function filterByMaxHeight(multiSel)
     return maxHeight;
 }
 
-function findTracksClear()
-{// Clear found tracks and all input controls
-    findTracksClearFound();
-    $('input[type="text"]').val(''); // This will always be found
-    //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
-    $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
-    $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
-        //$(this).dropdownchecklist("refresh");  // requires v1.1
-        $(this).dropdownchecklist("destroy");
-        $(this).show();
-        if (newJQuery)
+ //////////////////////////////
+//// findTracks functions ////
+/////////////////////////////
+var findTracks = {
+
+    updateMdbHelp: function (index)
+    {
+    // update the metadata help links based on currently selected values.
+    // If index == 0 we update all help items, otherwise we only update the one == index.
+        var db = getDb();
+        var disabled = {  // blackList
+            'accession': 1, 'dataType':        1, 'dataVersion': 1, 'geoSample':    1, 'grant':     1,
+            'lab':       1, 'labExpId':        1, 'labVersion':  1, 'origAssembly': 1, 'replicate': 1,
+            'setType':   1, 'softwareVersion': 1, 'subId':       1, 'view':         1
+        }
+        var expected = $('tr.mdbSelect').length;
+        var ix=1;
+        if (index!=0) {
+            ix=index;
+            expected=index;
+        }
+        for(;ix <= expected;ix++) {
+            var helpLink = $("span#helpLink" + ix);
+            if (helpLink.length > 0) {
+                var val = $("select[name='hgt_mdbVar" + ix + "']").val();  // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+                var text = $("select[name='hgt_mdbVar" + ix + "'] option:selected").text();
+                helpLink.html("&nbsp;"); // Do not want this with length == 0 later!
+                if (typeof(disabled[val]) == 'undefined') {
+                    var str;
+                    if (val == 'cell') {
+                        if (db.substr(0, 2) == "mm") {
+                            str = "../ENCODE/cellTypesMouse.html";
+                        } else {
+                            str = "../ENCODE/cellTypes.html";
+                        }
+                    } else if (val.toLowerCase() == 'antibody') {
+                        str = "../ENCODE/antibodies.html";
+                    } else {
+                        str = "../ENCODE/otherTerms.html#" + val;
+                    }
+                    helpLink.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
+                }
+            }
+        }
+    },
+
+    mdbVarChanged: function (obj)
+    { // Ajax call to repopulate a metadata vals select when mdb var changes
+    // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+
+        findTracks.clearFound();  // Changing values so abandon what has been found
+
+        var newVar = $(obj).val();
+        var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+        if(newVar != undefined && a && a[1]) {
+            var num = a[1];
+            if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
+                $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
+            }
+            var cgiVars = "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar;
+            if (document.URL.search('hgFileSearch') != -1)
+                cgiVars += "&fileSearch=1";
+            else
+                cgiVars += "&fileSearch=0";
+
+            $.ajax({
+                    type: "GET",
+                    url: "../cgi-bin/hgApi",
+                    data: cgiVars,
+                    dataType: 'html',
+                    trueSuccess: findTracks.handleNewMdbVals,
+                    success: catchErrorOrDispatch,
+                    error: errorHandler,
+                    cache: true,
+                    cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
+                    num: num
+                });
+        }
+        // NOTE: with newJquery, the response is getting a new error (missing ; before statement)
+        //       There were also several XML parsing errors.
+        // This error is fixed with the addition of "dataType: 'html'," above.
+    },
+
+    handleNewMdbVals: function (response, status)
+    { // Handle ajax response (repopulate a metadata val select)
+    // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+
+        var td = $('td#' + this.cmd );
+        if (td != undefined) {
+            var usesFilterBy = ($("select.mdbVar[name='hgt_mdbVar"+this.num+"']").hasClass('noMulti') == false);
+            td.empty();
+            td.append(response);
+            var inp = $(td).find('.mdbVal');
+            var tdIsLike = $('td#isLike'+this.num);
+            if (inp != undefined && tdIsLike != undefined) {
+                if ($(inp).hasClass('freeText')) {
+                    $(tdIsLike).text('contains');
+                } else if ($(inp).hasClass('wildList')
+                    || (usesFilterBy && $(inp).hasClass('filterBy'))) {
+                    $(tdIsLike).text('is among');
+                } else {
+                    $(tdIsLike).text('is');
+                }
+            }
+            $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
+                if (usesFilterBy) {
+                    ddcl.setup(this,'noneIsAll');
+                } else {
+                    $(this).attr("multiple",false);
+                    $(this).removeClass('filterBy');
+                    $(this).show();
+                }
+            });
+        }
+        findTracks.updateMdbHelp(this.num);
+    },
+
+    mdbValChanged: function (obj)
+    { // Keep all tabs with same selects in sync  TODO: Change from name to id based identification and only have one set of inputs in form
+    // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+
+        findTracks.clearFound();  // Changing values so abandon what has been found
+
+        if ($('#advancedTab').length == 1 && $('#filesTab').length == 1) {
+            var newVal = $(obj).val();
+            var a = /hgt_mdbVal(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+            if(newVal != undefined && a && a[1]) {
+                var num = a[1];
+                $("input.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").val(newVal);
+                $("select.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").each( function (i) {
+                    $(this).val(newVal);
+                    if ($(this).hasClass('filterBy')) {
+                        $(this).dropdownchecklist("destroy");
+                        ddcl.setup(this,'noneIsAll');
+                    }
+                });
+            }
+        }
+        //findTracks.searchButtonsEnable(true);
+    },
+
+    changeVis: function (seenVis)
+    { // called by onchange of vis
+        var visName = $(seenVis).attr('id');
+        var trackName = visName.substring(0,visName.length - "_id".length)
+        var hiddenVis = $("input[name='"+trackName+"']");
+        var tdb = tdbGetJsonRecord(trackName);
+        if($(seenVis).val() != "hide")
+            $(hiddenVis).val($(seenVis).val());
+        else {
+            var selCb = $("input#"+trackName+"_sel_id");
+            $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+            $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+            var needSel = (tdb.parentTrack != undefined);
+            if (needSel) {
+                var hiddenSel = $("input[name='"+trackName+"_sel']");
+                $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+                $(hiddenSel).attr('disabled',false);
+            }
+            if(tdbIsSubtrack(tdb))
+                $(hiddenVis).val("[]");
+            else
+                $(hiddenVis).val("hide");
+        }
+        $(hiddenVis).attr('disabled',false);
+
+        $('input.viewBtn').val('View in Browser');
+        //warn("Changed "+trackName+" to "+$(hiddenVis).val())
+    },
+
+    clickedOne: function (selCb,justClicked)
+    { // called by on click of CB and findTracks.checkAll()
+        var selName = $(selCb).attr('id');
+        var trackName = selName.substring(0,selName.length - "_sel_id".length)
+        var hiddenSel = $("input[name='"+trackName+"_sel']");
+        var seenVis = $('select#' + trackName + "_id");
+        var hiddenVis = $("input[name='"+trackName+"']");
+        var tr = $(selCb).parents('tr.found');
+        var tdb = tdbGetJsonRecord(trackName);
+        var needSel = (tdb.parentTrack != undefined);
+        var shouldPack = tdb.canPack && tdb.kindOfParent == 0; // If parent then not pack but full
+        if (shouldPack && tdb.shouldPack != undefined && !tdb.shouldPack)
+            shouldPack = false;
+        var checked = $(selCb).attr('checked');
+        //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" needSel:"+needSel +" shouldPack:"+shouldPack);
+
+        // First deal with seenVis control
+        if(checked) {
+            $(seenVis).attr('disabled', false);
+            if($(seenVis).attr('selectedIndex') == 0) {
+                if(shouldPack)
+                    $(seenVis).attr('selectedIndex',3);  // packed
+                else
+                    $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
+            }
+        } else {
+            $(seenVis).attr('selectedIndex',0);  // hide
+            $(seenVis).attr('disabled', true );
+        }
+
+        // Deal with hiddenSel and hiddenVis so that submit does the right thing
+        // Setting these requires justClicked OR seen vs. hidden to be different
+        var setHiddenInputs = justClicked;
+        if(!justClicked) {
+            if(needSel)
+                setHiddenInputs = (checked != ($(hiddenSel).val() == '1'));
+            else if (checked)
+                setHiddenInputs = ($(seenVis).val() != $(hiddenVis).val());
+            else
+                setHiddenInputs = ($(hiddenVis).val() != "hide" && $(hiddenVis).val() != "[]");
+        }
+        if(setHiddenInputs) {
+            if(checked)
+                $(hiddenVis).val($(seenVis).val());
+            else if(tdbIsSubtrack(tdb))
+                $(hiddenVis).val("[]");
+            else
+                $(hiddenVis).val("hide");
+            $(hiddenVis).attr('disabled',false);
+
+            if(needSel) {
+                if(checked)
+                    $(hiddenSel).val('1');
+                else
+                    $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+                $(hiddenSel).attr('disabled',false);
+            }
+        }
+
+        // The "view in browser" button should be enabled/disabled
+        if(justClicked) {
+            $('input.viewBtn').val('View in Browser');
+            findTracks.counts();
+        }
+    },
+
+
+    normalize: function ()
+    { // Normalize the page based upon current state of all found tracks
+        $('div#found').show()
+        var selCbs = $('input.selCb');
+
+        // All should have their vis enabled/disabled appropriately (false means don't update cart)
+        $(selCbs).each( function(i) { findTracks.clickedOne(this,false); });
+
+        findTracks.counts();
+    },
+
+    normalizeWaitOn: function ()  // UNUSED ?
+    { // Put up wait mask then Normalize the page based upon current state of all found tracks
+        waitOnFunction( findTracks.normalize );
+    },
+
+    _checkAll: function (check)
+    { // Checks/unchecks all found tracks.
+        var selCbs = $('input.selCb');
+        $(selCbs).attr('checked',check);
+
+        // All should have their vis enabled/disabled appropriately (false means don't update cart)
+        $(selCbs).each( function(i) { findTracks.clickedOne(this,false); });
+
+        $('input.viewBtn').val('View in Browser');
+        findTracks.counts();
+        return false;  // Pressing button does nothing more
+    },
+
+    checkAll: function (check)
+    {
+        waitOnFunction( findTracks._checkAll, check);
+    },
+
+    searchButtonsEnable: function (enable)
+    { // Displays visible and checked track count
+        var searchButton = $('input[name="hgt_tSearch"]'); // NOTE: must match TRACK_SEARCH in hg/inc/searchTracks.h
+        var clearButton  = $('input.clear');
+        if(enable) {
+            $(searchButton).attr('disabled',false);
+            $(clearButton).attr('disabled',false);
+        } else {
+            $(searchButton).attr('disabled',true);
+            $(clearButton).attr('disabled',true);
+        }
+    },
+
+    counts: function ()
+    {// Displays visible and checked track count
+        var counter = $('.selCbCount');
+        if(counter != undefined) {
+            var selCbs =  $("input.selCb");
+            $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+        }
+    },
+
+    clearFound: function ()
+    {// Clear found tracks and all input controls
+        var found = $('div#found');
+        if(found != undefined)
+            $(found).remove();
+        found = $('div#filesFound');
+        if(found != undefined)
+            $(found).remove();
+        return false;
+    },
+
+    clear: function ()
+    {// Clear found tracks and all input controls
+        findTracks.clearFound();
+        $('input[type="text"]').val(''); // This will always be found
+        //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
+        $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
+        $('select.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
+            //$(this).dropdownchecklist("refresh");  // requires v1.1
+            $(this).dropdownchecklist("destroy");
+            $(this).show();
             ddcl.setup(this,'noneIsAll');
+        });
+
+        $('select.groupSearch').attr('selectedIndex',0);
+        $('select.typeSearch').attr('selectedIndex',0);
+        //findTracks.searchButtonsEnable(false);
+        return false;
+    },
+
+    sortNow: function (obj)
+    {// Called by radio button to sort tracks
+        if( $('#sortIt').length == 0 )
+            $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
         else
-            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });
-    });
+            $('#sortIt').val($(obj).val());
 
-    $('select.groupSearch').attr('selectedIndex',0);
-    $('select.typeSearch').attr('selectedIndex',0);
-    //findTracksSearchButtonsEnable(false);
-    return false;
-}
+        // How to hold onto selected tracks?
+        // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
+        var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
+        if($(inp).length > 0) {
+            $(inp).appendTo('form#trackSearch');
+            $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+        }
 
-function findTracksSortNow(obj)
-{// Called by radio button to sort tracks
-    if( $('#sortIt').length == 0 )
-        $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
-    else
-        $('#sortIt').val($(obj).val());
+        $('#searchSubmit').click();
+        return true;
+    },
 
-    // How to hold onto selected tracks?
-    // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
-    var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
-    if($(inp).length > 0) {
-        $(inp).appendTo('form#trackSearch');
-        $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
-    }
+    page: function (pageVar,startAt)
+    {// Called by radio button to sort tracks
+        var pager = $("input[name='"+pageVar+"']");
+        if( $(pager).length == 1)
+            $(pager).val(startAt);
 
-    $('#searchSubmit').click();
-    return true;
-}
+        // How to hold onto selected tracks?
+        // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
+        var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
+        if($(inp).length > 0) {
+            $(inp).appendTo('form#trackSearch');
+            $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+        }
 
-function findTracksPage(pageVar,startAt)
-{// Called by radio button to sort tracks
-    var pager = $("input[name='"+pageVar+"']");
-    if( $(pager).length == 1)
-        $(pager).val(startAt);
+        $('#searchSubmit').click();
+        return false;
+    },
 
-    // How to hold onto selected tracks?
-    // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
-    var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
-    if($(inp).length > 0) {
-        $(inp).appendTo('form#trackSearch');
-        $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
-    }
+    configSet: function (name)
+    {// Called when configuring a composite or superTrack
+        var thisForm =  $('form#searchResults');
+        $(thisForm).attr('action',"../cgi-bin/hgTrackUi?hgt_tSearch=Search&g="+name);
+        $(thisForm).find('input.viewBtn').click();
+    },
 
-    $('#searchSubmit').click();
-    return false;
-}
+    mdbSelectPlusMinus: function (obj, rowNum)
+    { // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
+    // Will remove row or clone new one.  Complication is that 'advanced' and 'files' tab duplicate the tables!
 
-function findTracksConfigureSet(name)
-{// Called when configuring a composite or superTrack
-    var thisForm =  $('form#searchResults');
-    $(thisForm).attr('action',"../cgi-bin/hgTrackUi?hgt_tSearch=Search&g="+name);
-    $(thisForm).find('input.viewBtn').click();
-}
-
-function findTracksMdbSelectPlusMinus(obj, rowNum)
-{ // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
-  // Will remove row or clone new one.  Complication is that 'advanced' and 'files' tab duplicate the tables!
-
- var objId = $(obj).attr('id');
-    rowNum = objId.substring(objId.length - 1);
-    if ($(obj).val() == '+') {
-        var buttons = $("input#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
-        if (buttons.length > 0) {
-            var table = null;
-            $(buttons).each(function (i) {
-                var tr = $(this).parents('tr.mdbSelect')[0];
-                if (tr != undefined) {
-                    table = $(tr).parents('table')[0];
-                    if(newJQuery) {
+        var objId = $(obj).attr('id');
+        rowNum = objId.substring(objId.length - 1);
+        if ($(obj).val() == '+') {
+            var buttons = $("input#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
+            if (buttons.length > 0) {
+                var table = null;
+                $(buttons).each(function (i) {
+                    var tr = $(this).parents('tr.mdbSelect')[0];
+                    if (tr != undefined) {
+                        table = $(tr).parents('table')[0];
                         var newTr = $(tr).clone();
-                        var element = $(newTr).find("select.mdbVar")[0];
-                        if (element != undefined)
-                            $(element).attr('selectedIndex',-1);
-
-                        element = $(newTr).find("td[id^='hgt_mdbVal']")[0];
+                        var element = $(newTr).find("td[id^='hgt_mdbVal']")[0];
                         if (element != undefined)
                             $(element).empty();
                         element = $(newTr).find("td[id^='isLike']")[0];
                         if (element != undefined)
                             $(element).empty();
                         $(tr).after( newTr );
-                    } else
-                        $(tr).after( $(tr).clone() );
-                }
-            });
-            if (table)
-                findTracksMdbSelectRowsNormalize(table); // magic is in this function
-            return false;
-        }
-    } else { // == '-'
-        var buttons = $("input#minusButton"+rowNum);  // Two tabs may have the exact same buttons!
-        if (buttons.length > 0) {
-            var remaining = 0;
-            $(buttons).each(function (i) {
-                var tr = $(this).parents('tr')[0];
-                var table = $(tr).parents('table')[0];
-                if (tr != undefined)
-                    $(tr).remove();
-                remaining = findTracksMdbSelectRowsNormalize(table);  // Must renormalize since 2nd of 3 rows may have been removed
-            });
-            if (remaining > 0) {
-                removeNum = remaining + 1;  // Got to remove the cart vars, though it doesn't matter which as count must not be too many.
-                setCartVars( [ "hgt_mdbVar"+removeNum, "hgt_mdbVal"+removeNum ], [ "[]","[]" ] );
-            }
-
-            findTracksClearFound();  // Changing values so abandon what has been found
-            return false;
-        }
-    }
-    return true;
-}
-
-function findTracksMdbSelectRowsNormalize(table)
-{ // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
-  // Will walk through each row and get the numberings of addressable elements correct.
-    //var table = $('table#'+tableId);
-    if (table != undefined) {
-        var mdbSelectRows = $(table).find('tr.mdbSelect');
-        var needMinus = (mdbSelectRows.length > 2);
-        $(table).find('tr.mdbSelect').each( function (ix) {
-            var rowNum = ix + 1;  // Each [-][+] and mdb var=val pair of selects must be numbered
-
-            // First the [-][+] buttons
-            var plusButton = $(this).find("input[value='+']")[0];
-            if (plusButton != undefined) {
-                $(plusButton).attr('id',"plusButton"+rowNum);
-                // rebinding click appears to be not needed and screws up IE as well.
-                //$(plusButton).unbind('click')
-                //$(plusButton).click(function() { return findTracksMdbSelectPlusMinus($(plusButton), rowNum); });
-                var minusButton = $(this).find("input[value='-']")[0];
-                if (needMinus) {
-                    if (minusButton == undefined) {
-                        $(plusButton).before("<input type='button' id='minusButton"+rowNum+"' value='-' style='font-size:.7em;' title='delete this row' onclick='return findTracksMdbSelectPlusMinus(this,"+rowNum+");'>");
-                        minusButton = $(this).find("input[value='-']")[0];
-                    } else {
-                        $(minusButton).attr('id',"minusButton"+rowNum);
-                        $(minusButton).unbind('click');
-                        $(minusButton).click(function() { return findTracksMdbSelectPlusMinus($(minusButton), rowNum); });
+                        element = $(newTr).find("select.mdbVar")[0];
+                        if (element != undefined)
+                            $(element).attr('selectedIndex',-1);  // chrome needs this after 'after'
                     }
-                } else if (minusButton != undefined)
-                    $(minusButton).remove();
+                });
+                if (table)
+                    findTracks.mdbSelectRowsNormalize(table); // magic is in this function
+                return false;
             }
-            // Now the mdb var=val pair of selects
-            var element = $(this).find("select[name^='hgt_mdbVar']")[0];
-            if (element != undefined)
-                $(element).attr('name','hgt_mdbVar' + rowNum);
+        } else { // == '-'
+            var buttons = $("input#minusButton"+rowNum);  // Two tabs may have the exact same buttons!
+            if (buttons.length > 0) {
+                var remaining = 0;
+                $(buttons).each(function (i) {
+                    var tr = $(this).parents('tr')[0];
+                    var table = $(tr).parents('table')[0];
+                    if (tr != undefined)
+                        $(tr).remove();
+                    remaining = findTracks.mdbSelectRowsNormalize(table);  // Must renormalize since 2nd of 3 rows may have been removed
+                });
+                if (remaining > 0) {
+                    removeNum = remaining + 1;  // Got to remove the cart vars, though it doesn't matter which as count must not be too many.
+                    setCartVars( [ "hgt_mdbVar"+removeNum, "hgt_mdbVal"+removeNum ], [ "[]","[]" ] );
+                }
 
-            element = $(this).find("select[name^='hgt_mdbVal']")[0];
-            if (element != undefined)
-                $(element).attr('name','hgt_mdbVal' + rowNum);
+                findTracks.clearFound();  // Changing values so abandon what has been found
+                return false;
+            }
+        }
+        return true;
+    },
 
-            // A couple more things
-            element = $(this).find("td[id^='isLike']")[0];
-            if (element != undefined)
-                $(element).attr('id','isLike' + rowNum);
-            element = $(this).find("td[id^='hgt_mdbVal']")[0];
-            if (element != undefined)
-                $(element).attr('id','hgt_mdbVal' + rowNum);
-        });
-        return mdbSelectRows.length;
-    }
-    return 0;
-}
+    mdbSelectRowsNormalize: function (table)
+    { // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
+    // Will walk through each row and get the numberings of addressable elements correct.
+        //var table = $('table#'+tableId);
+        if (table != undefined) {
+            var mdbSelectRows = $(table).find('tr.mdbSelect');
+            var needMinus = (mdbSelectRows.length > 2);
+            $(table).find('tr.mdbSelect').each( function (ix) {
+                var rowNum = ix + 1;  // Each [-][+] and mdb var=val pair of selects must be numbered
 
-function findTracksSwitchTabs(ui)
-{ // switching tabs on findTracks page
+                // First the [-][+] buttons
+                var plusButton = $(this).find("input[value='+']")[0];
+                if (plusButton != undefined) {
+                    $(plusButton).attr('id',"plusButton"+rowNum);
+                    // rebinding click appears to be not needed and screws up IE as well.
+                    //$(plusButton).unbind('click')
+                    //$(plusButton).click(function() { return findTracks.mdbSelectPlusMinus($(plusButton), rowNum); });
+                    var minusButton = $(this).find("input[value='-']")[0];
+                    if (needMinus) {
+                        if (minusButton == undefined) {
+                            $(plusButton).before("<input type='button' id='minusButton"+rowNum+"' value='-' style='font-size:.7em;' title='delete this row' onclick='return findTracks.mdbSelectPlusMinus(this,"+rowNum+");'>");
+                            minusButton = $(this).find("input[value='-']")[0];
+                        } else {
+                            $(minusButton).attr('id',"minusButton"+rowNum);
+                            $(minusButton).unbind('click');
+                            $(minusButton).click(function() { return findTracks.mdbSelectPlusMinus($(minusButton), rowNum); });
+                        }
+                    } else if (minusButton != undefined)
+                        $(minusButton).remove();
+                }
+                // Now the mdb var=val pair of selects
+                var element = $(this).find("select[name^='hgt_mdbVar']")[0];
+                if (element != undefined)
+                    $(element).attr('name','hgt_mdbVar' + rowNum);
 
-    if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
-        setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
-    } else if( ui.panel.id == 'advancedTab') {
-        // Advanced tab has DDCL wigets which were sized badly because the hidden width was unknown
-        // delay necessary, since select event not afterSelect event
-        setTimeout("ddcl.reinit($('div#advancedTab').find('select.filterBy'),false);",20);
-    }
-    if( $('div#filesFound').length == 1) {
-        if( ui.panel.id == 'filesTab')
-            $('div#filesFound').show();
-        else
-            $('div#filesFound').hide();
-    }
-    if( $('div#found').length == 1) {
-        if( ui.panel.id != 'filesTab')
-            $('div#found').show();
-        else
-            $('div#found').hide();
+                element = $(this).find("select[name^='hgt_mdbVal']")[0];
+                if (element != undefined)
+                    $(element).attr('name','hgt_mdbVal' + rowNum);
+
+                // A couple more things
+                element = $(this).find("td[id^='isLike']")[0];
+                if (element != undefined)
+                    $(element).attr('id','isLike' + rowNum);
+                element = $(this).find("td[id^='hgt_mdbVal']")[0];
+                if (element != undefined)
+                    $(element).attr('id','hgt_mdbVal' + rowNum);
+            });
+            return mdbSelectRows.length;
+        }
+        return 0;
+    },
+
+    switchTabs: function (ui)
+    { // switching tabs on findTracks page
+
+        if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
+            setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
+        } else if( ui.panel.id == 'advancedTab') {
+            // Advanced tab has DDCL wigets which were sized badly because the hidden width was unknown
+            // delay necessary, since select event not afterSelect event
+            setTimeout("ddcl.reinit($('div#advancedTab').find('select.filterBy'),false);",20);
+        }
+        if( $('div#filesFound').length == 1) {
+            if( ui.panel.id == 'filesTab')
+                $('div#filesFound').show();
+            else
+                $('div#filesFound').hide();
+        }
+        if( $('div#found').length == 1) {
+            if( ui.panel.id != 'filesTab')
+                $('div#found').show();
+            else
+                $('div#found').hide();
+        }
     }
 }
 
@@ -2643,3 +2637,8 @@ function filterTableExcludeOptions(filter)
     return true;
 }
 
+function escapeJQuerySelectorChars(str)
+{
+    // replace characters which are reserved in jQuery selectors (surprisingly jQuery does not have a built in function to do this).
+    return str.replace(/([!"#$%&'()*+,./:;<=>?@[\]^`{|}~"])/g,'\\$1');
+}

@@ -6973,35 +6973,6 @@ subId 1662
 tableName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
 view Signal
 
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
-objType table
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2011-01-22
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
-expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2.bam.bai
-grant Myers
-lab Caltech
-labExpId 11210
-localization cell
-mapAlgorithm TH1014
-md5sum b49542b9c2a6bce74fb049f8873d9022,eb2e128cc7b5ce4bd4bb5a2770631930
-objStatus replaced
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 1
-rnaExtract longPolyA
-subId 3454
-submittedDataVersion V2 - A better mapping technique.
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V2
-view Alignments
-
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
 objType table
 cell HepG2
@@ -7028,35 +6999,6 @@ rnaExtract longPolyA
 subId 4798
 submittedDataVersion V3 - Replace conflicting md5sums
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep1V3
-view Alignments
-
-metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
-objType table
-cell HepG2
-composite wgEncodeCaltechRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2011-01-21
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-dccAccession wgEncodeEH000135
-expId 135
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam,wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2.bam.bai
-grant Myers
-lab Caltech
-labExpId 11209
-localization cell
-mapAlgorithm TH1014
-md5sum 65443cd0793f3879ebb377cb92a0fac0,531d57f7154d1227f307fba536dfda99
-objStatus replaced
-origAssembly hg18
-project wgEncode
-readType 1x75D
-replicate 2
-rnaExtract longPolyA
-subId 3455
-submittedDataVersion V2 - A better mapping technique
-tableName wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V2
 view Alignments
 
 metaObject wgEncodeCaltechRnaSeqHepg2R1x75dAlignsRep2V3
@@ -7159,7 +7101,7 @@ project wgEncode
 readType 1x75D
 replicate 1
 rnaExtract longPolyA
-subId 3521
+subId 4798
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep1V3
 view MinusRawSignal
@@ -7186,7 +7128,7 @@ project wgEncode
 readType 1x75D
 replicate 2
 rnaExtract longPolyA
-subId 3522
+subId 4797
 submittedDataVersion V3 - A better mapping technique.
 tableName wgEncodeCaltechRnaSeqHepg2R1x75dMinusSignalRep2V3
 view MinusRawSignal
@@ -14237,4 +14179,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 1368149414
+# MAGIC: 1288890950

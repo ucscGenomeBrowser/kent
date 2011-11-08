@@ -482,6 +482,9 @@ unsigned int exceptionBits = 0;
  *   lose that row of SNPAlleleFreq (perhaps should do a left join to
  *   make ucscAlleleFreq in doDbSnp.pl, but then we'd have to deal with
  *   missing values in the middle of float arrays).
+ * New as of snp135:
+ * - InconsistentAlleles: allele frequencies are given for alleles that do
+ *   not match the given observed alleles.
  */
 
 /* Use an enum that indexes arrays of char * to avoid spelling errors. */
@@ -515,6 +518,8 @@ enum exceptionType
     /* processAlleleFreqs() */
     NonIntegerChromCount,
     AlleleFreqSumNot1,
+    /* checkFrequencyAllelesVsObserved */
+    InconsistentAlleles,
     /* Keep this one last as a count of enum values: */
     exceptionTypeCount
     };
@@ -575,6 +580,8 @@ exceptionNames[MultipleAlignments] = "MultipleAlignments";
 /* processAlleleFreqs() */
 exceptionNames[NonIntegerChromCount] = "NonIntegerChromCount";
 exceptionNames[AlleleFreqSumNot1] = "AlleleFreqSumNot1";
+/* checkFrequencyAllelesVsObserved */
+exceptionNames[InconsistentAlleles] = "InconsistentAlleles";
 
 
 /* Many of these conditions imply a problem with NCBI's alignment and/or the
@@ -656,6 +663,9 @@ safef(buf, sizeof(buf),
     "  This SNP's allele frequency data are probably incomplete.",
       ALLELE_FREQ_ROUNDING_ERROR);
 exceptionDescs[AlleleFreqSumNot1] = cloneString(buf);
+/* checkFrequencyAllelesVsObserved */
+exceptionDescs[InconsistentAlleles] =
+    "Allele frequencies are given for alleles that do not match the reported observed alleles.";
 
 AllocArray(exceptionCounts, exceptionTypeCount);
 
@@ -1683,16 +1693,24 @@ prevPos = chrStart;
 }
 
 
-void checkSubmitters(struct lineFile *lf, int submitterCount, char *submitters)
+void checkSubmitters(struct lineFile *lf, int *pSubmitterCount, char *submitters)
 /* Make sure submitterCount matches count of comma-sep'd strings in submitters. */
 {
+if (*pSubmitterCount < 0)
+    {
+    warn("Looks like submitterCount is missing/NULL for rs%d -- check completeness "
+	 "of ids in SNPSubSNPLink, SubSNP and Batch, and email dbSNP", rsId);
+    *pSubmitterCount = 0;
+    submitters[0] = '\0';  // instead of "NULL"
+    return;
+    }
 // subtract one because of comma at end:
 int checkCount = chopCommas(submitters, NULL) - 1;
-if (checkCount != submitterCount)
+if (checkCount != *pSubmitterCount)
     lineFileAbort(lf, "submitterCount %d does not match number of comma-separated "
-		  "strings %d in submitters (%s).  Check doDbSnp.pl's code that "
+		  "strings %d in submitters (%s) for rs%d.  Check doDbSnp.pl's code that "
 		  "processes submitter data into ucscHandles.",
-		  submitterCount, checkCount, submitters);
+		  *pSubmitterCount, checkCount, submitters, rsId);
 }
 
 void processAlleleFreqs(struct lineFile *lf, int *pAlleleFreqCount, char *alleles,
@@ -1723,6 +1741,33 @@ for (i=0;  i < *pAlleleFreqCount;  i++)
     }
 if (total < 1.0-ALLELE_FREQ_ROUNDING_ERROR || total > 1.0+ALLELE_FREQ_ROUNDING_ERROR)
     writeException(AlleleFreqSumNot1);
+}
+
+void checkFrequencyAllelesVsObserved(char *alleles, int alCount, char *observed)
+/* If a frequency is given for an allele not in observed, flag exception. */
+{
+if (alCount == 0 || sameString(observed, "lengthTooLong"))
+    return;
+char *obsWords[alCount*2];
+char obsBuf[2048];
+safecpy(obsBuf, sizeof(obsBuf), observed);
+int obsCount = chopString(obsBuf, "/", obsWords, ArraySize(obsWords));
+if (obsCount != alCount)
+    writeException(InconsistentAlleles);
+else
+    {
+    char *alWords[alCount];
+    char alBuf[2048];
+    safecpy(alBuf, sizeof(alBuf), alleles);
+    chopCommas(alBuf, alWords);
+    int i;
+    for (i=0;  i < alCount;  i++)
+	if (stringArrayIx(alWords[i], obsWords, obsCount) < 0)
+	    {
+	    writeException(InconsistentAlleles);
+	    break;
+	    }
+    }
 }
 
 void processBitfields(struct lineFile *lf, int bytes[], char *bitfieldsStr, size_t size)
@@ -1810,7 +1855,8 @@ lineFileClose(&lf);
 /* SNP130: now 18M items, max ID 74315166. */
 /* SNP132: 30M items, max ID 121909398 */
 /* SNP134: 62M items, max ID 179363897 */
-#define MAX_SNPID 180 * 1024 * 1024
+/* SNP135: 55M items, max ID 193919341 (wastefulness factor: 193919341 / 55449139 = 3.497247) */
+#define MAX_SNPID 185 * 1024 * 1024
 struct coords
     {
     struct coords *next;
@@ -2147,8 +2193,9 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     char bitfieldsStr[256];
     if (snp132Ext)
 	{
-	checkSubmitters(lf, submitterCount, submitters);
+	checkSubmitters(lf, &submitterCount, submitters);
 	processAlleleFreqs(lf, &alleleFreqCount, alleles, alleleNs, alleleFreqs);
+	checkFrequencyAllelesVsObserved(alleles, alleleFreqCount, observed);
 	// Note: the order of bytes here must match bitfieldsOffsets above:
 	int bytes[] = { linkPropB2, freqProp, phenoProp, qualCheck };
 	processBitfields(lf, bytes, bitfieldsStr, sizeof(bitfieldsStr));

@@ -98,8 +98,10 @@ function exposeAll()
 {
     // Make main display dropdown show full if currently hide
     var visDD = $("select.visDD"); // limit to hidden
-    if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0)   // limit to hidden
+    if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0) {  // limit to hidden
         $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
+        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
+    }
 }
 
 function matSubCbClick(subCB)
@@ -1146,9 +1148,144 @@ function tableSortAtButtonPress(anchor,tagId)
     return false;  // called by link so return false means don't try to go anywhere
 }
 
+  ////////////////////
+ //// superTrack ////
+////////////////////
+var superT = {
+
+    submitAndLink: function (obj)
+    {
+        var thisForm=$(obj).parents('form');
+        if(thisForm != undefined && $(thisForm).length == 1) {
+           thisForm = thisForm[0];
+           $(thisForm).attr('action',obj.href); // just attach the straight href
+           $(thisForm).submit();
+           return false;  // should not get here!
+        }
+        return true;
+    },
+
+    topVis: function (show)
+    {
+        var superSel = $('select.visDD');
+        if (superSel != undefined && superSel.length == 1) {
+            superSel = superSel[0];
+            if (show) {
+                $(superSel).addClass('normalText');
+                $(superSel).attr('selectedIndex',1);
+                $(superSel).removeClass('hiddenText');
+            } else {
+                $(superSel).attr('selectedIndex',0);
+                $(superSel).removeClass('normalText');
+                $(superSel).addClass('hiddenText');
+            }
+        }
+    },
+
+    plusMinus: function (check)
+    {
+        $("input:checkbox").each(function (i) {
+            $(this).attr("checked",check);
+            superT.childChecked(this,1);
+            if (!check) // all are unchecked so we can hide this whole thing.
+                superT.topVis(check);
+        });
+    },
+
+    childChecked: function (cb,defaultVis)
+    {
+        var sel = $('select[name="' + cb.id + '"]');
+        if (sel != undefined && sel.length == 1) {
+            sel = sel[0];
+            var selIx = $(sel).attr('selectedIndex');
+            if (cb.checked && selIx.toString() == "0") {
+                // What can be done to more intelligently default this?
+                // All to dense?  Probably the best idea
+                // When first rendering page?  Then how to save?
+                // Logic is: from [+][-] then dense;  from cb, then full
+                if (defaultVis == undefined)
+                    defaultVis = (sel.options.length - 1); // full
+                superT.selChanged(sel,defaultVis);
+            } else if (!(cb.checked) && selIx.toString() != "0") {
+                superT.selChanged(sel,0);
+            }
+        }
+    },
+
+    selChanged: function(sel,val)
+    {
+        var selIx = val;
+        if (val == undefined) // onchange event
+            selIx = $(sel).attr('selectedIndex');
+        else // called from childChecked() so set value
+            $(sel).attr('selectedIndex',val);
+
+        if (selIx == 0) {
+            $(sel).removeClass('normalText');
+            $(sel).addClass('hiddenText');
+        } else {
+            $(sel).removeClass('hiddenText');
+            $(sel).addClass('normalText');
+            superT.topVis(true);
+        }
+        if (val == undefined) { // onchange event only
+            var cb = $('input#'+sel.name);
+            if (cb != undefined && cb.length == 1) {
+                cb = cb[0];
+                $(cb).attr('checked',(selIx > 0));
+            }
+        }
+    }
+}
+
+/* SOON TO BE ENABLED
+var mat = { // Beginings of matrix object
+
+    dimensions: 0,
+
+    cellHover: function (obj,on)
+    {
+        var classList = $( obj ).attr("class").split(" ");
+        classList = aryRemove(classList,"matCell");
+        for (var ix=0;ix < classList.length;ix++) {
+            var cells = $(".matCell."+classList[ix]);
+            if (on)
+                $(cells).css({backgroundColor:"#FCECC0"});
+            else
+                $(cells).css({backgroundColor:"#FFF9D2"});
+        }
+        if (on && obj.title.length == 0) {
+            for (var ix=0;ix < classList.length;ix++) {
+                if (ix > 0)
+                    obj.title += " and ";
+                obj.title += $("th."+classList[ix]).first().text();
+            }
+        }
+    },
+
+    init: function ()
+    {
+        var cells = $('td.matCell');
+        if (cells != undefined && cells.length > 0) {
+            var classList = $( cells[0] ).attr("class").split(" ");
+            classList = aryRemove(classList,"matCell");
+            mat.dimensions = classList.length;
+            if (mat.dimensions > 1) { // No need unless this is a 2D matrix
+                $('td.matCell').hover(
+                    function (e) {mat.cellHover(this,true)},
+                    function (e) {mat.cellHover(this,false)}
+                );
+            }
+        }
+    }
+}
+*/
+
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
+    // SOON TO BE ENABLED: mat.init();
+
     // Initialize sortable tables
     $('table.sortable').each(function (ix) {
         sortTableInitialize(this,true,true);

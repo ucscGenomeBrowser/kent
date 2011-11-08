@@ -7,11 +7,20 @@ use Getopt::Long;
 
 
 
-my $doencval = $ARGV[0];
+#my $doencval = $ARGV[0];
 
-unless ($doencval){
-	die "usage: tester.pl doEncodeValidate.pl\n";
+#unless ($doencval) {
+my $doencval = "../doEncodeValidate.pl";
+#}
+
+#unless ($doencval){
+#	die "usage: tester.pl doEncodeValidate.pl\n";
+#}
+
+unless (-e $doencval) {
+	die "can't find doEncodeValidate.pl in directory above, did you move the test directory?\n"
 }
+
 
 my $make;
 if ($ARGV[1] && $ARGV[1] eq "make"){
@@ -84,6 +93,13 @@ foreach my $test (@tests){
 	my $pass = 1;
 	if (scalar(@resultlines) != scalar(@expectlines)){
 		if ($verbose){
+			my $count = 0;
+			foreach my $line (@resultlines){
+				unless($expectlines[$count]){
+					$expectlines[$count] = 'NULL';
+				}
+				$count++;
+			}
 			push @errors, "line count of expected vs result don't match\n";
 		}
 		$pass = 0;
