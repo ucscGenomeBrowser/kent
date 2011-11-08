@@ -299,7 +299,7 @@ The format of the type fields:
 	display of non-bed type fields.  Default is: "Non-BED fields:"
     denseCoverage maxVal
 	In dense mode do a density plot based on maximum coverage seen under
-	pixel.  The maxVal Borresponds to the count at which it gets as dark
+	pixel.  The maxVal corresponds to the count at which it gets as dark
 	as it can get.  If maxVal is 0 then this will be calculated from the
 	data itself.
 

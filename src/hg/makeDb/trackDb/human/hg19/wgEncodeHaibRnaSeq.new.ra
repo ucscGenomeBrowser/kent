@@ -16,7 +16,7 @@ compositeTrack on
 shortLabel HAIB RNA-seq
 longLabel RNA-seq from ENCODE/HudsonAlpha
 group expression
-subGroup1 view Views TranscriptGencV3=Gene_model RawSignal=Signal Alignments=Alignments
+subGroup1 view Views TranscriptGencV7=Gene_model RawSignal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line 1GM12878=GM12878<BR>&nbsp;(Tier_1) 1H1hESC=H1-hESC<BR>&nbsp;(Tier_1) 1K562=K562<BR>&nbsp;(Tier_1) 2HELAS3=HeLa-S3<BR>&nbsp;(Tier_2) 2HEPG2=HepG2<BR>&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn 2HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
 subGroup3 rnaExtract RnaExtract pAP=longPolyA shortPolyA=shortPolyA
 subGroup4 treatment Treatment  BPA14h=BPA_4hr_100nM DEX100NM=DEX_1hr_100nM DEX5NM=DEX_1hr_5nM DEX1NM=DEX_1hr_1nM DEX500PM=DEX_1hr_500pM DEX100PM=DEX_1hr_100pM DM002P4H=DMSO_4hr_0.02pct EST10NM4H=ESTRADIOL_4hr_10nM ETOH02=ETOH_1hr_0.02pct GEN4H=GENISTEIN_4hr_100nM None=None
@@ -427,401 +427,403 @@ html wgEncodeHaibRnaSeq.new
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-    track wgEncodeHaibRnaSeqViewGencV3
-    shortLabel Transcripts GencodeV3c
-    view TranscriptGencV3
+
+#These should all be V7 but we do not have V7 tables
+    track wgEncodeHaibRnaSeqViewGencV7
+    shortLabel Transcripts GencodeV7
+    view TranscriptGencV7
     visibility full 
     parent wgEncodeHaibRnaSeq
     type genePred
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep3
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 ETOH 3
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Transcripts FPKM Rep 3 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 on
+        parent wgEncodeHaibRnaSeqViewGencV7 on
         shortLabel A549 DEX500p 1
         longLabel A549 DEX 1 hr 500 pM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX500PM rep=rep1
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX500PM rep=rep1
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 on
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 on
         shortLabel A549 DEX1n 1
         longLabel A549 DEX 1 hr 1nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX1NM rep=rep1
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX1NM rep=rep1
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 on
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 on
         shortLabel A549 DEX5n 1
         longLabel A549 DEX 1 hr 5 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX5NM rep=rep1
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX5NM rep=rep1
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep4
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV7Rep4
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 ETOH 4
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Transcripts FPKM Rep 4 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 DEX100p 2
         longLabel A549 DEX 1 hr 100 pM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100PM rep=rep2
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX100PM rep=rep2
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 DEX500p 2
         longLabel A549 DEX 1 hr 500 pM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX500PM rep=rep2
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX500PM rep=rep2
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 DEX1n 2
         longLabel A549 DEX 1 hr 1nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX1NM rep=rep2
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX1NM rep=rep2
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 DEX5n 2
         longLabel A549 DEX 1 hr 5 nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX5NM rep=rep2
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX5NM rep=rep2
         type genePred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 GEN 1
         longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4H rep=rep1
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4H rep=rep1
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 EST 2
         longLabel ECC-1 ESTRADIOL 4 hr 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=EST10NM4H rep=rep2
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=EST10NM4H rep=rep2
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 EST 1
         longLabel ECC-1 ESTRADIOL 4 hr 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=EST10NM4H rep=rep1
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=EST10NM4H rep=rep1
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D EST 1
         longLabel T-47D ESTRADIOL 4 hr 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=EST10NM4H rep=rep1
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=EST10NM4H rep=rep1
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D GEN 1
         longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=GEN4H rep=rep1
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=GEN4H rep=rep1
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D DMSO 2
         longLabel T-47D DMSO 4 hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DM002P4H rep=rep2
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=DM002P4H rep=rep2
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D EST 2
         longLabel T-47D ESTRADIOL 4 hr 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=EST10NM4H rep=rep2
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=EST10NM4H rep=rep2
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D GEN 2
         longLabel T-47D GENISTEIN 4 hr 100 nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=GEN4H rep=rep2
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=GEN4H rep=rep2
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 GEN 2
         longLabel ECC-1 GENISTEIN 4 hr 100 nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4H rep=rep2
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4H rep=rep2
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D BPA 1
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DM002P4H rep=rep1
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=DM002P4H rep=rep1
         type genePred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D BPA 1
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 BPA 1
         longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel T-47D BPA 2
         longLabel T-47D BPA 4 hr 100 nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        subGroups view=TranscriptGencV7 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 BPA 2
         longLabel ECC-1 BPA 4 hr 100 nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 DMSO 2
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DM002P4H rep=rep2
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=DM002P4H rep=rep2
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel ECC-1 DMSO 1
         longLabel ECC-1 DMSO 4 hr 0.02% RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DM002P4H rep=rep1
+        subGroups view=TranscriptGencV7 cellType=ECC1 rnaExtract=shortPolyA treatment=DM002P4H rep=rep1
         type genePred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 on
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 on
         shortLabel A549 ETOH 1
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
         type genePred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 ETOH 2
         longLabel A549 ETOH 1 hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
         type genePred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 on
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 on
         shortLabel A549 DEX100n 1
         longLabel A549 DEX 1 hr 100 nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100NM rep=rep1
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX100NM rep=rep1
         type genePred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep2
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV7Rep2
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel A549 DEX100n 2
         longLabel A549 DEX 1 hr 100 nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100NM rep=rep2
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX100NM rep=rep2
         type genePred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep1
-        parent wgEncodeHaibRnaSeqViewGencV3 on
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV7Rep1
+        parent wgEncodeHaibRnaSeqViewGencV7 on
         shortLabel A549 DEX100p 1
         longLabel A549 DEX 1 hr 100 pM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100PM rep=rep1
+        subGroups view=TranscriptGencV7 cellType=A549 rnaExtract=shortPolyA treatment=DEX100PM rep=rep1
         type genePred
         origAssembly hg19
         # subId=3274 dateSubmitted=2011-01-19
 
-        track wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1
-#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep1 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV7cRep1
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV7Rep1 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV7cRep1 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel BE2_C 1
         longLabel BE2_C RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep1
+        subGroups view=TranscriptGencV7 cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep1
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2
-#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV3cRep2 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV7cRep2
+#changed from wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV7Rep2 to wgEncodeHaibRnaSeqBe2cShortpolyaTranscriptGencV7cRep2 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel BE2_C 2
         longLabel BE2_C RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep2
+        subGroups view=TranscriptGencV7 cellType=BE2C rnaExtract=shortPolyA treatment=None rep=rep2
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1
-#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep1 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV7cRep1
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV7Rep1 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV7cRep1 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel SK-N-SH 1
         longLabel SK-N-SH RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=SKNSH rnaExtract=shortPolyA treatment=None rep=rep1
+        subGroups view=TranscriptGencV7 cellType=SKNSH rnaExtract=shortPolyA treatment=None rep=rep1
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
-        # was wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep1 wong Fri Jun  3 11:47:46 2011
+        # was wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV7Rep1 wong Fri Jun  3 11:47:46 2011
 
-        track wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2
-#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV3cRep2 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV7cRep2
+#changed from wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV7Rep2 to wgEncodeHaibRnaSeqSknshShortpolyaTranscriptGencV7cRep2 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel SK-N-SH 2
         longLabel SK-N-SH RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=SKNSH rnaExtract=shortPolyA treatment=None rep=rep2
+        subGroups view=TranscriptGencV7 cellType=SKNSH rnaExtract=shortPolyA treatment=None rep=rep2
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
-        # was wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV3Rep2 wong Fri Jun  3 11:47:46 2011
+        # was wgEncodeHaibRnaSeqHtb11ShortpolyaTranscriptGencV7Rep2 wong Fri Jun  3 11:47:46 2011
 
-        track wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1
-#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV7cRep1
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV7Rep1 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV7cRep1 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel PANC-1 1
         longLabel PANC-1 RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep1
+        subGroups view=TranscriptGencV7 cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep1
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2
-#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV7cRep2
+#changed from wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV7Rep2 to wgEncodeHaibRnaSeqPanc1ShortpolyaTranscriptGencV7cRep2 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel PANC-1 2
         longLabel PANC-1 RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep2
+        subGroups view=TranscriptGencV7 cellType=PANC1 rnaExtract=shortPolyA treatment=None rep=rep2
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1
-#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep1 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV7cRep1
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV7Rep1 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV7cRep1 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel PFSK-1 1
         longLabel PFSK-1 RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep1
+        subGroups view=TranscriptGencV7 cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep1
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2
-#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV3cRep2 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV7cRep2
+#changed from wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV7Rep2 to wgEncodeHaibRnaSeqPfsk1ShortpolyaTranscriptGencV7cRep2 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel PFSK-1 2
         longLabel PFSK-1 RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep2
+        subGroups view=TranscriptGencV7 cellType=PFSK1 rnaExtract=shortPolyA treatment=None rep=rep2
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1
-#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep1 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV7cRep1
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV7Rep1 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV7cRep1 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel U87 1
         longLabel U87 RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep1
+        subGroups view=TranscriptGencV7 cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep1
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2
-#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV3cRep2 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV7cRep2
+#changed from wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV7Rep2 to wgEncodeHaibRnaSeqU87ShortpolyaTranscriptGencV7cRep2 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel U87 2
         longLabel U87 RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep2
+        subGroups view=TranscriptGencV7 cellType=U87 rnaExtract=shortPolyA treatment=None rep=rep2
         type genePred
         origAssembly hg19
         # subId=3838 dateSubmitted=2011-03-31
 
-        track wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1
-#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep1 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep1 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV7cRep1
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV7Rep1 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV7cRep1 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel Jurkat 1
         longLabel Jurkat RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=Jurkat rnaExtract=shortPolyA treatment=None rep=rep1
+        subGroups view=TranscriptGencV7 cellType=Jurkat rnaExtract=shortPolyA treatment=None rep=rep1
         type genePred
         origAssembly hg18
         # subId=3868 dateSubmitted=2011-04-01
 
-        track wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2
-#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3Rep2 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV3cRep2 by wong in June 15
-        parent wgEncodeHaibRnaSeqViewGencV3 off
+        track wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV7cRep2
+#changed from wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV7Rep2 to wgEncodeHaibRnaSeqJurkatShortpolyaTranscriptGencV7cRep2 by wong in June 15
+        parent wgEncodeHaibRnaSeqViewGencV7 off
         shortLabel Jurkat 2
         longLabel Jurkat RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
-        subGroups view=TranscriptGencV3 cellType=Jurkat rnaExtract=shortPolyA treatment=None rep=rep2
+        subGroups view=TranscriptGencV7 cellType=Jurkat rnaExtract=shortPolyA treatment=None rep=rep2
         type genePred
         origAssembly hg18
         # subId=3868 dateSubmitted=2011-04-01

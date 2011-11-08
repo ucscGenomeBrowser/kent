@@ -1693,16 +1693,24 @@ prevPos = chrStart;
 }
 
 
-void checkSubmitters(struct lineFile *lf, int submitterCount, char *submitters)
+void checkSubmitters(struct lineFile *lf, int *pSubmitterCount, char *submitters)
 /* Make sure submitterCount matches count of comma-sep'd strings in submitters. */
 {
+if (*pSubmitterCount < 0)
+    {
+    warn("Looks like submitterCount is missing/NULL for rs%d -- check completeness "
+	 "of ids in SNPSubSNPLink, SubSNP and Batch, and email dbSNP", rsId);
+    *pSubmitterCount = 0;
+    submitters[0] = '\0';  // instead of "NULL"
+    return;
+    }
 // subtract one because of comma at end:
 int checkCount = chopCommas(submitters, NULL) - 1;
-if (checkCount != submitterCount)
+if (checkCount != *pSubmitterCount)
     lineFileAbort(lf, "submitterCount %d does not match number of comma-separated "
-		  "strings %d in submitters (%s).  Check doDbSnp.pl's code that "
+		  "strings %d in submitters (%s) for rs%d.  Check doDbSnp.pl's code that "
 		  "processes submitter data into ucscHandles.",
-		  submitterCount, checkCount, submitters);
+		  *pSubmitterCount, checkCount, submitters, rsId);
 }
 
 void processAlleleFreqs(struct lineFile *lf, int *pAlleleFreqCount, char *alleles,
@@ -1847,7 +1855,8 @@ lineFileClose(&lf);
 /* SNP130: now 18M items, max ID 74315166. */
 /* SNP132: 30M items, max ID 121909398 */
 /* SNP134: 62M items, max ID 179363897 */
-#define MAX_SNPID 180 * 1024 * 1024
+/* SNP135: 55M items, max ID 193919341 (wastefulness factor: 193919341 / 55449139 = 3.497247) */
+#define MAX_SNPID 185 * 1024 * 1024
 struct coords
     {
     struct coords *next;
@@ -2184,7 +2193,7 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     char bitfieldsStr[256];
     if (snp132Ext)
 	{
-	checkSubmitters(lf, submitterCount, submitters);
+	checkSubmitters(lf, &submitterCount, submitters);
 	processAlleleFreqs(lf, &alleleFreqCount, alleles, alleleNs, alleleFreqs);
 	checkFrequencyAllelesVsObserved(alleles, alleleFreqCount, observed);
 	// Note: the order of bytes here must match bitfieldsOffsets above:
