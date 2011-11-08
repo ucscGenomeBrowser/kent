@@ -185,6 +185,7 @@ sub projectDir
     return "/cluster/data/encode/pipeline/encpipeline_$instance/$id";
 }
 
+#this function is to be deprecated
 sub getGrants
 {
 # The grants are called "labs" in the labs.ra file (for historical reasons).
@@ -197,6 +198,7 @@ sub getGrants
     return \%grants;
 }
 
+#this function is to be deprecated
 sub getLabs
 {
 # file with lab/pi/project/grant -- used for reporting purposes
@@ -209,6 +211,7 @@ sub getLabs
     return \%labs;
 }
 
+#this function is to be deprecated
 sub getExpVars
 {
 # Returns hash indexed by the composite name in the experiments.ra file
