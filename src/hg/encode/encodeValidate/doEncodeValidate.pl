@@ -33,12 +33,18 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
-use Encode;
-use HgAutomate;
-use HgDb;
-use RAFile;
-use SafePipe;
+BEGIN {
+    my $dir = dirname($0);
+    unshift(@INC, $dir);
+    require Encode; Encode->import;
+    require HgAutomate; HgAutomate->import;
+    require HgDb; HgDb->import;
+    require RAFile; RAFile->import;
+    require SafePipe; SafePipe->import;
+    require DataBrowser; DataBrowser->import('browse');
+}
+
+#browse(\%INC);
 
 use vars qw/
     $opt_allowReloads
