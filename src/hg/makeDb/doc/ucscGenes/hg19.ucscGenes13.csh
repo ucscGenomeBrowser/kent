@@ -1296,6 +1296,7 @@ subColumn 4 ucscGenes.bed idSub.txt ucscGenesIdSubbed.bed
 sequenceForBed -keepName -db=hg19 -bedIn=ucscGenesIdSubbed.bed -fastaOut=stdout \
     | faToTwoBit stdin kgTargetSeq.2bit 
 mkdir -p /gbdb/hg19/targetDb/
+rm -f /gbdb/hg19/targetDb/kgTargetSeq.2bit
 ln -s $dir/kgTargetSeq.2bit /gbdb/hg19/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
 cut -f 1-10 ucscGenes.gp \                        
