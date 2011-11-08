@@ -17,12 +17,13 @@ dragAndDrop subTracks
 visibility hide
 canPack On
 priority 0
-type bed 3    
+type bed 6 +
 noInherit on
 wgEncode 1
 superTrack wgEncodeExonArraySuper dense
 html wgEncodeDukeAffyExon.new
 viewUi on
+boxedCfg on
 scoreFilterLimits 0:1000
 scoreFilter 1
 scoreMin 10

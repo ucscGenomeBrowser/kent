@@ -74,13 +74,14 @@ var genomePos = {
     original: null,
     originalSize: 0,
 
-    linkFixup: function (pos, name, reg, endParamName)
+    linkFixup: function (pos, id, reg, endParamName)
     {   // fixup external links (e.g. ensembl)
-        if($('#' + name).length) {
-            var link = $('#' + name).attr('href');
+        var ele = $(document.getElementById(id));
+        if(ele.length) {
+            var link = ele.attr('href');
             var a = reg.exec(link);
             if(a && a[1]) {
-                $('#' + name).attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
+                ele.attr('href', a[1] + pos.start + "&" + endParamName + "=" + pos.end);
             }
         }
     },
@@ -1890,7 +1891,7 @@ var rightClick = {
                         document.TrackHeaderForm.submit();
                 }
             } else {
-                imageV2.requestImgUpdate(id, id+"="+cmd, "");
+                imageV2.requestImgUpdate(id, id + "=" + cmd, "", cmd);
             }
         }
     },
@@ -2546,8 +2547,9 @@ var imageV2 = {
         return false;
     },
 
-    requestImgUpdate: function (trackName,extraData,loadingId)
+    requestImgUpdate: function (trackName,extraData,loadingId,newVisibility)
     {
+        // extraData, loadingId and newVisibility are optional
         var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
         if(extraData != undefined && extraData != "")
             data += "&" + extraData;
@@ -2567,6 +2569,7 @@ var imageV2 = {
                     cmd: 'refresh',
                     loadingId: loadingId,
                     id: trackName,
+                    newVisibility: newVisibility,
                     cache: false
                 });
     },
@@ -2667,8 +2670,8 @@ var imageV2 = {
         // We do this last b/c it's least important.
         var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
         if(a && a[1]) {
-            b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-            if(b[1]) {
+            var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
+            if(b && b[1]) {
                 $('#chrom').attr('src', b[1]);
             }
         }

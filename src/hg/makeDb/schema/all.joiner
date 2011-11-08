@@ -1582,10 +1582,9 @@ identifier knownGeneId dependency
     $kgDb.kg2ToKg3.newId minCheck=0.5 exclude=
     $kgDb.kg3ToKg4.oldId minCheck=0.5 exclude=
     $kgDb.kg3ToKg4.newId minCheck=0.5 exclude=
-    hg19.kg4ToKg5.newId minCheck=0.5 exclude=
+    $kgDb,!hg19.kg4ToKg5.newId minCheck=0.5 exclude=
     hg19.kg5ToKg6.newId exclude=
     $kgDb.kgTargetAli.qName full
-    mm9.kg4ToKg5.newId
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
 
@@ -1596,7 +1595,7 @@ identifier knownGeneOld5Id dependency
 
 identifier knownGeneOldId dependency
 "Still-previous UCSC Genes build"
-    $kgDb.knownGeneOld4.name
+    $kgDb,!hg19.knownGeneOld4.name
     $kgDb.kg4ToKg5.oldId full
 
 identifier knownGeneOld3Id dependency
