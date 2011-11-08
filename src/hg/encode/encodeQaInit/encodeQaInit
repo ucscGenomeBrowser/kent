@@ -55,7 +55,10 @@ def makeLinks(c, args, qaDir):
 	downloads = c.downloadsDirectory + "release%s" % args.release
 
 	if not os.path.exists(notesfile):
-		return ("Error: Notes file for %s release %s doesn't exist in %s" % (args.composite, args.release, c._notesDirectory))
+		return ("""
+FATAL ERROR: Notes file for %s release %s doesn't exist in %s
+You may need to 'git pull' or tell the wrangler to check in notes file
+""" % (args.composite, args.release, c._notesDirectory))
 	if os.path.exists(qaDir + "/notes.file"):
 		os.remove(qaDir + "/notes.file")
 	os.symlink(notesfile, qaDir + "/notes.file")
@@ -402,7 +405,10 @@ def checkWithMkNotes(ourset, mkNotesSet, status):
 	for i in ourset:
 		compset.add(i.rstrip())
 	if mkNotesSet != compset:
-		errors.append("The list of %s in the notes file is out of date." % status)
+		errors.append("""
+FATAL ERROR: The list of %s in the notes file is out of date.
+You may need to do a 'git pull'.
+""" % status)
 	return errors
 
 
@@ -470,7 +476,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	getMethods(qaDir, args, user, d)
 	
 	print "Checking notes file"
-	if re.search('Error', notesFile):
+	if re.search('FATAL ERROR', notesFile):
 		print notesFile
 		return
 	m = re.match('.*(kent/.*)', notesFile)
