@@ -1,3 +1,24 @@
+metaObject wgEncode450tmp
+objType table
+cell HCT-116
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+fileName wgEncode450tmp.bed.gz
+grant Myers
+lab HudsonAlpha
+labVersion Methyl450K
+md5sum 8ff466bca66b938f255e6b2d9cb2b3c0
+obtainedBy Stanford
+project wgEncode
+replicate 1
+subId 4942
+tableName wgEncode450tmp
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethyl450
 objType composite
 composite wgEncodeHaibMethyl450
@@ -477,33 +498,12 @@ fileName wgEncodeHaibMethyl450Hct116HaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl450K
-md5sum 8ff466bca66b938f255e6b2d9cb2b3c0
-obtainedBy Stanford
-project wgEncode
-replicate 1
-subId 4942
-tableName wgEncodeHaibMethyl450Hct116HaibSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethyl450Hct116StanfordSitesRep1
-objType table
-cell HCT-116
-composite wgEncodeHaibMethyl450
-dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-01
-dateUnrestricted 2012-06-30
-fileName wgEncodeHaibMethyl450Hct116StanfordSitesRep1.bed.gz
-grant Myers
-lab HudsonAlpha
-labVersion Methyl450K
 md5sum f640d32bb7cc3f4724436ff431f9b589
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
 subId 4942
-tableName wgEncodeHaibMethyl450Hct116StanfordSitesRep1
+tableName wgEncodeHaibMethyl450Hct116HaibSitesRep1
 treatment None
 view Sites
 
@@ -1326,4 +1326,4 @@ tableName wgEncodeHaibMethyl450U87SitesRep1
 treatment None
 view Sites
 
-# MAGIC: -407159542
+# MAGIC: 772630916
