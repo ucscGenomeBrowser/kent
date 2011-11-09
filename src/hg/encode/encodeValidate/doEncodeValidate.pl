@@ -41,7 +41,7 @@ BEGIN {
     require HgDb; HgDb->import;
     require RAFile; RAFile->import;
     require SafePipe; SafePipe->import;
-    require DataBrowser; DataBrowser->import('browse');
+#    require DataBrowser; DataBrowser->import('browse');
 }
 
 #browse(\%INC);
