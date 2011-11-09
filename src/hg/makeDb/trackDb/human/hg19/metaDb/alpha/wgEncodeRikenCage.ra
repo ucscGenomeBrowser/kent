@@ -286,6 +286,7 @@ labProtocolId 021WC+cage,022WC+cage
 labVersion IDR
 localization cell
 md5sum 90b1f1f807c5b5bbf416814185427425
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5067
@@ -574,6 +575,7 @@ labProtocolId 017WC+cage,018WC+cage
 labVersion IDR
 localization cell
 md5sum d2c02648c526bee76c4e0de95c40d6cc
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5070
@@ -862,6 +864,7 @@ labProtocolId 037WC+cage,038WC+cage
 labVersion IDR
 localization cell
 md5sum 88225b49eca770419d470bb2a8092559
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5048
@@ -1150,6 +1153,7 @@ labProtocolId 003WC+cage,004WC+cage
 labVersion IDR
 localization cell
 md5sum 16b7f46fc29362165e8898e0f2852057
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5082
@@ -1333,6 +1337,7 @@ labProtocolId gen0104C-cage
 labVersion IDR
 localization cytosol
 md5sum 329b5534c170df31bb68a5ec85fa29c7
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5075
@@ -1621,6 +1626,7 @@ labProtocolId 003C+cage,004C+cage
 labVersion IDR
 localization cytosol
 md5sum 713e78e09fc205e3529406dffdbb9f66
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5058
@@ -1801,6 +1807,7 @@ labProtocolId gen0109NLtcage
 labVersion IDR
 localization nucleolus
 md5sum 4df3a4e87e01560e0815ae7f67cd95fc
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5057
@@ -1978,6 +1985,7 @@ labProtocolId gen0110N-cage
 labVersion IDR
 localization nucleus
 md5sum d40d8717b6b1ec35024af5464aa7b766
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5059
@@ -2266,6 +2274,7 @@ labProtocolId 003N+cage,004N+cage
 labVersion IDR
 localization nucleus
 md5sum af79b5a6ea092efa030183b72aea24a6
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5086
@@ -2449,6 +2458,7 @@ labProtocolId gen0113WC-cage
 labVersion IDR
 localization cell
 md5sum f296e6036fcdafb7b93a666b3a74c584
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5080
@@ -2737,6 +2747,7 @@ labProtocolId 005WC+cage,006WC+cage
 labVersion IDR
 localization cell
 md5sum f95209c8c18d35775e9831be8a7fd447
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5055
@@ -3291,6 +3302,7 @@ labProtocolId 011WC+cage,012WC+cage
 labVersion IDR
 localization cell
 md5sum db9b55e8796d075bb77e1a31446b80ec
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5054
@@ -3468,6 +3480,7 @@ labProtocolId gen0121C-cage
 labVersion IDR
 localization cytosol
 md5sum 5f12a5131874544169d78864a0c7a75c
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5085
@@ -3756,6 +3769,7 @@ labProtocolId 011C+cage,012C+cage
 labVersion IDR
 localization cytosol
 md5sum ace9bafdfb0dfdc597846e1a33cacdcf
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5079
@@ -3933,6 +3947,7 @@ labProtocolId gen0123NLtcage
 labVersion IDR
 localization nucleolus
 md5sum deb96e4d8a0a676cb6fed674a76ef8e7
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5083
@@ -4221,6 +4236,7 @@ labProtocolId 011N+cage,012N+cage
 labVersion IDR
 localization nucleus
 md5sum 723016c9e8a199c7f2b4d0c1f80140f3
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5072
@@ -4509,6 +4525,7 @@ labProtocolId 013WC+cage,014WC+cage
 labVersion IDR
 localization cell
 md5sum b4b91192506fd7d6b626f1518d4f197c
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5060
@@ -4692,6 +4709,7 @@ labProtocolId gen0125C-cage
 labVersion IDR
 localization cytosol
 md5sum d4cdb1627833ec5a2f31391ea545acb4
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5064
@@ -4980,6 +4998,7 @@ labProtocolId 013C+cage,014C+cage
 labVersion IDR
 localization cytosol
 md5sum a1e50774aba263f7d22efde4b6f8af3f
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5063
@@ -5160,6 +5179,7 @@ labProtocolId gen0127NLtcage
 labVersion IDR
 localization nucleolus
 md5sum baa3c52dcd332cd280df71b425357178
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5069
@@ -5343,6 +5363,7 @@ labProtocolId gen0128N-cage
 labVersion IDR
 localization nucleus
 md5sum da9c284d8022126f3e65fb4aa9a9b673
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5061
@@ -5631,6 +5652,7 @@ labProtocolId 013N+cage,014N+cage
 labVersion IDR
 localization nucleus
 md5sum 0093055adfe3e39c0c696d66b964a1d4
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5077
@@ -5919,6 +5941,7 @@ labProtocolId 009WC+cage,010WC+cage
 labVersion IDR
 localization cell
 md5sum 6f8915c37b529c02a74e04b22d29df08
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5053
@@ -6102,6 +6125,7 @@ labProtocolId gen0116C-cage
 labVersion IDR
 localization cytosol
 md5sum 9857646f0380943ac53a48cb5f9b18c1
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5073
@@ -6390,6 +6414,7 @@ labProtocolId 029C+cage,030C+cage
 labVersion IDR
 localization cytosol
 md5sum 8fff822347d3fa7bfbd534203764efb2
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5066
@@ -6678,6 +6703,7 @@ labProtocolId 029N+cage,030N+cage
 labVersion IDR
 localization nucleus
 md5sum 80b8cf95b0e532ded04c2a10c26081c0
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5030
@@ -6966,6 +6992,7 @@ labProtocolId 001WC+cage,002WC+cage
 labVersion IDR
 localization cell
 md5sum 8393f675a18b70a6b38d51a1895ee6b5
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5081
@@ -7149,6 +7176,7 @@ labProtocolId gen0134CHtcage
 labVersion IDR
 localization chromatin
 md5sum eb338642e7ec879be9ec11fe43da98e0
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5065
@@ -7359,6 +7387,7 @@ labProtocolId gen0136C-cage
 labVersion IDR
 localization cytosol
 md5sum 3de7ed2820eaf82676ec0f717108f428
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5051
@@ -7785,6 +7814,7 @@ labProtocolId 001C+cage,002C+cage
 labVersion IDR
 localization cytosol
 md5sum 6631928c3b2ca4fecbf4d271b9e4011f
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5050
@@ -7962,6 +7992,7 @@ labProtocolId gen0144NLtcage
 labVersion IDR
 localization nucleolus
 md5sum 25a8b99de440b531dd14432df0274159
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5056
@@ -8145,6 +8176,7 @@ labProtocolId gen0147NPtcage
 labVersion IDR
 localization nucleoplasm
 md5sum bd5cf0866d75661595d208f490df77a4
+origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5076
@@ -8352,6 +8384,7 @@ labProtocolId gen0149N-cage
 labVersion IDR
 localization nucleus
 md5sum 3b004e336fb499508db2071e0dd28256
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5087
@@ -8640,6 +8673,7 @@ labProtocolId 001N+cage,002N+cage
 labVersion IDR
 localization nucleus
 md5sum 71d1a025b69a374ca6acc9a597bb6468
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5068
@@ -8823,6 +8857,7 @@ labProtocolId gen0152P-cage
 labVersion IDR
 localization polysome
 md5sum b8b0edaab7470ec3b5a23fc10352f63b
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5062
@@ -9111,6 +9146,7 @@ labProtocolId 015WC+cage,016WC+cage
 labVersion IDR
 localization cell
 md5sum 08d38b68204206fb5637d59071691b61
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5071
@@ -9399,6 +9435,7 @@ labProtocolId 007WC+cage,008WC+cage
 labVersion IDR
 localization cell
 md5sum a827c719b5d6e89885040e066992c87b
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5049
@@ -9582,6 +9619,7 @@ labProtocolId gen0155C-cage
 labVersion IDR
 localization cytosol
 md5sum a865b900474c1946fbe8e96550b0dbde
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5084
@@ -9870,6 +9908,7 @@ labProtocolId 027C+cage,028C+cage
 labVersion IDR
 localization cytosol
 md5sum 9893028f253c73c0b837fb743c99c6e0
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5052
@@ -10053,6 +10092,7 @@ labProtocolId gen0157N-cage
 labVersion IDR
 localization nucleus
 md5sum a5e0ef187812b3a05f84f09605d74799
+origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 subId 5088
@@ -10234,6 +10274,7 @@ labProtocolId 027N+cage
 labVersion IDR
 localization nucleus
 md5sum 61b623a918f76f2b37d4c2dd36528213
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5078
@@ -10684,9 +10725,10 @@ labProtocolId 019WC+cage,020WC+cage
 labVersion IDR
 localization cell
 md5sum 85a826f3bb0ae4fa64ab1fb890532b74
+origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: 1528425544
+# MAGIC: 1843964296
