@@ -12,6 +12,8 @@
 #    assembly] sequence: 
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.0/
 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ADFV00
+
 
 ##########################################################################
 # Download sequence (DONE 2010-10-22 - Chin)
