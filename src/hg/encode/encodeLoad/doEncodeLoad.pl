@@ -21,16 +21,12 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-BEGIN{
+use lib "/cluster/bin/scripts";
+use Encode;
+use RAFile;
+use SafePipe;
+use HgDb;
 
-unshift(@INC, ".");
-require Encode; Encode->import;
-require HgAutomate; HgAutomate->import;
-require HgDb; HgDb->import;
-require RAFile; RAFile->import;
-require SafePipe; SafePipe->import;
-
-}
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad $opt_skipDownload/;
 
 my $loadRa = "out/$Encode::loadFile";
@@ -335,11 +331,16 @@ if (defined $opt_configDir) {
 }
 HgAutomate::verbose(1, "Using config path $configPath\n");
 
+my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $fields);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 my $db = HgDb->new(DB => $daf->{assembly});
 my $email;
 my %labels;
+
+if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+    $email = $grants->{$daf->{grant}}{wranglerEmail};
+}
 
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
@@ -554,7 +555,7 @@ for my $key (keys %ra) {
 my $readme = "$downloadDir/README.txt";
 unless (-e $readme){
 	my @template;
-	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt" or die "can't open template for README.txt in config dir\n";
+	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt";
 	while (<TEMPLATE>){
 	
 		my $line = $_;
