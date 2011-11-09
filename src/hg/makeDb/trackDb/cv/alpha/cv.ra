@@ -5774,7 +5774,7 @@ targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
-label GATA2 (  ;)
+label GATA2
 
 term GATA2_(SC-267)
 tag GATA2b
@@ -5790,7 +5790,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
 lots E2708
 validation GATA2_(SC-267)(Immunoprecipitation-Western_blot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
-label GATA2 ( sc-267)
+label GATA2 (sc-267)
 
 term GATA2_(SC-9008)
 tag GATA2SC9008
@@ -6920,7 +6920,7 @@ lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
 validation missing
-label NF-YA (missing)
+label NF-YA
 
 term NF-YB
 tag NFYB
@@ -6935,7 +6935,7 @@ lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 validation missing
-label NF-YB (missing)
+label NF-YB
 
 term Nrf1
 tag NRF1
@@ -6981,7 +6981,7 @@ lots 20070905JV
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation missing
-label NRSF ( (Made by Protein Expression Center: pec@caltech.edu))
+label NRSF
 
 
 term p300
@@ -7429,7 +7429,7 @@ lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation SETDB1(Western_blot,ChIPseq):human_SETDB1_validation_Farnham.pdf
-label SETDB1 ( 11231-1-AP)
+label SETDB1 (11231-1-AP)
 
 term  SETDB1_(SC-66884)
 tag  SETDB1b
@@ -7569,7 +7569,7 @@ lab Struhl
 targetId GeneCards:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation missing
-label SPT20 (missing)
+label SPT20
 
 term SREBP1
 tag SREBP1
@@ -8205,7 +8205,7 @@ lots 08064-4C12
 targetId Genecard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
 validation ZNF274_(M01)(Western_blot,ChIPseq):human_ZNF274_M01_validation_Farnham.pdf
-label ZNF274 (M01)
+label ZNF274 (H00010782-M01)
 
 term ZZZ3
 tag ZZZ3
@@ -8215,12 +8215,12 @@ antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic pept
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
 orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
 vendorName Lazlo Tora, Institut de G?n?tique et de Biologie Mol?culaire et Cellulaire
-vendorId missing
+vendorId ZZZ3
 lab Struhl
 targetId GeneCard:ZZZ3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
-label ZZZ3 (missing)
+label ZZZ3
 
 
 ###  Antibodies
@@ -8534,7 +8534,6 @@ targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
 validation missing
 label RPS6KA1 (07-1477)
 
-
 term ripInput
 tag RIPIN
 type Antibody
@@ -8549,7 +8548,7 @@ lab Tenenbaum
 targetId (input)
 #targetUrl ;
 validation missing
-label ripInput (RIP Input)
+label RIP input
 
 term SLBP
 tag SLBP
