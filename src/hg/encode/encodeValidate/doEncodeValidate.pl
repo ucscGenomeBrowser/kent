@@ -33,16 +33,13 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-BEGIN{
+use lib "/cluster/bin/scripts";
+use Encode;
+use HgAutomate;
+use HgDb;
+use RAFile;
+use SafePipe;
 
-unshift(@INC, ".");
-require Encode; Encode->import;
-require HgAutomate; HgAutomate->import;
-require HgDb; HgDb->import;
-require RAFile; RAFile->import;
-require SafePipe; SafePipe->import;
-
-}
 use vars qw/
     $opt_allowReloads
     $opt_configDir
@@ -137,7 +134,11 @@ sub doTime
 sub dieTellWrangler
 {
     my ($msg) = @_;
-    $msg .= "Please contact the encode staff at encode-staff\@soe.ucsc.edu\n";
+    my $email;
+    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+        $email = $grants->{$daf->{grant}}{wranglerEmail};
+    }
+    $msg .= "Please contact your wrangler" . (defined($email) ? " at $email" : "") . "\n";
     die $msg;
 }
 
@@ -236,15 +237,14 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    if (@errors) {
-        my $errorstr = "";
-        for my $line (@errors) {
-            $errorstr = $errorstr . "$line\n";
-        }
-        return $errorstr;
-    }
-    else {
+    unless (@errors) {
         return ();
+    } else {
+        my $errstr = "";
+        for my $error (@errors) {
+            $errstr = $errstr . "$error\n";
+        }
+        return $errstr;
     }
 }
 
@@ -1525,23 +1525,33 @@ if(!$opt_validateDaf) {
 }
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
+$grants = Encode::getGrants($configPath);
 $fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
-        Encode::parseDaf($submitDir, $fields);
+        Encode::parseDaf($submitDir, $grants, $fields);
     } else {
-        Encode::getDaf($submitDir, $fields);
+        Encode::getDaf($submitDir, $grants, $fields);
     }
     print STDERR "DAF is valid\n";
     exit(0);
 }
 
-$daf = Encode::getDaf($submitDir, $fields);
+$daf = Encode::getDaf($submitDir, $grants, $fields);
 $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
+
+if($opt_sendEmail) {
+    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+        my $email = $grants->{$daf->{grant}}{wranglerEmail};
+        if($email) {
+            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab has been submitted for validation." $email`;
+        }
+    }
+}
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
