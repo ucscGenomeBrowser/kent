@@ -1531,15 +1531,15 @@ $fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
-        Encode::parseDaf($submitDir, $grants, $fields);
+        Encode::parseDaf($submitDir, $grants, $fields, $submitType);
     } else {
-        Encode::getDaf($submitDir, $grants, $fields);
+        Encode::getDaf($submitDir, $grants, $fields, $submitType);
     }
     print STDERR "DAF is valid\n";
     exit(0);
 }
 
-$daf = Encode::getDaf($submitDir, $grants, $fields);
+$daf = Encode::getDaf($submitDir, $grants, $fields, $submitType);
 $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
