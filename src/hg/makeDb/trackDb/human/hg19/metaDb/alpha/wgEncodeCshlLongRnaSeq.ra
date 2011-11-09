@@ -351,7 +351,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4589
 view ExonsGencV7
 
@@ -405,7 +405,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4589
 view GeneGencV7
 
@@ -463,7 +463,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4258
 view Spikeins
 
@@ -494,7 +494,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4213
 view Spikeins
 
@@ -548,7 +548,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4589
 tableName wgEncodeCshlLongRnaSeqA549CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -663,7 +663,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4549
 view ExonsGencV7
 
@@ -832,7 +832,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4549
 view GeneGencV7
 
@@ -1064,7 +1064,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4191
 view Spikeins
 
@@ -1095,7 +1095,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4188
 view Spikeins
 
@@ -1148,7 +1148,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4549
 tableName wgEncodeCshlLongRnaSeqA549CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -1500,7 +1500,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4558
 view ExonsGencV7
 
@@ -1554,7 +1554,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4558
 view GeneGencV7
 
@@ -1612,7 +1612,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4208
 view Spikeins
 
@@ -1643,7 +1643,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4205
 view Spikeins
 
@@ -1697,7 +1697,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4558
 tableName wgEncodeCshlLongRnaSeqAg04450CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -1812,7 +1812,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4554
 view ExonsGencV7
 
@@ -1981,7 +1981,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4554
 view GeneGencV7
 
@@ -2213,7 +2213,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4253
 view Spikeins
 
@@ -2244,7 +2244,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4250
 view Spikeins
 
@@ -2297,7 +2297,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4554
 tableName wgEncodeCshlLongRnaSeqAg04450CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -2649,7 +2649,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4581
 view ExonsGencV7
 
@@ -2703,7 +2703,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4581
 view GeneGencV7
 
@@ -2761,7 +2761,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4190
 view Spikeins
 
@@ -2792,7 +2792,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4254
 view Spikeins
 
@@ -2846,7 +2846,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4581
 tableName wgEncodeCshlLongRnaSeqBjCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -2961,7 +2961,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4576
 view ExonsGencV7
 
@@ -3130,7 +3130,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4576
 view GeneGencV7
 
@@ -3362,7 +3362,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4251
 view Spikeins
 
@@ -3393,7 +3393,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4212
 view Spikeins
 
@@ -3446,7 +3446,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4576
 tableName wgEncodeCshlLongRnaSeqBjCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -3797,7 +3797,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4586
 view ExonsGencV7
 
@@ -3850,7 +3850,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4586
 view GeneGencV7
 
@@ -3962,7 +3962,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4298
 view Spikeins
 
@@ -3993,7 +3993,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4288
 view Spikeins
 
@@ -4046,7 +4046,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4586
 tableName wgEncodeCshlLongRnaSeqGm12878CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -4161,7 +4161,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4571
 view ExonsGencV7
 
@@ -4330,7 +4330,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4571
 view GeneGencV7
 
@@ -4562,7 +4562,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4260
 view Spikeins
 
@@ -4593,7 +4593,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4201
 view Spikeins
 
@@ -4646,7 +4646,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4571
 tableName wgEncodeCshlLongRnaSeqGm12878CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -5218,7 +5218,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4559
 view ExonsGencV7
 
@@ -5272,7 +5272,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4559
 view GeneGencV7
 
@@ -5384,7 +5384,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4195
 view Spikeins
 
@@ -5415,7 +5415,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4292
 view Spikeins
 
@@ -5469,7 +5469,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4559
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -5584,7 +5584,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4553
 view ExonsGencV7
 
@@ -5753,7 +5753,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4553
 view GeneGencV7
 
@@ -5985,7 +5985,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4276
 view Spikeins
 
@@ -6016,7 +6016,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4231
 view Spikeins
 
@@ -6069,7 +6069,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4553
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -6421,7 +6421,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4548
 view ExonsGencV7
 
@@ -6475,7 +6475,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4548
 view GeneGencV7
 
@@ -6587,7 +6587,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4215
 view Spikeins
 
@@ -6618,7 +6618,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4209
 view Spikeins
 
@@ -6672,7 +6672,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4548
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -6788,7 +6788,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4601
 view ExonsGencV7
 
@@ -6958,7 +6958,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4601
 view GeneGencV7
 
@@ -7190,7 +7190,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4290
 view Spikeins
 
@@ -7221,7 +7221,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4235
 view Spikeins
 
@@ -7275,7 +7275,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4601
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -7626,7 +7626,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4593
 view ExonsGencV7
 
@@ -7679,7 +7679,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4593
 view GeneGencV7
 
@@ -7791,7 +7791,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4226
 view Spikeins
 
@@ -7822,7 +7822,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4239
 view Spikeins
 
@@ -7875,7 +7875,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4593
 tableName wgEncodeCshlLongRnaSeqH1hescCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -7990,7 +7990,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4592
 view ExonsGencV7
 
@@ -8159,7 +8159,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4592
 view GeneGencV7
 
@@ -8391,7 +8391,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4223
 view Spikeins
 
@@ -8422,7 +8422,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4265
 view Spikeins
 
@@ -8475,7 +8475,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4592
 tableName wgEncodeCshlLongRnaSeqH1hescCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -8681,7 +8681,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4542
 view ExonsGencV7
 
@@ -8737,7 +8737,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4542
 view GeneGencV7
 
@@ -8824,7 +8824,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4185
 view Spikeins
 
@@ -8880,7 +8880,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4542
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -8967,7 +8967,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4582
 view ExonsGencV7
 
@@ -9080,7 +9080,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4582
 view GeneGencV7
 
@@ -9227,7 +9227,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4280
 view Spikeins
 
@@ -9282,7 +9282,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4582
 tableName wgEncodeCshlLongRnaSeqH1hescCytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -9488,7 +9488,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4590
 view ExonsGencV7
 
@@ -9544,7 +9544,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4590
 view GeneGencV7
 
@@ -9631,7 +9631,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4287
 view Spikeins
 
@@ -9687,7 +9687,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4590
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -9774,7 +9774,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4570
 view ExonsGencV7
 
@@ -9887,7 +9887,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4570
 view GeneGencV7
 
@@ -10034,7 +10034,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4270
 view Spikeins
 
@@ -10089,7 +10089,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4570
 tableName wgEncodeCshlLongRnaSeqH1hescNucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -10441,7 +10441,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4599
 view ExonsGencV7
 
@@ -10495,7 +10495,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4599
 view GeneGencV7
 
@@ -10607,7 +10607,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4229
 view Spikeins
 
@@ -10638,7 +10638,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4256
 view Spikeins
 
@@ -10692,7 +10692,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4599
 tableName wgEncodeCshlLongRnaSeqHelas3CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -10808,7 +10808,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4583
 view ExonsGencV7
 
@@ -10978,7 +10978,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4583
 view GeneGencV7
 
@@ -11210,7 +11210,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4193
 view Spikeins
 
@@ -11241,7 +11241,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4271
 view Spikeins
 
@@ -11295,7 +11295,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4583
 tableName wgEncodeCshlLongRnaSeqHelas3CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -11501,7 +11501,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4577
 view ExonsGencV7
 
@@ -11557,7 +11557,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4577
 view GeneGencV7
 
@@ -11644,7 +11644,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4222
 view Spikeins
 
@@ -11700,7 +11700,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4577
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -11816,7 +11816,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4544
 view ExonsGencV7
 
@@ -11986,7 +11986,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4544
 view GeneGencV7
 
@@ -12218,7 +12218,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4211
 view Spikeins
 
@@ -12249,7 +12249,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4225
 view Spikeins
 
@@ -12303,7 +12303,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4544
 tableName wgEncodeCshlLongRnaSeqHelas3CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -12655,7 +12655,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4568
 view ExonsGencV7
 
@@ -12709,7 +12709,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4568
 view GeneGencV7
 
@@ -12821,7 +12821,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4262
 view Spikeins
 
@@ -12852,7 +12852,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4268
 view Spikeins
 
@@ -12906,7 +12906,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4568
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -13022,7 +13022,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4550
 view ExonsGencV7
 
@@ -13192,7 +13192,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4550
 view GeneGencV7
 
@@ -13424,7 +13424,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4264
 view Spikeins
 
@@ -13455,7 +13455,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4272
 view Spikeins
 
@@ -13509,7 +13509,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4550
 tableName wgEncodeCshlLongRnaSeqHelas3NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -13860,7 +13860,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4580
 view ExonsGencV7
 
@@ -13913,7 +13913,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4580
 view GeneGencV7
 
@@ -14025,7 +14025,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4242
 view Spikeins
 
@@ -14056,7 +14056,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4243
 view Spikeins
 
@@ -14109,7 +14109,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4580
 tableName wgEncodeCshlLongRnaSeqHepg2CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -14224,7 +14224,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4596
 view ExonsGencV7
 
@@ -14393,7 +14393,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4596
 view GeneGencV7
 
@@ -14625,7 +14625,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4296
 view Spikeins
 
@@ -14656,7 +14656,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4277
 view Spikeins
 
@@ -14709,7 +14709,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4596
 tableName wgEncodeCshlLongRnaSeqHepg2CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -15061,7 +15061,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4575
 view ExonsGencV7
 
@@ -15115,7 +15115,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4575
 view GeneGencV7
 
@@ -15227,7 +15227,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4238
 view Spikeins
 
@@ -15258,7 +15258,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4224
 view Spikeins
 
@@ -15312,7 +15312,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4575
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -15427,7 +15427,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4603
 view ExonsGencV7
 
@@ -15596,7 +15596,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4603
 view GeneGencV7
 
@@ -15828,7 +15828,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4207
 view Spikeins
 
@@ -15859,7 +15859,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4263
 view Spikeins
 
@@ -15912,7 +15912,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4603
 tableName wgEncodeCshlLongRnaSeqHepg2CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -16264,7 +16264,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4562
 view ExonsGencV7
 
@@ -16318,7 +16318,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4562
 view GeneGencV7
 
@@ -16430,7 +16430,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4217
 view Spikeins
 
@@ -16461,7 +16461,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4244
 view Spikeins
 
@@ -16515,7 +16515,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4562
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -16630,7 +16630,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4584
 view ExonsGencV7
 
@@ -16799,7 +16799,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4584
 view GeneGencV7
 
@@ -17031,7 +17031,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4283
 view Spikeins
 
@@ -17062,7 +17062,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4221
 view Spikeins
 
@@ -17115,7 +17115,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4584
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -17321,7 +17321,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4547
 view ExonsGencV7
 
@@ -17377,7 +17377,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4547
 view GeneGencV7
 
@@ -17464,7 +17464,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4196
 view Spikeins
 
@@ -17520,7 +17520,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4547
 tableName wgEncodeCshlLongRnaSeqHmecCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -17607,7 +17607,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4556
 view ExonsGencV7
 
@@ -17720,7 +17720,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4556
 view GeneGencV7
 
@@ -17867,7 +17867,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4200
 view Spikeins
 
@@ -17922,7 +17922,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4556
 tableName wgEncodeCshlLongRnaSeqHmecCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -18274,7 +18274,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4605
 view ExonsGencV7
 
@@ -18328,7 +18328,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4605
 view GeneGencV7
 
@@ -18440,7 +18440,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4198
 view Spikeins
 
@@ -18471,7 +18471,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4249
 view Spikeins
 
@@ -18525,7 +18525,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4605
 tableName wgEncodeCshlLongRnaSeqHsmmCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -18586,7 +18586,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4051
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2
 view Alignments
@@ -18641,7 +18641,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4587
 view ExonsGencV7
 
@@ -18810,7 +18810,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4587
 view GeneGencV7
 
@@ -19042,7 +19042,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4261
 view Spikeins
 
@@ -19073,7 +19073,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4246
 view Spikeins
 
@@ -19126,7 +19126,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4587
 tableName wgEncodeCshlLongRnaSeqHsmmCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -19478,7 +19478,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4565
 view ExonsGencV7
 
@@ -19532,7 +19532,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4565
 view GeneGencV7
 
@@ -19644,7 +19644,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4255
 view Spikeins
 
@@ -19675,7 +19675,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4269
 view Spikeins
 
@@ -19729,7 +19729,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4565
 tableName wgEncodeCshlLongRnaSeqHuvecCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -19844,7 +19844,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4564
 view ExonsGencV7
 
@@ -20013,7 +20013,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4564
 view GeneGencV7
 
@@ -20245,7 +20245,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4286
 view Spikeins
 
@@ -20276,7 +20276,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4204
 view Spikeins
 
@@ -20329,7 +20329,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4564
 tableName wgEncodeCshlLongRnaSeqHuvecCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -20535,7 +20535,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4552
 view ExonsGencV7
 
@@ -20591,7 +20591,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4552
 view GeneGencV7
 
@@ -20678,7 +20678,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4199
 view Spikeins
 
@@ -20734,7 +20734,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4552
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -20849,7 +20849,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4595
 view ExonsGencV7
 
@@ -21018,7 +21018,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4595
 view GeneGencV7
 
@@ -21250,7 +21250,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4257
 view Spikeins
 
@@ -21281,7 +21281,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4187
 view Spikeins
 
@@ -21334,7 +21334,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4595
 tableName wgEncodeCshlLongRnaSeqHuvecCytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -21686,7 +21686,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4563
 view ExonsGencV7
 
@@ -21740,7 +21740,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4563
 view GeneGencV7
 
@@ -21852,7 +21852,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4284
 view Spikeins
 
@@ -21883,7 +21883,7 @@ readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4206
 view Spikeins
 
@@ -21937,7 +21937,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4563
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -22052,7 +22052,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4602
 view ExonsGencV7
 
@@ -22221,7 +22221,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4602
 view GeneGencV7
 
@@ -22453,7 +22453,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4293
 view Spikeins
 
@@ -22484,7 +22484,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4210
 view Spikeins
 
@@ -22537,7 +22537,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4602
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -22888,7 +22888,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4588
 view ExonsGencV7
 
@@ -22941,7 +22941,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4588
 view GeneGencV7
 
@@ -23053,7 +23053,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4227
 view Spikeins
 
@@ -23084,7 +23084,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4294
 view Spikeins
 
@@ -23137,7 +23137,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4588
 tableName wgEncodeCshlLongRnaSeqK562CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -23253,7 +23253,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4585
 view ExonsGencV7
 
@@ -23423,7 +23423,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4585
 view GeneGencV7
 
@@ -23655,7 +23655,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4273
 view Spikeins
 
@@ -23686,7 +23686,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4230
 view Spikeins
 
@@ -23740,7 +23740,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4585
 tableName wgEncodeCshlLongRnaSeqK562CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -24076,7 +24076,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4551
 view ExonsGencV7
 
@@ -24246,7 +24246,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4551
 view GeneGencV7
 
@@ -24424,7 +24424,7 @@ readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4189
 view Spikeins
 
@@ -24455,7 +24455,7 @@ readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4236
 view Spikeins
 
@@ -24509,7 +24509,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4551
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalTranscriptGencV7
 view TranscriptGencV7
@@ -24861,7 +24861,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4579
 view ExonsGencV7
 
@@ -24915,7 +24915,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4579
 view GeneGencV7
 
@@ -25027,7 +25027,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4197
 view Spikeins
 
@@ -25058,7 +25058,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4279
 view Spikeins
 
@@ -25112,7 +25112,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4579
 tableName wgEncodeCshlLongRnaSeqK562CytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -25224,7 +25224,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4572
 view ExonsGencV7
 
@@ -25388,7 +25388,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4572
 view GeneGencV7
 
@@ -25612,7 +25612,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4295
 view Spikeins
 
@@ -25642,7 +25642,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4192
 view Spikeins
 
@@ -25694,7 +25694,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4572
 tableName wgEncodeCshlLongRnaSeqK562CytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -25810,7 +25810,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4546
 view ExonsGencV7
 
@@ -25980,7 +25980,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4546
 view GeneGencV7
 
@@ -26158,7 +26158,7 @@ readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4285
 view Spikeins
 
@@ -26189,7 +26189,7 @@ readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4228
 view Spikeins
 
@@ -26243,7 +26243,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4546
 tableName wgEncodeCshlLongRnaSeqK562NucleolusTotalTranscriptGencV7
 view TranscriptGencV7
@@ -26359,7 +26359,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4545
 view ExonsGencV7
 
@@ -26529,7 +26529,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4545
 view GeneGencV7
 
@@ -26707,7 +26707,7 @@ readType 2x76D
 replicate 3
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4291
 view Spikeins
 
@@ -26738,7 +26738,7 @@ readType 2x76D
 replicate 4
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4297
 view Spikeins
 
@@ -26792,7 +26792,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract total
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4545
 tableName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalTranscriptGencV7
 view TranscriptGencV7
@@ -27144,7 +27144,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4541
 view ExonsGencV7
 
@@ -27198,7 +27198,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4541
 view GeneGencV7
 
@@ -27310,7 +27310,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4259
 view Spikeins
 
@@ -27341,7 +27341,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4233
 view Spikeins
 
@@ -27395,7 +27395,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4541
 tableName wgEncodeCshlLongRnaSeqK562NucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -27511,7 +27511,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4555
 view ExonsGencV7
 
@@ -27681,7 +27681,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4555
 view GeneGencV7
 
@@ -27913,7 +27913,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4203
 view Spikeins
 
@@ -27944,7 +27944,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4220
 view Spikeins
 
@@ -27998,7 +27998,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4555
 tableName wgEncodeCshlLongRnaSeqK562NucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -28350,7 +28350,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4578
 view ExonsGencV7
 
@@ -28404,7 +28404,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4578
 view GeneGencV7
 
@@ -28516,7 +28516,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4056
 view Spikeins
 
@@ -28547,7 +28547,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4241
 view Spikeins
 
@@ -28601,7 +28601,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4578
 tableName wgEncodeCshlLongRnaSeqMcf7CellPamTranscriptGencV7
 view TranscriptGencV7
@@ -28717,7 +28717,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4600
 view ExonsGencV7
 
@@ -28887,7 +28887,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4600
 view GeneGencV7
 
@@ -29119,7 +29119,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4248
 view Spikeins
 
@@ -29150,7 +29150,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4234
 view Spikeins
 
@@ -29204,7 +29204,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4600
 tableName wgEncodeCshlLongRnaSeqMcf7CellPapTranscriptGencV7
 view TranscriptGencV7
@@ -29711,7 +29711,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4567
 view ExonsGencV7
 
@@ -29741,7 +29741,7 @@ project wgEncode
 replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4594
 view ExonsGencV7
 
@@ -29797,7 +29797,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4567
 view GeneGencV7
 
@@ -29825,7 +29825,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4594
 view GeneGencV7
 
@@ -29966,7 +29966,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4216
 view Spikeins
 
@@ -29997,7 +29997,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4289
 view Spikeins
 
@@ -30027,7 +30027,7 @@ readType 2x76D
 replicate 5
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4240
 view Spikeins
 
@@ -30083,7 +30083,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4567
 tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -30112,7 +30112,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4594
 tableName wgEncodeCshlLongRnaSeqNhekCellPamTranscriptGencV7Rep5
 view TranscriptGencV7
@@ -30205,7 +30205,7 @@ replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 sex U
-spikeInPool 14
+spikeInPool NIST14
 subId 4055
 tableName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5
 view Alignments
@@ -30263,7 +30263,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4591
 view ExonsGencV7
 
@@ -30293,7 +30293,7 @@ project wgEncode
 replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4574
 view ExonsGencV7
 
@@ -30525,7 +30525,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4591
 view GeneGencV7
 
@@ -30553,7 +30553,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4574
 view GeneGencV7
 
@@ -30876,7 +30876,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4186
 view Spikeins
 
@@ -30907,7 +30907,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4194
 view Spikeins
 
@@ -30937,7 +30937,7 @@ readType 2x76D
 replicate 5
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4219
 view Spikeins
 
@@ -30993,7 +30993,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4591
 tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -31022,7 +31022,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4574
 tableName wgEncodeCshlLongRnaSeqNhekCellPapTranscriptGencV7Rep5
 view TranscriptGencV7
@@ -31228,7 +31228,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4598
 view ExonsGencV7
 
@@ -31284,7 +31284,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4598
 view GeneGencV7
 
@@ -31344,7 +31344,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4245
 view Spikeins
 
@@ -31400,7 +31400,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4598
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPamTranscriptGencV7
 view TranscriptGencV7
@@ -31516,7 +31516,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4597
 view ExonsGencV7
 
@@ -31686,7 +31686,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4597
 view GeneGencV7
 
@@ -31918,7 +31918,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4214
 view Spikeins
 
@@ -31949,7 +31949,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4247
 view Spikeins
 
@@ -32003,7 +32003,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4597
 tableName wgEncodeCshlLongRnaSeqNhekCytosolPapTranscriptGencV7
 view TranscriptGencV7
@@ -32355,7 +32355,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4566
 view ExonsGencV7
 
@@ -32409,7 +32409,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4566
 view GeneGencV7
 
@@ -32521,7 +32521,7 @@ readType 2x76D
 replicate 3
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4274
 view Spikeins
 
@@ -32552,7 +32552,7 @@ readType 2x76D
 replicate 4
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4267
 view Spikeins
 
@@ -32606,7 +32606,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4566
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPamTranscriptGencV7
 view TranscriptGencV7
@@ -32668,7 +32668,7 @@ replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
 sex U
-spikeInPool 14
+spikeInPool NIST14
 subId 4053
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4
 view Alignments
@@ -32724,7 +32724,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4569
 view ExonsGencV7
 
@@ -32894,7 +32894,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4569
 view GeneGencV7
 
@@ -33126,7 +33126,7 @@ readType 2x76D
 replicate 3
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4237
 view Spikeins
 
@@ -33157,7 +33157,7 @@ readType 2x76D
 replicate 4
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4218
 view Spikeins
 
@@ -33211,7 +33211,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4569
 tableName wgEncodeCshlLongRnaSeqNhekNucleusPapTranscriptGencV7
 view TranscriptGencV7
@@ -33563,7 +33563,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4573
 view ExonsGencV7
 
@@ -33617,7 +33617,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4573
 view GeneGencV7
 
@@ -33729,7 +33729,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4281
 view Spikeins
 
@@ -33760,7 +33760,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4275
 view Spikeins
 
@@ -33814,7 +33814,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4573
 tableName wgEncodeCshlLongRnaSeqNhlfCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -33845,7 +33845,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4052
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1
 view Alignments
@@ -33876,7 +33876,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4054
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2
 view Alignments
@@ -33932,7 +33932,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4543
 view ExonsGencV7
 
@@ -34102,7 +34102,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4543
 view GeneGencV7
 
@@ -34334,7 +34334,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4278
 view Spikeins
 
@@ -34365,7 +34365,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4266
 view Spikeins
 
@@ -34419,7 +34419,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4543
 tableName wgEncodeCshlLongRnaSeqNhlfCellPapTranscriptGencV7
 view TranscriptGencV7
@@ -34771,7 +34771,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4561
 view ExonsGencV7
 
@@ -34825,7 +34825,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4561
 view GeneGencV7
 
@@ -34883,7 +34883,7 @@ readType 2x76D
 replicate 1
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4252
 view Spikeins
 
@@ -34914,7 +34914,7 @@ readType 2x76D
 replicate 2
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4202
 view Spikeins
 
@@ -34968,7 +34968,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longNonPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4561
 tableName wgEncodeCshlLongRnaSeqSknshraCellPamTranscriptGencV7
 view TranscriptGencV7
@@ -35084,7 +35084,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4560
 view ExonsGencV7
 
@@ -35254,7 +35254,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4560
 view GeneGencV7
 
@@ -35486,7 +35486,7 @@ readType 2x76D
 replicate 1
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4282
 view Spikeins
 
@@ -35517,7 +35517,7 @@ readType 2x76D
 replicate 2
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4232
 view Spikeins
 
@@ -35571,9 +35571,9 @@ origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 seqPlatform Illumina_GA2x
-spikeInPool 14
+spikeInPool NIST14
 subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1215657903
+# MAGIC: -1183047897
