@@ -181,7 +181,6 @@ sub metaMakefileCheck {
 		chomp $line;
 
 		if ($line =~ m/^(wgEncode\S+[^\\])/){
-			print "seen $1\n";
 			if ($1 =~ m/$composite.ra/){
 				$seen = 1;
 			}
