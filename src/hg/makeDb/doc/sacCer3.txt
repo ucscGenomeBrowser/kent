@@ -1641,4 +1641,36 @@ do
 done
 
 mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/anoCar2/anoCar2.2bit result/$(file1)
+
 ############################################################################
+# LIFTOVER TO SacCer2 (DONE - 2011-11-08 - Chin )
+    sh hgwdev
+    cd /hive/data/genomes/sacCer3
+    ln -s jkStuff/sacCer3.11.ooc 11.ooc
+
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug sacCer3 sacCer2
+
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         sacCer3 sacCer2 > doLiftOverToSacCer2.log 2>&1 &
+    # real    3m21.410s
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/sacCer3/liftOver/
+    md5sum sacCer3ToSacCer2.over.chain.gz >> md5sum.txt
+    popd
+
+############################################################################
+# LIFTOVER TO SacCer1 (DONE - 2011-11-08 - Chin )
+    sh hgwdev
+    cd /hive/data/genomes/sacCer3
+
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         sacCer3 sacCer1 > doLiftOverToSacCer1.log 2>&1 &
+    # real    3m21.141s
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/sacCer3/liftOver/
+    md5sum sacCer3ToSacCer1.over.chain.gz >> md5sum.txt
+    popd
+
+############################################################################
+
