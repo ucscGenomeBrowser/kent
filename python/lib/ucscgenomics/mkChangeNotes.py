@@ -482,9 +482,11 @@ class makeNotes(object):
             for j in sorted(errorsDict[i]):
                 output.append("%s" % j)
         output.append("\n")
-        output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
-        output.append("\n")
-        output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
+        if missingFiles:
+            output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
+            output.append("\n")
+        if self.droppedTables:
+            output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
         return output
 
     def __init__(self, args):
@@ -633,4 +635,5 @@ class makeNotes(object):
             if (not errors) or self.ignore:
                 self.output = self.printReportOne(args, c) 
             else:
-                self.output = self.printErrors(errors, self.missingFiles)
+                self.droppedTables = set()
+                self.output = self.printErrors(errors, set())
