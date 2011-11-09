@@ -1040,6 +1040,9 @@ static void checkLabelLength(struct tdbRecord *record, char *name, int maxLength
 {
 if (maxLength != 0)
     {
+    // only check leaves 
+    if (record->children != NULL)
+	return;
     struct tdbField *labelField = tdbRecordField(record, name);
     if (labelField == NULL)
 	recordAbort(record, "missing %s", name);

@@ -51,6 +51,9 @@ char *htmlEncodeText(char *s, boolean tagsOkay);
    be displayed in an html page or tooltip style title.  */
 #define htmlEncode(s) htmlEncodeText(s,FALSE)
 
+char *attributeEncode(char *str);
+// encode double and single quotes in a string to be used as an element attribute
+
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */
 

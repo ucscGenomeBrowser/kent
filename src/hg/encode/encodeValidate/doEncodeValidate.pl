@@ -1944,8 +1944,6 @@ if(!$opt_skipOutput && !$compositeExists) {
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
 
-# use pi.ra file to map pi/lab/institution/grant/project for metadata line
-
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
     $ddfLineNumber++;
