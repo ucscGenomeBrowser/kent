@@ -254,7 +254,6 @@ return (tdb && sameWord(tdb->type,DOWNLOADS_ONLY_TYPE));
 }
 
 
-
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb
  * from database.  Dispose of this with trackDbFree(). */
@@ -556,6 +555,35 @@ struct _membership *tdbExtrasMembership(struct trackDb *tdb);
 
 void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership);
 // Sets the subtrack membership for later retrieval.
+
+char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb);
+// Return file name associated with bigWig.  Do a freeMem on returned string when done.
+
+// More INLINES which depend on what the definition of "is" is
+INLINE boolean tdbIsBigBed(struct trackDb *tdb)
+// Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
+{
+return startsWithWord("bigBed", tdb->type);
+}
+
+INLINE boolean tdbIsBigWig(struct trackDb *tdb)
+// Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
+{
+return startsWithWord("bigWig", tdb->type);
+}
+
+INLINE boolean tdbIsBam(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a BAM file.
+{
+return startsWithWord("bam", tdb->type);
+}
+
+INLINE boolean tdbIsVcf(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a VCF file.
+{
+return startsWithWord("vcfTabix", tdb->type);
+}
+
 
 #endif /* TRACKDB_H */
 

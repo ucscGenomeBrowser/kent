@@ -540,10 +540,9 @@ else
     }
 }
 
-static void showSchemaWithAutoSqlString(char *db, char *trackId, struct customTrack *ct, char *autoSqlString)
+static void showSchemaWithAsObj(char *db, char *trackId, struct customTrack *ct, struct asObject *asObj)
 /* Show schema on custom track using autoSqlString defined for this track type. */
 {
-struct asObject *asObj = asParseText(autoSqlString);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char *table = ct->dbTableName;
 
@@ -579,11 +578,23 @@ else if (startsWithWord("maf", type))
 else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
 else if (startsWithWord("makeItems", type))
-    showSchemaWithAutoSqlString(db, table, ct, makeItemsItemAutoSqlString);
+    {
+    struct asObject *asObj = makeItemsItemAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
 else if (sameWord("bedDetail", type))
-    showSchemaWithAutoSqlString(db, table, ct, bedDetailAutoSqlString);
+    {
+    struct asObject *asObj = bedDetailAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
 else if (sameWord("pgSnp", type))
-    showSchemaWithAutoSqlString(db, table, ct, pgSnpAutoSqlString);
+    {
+    struct asObject *asObj = pgSnpAsObj();
+    showSchemaWithAsObj(db, table, ct, asObj);
+    asObjectFree(&asObj);
+    }
 else
     errAbort("Unrecognized customTrack type %s", type);
 }
@@ -684,3 +695,33 @@ else
     doTableSchema(database, curTable, conn);
 }
 
+struct asObject *asForTable(struct sqlConnection *conn, char *table)
+/* Get autoSQL description if any associated with table. */
+/* Wrap some error catching around asForTable. */
+{
+struct trackDb *tdb = NULL;
+if (isCustomTrack(table))  // Why isn't custom track in fullTrackAndSubtrackHash?
+    {
+    struct customTrack *ct = ctLookupName(table);
+    tdb = ct->tdb;
+    }
+else
+    tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+return asForTdb(conn,tdb);
+}
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
+/* Convert asObject to list of sqlFieldTypes */
+{
+struct sqlFieldType *ft, *list = NULL;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    struct dyString *type = asColumnToSqlType(col);
+    ft = sqlFieldTypeNew(col->name, type->string);
+    slAddHead(&list, ft);
+    dyStringFree(&type);
+    }
+slReverse(&list);
+return list;
+}
