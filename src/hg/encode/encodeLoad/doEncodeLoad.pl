@@ -39,6 +39,7 @@ my $tempDir = "/data/tmp";
 my $encInstance = "";
 
 my $PROG = basename $0;
+
 sub usage
 {
     die <<END
@@ -330,12 +331,16 @@ if (defined $opt_configDir) {
 }
 HgAutomate::verbose(1, "Using config path $configPath\n");
 
+my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $fields);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 my $db = HgDb->new(DB => $daf->{assembly});
 my $email;
 my %labels;
 
+if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+    $email = $grants->{$daf->{grant}}{wranglerEmail};
+}
 
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
@@ -343,16 +348,14 @@ my $tableSuffix = "";
 if ($submitDir eq ".") { # make sure command-line use specifies full path and directory
     die "ERROR: please specify full path to directory\n";
 }
-#if(dirname($submitDir) =~ /_(.*)/) {
-
-#    if($1 ne 'prod') {
-#        # yank out "beta" from encinstance_beta
-#        $tableSuffix = "_$1_" . basename($submitDir);;
-#    }
-#} else {
-#    print "here11111\n";
-#    $tableSuffix = "_" . basename($submitDir);;
-#}
+if(dirname($submitDir) =~ /_(.*)/) {
+    if($1 ne 'prod') {
+        # yank out "beta" from encinstance_beta
+        $tableSuffix = "_$1_" . basename($submitDir);;
+    }
+} else {
+    $tableSuffix = "_" . basename($submitDir);;
+}
 
 chdir($submitDir);
 my $programDir = dirname($0);
@@ -552,7 +555,7 @@ for my $key (keys %ra) {
 my $readme = "$downloadDir/README.txt";
 unless (-e $readme){
 	my @template;
-	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt" or die "downloadsReadmeTemplate.txt is missing\n";
+	open TEMPLATE, "$configPath/downloadsReadmeTemplate.txt";
 	while (<TEMPLATE>){
 	
 		my $line = $_;

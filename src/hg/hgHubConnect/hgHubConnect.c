@@ -50,8 +50,21 @@ puts("</TD>");
 static void ourPrintCell(char *str)
 {
 ourCellStart();
-puts(str);
+if (str != NULL)
+    puts(str);
 ourCellEnd();
+}
+
+static char *removeLastComma(char *string)
+{
+if (string != NULL)
+    {
+    int len = strlen(string);
+
+    if ( string[len - 1] == ',')
+	string[len - 1]  = 0;
+    }
+return string;
 }
 
 static void addGenomesToHash(struct hubConnectStatus *hub, struct hash *hash)
@@ -91,7 +104,6 @@ printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
 
 // count up the number of unlisted hubs we currently have
 int unlistedHubCount = 0;
-int otherHubCount = 0;
 struct hubConnectStatus *unlistedHubList = NULL;
 struct hubConnectStatus *hub, *nextHub;
 struct hash *assHash = newHash(5);
@@ -102,15 +114,8 @@ for(hub = hubList; hub; hub = nextHub)
     if (isHubUnlisted(hub) )
 	{
 	addGenomesToHash(hub, assHash);
-	if ((hub->trackHub == NULL) || trackHubHasDatabase(hub->trackHub, database) )
-	    {
-	    unlistedHubCount++;
-	    slAddHead(&unlistedHubList, hub);
-	    }
-	else
-	    {
-	    otherHubCount++;
-	    }
+	unlistedHubCount++;
+	slAddHead(&unlistedHubList, hub);
 	}
     }
 
@@ -125,19 +130,17 @@ while ((hel = hashNext(&cookie)) != NULL)
     dyStringPrintf(dy,"%s,", hel->name);
     numAssemblies++;
     }
-if (numAssemblies)   // take off the final ','
-    dy->string[strlen(dy->string) - 1]  = 0;
+
+char *dbList = NULL;
+if (numAssemblies)   
+    dbList = dyStringCannibalize(&dy);
 
 if (unlistedHubCount == 0)
     {
     // nothing to see here
     printf(
-	"<tr><td>No Track Hubs for this genome assembly</td></tr>"
+	"<tr><td>No Unlisted Track Hubs</td></tr>"
 	"</td>");
-    if (otherHubCount)
-	printf(
-	    "<tr><td>%d Track Hubs for other genome assemblies: %s</tr></td>",
-	    otherHubCount, dy->string);
     printf("</table></thead></div>");
     return;
     }
@@ -148,6 +151,7 @@ printf(
 	"<th>Display</th> "
 	"<th>Hub Name</th> "
 	"<th>Description</th> "
+	"<th>Assemblies</th> "
 	"<th>URL</th> "
 	"<th>Disconnect</th> "
     "</tr></thead>\n");
@@ -197,6 +201,7 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     else
 	ourPrintCell("");
 
+    ourPrintCell(removeLastComma(dbList));
     ourPrintCell(hub->hubUrl);
 
     ourCellStart();
@@ -210,22 +215,8 @@ for(hub = unlistedHubList; hub; hub = hub->next)
     }
 
 printf("</TR></tbody></TABLE>\n");
-    if (otherHubCount)
-	printf( "%d Track Hubs for other genome assemblies: %s", 
-	    otherHubCount, dy->string);
 printf("</div>");
 }
-
-static void makeGenomePrint()
-/* print out the name of the current database etc. */
-{
-getDbAndGenome(cart, &database, &organism, oldVars);
-printf("<div id=\"assemblyInfo\"> \n");
-printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s  ",
-	organism, hFreezeDate(database));
-printf("</div>\n");
-}
-
 
 void hgHubConnectPublic()
 /* Put up the list of public hubs and other controls for the page. */
@@ -242,65 +233,64 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *url = row[0], *shortLabel = row[1], *longLabel = row[2], 
     	  *dbList = row[3];
-    if (nameInCommaList(database, dbList))
+    if (gotAnyRows)
+	webPrintLinkTableNewRow();
+    else
 	{
-	if (gotAnyRows)
-	    webPrintLinkTableNewRow();
-	else
-	    {
-	    /* output header */
-	    printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
-	    printf("<table id=\"publicHubsTable\"> "
-		"<thead><tr> "
-		    "<th>Display</th> "
-		    "<th>Hub Name</th> "
-		    "<th>Description</th> "
-		    "<th>URL</th> "
-		"</tr></thead>\n");
+	/* output header */
+	printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
+	printf("<table id=\"publicHubsTable\"> "
+	    "<thead><tr> "
+		"<th>Display</th> "
+		"<th>Hub Name</th> "
+		"<th>Description</th> "
+		"<th>Assemblies</th> "
+		"<th>URL</th> "
+	    "</tr></thead>\n");
 
-	    // start first row
-	    printf("<tbody> <tr>");
-	    gotAnyRows = TRUE;
-	    }
-
-	char *errorMessage = NULL;
-	// get an id for this hub
-	unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
-	    url, &errorMessage);
-
-	if ((id != 0) && isEmpty(errorMessage)) 
-	    {
-	    ourCellStart();
-	    char hubName[32];
-	    safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
-	    cartMakeCheckBox(cart, hubName, FALSE);
-	    ourCellEnd();
-	    }
-	else if (!isEmpty(errorMessage))
-	    {
-	    // give user a chance to clear the error
-	    ourCellStart();
-	    printf(
-	    "<input name=\"hubClearButton\""
-		"onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
-		    "document.resetHubForm.submit();return true;\" "
-		    "class=\"hubField\" type=\"button\" value=\"check hub\">"
-		    , url);
-	    ourCellEnd();
-	    }
-	else
-	    errAbort("cannot get id for hub with url %s\n", url);
-
-	ourPrintCell(shortLabel);
-	if (isEmpty(errorMessage))
-	    ourPrintCell(longLabel);
-	else
-	    printf("<TD><span class=\"hubError\">ERROR: %s </span>"
-		"<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
-		errorMessage);
-
-	ourPrintCell(url);
+	// start first row
+	printf("<tbody> <tr>");
+	gotAnyRows = TRUE;
 	}
+
+    char *errorMessage = NULL;
+    // get an id for this hub
+    unsigned id = hubFindOrAddUrlInStatusTable(database, cart, 
+	url, &errorMessage);
+
+    if ((id != 0) && isEmpty(errorMessage)) 
+	{
+	ourCellStart();
+	char hubName[32];
+	safef(hubName, sizeof(hubName), "%s%u", hgHubConnectHubVarPrefix, id);
+	cartMakeCheckBox(cart, hubName, FALSE);
+	ourCellEnd();
+	}
+    else if (!isEmpty(errorMessage))
+	{
+	// give user a chance to clear the error
+	ourCellStart();
+	printf(
+	"<input name=\"hubClearButton\""
+	    "onClick=\"document.resetHubForm.elements['hubUrl'].value='%s';"
+		"document.resetHubForm.submit();return true;\" "
+		"class=\"hubField\" type=\"button\" value=\"check hub\">"
+		, url);
+	ourCellEnd();
+	}
+    else
+	errAbort("cannot get id for hub with url %s\n", url);
+
+    ourPrintCell(shortLabel);
+    if (isEmpty(errorMessage))
+	ourPrintCell(longLabel);
+    else
+	printf("<TD><span class=\"hubError\">ERROR: %s </span>"
+	    "<a href=\"../goldenPath/help/hgTrackHubHelp.html#Debug\">Debug</a></TD>", 
+	    errorMessage);
+
+    ourPrintCell(removeLastComma(dbList));
+    ourPrintCell(url);
     }
 sqlFreeResult(&sr);
 
@@ -453,8 +443,7 @@ printf(
    );
 printf("</div>\n");
 
-// figure out and print out genome name
-makeGenomePrint();
+getDbAndGenome(cart, &database, &organism, oldVars);
 
 char *survey = cfgOptionEnv("HGDB_HUB_SURVEY", "hubSurvey");
 char *surveyLabel = cfgOptionEnv("HGDB_HUB_SURVEY_LABEL", "hubSurveyLabel");

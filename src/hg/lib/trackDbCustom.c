@@ -1313,3 +1313,15 @@ void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership)
 tdbExtrasGet(tdb)->membership = membership;
 }
 
+char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb)
+// Return file name associated with bigWig.  Do a freeMem on returned string when done.
+{
+char *fileName = trackDbSetting(tdb, "bigDataUrl"); // always takes precedence
+if (fileName != NULL)
+    return cloneString(fileName);
+
+char query[256];
+safef(query, sizeof(query), "select fileName from %s", tdb->table);
+return sqlQuickString(conn, query);
+}
+

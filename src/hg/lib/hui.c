@@ -30,8 +30,12 @@
 #include "bigWig.h"
 #include "regexHelper.h"
 #include "vcfUi.h"
-
-static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
+#include "vcf.h"
+#include "errCatch.h"
+#include "samAlignment.h"
+#include "makeItemsItem.h"
+#include "bedDetail.h"
+#include "pgSnp.h"
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -3504,8 +3508,8 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     printf("<BR>\n");
 
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
-    #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
-    printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
+    #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
+    printf(FILTER_BY_FORMAT,ix,filterBy->htmlName);
     ix++;
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""));
     struct slName *slValue;
@@ -3722,22 +3726,26 @@ if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by aja
         tdb = tdb->subtracks; // show subtrack cfg instead
         prefix = tdb->track;
         }
-    else if (tdb->parent != NULL                 // called with subtrack (tdb is never a view)
-        && tdbIsCompositeView(tdb->parent)       // subtrack has view
-        && differentString(prefix,tdb->track)    // and this has been called FOR the view
-        && slCount(tdb->parent->subtracks) == 1) // and view has only one subtrack
+    else if (tdbIsSubtrack(tdb)                   // called with subtrack
+         && tdbIsCompositeView(tdb->parent)       // subtrack has view
+         && differentString(prefix,tdb->track)    // and this has been called FOR the view
+         && slCount(tdb->parent->subtracks) == 1) // and view has only one subtrack
         prefix = tdb->track; // removes reference to view level
     }
 #endif///def SUBTRACK_CFG
+// composite without view should pass in subtrack as example track!
+if (tdbIsComposite(tdb) && !tdbIsCompositeView(tdb->subtracks))
+    tdb = tdb->subtracks;
+
 switch(cType)
     {
     case cfgBedScore:
-	{
-	char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
-	int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
-	scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
-	}
-	break;
+                        {
+                        char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+                        int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+                        scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+                        }
+                        break;
     case cfgPeak:
                         encodePeakCfgUi(cart,tdb,prefix,title,boxed);
                         break;
@@ -3749,17 +3757,17 @@ switch(cType)
                         break;
     case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
                         break;
-    case cfgNetAlign:	netAlignCfgUi(db,cart,tdb,prefix,title,boxed);
+    case cfgNetAlign:   netAlignCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgBedFilt:    bedFiltCfgUi(cart,tdb,prefix,title, boxed);
-                 	break;
+                        break;
 #ifdef USE_BAM
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
-			break;
+                        break;
 #endif
-    case cfgVcf:	vcfCfgUi(cart, tdb, prefix, title, boxed);
-			break;
-    case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
+    case cfgVcf:        vcfCfgUi(cart, tdb, prefix, title, boxed);
+                        break;
+    case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
                         break;
@@ -4879,7 +4887,7 @@ return FALSE;
 }
 
 
-static int numericFiltersShowAll(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
+static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
                                boolean viewLevel,char *name, char *title)
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
 {
@@ -4889,7 +4897,13 @@ if (filterSettings)
     {
     puts("<BR>");
     struct slName *filter = NULL;
-    struct extraField *extras = extraFieldsGet(tdb);
+#ifdef EXTRA_FIELDS_SUPPORT
+    struct extraField *extras = extraFieldsGet(db,tdb);
+#else///ifndef EXTRA_FIELDS_SUPPORT
+    struct sqlConnection *conn = hAllocConnTrack(db, tdb);
+    struct asObject *as = asForTdb(conn, tdb);
+    hFreeConn(&conn);
+#endif///ndef EXTRA_FIELDS_SUPPORT
 
     while ((filter = slPopHead(&filterSettings)) != NULL)
         {
@@ -4905,6 +4919,7 @@ if (filterSettings)
             assert(ix > 0);
             field[ix] = '\0';
 
+        #ifdef EXTRA_FIELDS_SUPPORT
             if (extras != NULL)
                 {
                 struct extraField *extra = extraFieldsFind(extras, field);
@@ -4915,6 +4930,18 @@ if (filterSettings)
                         isFloat = (extra->type == ftFloat);
                     }
                 }
+        #else///ifndef EXTRA_FIELDS_SUPPORT
+            if (as != NULL)
+                {
+                struct asColumn *asCol = asColumnFind(as, field);
+                if (asCol != NULL)
+                    { // Found label so replace field
+                    field = asCol->comment;
+                    if (!isFloat)
+                        isFloat = asTypesIsFloating(asCol->lowType->type);
+                    }
+                }
+        #endif///ndef EXTRA_FIELDS_SUPPORT
             char label[128];
             safef(label,sizeof(label),"Minimum %s",field);
             showScoreFilter(cart,tdb,opened,boxed,viewLevel,name,title,label,scoreName,isFloat);
@@ -4923,8 +4950,13 @@ if (filterSettings)
             }
         slNameFree(&filter);
         }
+#ifdef EXTRA_FIELDS_SUPPORT
     if (extras != NULL)
         extraFieldsFree(&extras);
+#else///ifndef EXTRA_FIELDS_SUPPORT
+    if (as != NULL)
+        asObjectFree(&as);
+#endif///ndef EXTRA_FIELDS_SUPPORT
     }
 if (count > 0)
     puts("</TABLE>");
@@ -4982,7 +5014,7 @@ if (!bigBed)  // bigBed filters are limited!
     {
     // Numeric filters are first
     boolean isBoxOpened = FALSE;
-    if (numericFiltersShowAll(cart, tdb, &isBoxOpened, boxed, viewLevel, name, title) > 0)
+    if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, viewLevel, name, title) > 0)
         skipScoreFilter = TRUE;
 
     // Add any multi-selects next
@@ -7557,12 +7589,46 @@ void printBbiUpdateTime(time_t *timep)
 	sqlUnixTimeToDate(timep, FALSE));
 }
 
-struct extraField *extraFieldsGet(struct trackDb *tdb)
+#ifdef EXTRA_FIELDS_SUPPORT
+static struct extraField *asFieldsGet(char *db, struct trackDb *tdb)
+// returns the as style fields from a table or remote data file
+{
+struct extraField *asFields = NULL;
+struct sqlConnection *conn = hAllocConnTrack(db, tdb);
+struct asObject *as = asForTdb(conn, tdb);
+hFreeConn(&conn);
+if (as != NULL)
+    {
+    struct asColumn *asCol = as->columnList;
+    for (;asCol != NULL; asCol = asCol->next)
+        {
+        struct extraField *asField  = NULL;
+        AllocVar(asField);
+        asField->name = cloneString(asCol->name);
+        if (asCol->comment != NULL && strlen(asCol->comment) > 0)
+            asField->label = cloneString(asCol->comment);
+        else
+            asField->label = cloneString(asField->name);
+        asField->type = ftString; // default
+        if (asTypesIsInt(asCol->lowType->type))
+            asField->type = ftInteger;
+        else if (asTypesIsFloating(asCol->lowType->type))
+            asField->type = ftFloat;
+        slAddHead(&asFields,asField);
+        }
+    if (asFields != NULL)
+        slReverse(&asFields);
+    asObjectFree(&as);
+    }
+return asFields;
+}
+
+struct extraField *extraFieldsGet(char *db, struct trackDb *tdb)
 // returns any extraFields defined in trackDb
 {
 char *fields = trackDbSetting(tdb, "extraFields"); // showFileds pValue=P_Value qValue=qValue
 if (fields == NULL)
-    return NULL;
+    return asFieldsGet(db, tdb);
 
 char *field = NULL;
 struct extraField *extras = NULL;
@@ -7627,4 +7693,99 @@ if (pExtras != NULL)
         }
     *pExtras = NULL;
     }
+}
+#endif///def EXTRA_FIELDS_SUPPORT
+
+static struct asObject *asForTdbOrDie(struct sqlConnection *conn, struct trackDb *tdb)
+// Get autoSQL description if any associated with tdb.
+// Abort if there's a problem
+{
+struct asObject *asObj = NULL;
+if (tdbIsBigBed(tdb))
+    {
+    char *fileName = tdbBigFileName(conn, tdb);
+    asObj = bigBedFileAsObjOrDefault(fileName);
+    freeMem(fileName);
+    }
+// TODO: standardize to a wig as
+//else if (tdbIsBigWig(tdb))
+//    asObj = asObjFrombigBed(conn,tdb);
+else if (tdbIsBam(tdb))
+    asObj = bamAsObj();
+else if (tdbIsVcf(tdb))
+    asObj = vcfAsObj();
+if (startsWithWord("makeItems", tdb->type))
+    asObj = makeItemsItemAsObj();
+else if (sameWord("bedDetail", tdb->type))
+    asObj = bedDetailAsObj();
+else if (sameWord("pgSnp", tdb->type))
+    asObj = pgSnpAsObj();
+else
+    {
+    if (sqlTableExists(conn, "tableDescriptions"))
+        {
+        char query[256];
+        char *asText = NULL;
+
+        // Try unsplit table first.
+        safef(query, sizeof(query),
+            "select autoSqlDef from tableDescriptions where tableName='%s'",tdb->table);
+        asText = sqlQuickString(conn, query);
+
+        // If no result try split table.
+        if (asText == NULL)
+            {
+            safef(query, sizeof(query),
+                "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",tdb->table);
+            asText = sqlQuickString(conn, query);
+            }
+
+        if (asText != NULL && asText[0] != 0)
+            asObj = asParseText(asText);
+        freez(&asText);
+        }
+    }
+return asObj;
+}
+
+struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb)
+// Get autoSQL description if any associated with table.
+{
+struct errCatch *errCatch = errCatchNew();
+struct asObject *asObj = NULL;
+// Wrap some error catching around asForTdbOrDie.
+if (errCatchStart(errCatch))
+    {
+    asObj = asForTdbOrDie(conn, tdb);
+    }
+errCatchEnd(errCatch);
+errCatchFree(&errCatch);
+return asObj;
+}
+
+struct asColumn *asColumnFind(struct asObject *asObj, char *name)
+// Return named column.
+{
+struct asColumn *asCol = NULL;
+if (asObj!= NULL)
+    {
+    for (asCol = asObj->columnList; asCol != NULL; asCol = asCol->next)
+        if (sameString(asCol->name, name))
+             break;
+    }
+return asCol;
+}
+
+struct slName *asColNames(struct asObject *as)
+// Get list of column names.
+{
+struct slName *list = NULL, *el;
+struct asColumn *col;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    el = slNameNew(col->name);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+return list;
 }

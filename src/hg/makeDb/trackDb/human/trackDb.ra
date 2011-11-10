@@ -3892,7 +3892,7 @@ type bed 4 .
 
 track iscaRetrospective
 shortLabel ISCA Retro
-longLabel International Standards for Cytogenetic Arrays Consortium - Retrospective variants
+longLabel International Standards for Cytogenomic Arrays Consortium - Retrospective variants
 group varRep
 priority 110
 visibility hide
@@ -3903,8 +3903,8 @@ release beta,public
 track iscaComposite
 compositeTrack on
 shortLabel ISCA
-longLabel International Standards for Cytogenetic Arrays Consortium
-group varRep
+longLabel International Standards for Cytogenomic Arrays Consortium
+group phenDis
 priority 110
 visibility hide
 type gvf
@@ -3926,8 +3926,8 @@ noScoreFilter .
 
     track iscaLikelyPathogenic
     parent iscaComposite
-    shortLabel ISCA Likely Path.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Likely Pathogenic
+    shortLabel ISCA Unc Lik Path
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Uncertain: Likely Pathogenic
     priority 3
 
     track iscaUncertain
@@ -3938,8 +3938,8 @@ noScoreFilter .
 
     track iscaLikelyBenign
     parent iscaComposite
-    shortLabel ISCA Likely Ben.
-    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Likely Benign
+    shortLabel ISCA Unc Lik Ben.
+    longLabel Internat. Stds. for Cytogen. Arrays Consort. (ISCA) CNVs: Uncertain: Likely Benign
     priority 5
 
     track iscaBenign
@@ -4189,5 +4189,10 @@ color 0, 80, 0
 type bed 4
 html geneReviews
 
-
-
+searchName geneReviews
+searchTable geneReviews
+searchType bed
+searchPriority 50
+xrefTable geneReviewsRefGene
+xrefQuery select geneSymbol,diseaseName from %s where diseaseName like '%%%s%%'
+searchBoth on

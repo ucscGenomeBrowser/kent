@@ -19,7 +19,7 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/beta/scripts";
+use lib "/cluster/bin/scripts";
 use Encode;
 use RAFile;
 use HgDb;
@@ -146,7 +146,7 @@ if(dirname($submitDir) =~ /_(.*)/) {
 
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $fields);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 my $downloadDir = Encode::downloadDir($daf);
 
 chdir($submitDir) || die "Couldn't chdir to '$submitDir'";

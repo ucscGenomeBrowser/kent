@@ -5768,13 +5768,13 @@ target GATA2
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal. Antibody Target: GATA2
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId   ;
+vendorId GATA2
 orderUrl http://molpharm.wisc.edu/people/faculty/bresnick/bresnick.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
-label ; GATA2
+label GATA2
 
 term GATA2_(SC-267)
 tag GATA2b
@@ -6914,13 +6914,13 @@ target NF-YA
 targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA. Antibody Target: NF-YA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId missing
+vendorId NF-YA
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
 validation missing
-label NF-YA NF-YA
+label NF-YA
 
 term NF-YB
 tag NFYB
@@ -6929,13 +6929,13 @@ target NF-YB
 targetDescription NF-YB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB. Antibody Target: NF-YB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId missing
+vendorId NF-YB
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 validation missing
-label NF-YB NF-YB
+label NF-YB
 
 term Nrf1
 tag NRF1
@@ -6981,7 +6981,7 @@ lots 20070905JV
 targetId GeneCard:REST
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation missing
-label NRSF NRSF
+label NRSF
 
 
 term p300
@@ -7562,14 +7562,14 @@ target SPT20
 antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: SPT20
 targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 vendorName Laszlo Tora
-vendorId missing
+vendorId SPT20 
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
 #lots
 targetId GeneCards:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation missing
-label anti-SPT20 SPT20
+label SPT20
 
 term SREBP1
 tag SREBP1
@@ -8198,14 +8198,14 @@ antibodyDescription Mouse monoclonal antibody raised against a partial recombina
 target ZNF274
 targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
 vendorName Abnova ZNF74
-vendorId M01
+vendorId H00010782-M01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-M01
 lab Farnham
 lots 08064-4C12
 targetId GeneCards:Genecard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF274
 validation ZNF274_(M01)(missing):human_ZNF274_M01_validation_Farnham.pdf
-label M01 ZNF274
+label H00010782-M01 ZNF274
 
 term ZZZ3
 tag ZZZ3
@@ -8215,12 +8215,12 @@ antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic pept
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
 orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
 vendorName Lazlo Tora, Institut de G?n?tique et de Biologie Mol?culaire et Cellulaire
-vendorId missing
+vendorId ZZZ3
 lab Struhl
 targetId GeneCard:ZZZ3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
-label ZZZ3 ZZZ3
+label ZZZ3
 
 
 ###  Antibodies
@@ -8549,7 +8549,7 @@ lab Tenenbaum
 targetId (input)
 #targetUrl ;
 validation missing
-label RIP ripInput
+label RIP Input
 
 term SLBP
 tag SLBP
@@ -8827,7 +8827,7 @@ term shortPolyA
 tag SHORTPOLYA
 type rnaExtract
 description Rna shorter than 200 nt that is Poly Adenalyated
-label Short PolyA RNA
+label Short PolyA+ RNA
 
 term shortTotal
 tag SHORTTOTAL
@@ -8839,20 +8839,20 @@ term longPolyA
 tag PAP
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
-label longPolyA+
+label Long PolyA+ RNA
 
 term longNonPolyA
 tag PAM
 type rnaExtract
 description Poly(A)- RNA longer than 200 nt
-label longPolyA-
+label Long PolyA- RNA
 
 ## This is what Yale and Caltech are using
 term polyA
 tag POLYA
 type rnaExtract
 description Isolated Poly(A) RNA
-label PolyA+
+label PolyA+ RNA
 
 term nonPolyARRna
 tag NONPOLYARRNA
@@ -8864,7 +8864,7 @@ term nonPolyA
 tag NONPOLYA
 type rnaExtract
 description Depleted Poly(A) RNA
-label PolyA-
+label PolyA- RNA
 
 term proteinRnaExtracts
 tag PROTEINRNAEXTRACTS
@@ -9179,7 +9179,6 @@ term estrogen
 tag ESTRO
 description 45 min with 100 nM Estradiol (Crawford)
 type treatment
-label Estradiol 100nM
 
 term EtOH_0.01pct
 tag ETOH01

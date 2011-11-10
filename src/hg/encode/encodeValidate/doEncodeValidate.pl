@@ -134,7 +134,11 @@ sub doTime
 sub dieTellWrangler
 {
     my ($msg) = @_;
-    $msg .= "Please contact the encode staff at encode-staff\@soe.ucsc.edu\n";
+    my $email;
+    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+        $email = $grants->{$daf->{grant}}{wranglerEmail};
+    }
+    $msg .= "Please contact your wrangler" . (defined($email) ? " at $email" : "") . "\n";
     die $msg;
 }
 
@@ -233,15 +237,14 @@ sub validateFiles {
     }
     $files = \@newFiles;
     doTime("done validateFiles") if $opt_timing;
-    if (@errors) {
-        my $errorstr = "";
-        for my $line (@errors) {
-            $errorstr = $errorstr . "$line\n";
-        }
-        return $errorstr;
-    }
-    else {
+    unless (@errors) {
         return ();
+    } else {
+        my $errstr = "";
+        for my $error (@errors) {
+            $errstr = $errstr . "$error\n";
+        }
+        return $errstr;
     }
 }
 
@@ -294,14 +297,8 @@ sub validateControlledVocabOrControl {
     my ($val, $type) = @_;
     if ($type eq 'antibody') {
         $type = 'Antibody';
-        if (defined($terms{$type}->{$val} || $terms{'control'}->{$val})) {
-            return ();
-        } else {
-            return ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
-        }
+        return defined($terms{$type}->{$val} || $terms{'control'}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
     }
-
-
     return defined($terms{$type}->{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -1174,6 +1171,8 @@ sub isDownloadOnly {
     } else {
         return 0;
     }
+    #return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative'
+    #    or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
 
 }
 
@@ -1526,24 +1525,33 @@ if(!$opt_validateDaf) {
 }
 
 # labs is now in fact the list of grants (labs are w/n grants, and are not currently validated).
+$grants = Encode::getGrants($configPath);
 $fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
-        Encode::parseDaf($submitDir, $fields);
+        Encode::parseDaf($submitDir, $grants, $fields);
     } else {
-        Encode::getDaf($submitDir, $fields);
+        Encode::getDaf($submitDir, $grants, $fields);
     }
     print STDERR "DAF is valid\n";
     exit(0);
 }
 
-$daf = Encode::getDaf($submitDir, $fields);
+$daf = Encode::getDaf($submitDir, $grants, $fields);
 $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
 
+if($opt_sendEmail) {
+    if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
+        my $email = $grants->{$daf->{grant}}{wranglerEmail};
+        if($email) {
+            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab has been submitted for validation." $email`;
+        }
+    }
+}
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
@@ -1729,7 +1737,7 @@ while (@{$lines}) {
                 next;
             }
             my $cell = $line{cell};
-            my $sex = $terms{'Cell Line'}{$cell}{'sex'};
+            my $sex = $line{sex};
             my $mdbError = validateDdfField($field, $line{$field}, $view, $daf, $cell, $sex, \%terms);
             if ($mdbError) {
                 push(@metadataErrors, $mdbError);

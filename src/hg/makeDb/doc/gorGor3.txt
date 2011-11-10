@@ -820,7 +820,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.panTro3.swap lastz.panTro3
 
 ############################################################################
-# LASTZ Bushbaby micMur1 (DONE - 2011-11-01,31 - Hiram)
+# LASTZ Bushbaby micMur1 (DONE - 2011-11-01,03 - Hiram)
     mkdir /hive/data/genomes/gorGor3/bed/lastzMicMur1.2011-11-01
     cd /hive/data/genomes/gorGor3/bed/lastzMicMur1.2011-11-01
 
@@ -863,17 +863,11 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Tue Nov  1 10:03:59 PDT 2011
-    # after manually finishing the batch after hive filesystem outage
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-continue=cat -syntenicNet \
-	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	> cat.log 2>&1 &
-    #	real    134m17.379s
-    cat fb.gorGor3.chainMicMur1Link.txt  
-    #	339201275 bases of 2822760080 (12.017%) in intersection
+    #	Elapsed time: 2962m15s
+    #	real    2962m15.467s
+
+    cat fb.gorGor3.chainMicMur1Link.txt
+    #	646647849 bases of 2822760080 (22.908%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
     ln -s lastzMicMur1.2011-11-01 lastz.micMur1
@@ -887,15 +881,15 @@ XXX - running - Tue Nov  1 10:03:59 PDT 2011
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> swap.log 2>&1 &
-    #	real    60m56.773s
+    #	real    139m3.414s
     cat fb.micMur1.chainGorGor3Link.txt 
-    #	336379843 bases of 1969052059 (17.083%) in intersection
+    #	640110238 bases of 1852394361 (34.556%) in intersection
 
     cd /hive/data/genomes/micMur1/bed
-    ln -s  blastz.micMur1.swap lastz.micMur1
+    ln -s blastz.gorGor3.swap lastz.gorGor3
 
 ############################################################################
-# LASTZ Tarsier tarSyr1 (DONE - 2011-11-01,31 - Hiram)
+# LASTZ Tarsier tarSyr1 (DONE - 2011-11-01,06 - Hiram)
     mkdir /hive/data/genomes/gorGor3/bed/lastzTarSyr1.2011-11-01
     cd /hive/data/genomes/gorGor3/bed/lastzTarSyr1.2011-11-01
 
@@ -938,17 +932,10 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Tue Nov  1 10:03:59 PDT 2011
-    # after manually finishing the batch after hive filesystem outage
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-continue=cat -syntenicNet \
-	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	> cat.log 2>&1 &
-    #	real    134m17.379s
-    cat fb.gorGor3.chainTarSyr1Link.txt  
-    #	339201275 bases of 2822760080 (12.017%) in intersection
+    #	real    5869m15.429s
+
+    cat fb.gorGor3.chainTarSyr1Link.txt 
+    #	549926460 bases of 2822760080 (19.482%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
     ln -s lastzTarSyr1.2011-11-01 lastz.tarSyr1
@@ -956,15 +943,17 @@ XXX - running - Tue Nov  1 10:03:59 PDT 2011
     #	running the swap
     mkdir /hive/data/genomes/tarSyr1/bed/blastz.gorGor3.swap
     cd /hive/data/genomes/tarSyr1/bed/blastz.gorGor3.swap
+    #	 swarm kluster off-line, hence bigHub=encodek, although it isn't
+    #	used for this
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/gorGor3/bed/lastzTarSyr1.2011-11-01/DEF \
 	-swap -syntenicNet \
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
 	> swap.log 2>&1 &
-    #	real    60m56.773s
+    #	real    599m8.506s
     cat fb.tarSyr1.chainGorGor3Link.txt 
-    #	336379843 bases of 1969052059 (17.083%) in intersection
+    #	567036277 bases of 2768536343 (20.481%) in intersection
 
     cd /hive/data/genomes/tarSyr1/bed
     ln -s  blastz.tarSyr1.swap lastz.tarSyr1

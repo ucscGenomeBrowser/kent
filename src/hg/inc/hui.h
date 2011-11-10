@@ -7,6 +7,7 @@
 #include "trackDb.h"
 #include "customTrack.h"
 #include "wiggle.h"
+#include "asParse.h"
 
 // This temporary define shouuld be removed after rollout of hgTrackUi subtrack cfg changes
 #define SUBTRACK_CFG
@@ -1245,6 +1246,8 @@ void printUpdateTime(char *database, struct trackDb *tdb,
 void printBbiUpdateTime(time_t *timep);
 /* for bbi files, print out the timep value */
 
+//#define EXTRA_FIELDS_SUPPORT
+#ifdef EXTRA_FIELDS_SUPPORT
 enum fieldType {
     ftString  =0,
     ftInteger =1,
@@ -1259,7 +1262,7 @@ struct extraField {
     enum fieldType type;        // string, int, float
     };
 
-struct extraField *extraFieldsGet(struct trackDb *tdb);
+struct extraField *extraFieldsGet(char *db, struct trackDb *tdb);
 // returns any extraFields defined in trackDb
 
 struct extraField *extraFieldsFind(struct extraField *extras, char *name);
@@ -1267,5 +1270,16 @@ struct extraField *extraFieldsFind(struct extraField *extras, char *name);
 
 void extraFieldsFree(struct extraField **pExtras);
 // frees all mem for extraFields list
+#endif///def EXTRA_FIELDS_SUPPORT
+
+
+struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb);
+// Get autoSQL description if any associated with table.
+
+struct asColumn *asColumnFind(struct asObject *asObj, char *name);
+// Return named column.
+
+struct slName *asColNames(struct asObject *as);
+// Get list of column names.
 
 #endif /* HUI_H */
