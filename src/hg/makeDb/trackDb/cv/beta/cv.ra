@@ -9179,7 +9179,6 @@ term estrogen
 tag ESTRO
 description 45 min with 100 nM Estradiol (Crawford)
 type treatment
-label Estradiol 100nM
 
 term EtOH_0.01pct
 tag ETOH01
