@@ -8826,7 +8826,7 @@ term shortPolyA
 tag SHORTPOLYA
 type rnaExtract
 description Rna shorter than 200 nt that is Poly Adenalyated
-label Short PolyA RNA
+label Short PolyA+ RNA
 
 term shortTotal
 tag SHORTTOTAL
@@ -8838,20 +8838,20 @@ term longPolyA
 tag PAP
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
-label longPolyA+
+label Long PolyA+ RNA
 
 term longNonPolyA
 tag PAM
 type rnaExtract
 description Poly(A)- RNA longer than 200 nt
-label longPolyA-
+label Long PolyA- RNA
 
 ## This is what Yale and Caltech are using
 term polyA
 tag POLYA
 type rnaExtract
 description Isolated Poly(A) RNA
-label PolyA+
+label PolyA+ RNA
 
 term nonPolyARRna
 tag NONPOLYARRNA
@@ -8863,7 +8863,7 @@ term nonPolyA
 tag NONPOLYA
 type rnaExtract
 description Depleted Poly(A) RNA
-label PolyA-
+label PolyA- RNA
 
 term proteinRnaExtracts
 tag PROTEINRNAEXTRACTS
