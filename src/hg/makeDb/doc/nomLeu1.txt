@@ -134,6 +134,9 @@ taxId 61853
     # 1400962059 lower) in 17968 sequences in 1 files
     # %47.72 masked total, %50.82 masked real
 
+    rm /gbdb/nomLeu1/nomLeu1.2bit
+    ln -s `pwd`/nomLeu1.2bit /gbdb/nomLeu1/nomLeu1.2bit
+
 #########################################################################
 # Marking *all* gaps - they are all in the AGP file
 #	(DONE - 2010-10-31 - Chin)
