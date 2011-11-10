@@ -535,28 +535,36 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	tables = genNotes.newTables
 	
 	print "Running qa tests"
-	(tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
+	output.append("Checking for missing table descriptions:")
+        (tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
 	output.extend(tableDescOutput)
 
+        output.append("Checking for missing table indexes:")
 	(tableIndexOut, missingIndex) = qa.checkTableIndex(args.database, tables)
 	output.extend(tableIndexOut)
 	
+        output.append("Checking table names for errors:")
 	(tableNameOut, badTableNames) = qa.checkTableName(tables)
 	output.extend(tableNameOut)
 	
 	trackDbPath = c.currentTrackDb
 	if trackDbPath:
+                output.append("Checking short and long labels in trackDb:")
 		(labelOut, badLabels) = qa.checkLabels(trackDbPath)
 		output.extend(labelOut)
 	else:
 		print "Could not determine track Db to use, does the composite have the alpha tag in trackDb.wgEncode.ra?"
 	
+        output.append("Checking tables for coordinate errors:")
 	(coordsOut, badCoords) = qa.checkTableCoords(args.database, tables)
 	output.extend(coordsOut)
 	
+        output.append("Checking tables for positional errors:")
 	(posOut, badPos) = qa.positionalTblCheck(args.database, tables)
 	output.extend(posOut)
 
+        output.append("Counts per chromosome:")
+        output.append("")
 	(countChromOut, tableCounts) = qa.countPerChrom(args.database, tables)
 	output.extend(countChromOut)
 

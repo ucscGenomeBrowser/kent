@@ -22,7 +22,6 @@
 #include "hgTables.h"
 #include "asFilter.h"
 #include "hgBam.h"
-#include "samAlignment.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
@@ -51,12 +50,6 @@ if (fileName == NULL)
 return fileName;
 }
 
-struct asObject *bamAsObj()
-/* Return asObject describing fields of BAM */
-{
-return asParseText(samAlignmentAutoSqlString);
-}
-
 struct hTableInfo *bamToHti(char *table)
 /* Get standard fields of BAM into hti structure. */
 {
@@ -75,16 +68,14 @@ struct slName *bamGetFields(char *table)
 /* Get fields of bam as simple name list. */
 {
 struct asObject *as = bamAsObj();
-struct slName *names = asColNames(as);
-return names;
+return asColNames(as);
 }
 
 struct sqlFieldType *bamListFieldsAndTypes()
 /* Get fields of bigBed as list of sqlFieldType. */
 {
 struct asObject *as = bamAsObj();
-struct sqlFieldType *list = sqlFieldTypesFromAs(as);
-return list;
+return sqlFieldTypesFromAs(as);
 }
 
 #define BAM_NUM_BUF_SIZE 256
@@ -123,7 +114,7 @@ int idFieldNum = 0;
 if (idField != NULL)
     idHash = identifierHash(db, table);
 
-if (f == NULL) 
+if (f == NULL)
     f = stdout;
 
 /* Convert comma separated list of fields to array. */
@@ -248,7 +239,7 @@ while (s < end)
 return tLength;
 }
 
-static void addFilteredBedsOnRegion(char *fileName, struct region *region, 
+static void addFilteredBedsOnRegion(char *fileName, struct region *region,
 	char *table, struct asFilter *filter, struct lm *bedLm, struct bed **pBedList, struct hash *idHash)
 /* Add relevant beds in reverse order to pBedList */
 {
@@ -277,8 +268,8 @@ for (sam = samList; sam != NULL; sam = sam->next)
 lmCleanup(&lm);
 }
 
-struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *db, char *table, struct region *regionList, struct lm *lm, 
+struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
+	char *db, char *table, struct region *regionList, struct lm *lm,
 	int *retFieldCount)
 /* Get list of beds from BAM, in all regions, that pass filtering. */
 {

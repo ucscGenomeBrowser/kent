@@ -6,6 +6,8 @@
 #ifndef BIGBED_H
 #define BIGBED_H
 
+#include "asParse.h"
+
 #ifndef BBIFILE
 #include "bbiFile.h"
 #endif
@@ -34,7 +36,7 @@ struct bbiFile *bigBedFileOpen(char *fileName);
 
 #define bigBedFileClose(a) bbiFileClose(a)
 
-struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
+struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom,
 	bits32 start, bits32 end, int maxItems, struct lm *lm);
 /* Get data for interval.  Return list allocated out of lm.  Set maxItems to maximum
  * number of items to return, or to 0 for all items. */
@@ -43,7 +45,7 @@ int bigBedIntervalToRow(struct bigBedInterval *interval, char *chrom, char *star
 	char **row, int rowSize);
 /* Convert bigBedInterval into an array of chars equivalent to what you'd get by
  * parsing the bed file. The startBuf and endBuf are used to hold the ascii representation of
- * start and end.  Note that the interval->rest string will have zeroes inserted as a side effect. 
+ * start and end.  Note that the interval->rest string will have zeroes inserted as a side effect.
  * Returns number of fields in row.  */
 
 boolean bigBedSummaryArray(struct bbiFile *bbi, char *chrom, bits32 start, bits32 end,
@@ -67,6 +69,12 @@ char *bigBedAutoSqlText(struct bbiFile *bbi);
 
 struct asObject *bigBedAs(struct bbiFile *bbi);
 /* Get autoSql object definition if any associated with file. */
+
+struct asObject *bigBedAsOrDefault(struct bbiFile *bbi);
+// Get asObject associated with bigBed - if none exists in file make it up from field counts.
+
+struct asObject *bigBedFileAsObjOrDefault(char *fileName);
+// Get asObject associated with bigBed file, or the default.
 
 boolean bigBedFileCheckSigs(char *fileName);
 /* check file signatures at beginning and end of file */

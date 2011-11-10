@@ -9,52 +9,6 @@
 #include "bigBed.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: bigBedClick.c,v 1.11 2010/05/11 01:43:28 kent Exp $";
-
-
-static int bigBedExtraFieldsPrint(struct trackDb *tdb, char *extraFields[],int extraCount)
-// Any extra fields defined in trackDb.  Returns number of extra fields actually printed
-{
-// Additional fields requested in trackDb?
-struct extraField *extras = extraFieldsGet(tdb);
-if (extras == NULL)
-    return 0;
-
-int ix = 0;
-struct extraField *extra = extras;
-for(;extra != NULL && ix <extraCount;extra=extra->next, ix++)
-    {
-    // Note: unlike for sql tables, extraFields is necessarily in sequential order
-
-    // Print as table rows
-    if(ix == 0)
-        printf("<br><table>");
-    printf("<tr><td><B>%s:</B></td>", extra->label);
-    switch (extra->type)
-        {
-        case ftInteger: {
-                        long long valInt = sqlLongLong(extraFields[ix]);
-                        printf("<td>%lld</td></tr>\n", valInt);
-                        }
-                        break;
-        case ftFloat:   {
-                        double valDouble = sqlDouble(extraFields[ix]);
-                        printf("<td>%g</td></tr>\n", valDouble);
-                        }
-                        break;
-        default:
-                        printf("<td>%s</td></tr>\n", extraFields[ix]);
-                        break;
-        }
-    }
-extraFieldsFree(&extras);
-
-if(ix > 0)
-    printf("</table>\n");
-
-return ix;
-}
-
 static void bigBedClick(char *fileName, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
@@ -132,7 +86,7 @@ if (bbMatch != NULL)
 	int restBedFields = bedSize - 3;
 	if (restCount > restBedFields)
 	    {
-            if (0 == bigBedExtraFieldsPrint(tdb, restFields + restBedFields,restCount - restBedFields))
+            if (0 == extraFieldsPrint(tdb,NULL,restFields + restBedFields,restCount - restBedFields))
                 {
                 int i;
                 char label[20];
