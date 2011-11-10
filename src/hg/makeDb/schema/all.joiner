@@ -3536,6 +3536,8 @@ tablesIgnored $kgDb
     pep%Dist
 
 tablesIgnored hg18
+    geneReviews
+    geneReviewsRefGene
     numtSAssembled
     numtS
     numtSMitochondrion
@@ -3549,6 +3551,32 @@ tablesIgnored hg19
     altSeqPatches
     bacEndPairsBad
     bamAllNumtSSorted
+    geneReviews
+    geneReviewsRefGene
+    lincRNAsCTAdipose
+    lincRNAsCTAdrenal
+    lincRNAsCTBrain
+    lincRNAsCTBrain_R
+    lincRNAsCTBreast
+    lincRNAsCTColon
+    lincRNAsCTForeskin_R
+    lincRNAsCTHeart
+    lincRNAsCTKidney
+    lincRNAsCTLiver
+    lincRNAsCTLung
+    lincRNAsCTLymphNode
+    lincRNAsCTOvary
+    lincRNAsCTPlacenta_R
+    lincRNAsCTProstate
+    lincRNAsCTSkeletalMuscle
+    lincRNAsCTTestes
+    lincRNAsCTTestes_R
+    lincRNAsCTThyroid
+    lincRNAsCTWhiteBloodCell
+    lincRNAsCThLF_r1
+    lincRNAsCThLF_r2
+    lincRNAsTranscripts
+    xlincRNAs
     multizMHCSummary
     netSyn_mann_hap4
     net_dbb_hap3
