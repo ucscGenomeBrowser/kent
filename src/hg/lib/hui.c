@@ -3494,11 +3494,11 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
 
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
     #ifdef NEW_JQUERY
-        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
+        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
     #else///ifndef NEW_JQUERY
-        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterBy'><BR>\n"
+        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s' multiple style='display: none;' class='filterBy'><BR>\n"
     #endif///ndef NEW_JQUERY
-    printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
+    printf(FILTER_BY_FORMAT,ix,filterBy->htmlName);
     ix++;
     printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""));
     struct slName *slValue;
