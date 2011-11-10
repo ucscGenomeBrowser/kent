@@ -269,20 +269,20 @@ sub getMetaDbDifferences {
 
     my %seen;
     my %differences;
-    foreach my $obj (keys %alphastanzas) {
+    my @newstanzas;
+    my @droppedstanzas;
+    foreach my $obj (sort keys %alphastanzas) {
         unless (exists $betastanzas{$obj}){
-            $differences{$obj} = [];
-            push @{$differences{$obj}}, "$obj is a new stanza in alpha";
-            } else {
+            push @newstanzas, "$obj";
+        } else {
             my @differences;
             my %seenkeys;
             foreach my $key (sort keys %{$alphastanzas{$obj}}) {
                 $seenkeys{$key} = 1;
                 unless (exists ${$betastanzas{$obj}}{$key}) {
-                    push @differences,  "$key inserted alpha";
+                    push @differences,  "added $key = ${$alphastanzas{$obj}}{$key} to alpha";
                 } elsif (${$betastanzas{$obj}}{$key} ne ${$alphastanzas{$obj}}{$key}) {
-                    push @differences, "$key beta=${$betastanzas{$obj}}{$key} -> alpha=${$alphastanzas{$obj}}{$key}";
-                } else {
+                    push @differences, "changed $key from beta=${$betastanzas{$obj}}{$key} -> alpha=${$alphastanzas{$obj}}{$key}";
                 }
             }
             foreach my $key (sort keys %{$betastanzas{$obj}}) {
@@ -290,23 +290,39 @@ sub getMetaDbDifferences {
                     next;
                 }
                 unless (exists ${$alphastanzas{$obj}}{$key}){
-                        push @differences, "$key removed from alpha";
+                        push @differences, "deleted $key = ${$betastanzas{$obj}}{$key} from alpha";
                     } else {
                     print "$obj $key\n";
                 }
             }
             if (scalar @differences){
                 $differences{$obj} = \@differences;
-                }
-
+            }
         }
-
+    }
+    foreach my $obj (sort keys %betastanzas) {
+        unless (exists $alphastanzas{$obj}) {
+            push @droppedstanzas, "$obj";
+        }
     }
     open DIFF, ">$composite.$stage.metaDb.diff";
-    
+    my $newnum = scalar(@newstanzas);
+    print DIFF "New stanzas in alpha ($newnum):\n";
+    foreach my $stanza (@newstanzas) {
+    print DIFF "$stanza\n";
+    }
+    print DIFF "\n";
+    my $droppednum = scalar(@droppedstanzas);
+    print DIFF "Dropped stanzas from alpha ($droppednum):\n";
+    foreach my $stanza (@droppedstanzas) {
+        print DIFF "$stanza\n";
+    }
+    print DIFF "\n";
+    my $changenum = scalar(keys %differences);
+    print DIFF "Changed Stanzas between alpha and beta ($changenum):\n";
     foreach my $obj (sort keys %differences){
-        print DIFF "$obj\n";
-        foreach my $val (@{$differences{$obj}}){
+        print DIFF "$obj:\n";
+        foreach my $val (sort @{$differences{$obj}}){
             print DIFF "\t$val\n";
         }
         print DIFF "\n";
