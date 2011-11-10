@@ -26,8 +26,8 @@ include wgEncodeUwRepliSeq.ra alpha
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra beta,public
-include wgEncodeGisRnaPet.release2.ra alpha
+include wgEncodeGisRnaPet.ra 
+#include wgEncodeGisRnaPet.release2.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
