@@ -279,19 +279,11 @@ sub getFields
 }
 
 sub validateAssembly {
-    my ($val, $submitType) = @_;
-    if ($submitType eq 'standard') {
-        if($val ne 'hg19' && $val ne 'mm9') {
-            return "Assembly '$val' is invalid (must be 'hg19 or mm9')";
-        } else {
-            return ();
-        }
+    my ($val) = @_;
+    if($val ne 'hg19' && $val ne 'mm9') {
+        return "Assembly '$val' is invalid (must be 'hg19 or mm9')";
     } else {
-        if ($val ne 'encodeTest') {
-            return "Assembly '$val' is invalid (must be 'encodeTest')";
-        } else {
-            return ();
-        }
+        return ();
     }
 }
 
@@ -301,7 +293,7 @@ sub getDaf
 # hash keys are RA style plus an additional TRACKS key which is a nested hash for
 # the track list at the end of the DAF file; e.g.:
 # (lab => 'Myers', TRACKS => {'Alignments => {}, Signal => {}})
-    my ($submitDir, $grants, $fields, $submitType) = @_;
+    my ($submitDir, $grants, $fields) = @_;
 
     # Verify required fields
     # are present and that the project is marked active.
@@ -316,13 +308,13 @@ sub getDaf
     $dafFile = cwd() . "/" . $dafFile;
     HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
     chdir($wd);
-    return parseDaf($dafFile, $grants, $fields, $submitType);
+    return parseDaf($dafFile, $grants, $fields);
 }
 
 sub parseDaf
 {
 # Identical to getDaf, but first argument is the DAF filename.
-    my ($dafFile, $grants, $fields, $submitType) = @_;
+    my ($dafFile, $grants, $fields) = @_;
     my %daf = ();
     $daf{TRACKS} = {};
     my $lines = readFile("$dafFile");
@@ -391,7 +383,7 @@ sub parseDaf
     if(!defined($grants->{$daf{grant}})) {
         push(@errors, "invalid lab '$daf{grant}' in DAF '$dafFile'");
     }
-    push(@errors, validateAssembly($daf{assembly}, $submitType));
+    push(@errors, validateAssembly($daf{assembly}));
 
     foreach my $view (keys %{$daf{TRACKS}}) {
         HgAutomate::verbose(4, "  View: $view\n");

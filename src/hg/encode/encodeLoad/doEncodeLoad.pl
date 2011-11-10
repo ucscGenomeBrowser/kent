@@ -335,7 +335,7 @@ HgAutomate::verbose(1, "Using config path $configPath\n");
 
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields, $submitType);
+my $daf = Encode::getDaf($submitDir, $grants, $fields);
 my $db = HgDb->new(DB => $daf->{assembly});
 my $email;
 my %labels;
@@ -347,7 +347,6 @@ if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
 my $tableSuffix = "";
-
 if ($submitDir eq ".") { # make sure command-line use specifies full path and directory
     die "ERROR: please specify full path to directory\n";
 }
