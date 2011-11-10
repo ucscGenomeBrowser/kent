@@ -1394,50 +1394,97 @@ if (mf != NULL)
     }
 }
 
-int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **row)
-// Any extra fields defined in trackDb.  Retruns number of extra fields actually printed
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
 {
-// Additional fields requested in trackDb?
-struct extraField *extras = extraFieldsGet(tdb);
+#ifdef EXTRA_FIELDS_SUPPORT
+struct extraField *extras = extraFieldsGet(database, tdb);
 if (extras == NULL)
     return 0;
+#else///ifndef EXTRA_FIELDS_SUPPORT
+struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+struct asObject *as = asForTdb(conn, tdb);
+hFreeConn(&conn);
+if (as == NULL)
+    return 0;
+#endif///ndef EXTRA_FIELDS_SUPPORT
 
-int count = 0;
-struct extraField *extra = extras;
-for(;extra != NULL;extra=extra->next)
+// We are trying to print extra fields so we need to figure out how many fields to skip
+int start = 0;
+char *type = cloneString(tdb->type);
+char *word = nextWord(&type);
+if (word && (sameWord(word,"bed") || sameWord(word,"bigBed")))
     {
-    int ix = sqlFieldColumn(sr, extra->name); // Name must match sql columnn name!
-    if (ix == -1)                             // so extraField really just provides a label
+    if (NULL != (word = nextWord(&type)))
+        start = sqlUnsigned(word);
+    #ifdef EXTRA_FIELDS_SUPPORT
+    // extraFields do not have to define all fields
+    if (fieldCount > slCount(extras))
+        start = 0;
+    #endif///def EXTRA_FIELDS_SUPPORT
+    }
+int count = 0;
+#ifdef EXTRA_FIELDS_SUPPORT
+struct extraField *col = extras;
+#else///ifndef EXTRA_FIELDS_SUPPORT
+struct asColumn *col = as->columnList;
+#endif///ndef EXTRA_FIELDS_SUPPORT
+for(;col != NULL && count < fieldCount;col=col->next)
+    {
+    if (start > 0)  // skip past already known fields
         {
-        char *setting = trackDbSetting(tdb, "extraFields"); // showFileds pValue=P_Value qValue=qValue
-        warn("trackDb setting [extraFields %s] could not find %s in %s.\n", setting, extra->name,tdb->table);
+        start--;
+        continue;
         }
+    int ix = count;
+    if (sr != NULL)
+        {
+        ix = sqlFieldColumn(sr, col->name); // If sr provided, name must match sql columnn name!
+        if (ix == -1 || ix > fieldCount)      // so extraField really just provides a label
+            continue;
+        }
+
+    // Print as table rows
+    if(count == 0)
+        printf("<br><table>");
+    count++;
+    #ifdef EXTRA_FIELDS_SUPPORT
+    printf("<tr><td><B>%s:</B></td>", col->label);
+    if (col->type == ftInteger)
+        {
+        long long valInt = sqlLongLong(fields[ix]);
+        printf("<td>%lld</td></tr>\n", valInt);
+        }
+    else if (col->type == ftFloat)
+        {
+        double valDouble = sqlDouble(fields[ix]);
+        printf("<td>%g</td></tr>\n", valDouble);
+        }
+    #else///ifndef EXTRA_FIELDS_SUPPORT
+    printf("<tr><td><B>%s:</B></td>", col->comment);
+    if (asTypesIsInt(col->lowType->type))
+        {
+        long long valInt = sqlLongLong(fields[ix]);
+        printf("<td>%lld</td></tr>\n", valInt);
+        }
+    else if (asTypesIsFloating(col->lowType->type))
+        {
+        double valDouble = sqlDouble(fields[ix]);
+        printf("<td>%g</td></tr>\n", valDouble);
+        }
+    #endif///ndef EXTRA_FIELDS_SUPPORT
     else
         {
-        // Print as table rows
-        if(count == 0)
-            printf("<br><table>");
-        count++;
-        printf("<tr><td><B>%s:</B></td>", extra->label);
-        switch (extra->type)
-            {
-            case ftInteger: {
-                            long long valInt = sqlLongLong(row[ix]);
-                            printf("<td>%lld</td></tr>\n", valInt);
-                            }
-                            break;
-            case ftFloat:   {
-                            double valDouble = sqlDouble(row[ix]);
-                            printf("<td>%g</td></tr>\n", valDouble);
-                            }
-                            break;
-            default:
-                            printf("<td>%s</td></tr>\n", row[ix]);
-                            break;
-            }
+        printf("<td>%s</td></tr>\n", fields[ix]);
         }
     }
+#ifdef EXTRA_FIELDS_SUPPORT
 extraFieldsFree(&extras);
+#else///ifndef EXTRA_FIELDS_SUPPORT
+asObjectFree(&as);
+#endif///ndef EXTRA_FIELDS_SUPPORT
 if(count > 0)
     printf("</table>\n");
 
@@ -1485,7 +1532,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	bedPrintPos(bed, bedSize, tdb);
 
-    extraFieldsPrint(tdb,sr,row);
+    extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
     if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
@@ -4170,6 +4217,28 @@ else
     }
 }
 
+#define AND_SUBTRACKS_TOO
+#ifdef AND_SUBTRACKS_TOO
+struct trackDb *rFindUnderstandableTrack(char *db, struct trackDb *tdb)
+// If any leaf is usable in getting DNA then that leaf's tdb is returned.
+{
+if (tdb->subtracks != NULL)
+    return rFindUnderstandableTrack(db,tdb->subtracks);
+
+if (fbUnderstandTrack(db, tdb->table) && !dnaIgnoreTrack(tdb->table))
+    return tdb;
+else
+    return NULL;
+}
+
+boolean forestHasUnderstandableTrack(char *db, struct trackDb *tdb)
+// TRUE if any leaf is usable in getting DNA.
+{
+return (rFindUnderstandableTrack(db, tdb) != NULL);
+}
+#endif///def AND_SUBTRACKS_TOO
+
+
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
@@ -4269,8 +4338,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     char *table = tdb->table;
     char *track = tdb->track;
     if (sameString(USER_PSL_TRACK_NAME, table) ||
-	(lookupCt(track) != NULL) ||
-	(fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+        (lookupCt(track) != NULL) ||
+#ifdef AND_SUBTRACKS_TOO
+        (   tdbVisLimitedByAncestors(cart,tdb,TRUE,TRUE) != tvHide
+         && forestHasUnderstandableTrack(database, tdb)))
+#else///ifndef AND_SUBTRACKS_TOO
+        (fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+#endif///ndef AND_SUBTRACKS_TOO
 	{
         char *visString = cartUsualString(cart, track, hStringFromTv(tdb->visibility));
          if (differentString(visString, "hide") && tdb->parent)
@@ -4829,7 +4903,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     struct customTrack *ct = lookupCt(track);
     if (sameString(USER_PSL_TRACK_NAME, table) ||
 	(ct != NULL) ||
-	(fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+#ifdef AND_SUBTRACKS_TOO
+        (   tdbVisLimitedByAncestors(cart,tdb,TRUE,TRUE) != tvHide
+         && forestHasUnderstandableTrack(database, tdb)))
+#else///ifndef AND_SUBTRACKS_TOO
+        (fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+#endif///ndef AND_SUBTRACKS_TOO
         {
 	char buf[256];
 	int r,g,b;
@@ -4911,7 +4990,30 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 bedFreeList(&ctBedList);
 	    }
 	else
-	    fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
+            {
+#ifdef AND_SUBTRACKS_TOO
+            if (tdb->subtracks)
+                {
+                struct slRef *refLeaves = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+                struct slRef *refLeaf = NULL;
+                while ((refLeaf = slPopHead(&refLeaves)) != NULL)
+                    {
+                    struct trackDb *tdbLeaf = refLeaf->val;
+                    if (tdbVisLimitedByAncestors(cart,tdbLeaf,TRUE,TRUE) != tvHide
+                    &&  fbUnderstandTrack(database, tdbLeaf->table)
+                    && !dnaIgnoreTrack(tdbLeaf->table))
+                        {
+                        struct featureBits *fbLeafList = fbGetRange(database, tdbLeaf->table, seqName, winStart, winEnd);
+                        if (fbLeafList != NULL)
+                            fbList = slCat(fbList,fbLeafList); // TODO: merge featureBits to overlaps?
+                        }
+                    freeMem(refLeaf);
+                    }
+                }
+            else
+#endif///def AND_SUBTRACKS_TOO
+	       fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
+            }
 
 	/* Flip underline/italic/bold bits. */
 	getDnaHandleBits(track, "u", uBits, winStart, winEnd, isRc, fbList);

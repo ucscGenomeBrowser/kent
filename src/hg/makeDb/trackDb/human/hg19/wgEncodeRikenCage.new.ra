@@ -1908,7 +1908,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageMcf7CellPapMinusRawRep2
         parent wgEncodeRikenCageViewMinusSignal off
-        shortLabel MCF-7 cell pA+ - 2
+        shortLabel MCF7 cell pA+ - 2
         longLabel MCF-7 whole cell polyA+ CAGE Minus start sites Rep 2 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=MCF7 localization=cell rnaExtract=pAP rep=rep2
         type bigWig 1.000000 90472.000000
