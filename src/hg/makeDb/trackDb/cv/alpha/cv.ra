@@ -1043,8 +1043,7 @@ vendorName S. Heimfeld Laboratory, FHCRC
 vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
-0000876 
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 #formerly tier 3
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
