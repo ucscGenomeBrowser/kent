@@ -9178,7 +9178,6 @@ term estrogen
 tag ESTRO
 description 45 min with 100 nM Estradiol (Crawford)
 type treatment
-label Estradiol 100nM
 
 term EtOH_0.01pct
 tag ETOH01
@@ -9289,7 +9288,6 @@ term DIFF_7d
 tag DIFF7D
 description Myocytes differentiated from myoblasts for 7 days. See specific cell protocol for treatment details. (Wold)
 type treatment
-
 
 term NaBut
 tag NABUT
