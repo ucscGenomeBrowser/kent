@@ -50,7 +50,8 @@ puts("</TD>");
 static void ourPrintCell(char *str)
 {
 ourCellStart();
-puts(str);
+if (str != NULL)
+    puts(str);
 ourCellEnd();
 }
 
