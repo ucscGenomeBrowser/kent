@@ -394,9 +394,19 @@ unless (-e $trackDb) {
 	die "cannot find $trackDb"
 }
 
-
-
 my $metaDbDir = "$trackDbDir/metaDb";
+
+my $ls = `ls $trackDbDir`;
+my @trackDbLs = split "\n", $ls;
+my $hascomposite = 0;
+foreach my $file (@trackDbLs) {
+	if ($file =~ m/$composite/) {
+		$hascomposite = 1;
+	}
+}
+unless ($hascomposite) {
+	die "cannot find any $composite .ra in $trackDbDir\n";
+}
 
 &metaMakefileCheck($composite, $metaDbDir, $stage);
 &copyOverMetaDb($composite, $metaDbDir, $stage);
