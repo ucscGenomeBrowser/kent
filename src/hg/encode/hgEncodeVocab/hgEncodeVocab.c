@@ -44,9 +44,10 @@ static char *labelOpt = NULL;
 static char *organismOpt = NULL; // we default to human if nothing else is set
 static char *organismOptLower = NULL; //  version of above used for path names
 
-void documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
+boolean documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
 // Compare controlled vocab based on term value
 {
+boolean printed = FALSE;
 char *s;
 if(title == NULL)
     title = docTerm;
@@ -56,50 +57,60 @@ char docUrl[PATH_LEN];
 char docFile[PATH_LEN];
 // parse setting
 s = hashFindVal(ra,docTerm);
-if(s != NULL && differentWord(s,"missing"))
+if(s != NULL)
     {
-    char *docSetting = cloneString(s);
-    char *settings=docSetting;
-    int count=0;
-    while((s = nextWord(&settings)) != NULL)
+    if (sameWord(s,"missing"))
+        printf("&nbsp;<em>missing</em>\n");
+    else
         {
-        char *docTitle = NULL;
-        char *fileName = NULL;
-        if(strchr(s,':')) // lab Specific setting
+        char *docSetting = cloneString(s);
+        char *settings=docSetting;
+        int count=0;
+        while((s = nextWord(&settings)) != NULL)
             {
-            docTitle = strSwapChar(s,':',0);
-            fileName = docTitle + strlen(docTitle) + 1;
+            char *docTitle = NULL;
+            char *fileName = NULL;
+            if(strchr(s,':')) // lab Specific setting
+                {
+                docTitle = strSwapChar(s,':',0);
+                fileName = docTitle + strlen(docTitle) + 1;
+                }
+            else
+                {
+                docTitle = title;
+                fileName = s;
+                }
+            safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
+            safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
+            if (count>0)
+                printf("<BR>");
+            count++;
+            docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
+            printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+            printed = TRUE;
+            freeMem(docTitle);
             }
-        else
-            {
-            docTitle = title;
-            fileName = s;
-            }
-        safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
-        safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
-        if (count>0)
-            printf("<BR>");
-        count++;
-        docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
-        printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
-        freeMem(docTitle);
+        freeMem(docSetting);
         }
-    freeMem(docSetting);
     }
 else if(genericDoc)
     { // generate a standard name
     safef(docUrl,  sizeof(docUrl),  "%s%s_protocol.pdf", dir, term);
     safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
     if (fileExists(docFile))
+        {
         printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,title);
+        printed = TRUE;
+        }
     }
+return printed;
 }
 
 void printDocumentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
 // prints a document link
 {
 printf("  <TD>");
-documentLink(ra,term,docTerm,dir,title,genericDoc);
+(void)documentLink(ra,term,docTerm,dir,title,genericDoc);
 printf("  &nbsp;</TD>\n");
 }
 
