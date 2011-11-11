@@ -44,10 +44,10 @@ static char *labelOpt = NULL;
 static char *organismOpt = NULL; // we default to human if nothing else is set
 static char *organismOptLower = NULL; //  version of above used for path names
 
-boolean documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
+int documentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
 // Compare controlled vocab based on term value
 {
-boolean printed = FALSE;
+boolean docsPrinted = 0;
 char *s;
 if(title == NULL)
     title = docTerm;
@@ -80,14 +80,19 @@ if(s != NULL)
                 docTitle = title;
                 fileName = s;
                 }
-            safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
-            safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
             if (count>0)
                 printf("<BR>");
             count++;
             docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
-            printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
-            printed = TRUE;
+            if (sameWord(fileName,"missing"))
+                printf("%s<em>missing</em>\n",docTitle);
+            else
+                {
+                safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
+                safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
+                printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+                docsPrinted++;
+                }
             freeMem(docTitle);
             }
         freeMem(docSetting);
@@ -100,10 +105,10 @@ else if(genericDoc)
     if (fileExists(docFile))
         {
         printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,title);
-        printed = TRUE;
+        docsPrinted++;
         }
     }
-return printed;
+return docsPrinted;
 }
 
 void printDocumentLink(struct hash *ra, char *term, char *docTerm,char *dir,char *title,boolean genericDoc)
