@@ -26,8 +26,8 @@ include wgEncodeUwRepliSeq.ra alpha
 include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
-include wgEncodeGisRnaPet.ra beta,public
-include wgEncodeGisRnaPet.release2.ra alpha
+include wgEncodeGisRnaPet.ra 
+#include wgEncodeGisRnaPet.release2.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -168,7 +168,7 @@ include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
 include wgEncodeHaibTfbs.ra beta,public
-include wgEncodeHaibTfbs.new.ra alpha
+include wgEncodeHaibTfbs.release2.ra alpha
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.new.ra alpha
