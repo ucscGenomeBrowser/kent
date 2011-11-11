@@ -7,7 +7,7 @@ longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/HAIB
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 BE2C=BE2_C ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HCT116=HCT-116 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87
-subGroup3 factor Factor ATF2SC81188=ATF2_(SC81188) ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CEBPB=CEBPB CEBPDSC636=CEBPD_(SC-636) CREB1SC240=CREB1_(SC-240) CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERAA=ER&alpha;_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HEY1=HEY1 HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MBD4SC271530=MBD4_(SC-271530) MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) MTA3SC81325=MTA3_(SC-81325) NANOGSC33759=NANOG_(SC-33759) NFATC1SC17834=NFATC1_(SC-17834) NFICSC81335=NFIC_(SC-81335) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 PMLSC71910=PML_(SC-71910) POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RUNX3SC101553=RUNX3_(SC-101553) RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SP4V20=SP4_(V-20) SRF=SRF STAT5ASC74442=STAT5A_(SC-74442) TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF3=TCF3 TCF12=TCF12 TEAD4SC101184=TEAD4_(SC-101184) THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388) zRXLCH=RevXlinkChromatin
+subGroup3 factor Factor ATF2SC81188=ATF2_(SC81188) ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF101388=BCLAF1_(SC-101388) BHLHE40=BHLHE40 CEBPB=CEBPB CEBPDSC636=CEBPD_(SC-636) CREB1SC240=CREB1_(SC-240) CTCF=CTCF CTCFSC5916=CTCF_(SC-5916) CTCFLSC98982=CTCFL_(SC-98982) E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) EGR1=Egr-1 ELF1SC631=ELF1_(SC-631) ERAA=ER&alpha;_a ETS1=ETS1 FOSL1SC183=FOSL1_(SC-183) FOSL2=FOSL2 FOXA1SC6553=FOXA1_(SC-6553) FOXA1SC101058=FOXA1_(SC-101058) FOXA2SC6554=FOXA2_(SC-6554) FOXP2=FOXP2 GABP=GABP GATA2=GATA2 GATA2SC267=GATA2_(SC-267) GATA3SC268=GATA3_(SC-268) GR=GR HDAC2SC6296=HDAC2_(SC-6296) HNF4ASC8987=HNF4A_(SC-8987) HNF4GSC6558=HNF4G_(SC-6558) IRF4SC6059=IRF4_(SC-6059) JUND=JunD LEF1SC8592=LEF1_(SC-8592) MAX=Max MBD4SC271530=MBD4_(SC-271530) MEF2A=MEF2A MEF2CSC13268=MEF2C_(SC-13268) MTA3SC81325=MTA3_(SC-81325) NANOGSC33759=NANOG_(SC-33759) NFATC1SC17834=NFATC1_(SC-17834) NFICSC81335=NFIC_(SC-81335) NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 PMLSC71910=PML_(SC-71910) POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 POU5F1SC9081=POU5F1_(SC-9081) PU1=PU.1 RAD21=RAD21 RUNX3SC101553=RUNX3_(SC-101553) RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SP2SC643=SP2_(SC-643) SP4V20=SP4_(V-20) SRF=SRF STAT5ASC74442=STAT5A_(SC-74442) TAF1=TAF1 TAF7SC101167=TAF7_(SC-101167) TCF3=TCF3 TCF12=TCF12 TEAD4SC101184=TEAD4_(SC-101184) THAP1SC98174=THAP1_(SC-98174) USF1=USF-1 USF1SC8983=USF1_(SC-8983) YY1=YY1 YY1SC281=YY1_(SC-281) ZBTB33=ZBTB33 ZBTB7ASC34508=ZBTB7A_(SC-34508) ZEB1SC25388=ZEB1_(SC-25388) zRXLCH=RevXlinkChromatin
 subGroup4 protocol Protocol PCR1X=PCR1x PCR2X=PCR2x V0416101=v041610.1 V0416102=v041610.2 V0422111=v042211.1
 subGroup5 treatment Treatment BPA1H=BPA_1h DEX500PM=DEX_500pM DEX5NM=DEX_5nM DEX50NM=DEX_50nM DEX100NM=DEX_100nM DM002P1H=DMSO_0.02pct EST10NM1H=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1H=Genistein_100nM NONE=None
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
@@ -287,13 +287,14 @@ noInherit on
         type broadPeak
     # subId=1224 dateSubmitted=2010-06-01
 
-        track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep2
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 HEY1 PCR1 2
-        longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
-        type broadPeak
-        color 46,0,184
+        #lab not confident in result
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep2
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 HEY1 PCR1 2
+        #longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
+        #type broadPeak
+        #color 46,0,184
     # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsK562Six5Pcr1xPkRep2
@@ -306,13 +307,14 @@ noInherit on
     # subId=1240 dateSubmitted=2010-06-07
 
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
-        track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep1
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 HEY1 PCR1 1
-        longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
-        type broadPeak
-        color 46,0,184
+        #lab not confident in results
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep1
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 HEY1 PCR1 1
+        #longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
+        #type broadPeak
+        #color 46,0,184
     # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsK562Pu1Pcr1xPkRep2
@@ -822,13 +824,14 @@ noInherit on
     # subId=1261 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep1 cricket Tue Apr 19 11:11:45 2011
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep2
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HEY1 V101 2
-        longLabel HepG2 HEY1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
-        type broadPeak
-        color 189,0,157
+        #lab not confident in results
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep2
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel HEPG HEY1 V101 2
+        #longLabel HepG2 HEY1 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
+        #type broadPeak
+        #color 189,0,157
     # subId=1452 dateSubmitted=2010-06-16
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep2
@@ -1184,13 +1187,14 @@ noInherit on
         color 189,0,157
     # subId=1227 dateSubmitted=2010-06-07
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HEPG HEY1 V101 1
-        longLabel HepG2 HEY1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
-        type broadPeak
-        color 189,0,157
+        #lab not confident in results
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel HEPG HEY1 V101 1
+        #longLabel HepG2 HEY1 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
+        #type broadPeak
+        #color 189,0,157
     # subId=1227 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep2
@@ -4350,13 +4354,14 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep2 wong Tue Jun  7 11:54:00 2011
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HEY1 V101 1
-        longLabel HepG2 HEY1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
-        type bigWig 0.192479 445.683990
-        color 189,0,157
+        #lab not confident in results
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel HEPG HEY1 V101 1
+        #longLabel HepG2 HEY1 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep1
+        #type bigWig 0.192479 445.683990
+        #color 189,0,157
         # subId=3021 dateSubmitted=2010-11-29
 
 
@@ -4846,13 +4851,14 @@ noInherit on
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsGm12878ControlPcr1xRawRep2 vsmalladi Wed Jul  6 14:19:02 2011
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HEPG HEY1 V101 2
-        longLabel HepG2 HEY1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
-        type bigWig 0.118831 808.763000
-        color 189,0,157
+        #lab not confident in results
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel HEPG HEY1 V101 2
+        #longLabel HepG2 HEY1 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=NONE rep=rep2
+        #type bigWig 0.118831 808.763000
+        #color 189,0,157
         # subId=3026 dateSubmitted=2011-01-21
 
         track wgEncodeHaibTfbsGm12878RxlchV0416101RawRep1
@@ -5580,13 +5586,14 @@ noInherit on
         color 153,38,0
         # subId=3037 dateSubmitted=2010-12-01
 
-        track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 HEY1 PCR1 1
-        longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
-        type bigWig 0.181844 506.480011
-        color 46,0,184
+        #lab not confident in results
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 HEY1 PCR1 1
+        #longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep1
+        #type bigWig 0.181844 506.480011
+        #color 46,0,184
         # subId=3037 dateSubmitted=2010-12-01
 
         track wgEncodeHaibTfbsK562Six5Pcr1xRawRep1
@@ -5707,13 +5714,14 @@ noInherit on
         # subId=3038 dateSubmitted=2010-11-30
         # was wgEncodeHaibTfbsGm12878Ebf1c8Pcr1xRawRep2 cricket Tue Apr 19 10:32:39 2011
 
-        track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 HEY1 PCR1 2
-        longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
-        type bigWig 0.086332 751.171021
-        color 46,0,184
+        #lab not confident in results
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 HEY1 PCR1 2
+        #longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1X treatment=NONE rep=rep2
+        #type bigWig 0.086332 751.171021
+        #color 46,0,184
         # subId=3038 dateSubmitted=2010-11-30
 
         track wgEncodeHaibTfbsK562Six5Pcr1xRawRep2
