@@ -5820,7 +5820,7 @@ lab Farnham
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(Western_blot,ChIP-seq):human_GATA3-SC-268_validation_Farnham.pdf
+validation GATA3_SC-268(Western_blot,ChIP-seq):human_GATA3_SC-268_validation_Farnham.pdf
 label  GATA3 (sc-268)
 
 term GATA3_(SC-269)
