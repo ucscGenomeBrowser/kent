@@ -483,6 +483,9 @@ unsigned int exceptionBits = 0;
  *   make ucscAlleleFreq in doDbSnp.pl, but then we'd have to deal with
  *   missing values in the middle of float arrays).
  * New as of snp135:
+ * - SingleAlleleFreq: allele frequency is given for only one allele and is 100%.
+ *   A frequent cause is that chromosome counts were submitted only for a
+ *   homozygous non-reference variant from a personal genome.
  * - InconsistentAlleles: allele frequencies are given for alleles that do
  *   not match the given observed alleles.
  */
@@ -518,6 +521,7 @@ enum exceptionType
     /* processAlleleFreqs() */
     NonIntegerChromCount,
     AlleleFreqSumNot1,
+    SingleAlleleFreq,
     /* checkFrequencyAllelesVsObserved */
     InconsistentAlleles,
     /* Keep this one last as a count of enum values: */
@@ -580,6 +584,7 @@ exceptionNames[MultipleAlignments] = "MultipleAlignments";
 /* processAlleleFreqs() */
 exceptionNames[NonIntegerChromCount] = "NonIntegerChromCount";
 exceptionNames[AlleleFreqSumNot1] = "AlleleFreqSumNot1";
+exceptionNames[SingleAlleleFreq] = "SingleAlleleFreq";
 /* checkFrequencyAllelesVsObserved */
 exceptionNames[InconsistentAlleles] = "InconsistentAlleles";
 
@@ -663,6 +668,11 @@ safef(buf, sizeof(buf),
     "  This SNP's allele frequency data are probably incomplete.",
       ALLELE_FREQ_ROUNDING_ERROR);
 exceptionDescs[AlleleFreqSumNot1] = cloneString(buf);
+exceptionDescs[SingleAlleleFreq] =
+    "Allele frequency is given for only one allele and is 100%. "
+    "A frequent cause, when chromosome counts are small, is that "
+    "chromosome counts were submitted only for a "
+    "homozygous non-reference variant from a personal genome.";
 /* checkFrequencyAllelesVsObserved */
 exceptionDescs[InconsistentAlleles] =
     "Allele frequencies are given for alleles that do not match the reported observed alleles.";
@@ -1120,16 +1130,22 @@ else if (sameString(locType, "between"))
     {
     /* dbSNP insertions have end=start+1 -- 2 bases long in their 0-based,
      * fully-closed coords.  We increment start so end=start -- 0 bases long
-     * in our 0-based, half-open coords.. */
-    if (chrEnd != chrStart + 1)
+     * in our 0-based, half-open coords. */
+    chrStart++;
+    if (chrEnd != chrStart)
+	{
+	chrStart--;
 	writeError("Unexpected coords for locType \"%s\" (%d) -- "
-		   "expected NCBI's chrEnd = chrStart+1.",
-		   locType, locTypeNum);
+		   "expected NCBI's chrEnd = chrStart+1, got start=%d, end=%d.",
+		   locType, locTypeNum, chrStart, chrEnd);
+	// as of snp135, when we're here, usually locType is incorrect and coords
+	// is plain old 0-based fully-closed... adjust chrEnd accordingly to avoid a
+	// later error that is just a side-effect of this one.
+	chrEnd++;
+	}
     else if (! sameString(refNCBI, "-"))
 	writeError("Unexpected refNCBI \"%s\" for locType \"%s\" (%d) -- "
 		   "expected \"-\"", refNCBI, locType, locTypeNum);
-    else
-	chrStart++;
     }
 else if (sameString(locType, "exact"))
     {
@@ -1205,11 +1221,7 @@ if (chrStart == chrEnd)
     return refNCBI;
 else
     {
-    if (strlen(refNCBI) != snpSize)
-	writeError("rs%d is %d bases long but refNCBI is different length: %s",
-		   rsId, snpSize, refNCBI);
-    strncpy(refUCSC, chrSeq->dna + chrStart, snpSize);
-    refUCSC[snpSize] = '\0';
+    safencpy(refUCSC, sizeof(refUCSC), chrSeq->dna + chrStart, snpSize);
     if (! sameString(refNCBI, refUCSC))
 	writeException(RefAlleleMismatch);
 
@@ -1741,12 +1753,15 @@ for (i=0;  i < *pAlleleFreqCount;  i++)
     }
 if (total < 1.0-ALLELE_FREQ_ROUNDING_ERROR || total > 1.0+ALLELE_FREQ_ROUNDING_ERROR)
     writeException(AlleleFreqSumNot1);
+else if (*pAlleleFreqCount == 1)
+    writeException(SingleAlleleFreq);
 }
 
 void checkFrequencyAllelesVsObserved(char *alleles, int alCount, char *observed)
-/* If a frequency is given for an allele not in observed, flag exception. */
+/* If multiple allele frequencies are given, and that set of alleles does not match
+ * the set of observed alleles, flag exception. */
 {
-if (alCount == 0 || sameString(observed, "lengthTooLong"))
+if (alCount < 2 || sameString(observed, "lengthTooLong"))
     return;
 char *obsWords[alCount*2];
 char obsBuf[2048];
