@@ -3146,9 +3146,11 @@ void safencpy(char *buf, size_t bufSize, const char *src, size_t n)
 {
 if (n > bufSize-1)
     errAbort("buffer overflow, size %lld, substring size: %lld", (long long)bufSize, (long long)n);
-size_t slen = strlen(src);
-if (slen > n)
-    slen = n;
+// strlen(src) can take a long time when src is for example a pointer into a chromosome sequence.
+// Instead of setting slen to max(strlen(src), n), just stop counting length at n.
+size_t slen = 0;
+while (src[slen] != '\0' && slen < n)
+    slen++;
 strncpy(buf, src, n);
 buf[slen] = '\0';
 }

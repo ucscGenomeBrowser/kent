@@ -245,6 +245,7 @@ The format of the type fields:
       maxHeightPixels   max:default:min      # default is 128:128:11
       graphType         bar|points           # default is bar
       viewLimits        lower:upper    # default is from the type line limits
+      viewLimitsMax     lower:upper    # UNENFORCED: suggested bounds of viewLimits
       yLineMark         real-value     # default is 0.0
       yLineOnOff        on|off         # default is off (draw y=yLineMark line)
       windowingFunction maximum|mean|minimum # default is mean
@@ -340,7 +341,7 @@ The format of the type fields:
     bamColorMode    strand|gray|tag|off         # coloring method, default is strand
     bamGrayMode     aliQual|baseQual|unpaired   # grayscale metric, default is aliQual
     bamColorTag     <XX>                        # optional tag for RGB color, default is "YC"
-    bamSkipPrintQualScore .                     # Skip printing quality score in bam item details page, 
+    bamSkipPrintQualScore .                     # Skip printing quality score in bam item details page,
                                                 # no default, always use "." to skip printing.
     minAliQual      <N>                         # display only items with alignment quality
                                                 #   at least N, default 0
@@ -381,9 +382,9 @@ The format of the type fields:
 22. type pgSnp
     This type is used for the display of variants (for example, personal genome
     variants).  It will display stacked boxes showing the proportion of reads
-    supporting each allele when frequency is available (in case of 2 alleles 
-    only).  Also the details page will use the UCSC genes to compute any amino 
-    acid changes.  The track can be loaded using hgLoadBed and the -sqlTable 
+    supporting each allele when frequency is available (in case of 2 alleles
+    only).  Also the details page will use the UCSC genes to compute any amino
+    acid changes.  The track can be loaded using hgLoadBed and the -sqlTable
     option (see pgSnp.sql for the format).
 
 If something lacks a type field it needs to have custom
@@ -804,7 +805,7 @@ COMPOSITE SUBTRACK SELECTION - 4 ways
 2) Add All [+][-] buttons - To the composte track add the setting below.
    allButtonPair on
    Not compatible with either of the next two methods
-3) Matrix selection of subgroups.  A 2 "dimension" grid of subgroups.
+3) Matrix selection of subgroups.  A 2+ "dimension" grid of subgroups.
    See MATRIX below.
 4) Subgroup buttons.  This happens if you have subgroups but no 'allButtonPair"
    or "dimensions" defined.
@@ -845,20 +846,32 @@ a demension setting which refers to subgroups already defined. Example:
     dimensions dimensionX=cellType dimensionY=factor
 This will result in a composite track configuration page with a matrix of
 check boxes with 'Cell Types' along the X axis and 'Factors' along the Y.  All
-individual subtracks will be displayed below, but the matix of check boxes will
+individual subtracks will be displayed below, but the matrix of check boxes will
 allow easy selection by subgrouping.  The dimensions X&Y have no explicit defaults
 (checked or unchecked) declared.  This is becuase their state can be determined by
 default settings of the tracks that belong to them.
 
 NOTE: Additional dimensions 'A'-'W' and 'Z' (called 'ABC' dimensions) may be added.
 However any 'ABC' dimensions will not be part of the matrix, but appear above it as
-single rows of checkboxes.  Unlike X&Y, any 'ABC' dimensions must have explicit
-defaults set with the following:
+single rows of checkboxes, or below it as 'filterComposite' drop-downs.  Unlike X&Y,
+any 'ABC' dimensions must have explicit defaults set with the following:
     dimensions dimensionX=cellType dimensionY=factor dimA=rep dimB=prot
     dimensionAchecked rep1
     dimensionBchecked protA,protB
 This setting says that replicate 1 and protocols A and B are checked by default but
 all other replicates and protocols are unchecked by default.
+Add a filterComposite definition to replace the rows of ABC checkboxes with drop-downs:
+   filterComposite on
+This line will cause all ABC dimensions to be represented by filter like drop-downs,
+which will 'filter' the subtrack list turning on/off all subtracks that agree with
+all dimensions currently selected.  On some browsers, the drop-down options will grey
+if the choice will not have an affect given the current selections in other dimensions.
+Addition filterComposite options:
+   filterComposite dimB=[multi,one,onlyOne]
+      Currently only 'multi' and 'onlyOne' supported. By default drop-downs are
+      mult-select, but setting onlyOne will result in forcing a single selection.
+
+
 
 VIEWS
 -------------------
@@ -958,53 +971,12 @@ In the example, subGroup3 refers to factors with values displayed in the UI such
 before H4K20me3.  However the actual sort will be of the Ids K09 and K20, which will
 result in a more desirable order.  NOTE: At some time, sortOrder may be extended to
 allow sorting by shortLabel and longLabel, but currently only subgroups are sortable.
-NOTE: This setting is incompatible with dividers and hierarchy and supercedes those
-settings.
 
 DRAG AND DROP
 -------------
 Subtracks of a composite track may be reordered by dragAndDrop as well.  To enable
 this functionality add the "dragAndDrop subTracks" setting to the composite (parent)
 track.
-
-DIVIDERS
---------
-In order to more easily recognize the organization of a large list of subtracks
-in a composite configuration page, dividers can be places between different
-groups of subtracks. Example:
-    subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
-    subGroup3 factor Factor K4=H3K4me3 K9=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3 PAN=pan-H3 WCE=WCE RPOL=RPol-II
-    dividers cellType factor
-This will place a simple dividing line anytime the cellType or factor changes
-when listing the subtracks on the subtrack configuration page.  In addition,
-alternate groups will be displayed with slightly different background color.
-NOTE: This setting is incompatible with and overridden by sortOrder.
-
-HIERARCHY
----------
-This setting allows one more means of visually organizing many subtracks on
-the composite track configuration page.  It is especially useful in easily
-distinguishing views which are likely to be different within a single group
-of subtracks.  Example:
-    hierarchy view Hmm=0 Win=0 Sig=1 Aln=2
-While a particular cell type and factor combination may be set off with dividers,
-between the dividers the Hmm and Win type subtracks have no indentation, while
-the signal track is indented by one and the alignment subtrack by two.
-NOTE: This setting is incompatible with and overridden by sortOrder.
-
-METADATA
---------
-With many subtracks it can be important to give further distinguishing details.
-In the subtracks list in hgTrackUi the long label can be followed by a "..."
-which, when clicked will open a list of name=value pairs which have few requirements.
-    metadata name1=value1 name2="value 2" ...
-Certain specific terms may carry special meanings in code:
-  (see controlledVvocabulary below)
-  dateSubmitted,dateUnrestricted used by ENCODE
-  fileName is converted into a link to the downloads directory in wgEncode
-  dataVersion is shown separately from metadata
-
-which is seen below.
 
 CONTROLLED VOCABULARY
 ---------------------
@@ -1072,11 +1044,12 @@ group regulation
 subGroup1 view Views Hmm=Sites-HMM Win=Sites-Windowing Sig=Signal_Densities Aln=Alignments
 subGroup2 cellType Cell_Type ES=ES MEF=MEF NP=NP EShyb=ES-hybrid
 subGroup3 factor Factor K04=H3K4me3 K09=H3K9me3 K20=H4K20me3 K27=H3K27me3 K36=H3K36me3
-dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor=+ view=-
+subGroup4 rep Replicate rep1=1 rep2=2
+dimensions dimensionX=cellType dimensionY=factor dimA=rep
+dimensionAchecked rep1
+filterComposite on
+sortOrder cellType=+ factor=+ rep=+ view=-
 dragAndDrop subTracks
-#dividers cellType factor
-#hierarchy view Hmm=0 Win=0 Sig=1 Aln=2
 noInherit on
 visibility hide
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
@@ -1093,11 +1066,10 @@ type bed 3
         shortLabel H3K4me3-ES HMM
         longLabel Broad Stem Cell Chromatin IP Sites by HMM (H3K4me3 ab, Embryonic Stem (ES) cells)
         parent broadChromatinChIPSeqViewHmm
-        subGroups factor=K04 cellType=ES view=Hmm
+        subGroups factor=K04 cellType=ES view=Hmm rep=1
         type bed 3
         color 25,25,150
         configurable on
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="PeakSeq v2.1"
 
     track broadChromatinChIPSeqViewWin
     shortLabel Sites Windowing
@@ -1110,12 +1082,11 @@ type bed 3
         shortLabel H3K4me3-ES Win
         longLabel Broad Stem Cell Chromatin IP Sites by Windowing (H3K4me3 ab, Embryonic Stem (ES) cells)
         parent broadChromatinChIPSeqViewWin
-        subGroups factor=K04 cellType=ES view=Win
+        subGroups factor=K04 cellType=ES view=Win rep=1
         type bed 5 +
         useScore 1
         color 25,25,150
         configurable on
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
 
     track broadChromatinChIPSeqViewSig
     shortLabel Signal Densities
@@ -1127,12 +1098,11 @@ type bed 3
         shortLabel H3K4me3-ES Sig
         longLabel Broad Stem Cell Chromatin IP Signal (H3K4me3 ab, Embryonic Stem (ES) cells)
         parent broadChromatinChIPSeqViewSig
-        subGroups factor=K04 cellType=ES view=Sig
+        subGroups factor=K04 cellType=ES view=Sig rep=1
         type wig 0 35
         yLineOnOff On
         yLineMark 1.0
         color 25,150,25
-	metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1"
 
     track broadChromatinChIPSeqViewAln
     shortLabel Sites Alignments
@@ -1144,18 +1114,16 @@ type bed 3
         shortLabel H3K4me3-ES Align
         longLabel Broad Stem Cell Chromatin IP Alignments (H3K4me3 ab, Embryonic Stem (ES) cells)
         parent broadChromatinChIPSeqViewAln
-        subGroups factor=K04 cellType=ES view=Aln
+        subGroups factor=K04 cellType=ES view=Aln rep=1
         type bed 9 +
         useScore 1
-        metadata project=wgEncode grant=Bernstein lab=Broad dataType=ChipSeq cell=M9ES antibody=H3K4me3 softwareVersion="Maq v2.1, unique, mismatch<=2"
          . . .
 
 This example set up a composite track configuration page with an X and Y
-dimension matrix of check boxes for Cell Types by Factors, and a multi-view.
-The subtracks will be sortable on either of the 2 dimensions and the view type.
-Additionally, the subtracks can be dragged and dropped into a preferred order
-by the user.  Notice that dividers and hierarchy are commented out, since they
-are incompatible and ignored when sort is enabled.  Also notice that the
+dimension matrix of check boxes for Cell Types by Factors, a filterComposite
+dropdown for replicate, and a multi-view. The subtracks will be sortable on
+either of the 3 dimensions and the view type. Additionally, the subtracks can
+be dragged and dropped into a preferred order by the user.  Notice that the
 entire composite track defaults to 'hide' when the user first visits the
 browser.  However, if the user then sets this to 'full' then 2 of 4 types
 of subtracks will be displayed as packed, the signal will be displayed as
@@ -1166,9 +1134,7 @@ accomplised using "ClosestToHome" methods for 2 of the views (Hmm and Win), but
 directly for the other 2 (Sig and Aln). The wigs have many default settings but
 only the one wig shown has yLine. Notice this example defines a controlled
 vocabulary for both cellTypes and factors with definitions found in the
-encode/cv.ra directory (off apache/cgi-bin/). (Don't be confused though, this
-example mm8 composite track doesn't really have controlled vocabulary.)
-Finally, metadata settings were added to provide further subtrack details.
+encode/cv.ra directory (off apache/cgi-bin/).
 
 ---------------------
 
