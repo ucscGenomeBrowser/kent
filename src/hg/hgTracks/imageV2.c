@@ -26,7 +26,6 @@ struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge r
 // A simplistic way of flattening the track list before building the image
 // NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
 /////////////////////////
-#define IMGORD_CUSTOM_ONTOP
 void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart)
 // Adds one track into the flatTracks list
 {
@@ -36,26 +35,18 @@ flatTrack->track = track;
 char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
 safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
-#ifdef IMGORD_CUSTOM_ONTOP
 if(flatTrack->order >= IMG_ORDERTOP)
-#else///ifndef IMGORD_CUSTOM_ONTOP
-if(flatTrack->order >= IMG_ORDEREND)
-#endif///ndef IMGORD_CUSTOM_ONTOP
     {
     cartRemove(cart,var);
     flatTrack->order = IMG_ANYORDER;
     }
-#ifdef IMGORD_CUSTOM_ONTOP
 static int topOrder  = IMG_ORDERTOP; // keep track of the order added to top of image
-#endif///def IMGORD_CUSTOM_ONTOP
 static int lastOrder = IMG_ORDEREND; // keep track of the order added and beyond end
 if( flatTrack->order == IMG_ANYORDER)
     {
-#ifdef IMGORD_CUSTOM_ONTOP
     if (track->customTrack)
         flatTrack->order = ++topOrder; // Custom tracks go to top
     else
-#endif///def IMGORD_CUSTOM_ONTOP
         flatTrack->order = ++lastOrder;
     }
 
@@ -72,7 +63,6 @@ if (a->order == b->order)
 return (a->order - b->order);
 }
 
-#ifdef IMGORD_CUSTOM_ONTOP
 void flatTracksSort(struct flatTracks **flatTracks)
 // This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
 {
@@ -149,48 +139,6 @@ if (haveBeenOrderd > 0 && notYetOrdered > 0)
 if (flatTracks && *flatTracks)
     slSort(flatTracks, flatTracksCmp);
 }
-
-#else///ifndef IMGORD_CUSTOM_ONTOP
-
-void flatTracksSort(struct flatTracks **flatTracks)
-// This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
-{
-// flatTracks list has 2 sets of "order": those already dragReordered (below IMG_ORDEREND)
-// and those not yet reordered (above).  It has been decided that adding new tracks to an
-// existing order should always put the new tracks below existing and treat them as if they
-// were reordered there.  Thus all new tracks should get an imgOrd below IMG_ORDEREND.
-// The result is turning on a successive set of new tracks will have them appear below all others.
-int imgOrdSet = 0;
-boolean notYetOrdered = FALSE;
-struct flatTracks *oneTrack = *flatTracks;
-for(;oneTrack!=NULL;oneTrack = oneTrack->next)
-    {
-    if (oneTrack->order <= IMG_ORDEREND
-    &&  imgOrdSet < oneTrack->order )
-        imgOrdSet = oneTrack->order;
-    else
-        notYetOrdered = TRUE;
-    }
-if (imgOrdSet > 0 && notYetOrdered) // Image order has previously been set, so givem all imgOrds
-    {
-    imgOrdSet = (IMG_ORDEREND - imgOrdSet);  // This difference should be removed from any with imgOrdSet
-    for(oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
-        {
-        if (oneTrack->order >= imgOrdSet)
-            {
-            oneTrack->order -= imgOrdSet;
-            char var[256];
-            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
-            cartSetInt(cart, var, oneTrack->order);
-            }
-        }
-    }
-
-if (flatTracks && *flatTracks)
-    slSort(flatTracks, flatTracksCmp);
-}
-#endif///ndef IMGORD_CUSTOM_ONTOP
-
 
 void flatTracksFree(struct flatTracks **flatTracks)
 // Frees all memory used to support flatTracks (underlying tracks are untouched)
