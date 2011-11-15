@@ -3,11 +3,8 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	doEncodeLoad.pl doEncodeUnload.pl
-
-PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
-
-
+	doEncodeLoad.pl \
+	doEncodeUnload.pl
 all:
 	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} scripts
 
@@ -20,11 +17,16 @@ beta:
 prod:
 	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_prod/bin/scripts scripts schemas
 
-scripts:
-	@for F in ${SCRIPT_FILES}; do \
-	  	chmod +x $$F; \
-		perl -c $$F && cp $$F ${SCRIPTS}; \
-	done
+
+#encpipeline_{pipeline}/bin/scripts needs to exist, otherwise the dev make could fail
+scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
+
+${SCRIPTS}/%: %
+	chmod +x $<
+	perl -c $< 2>&1
+	cp -p $< $@.tmp
+	mv -f $@.tmp $@
+
 
 schemas: 
 	./installSqlSchemas.pl
