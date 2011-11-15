@@ -33,10 +33,21 @@ my $PROG = basename $0;
 sub usage
 {
     print STDERR <<END;
-    usage: doEncodeUnload.pl submission_type project_submission_dir
-           submission_type is currently ignored
-           project_submission_dir needs a full path
-           OPTIONS: -verbose=i -configDir=s
+usage: doEncodeUnload.pl pipeline-instance project_submission_dir
+
+The pipeline instance variable is a switch that changes the behavior of doEncodeUnload.
+The changes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
+
+	project_submission_dir needs a full path
+	OPTIONS:
+		-verbose=i	Verbosity level
+		-configDir=s	Config directory location
 END
     exit(1);
 }
@@ -121,7 +132,7 @@ if(@ARGV != 2) {
     usage();
 }
 
-my $submitType = $ARGV[0];	# currently not used
+my $pipelineInstance = $ARGV[0];	# currently not used
 my $submitDir = $ARGV[1];	# directory where data files are
 my $configPath;
 if (defined $opt_configDir) {
@@ -148,7 +159,7 @@ if(dirname($submitDir) =~ /_(.*)/) {
 
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $daf = Encode::getDaf($submitDir, $grants, $fields, $pipelineInstance);
 my $downloadDir = Encode::downloadDir($daf);
 
 chdir($submitDir) || die "Couldn't chdir to '$submitDir'";
