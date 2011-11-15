@@ -25,7 +25,6 @@ use Encode;
 use HgAutomate;
 use HgDb;
 use RAFile;
-use SafePipe;
 
 
 use vars qw/$opt_verbose $opt_configDir/;
