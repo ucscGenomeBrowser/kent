@@ -2672,7 +2672,7 @@ vendorId Muscle needle biopsies
 sex U
 tissue muscle
 lab Crawford
-protocol Crawford(Missing):HSMMFSHD_Crawford_protocol.pdf
+protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -2719,7 +2719,7 @@ vendorId Muscle needle biopsies
 sex U
 tissue muscle
 lab Crawford
-protocol Crawford(Missing):HSMMtubeFSHD_Crawford_protocol.pdf
+protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -3519,7 +3519,7 @@ termId BTO:0002397
 termUrl missing
 sex M
 tier 3
-protocol Crawford(missing):RWPE_protocol.pdf
+protocol Crawford(missing):RWPE_Crawford_protocol.pdf
 
 term SAEC
 tag SAEC

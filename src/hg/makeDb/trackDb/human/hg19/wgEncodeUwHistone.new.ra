@@ -75,7 +75,7 @@ html wgEncodeUwHistone.new
     track wgEncodeUwHistoneViewHot
     shortLabel Hotspots
     view Hot
-    visibility pack
+    visibility full
     parent wgEncodeUwHistone
     pValueFilter 0.0
     pValueFilterLimits 0:324
