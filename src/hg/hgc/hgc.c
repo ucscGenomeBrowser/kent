@@ -4217,6 +4217,28 @@ else
     }
 }
 
+#define AND_SUBTRACKS_TOO
+#ifdef AND_SUBTRACKS_TOO
+struct trackDb *rFindUnderstandableTrack(char *db, struct trackDb *tdb)
+// If any leaf is usable in getting DNA then that leaf's tdb is returned.
+{
+if (tdb->subtracks != NULL)
+    return rFindUnderstandableTrack(db,tdb->subtracks);
+
+if (fbUnderstandTrack(db, tdb->table) && !dnaIgnoreTrack(tdb->table))
+    return tdb;
+else
+    return NULL;
+}
+
+boolean forestHasUnderstandableTrack(char *db, struct trackDb *tdb)
+// TRUE if any leaf is usable in getting DNA.
+{
+return (rFindUnderstandableTrack(db, tdb) != NULL);
+}
+#endif///def AND_SUBTRACKS_TOO
+
+
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
@@ -4316,8 +4338,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     char *table = tdb->table;
     char *track = tdb->track;
     if (sameString(USER_PSL_TRACK_NAME, table) ||
-	(lookupCt(track) != NULL) ||
-	(fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+        (lookupCt(track) != NULL) ||
+#ifdef AND_SUBTRACKS_TOO
+        (   tdbVisLimitedByAncestors(cart,tdb,TRUE,TRUE) != tvHide
+         && forestHasUnderstandableTrack(database, tdb)))
+#else///ifndef AND_SUBTRACKS_TOO
+        (fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+#endif///ndef AND_SUBTRACKS_TOO
 	{
         char *visString = cartUsualString(cart, track, hStringFromTv(tdb->visibility));
          if (differentString(visString, "hide") && tdb->parent)
@@ -4876,7 +4903,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     struct customTrack *ct = lookupCt(track);
     if (sameString(USER_PSL_TRACK_NAME, table) ||
 	(ct != NULL) ||
-	(fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+#ifdef AND_SUBTRACKS_TOO
+        (   tdbVisLimitedByAncestors(cart,tdb,TRUE,TRUE) != tvHide
+         && forestHasUnderstandableTrack(database, tdb)))
+#else///ifndef AND_SUBTRACKS_TOO
+        (fbUnderstandTrack(database, table) && !dnaIgnoreTrack(table)))
+#endif///ndef AND_SUBTRACKS_TOO
         {
 	char buf[256];
 	int r,g,b;
@@ -4958,7 +4990,30 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
                 bedFreeList(&ctBedList);
 	    }
 	else
-	    fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
+            {
+#ifdef AND_SUBTRACKS_TOO
+            if (tdb->subtracks)
+                {
+                struct slRef *refLeaves = trackDbListGetRefsToDescendantLeaves(tdb->subtracks);
+                struct slRef *refLeaf = NULL;
+                while ((refLeaf = slPopHead(&refLeaves)) != NULL)
+                    {
+                    struct trackDb *tdbLeaf = refLeaf->val;
+                    if (tdbVisLimitedByAncestors(cart,tdbLeaf,TRUE,TRUE) != tvHide
+                    &&  fbUnderstandTrack(database, tdbLeaf->table)
+                    && !dnaIgnoreTrack(tdbLeaf->table))
+                        {
+                        struct featureBits *fbLeafList = fbGetRange(database, tdbLeaf->table, seqName, winStart, winEnd);
+                        if (fbLeafList != NULL)
+                            fbList = slCat(fbList,fbLeafList); // TODO: merge featureBits to overlaps?
+                        }
+                    freeMem(refLeaf);
+                    }
+                }
+            else
+#endif///def AND_SUBTRACKS_TOO
+	       fbList = fbGetRange(database, tdb->table, seqName, winStart, winEnd);
+            }
 
 	/* Flip underline/italic/bold bits. */
 	getDnaHandleBits(track, "u", uBits, winStart, winEnd, isRc, fbList);
@@ -23927,7 +23982,7 @@ while ((row = sqlNextRow(sr)) != NULL)
              }
            }
          printf("%-10s    ", diseaseID);
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
+        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
 
     }  /* end while */
  printf("</TT></PRE>");
@@ -23957,13 +24012,13 @@ while ((row = sqlNextRow(sr)) != NULL)
           firstTime = FALSE;
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
        printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
        printf(")");
         } else {
           printf(", ");
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
        printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
        printf(")");
         }
      }

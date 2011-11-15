@@ -38,7 +38,9 @@ function submitButtonOnClick()
     var db = $('input[name=db]').val();
     if(gene && gene.length > 0) {
         var pos = lookupGene(db, gene);
-        if(!pos) {
+        if(pos) {
+            makeSureSuggestTrackIsVisible();
+        } else {
             // turn this into a full text search.
             pos = gene;
         }

@@ -375,6 +375,8 @@ wgEncodeGencodeRefSeq genePred
 wgEncodeGencodeTag genePred
 wgEncodeGencodeTranscriptSupport genePred
 wgEncodeGencodeUniProt genePred
+wgEncodeGencodePolyAFeature genePred
+wgEncodeGencodeAnnotationRemark genePred
 wibFile customTracks
 wigColorBy wig
 wigFile customTracks

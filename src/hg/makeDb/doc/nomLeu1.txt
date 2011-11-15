@@ -134,6 +134,9 @@ taxId 61853
     # 1400962059 lower) in 17968 sequences in 1 files
     # %47.72 masked total, %50.82 masked real
 
+    rm /gbdb/nomLeu1/nomLeu1.2bit
+    ln -s `pwd`/nomLeu1.2bit /gbdb/nomLeu1/nomLeu1.2bit
+
 #########################################################################
 # Marking *all* gaps - they are all in the AGP file
 #	(DONE - 2010-10-31 - Chin)
@@ -322,7 +325,7 @@ nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;
     ln -s blastz.gorGor3.swap lastz.gorGor3
 
 ###########################################################################
-# lastz swap Human hg19 (DONE - 2011-1i1-08 - Chin)
+# lastz swap Human hg19 (DONE - 2011-11-08 - Chin)
 
     # original alignment
     cd /hive/data/genomes/hg19/bed/lastzNomLeu1.2011-11-04
@@ -345,5 +348,42 @@ nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;
 
     cd /hive/data/genomes/nomLeu1/bed
     ln -s blastz.hg19.swap lastz.hg19
+
+
+#########################################################################
+# all.joiner update, downloads and in pushQ (DONE 2011-11-10 - Chin)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=nomLeu1 -all all.joiner
+
+    mkdir /hive/data/genomes/nomLeu1/goldenPath
+    cd /hive/data/genomes/nomLeu1/goldenPath
+    makeDownloads.pl nomLeu1 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/nomLeu1/pushQ
+    cd /hive/data/genomes/nomLeu1/pushQ
+    makePushQSql.pl nomLeu1 > nomLeu1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/nomLeu1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/nomLeu1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/nomLeu1/bbi/quality.bw
+    # WARNING: nomLeu1 does not have seq
+    # WARNING: nomLeu1 does not have extFile
+    # 
+    # WARNING: Could not tell (from trackDb, all.joiner and hardcoded
+    # lists of
+    # supporting and genbank tables) which tracks to assign these tables
+    # to:
+    #   tableList
+
+    #   copy it to hgwbeta
+    scp -p nomLeu1.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < nomLeu1.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
 
 ############################################################################

@@ -200,6 +200,16 @@ ifdef LOWELAB
     endif
 endif
 
+#ENCODE COMMON VARIABLES
+CONFIG_FILES = \
+	fields.ra \
+	labs.ra
+CV = cv.ra
+CVDIR=${HOME}/kent/src/hg/makeDb/trackDb/cv/alpha
+PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
+CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
+ENCODEDCC_DIR = ${PIPELINE_PATH}/downloads/encodeDCC
+
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${LOWELAB_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
