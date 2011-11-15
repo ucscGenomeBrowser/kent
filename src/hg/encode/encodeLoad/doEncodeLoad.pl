@@ -48,7 +48,7 @@ sub usage
 usage: doEncodeLoad.pl pipeline-instance submission-dir
 
 The pipeline instance variable is a switch that changes the behavior of doEncodeLoad.
-The chagnes if the instance is:
+The changes if the instance is:
 
 standard
     allows use of hg19 and mm9 databases only

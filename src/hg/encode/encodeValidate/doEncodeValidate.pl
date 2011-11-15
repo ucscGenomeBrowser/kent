@@ -82,7 +82,7 @@ sub usage {
 usage: encodeValidate.pl pipeline-instance project-submission-dir
 
 The pipeline instance variable is a switch that changes the behavior of doEncodeValidate.
-The chagnes if the instance is:
+The changes if the instance is:
 
 standard
     allows use of hg19 and mm9 databases only

@@ -37,7 +37,7 @@ sub usage
 usage: doEncodeUnload.pl pipeline-instance project_submission_dir
 
 The pipeline instance variable is a switch that changes the behavior of doEncodeUnload.
-The chagnes if the instance is:
+The changes if the instance is:
 
 standard
     allows use of hg19 and mm9 databases only
