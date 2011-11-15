@@ -21,11 +21,13 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
+use FindBin qw($Bin);
+use lib "$Bin";
 use Encode;
+use HgAutomate;
+use HgDb;
 use RAFile;
 use SafePipe;
-use HgDb;
 
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad $opt_skipDownload/;
 
@@ -357,17 +359,19 @@ if(dirname($submitDir) =~ /_(.*)/) {
     $tableSuffix = "_" . basename($submitDir);;
 }
 
-chdir($submitDir);
+my $loadRaTest = "$submitDir/$loadRa";
+
 my $programDir = dirname($0);
 
-if(!(-e $loadRa)) {
+if(!(-e $loadRaTest)) {
     die "ERROR: load.ra not found ($PROG)\n";
 }
 
 if(!$opt_skipLoad) {
     # clean out any stuff from previous load
     # We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
-
+    my $localLoad = "$submitDir/$loadRa";
+    my $localUnload = "$submitDir/$unloadRa";
     my $unloader = "$programDir/doEncodeUnload.pl";
     if(!(-e $unloader)) {
         # let's us use this in cvs tree
@@ -388,11 +392,12 @@ if(!$opt_skipLoad) {
 
     #TODO change to : FileUtils.cp $loadRa, $unloadRa
     # XXXX shouldn't we do the cp AFTER we finish everything else successfully?
-    if(system("cp $loadRa $unloadRa")) {
-        die "Cannot: cp $loadRa $unloadRa\n";
+    if(system("cp $localLoad $localUnload")) {
+        die "Cannot: cp $localLoad $localUnload\n";
     }
 }
 
+chdir($submitDir);
 HgAutomate::verbose(1, "Loading project in directory $submitDir\n");
 
 # Load files listed in load.ra

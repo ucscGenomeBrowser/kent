@@ -19,11 +19,13 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
+use FindBin qw($Bin);
+use lib "$Bin";
 use Encode;
-use RAFile;
-use HgDb;
 use HgAutomate;
+use HgDb;
+use RAFile;
+
 
 use vars qw/$opt_verbose $opt_configDir/;
 my $PROG = basename $0;
