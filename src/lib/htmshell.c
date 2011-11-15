@@ -149,6 +149,33 @@ while(*from!='\0')
 return scrubbed;
 }
 
+char *htmlTextReplaceTagsWithChar(char *s, char ch)
+/* Returns a cloned string with all html tags replaced with given char (useful for tokenizing) */
+{
+if (s == NULL)
+    return NULL;
+char *scrubbed = needMem(strlen(s) + 1);
+char *from=s;
+char *to=scrubbed;
+while(*from!='\0')
+    {
+    if (*from == '<')
+        {
+        from++;
+        *to++ = ch;
+        while (*from!='\0' && *from != '>')
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from++;
+        }
+    else
+        *to++ = *from++;
+    }
+*to = '\0';
+return scrubbed;
+}
+
 char *htmlEncodeText(char *s,boolean tagsOkay)
 /* Returns a cloned string with quotes replaced by html codes.
    Changes ',",\n and if not tagsOkay >,<,& to code equivalents.
