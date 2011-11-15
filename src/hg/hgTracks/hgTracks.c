@@ -184,7 +184,9 @@ int tgCmpPriority(const void *va, const void *vb)
 {
 const struct track *a = *((struct track **)va);
 const struct track *b = *((struct track **)vb);
-float dif = a->group->priority - b->group->priority;
+float dif = 0;
+if (a->group && b->group)
+    dif = a->group->priority - b->group->priority;
 
 if (dif == 0)
     dif = a->priority - b->priority;
