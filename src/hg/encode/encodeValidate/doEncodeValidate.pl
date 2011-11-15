@@ -33,7 +33,8 @@ use Cwd;
 use IO::File;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
+use FindBin qw($Bin);
+use lib "$Bin";
 use Encode;
 use HgAutomate;
 use HgDb;
