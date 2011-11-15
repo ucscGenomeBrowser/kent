@@ -79,9 +79,7 @@ our $assembly;
 
 sub usage {
     print STDERR <<END;
-usage: encodeValidate.pl submission-type project-submission-dir
-
-submission-type is currently ignored.
+usage: encodeValidate.pl pipeline-instance project-submission-dir
 
 Current dafVersion is: $Encode::dafVersion
 
@@ -1459,7 +1457,7 @@ if($opt_metaDataOnly) {
 usage() if (scalar(@ARGV) < 2);
 
 # Get command-line args
-my $submitType = $ARGV[0];     # currently not used
+my $pipelineInstance = $ARGV[0];     # currently not used
 my $submitDir = $ARGV[1];
 
 $ENV{TMPDIR} = $Encode::tempDir;
@@ -1531,15 +1529,15 @@ $fields = Encode::getFields($configPath);
 
 if($opt_validateDaf) {
     if(-f $submitDir) {
-        Encode::parseDaf($submitDir, $grants, $fields, $submitType);
+        Encode::parseDaf($submitDir, $grants, $fields, $pipelineInstance);
     } else {
-        Encode::getDaf($submitDir, $grants, $fields, $submitType);
+        Encode::getDaf($submitDir, $grants, $fields, $pipelineInstance);
     }
     print STDERR "DAF is valid\n";
     exit(0);
 }
 
-$daf = Encode::getDaf($submitDir, $grants, $fields, $submitType);
+$daf = Encode::getDaf($submitDir, $grants, $fields, $pipelineInstance);
 $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
