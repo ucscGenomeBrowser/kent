@@ -257,8 +257,6 @@ identifier UniProtAccession external=UniProt
      $kgDb2.kgXref.spID minCheck=0.9
      $kgDb3.kgSpAlias.spID minCheck=0.50 exclude=
      $kgDb3.kgXref.spID minCheck=0.50 exclude=
-     $gbd,!hg19.pepMwAa.accession minCheck=0.9
-     $gbd,!hg19.pepPi.accession minCheck=0.9
      $ce.sangerCanonical.protein minCheck=0.8
      $ce.sangerGene.proteinID minCheck=0.8
      $ce.sangerLinks.protName minCheck=0.8
@@ -3171,7 +3169,6 @@ dependency $pbDb,!hg17.pepExonCntDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepHydroDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepIPCntDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepMolWtDist $pbDb.knownGenePep
-dependency $pbDb,!hg17.pepPi $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepPiDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepResDist $pbDb.knownGenePep
 dependency $pbDb.pepMwAaDist $pbDb.knownGenePep
