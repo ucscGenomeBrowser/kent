@@ -34,7 +34,16 @@ my $PROG = basename $0;
 sub usage
 {
     print STDERR <<END;
-usage: doEncodeUnload.plpipeline-instance project_submission_dir
+usage: doEncodeUnload.pl pipeline-instance project_submission_dir
+
+The pipeline instance variable is a switch that changes the behavior of doEncodeUnload.
+The chagnes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
 
 	project_submission_dir needs a full path
 	OPTIONS:

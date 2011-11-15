@@ -81,6 +81,15 @@ sub usage {
     print STDERR <<END;
 usage: encodeValidate.pl pipeline-instance project-submission-dir
 
+The pipeline instance variable is a switch that changes the behavior of doEncodeValidate.
+The chagnes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
+
 Current dafVersion is: $Encode::dafVersion
 
 Creates the following output files: $Encode::loadFile, $Encode::trackFile 
@@ -1942,8 +1951,6 @@ if(!$opt_skipOutput && !$compositeExists) {
 
 my $priority = $db->quickQuery("select max(priority) from trackDb where settings like '%subTrack $compositeTrack%'") || 0;
 $ddfLineNumber = 1;
-
-# use pi.ra file to map pi/lab/institution/grant/project for metadata line
 
 my $subId = 0;
 foreach my $ddfLine (@ddfLines) {
