@@ -257,8 +257,6 @@ identifier UniProtAccession external=UniProt
      $kgDb2.kgXref.spID minCheck=0.9
      $kgDb3.kgSpAlias.spID minCheck=0.50 exclude=
      $kgDb3.kgXref.spID minCheck=0.50 exclude=
-     $gbd,!hg19.pepMwAa.accession minCheck=0.9
-     $gbd,!hg19.pepPi.accession minCheck=0.9
      $ce.sangerCanonical.protein minCheck=0.8
      $ce.sangerGene.proteinID minCheck=0.8
      $ce.sangerLinks.protName minCheck=0.8
@@ -2206,14 +2204,14 @@ identifier ensemblProteinId3 external=Ensembl
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $ensGeneDb.ensGene.name chopAfter=.
+    $ensGeneDb,!felCat3.ensGene.name chopAfter=.
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
-    $ensGeneDb.ensGtp.transcript chopAfter=. minCheck=0.94
-    $ensGeneDb.ensPep.name chopAfter=. minCheck=0.93
+    $ensGeneDb,!felCat3.ensGtp.transcript chopAfter=. minCheck=0.94
+    $ensGeneDb,!felCat3.ensPep.name chopAfter=. minCheck=0.93
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
-    $ensGeneDb.ensemblToGeneName.name minCheck=0.97
-    $ensGeneDb.ensemblSource.name minCheck=0.97
+    $ensGeneDb,!felCat3.ensemblToGeneName.name minCheck=0.97
+    $ensGeneDb,!felCat3.ensemblSource.name minCheck=0.97
     $kgDb.knownToEnsembl.value chopAfter=.
     $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query
@@ -3171,7 +3169,6 @@ dependency $pbDb,!hg17.pepExonCntDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepHydroDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepIPCntDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepMolWtDist $pbDb.knownGenePep
-dependency $pbDb,!hg17.pepPi $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepPiDist $pbDb.knownGenePep
 dependency $pbDb,!hg17.pepResDist $pbDb.knownGenePep
 dependency $pbDb.pepMwAaDist $pbDb.knownGenePep
