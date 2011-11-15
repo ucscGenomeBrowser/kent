@@ -24,6 +24,7 @@
 #include "bedDetail.h"
 #include "pgSnp.h"
 #include "hubConnect.h"
+#include "errCatch.h"
 
 static char const rcsid[] = "$Id: schema.c,v 1.66 2010/06/07 16:53:10 angie Exp $";
 
@@ -685,11 +686,10 @@ void doSchema(struct sqlConnection *conn)
 {
 if (curTrackDescribesCurTable())
     {
-    struct trackDb *track = curTrack;
-    if (!hashFindVal(fullTrackAndSubtrackHash, track->table))
-        hashAdd(fullTrackAndSubtrackHash, track->table, track);
     char *table = connectingTableForTrack(curTable);
-    htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
+    if (!isCustomTrack(table) && !hashFindVal(fullTrackAndSubtrackHash, table))
+        hashAdd(fullTrackAndSubtrackHash, table, curTrack);
+    htmlOpen("Schema for %s - %s", curTrack->shortLabel, curTrack->longLabel);
     showSchema(database, curTrack, table);
     htmlClose();
     }
@@ -708,8 +708,42 @@ if (isCustomTrack(table))  // Why isn't custom track in fullTrackAndSubtrackHash
     tdb = ct->tdb;
     }
 else
-    tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
-return asForTdb(conn,tdb);
+    tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+if (tdb != NULL)
+    return asForTdb(conn,tdb);
+
+// Some cases are for tables with no tdb!
+struct asObject *asObj = NULL;
+if (sqlTableExists(conn, "tableDescriptions"))
+    {
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        char query[256];
+
+        safef(query, sizeof(query),
+            "select autoSqlDef from tableDescriptions where tableName='%s'",
+            table);
+        char *asText = asText = sqlQuickString(conn, query);
+
+        // If no result try split table. (not likely)
+        if (asText == NULL)
+            {
+            safef(query, sizeof(query),
+                "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",
+                table);
+            asText = sqlQuickString(conn, query);
+            }
+        if (asText != NULL && asText[0] != 0)
+            {
+            asObj = asParseText(asText);
+            }
+        freez(&asText);
+        }
+    errCatchEnd(errCatch);
+    errCatchFree(&errCatch);
+    }
+return asObj;
 }
 
 struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as)
