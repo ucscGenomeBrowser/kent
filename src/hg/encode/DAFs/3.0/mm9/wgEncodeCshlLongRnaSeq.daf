@@ -4,7 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the related .ddf should look like this:
-# files view    cell	age	sex	strain	 rnaExtract		replicate	readType      labProtocolId   labExpId        bioRep	seqPlatform labVersion
+# files view    cell	age	sex	strain	 rnaExtract		replicate	readType	localization      labProtocolId   labExpId        bioRep	seqPlatform labVersion
 #
 #files          a list of files that will be concatenated together
 #view           the view of the data as described below
@@ -15,6 +15,7 @@
 #rnaExtract     the features of rnaExtract (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
 #replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
 #readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
+#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
 #labProtocolId  Transcriptome specific lab protocol ID, can be comma separated list for pooled
 #bioRep         Transcriptome specific bioRep ID, can be comma separated list for pooled
 #labExpId       optional lab internal identifiers, can be comma sepated list for pooled
