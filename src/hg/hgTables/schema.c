@@ -686,6 +686,8 @@ void doSchema(struct sqlConnection *conn)
 if (curTrackDescribesCurTable())
     {
     struct trackDb *track = curTrack;
+    if (!hashFindVal(fullTrackAndSubtrackHash, track->table))
+        hashAdd(fullTrackAndSubtrackHash, track->table, track);
     char *table = connectingTableForTrack(curTable);
     htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
     showSchema(database, curTrack, table);
