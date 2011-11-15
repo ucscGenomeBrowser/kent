@@ -12,8 +12,8 @@ use HgDb;
 unless (scalar(@ARGV) == 2) {
 	
 	print STDERR<<END;
-usage: qaSqlRelease.pl <release.sql> <sponsor>
-example: qaSqlRelease.pl release.sql wong
+usage: encodeQaSqlRelease <release.sql> <sponsor>
+example: encodeQaSqlRelease release.sql wong
 
 END
 

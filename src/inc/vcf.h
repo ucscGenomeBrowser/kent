@@ -9,6 +9,7 @@
 
 #include "hash.h"
 #include "linefile.h"
+#include "asParse.h"
 
 enum vcfInfoType
 /* VCF header defines INFO column components; each component has one of these types: */
@@ -100,7 +101,7 @@ struct vcfFile
     struct vcfRecord *records;	// VCF data rows, sorted by position
     struct hash *byName;		// Hash records by name -- not populated until needed.
     struct hash *pool;		// Used to allocate string values that tend to
-				// be repeated in the files.  hash's localMem is also 
+				// be repeated in the files.  hash's localMem is also
 				// use to allocated memory for all other objects.
     struct lineFile *lf;	// Used only during parsing
     int maxErr;			// Maximum number of errors before aborting
@@ -214,5 +215,8 @@ const struct vcfGenotype *vcfRecordFindGenotype(struct vcfRecord *record, char *
 struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
 /* Look up the type of genotype FORMAT component key, in the definitions from the header,
  * and failing that, from the keys reserved in the spec. */
+
+struct asObject *vcfAsObj();
+// Return asObject describing fields of VCF
 
 #endif // vcf_h

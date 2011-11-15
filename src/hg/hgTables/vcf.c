@@ -19,30 +19,12 @@
 
 #define VCFDATALINE_NUM_COLS 10
 
-char *vcfDataLineAutoSqlString =
-"table vcfDataLine"
-"\"The fields of a Variant Call Format data line\""
-"    ("
-"    string chrom;	\"An identifier from the reference genome\""
-"    uint pos;		\"The reference position, with the 1st base having position 1\""
-"    string id;		\"Semi-colon separated list of unique identifiers where available\""
-"    string ref;		\"Reference base(s)\""
-"    string alt;		\"Comma separated list of alternate non-reference alleles called on at least one of the samples\""
-"    string qual;	\"Phred-scaled quality score for the assertion made in ALT. i.e. give -10log_10 prob(call in ALT is wrong)\""
-"    string filter;	\"PASS if this position has passed all filters. Otherwise, a semicolon-separated list of codes for filters that fail\""
-"    string info;	\"Additional information encoded as a semicolon-separated series of short keys with optional comma-separated values\""
-"    string format;	\"If genotype columns are specified in header, a semicolon-separated list of of short keys starting with GT\""
-"    string genotypes;	\"If genotype columns are specified in header, a tab-separated set of genotype column values; each value is a colon-separated list of values corresponding to keys in the format column\""
-"    )";
-
 boolean isVcfTable(char *table)
 /* Return TRUE if table corresponds to a VCF file. */
 {
-if (isHubTrack(table))
-    {
-    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
-    return startsWithWord("vcfTabix", tdb->type);
-    }
+struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
+if (tdb)
+    return tdbIsVcf(tdb);
 else
     return trackIsType(database, table, curTrack, "vcfTabix", ctLookupName);
 }
@@ -55,12 +37,6 @@ char *fileName = bigFileNameFromCtOrHub(table, conn);
 if (fileName == NULL)
     fileName = bamFileNameFromTable(conn, table, seqName);
 return fileName;
-}
-
-struct asObject *vcfAsObj()
-/* Return asObject describing fields of VCF */
-{
-return asParseText(vcfDataLineAutoSqlString);
 }
 
 struct hTableInfo *vcfToHti(char *table)

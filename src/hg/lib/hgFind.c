@@ -2424,10 +2424,14 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
 		fprintf(f, "%s&", extraCgi);
+		fprintf(f, "%s=%s&", trackName, vis);
+		// this is magic to tell the browser to make the 
+		// composite and this subTrack visible
 		if (parent)
-		    fprintf(f, "%s=%s&", parent, vis);
-		else
-		    fprintf(f, "%s=%s&", trackName, vis);
+		    {
+		    fprintf(f, "%s_sel=1&", trackName);
+		    fprintf(f, "%s_sel=1&", parent);
+		    }
 		fprintf(f, "hgFind.matches=%s,\">", encMatches);
 		htmTextOut(f, pos->name);
 		fprintf(f, " at %s</A>", range);

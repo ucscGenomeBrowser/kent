@@ -4022,7 +4022,7 @@ struct trackDb *tdb = hMaybeTrackInfo(conn, subtrackName);
 char *ret = NULL;
 if (tdb != NULL)
     {
-    ret = trackDbLocalSetting(tdb, "parent");
+    ret = firstWordInLine( trackDbLocalSetting(tdb, "parent"));
     trackDbFree(&tdb);
     }
 hFreeConn(&conn);
