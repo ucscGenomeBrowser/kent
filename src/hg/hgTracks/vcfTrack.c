@@ -685,9 +685,10 @@ if (ht->left != NULL && ht->right != NULL)
 	int yStart = min(yStartLeft, yStartRight);
 	int yEnd = max(yEndLeft, yEndRight);
 	midY = (yStart + yEnd) / 2;
-	hvGfxLine(hvg, x+branchW-1, yStart, x+branchW-1, yEnd-1, MG_BLACK);
-	hvGfxLine(hvg, x+branchW, yStart, labelEnd, yStart, MG_BLACK);
-	hvGfxLine(hvg, x+branchW, yEnd-1, labelEnd, yEnd-1, MG_BLACK);
+	Color col = (ht->childDistance == 0) ? purple : MG_BLACK;
+	hvGfxLine(hvg, x+branchW-1, yStart, x+branchW-1, yEnd-1, col);
+	hvGfxLine(hvg, x+branchW, yStart, labelEnd, yStart, col);
+	hvGfxLine(hvg, x+branchW, yEnd-1, labelEnd, yEnd-1, col);
 	}
     else
 	{
@@ -708,7 +709,7 @@ else if (ht->right != NULL)
 // Leaf node -- return pixel height. Draw a line if yType is midpoint.
 int y = yFromNode(ht->itemOrCluster, extraData, yType);
 if (yType == yrtMidPoint && x < labelEnd)
-    hvGfxLine(hvg, x, y, labelEnd, y, MG_BLACK);
+    hvGfxLine(hvg, x, y, labelEnd, y, purple);
 return y;
 }
 
