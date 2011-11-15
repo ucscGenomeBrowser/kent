@@ -7,6 +7,7 @@ include wgEncodeGencodeV3.ra alpha
 include wgEncodeGencodeV4.ra
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
+include wgEncodeGencodeV9.ra alpha
 
 # UNC/BSU Proteogenomics (wrangler: cline,cricket)
 include wgEncodeUncBsuProt.ra
@@ -27,6 +28,7 @@ include wgEncodeSydhNsome.ra
 
 # GIS RNA PET (wrangler: cricket)
 include wgEncodeGisRnaPet.ra 
+#include wgEncodeGisRnaPet.release2.ra alpha
 
 # GIS DNA PET (wrangler: cricket)
 include wgEncodeGisDnaPet.ra
@@ -149,8 +151,8 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.new.ra alpha
-include wgEncodeUwHistone.ra beta,public
+include wgEncodeUwHistone.new.ra alpha,beta
+include wgEncodeUwHistone.ra public
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra 
@@ -167,7 +169,7 @@ include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
 include wgEncodeHaibTfbs.ra beta,public
-include wgEncodeHaibTfbs.new.ra alpha
+include wgEncodeHaibTfbs.release2.ra alpha
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
 include wgEncodeSydhTfbs.new.ra alpha

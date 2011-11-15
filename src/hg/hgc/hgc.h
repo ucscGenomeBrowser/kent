@@ -10,7 +10,7 @@
 
 #ifndef TRACKDB_H
 #include "trackDb.h"
-#endif 
+#endif
 
 #ifndef BED_H
 #include "bed.h"
@@ -18,7 +18,7 @@
 
 #ifndef HDB_H
 #include "hdb.h"
-#endif 
+#endif
 
 #ifndef HPRINT_H
 #include "hPrint.h"
@@ -64,17 +64,17 @@ char *hgcPathAndSettings();
 /* Return path with this CGI script and session state variable. */
 
 void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom);
-/* Generate an anchor that calls click processing program with item 
+/* Generate an anchor that calls click processing program with item
  * and other parameters. */
 
-void hgcAnchorWindow(char *group, char *item, int thisWinStart, 
+void hgcAnchorWindow(char *group, char *item, int thisWinStart,
         int thisWinEnd, char *other, char *chrom);
 /* Generate an anchor that calls click processing program with item
  * and other parameters, INCLUDING the ability to specify left and
  * right window positions different from the current window*/
 
 void hgcAnchor(char *group, char *item, char *other);
-/* Generate an anchor that calls click processing program with item 
+/* Generate an anchor that calls click processing program with item
  * and other parameters. */
 
 struct trackDb *tdbForTableArg();
@@ -88,15 +88,15 @@ struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
 
 void printAlignmentsSimple(struct psl *pslList, int startFirst, char *hgcCommand,
                            char *typeName, char *itemIn);
-/* Print list of mRNA alignments, don't add extra textual link when 
+/* Print list of mRNA alignments, don't add extra textual link when
  * doesn't honor hgcCommand. */
 
-void printAlignments(struct psl *pslList, 
+void printAlignments(struct psl *pslList,
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
 /* Print list of mRNA alignments. */
 
-void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
-		       enum gfType qType, int qStart, int qEnd, 
+void showSomeAlignment(struct psl *psl, bioSeq *oSeq,
+		       enum gfType qType, int qStart, int qEnd,
 		       char *qName, int cdsS, int cdsE);
 /* Display protein or DNA alignment in a frame. */
 
@@ -128,13 +128,13 @@ void bedPrintPos(struct bed *bed, int bedSize, struct trackDb *tdb);
  * standard format. */
 
 void savePosInTextBox(char *chrom, int start, int end);
-/* Save basic position/database info in text box and hidden var. 
+/* Save basic position/database info in text box and hidden var.
    Positions becomes chrom:start-end*/
 
 void genericHeader(struct trackDb *tdb, char *item);
 /* Put up generic track info. */
 
-void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize);
 /* Handle click in generic BED track. */
 
@@ -157,18 +157,18 @@ void printBacStsXRef(char *clone);
 /* tracks details pages. */
 
 /* ----Routines in other modules in the same directory---- */
-void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start);
 /* Display details for WIGGLE tracks. */
 
-void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericBigWigClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start);
 /* Display details for BigWig  tracks. */
 
 void bigWigCustomClick(struct trackDb *tdb);
 /* Display details for BigWig custom tracks. */
 
-void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize);
 
 void doT2gDetails(struct trackDb *tdb, char *item);
@@ -179,15 +179,15 @@ void doT2gDetails(struct trackDb *tdb, char *item);
 void bigBedCustomClick(struct trackDb *tdb);
 /* Display details for BigWig custom tracks. */
 
-void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericMafClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start);
 /* Display details for MAF tracks. */
 
-void genericAxtClick(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericAxtClick(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start, char *otherDb);
 /* Display details for AXT tracks. */
 
-void genericExpRatio(struct sqlConnection *conn, struct trackDb *tdb, 
+void genericExpRatio(struct sqlConnection *conn, struct trackDb *tdb,
 	char *item, int start);
 /* Display details for expRatio tracks. */
 
@@ -221,11 +221,11 @@ void doExpRatio(struct trackDb *tdb, char *item, struct customTrack *ct);
 
 void getMsBedExpDetails(struct trackDb *tdb, char *expName, boolean all);
 /* Create tab-delimited output to download */
- 
+
 void printPslFormat(struct sqlConnection *conn, struct trackDb *tdb, char *item, int start, char *subType);
 /*Handles click in Affy tracks and prints out alignment details with link*/
 /* to sequences if available in the database */
- 
+
 void doAffy(struct trackDb *tdb, char *item, char *itemForUrl);
 /* Display alignment information for Affy tracks */
 
@@ -254,8 +254,8 @@ void doTriangle(struct trackDb *tdb, char *item, char *motifTable);
 void doTransRegCode(struct trackDb *tdb, char *item, char *motifTable);
 /* Display detailed info on a transcriptional regulatory code item. */
 
-void doTransRegCodeProbe(struct trackDb *tdb, char *item, 
-	char *codeTable, char *motifTable, 
+void doTransRegCodeProbe(struct trackDb *tdb, char *item,
+	char *codeTable, char *motifTable,
 	char *tfToConditionTable, char *conditionTable);
 /* Display detailed info on a CHIP/CHIP probe from transRegCode experiments. */
 
@@ -316,12 +316,12 @@ void medlineLinkedLine(char *title, char *text, char *search);
  *     TITLE: value
  * with the value hyperlinked to medline. */
 
-void hgcAnchorPosition(char *group, char *item); 
-/* Generate an anchor that calls click processing program with item 
+void hgcAnchorPosition(char *group, char *item);
+/* Generate an anchor that calls click processing program with item
  * and group parameters. */
 
-void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb, 
-			 char *pepTable, char *pepClick, 
+void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
+			 char *pepTable, char *pepClick,
 			 char *mrnaClick, char *genomicClick, char *mrnaDescription);
 /* Show parts of gene common to everything. If pepTable is not null,
  * it's the old table name, but will check gbSeq first. */
@@ -374,7 +374,7 @@ void doDeleteVariomeItem(char *wikiItemId, char *chrom, int winStart, int winEnd
 void printWikiVariomeForm (struct bedDetail *item);
 /* print the wiki annotation form for the variome track */
 
-void customMafClick(struct sqlConnection *conn, 
+void customMafClick(struct sqlConnection *conn,
 	struct sqlConnection *conn2, struct trackDb *tdb);
 /* handle clicks on a custom maf */
 
@@ -433,6 +433,11 @@ void prGeneReviews(struct sqlConnection *conn, char *itemName);
 
 void prGRShortRefGene(char *itemName);
 /* print GeneReviews short label associated to this refGene item */
+
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
 
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 

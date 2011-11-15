@@ -864,6 +864,7 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
     #	Elapsed time: 2962m15s
+    #	real    2962m15.467s
 
     cat fb.gorGor3.chainMicMur1Link.txt
     #	646647849 bases of 2822760080 (22.908%) in intersection
@@ -888,7 +889,7 @@ TMPDIR=/scratch/tmp
     ln -s blastz.gorGor3.swap lastz.gorGor3
 
 ############################################################################
-# LASTZ Tarsier tarSyr1 (DONE - 2011-11-01,31 - Hiram)
+# LASTZ Tarsier tarSyr1 (DONE - 2011-11-01,06 - Hiram)
     mkdir /hive/data/genomes/gorGor3/bed/lastzTarSyr1.2011-11-01
     cd /hive/data/genomes/gorGor3/bed/lastzTarSyr1.2011-11-01
 
@@ -931,17 +932,10 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Tue Nov  1 10:03:59 PDT 2011
-    # after manually finishing the batch after hive filesystem outage
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-continue=cat -syntenicNet \
-	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-	> cat.log 2>&1 &
-    #	real    134m17.379s
-    cat fb.gorGor3.chainTarSyr1Link.txt  
-    #	339201275 bases of 2822760080 (12.017%) in intersection
+    #	real    5869m15.429s
+
+    cat fb.gorGor3.chainTarSyr1Link.txt 
+    #	549926460 bases of 2822760080 (19.482%) in intersection
 
     cd /hive/data/genomes/gorGor3/bed
     ln -s lastzTarSyr1.2011-11-01 lastz.tarSyr1
@@ -949,17 +943,258 @@ XXX - running - Tue Nov  1 10:03:59 PDT 2011
     #	running the swap
     mkdir /hive/data/genomes/tarSyr1/bed/blastz.gorGor3.swap
     cd /hive/data/genomes/tarSyr1/bed/blastz.gorGor3.swap
+    #	 swarm kluster off-line, hence bigHub=encodek, although it isn't
+    #	used for this
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/gorGor3/bed/lastzTarSyr1.2011-11-01/DEF \
 	-swap -syntenicNet \
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
-	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=encodek \
 	> swap.log 2>&1 &
-    #	real    60m56.773s
+    #	real    599m8.506s
     cat fb.tarSyr1.chainGorGor3Link.txt 
-    #	336379843 bases of 1969052059 (17.083%) in intersection
+    #	567036277 bases of 2768536343 (20.481%) in intersection
 
     cd /hive/data/genomes/tarSyr1/bed
     ln -s  blastz.tarSyr1.swap lastz.tarSyr1
 
 ############################################################################
+# Construct download files (DONE - 2011-11-14 - Hiram)
+    cd /hive/data/genomes/gorGor3
+    time makeDownloads.pl gorGor3 -workhorse=hgwdev > downloads.log 2>&1 &
+    #	real    24m7.903s
+    # you must edit the */README files in ./goldenPath/
+    # verify joinerCheck is good and gorGor3 is in all.joiner
+    joinerCheck -keys -database=gorGor3 \
+	$HOME/kent/src/hg/makeDb/schema/all.joiner
+
+############################################################################
+# after downloads, construct pushQ (DONE - 2011-11-14 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/pushQ
+    cd /hive/data/genomes/gorGor3/pushQ
+    time makePushQSql.pl gorGor3 > gorGor3.sql 2> stderr.log
+    # check stderr.log for anything not categorized
+
+    scp -p gorGor3.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < gorGor3.sql
+    # after loading, view the subQ in the WEB interface, go through each
+    #	item and verify it can measure the tables and files
+
+############################################################################
+## 11-Way Multiz (WORKING - 2011-11-09 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way
+    cd /hive/data/genomes/gorGor3/bed/multiz11way
+
+    # species list:
+    cd /hive/data/genomes/gorGor3/bed
+    ls -d lastz.* | sed -e "s/lastz.//" | sort | xargs echo
+# calJac3 hg19 micMur1 nomLeu1 otoGar1 panTro3 papHam1 ponAbe2 rheMac2 tarSyr1
+    # plus this one
+# gorGor3
+
+    #	All distances remain as specified in the 51way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but \
+calJac3,hg19,micMur1,nomLeu1,otoGar1,panTro3,papHam1,ponAbe2,rheMac2,tarSyr1,gorGor3 \
+	$HOME/kent/src/hg/utils/phyloTrees/51way.nh > 11way.nh
+    #	what that looks like:
+    cat 11way.nh
+# ((((((((hg19:0.006700,panTro3:0.006667):0.002250,gorGor3:0.008825):0.009680,
+# ponAbe2:0.018318):0.007000,nomLeu1:0.010000):0.007000,(rheMac2:0.007853,
+# papHam1:0.007637):0.029618):0.021965,calJac3:0.066131):0.057590,
+# tarSyr1:0.137823):0.011062,(micMur1:0.092749,otoGar1:0.129725):0.035463);
+
+
+    #	rearrange to get gorGor3 on top:
+    cat << '_EOF_' > gorGor3.11way.nh
+(((((((gorGor3:0.008825,(hg19:0.006700,panTro3:0.006667):0.002250):0.009680,
+ponAbe2:0.018318):0.007000,nomLeu1:0.010000):0.007000,(rheMac2:0.007853,
+papHam1:0.007637):0.029618):0.021965,calJac3:0.066131):0.057590,
+tarSyr1:0.137823):0.011062,(micMur1:0.092749,otoGar1:0.129725):0.035463);
+'_EOF_'
+    # << happy emacs
+
+XXX - working on this
+    # convert to species names
+    /cluster/bin/phast/tree_doctor --rename \
+"gorGor3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; melGal1->Turkey; galGal3->Chicken; anoCar2->Lizard; danRer7->Zebrafish" \
+gorGor3.11way.nh > gorGor3.commonNames.11way.nh
+
+# ((X_tropicalis:0.855573,(((Human:0.144018,
+# (Mouse:0.084509,Rat:0.091589):0.271974):0.278985,
+# Opossum:0.340786):0.181168,((Turkey:0.100000,
+# Chicken:0.165536):0.299223,Lizard:0.489241):0.105143):0.172371):0.311354,
+# Zebrafish:0.878701);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for src/hg/htdocs/images/phylo/gorGor3_11way.png
+
+    /cluster/bin/phast/all_dists gorGor3.11way.nh > 11way.distances.txt
+    #	Use this output to create the table below
+    grep -i gorGor3 11way.distances.txt | sort -k3,3n
+# gorGor3 melGal1 1.532310
+# gorGor3 monDom5 1.549898
+# gorGor3 galGal3 1.597846
+# gorGor3 anoCar2 1.622328
+# gorGor3 hg19    1.632115
+# gorGor3 mm9     1.844580
+# gorGor3 rn4     1.851660
+# gorGor3 danRer7 2.045628
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#                         featureBits chainLink measures
+#                                   chainAnoCar2Link         chain linearGap
+#    distance                    on gorGor3  on other     minScore
+#  1  1.532 - turkey melGal1     (%  4.20) (%  5.24)       5000     loose
+#  2  1.550 - opossum monDom5    (%  5.49) (%  2.14)       5000     loose
+#  3  1.598 - chicken galGal3    (%  4.73) (%  5.27)       5000     loose
+#  4  1.622 - lizard anoCar2     (%  6.78) (%  5.11)       5000     loose
+#  5  1.632 - human hg19         (%  6.69) (%  3.04)       5000     loose
+#  6  1.845 - mouse mm9          (%  6.61) (%  3.13)       5000     loose
+#  7  1.852 - rat rn4            (%  5.49) (%  2.57)       5000     loose
+#  8  2.046 - zebrafish danRer7  (%  7.11) (%  6.51)       5000     loose
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	gorGor3.11way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/mafSplit
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/mafSplit
+    for D in `sed -e "s/gorGor3 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/gorGor3.${D}.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../../lastz.${D}/mafNet/gorGor3.${D}.net.maf.gz
+    cd ..
+done
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 2048
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256 maf.list
+
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/splitRun
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = gorGor3
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/gorGor3/bed/multiz11way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+	if (! -s $out) then
+	    echo "##maf version=1 scoring=autoMZ" > $out
+	endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+	> /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/gorGor3/bed/multiz11way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh swarm
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/splitRun/run
+    # the tac reverses the list to get the small jobs first
+    gensub2 maf.list single template stdout | tac > jobList
+    para -ram=8g create jobsList
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:      14427s     240.45m     4.01h    0.17d  0.000 y
+# IO & Wait Time:                  1927s      32.12m     0.54h    0.02d  0.000 y
+# Average job time:                  64s       1.06m     0.02h    0.00d
+# Longest finished job:             280s       4.67m     0.08h    0.00d
+# Submission to last job:          1536s      25.60m     0.43h    0.02d
+
+    # assemble into a single maf file
+    cd /hive/data/genomes/gorGor3/bed/multiz11way
+    head -1 splitRun/maf/001.maf > multiz11way.maf
+    for F in splitRun/maf/*.maf
+do
+    egrep -v "^#" ${F}
+done >> multiz11way.maf
+    tail -1 splitRun/maf/001.maf >> multiz11way.maf
+
+# -rw-rw-r--  1 1524521286 Sep 28 13:28 multiz11way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3/bed/multiz11way
+    mkdir /gbdb/gorGor3/multiz11way
+    ln -s `pwd`/multiz11way.maf /gbdb/gorGor3/multiz11way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf gorGor3 multiz11way
+    #	Indexing and tabulating /gbdb/gorGor3/multiz11way/multiz11way.maf
+    #	Loaded 2591342 mafs in 1 files from /gbdb/gorGor3/multiz11way
+    #	real    1m4.383s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 gorGor3 multiz11waySummary \
+	/gbdb/gorGor3/multiz11way/multiz11way.maf
+    #	Created 516059 summary blocks from 5782695 components and 2591342 mafs
+    #	from /gbdb/gorGor3/multiz11way/multiz11way.maf
+    #	real    1m2.197s
+
+    wc -l multiz11way*.tab
+    #	2591342 multiz11way.tab
+    #	516059 multiz11waySummary.tab
+    #	3107401 total
+
+    rm multiz11way*.tab
+
+#######################################################################
