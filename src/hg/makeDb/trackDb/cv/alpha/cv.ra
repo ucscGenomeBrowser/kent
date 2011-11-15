@@ -2672,7 +2672,7 @@ vendorId Muscle needle biopsies
 sex U
 tissue muscle
 lab Crawford
-protocol Crawford(Missing):HSMMFSHD_Crawford_protocol.pdf
+protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -2719,7 +2719,7 @@ vendorId Muscle needle biopsies
 sex U
 tissue muscle
 lab Crawford
-protocol Crawford(Missing):HSMMtubeFSHD_Crawford_protocol.pdf
+protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -3519,7 +3519,7 @@ termId BTO:0002397
 termUrl missing
 sex M
 tier 3
-protocol Crawford(missing):RWPE_protocol.pdf
+protocol Crawford(missing):RWPE_Crawford_protocol.pdf
 
 term SAEC
 tag SAEC
@@ -5820,7 +5820,7 @@ lab Farnham
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(Western_blot,ChIP-seq):human_GATA3-SC-268_validation_Farnham.pdf
+validation GATA3_SC-268(Western_blot,ChIP-seq):human_GATA3_SC-268_validation_Farnham.pdf
 label  GATA3 (sc-268)
 
 term GATA3_(SC-269)
