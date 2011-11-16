@@ -9724,6 +9724,10 @@ if (url != NULL && url[0] != 0)
     	    printf(" %s ", title2);
 	    }
 	}
+    else
+        {
+	printf("<BR>");
+	}
     sqlFreeResult(&sr);
 
     // disable NCBI link until they work it out with OMIM
