@@ -52,7 +52,8 @@ include wgEncodeGisChiaPet.ra alpha
 include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
-include wgEncodeUw5C.ra 
+include wgEncodeUw5C.ra beta,public
+include wgEncodeUw5C.new.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
