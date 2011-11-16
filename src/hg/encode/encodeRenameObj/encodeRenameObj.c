@@ -970,6 +970,13 @@ if (strlen(newObj) > 64)
     logErrAbort("ERROR: new name %s is too long for mysql table name, length %ld exceeds 64 chars in length.", newObj, strlen(newObj));
     }
 
+// newObj should still begin with <composite>
+if (!startsWith(composite,newObj))
+    {
+    ++errorCount;
+    logErrAbort("ERROR: new name %s does not begin with %s", newObj, composite);
+    }
+
 // Does object exist in mdb
 struct mdbObj *mdbObj = (struct mdbObj *)hashFindVal(mdbHash, oldObj);
 if (!mdbObj)

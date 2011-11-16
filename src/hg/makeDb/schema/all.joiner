@@ -2204,14 +2204,14 @@ identifier ensemblProteinId3 external=Ensembl
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $ensGeneDb.ensGene.name chopAfter=.
+    $ensGeneDb,!felCat3.ensGene.name chopAfter=.
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
-    $ensGeneDb.ensGtp.transcript chopAfter=. minCheck=0.94
-    $ensGeneDb.ensPep.name chopAfter=. minCheck=0.93
+    $ensGeneDb,!felCat3.ensGtp.transcript chopAfter=. minCheck=0.94
+    $ensGeneDb,!felCat3.ensPep.name chopAfter=. minCheck=0.93
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $gbd.ensInfo.name minCheck=0.9
-    $ensGeneDb.ensemblToGeneName.name minCheck=0.97
-    $ensGeneDb.ensemblSource.name minCheck=0.97
+    $ensGeneDb,!felCat3.ensemblToGeneName.name minCheck=0.97
+    $ensGeneDb,!felCat3.ensemblSource.name minCheck=0.97
     $kgDb.knownToEnsembl.value chopAfter=.
     $kgDb.rgdGene2ToEnsembl.value chopAfter=.
     $danRer.ensZfishBlastTab.query

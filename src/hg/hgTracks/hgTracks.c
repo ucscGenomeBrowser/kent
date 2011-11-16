@@ -187,7 +187,6 @@ const struct track *b = *((struct track **)vb);
 float dif = 0;
 if (a->group && b->group)
     dif = a->group->priority - b->group->priority;
-
 if (dif == 0)
     dif = a->priority - b->priority;
 if (dif < 0)
@@ -3844,6 +3843,17 @@ const struct trackHub *b = *((struct trackHub **)vb);
 return strcmp(a->shortLabel, b->shortLabel);
 }
 
+static void rPropagateGroup(struct track *track, struct group *group)
+// group should spread to multiple levels of children.
+{
+struct track *subtrack = track->subtracks;
+for ( ;subtrack != NULL;subtrack = subtrack->next)
+    {
+    subtrack->group = group;
+    rPropagateGroup(subtrack, group);
+    }
+}
+
 static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
 	struct group **pGroupList, int vis)
 /* Make up groups and assign tracks to groups.
@@ -3989,6 +3999,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
 	group = unknown;
 	}
     track->group = group;
+    rPropagateGroup(track, group);
     }
 
 /* Sort tracks by combined group/track priority, and
