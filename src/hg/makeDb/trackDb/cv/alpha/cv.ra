@@ -3519,7 +3519,7 @@ termId BTO:0002397
 termUrl missing
 sex M
 tier 3
-protocol Crawford(missing):RWPE_Crawford_protocol.pdf
+protocol Crawford:RWPE_Crawford_protocol.pdf
 
 term SAEC
 tag SAEC

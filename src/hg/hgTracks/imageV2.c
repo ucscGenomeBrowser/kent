@@ -1618,24 +1618,31 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' class='area'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
-    if(map->linkRoot != NULL)
+
+    if (sameString(TITLE_BUT_NO_LINK,item->linkVar))
+        { // map items could be for mouse-over titles only
+        hPrintf(" class='area %s'",TITLE_BUT_NO_LINK);
+        }
+    else if(map->linkRoot != NULL)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s%s",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
         else
             hPrintf(" HREF='%s%s'",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
+        hPrintf(" class='area'");
         }
     else if(item->linkVar != NULL)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s",item->linkVar);
-	else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
-                 hPrintf(" HREF='..%s'",item->linkVar);
+        else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
+                 hPrintf(" HREF='..%s'",item->linkVar);       // FIXME: Chin should get rid of this special case!
              else
                  hPrintf(" HREF='%s'",item->linkVar);
+        hPrintf(" class='area'");
         }
     else
         warn("map item has no url!");
@@ -1761,7 +1768,11 @@ if(map)
     useMap = imageMapDraw(map,name);
 else if(slice->link != NULL)
     {
-    if(skipToSpaces(slice->link) != NULL)
+    if (sameString(TITLE_BUT_NO_LINK,slice->link))
+        { // This fake link ensures a mouse-over title is seen but not heard
+        hPrintf("<A class='%s'",TITLE_BUT_NO_LINK);
+        }
+    else if(skipToSpaces(slice->link) != NULL)
         hPrintf("  <A HREF=%s",slice->link);
     else
         hPrintf("  <A HREF='%s'",slice->link);

@@ -2111,7 +2111,7 @@ var findTracks = {
         return false;  // Pressing button does nothing more
     },
 
-    checkAll: function (check)
+    checkAllWithWait: function (check)
     {
         waitOnFunction( findTracks._checkAll, check);
     },

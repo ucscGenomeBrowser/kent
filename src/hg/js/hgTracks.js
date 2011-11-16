@@ -367,6 +367,10 @@ var posting = {
         }
         if(obj == undefined || obj.href == undefined) // called directly with obj
             obj = this;                               // and from callback without obj
+
+        if ($(obj).hasClass('noLink'))  // TITLE_BUT_NO_LINK
+            return false;
+
         if (obj.href.match('#') || obj.target.length > 0) {
             //alert("Matched # ["+obj.href+"] or has target:"+obj.target);
             return true;
@@ -3038,7 +3042,7 @@ $(document).ready(function()
             return true;
         });
     }
-    
+
     if($("#positionInput").length) {
         $("#positionInput").change(function(event) {
             if(!suggestBox.lastEntered || suggestBox.lastEntered != $('#positionInput').val()) {
@@ -3046,7 +3050,7 @@ $(document).ready(function()
             }
         });
     }
-    
+
     if(imageV2.enabled) {
 
         // Make imgTbl allow drag reorder of imgTrack rows
