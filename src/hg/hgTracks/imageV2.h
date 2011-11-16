@@ -128,6 +128,9 @@ struct mapSet // IMAGEv2: full map for image OR partial map for slice
     struct mapItem *items;    // list of items
     };
 
+// To create map items which have mouse-over titles but no link, fill link with:
+#define TITLE_BUT_NO_LINK "noLink"
+
 struct mapSet *mapSetStart(char *name,struct image *img,char *linkRoot);
 /* Starts a map (aka mapSet) which is the seet of links and image locations used in HTML.
    Complete a map by adding items with mapItemAdd() */
