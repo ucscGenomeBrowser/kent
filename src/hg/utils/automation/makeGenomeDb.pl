@@ -1067,43 +1067,6 @@ html gap
 
 _EOF_
   ;
-  if (! $chromBased) {
-    print $fh <<_EOF_
-# Unsplit mRNA track for scaffold-based assembly.
-track all_mrna
-shortLabel \$Organism mRNAs
-longLabel \$Organism mRNAs from GenBank
-group rna
-priority 54
-visibility pack
-spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
-# Unsplit EST track for scaffold-based assembly.
-track all_est
-shortLabel \$Organism ESTs
-longLabel \$Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-maxItems 300
-
-_EOF_
-    ;
-  }
   close($fh);
 
   $fh = &HgAutomate::mustOpen(">$topDir/html/gap.html");
