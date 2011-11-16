@@ -168,12 +168,12 @@ var ddcl = {
             var multiSelect = this;
             if (!force) { // condition on bad dimensions
                 var id = $(multiSelect).attr('id');
-                control = $('#ddcl-' + id);
-                if (control != null && control != undefined) {
-                    var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
-                    if ($(controlSelector).width() > 20)
-                        return;  // Dimensions look okay
-                }
+                control = normed($('#ddcl-' + id));
+                if (control == undefined)
+                    return;                            // This is being called before normal init
+                var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
+                if ($(controlSelector).width() > 20)
+                    return;  // Dimensions look okay
             }
             $(multiSelect).dropdownchecklist("destroy");
             $(multiSelect).show(); // necessary to get dimensions

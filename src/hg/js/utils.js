@@ -2131,10 +2131,11 @@ var findTracks = {
 
     counts: function ()
     {// Displays visible and checked track count
-        var counter = $('.selCbCount');
+        var counter = normed($('.selCbCount'));
         if(counter != undefined) {
             var selCbs =  $("input.selCb");
-            $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+            if (selCbs != undefined && selCbs.length > 0)
+                $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
         }
     },
 
