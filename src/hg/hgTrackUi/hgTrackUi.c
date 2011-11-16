@@ -2780,6 +2780,14 @@ if (!tdbIsDownloadsOnly(tdb))
         {
         printf("&nbsp;");
         cgiMakeButton("Submit", "Submit");
+    #ifdef SUBTRACK_CFG
+        // Offer cancel button always?     // composites and multiTracks (not standAlones or supers)
+        if (tdbIsContainer(tdb))
+            {
+            printf("&nbsp;");
+            cgiMakeOnClickButton("window.history.back();","Cancel");
+            }
+    #endif///def SUBTRACK_CFG
 
         if(tdbIsComposite(tdb))
             printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
