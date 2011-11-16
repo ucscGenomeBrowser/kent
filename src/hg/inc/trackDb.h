@@ -254,6 +254,7 @@ INLINE boolean tdbIsSoloTrack(struct trackDb *tdb)
 return tdb && SOLO_NODE(tdb->treeNodeType);
 }
 #define tdbIsStandAlone(tdb) tdbIsSoloTrack(tdb)
+#define tdbIsDataTrack(tdb) (tdbIsSoloTrack(tdb) || tdbIsSubtrack(tdb))
 
 // TrackUi Top level means composite, multitrack or solo
 // These are not folders, views or subtracks.
