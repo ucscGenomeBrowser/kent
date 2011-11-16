@@ -30,6 +30,8 @@
 #include "hui.h"
 #include "imageV2.h"
 #include "bigBed.h"
+#include "htmshell.h"
+#include "kxTok.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -12133,6 +12135,107 @@ track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
 }
 
+static void tokenizeAndAddToHash(struct hash *hash, char *str)
+{
+// Pull all words out of a string and add them to an existence hash.
+char *s;
+str = htmlTextReplaceTagsWithChar(str, ' ');
+
+// strip out chars that crash kxTokenize
+for(s = str; *s; s++)
+    {
+    if(*s < 32 || !isalnum(*s))
+        *s = ' ';
+    }
+
+struct kxTok *kx = kxTokenize(str, FALSE);
+for( ; kx != NULL; kx = kx->next)
+    {
+    char *str = kx->string;
+    toLowerN(str, strlen(str));
+    hashAddInt(hash, str, 1);
+    }
+}
+
+static void t2gLoadItems(struct track *tg)
+/* apply filter to t2g items */
+{
+loadGappedBed(tg);
+struct linkedFeatures *lf, *next, *newList = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+
+char *articleTable = trackDbSetting(tg->tdb, "articleTable");
+char *keyWords = cartOptionalString(cart, "t2gKeywords");
+if(articleTable != NULL && isNotEmpty(keyWords))
+    {
+    for( lf = tg->items; lf != NULL; lf = next)
+        {
+        char query[512];
+        struct sqlResult *sr;
+        char **row;
+        next = lf->next;
+        lf->next = NULL;
+
+        safef(query, sizeof(query), "select authors, title, citation, abstract from %s where displayId = '%s'", articleTable, lf->name);
+        sr = sqlGetResult(conn, query);
+        if ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct hash *hash = newHash(0);
+            boolean pass = TRUE;
+            struct kxTok *kx;
+
+            tokenizeAndAddToHash(hash, row[0]);
+            tokenizeAndAddToHash(hash, row[1]);
+            tokenizeAndAddToHash(hash, row[2]);
+            tokenizeAndAddToHash(hash, row[3]);
+
+            // we pass articles where keywords is a subset of words in article metadata.
+            kx = kxTokenize(keyWords, FALSE);
+            for( ; pass && kx != NULL; kx = kx->next)
+                {
+                toLowerN(kx->string, strlen(kx->string));
+                pass = hashLookup(hash, kx->string) != NULL;
+                }
+            if(pass)
+                slAddTail(&newList, lf);
+            }
+        else
+            errAbort("Couldn't find article with displayId: '%s'", lf->name);
+        sqlFreeResult(&sr);
+        }
+    tg->items = newList;
+    }
+hFreeConn(&conn);
+}
+
+static void t2gMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height)
+{
+if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
+    {
+    char query[1024], title[4096];
+    char *label = NULL;
+    char *articleTable = trackDbSetting(tg->tdb, "articleTable");
+    if(!isEmpty(articleTable))
+        {
+        struct sqlConnection *conn = hAllocConn(database);
+        safef(query, sizeof(query), "select title from %s where displayId = '%s'", articleTable, mapItemName);
+        label = sqlQuickQuery(conn, query, title, sizeof(title));
+        hFreeConn(&conn);
+        }
+    if(isEmpty(label))
+        label = mapItemName;
+    mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, label);
+    }
+}
+
+static void t2gMethods(struct track *tg)
+{
+tg->loadItems = t2gLoadItems;
+tg->mapItem = t2gMapItem;
+}
+
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
@@ -12154,6 +12257,8 @@ if (sameWord(type, "bed"))
        settings. */
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
+    if (startsWith("t2g", track->table))
+        t2gMethods(track);
     }
 /*
 else if (sameWord(type, "bedLogR"))
