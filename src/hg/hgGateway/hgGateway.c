@@ -56,15 +56,8 @@ if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
 jsIncludeFile("jquery.js", NULL);
-#ifdef NEW_JQUERY
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
-printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
-#else///ifndef NEW_JQUERY
-webIncludeResourceFile("autocomplete.css");
-jsIncludeFile("jquery.autocomplete.js", NULL);
-printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
-#endif///ndef NEW_JQUERY
 jsIncludeFile("ajax.js", NULL);
 jsIncludeFile("autocomplete.js", NULL);
 jsIncludeFile("hgGateway.js", NULL);
@@ -221,10 +214,6 @@ puts("</CENTER>\n"
 "</td></tr></table>\n"
 );
 puts("</CENTER>");
-#ifdef NEW_JQUERY
-hPrintf("<input type='hidden' id='hgt.newJQuery' name='hgt.newJQuery' value='1'>\n");
-#endif
-
 
 if(!cartVarExists(cart, "pix"))
     // put a hidden input for pix on page so default value can be filled in on the client side

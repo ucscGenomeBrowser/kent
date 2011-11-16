@@ -4689,7 +4689,6 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 jsonHashAddNumber(jsonForClient, "insideX", insideX);
 jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
-hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
