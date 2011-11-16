@@ -2249,11 +2249,6 @@ foreach my $ddfLine (@ddfLines) {
         }
     }
 
-    if ($submitDir =~ m/^\.\/?/) {
-        my $pwd = `pwd`;
-        chomp $pwd;
-        $submitDir = `pwd`;
-    }
     unless ($pipelineInstance eq "beta" or $pipelineInstance eq "standard") {
         $tableName = $tableName . "_$pipelineInstance" . "_" . basename($submitDir);
     }
