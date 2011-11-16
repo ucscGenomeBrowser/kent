@@ -36,7 +36,7 @@ my $unloadRa = "out/$Encode::unloadFile";
 my $trackDb = "out/trackDb.ra";
 my $submitDir = "";
 my $submitPath;			# full path of data submission directory
-my $submitType = "";		# currently ignored
+my $pipelineInstance = "";		# currently ignored
 my $tempDir = "/data/tmp";
 my $encInstance = "";
 
@@ -45,9 +45,16 @@ my $PROG = basename $0;
 sub usage
 {
     die <<END
-usage: doEncodeLoad.pl submission-type submission-dir
+usage: doEncodeLoad.pl pipeline-instance submission-dir
 
-submission-type is currently ignored.
+The pipeline instance variable is a switch that changes the behavior of doEncodeLoad.
+The changes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
 
 Requires file called: submission-dir/$loadRa
 
@@ -313,7 +320,7 @@ if($opt_outDir) {
 if(@ARGV != 2) {
     usage();
 }
-$submitType = $ARGV[0];	# currently not used
+$pipelineInstance = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
 if ($submitDir =~ /^\//) {
     $submitPath = $submitDir;
@@ -335,7 +342,7 @@ HgAutomate::verbose(1, "Using config path $configPath\n");
 
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $daf = Encode::getDaf($submitDir, $grants, $fields, $pipelineInstance);
 my $db = HgDb->new(DB => $daf->{assembly});
 my $email;
 my %labels;
@@ -382,9 +389,9 @@ if(!$opt_skipLoad) {
     }
     my $unloader_cmd;
     if (defined $opt_configDir) {
-        $unloader_cmd = "$unloader -configDir $opt_configDir $submitType $submitPath";
+        $unloader_cmd = "$unloader -configDir $opt_configDir $pipelineInstance $submitPath";
     } else {
-        $unloader_cmd = "$unloader $submitType $submitPath";
+        $unloader_cmd = "$unloader $pipelineInstance $submitPath";
     }
     if(system("$unloader_cmd")) {
         die "unload script failed\n";
