@@ -6,35 +6,12 @@ html gold
 track gap override
 html gap
 
-# Unsplit mRNA track for scaffold-based assembly.
-track all_mrna override
-shortLabel $Organism mRNAs
-longLabel $Organism mRNAs from GenBank
-group rna
-priority 54
-visibility pack
-spectrum on
-type psl .
-baseColorUseCds genbank
-baseColorUseSequence genbank
-baseColorDefault diffCodons
-showDiffBasesAllScales .
-indelDoubleInsert on
-indelQueryInsert on
-indelPolyA on
-
-# Unsplit EST track for scaffold-based assembly.
-track all_est override
-shortLabel $Organism ESTs
-longLabel $Organism ESTs Including Unspliced
-group rna
-priority 57
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-baseColorUseSequence genbank
-indelDoubleInsert on
-indelQueryInsert on
-maxItems 300
-
+# different type of gold search here so the fragments can be found with
+#	or without their trailing .1
+searchTable gold
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex ADFV01[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
