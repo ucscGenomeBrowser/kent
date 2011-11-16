@@ -2039,37 +2039,39 @@ struct dyString *ds = newDyString(256);
 struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = hTableExists(db, "refLink");
 boolean found = FALSE;
+char *specNoVersion = cloneString(spec);
+(void) chopPrefix(specNoVersion);
 
 if (gotRefLink)
     {
-    if (startsWith("NM_", spec) || startsWith("NR_", spec) || startsWith("XM_", spec))
+    if (startsWith("NM_", specNoVersion) || startsWith("NR_", specNoVersion) || startsWith("XM_", specNoVersion))
 	{
-	dyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", spec);
+	dyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
-    else if (startsWith("NP_", spec) || startsWith("XP_", spec))
+    else if (startsWith("NP_", specNoVersion) || startsWith("XP_", specNoVersion))
         {
-	dyStringPrintf(ds, "select * from refLink where protAcc = '%s'", spec);
+	dyStringPrintf(ds, "select * from refLink where protAcc = '%s'", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
-    else if (isUnsignedInt(spec))
+    else if (isUnsignedInt(specNoVersion))
         {
 	dyStringPrintf(ds, "select * from refLink where locusLinkId = %s",
-		       spec);
+		       specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from refLink where omimId = %s", spec);
+	dyStringPrintf(ds, "select * from refLink where omimId = %s", specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else 
 	{
 	char *indexFile = getGenbankGrepIndex(db, hfs, "refLink", "mrnaAccProduct");
 	dyStringPrintf(ds, "select * from refLink where name like '%s%%'",
-		       spec);
+		       specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	if (indexFile != NULL)
 	    {
-	    struct slName *accList = doGrepQuery(indexFile, "refLink", spec,
+	    struct slName *accList = doGrepQuery(indexFile, "refLink", specNoVersion,
 						 NULL);
 	    addRefLinkAccs(conn, accList, &rlList);
 	    }
@@ -2077,7 +2079,7 @@ if (gotRefLink)
 	    {
 	    dyStringClear(ds);
 	    dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'",
-			   spec);
+			   specNoVersion);
 	    addRefLinks(conn, ds, &rlList);
 	    }
 	}
