@@ -81,6 +81,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
+md5sum 017e887899fc0f28b36cb71fe498f583,798daa5f9e1db8fe485ef3c4290a46c6
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -169,6 +170,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
+md5sum 9c1a439d01fb082b23e026388b6718dd
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -255,6 +257,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
+md5sum 7f50a4196a6557139a5b0b39a73b9de3
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -339,6 +342,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
+md5sum 4784bfb738c10b61e34c6177e7c29adf
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -367,6 +371,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
+md5sum 2e602986507fa4a74730a2c85346b9cc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -455,6 +460,7 @@ labExpId IHG024
 labProtocolId gen0107C+pet
 labVersion clone-based
 localization cytosol
+md5sum 39a6558646cee0174798cf41003ac477
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1421,6 +1427,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
+md5sum 519c3c36bf919a414d2ef80d94089bc6,b34adfed388ea1a714e653a53a5b8e88
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1480,6 +1487,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
+md5sum ad5af8d508129839e0eded6504192c15
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1538,6 +1546,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
+md5sum de20f645ea6d70f0d2b7fcc10bf01e6d
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1595,6 +1604,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
+md5sum 9c1bb79ddf69ed86900fe1ff3abe2a40
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1653,6 +1663,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
+md5sum 28e104c08161695dcb540cf2821b7b21
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1712,6 +1723,7 @@ labExpId RHH004
 labProtocolId gen0124N+pet
 labVersion clone-free
 localization nucleus
+md5sum a8685ba0fd00b821ac72d9223480286f
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2115,6 +2127,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
+md5sum fd58f1ee216b20544b3cd41be7ee0ea0,1293e71a5f2717bf71d5015d53fe18f0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2174,6 +2187,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
+md5sum 3f522dc545a5c02d8ba385097fb45adc
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2232,6 +2246,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
+md5sum 69b3970780cbfa5ac12d6c8b6a1cc0a0
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2289,6 +2304,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
+md5sum 04d5abf878044ef7697e64d2be3354b9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2347,6 +2363,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
+md5sum 3be99e4023512e5bd2b2f9c945fab649
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2406,6 +2423,7 @@ labExpId RHH003
 labProtocolId gen0117C+pet
 labVersion clone-free
 localization cytosol
+md5sum ad2d11ba5ee585cedf4a2910ca030ba9
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4080,4 +4098,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 1008231799
+# MAGIC: -1947807863

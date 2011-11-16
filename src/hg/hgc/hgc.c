@@ -25227,7 +25227,7 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (sameString("t2g", table))
+else if (startsWith("t2g", table))
     {
     doT2gDetails(tdb, item);
     }
