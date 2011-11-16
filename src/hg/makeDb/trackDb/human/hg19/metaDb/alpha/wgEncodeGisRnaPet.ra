@@ -410,7 +410,7 @@ metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
 objType table
 attic auxExp
 bioRep gen0105C
-cell GM1287#8
+cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
 dataVersion ENCODE Jan 2011 Freeze

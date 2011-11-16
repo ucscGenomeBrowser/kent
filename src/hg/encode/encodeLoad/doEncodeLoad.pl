@@ -21,11 +21,13 @@ use Getopt::Long;
 use Cwd;
 use File::Basename;
 
-use lib "/cluster/bin/scripts";
+use FindBin qw($Bin);
+use lib "$Bin";
 use Encode;
+use HgAutomate;
+use HgDb;
 use RAFile;
 use SafePipe;
-use HgDb;
 
 use vars qw/$opt_configDir $opt_noEmail $opt_outDir $opt_verbose $opt_debug $opt_skipLoad $opt_skipDownload/;
 
@@ -34,7 +36,7 @@ my $unloadRa = "out/$Encode::unloadFile";
 my $trackDb = "out/trackDb.ra";
 my $submitDir = "";
 my $submitPath;			# full path of data submission directory
-my $submitType = "";		# currently ignored
+my $pipelineInstance = "";		# currently ignored
 my $tempDir = "/data/tmp";
 my $encInstance = "";
 
@@ -43,9 +45,16 @@ my $PROG = basename $0;
 sub usage
 {
     die <<END
-usage: doEncodeLoad.pl submission-type submission-dir
+usage: doEncodeLoad.pl pipeline-instance submission-dir
 
-submission-type is currently ignored.
+The pipeline instance variable is a switch that changes the behavior of doEncodeLoad.
+The changes if the instance is:
+
+standard
+    allows use of hg19 and mm9 databases only
+
+anything else
+    allows use of the encodeTest database only
 
 Requires file called: submission-dir/$loadRa
 
@@ -311,7 +320,7 @@ if($opt_outDir) {
 if(@ARGV != 2) {
     usage();
 }
-$submitType = $ARGV[0];	# currently not used
+$pipelineInstance = $ARGV[0];	# currently not used
 $submitDir = $ARGV[1];
 if ($submitDir =~ /^\//) {
     $submitPath = $submitDir;
@@ -333,7 +342,7 @@ HgAutomate::verbose(1, "Using config path $configPath\n");
 
 my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields);
+my $daf = Encode::getDaf($submitDir, $grants, $fields, $pipelineInstance);
 my $db = HgDb->new(DB => $daf->{assembly});
 my $email;
 my %labels;
@@ -357,17 +366,19 @@ if(dirname($submitDir) =~ /_(.*)/) {
     $tableSuffix = "_" . basename($submitDir);;
 }
 
-chdir($submitDir);
+my $loadRaTest = "$submitDir/$loadRa";
+
 my $programDir = dirname($0);
 
-if(!(-e $loadRa)) {
+if(!(-e $loadRaTest)) {
     die "ERROR: load.ra not found ($PROG)\n";
 }
 
 if(!$opt_skipLoad) {
     # clean out any stuff from previous load
     # We assume unload program is in the same location as loader (fixes problem with misconfigured qateam environment).
-
+    my $localLoad = "$submitDir/$loadRa";
+    my $localUnload = "$submitDir/$unloadRa";
     my $unloader = "$programDir/doEncodeUnload.pl";
     if(!(-e $unloader)) {
         # let's us use this in cvs tree
@@ -378,9 +389,9 @@ if(!$opt_skipLoad) {
     }
     my $unloader_cmd;
     if (defined $opt_configDir) {
-        $unloader_cmd = "$unloader -configDir $opt_configDir $submitType $submitPath";
+        $unloader_cmd = "$unloader -configDir $opt_configDir $pipelineInstance $submitPath";
     } else {
-        $unloader_cmd = "$unloader $submitType $submitPath";
+        $unloader_cmd = "$unloader $pipelineInstance $submitPath";
     }
     if(system("$unloader_cmd")) {
         die "unload script failed\n";
@@ -388,11 +399,12 @@ if(!$opt_skipLoad) {
 
     #TODO change to : FileUtils.cp $loadRa, $unloadRa
     # XXXX shouldn't we do the cp AFTER we finish everything else successfully?
-    if(system("cp $loadRa $unloadRa")) {
-        die "Cannot: cp $loadRa $unloadRa\n";
+    if(system("cp $localLoad $localUnload")) {
+        die "Cannot: cp $localLoad $localUnload\n";
     }
 }
 
+chdir($submitDir);
 HgAutomate::verbose(1, "Loading project in directory $submitDir\n");
 
 # Load files listed in load.ra
