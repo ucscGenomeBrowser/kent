@@ -281,13 +281,17 @@ sub getFields
 sub validateAssembly {
     my ($val, $pipelineInstance) = @_;
     if ($pipelineInstance eq 'standard') {
-        if($val ne 'hg19' && $val ne 'mm9') {
+        if ($val ne 'hg19' && $val ne 'mm9') {
             return "Assembly '$val' is invalid (must be 'hg19 or mm9')";
         } else {
             return ();
         }
     } else {
-        return ();
+        if ($val ne 'encodeTest') {
+            return "Assembly '$val' is invalid (must be 'encodeTest')";
+        } else {
+            return ();
+        }
     }
 }
 

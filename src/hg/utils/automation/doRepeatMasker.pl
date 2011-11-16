@@ -315,7 +315,7 @@ _EOF_
 
 liftUp $db.fa.out /dev/null carry $partDir/???/*.out
 cat $partDir/???/*.align >> $db.fa.align
-head -4 $db.fa.out > $db.sorted.fa.out
+head -3 $db.fa.out > $db.sorted.fa.out
 tail -n +4 $db.fa.out | sort -k5,5 -k6,6n >> $db.sorted.fa.out
 _EOF_
   );
