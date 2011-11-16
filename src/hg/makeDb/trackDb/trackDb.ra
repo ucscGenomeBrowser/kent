@@ -479,18 +479,6 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
-# track text2Genome
-track t2g
-shortLabel Publications
-longLabel Mapped sequences from publications
-group map
-priority 800
-visibility hide
-color 20,50,100
-articleTable t2gArticle
-sequenceTable t2gSequence
-type bed 12
-
 searchTable mgcFullMrna
 searchType psl
 searchPriority 25
