@@ -2249,6 +2249,8 @@ foreach my $ddfLine (@ddfLines) {
         }
     }
 
+    $submitDir = `pwd`;
+    chomp $submitDir;
     unless ($pipelineInstance eq "beta" or $pipelineInstance eq "standard") {
         $tableName = $tableName . "_$pipelineInstance" . "_" . basename($submitDir);
     }
