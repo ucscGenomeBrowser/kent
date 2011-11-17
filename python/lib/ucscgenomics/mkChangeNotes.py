@@ -34,7 +34,7 @@ class makeNotes(object):
                         atticset.add(j.name)
             else:
                 #pass
-                if loose and re.match('.*bai', i):
+                if loose and state == 'old' and re.match('.*bai', i):
                     pass
                 else:
                     errors.append("metaDb: %s is not mentioned in %s" % (i, status))

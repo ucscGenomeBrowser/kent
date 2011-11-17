@@ -114,6 +114,24 @@ taxId 61853
     # 1399907521 lower) in 17968 sequences in 1 files
     # %47.68 masked total, %50.78 masked real
 
+    #bug 5557 fixed up (2011-11-16 Chin)
+    cd /hive/data/genomes/nomLeu1/bed/repeatMasker
+    head -3 nomLeu1.fa.out > nomLeu1.sorted.fa.out
+    tail -n +4 nomLeu1.fa.out | sort -k5,5 -k6,6n >> nomLeu1.sorted.fa.out
+    hgLoadOut -table=rmsk -nosplit nomLeu1 nomLeu1.sorted.fa.out
+    # Loading up table rmsk
+    # note: 2 records dropped due to repStart > repEnd
+    #   run with -verbose=2 for details
+
+    hgLoadOut -table=rmsk -nosplit -verbose=2 nomLeu1 nomLeu1.sorted.fa.out
+    #	hgLoadOut: connected to database: nomLeu1
+    # bad rep range [5563, 5562] line 2793949 of nomLeu1.sorted.fa.out 
+    # bad rep range [3599, 3598] line 3970033 of nomLeu1.sorted.fa.out 
+    # Loading up table rmsk
+    # note: 2 records dropped due to repStart > repEnd
+
+
+
 #########################################################################
 # simpleRepeats ( DONE 2010-10-31 - Chin)
     mkdir /hive/data/genomes/nomLeu1/bed/simpleRepeat
