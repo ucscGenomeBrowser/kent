@@ -295,6 +295,15 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
         text-align: center;
 }
 
+.positionDisplay {
+        padding: 7px; background-color:#E0E0E0; -moz-border-radius: 3px; border-radius: 3px;
+        border: gray 1px solid;
+}
+
+.positionInput {
+        padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
+        border: gray 1px solid;
+}
 
 /*
    Styles for hgHubConnect (formerly in separate .css)
