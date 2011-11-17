@@ -3049,6 +3049,10 @@ $(document).ready(function()
                 $('#position').val($('#positionInput').val());
             }
         });
+        $("#positionDisplay").click(function(event) {
+            genomePos.set($(this).text());
+            $('#positionInput').val($(this).text());
+        });
     }
 
     if(imageV2.enabled) {
