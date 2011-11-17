@@ -5221,7 +5221,7 @@ lab Hardison
 lots 1350637, DAM1472197
 targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
-validation Human_-_:missingMouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
+validation Human_-_:missing Mouse_-_CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 label CTCF (07-729)
 
 term CTCF_(SC-15914)
@@ -7754,7 +7754,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation Human_-_:missingMouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
+validation Human_-_:missing Mouse_-_TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 label TAL1 (sc-12984)
 
 #term TAF-II
@@ -7939,7 +7939,7 @@ orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname
 lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
-validation Human_-_:missingMouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
+validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
 label TR4 (TR4)
 
 term TRIM37_(SC-49548)
