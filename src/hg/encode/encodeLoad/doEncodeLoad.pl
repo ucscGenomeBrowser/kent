@@ -353,19 +353,6 @@ if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
 
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
-my $tableSuffix = "";
-if ($submitDir eq ".") { # make sure command-line use specifies full path and directory
-    die "ERROR: please specify full path to directory\n";
-}
-if(dirname($submitDir) =~ /_(.*)/) {
-    if($1 ne 'prod') {
-        # yank out "beta" from encinstance_beta
-        $tableSuffix = "_$1_" . basename($submitDir);;
-    }
-} else {
-    $tableSuffix = "_" . basename($submitDir);;
-}
-
 my $loadRaTest = "$submitDir/$loadRa";
 
 my $programDir = dirname($0);
@@ -431,7 +418,7 @@ if(!$opt_skipDownload and !(-d $downloadDir)) {
 
 for my $key (keys %ra) {
     my $h = $ra{$key};
-    my $tablename = $h->{tablename} . $tableSuffix;
+    my $tablename = $h->{tablename};
     $labels{$h->{pushQDescription}} = 1;
 
     my $str = "\nkeyword: $key\n";

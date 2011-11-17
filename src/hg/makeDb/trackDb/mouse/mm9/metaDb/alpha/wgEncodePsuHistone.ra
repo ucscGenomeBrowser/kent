@@ -1483,6 +1483,246 @@ strain CD-1
 subId 5105
 view RawData
 
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control None
+controlId Erythrobl/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view Alignments
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control None
+controlId Erythrobl/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view Alignments
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk
+objType table
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId Erythrobl/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+tableName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk
+view Peaks
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId Erythrobl/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view RepPeaks
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId Erythrobl/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view RepPeaks
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId Erythrobl/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view RepSignal
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId Erythrobl/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view RepSignal
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputSig
+objType table
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId Erythrobl/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputSig.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+tableName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputSig
+view Signal
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control None
+controlId Erythrobl/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view RawData
+
+metaObject wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Erythrobl
+composite wgEncodePsuHistone
+control None
+controlId Erythrobl/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-16
+dateUnrestricted 2012-08-15
+fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5101
+view RawData
+
 metaObject wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1AlnRep1
 objType file
 age E14.5
@@ -5675,4 +5915,4 @@ strain CD-1
 subId 5031
 view RawData
 
-# MAGIC: 2079315883
+# MAGIC: -592837837
