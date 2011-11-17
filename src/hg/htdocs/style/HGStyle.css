@@ -170,7 +170,7 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
 }
 
 table.chainTbl, .descTbl {border-collapse: collapse;}
-table.chainTbl td, .descTbl td {border: 1px solid #666; padding: 5px;}
+table.chainTbl td, .descTbl td, .descTbl th {border: 1px solid #666; padding: 5px;}
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
