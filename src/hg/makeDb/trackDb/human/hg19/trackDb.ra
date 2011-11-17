@@ -2265,7 +2265,7 @@ type bed 3 .
     track agilentCghSnpCancer4x180k
     parent agilentCgh
     shortLabel Ag Can 4x180k
-    longLabel Agilent SurePrint G3 Human Cancer CGH+SNP Microarray 4x180K AMADID 030587
+    longLabel Agilent SurePrint G3 Human CGH+SNP Cancer Microarray 4x180K AMADID 030587
     color 0,0,128
     type bed 9 .
     itemRgb on
