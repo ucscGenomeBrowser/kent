@@ -6335,21 +6335,38 @@ freeMem(rootLabel);
 return cloneString(label);
 }
 
+#ifdef SUBTRACK_CFG
+#define DIV_BUTTON "<div class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%s</div>"
+#else///ifndef SUBTRACK_CFG
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'>"
+#endif///def SUBTRACK_CFG
+
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
 #define MATRIX_BOTTOM_BUTTONS_AFTER 20
 
 static void buttonsForAll()
 {
+#ifdef SUBTRACK_CFG
+printf(DIV_BUTTON,"true", "", "", "", "+");
+printf(DIV_BUTTON,"false","", "", "", "-");
+#else///ifndef SUBTRACK_CFG
 printf(PM_BUTTON_UC,"true", "", "", "", "", "",  "plus_all",    "add_sm.gif");
 printf(PM_BUTTON_UC,"false","", "", "", "", "", "minus_all", "remove_sm.gif");
+#endif///ndef SUBTRACK_CFG
 }
 static void buttonsForOne(char *name,char *class,boolean vertical)
 {
+#ifdef SUBTRACK_CFG
+printf(DIV_BUTTON, "true",  ",'", class, "'", "+");
+if (vertical)
+    puts("<BR>");
+printf(DIV_BUTTON, "false", ",'", class, "'", "-");
+#else///ifndef SUBTRACK_CFG
 printf(PM_BUTTON_UC, "true",  ",'", class, "'", "", "", name,    "add_sm.gif");
 if (vertical)
     puts("<BR>");
 printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
+#endif///ndef SUBTRACK_CFG
 }
 
 #define MATRIX_SQUEEZE 10
