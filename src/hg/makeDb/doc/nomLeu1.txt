@@ -404,4 +404,18 @@ nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;
     #   sizes will set properly
 
 
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2011-11-17 - Chin)
+#  this has been requested through Steve H. A blat has been started for
+#  nomLeu1 on the host blat1 on ports 17812 (trans) and 17813 (untrans).
+#       After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("nomLeu1", "blat1", "17812", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("nomLeu1", "blat1", "17813", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
 ############################################################################
