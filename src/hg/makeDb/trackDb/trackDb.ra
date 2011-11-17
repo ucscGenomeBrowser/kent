@@ -499,6 +499,7 @@ release alpha
     articleTable t2gPmcArticle
     sequenceTable t2gPmcSequence
     priority 1
+    release alpha
 
     track t2gElsevier
     shortLabel Elsevier (alpha)
@@ -508,7 +509,7 @@ release alpha
     articleTable t2gElsevierArticle
     sequenceTable t2gElsevierSequence
     type bed 12
-
+    release alpha
 
 searchTable mgcFullMrna
 searchType psl

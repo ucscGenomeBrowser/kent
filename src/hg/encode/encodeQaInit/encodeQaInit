@@ -15,7 +15,8 @@ def getMethods(qaDir, args, user, d):
 	f.write(args.composite + "\n")
 	f.write(args.database + "\n")
 	f.write("Release " + args.release + "\n")
-	f.write(str(d) + "\n")
+	f.write("Redmine #" + args.redmine + "\n")
+        f.write(str(d) + "\n")
 	f.write(user + "\n")
 	f.write("\n")
 	for line in output:
@@ -119,7 +120,7 @@ def parseNotes(lines):
 			supplemental.add(i)
 		if switch == 5:
 			others.add(i)
-			
+
 	return tables, gbdbs, files, supplemental, others, str(size)
 
 def writeTableMail(tables, args, user, qaDir):
@@ -376,7 +377,7 @@ def writePushHtmlMail(args, user, qaDir):
 
 	downloads = 'downloads.html'
 	if re.match('mm\S+', args.database):
-		downloads = downloadsMouse.html
+		downloads = 'downloadsMouse.html'
 	
 	mail = """Hi Pushers,
 
@@ -391,6 +392,12 @@ Thanks!
 
 %s
 """ % (downloads, args.composite, args.database, user)
+	f = open(qaDir + "/pushHtmlMail", "w")
+	f.write(mail)
+	f.close()
+	return
+
+
 
 def changeStatus(subIds):
 	for i in subIds:
