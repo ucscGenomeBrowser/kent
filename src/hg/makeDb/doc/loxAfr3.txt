@@ -350,4 +350,7 @@ see doc/builds.txt for specific details.
     cat fb.loxAfr3.chainMonDom5Link.txt
     #   230673812 bases of 3118565340 (7.397%) in intersection
 
+    cd /hive/data/genomes/loxAfr3/bed
+    ln -s blastz.monDom5.swap lastz.monDom5
+
 ############################################################################
