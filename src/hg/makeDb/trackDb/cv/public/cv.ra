@@ -8201,8 +8201,8 @@ vendorId H00010782-M01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-M01
 lab Farnham
 lots 08064-4C12
-targetId GeneCards:Genecard:ZNF274
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Genecard:ZNF274
+targetId Genecard:ZNF274
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
 validation ZNF274_(M01)(missing):human_ZNF274_M01_validation_Farnham.pdf
 label H00010782-M01 ZNF274
 
