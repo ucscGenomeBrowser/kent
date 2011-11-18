@@ -111,8 +111,13 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
+#ifdef BUTTONS_BY_CSS
+    hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
+        group->name, group->name, isOpen?"Collapse":"Expand", indicator);
+#else///ifndef BUTTONS_BY_CSS
     hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this,'%s');\" id='%s_button' src='%s' alt='%s' title='%s this group'>&nbsp;&nbsp;",
         group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
+#endif///ndef BUTTONS_BY_CSS
     hPrintf("<B>&nbsp;%s</B> ", group->label);
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("</td><td style='text-align:right;'>\n");

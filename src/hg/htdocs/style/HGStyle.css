@@ -352,8 +352,8 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 .hubError {color: #F00000;}
 
 /* [+][-] buttons are no longer images but divs */
-.pmButton { font-size: small; font-weight:bold; text-align:center; font-family: courier;
-            display: inline-block; width:17px; height:17px; vertical-align: top;
+.pmButton { font-size: small; font-weight:bold; text-align:center; font-family: courier; color: black;
+            display: inline-block; width:16px; height:16px; vertical-align: top;
             border: 2px outset lightGray; border-bottom-color:darkgray; border-right-color:darkgray;
             background-color:#F3EDED; cursor: pointer;}
 .pmButton:hover { border-bottom-color:DarkBlue; border-right-color:DarkBlue; color: #0000AA; background-color:#AADDFF; }

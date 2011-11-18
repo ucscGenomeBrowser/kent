@@ -438,23 +438,41 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
     var retval = true;
     var hidden = $("input[name='"+hiddenPrefix+"_"+prefix+"_close']");
     if($(button) != undefined && $(hidden) != undefined && $(hidden).length > 0) {
-        var oldSrc = $(button).attr("src");
-	var newVal;
-        if(arguments.length > 5)
+	var newVal = -1;
+        if (arguments.length > 5)
             newVal = arguments[5] ? 0 : 1;
-        else
-            newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
-        var newSrc;
+        var oldSrc = $(button).attr("src");
+        if (oldSrc != undefined && oldSrc.length > 0) {
+            // Old img version of the toggleButton
+            if (newVal == -1)
+                newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
+            if(newVal == 1)
+                $(button).attr("src", oldSrc.replace("/remove", "/add") );
+            else
+                $(button).attr("src", oldSrc.replace("/add", "/remove") );
+        } else {
+            // new BUTTONS_BY_CSS
+            if (newVal == -1) {
+                oldSrc = $(button).text();
+                if (oldSrc != undefined && oldSrc.length == 1)
+                    newVal = $(button).text() == "+" ? 0 : 1;
+                else {
+                    warn("Uninterpretable toggleButton!");
+                    newVal = 0;
+                }
+            }
+            if(newVal == 1)
+                $(button).text('+');
+            else
+                $(button).text('-');
+        }
         if(newVal == 1) {
-            newSrc = oldSrc.replace("/remove", "/add");
             $(button).attr('title', 'Expand this '+titleDesc);
             $("tr[id^='"+prefix+"-']").hide();
         } else {
-            newSrc = oldSrc.replace("/add", "/remove");
             $(button).attr('title', 'Collapse this '+titleDesc);
             $("tr[id^='"+prefix+"-']").show();
         }
-        $(button).attr("src", newSrc);
         $(hidden).val(newVal);
 	if (doAjax) {
 	    setCartVar(hiddenPrefix+"_"+prefix+"_close", newVal);

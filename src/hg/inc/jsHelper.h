@@ -21,6 +21,9 @@
 #define JS_SET_ALL_BUTTON_LABEL  "Set all"
 #define JS_DEFAULTS_BUTTON_LABEL "Set defaults"
 
+// Make toggle and [+][-] buttons without image gifs.
+#define BUTTONS_BY_CSS
+
 void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 	char **vars, int varCount);
 /* Create a hidden form with the given variables.  Must be

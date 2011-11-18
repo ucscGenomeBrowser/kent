@@ -2331,15 +2331,15 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 {
 #define SUPERS_WITH_CHECKBOXES
 #ifdef SUPERS_WITH_CHECKBOXES
-#ifdef SUBTRACK_CFG
-#define BUTTON_SUPER   "<span class='pmButton' onclick='superT.plusMinus(%s)'>%s</span>"
-#define BUTTON_PLUS_SUPER()  printf(BUTTON_SUPER,"true", "+")
-#define BUTTON_MINUS_SUPER() printf(BUTTON_SUPER,"false","-")
-#else///ifndef SUBTRACK_CFG
+#ifdef BUTTONS_BY_CSS
+#define BUTTON_SUPER   "<span class='pmButton' onclick='superT.plusMinus(%s)'>%c</span>"
+#define BUTTON_PLUS_SUPER()  printf(BUTTON_SUPER,"true", '+')
+#define BUTTON_MINUS_SUPER() printf(BUTTON_SUPER,"false",'-')
+#else///ifndef BUTTONS_BY_CSS
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
 #define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
-#endif///ndef SUBTRACK_CFG
+#endif///ndef BUTTONS_BY_CSS
 jsIncludeFile("hui.js",NULL);
 #endif///def SUPERS_WITH_CHECKBOXES
 printf("\n<P><TABLE CELLPADDING=2>");
