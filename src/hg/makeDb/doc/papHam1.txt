@@ -5,6 +5,8 @@
 # ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/linearScaffolds/*
 # ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Phamadryas/fasta/Pham_1.0/contigs/*
 
+#  http://www.hgsc.bcm.tmc.edu/project-species-p-Papio%20hamadryas.hgsc?pageLocation=Papio%20hamadryas
+
 ##########################################################################
 # download sequence (DONE - 2009-05-06 - Hiram)
     mkdir -p /hive/data/genomes/papHam1/download
