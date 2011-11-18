@@ -43,16 +43,20 @@
 #define CLEAR_BUTTON_LABEL      "clear"
 #define JBUFSIZE 2048
 
-//#define PM_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG height=18 width=18 onclick=\"return (setCheckBoxesThatContain('%s',%s,true,'%s','','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-//#define DEF_BUTTON "<A NAME=\"%s\"></A><A HREF=\"#%s\"><IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); return (setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s') == false);\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\"></A>\n"
-//#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(DEF_BUTTON,(anc),(anc),(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains),(anc),"defaults_sm.png","default")
-//#define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
-//#define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (anc),(anc),(nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
+#ifdef SUBTRACK_CFG
+#define BUTTON_PM  "<span class='pmButton' onclick=\"setCheckBoxesThatContain('%s',%s,true,'%s','','%s')\">%s</span>"
+#define BUTTON_DEF "<span class='pmButton' onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); " \
+                                                    "setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s');\" style='width:50px;font-weight:normal; font-family:default;'>default</span>"
+#define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(BUTTON_DEF,(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains))
+#define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(BUTTON_PM, (nameOrId),"true", (beg),(contains),"+")
+#define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(BUTTON_PM, (nameOrId),"false",(beg),(contains),"-")
+#else///ifndef SUBTRACK_CFG
 #define PM_BUTTON  "<IMG height=18 width=18 onclick=\"setCheckBoxesThatContain('%s',%s,true,'%s','','%s');\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\">\n"
 #define DEF_BUTTON "<IMG onclick=\"setCheckBoxesThatContain('%s',true,false,'%s','','%s'); setCheckBoxesThatContain('%s',false,false,'%s','_defOff','%s');\" id=\"btn_%s\" src=\"../images/%s\" alt=\"%s\">\n"
 #define DEFAULT_BUTTON(nameOrId,anc,beg,contains) printf(DEF_BUTTON,(nameOrId),        (beg),(contains),(nameOrId),(beg),(contains),(anc),"defaults_sm.png","default")
 #define    PLUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"true", (beg),(contains),(anc),"add_sm.gif",   "+")
 #define   MINUS_BUTTON(nameOrId,anc,beg,contains) printf(PM_BUTTON, (nameOrId),"false",(beg),(contains),(anc),"remove_sm.gif","-")
+#endif///ndef SUBTRACK_CFG
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -5690,9 +5694,9 @@ if(cartOptionalString(cart, "ajax") == NULL)
 //jsInit();
 puts("\n<P><B>Species selection:</B>&nbsp;");
 
+cgiContinueHiddenVar("g");
 PLUS_BUTTON( "id", "plus_pw","cb_maf_","_maf_");
 MINUS_BUTTON("id","minus_pw","cb_maf_","_maf_");
-cgiContinueHiddenVar("g");
 
 char prefix[512];
 safef(prefix, sizeof prefix, "%s.", name);
@@ -6336,7 +6340,7 @@ return cloneString(label);
 }
 
 #ifdef SUBTRACK_CFG
-#define DIV_BUTTON "<div class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%s</div>"
+#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%s</span>"
 #else///ifndef SUBTRACK_CFG
 #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'>"
 #endif///def SUBTRACK_CFG
@@ -6347,8 +6351,8 @@ return cloneString(label);
 static void buttonsForAll()
 {
 #ifdef SUBTRACK_CFG
-printf(DIV_BUTTON,"true", "", "", "", "+");
-printf(DIV_BUTTON,"false","", "", "", "-");
+printf(BUTTON_MAT,"true", "", "", "", "+");
+printf(BUTTON_MAT,"false","", "", "", "-");
 #else///ifndef SUBTRACK_CFG
 printf(PM_BUTTON_UC,"true", "", "", "", "", "",  "plus_all",    "add_sm.gif");
 printf(PM_BUTTON_UC,"false","", "", "", "", "", "minus_all", "remove_sm.gif");
@@ -6357,10 +6361,10 @@ printf(PM_BUTTON_UC,"false","", "", "", "", "", "minus_all", "remove_sm.gif");
 static void buttonsForOne(char *name,char *class,boolean vertical)
 {
 #ifdef SUBTRACK_CFG
-printf(DIV_BUTTON, "true",  ",'", class, "'", "+");
+printf(BUTTON_MAT, "true",  ",'", class, "'", "+");
 if (vertical)
     puts("<BR>");
-printf(DIV_BUTTON, "false", ",'", class, "'", "-");
+printf(BUTTON_MAT, "false", ",'", class, "'", "-");
 #else///ifndef SUBTRACK_CFG
 printf(PM_BUTTON_UC, "true",  ",'", class, "'", "", "", name,    "add_sm.gif");
 if (vertical)
@@ -6742,13 +6746,15 @@ printf("<TABLE><TR valign='top'>\n");
 // Do All [+][-] buttons
 if(membersForAll->members[dimX] == NULL && membersForAll->members[dimY] == NULL) // No matrix
     {
+#ifdef SUBTRACK_CFG
+    // TODO: Test when a real world case actually calls this.  Currently no trackDb.ra cases exist
+    #define PM_BUTTON_FILTER_COMP "<input type='button' class='pmButton inOutButton' onclick=\"waitOnFunction(filterCompositeSet,this,%s); return false;\" id='btn_%s' value='%c'>"
+#else///ifndef SUBTRACK_CFG
     #define PM_BUTTON_FILTER_COMP "<input type='button' class='inOutButton' onclick=\"waitOnFunction(filterCompositeSet,this,%s); return false;\" id='btn_%s' value='%c'>"
+#endif///ndef SUBTRACK_CFG
     printf("<TD align='left' width='50px'><B>All:</B><BR>");
     printf(PM_BUTTON_FILTER_COMP,"true",  "plus_fc",'+');
     printf(PM_BUTTON_FILTER_COMP,"false","minus_fc",'-');
-    //#define PM_BUTTON2_FILTER_COMP "<IMG height=18 width=18 onclick=\"filterCompositeSet(%s);\" id='btn_%s' src='../images/%s'>"
-    //printf(PM_BUTTON2_FILTER_COMP,"true",  "plus_fc",   "add_sm.gif");
-    //printf(PM_BUTTON2_FILTER_COMP,"false","minus_fc","remove_sm.gif");
     printf("</TD>\n");
     }
 
@@ -7030,9 +7036,15 @@ if (trackDbCountDescendantLeaves(parentTdb) <= 1)
 if(dimensionsExist(parentTdb))
     return FALSE;
 
+#ifdef SUBTRACK_CFG
+#define BUTTON_ALL   "<span class='pmButton' onclick='matSubCBsCheck(%s)'>%s</span>"
+#define BUTTON_PLUS_ALL_GLOBAL()  printf(BUTTON_ALL,"true", "+")
+#define BUTTON_MINUS_ALL_GLOBAL() printf(BUTTON_ALL,"false","-")
+#else///ifndef SUBTRACK_CFG
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" id='btn_%s' src='../images/%s'>"
 #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
 #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
+#endif///ndef SUBTRACK_CFG
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();
 puts("&nbsp;<B>Select all subtracks</B><BR>");

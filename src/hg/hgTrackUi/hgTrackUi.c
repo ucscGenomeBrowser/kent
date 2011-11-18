@@ -2331,9 +2331,15 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 {
 #define SUPERS_WITH_CHECKBOXES
 #ifdef SUPERS_WITH_CHECKBOXES
+#ifdef SUBTRACK_CFG
+#define BUTTON_SUPER   "<span class='pmButton' onclick='superT.plusMinus(%s)'>%s</span>"
+#define BUTTON_PLUS_SUPER()  printf(BUTTON_SUPER,"true", "+")
+#define BUTTON_MINUS_SUPER() printf(BUTTON_SUPER,"false","-")
+#else///ifndef SUBTRACK_CFG
 #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" id='btn_%s' src='../images/%s'>"
-#define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
-#define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
+#define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
+#endif///ndef SUBTRACK_CFG
 jsIncludeFile("hui.js",NULL);
 #endif///def SUPERS_WITH_CHECKBOXES
 printf("\n<P><TABLE CELLPADDING=2>");
@@ -2346,8 +2352,8 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     if (childRef == superTdb->children) // first time through
         {
         printf("\n<TR><TD NOWRAP colspan=2>");
-        BUTTON_PLUS_ALL_GLOBAL();
-        BUTTON_MINUS_ALL_GLOBAL();
+        BUTTON_PLUS_SUPER();
+        BUTTON_MINUS_SUPER();
         printf("&nbsp;<B>All</B><BR>");
         printf("</TD></TR>\n");
         }

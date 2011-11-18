@@ -429,10 +429,18 @@ else
     //hPrintf("<table id='foundTracks'><tr><td colspan='2'>\n");
     hPrintf("<tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
-    #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracks.checkAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
+#define NEW_BUTTONS
+#ifdef NEW_BUTTONS
+    // TODO: Replace the pm buttons on tab.  Replace the toggle buttons in config.c
+    #define BUTTON_PM  "<span class='pmButton' onclick='findTracks.checkAllWithWait(%s)' title='%s all found tracks'>%s</span>"
+    hPrintf(BUTTON_PM,"true",   "Select","+");
+    hPrintf(BUTTON_PM,"false","Unselect","-");
+#else///ifndef NEW_BUTTONS
+    #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracks.checkAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf(PM_BUTTON,"true",  "plus_all",   "add_sm.gif",  "Select");
     hPrintf(PM_BUTTON,"false","minus_all","remove_sm.gif","Unselect");
+#endif///ndef NEW_BUTTONS
     hPrintf("</td><td><b>Visibility</b></td><td colspan=2>&nbsp;&nbsp;<b>Track Name</b>\n");
 
     // Sort options?
