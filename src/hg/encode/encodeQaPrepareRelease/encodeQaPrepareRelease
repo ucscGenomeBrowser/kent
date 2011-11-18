@@ -396,7 +396,13 @@ if ($assm =~ m/^mm\d+$/){
 my $gitstat = `git status 2>&1`;
 
 if ($gitstat =~ m/fatal/) {
-    die "must be run in your git repository";
+    print STDERR<<END;
+This program must be run in your git repository.
+Please go to somewhere in the source tree.
+
+END
+
+    die
 }
 
 

@@ -5675,6 +5675,246 @@ strain CD-1
 subId 5111
 view RawData
 
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep1
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view Alignments
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep2
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view Alignments
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk
+objType table
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+tableName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk
+view Peaks
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep1
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view RepPeaks
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep2
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view RepPeaks
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep1
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view RepSignal
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep2
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view RepSignal
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputSig
+objType table
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId Megakaryo/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputSig.bigWig
+grant Hardison
+lab PSU-m
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+tableName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputSig
+view Signal
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep1
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view RawData
+
+metaObject wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep2
+objType file
+age E14.5
+antibody H3K27me3
+cell Megakaryo
+composite wgEncodePsuHistone
+control None
+controlId Megakaryo/Input/None
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex B
+strain CD-1
+subId 5115
+view RawData
+
 metaObject wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1AlnRep1
 objType file
 age E14.5
@@ -5915,4 +6155,4 @@ strain CD-1
 subId 5031
 view RawData
 
-# MAGIC: -592837837
+# MAGIC: 1731140597
