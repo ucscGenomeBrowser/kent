@@ -52,7 +52,8 @@ include wgEncodeGisChiaPet.ra alpha
 include wgEncodeUmassDekker5C.ra alpha
 
 # UW 5C (wrangler: kate)
-include wgEncodeUw5C.ra 
+include wgEncodeUw5C.ra beta,public
+include wgEncodeUw5C.new.ra alpha
 
 
 # Encode Affy Exon --------------------------------------------
@@ -151,8 +152,7 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.new.ra alpha,beta
-include wgEncodeUwHistone.ra public
+include wgEncodeUwHistone.ra 
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra 

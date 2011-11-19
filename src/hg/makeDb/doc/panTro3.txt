@@ -2,6 +2,8 @@
 
 # This file describes browser build for the panTro3 chimp genome: October 2010
 
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AACZ03
+
 #############################################################################
 # Fetch sequence from genbank (DONE - 2011-02-15 - Hiram)
 

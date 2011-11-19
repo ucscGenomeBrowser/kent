@@ -55,7 +55,7 @@ struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* do
     safef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
         "and chrom='%s' and chromStart=%d", trackTable, item, seqName, start);
     if (debug)
-        printf(query);
+        puts(query);
     char* seqIdCoordString = sqlQuickString(conn, query);
     char* seqIdCoords[1024];
     int partCount = chopString(seqIdCoordString, ",", seqIdCoords, ArraySize(seqIdCoords));
@@ -97,7 +97,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
     char query[4096];
     safef(query, sizeof(query), "SELECT fileDesc, snippet, locations, articleId,fileId, seqId, sequence FROM %s WHERE articleId='%s';", sequenceTable, docId);
     if (debug)
-        printf(query);
+        puts(query);
     struct sqlResult *sr = sqlGetResult(conn, query);
 
     // construct title for section
@@ -113,7 +113,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         printSeqHeaders(debug, showDesc, isClickedSection);
 
     char **row;
-    bool foundSkippedRows = false;
+    bool foundSkippedRows = FALSE;
     while ((row = sqlNextRow(sr)) != NULL)
     {
         char* fileDesc = row[0];
@@ -131,7 +131,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
 
         // only display this sequence if we're in the right section
         if ((hashLookup(filterIdHash, annotId)==0) ^ !isClickedSection) {
-            foundSkippedRows = true;
+            foundSkippedRows = FALSE;
             continue;
         }
 

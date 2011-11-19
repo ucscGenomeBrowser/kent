@@ -25,6 +25,9 @@ Assembly Accession:	GCA_000146605.1
 #    sequence:
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Meleagris_gallopavo/Turkey_2.01/
 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ADDD00
+
+
 ##########################################################################
 # Download sequence (DONE - 2010-10-22 - Chin)
     mkdir /hive/data/genomes/melGal1
