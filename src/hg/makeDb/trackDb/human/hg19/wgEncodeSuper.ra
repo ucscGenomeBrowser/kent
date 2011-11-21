@@ -61,4 +61,11 @@ shortLabel ENC ProtGeno
 longLabel ENCODE Proteogenomics
 wgEncode 1
 
+track wgEncodeChromSuper
+superTrack on
+group expression
+shortLabel ENC Chromatin 
+longLabel ENCODE Chromatin Interactions
+wgEncode 1
+
 

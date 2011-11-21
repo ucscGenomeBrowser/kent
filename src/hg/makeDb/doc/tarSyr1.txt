@@ -2,6 +2,9 @@
 
 # Tarsius syrichta
 # (original doc had incorrect name of Tarsier syrichta)
+
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRT00
+
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
     ssh kolossus

@@ -1,6 +1,9 @@
 # for emacs: -*- mode: sh; -*-
 
 # Mouse lemur ( Microcebus murinus)
+
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABDC00
+
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-07-28 )
     ssh kkstore05

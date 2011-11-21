@@ -8083,6 +8083,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 76c6099c1ce24acc59335f6e31354698,9bcae5aa5cb93d3a6ea95e2e5d312478
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8110,6 +8111,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 536fc38bd41cd24fba14271a2b9aea57,8da33db226f90653a9c371e246bab4c8
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8137,6 +8139,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 45c27016c9041f6398211257a331fd90
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8163,6 +8166,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 84c1b509651697c309858aff394ed582
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8289,6 +8293,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 128b6966045b3703ab4361afa98f81ad
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8315,6 +8320,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 9f78fe778c0b5d6e4c1e17d00abdb1d4
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8341,6 +8347,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 29ed5785f0de73eb60bdc8b9b0b2faf9
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8367,6 +8374,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 47ff0fe86774603a76324509aef0ed5d
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8393,6 +8401,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 558f889dbcb14c4a0633c40d302f9844
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8419,6 +8428,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 39e2a9032a81717a6a4b6c79fe85edef
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8445,6 +8455,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 585d42e0bd089c9871cb41113d82ebed
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8472,6 +8483,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum d658dbe83ca0589d0c5dc533dcd2f860
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8499,6 +8511,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum 21f7b4a09370c7732939c476ebb1a871,659639e302916e6a7c58e7036f592089
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8526,6 +8539,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 33934ac8aa13e7b38da48a1602328948,792ca88a3ced81e942c6fd24d4e28cbf
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8553,6 +8567,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum e1789f8df3101eaeeffd83c390e0d732
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8579,6 +8594,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 0fa074b40317b33111329ee860f45806
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8605,6 +8621,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum bffa02002543426efc1784028793d2f2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8631,6 +8648,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum e8bd486aa37683f133732e34b3c314bd
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -8657,6 +8675,7 @@ labExpId 11584
 localization cell
 mapAlgorithm TH1014
 md5sum dfc8a56eadec71f012c1ac8dd782d856
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -8683,6 +8702,7 @@ labExpId 11585
 localization cell
 mapAlgorithm TH1014
 md5sum 1147472b2e7bce92102e9b2b2c8d6f10
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -11626,6 +11646,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum bf90494743bc9877cc6bc565154485ca,98fd1fd0664b5bdafcd5dada78ec33d3
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11653,6 +11674,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 51a067ff282b9061fc39f1a3b98727cd,e60c5c8cb7a63612abe04a6b559657fc
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -11680,6 +11702,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum d30e635c48943bd85ad061bd5eb7294b,f3eba71c2153f484ca6ad2fa17cdbdd3
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -11707,6 +11730,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f2d6219c0d86ddf1612a63bd7de51324
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11733,6 +11757,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum bc56498d676d9b01a42a1685bde969ca
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -11759,6 +11784,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 786ae20b8d997c3f4637f98395c6b9bf
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -11785,6 +11811,7 @@ lab Caltech
 labExpId 11581
 localization cell
 md5sum b144ccab25a4ae10596a9b6d95352eb7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11860,6 +11887,7 @@ lab Caltech
 labExpId 11581
 localization cell
 md5sum bdf0179ed4ecd7c98b4b51da897b0f13
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11935,6 +11963,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum ebeb0ce2c4f99718e20059f11ca7b791
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -11961,6 +11990,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum c86fdfaeb2ef85999cc298a6c0724dbc
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -11987,6 +12017,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 87f2b40bf221d6fbfe081a40e0c61cc7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12013,6 +12044,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum dbe0c9d911222cc4f8e928c8b0227cf2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12039,6 +12071,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum afcc36725a0769f8d58acfb31ae630f2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12065,6 +12098,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum ad6b6f82c2f47dfb3517aaab79085c47
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12091,6 +12125,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum 18381cc2452c0193f1ad2ac0121d52fe
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12117,6 +12152,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 7d38a1e20a05f678c72daf23bdd18bc3
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12143,6 +12179,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 52dc523ccda1fea00a686f8f0ebeb497
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12169,6 +12206,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum e107a0fa82bce0044c13a7a8ff1cab31
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12196,6 +12234,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 0669978e2325c8ccb73da658fd2cb72b
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12223,6 +12262,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum 3c5c7b34f0d917a331a60da7ac1f16d6
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12250,6 +12290,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum de0a84aca83f09e93205822f615cf108,7af9380bedc52b57b29fc33a1c16174d
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12277,6 +12318,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 3b111346ba963eb5b3958e1f7161268b,ae0ad7c3fc1bdffb01a8663c3baf72ef
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12304,6 +12346,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum e4454727fe54f4872d50e011278a744f,c20c3a35b5f1f285af2190fcf189ac92
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12331,6 +12374,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum 075e9986692317fbc3aa4724de9645f8
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12357,6 +12401,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 7b9eef2c333c49b9939012f183a2af97
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12383,6 +12428,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum eb72137bc641f3bd682335840a0fe53b
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12409,6 +12455,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum f755da2fee8d800221587b17410e747d
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12435,6 +12482,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum 50fb1553a8644f2dbe0861885dcbc618
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12461,6 +12509,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum added3851f237dc2abaabb68dfe617b6
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12487,6 +12536,7 @@ labExpId 11581
 localization cell
 mapAlgorithm TH1014
 md5sum aac13a83da476a5b1c6858abc0e6fa2e
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -12513,6 +12563,7 @@ labExpId 11582
 localization cell
 mapAlgorithm TH1014
 md5sum a84de012446172b5e33892a5a9191f83
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -12539,6 +12590,7 @@ labExpId 12098
 localization cell
 mapAlgorithm TH1014
 md5sum dff4e802de5b80bbeec6ee4f3492c9c7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
@@ -12566,6 +12618,7 @@ labExpId 11581
 mapAlgorithm TH1014
 md5sum 380b66e8b589c3a29b88a61fda477994
 objStatus replaced
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13517,6 +13570,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 562c779768d207625984bf7fb72d149a,fbd5d973c6c8606a71948628431a22a5
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13544,6 +13598,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 698eb744de450f19a5859a4b0b31c20e,3a4011ed4bce8f730871979e82e1e6f9
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13571,6 +13626,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 0cebca8f15c7d6aed56ad9033e7ab28f
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13597,6 +13653,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum f3da2830e35162d5ca9a311c40dfbca5
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13723,6 +13780,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 3174b2bf67e53030b6b962b5b37252d4
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13749,6 +13807,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 47edf03671d311a7ffab28d84417c02a
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13775,6 +13834,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 935e30c092cdb0f5ed48d76ff530f7d3
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13801,6 +13861,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 3c6f8d34d1be105456407328e39751a7
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13827,6 +13888,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum a909aaa63ead3dae77a3fda9a677af36
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13853,6 +13915,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 7497570de03e63c902e21293885398e6
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13879,6 +13942,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 33a394274d02da08fdf7e8b6f09b6bf2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13906,6 +13970,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 1b981f54d2b5c0343e1df4f9f18f42d4
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13933,6 +13998,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 0819108916df1d413755b208fe988811,fa2fad06ba5c4ff5e93788adfafd0283
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -13960,6 +14026,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 65903ccbdb793fb385541a44782d12d0,623034a1e60a2b5864eebb44a7a0b3bf
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -13987,6 +14054,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 287901b7da02a94b705c6d536abd1581
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14013,6 +14081,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 0206d58bc1036fa8a4cb7ac76bed1864
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14039,6 +14108,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum e21f3d9751d46fd577edec296b7e04ec
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14065,6 +14135,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum 03038cc8ea8cbde2480d2073f0d34fde
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14091,6 +14162,7 @@ labExpId 11587
 localization cell
 mapAlgorithm TH1014
 md5sum 24e4b8522dca509c9dd5f55edc62212c
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -14117,6 +14189,7 @@ labExpId 11588
 localization cell
 mapAlgorithm TH1014
 md5sum d7523997e302832a5dbb19aea0728537
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -14179,4 +14252,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 1288890950
+# MAGIC: -616939382
