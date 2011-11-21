@@ -1887,6 +1887,16 @@ puts("&nbsp;<B>position</B>");
 
 }
 
+void t2gUi(struct trackDb *tdb)
+/* UI for t2g match track */
+{
+char* keywordTag = "t2gKeywords";
+char *keywords = cartUsualString(cart, keywordTag, "");
+puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
+cgiMakeTextVar(keywordTag, keywords, 45);
+}
+
+
 void oligoMatchUi(struct trackDb *tdb)
 /* UI for oligo match track */
 {
@@ -2508,6 +2518,8 @@ else if (sameString(track, "vegaGeneComposite"))
     vegaGeneUI(tdb);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
+else if (startsWith("t2g", track)) 
+        t2gUi(tdb);
 else if (startsWith("blastDm", track))
     blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))

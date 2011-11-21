@@ -2249,6 +2249,12 @@ foreach my $ddfLine (@ddfLines) {
         }
     }
 
+    $submitDir = `pwd`;
+    chomp $submitDir;
+    unless ($pipelineInstance eq "beta" or $pipelineInstance eq "standard") {
+        $tableName = $tableName . "_$pipelineInstance" . "_" . basename($submitDir);
+    }
+
     my $targetFile = makeDownloadTargetFileName($tableName, $type, \@{$ddfLine->{files}} );
     my $downloadDir = Encode::downloadDir($daf);
     if(!$opt_allowReloads) {

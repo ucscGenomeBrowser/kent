@@ -77,8 +77,11 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
-            "hgt.contentType",
+            "hgt.contentType", "hgt.positionInput",
             NULL };
+
+// MERGE_GENE_SUGGEST is used for work on redmine #5933
+// #define MERGE_GENE_SUGGEST
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -5000,6 +5003,18 @@ if (!hideControls)
 
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
+#ifdef MERGE_GENE_SUGGEST
+	hPrintf("&nbsp;&nbsp;<span class='positionBox' id='positionDisplay' style='font-weight:bold;'>%s</span>", addCommasToPos(database, position));
+	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
+	sprintLongWithCommas(buf, winEnd - winStart);
+	hPrintf(" <span id='size'>%s</span> bp. ", buf);
+	hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='60'>\n");
+	hWrites(" ");
+	hButtonWithOnClick("hgt.jump", "go", NULL, "imageV2.jumpButtonOnClick()");
+	jsonHashAddBoolean(jsonForClient, "assemblySupportsGeneSuggest", assemblySupportsGeneSuggest(database));
+	if(assemblySupportsGeneSuggest(database))
+	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
+#else
 	hWrites("position/search ");
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
@@ -5014,6 +5029,7 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
+#endif
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	hPutc('\n');
@@ -5974,6 +5990,9 @@ if(!trackImgOnly)
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js", NULL);
     jsIncludeFile("ajax.js", NULL);
+#ifdef MERGE_GENE_SUGGEST
+    jsIncludeFile("jquery.watermarkinput.js", NULL);
+#endif
     if(!searching)
         {
         jsIncludeFile("jquery.imgareaselect.js", NULL);

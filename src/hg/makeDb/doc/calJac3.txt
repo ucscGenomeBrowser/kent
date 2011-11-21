@@ -2,10 +2,13 @@
 
 #	$Id: calJac3.txt,v 1.16 2010/06/11 16:00:57 chinhli Exp $
 
-# Marmoset sequence: http://panda.genomics.org.cn/page/panda/download.jsp
+# Marmoset sequence:
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/
 #	Callithrix_jacchus/Callithrix_jacchus-3.2
 #	Callithrix jacchus
+
+# http://www.hgsc.bcm.tmc.edu/project-species-p-Marmoset.hgsc?pageLocation=Marmoset
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ACFV00
 
 ##########################################################################
 # Download sequence (DONE - 2010-02-04 - Hiram)

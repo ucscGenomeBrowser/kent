@@ -170,7 +170,7 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
 }
 
 table.chainTbl, .descTbl {border-collapse: collapse;}
-table.chainTbl td, .descTbl td {border: 1px solid #666; padding: 5px;}
+table.chainTbl td, .descTbl td, .descTbl th {border: 1px solid #666; padding: 5px;}
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
@@ -301,6 +301,16 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
 div.disabled  { border-color: gray; color: gray;  }
 input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
 span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
+
+.positionDisplay {
+        padding: 7px; background-color:#E0E0E0; -moz-border-radius: 3px; border-radius: 3px;
+        border: gray 1px solid;
+}
+
+.positionInput {
+        padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
+        border: gray 1px solid;
+}
 
 /*
    Styles for hgHubConnect (formerly in separate .css)

@@ -6738,7 +6738,7 @@ if(cartOptionalString(cart, "ajax") == NULL)
     }
 
 cgiDown(0.7);
-printf("<B>Filter subtracks %sby:</B> (select multiple %sitems - %s)<BR>\n",
+printf("<B>Select subtracks %sby:</B> (select multiple %sitems - %s)<BR>\n",
        (membersForAll->members[dimX] != NULL || membersForAll->members[dimY] != NULL ? "further ":""),
        (membersForAll->dimMax == dimA?"":"categories and "),FILTERBY_HELP_LINK);
 printf("<TABLE><TR valign='top'>\n");

@@ -58,7 +58,7 @@ html wgEncodeUwTfbs.new
     track wgEncodeUwTfbsViewHot
     shortLabel Hotspots
     view Hot
-    visibility dense
+    visibility full
     parent wgEncodeUwTfbs
     pValueFilter 0.0
     pValueFilterLimits 0:324
@@ -1017,7 +1017,7 @@ html wgEncodeUwTfbs.new
     track wgEncodeUwTfbsViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility dense
+    visibility pack
     parent wgEncodeUwTfbs
     pValueFilter 0.0
     pValueFilterLimits 0:324

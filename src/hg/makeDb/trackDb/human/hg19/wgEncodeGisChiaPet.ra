@@ -1,5 +1,6 @@
 track wgEncodeGisChiaPet
 compositeTrack on
+superTrack wgEncodeChromSuper dense
 shortLabel GIS ChIA-PET
 longLabel  Chromatin Interations PET (ChIA-PET) from ENCODE/GIS-Ruan
 group regulation

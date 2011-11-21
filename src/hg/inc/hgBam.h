@@ -8,12 +8,8 @@
 #include "bamFile.h"
 #endif
 
-#ifdef USE_BAM
-
 #ifndef SAMALIGNMENT_H
 #include "samAlignment.h"
-#endif
-
 #endif
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName);
