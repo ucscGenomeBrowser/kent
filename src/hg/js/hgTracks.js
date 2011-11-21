@@ -136,6 +136,9 @@ var genomePos = {
                 ele.value = position;
             }
         }
+        if($('#positionDisplay').length) {
+            $('#positionDisplay').text(position);
+        }
         if(size) {
             $('#size').text(size);
         }
@@ -364,6 +367,10 @@ var posting = {
         }
         if(obj == undefined || obj.href == undefined) // called directly with obj
             obj = this;                               // and from callback without obj
+
+        if ($(obj).hasClass('noLink'))  // TITLE_BUT_NO_LINK
+            return false;
+
         if (obj.href.match('#') || obj.target.length > 0) {
             //alert("Matched # ["+obj.href+"] or has target:"+obj.target);
             return true;
@@ -518,7 +525,7 @@ var dragSelect = {
             }
         } else {  // what is this doing?
             genomePos.set(genomePos.original, genomePos.originalSize);
-            genomePos.original = genomePos.originalSize = null;
+            genomePos.original = genomePos.originalSize = null;         // <- XXXX I think this is unnecessary.
         }
         dragSelect.startTime = null;
         setTimeout('posting.allowMapClicks();',50); // Necessary incase the dragSelect.selectEnd was over a map item. select takes precedence.
@@ -1181,7 +1188,7 @@ var dragReorder = {
 //////////////////////////
 jQuery.fn.panImages = function(){
     // globals across all panImages
-    genomePos.original = genomePos.getOriginalPos();
+    genomePos.original = genomePos.getOriginalPos();              // XXXX what is this for? (this already happened in initVars).
     var leftLimit   = hgTracks.imgBoxLeftLabel * -1;
     var rightLimit  = (hgTracks.imgBoxPortalWidth - hgTracks.imgBoxWidth + leftLimit);
     var only1xScrolling = ((hgTracks.imgBoxWidth - hgTracks.imgBoxPortalWidth) == 0);//< hgTracks.imgBoxLeftLabel);
@@ -2679,7 +2686,7 @@ var imageV2 = {
             imageV2.updateTiming(response);
         }
         if(this.disabledEle) {
-            this.disabledEle.attr('disabled', '');
+            this.disabledEle.removeAttr('disabled');
         }
         if(this.loadingId) {
             hideLoadingImage(this.loadingId);
@@ -2808,10 +2815,14 @@ var imageV2 = {
         && gene.length > 0
         && gene != "gene"
         && db
+        && $('#positionDisplay').length == 0
         && (genomePos.getOriginalPos() == genomePos.get() || genomePos.get().length == 0)) {
-            pos = lookupGene(db, gene);
+            var pos = lookupGene(db, gene);
             if(pos) {
+                vis.makeTrackVisible($("#suggestTrack").val());
                 genomePos.set(pos, null);
+                // Following doesn't work b/c we get the hugo symbol from the suggest list, not the known gene id.
+                // $(document.TrackForm || document.TrackHeaderForm).append("<input type='hidden' name='hgFind.matches' " + "value='" + name + "'>");
             } else {
                 // turn this into a full text search.
                 genomePos.set(gene, null);
@@ -2862,14 +2873,25 @@ var imageV2 = {
  //// suggest  (aka gene search) ////
 ////////////////////////////////////
 var suggestBox = {
+    lastEntered: null,
 
     init: function (db)
     {
-        if(jQuery.fn.autocomplete && $('input#suggest') && db) {
+        var ele = $('#positionInput');
+        if(!ele.length) {
+            ele = $('input#suggest');
+        }
+        if(jQuery.fn.autocomplete && ele.length && db) {
             if(jQuery.fn.Watermark) {
-                $('#suggest').Watermark("gene");
+                var str;
+                if(hgTracks.assemblySupportsGeneSuggest) {
+                     str = "enter new position, gene symbol or annotation search terms";
+                } else {
+                     str = "enter new position or annotation search terms";
+                }
+                $('#positionInput').Watermark(str, '#686868');
             }
-            $('input#suggest').autocomplete({
+            ele.autocomplete({
                 delay: 500,
                 minLength: 2,
                 source: ajaxGet(function () {return getDb();}, new Object, true),
@@ -2888,6 +2910,7 @@ var suggestBox = {
                 select: function (event, ui) {
                         genomePos.set(ui.item.id, commify(getSizeFromCoordinates(ui.item.id)));
                         vis.makeTrackVisible($("#suggestTrack").val());
+                        suggestBox.lastEntered = ui.item.value;
                         // jQuery('body').css('cursor', 'wait');
                         // document.TrackHeaderForm.submit();
                     }
@@ -3017,6 +3040,18 @@ $(document).ready(function()
                 return postTheForm($(thisForm).attr('name'),this.href);
             }
             return true;
+        });
+    }
+
+    if($("#positionInput").length) {
+        $("#positionInput").change(function(event) {
+            if(!suggestBox.lastEntered || suggestBox.lastEntered != $('#positionInput').val()) {
+                $('#position').val($('#positionInput').val());
+            }
+        });
+        $("#positionDisplay").click(function(event) {
+            genomePos.set($(this).text());
+            $('#positionInput').val($(this).text());
         });
     }
 

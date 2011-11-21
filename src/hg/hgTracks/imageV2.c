@@ -1616,30 +1616,37 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' class='area'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
-    if(map->linkRoot != NULL)
+
+    if (sameString(TITLE_BUT_NO_LINK,item->linkVar))
+        { // map items could be for mouse-over titles only
+        hPrintf(" class='area %s'",TITLE_BUT_NO_LINK);
+        }
+    else if(map->linkRoot != NULL)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s%s",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
         else
             hPrintf(" HREF='%s%s'",map->linkRoot,(item->linkVar != NULL?item->linkVar:""));
+        hPrintf(" class='area'");
         }
     else if(item->linkVar != NULL)
         {
         if(skipToSpaces(item->linkVar))
             hPrintf(" HREF=%s",item->linkVar);
-	else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
-                 hPrintf(" HREF='..%s'",item->linkVar);
+        else if(startsWith("/cgi-bin/hgGene", item->linkVar)) // redmine #4151
+                 hPrintf(" HREF='..%s'",item->linkVar);       // FIXME: Chin should get rid of this special case!
              else
                  hPrintf(" HREF='%s'",item->linkVar);
+        hPrintf(" class='area'");
         }
     else
         warn("map item has no url!");
 
     if(item->title != NULL && strlen(item->title) > 0)
-        hPrintf(" TITLE='%s'", htmlEncode(item->title) );
+        hPrintf(" TITLE='%s'", attributeEncode(item->title) );
     if(item->id != NULL)
         hPrintf(" id='%s'", item->id);
     hPrintf(">" );
@@ -1667,9 +1674,9 @@ if(slice->parentImg && slice->parentImg->file != NULL)
     else
         hPrintf("'");
     if(slice->title != NULL)
-        hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
+        hPrintf(" title='%s'", attributeEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
-        hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
+        hPrintf("' title='%s'", attributeEncode(slice->parentImg->title) );// Adds image wide title
     if(slice->type==stData || slice->type==stCenter)
         hPrintf(" ondrag='{return false;}'");
     hPrintf(">");
@@ -1759,7 +1766,11 @@ if(map)
     useMap = imageMapDraw(map,name);
 else if(slice->link != NULL)
     {
-    if(skipToSpaces(slice->link) != NULL)
+    if (sameString(TITLE_BUT_NO_LINK,slice->link))
+        { // This fake link ensures a mouse-over title is seen but not heard
+        hPrintf("<A class='%s'",TITLE_BUT_NO_LINK);
+        }
+    else if(skipToSpaces(slice->link) != NULL)
         hPrintf("  <A HREF=%s",slice->link);
     else
         hPrintf("  <A HREF='%s'",slice->link);
@@ -1771,13 +1782,13 @@ else if(slice->link != NULL)
             char *newLine = NEWLINE_TO_USE(browser);
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if(imgTrack->reorderable)
-                hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
+                hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",attributeEncode(slice->title), newLine,
                     ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtracks":"") );
             else
-                hPrintf(" TITLE='%s%sclick or right click to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
+                hPrintf(" TITLE='%s%sclick or right click to configure%s'",attributeEncode(slice->title), newLine, ellipsis);
             }
         else
-            hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
+            hPrintf(" TITLE='Click for: &#x0A;%s'", attributeEncode(slice->title) );
         }
     hPrintf(">\n" );
     }
@@ -1875,7 +1886,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+            hPrintf(" <TD id='td_%s' class='dragHandle tdLeft' title='%s%sdrag to reorder'>\n",name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdLeft'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
@@ -1905,7 +1916,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // rightLabel
         safef(name, sizeof(name), "side_%s", trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+            hPrintf(" <TD id='td_%s' class='dragHandle tdRight' title='%s%sdrag to reorder'>\n",name,attributeEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s' class='tdRight'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);

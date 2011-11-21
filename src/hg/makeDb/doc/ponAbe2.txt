@@ -6,6 +6,8 @@
 #
 #	"$Id: ponAbe2.txt,v 1.23 2010/02/12 23:51:36 hiram Exp $"
 #
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABGA00
+#
 ######################################################################
 ## DOWNLOAD SEQUENCE (DONE - 2007-09-06 - Hiram)
     ssh kkstore02

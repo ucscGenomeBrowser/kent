@@ -3211,6 +3211,7 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion Bowtie 0.12.7
+objStatus lab requrested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3229,6 +3230,7 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion Hotspot-v5.2
+objStatus lab requrested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3248,6 +3250,7 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion lmax-v1.0
+objStatus lab requrested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3267,6 +3270,7 @@ grant Stam
 lab UW
 labExpId DS16508
 labVersion WindowDensity-bin20-win+/-75
+objStatus lab requrested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3285,6 +3289,7 @@ fileName wgEncodeUwDgfMonocd14ro1746RawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS16508
+objStatus lab requrested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -3302,6 +3307,7 @@ fileName wgEncodeUwDgfMonocd14ro1746Sig.bigWig
 grant Stam
 lab UW
 labExpId DS16508
+objStatus lab requrested the data be pulled due to a problem with DNA digest leading to spurious signal spikes(noise)
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 subId 4885
@@ -4406,4 +4412,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -239852429
+# MAGIC: -2086376319

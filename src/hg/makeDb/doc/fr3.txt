@@ -1,0 +1,359 @@
+# for emacs: -*- mode: sh; -*-
+
+#	Takifugu rubripes
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Takifugu_rubripes/FUGU5/
+#
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAAB02
+#	WGS: CAAB02000001:CAAB02030857
+#
+##########################################################################
+# Download sequence (DONE - 2011-11-09 - Hiram)
+    mkdir -p /hive/data/genomes/fr3/genbank
+    cd /hive/data/genomes/fr3/genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Takifugu_rubripes/FUGU5/*"
+
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
+# 281572362 bases (12721879 N's 268850483 real 268850483 upper 0 lower) in 22
+sequences in 22 files
+
+    cat << '_EOF_' > mkUcsc.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chrFrNameToChrN;
+
+open (FH, "< Primary_Assembly/assembled_chromosomes/chr2acc") or die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $frName) = split('\s+', $line);
+    $chrFrNameToChrN{$frName} = $chrN;
+}
+close (FH);
+
+my $firstHeader = 1;
+open (UC, "|gzip -c > ucsc.agp.gz") or die "can not write to ucsc.agp.gz";
+open (FA, "|gzip -c > ucsc.fa.gz") or die "can not write to uscs.fa.gz";
+foreach my $key (sort keys %chrFrNameToChrN) {
+    my $chrN = $chrFrNameToChrN{$key};
+    printf "%s\tchr%s\n", $key, $chrN;
+    my $fastaFile = "Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz";
+    my $agpFile = "Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.agp.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    while (my $line = <FH>) {
+	if ($line =~ m/^#/) {
+	    if ($firstHeader) {
+		printf UC "%s", $line;
+	    }
+	    next;
+	}
+	$firstHeader = 0;
+	$line =~ s/$key/chr${chrN}/;
+	printf UC "%s", $line;
+    }
+    close (FH);
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    while (my $line = <FH>) {
+	if ($line =~ m/^>/) {
+	    die "can not match fasta name $key in $fastaFile\n$line" if ($line !~ m/$key/);
+	    printf FA ">chr${chrN}\n";
+	    next;
+	}
+	printf FA "%s", $line;
+    }
+    close (FH);
+}
+close (UC);
+close (FA);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUcsc.pl
+
+    time ./mkUcsc.pl 
+    #	real    18m3.244s
+
+    zcat Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | \
+	sed -e 's/\.1//' | gzip -c > ucsc.unplaced.agp.gz
+
+    zcat Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz \
+	| sed -e 's/^>.*emb|\([A-Z0-9]*\).*/>\1/' | gzip -c \
+	> ucsc.unplaced.fa.gz
+
+###########################################################################
+# Initial genome build (DONE - 2011-11-16 - Hiram)
+    cd /hive/data/genomes/fr3
+    cat << '_EOF_' > fr3.config.ra
+# Config parameters for makeGenomeDb.pl:
+db fr3
+clade vertebrate
+genomeCladePriority 110
+scientificName Takifugu Rubripes 
+commonName Fugu
+assemblyDate Oct. 2011
+assemblyLabel Fugu Genome Sequencing Consortium - FUGU5 (NCBI project 1434, GCA_000180615.2)
+assemblyShortLabel fr3.1
+# orderKey = fr2.orderKey - 1
+orderKey 463
+#       GI: 23397366
+mitoAcc NC_004299
+fastaFiles /hive/data/genomes/fr3/genbank/ucsc.*fa.gz
+agpFiles /hive/data/genomes/fr3/genbank/ucsc.*agp.gz
+dbDbSpeciesDir fugu
+# qualFiles none
+taxId 31033
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -stop=agp -workhorse=hgwdev -fileServer=hgwdev \
+	fr3.config.ra > step.agp.log 2>&1 &
+    #	real    0m29.258s
+    # take a look at the constructed AGP file to see if it has the names
+    #	desired, then continuing:
+    time makeGenomeDb.pl -continue=db -workhorse=hgwdev -fileServer=hgwdev \
+	fr3.config.ra > step.db.log 2>&1 &
+    #	about 3 minutes
+
+################################################
+## WINDOWMASKER (DONE - 2011-11-16 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/windowMasker
+    cd /hive/data/genomes/fr3/bed/windowMasker
+    time doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev fr3 > do.log 2>&1 &
+    #	real    21m47.182s
+
+    # Masking statistics
+    twoBitToFa fr3.wmsk.sdust.2bit stdout | faSize stdin
+    #	391484715 bases (40522884 N's 350961831 real 284458798 upper
+    #	66503033 lower) in 6835 sequences in 1 files
+    #	%16.99 masked total, %18.95 masked real
+
+    hgLoadBed fr3 windowmaskerSdust windowmasker.sdust.bed.gz
+    # Loaded 1742235 elements of size 3
+
+    featureBits -countGaps fr3 windowmaskerSdust
+    #	107012497 bases of 391484715 (27.335%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits fr3 -not gap -bed=notGap.bed
+    #	350961831 bases of 350961831 (100.000%) in intersection
+    time nice -n +19 featureBits fr3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	66503033 bases of 350961831 (18.949%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed fr3 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1743810 elements of size 4
+    featureBits -countGaps fr3 windowmaskerSdust
+    #	66503033 bases of 391484715 (16.987%) in intersection
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../fr3.unmasked.2bit stdin \
+	    -type=.bed fr3.cleanWMSdust.2bit
+    twoBitToFa fr3.cleanWMSdust.2bit stdout | faSize stdin \
+        > fr3.cleanWMSdust.faSize.txt
+    cat fr3.cleanWMSdust.faSize.txt
+    #	391484715 bases (40522884 N's 350961831 real 284458798 upper 66503033 lower) in 6835 sequences in 1 files
+    #	%16.99 masked total, %18.95 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps fr3 rmsk windowmaskerSdust
+    #	21610292 bases of 391484715 (5.520%) in intersection
+
+##########################################################################
+# running repeat masker (DONE - 2011-11-16 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/repeatMasker
+    cd /hive/data/genomes/fr3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk fr3 > do.log 2>&1 &
+    #	real       46m48.252s
+    cat faSize.rmsk.txt
+    #	391484715 bases (40522884 N's 350961831 real 322500133 upper
+    #	28461698 lower) in 6835 sequences in 1 files
+    #	%7.27 masked total, %8.11 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+# April 26 2011 (open-3-3-0) version of RepeatMasker
+
+    featureBits -countGaps fr3 rmsk
+    #	28570382 bases of 391484715 (7.298%) in intersection
+    # why is it different than the faSize above ?
+
+##########################################################################
+# running simple repeat (DONE - 2011-11-16 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/simpleRepeat
+    cd /hive/data/genomes/fr3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	fr3 > do.log 2>&1 &
+    #	real  14m11.20
+
+    cat fb.simpleRepeat 
+    #	10415803 bases of 350961831 (2.968%) in intersection
+
+    # We are not going to use the RepeatMasker business since Window Masker
+    #	covers much more.  It it was just TRF and rmsk, the following would
+    #	take place.
+    # when repeatMasker above is completed, add this mask:
+    cd /hive/data/genomes/fr3
+    twoBitMask fr3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed fr3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa fr3.2bit stdout | faSize stdin > faSize.fr3.2bit.txt
+    cat faSize.fr3.2bit.txt
+    #	391484715 bases (40522884 N's 350961831 real 321862602 upper
+    #	29099229 lower) in 6835 sequences in 1 files
+    #	%7.43 masked total, %8.29 masked real
+
+    #  *** REMEMBER *** to reset they symLink in gbdb:
+    rm /gbdb/fr3/fr3.2bit
+    ln -s `pwd`/fr3.2bit /gbdb/fr3/fr3.2bit
+
+#########################################################################
+## Add TRF mask to WindowMasker masked sequence
+    cd /cluster/data/fr3
+    twoBitMask bed/windowMasker/fr3.cleanWMSdust.2bit \
+      -add bed/simpleRepeat/trfMask.bed fr3.2bit
+    # you can safely ignore the warnings about >= 13 fields
+
+    # check the total masking
+    twoBitToFa fr3.2bit stdout | faSize stdin
+    #	391484715 bases (40522884 N's 350961831 real 284231237 upper
+    #	66730594 lower) in 6835 sequences in 1 files
+    #	%17.05 masked total, %19.01 masked real
+
+    # as an experiment, see what rmsk adds:
+    twoBitMask fr3.2bit \
+      -add bed/repeatMasker/fr3.sorted.fa.out fr3.trf.wm.rmsk.2bit
+
+    twoBitToFa fr3.trf.wm.rmsk.2bit stdout | faSize stdin
+    #	391484715 bases (40522884 N's 350961831 real 277411829 upper
+    #	73550002 lower) in 6835 sequences in 1 files
+    #	%18.79 masked total, %20.96 masked real
+    # which is an extra 6.8 million bases: 73550002-66730594 = 6819408
+
+    # Make this be the actual file for the genome browser
+    rm /gbdb/fr3/fr3.2bit
+    ln -s /hive/data/genomes/fr3/fr3.2bit /gbdb/fr3/fr3.2bit 
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2011-11-16 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/gap
+    cd /hive/data/genomes/fr3/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../fr3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    1m8.647s
+
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits fr3 -not gap -bed=notGap.bed
+    #	363677527 bases of 363677527 (100.000%) in intersection
+    featureBits fr3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	12715696 bases of 363677527 (3.496%) in intersection
+    #	Wow, that's a lot of unmarked gap
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" fr3 | sort -n | tail -1
+    #	110
+    #	that number is used below in the script to mark all the new gaps
+    #	with a higher ix than that
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" fr3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits -countGaps fr3 other.bed
+    #	12715696 bases of 363677527 (3.248%) in intersection
+    wc -l other.bed
+    #	24141
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad fr3 otherGap other.bed
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" fr3
+    #	14303
+    hgsql fr3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" fr3
+    #	38444
+    # == 24141 + 14303
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 fr3 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt
+
+    # there are non-bridged gaps here:
+
+    hgsql -N -e "select bridge from gap;" fr3 | sort | uniq -c
+    #	256 no
+    #	38188 yes
+
+##########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-11-17 - Hiram)
+    # Use -repMatch=128 (based on size -- for human we use 1024, and
+    # fugu size is ~12% of human judging by gapless fr3 vs. hg18
+    # genome sizes from featureBits.  Use the "real" number from
+    #	the faSize measurements
+
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 350961831 / 2897316137 \) \* 1024
+    #	( 350961831 / 2897316137 ) * 1024 = 124.040629
+    # round up to 128
+
+    cd /hive/data/genomes/fr3
+    blat fr3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/fr3.11.ooc -repMatch=128
+    #	Wrote 8853 overused 11-mers to jkStuff/fr3.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    # there are some non-bridged gaps
+    hgsql -N -e "select bridge from gap;" fr3 | sort | uniq -c
+    #	256 no
+    #	38188 yes
+
+    cd /hive/data/genomes/fr3/jkStuff
+    gapToLift fr3 fr3.nonBridged.lift -bedFile=fr3.nonBridged.bed
+    cd /hive/data/genomes/fr3
+    mkdir /hive/data/staging/data/fr3
+    cp -p jkStuff/fr3.11.ooc chrom.sizes fr3.2bit jkStuff/fr3.nonBridged.lift \
+	/hive/data/staging/data/fr3/
+    # request rsync copy from cluster admin
+
+#########################################################################
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fr3", "blat1", "17814", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fr3", "blat1", "17815", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+## Default position set same as fr2 (DONE - 2011-11-17 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr21:5807962-5832802"
+	where name="fr3";' hgcentraltest
+
+#########################################################################

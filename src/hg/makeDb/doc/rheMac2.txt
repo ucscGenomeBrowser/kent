@@ -1,5 +1,8 @@
 # for emacs: -*- mode: sh; -*-
 
+# http://www.hgsc.bcm.tmc.edu/project-species-p-Rhesus%20Macaque.hgsc?pageLocation=Rhesus%20Macaque
+
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AANU00
 
 # Macaca Mulatta  (rheMac2)
 # Venter Institute final split merge assembly using washU and baylor

@@ -6,6 +6,9 @@
 #blocks of the N50 size or longer. The N50 length for supercontigs is 101.35 kb
 #and is 3.13 kb for contigs. The total number of bases in supercontigs is 3.39
 #Gb and in contigs is 1.97 Gb.
+
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAQR00
+
 #
 ##########################################################################
 #  Run the makeGenomeDb.pl script (DONE - 2006-12-18 - Robert)

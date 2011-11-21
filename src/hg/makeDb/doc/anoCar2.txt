@@ -4,6 +4,8 @@
 # ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/
 #	Anolis_carolinensis/
 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAWZ00
+
 ##########################################################################
 # Download sequence (DONE - 2011-04-12 - Hiram)
     mkdir -p /hive/data/genomes/anoCar2/genbank
