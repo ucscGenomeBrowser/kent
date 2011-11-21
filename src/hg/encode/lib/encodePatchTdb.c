@@ -685,11 +685,11 @@ if (!foundOld)
 return (foundOld && !foundNew);
 }
 
-char *findCompositeInIncluder(struct raFile *includer, char *composite, int *numTagsFound, boolean removeAlpha, char **warnMsg)
+char *findCompositeInIncluder(struct raFile *includer, char *composite, char *releaseTag, int *numTagsFound, boolean removeAlpha, char **warnMsg)
 /* */
 /* Find <composite>{.other}.ra in includer file trackDb.wgEncode.ra
  * Return compositeName (no path) or NULL if error, give warnings.
- * Must have tag alpha or no tags.
+ * Must have tag releaseTag (usually "alpha") or no tags.
  * If removeAlpha is true, then the alpha tag is removed,
  * or if no tags then adds tags beta,pubic */
 {
@@ -736,7 +736,7 @@ for (r = includer->recordList; r != NULL; r = r->next)
 			int tagCount = slCount(rlTags);
 			for(rlTag=rlTags; rlTag; rlTag = rlTag->next)
 			    {
-			    if (sameString(rlTag->name, "alpha"))
+			    if (sameString(rlTag->name, releaseTag))
 				{
 				found = TRUE;
 				result = cloneStringZ(tag->val, raEnd - tag->val);
