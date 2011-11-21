@@ -324,7 +324,6 @@ for(el=list; el; el=el->next)
 	}
     }
 
-
 // see if we have to add any .bam.bai to the list 
 for(el=list; el; el=el->next)
     {
@@ -350,6 +349,7 @@ for(el=list; el; el=el->next)
 
 
 // make sure all the files are there
+struct dyString *newFileNames = newDyString(256);
 for(el=list; el; el=el->next)
     {
 
@@ -365,6 +365,9 @@ for(el=list; el; el=el->next)
     char *newFileName = NULL;
     char newBuffer[10 * 1024];
     newFileName = replaceChars(fileName, oldObj, newObj);
+    if (el != list)
+	dyStringAppend(newFileNames, ",");
+    dyStringAppend(newFileNames, newFileName);
 
     int i = 0;
     for(i=0; i < 2; ++i)  // do main (i==0) and newest release (i==1)
@@ -420,17 +423,16 @@ for(el=list; el; el=el->next)
 
 if (pass == 1)
     {
-    char *newFileNames = slNameListToString(list, ',');
     struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "fileName");
     freeMem(mdbVar->val);
-    mdbVar->val = newFileNames;
+    mdbVar->val = newFileNames->string;
     logChange("renamed mdbObj->fileName from %s to %s\n", oldObj, newObj);
 
     // update mdb_$USER
     char sql[1024];
     safef(sql, sizeof sql, 
 	"update %s set val='%s' where obj='%s' and var='fileName'",
-	metaUser, newFileNames, oldObj);
+	metaUser, newFileNames->string, oldObj);
     if (sqlUpdateRows(conn, sql, NULL) == 0)
 	{
 	logWarn("error: no rows changed for: %s", sql);	
