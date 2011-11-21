@@ -2686,7 +2686,7 @@ var imageV2 = {
             imageV2.updateTiming(response);
         }
         if(this.disabledEle) {
-            this.disabledEle.attr('disabled', '');
+            this.disabledEle.removeAttr('disabled');
         }
         if(this.loadingId) {
             hideLoadingImage(this.loadingId);
