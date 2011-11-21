@@ -1355,6 +1355,42 @@ sex M
 tier 3
 protocol Stam:GM12801_Stam_protocol.pdf
 
+term GM12812
+tag GM12812
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
+lineage mesoderm
+karyotype normal
+sex M
+tissue blood
+vendorName Coriell
+vendorId GM12812
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12812&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12812_Stam_protocol.pdf
+
+term GM12813
+tag GM12813
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
+lineage mesoderm
+karyotype normal
+sex F
+tissue blood
+vendorName Coriell
+vendorId GM12813
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12813&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12813_Stam_protocol.pdf
+
 term GM12864
 tag GM12864
 type Cell Line
