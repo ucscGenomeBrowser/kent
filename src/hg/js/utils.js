@@ -1873,7 +1873,6 @@ var findTracks = {
 
         var td = $('td#' + this.cmd );
         if (td != undefined) {
-            var usesFilterBy = ($("select.mdbVar[name='hgt_mdbVar"+this.num+"']").hasClass('noMulti') == false);
             td.empty();
             td.append(response);
             var inp = $(td).find('.mdbVal');
@@ -1881,21 +1880,14 @@ var findTracks = {
             if (inp != undefined && tdIsLike != undefined) {
                 if ($(inp).hasClass('freeText')) {
                     $(tdIsLike).text('contains');
-                } else if ($(inp).hasClass('wildList')
-                    || (usesFilterBy && $(inp).hasClass('filterBy'))) {
+                } else if ($(inp).hasClass('wildList') ||  $(inp).hasClass('filterBy')) {
                     $(tdIsLike).text('is among');
                 } else {
                     $(tdIsLike).text('is');
                 }
             }
             $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
-                if (usesFilterBy) {
                     ddcl.setup(this,'noneIsAll');
-                } else {
-                    $(this).attr("multiple",false);
-                    $(this).removeClass('filterBy');
-                    $(this).show();
-                }
             });
         }
         findTracks.updateMdbHelp(this.num);
@@ -2151,14 +2143,17 @@ var findTracks = {
         $(thisForm).find('input.viewBtn').click();
     },
 
-    mdbSelectPlusMinus: function (obj, rowNum)
+    mdbSelectPlusMinus: function (obj)
     { // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
     // Will remove row or clone new one.  Complication is that 'advanced' and 'files' tab duplicate the tables!
 
         var objId = $(obj).attr('id');
-        rowNum = objId.substring(objId.length - 1);
-        if ($(obj).val() == '+') {
-            var buttons = $("input#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
+        var rowNum = objId.substring(objId.length - 1);
+        var val = $(obj).text();
+        if (val == undefined || val.length == 0)
+            val = $(obj).val(); // Remove this when non-CSS buttons go away
+        if (val == '+') {
+            var buttons = $("#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
             if (buttons.length > 0) {
                 var table = null;
                 $(buttons).each(function (i) {
@@ -2183,7 +2178,7 @@ var findTracks = {
                 return false;
             }
         } else { // == '-'
-            var buttons = $("input#minusButton"+rowNum);  // Two tabs may have the exact same buttons!
+            var buttons = $("#minusButton"+rowNum);  // Two tabs may have the exact same buttons!
             if (buttons.length > 0) {
                 var remaining = 0;
                 $(buttons).each(function (i) {
@@ -2208,7 +2203,6 @@ var findTracks = {
     mdbSelectRowsNormalize: function (table)
     { // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
     // Will walk through each row and get the numberings of addressable elements correct.
-        //var table = $('table#'+tableId);
         if (table != undefined) {
             var mdbSelectRows = $(table).find('tr.mdbSelect');
             var needMinus = (mdbSelectRows.length > 2);
@@ -2216,33 +2210,39 @@ var findTracks = {
                 var rowNum = ix + 1;  // Each [-][+] and mdb var=val pair of selects must be numbered
 
                 // First the [-][+] buttons
-                var plusButton = $(this).find("input[value='+']")[0];
-                if (plusButton != undefined) {
+                var plusButton = $(this).find("[id^='plusButton']")[0];
+                if (plusButton != undefined) {  // should always be a plus button
+                    var oldNum =  Number(plusButton.id.substring(plusButton.id.length - 1));
+                    if (oldNum == rowNum)
+                        return;  // that is continue with the next row
+
                     $(plusButton).attr('id',"plusButton"+rowNum);
-                    // rebinding click appears to be not needed and screws up IE as well.
-                    //$(plusButton).unbind('click')
-                    //$(plusButton).click(function() { return findTracks.mdbSelectPlusMinus($(plusButton), rowNum); });
-                    var minusButton = $(this).find("input[value='-']")[0];
+                    var minusButton = $(this).find("[id^='minusButton']")[0];
                     if (needMinus) {
                         if (minusButton == undefined) {
-                            $(plusButton).before("<input type='button' id='minusButton"+rowNum+"' value='-' style='font-size:.7em;' title='delete this row' onclick='return findTracks.mdbSelectPlusMinus(this,"+rowNum+");'>");
-                            minusButton = $(this).find("input[value='-']")[0];
-                        } else {
+                            if ($(plusButton).hasClass('pmButton'))
+                                $(plusButton).before("<span class='pmButton' id='minusButton"+rowNum+"' title='delete this row' onclick='findTracks.mdbSelectPlusMinus(this);'>-</span>");
+                            else   // Remove this else when non-CSS buttons go away
+                                $(plusButton).before("<input type='button' id='minusButton"+rowNum+"' value='-' style='font-size:.7em;' title='delete this row' onclick='return findTracks.mdbSelectPlusMinus(this);'>");
+                        } else
                             $(minusButton).attr('id',"minusButton"+rowNum);
-                            $(minusButton).unbind('click');
-                            $(minusButton).click(function() { return findTracks.mdbSelectPlusMinus($(minusButton), rowNum); });
-                        }
                     } else if (minusButton != undefined)
                         $(minusButton).remove();
                 }
+
                 // Now the mdb var=val pair of selects
-                var element = $(this).find("select[name^='hgt_mdbVar']")[0];
+                var element = $(this).find(".mdbVar")[0];  // select var
                 if (element != undefined)
                     $(element).attr('name','hgt_mdbVar' + rowNum);
 
-                element = $(this).find("select[name^='hgt_mdbVal']")[0];
-                if (element != undefined)
+                element = $(this).find(".mdbVal")[0];      // select val
+                if (element != undefined) {                // not there if new row
                     $(element).attr('name','hgt_mdbVal' + rowNum);
+                    if ($(element).hasClass('filterBy')) {
+                        $(element).attr('id',''); // removing id ensures renumbering id
+                        ddcl.reinit([ element ],true);
+                    }
+                }
 
                 // A couple more things
                 element = $(this).find("td[id^='isLike']")[0];
