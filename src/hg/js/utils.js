@@ -2642,3 +2642,13 @@ function escapeJQuerySelectorChars(str)
     // replace characters which are reserved in jQuery selectors (surprisingly jQuery does not have a built in function to do this).
     return str.replace(/([!"#$%&'()*+,./:;<=>?@[\]^`{|}~"])/g,'\\$1');
 }
+
+var preloadImages = new Array()
+var preloadImageCount = 0;
+function preloadImg(url)
+{
+// force an image to be loaded (e.g. for images in menus or dialogs).
+    preloadImages[preloadImageCount] = new Image();
+    preloadImages[preloadImageCount].src = url;
+    preloadImageCount++;
+}
