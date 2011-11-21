@@ -248,15 +248,24 @@ if (differentString(oldObj, tableName))
     return;
     }
 
+
+struct mdbVar *atticVar = hashFindVal(mdbObj->varHash, "attic");
+
 if (!sqlTableExists(conn, tableName))
     {
-    logWarn("metaDb table %s not found in database %s",tableName, database);
-    ++errorCount;
-    return;
+    if (atticVar)
+	{
+	logWarn("attic! metaDb table %s not found in database %s; this is as expected.",tableName, database); // just informational
+	}
+    else
+	{
+	logWarn("metaDb table %s not found in database %s", tableName, database);
+	++errorCount;
+	return;
+	}
     }
 else
     verbose(2,"table %s found\n", tableName);
-
 }
 
 void checkMetaFileNameAndDownloads(struct mdbObj *mdbObj, char *downDir, char *composite)
@@ -491,22 +500,60 @@ for(trackObj = trackObjs; trackObj; trackObj = trackObj->next)
 return hash;
 }
 
-void checkMetaTableInTrackDb(struct hash *trackHash)
+void checkMetaTableInTrackDb(struct mdbObj *mdbObj, struct hash *trackHash)
 {
 verbose(1, "\n");
 verbose(1, "---------------------------------------------------------\n");
 verbose(1, "Checking that table specified in metaDb exists in trackDb\n");
 verbose(1, "---------------------------------------------------------\n");
 
-struct trackDb *trackObj = hashFindVal(trackHash, oldObj);
-if (!trackObj)
+struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "tableName");
+if (mdbVar == NULL)
     {
-    logWarn("table %s: not found in trackDb",oldObj);
+    logWarn("tableName not found in object %s", mdbObj->obj);
     ++errorCount;
     return;
     }
-else
+
+struct mdbVar *atticVar = hashFindVal(mdbObj->varHash, "attic");
+struct mdbVar *statusVar = hashFindVal(mdbObj->varHash, "objStatus");
+char *reason = NULL;
+if (atticVar)
+    reason = "attic";
+if (statusVar)
+    {
+    if (startsWith("renamed", statusVar->val))
+	reason = "renamed";
+    if (startsWith("replaced", statusVar->val))
+	reason = "replaced";
+    if (startsWith("revoked", statusVar->val))
+	reason = "revoked";
+    }
+
+struct trackDb *trackObj = hashFindVal(trackHash, oldObj);
+if (trackObj)
+    {
+    if (reason)
+	{
+	logWarn("%s table %s: should NOT be found in trackDb", reason, oldObj);
+	++errorCount;
+	return;
+	}
     verbose(2, "tableName %s found in trackDb\n", oldObj);
+    }
+else
+    {
+    if (reason)
+	{ 
+	// ok because attic, replaced, revoked, renamed should not be in trackDb
+	}
+    else
+	{
+	logWarn("table %s: not found in trackDb",oldObj);
+	++errorCount;
+	return;
+	}
+    }
 
 // this was copied from another removed routine, not sure if it is needed
 char *compSetting = trackDbSetting(trackObj, "compositeTrack");
@@ -530,6 +577,7 @@ if (hashLookup(trackHash, newObj) != NULL)
     {
     logWarn("Renaming collision: trackDb entry %s already exists", newObj);
     ++errorCount;
+    return;
     }
 }
 
@@ -1116,7 +1164,7 @@ while (pass < 2)
 
     if (pass == 0 && sameString(objType, "table"))
 	{
-	checkMetaTableInTrackDb(trackHash);
+	checkMetaTableInTrackDb(mdbObj, trackHash);
 	if (errorCount > 0) break;
 	}
 
