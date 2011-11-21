@@ -349,7 +349,7 @@ scoreFilterLimits 0:1000
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
 
-        track wgEncode450tmp
+        track wgEncodeHaibMethyl450Hct116StanfordSitesRep
         parent wgEncodeHaibMethyl450 off
         shortLabel HCT-116 HAIB 
         longLabel HCT-116 HAIB Methylation 450K Bead Array from ENCODE/HAIB

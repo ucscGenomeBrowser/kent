@@ -2,8 +2,8 @@
 #  Currently downloads only, there is an empty table for now
 
 track wgEncodeUmassDekker5C
+superTrack wgEncodeChromSuper dense
 type downloadsOnly
-#type bed
 shortLabel UMass 5C Interactions
 longLabel Chromatin Interactions by 5C from ENCODE/Dekker Univ. Mass.
 group regulation

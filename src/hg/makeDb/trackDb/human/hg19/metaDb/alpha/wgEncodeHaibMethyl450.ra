@@ -1,4 +1,4 @@
-metaObject wgEncode450tmp
+metaObject wgEncodeHaibMethyl450Hct116StanfordSitesRep
 objType table
 cell HCT-116
 composite wgEncodeHaibMethyl450
@@ -6,7 +6,7 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
-fileName wgEncode450tmp.bed.gz
+fileName wgEncodeHaibMethyl450Hct116StanfordSitesRep.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl450K
@@ -15,7 +15,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 1
 subId 4942
-tableName wgEncode450tmp
+tableName wgEncodeHaibMethyl450Hct116StanfordSitesRep
 treatment None
 view Sites
 
