@@ -117,6 +117,51 @@ taxId 31033
 	fr3.config.ra > step.db.log 2>&1 &
     #	about 3 minutes
 
+################################################
+## WINDOWMASKER (DONE - 2011-11-16 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/windowMasker
+    cd /hive/data/genomes/fr3/bed/windowMasker
+    time doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev fr3 > do.log 2>&1 &
+    #	real    21m47.182s
+
+    # Masking statistics
+    twoBitToFa fr3.wmsk.sdust.2bit stdout | faSize stdin
+    #	391484715 bases (40522884 N's 350961831 real 284458798 upper
+    #	66503033 lower) in 6835 sequences in 1 files
+    #	%16.99 masked total, %18.95 masked real
+
+    hgLoadBed fr3 windowmaskerSdust windowmasker.sdust.bed.gz
+    # Loaded 1742235 elements of size 3
+
+    featureBits -countGaps fr3 windowmaskerSdust
+    #	107012497 bases of 391484715 (27.335%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits fr3 -not gap -bed=notGap.bed
+    #	350961831 bases of 350961831 (100.000%) in intersection
+    time nice -n +19 featureBits fr3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	66503033 bases of 350961831 (18.949%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed fr3 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1743810 elements of size 4
+    featureBits -countGaps fr3 windowmaskerSdust
+    #	66503033 bases of 391484715 (16.987%) in intersection
+    #	mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../fr3.unmasked.2bit stdin \
+	    -type=.bed fr3.cleanWMSdust.2bit
+    twoBitToFa fr3.cleanWMSdust.2bit stdout | faSize stdin \
+        > fr3.cleanWMSdust.faSize.txt
+    cat fr3.cleanWMSdust.faSize.txt
+    #	391484715 bases (40522884 N's 350961831 real 284458798 upper 66503033 lower) in 6835 sequences in 1 files
+    #	%16.99 masked total, %18.95 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps fr3 rmsk windowmaskerSdust
+    #	21610292 bases of 391484715 (5.520%) in intersection
+
 ##########################################################################
 # running repeat masker (DONE - 2011-11-16 - Hiram)
     mkdir /hive/data/genomes/fr3/bed/repeatMasker
@@ -150,6 +195,9 @@ taxId 31033
     cat fb.simpleRepeat 
     #	10415803 bases of 350961831 (2.968%) in intersection
 
+    # We are not going to use the RepeatMasker business since Window Masker
+    #	covers much more.  It it was just TRF and rmsk, the following would
+    #	take place.
     # when repeatMasker above is completed, add this mask:
     cd /hive/data/genomes/fr3
     twoBitMask fr3.rmsk.2bit \
@@ -165,6 +213,33 @@ taxId 31033
     #  *** REMEMBER *** to reset they symLink in gbdb:
     rm /gbdb/fr3/fr3.2bit
     ln -s `pwd`/fr3.2bit /gbdb/fr3/fr3.2bit
+
+#########################################################################
+## Add TRF mask to WindowMasker masked sequence
+    cd /cluster/data/fr3
+    twoBitMask bed/windowMasker/fr3.cleanWMSdust.2bit \
+      -add bed/simpleRepeat/trfMask.bed fr3.2bit
+    # you can safely ignore the warnings about >= 13 fields
+
+    # check the total masking
+    twoBitToFa fr3.2bit stdout | faSize stdin
+    #	391484715 bases (40522884 N's 350961831 real 284231237 upper
+    #	66730594 lower) in 6835 sequences in 1 files
+    #	%17.05 masked total, %19.01 masked real
+
+    # as an experiment, see what rmsk adds:
+    twoBitMask fr3.2bit \
+      -add bed/repeatMasker/fr3.sorted.fa.out fr3.trf.wm.rmsk.2bit
+
+    twoBitToFa fr3.trf.wm.rmsk.2bit stdout | faSize stdin
+    #	391484715 bases (40522884 N's 350961831 real 277411829 upper
+    #	73550002 lower) in 6835 sequences in 1 files
+    #	%18.79 masked total, %20.96 masked real
+    # which is an extra 6.8 million bases: 73550002-66730594 = 6819408
+
+    # Make this be the actual file for the genome browser
+    rm /gbdb/fr3/fr3.2bit
+    ln -s /hive/data/genomes/fr3/fr3.2bit /gbdb/fr3/fr3.2bit 
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
@@ -234,3 +309,51 @@ close (FH);
     #	38188 yes
 
 ##########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2011-11-17 - Hiram)
+    # Use -repMatch=128 (based on size -- for human we use 1024, and
+    # fugu size is ~12% of human judging by gapless fr3 vs. hg18
+    # genome sizes from featureBits.  Use the "real" number from
+    #	the faSize measurements
+
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \( 350961831 / 2897316137 \) \* 1024
+    #	( 350961831 / 2897316137 ) * 1024 = 124.040629
+    # round up to 128
+
+    cd /hive/data/genomes/fr3
+    blat fr3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/fr3.11.ooc -repMatch=128
+    #	Wrote 8853 overused 11-mers to jkStuff/fr3.11.ooc
+
+    #	copy all of this stuff to the klusters:
+    # there are some non-bridged gaps
+    hgsql -N -e "select bridge from gap;" fr3 | sort | uniq -c
+    #	256 no
+    #	38188 yes
+
+    cd /hive/data/genomes/fr3/jkStuff
+    gapToLift fr3 fr3.nonBridged.lift -bedFile=fr3.nonBridged.bed
+    cd /hive/data/genomes/fr3
+    mkdir /hive/data/staging/data/fr3
+    cp -p jkStuff/fr3.11.ooc chrom.sizes fr3.2bit jkStuff/fr3.nonBridged.lift \
+	/hive/data/staging/data/fr3/
+    # request rsync copy from cluster admin
+
+#########################################################################
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fr3", "blat1", "17814", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("fr3", "blat1", "17815", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+## Default position set same as fr2 (DONE - 2011-11-17 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr21:5807962-5832802"
+	where name="fr3";' hgcentraltest
+
+#########################################################################

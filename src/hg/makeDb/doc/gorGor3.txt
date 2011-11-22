@@ -1019,14 +1019,14 @@ tarSyr1:0.137823):0.011062,(micMur1:0.092749,otoGar1:0.129725):0.035463);
 XXX - working on this
     # convert to species names
     /cluster/bin/phast/tree_doctor --rename \
-"gorGor3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; melGal1->Turkey; galGal3->Chicken; anoCar2->Lizard; danRer7->Zebrafish" \
+"gorGor3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; rheMac2->Rhesus; papHam1->Baboon; calJac3->Marmoset; tarSyr1->Tarsier; micMur1->Mouse_lemur; otoGar1->Bushbaby" \
 gorGor3.11way.nh > gorGor3.commonNames.11way.nh
 
-# ((X_tropicalis:0.855573,(((Human:0.144018,
-# (Mouse:0.084509,Rat:0.091589):0.271974):0.278985,
-# Opossum:0.340786):0.181168,((Turkey:0.100000,
-# Chicken:0.165536):0.299223,Lizard:0.489241):0.105143):0.172371):0.311354,
-# Zebrafish:0.878701);
+# (((((((Gorilla:0.008825,(Human:0.006700,Chimp:0.006667):0.002250):0.009680,
+# Orangutan:0.018318):0.007000,Gibbon:0.010000):0.007000,
+# (Rhesus:0.007853,Baboon:0.007637):0.029618):0.021965,
+# Marmoset:0.066131):0.057590,Tarsier:0.137823):0.011062,
+# (Mouse_lemur:0.092749,Bushbaby:0.129725):0.035463);
 
     #	Use this specification in the phyloGif tool:
     #	http://genome.ucsc.edu/cgi-bin/phyloGif
@@ -1035,29 +1035,33 @@ gorGor3.11way.nh > gorGor3.commonNames.11way.nh
     /cluster/bin/phast/all_dists gorGor3.11way.nh > 11way.distances.txt
     #	Use this output to create the table below
     grep -i gorGor3 11way.distances.txt | sort -k3,3n
-# gorGor3 melGal1 1.532310
-# gorGor3 monDom5 1.549898
-# gorGor3 galGal3 1.597846
-# gorGor3 anoCar2 1.622328
-# gorGor3 hg19    1.632115
-# gorGor3 mm9     1.844580
-# gorGor3 rn4     1.851660
-# gorGor3 danRer7 2.045628
+# gorGor3 panTro3 0.017742
+# gorGor3 hg19    0.017775
+# gorGor3 nomLeu1 0.035505
+# gorGor3 ponAbe2 0.036823
+# gorGor3 papHam1 0.069760
+# gorGor3 rheMac2 0.069976
+# gorGor3 calJac3 0.120601
+# gorGor3 tarSyr1 0.249883
+# gorGor3 micMur1 0.251334
+# gorGor3 otoGar1 0.288310
 
 #	If you can fill in all the numbers in this table, you are ready for
 #	the multiple alignment procedure
 
 #                         featureBits chainLink measures
-#                                   chainAnoCar2Link         chain linearGap
+#                                        chainGorGor3Link  chain linearGap
 #    distance                    on gorGor3  on other     minScore
-#  1  1.532 - turkey melGal1     (%  4.20) (%  5.24)       5000     loose
-#  2  1.550 - opossum monDom5    (%  5.49) (%  2.14)       5000     loose
-#  3  1.598 - chicken galGal3    (%  4.73) (%  5.27)       5000     loose
-#  4  1.622 - lizard anoCar2     (%  6.78) (%  5.11)       5000     loose
-#  5  1.632 - human hg19         (%  6.69) (%  3.04)       5000     loose
-#  6  1.845 - mouse mm9          (%  6.61) (%  3.13)       5000     loose
-#  7  1.852 - rat rn4            (%  5.49) (%  2.57)       5000     loose
-#  8  2.046 - zebrafish danRer7  (%  7.11) (%  6.51)       5000     loose
+#  1  0.018 - chimp panTro3      (% 89.04) (% 88.04)       5000     medium
+#  2  0.018 - human hg19         (% 91.11) (% 89.88)       5000     medium
+#  3  0.036 - gibbon nomLeu1     (% 83.48) (% 84.12)       5000     medium
+#  4  0.037 - orangutan ponAbe2  (% 86.35) (% 83.55)       5000     medium
+#  5  0.070 - baboon papHam1     (% 79.43) (% 80.87)       5000     medium
+#  6  0.070 - rhesus rheMac2     (% 79.24) (% 82.19)       5000     medium
+#  7  0.121 - marmoset calJac3   (% 68.51) (% 70.07)       5000     medium
+#  8  0.250 - tarsier tarSyr1    (% 19.48) (% 20.48)       5000     medium
+#  9  0.251 - mouse lemur micMur1(% 22.91) (% 34.56)       5000     medium
+# 10  0.288 - bushbaby otoGar1   (% 12.02) (% 17.08)       5000     medium
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
@@ -1065,8 +1069,7 @@ gorGor3.11way.nh > gorGor3.commonNames.11way.nh
     # create species list and stripped down tree for autoMZ
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
 	gorGor3.11way.nh > tmp.nh
-    echo `cat tmp.nh` > tree-commas.nh
-    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
     sed 's/[()]//g; s/,/ /g' tree.nh > species.list
 
     # split the maf files into a set of hashed named files
@@ -1079,9 +1082,9 @@ do
     echo "${D}"
     mkdir $D
     cd $D
-    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/gorGor3.${D}.maf.gz"
+    echo "mafSplit -byTarget -useHashedName=10 /dev/null . ../../../lastz.${D}/axtChain/gorGor3.${D}.synNet.maf.gz"
     mafSplit -byTarget -useHashedName=8 /dev/null . \
-	../../../lastz.${D}/mafNet/gorGor3.${D}.net.maf.gz
+	../../../lastz.${D}/axtChain/gorGor3.${D}.synNet.maf.gz
     cd ..
 done
 

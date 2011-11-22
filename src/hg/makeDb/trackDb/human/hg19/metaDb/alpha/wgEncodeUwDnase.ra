@@ -14908,6 +14908,7 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 md5sum fe85986229b367ed81d310d678265cb3,522d75f85e31cea62d6f41f8e2065056
+objStatus revoked - lab wanted to pull data due to a problem with DNA digest leading to spurious signal spikes(noise)
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -14979,6 +14980,7 @@ grant Stam
 lab UW
 labVersion Hotspot-v5.2
 md5sum 36e2052f63c36e6a410da45f7da94700
+objStatus revoked - lab wanted to pull data due to a problem with DNA digest leading to spurious signal spikes(noise)
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15052,6 +15054,7 @@ grant Stam
 lab UW
 labVersion lmax-v1.0
 md5sum fa30e0c47cbc55598921bb1866728a4d
+objStatus revoked - lab wanted to pull data due to a problem with DNA digest leading to spurious signal spikes(noise)
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15122,6 +15125,7 @@ fileName wgEncodeUwDnaseMonocd14ro1746RawDataRep1V2.fastq.tgz
 grant Stam
 lab UW
 md5sum aa36e2238abb647a8d84f76cd024568c
+objStatus revoked - lab wanted to pull data due to a problem with DNA digest leading to spurious signal spikes(noise)
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -15192,6 +15196,7 @@ grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
 md5sum 01931d00fa1b170143cdcdf548906cd1
+objStatus revoked - lab wanted to pull data due to a problem with DNA digest leading to spurious signal spikes(noise)
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -19488,4 +19493,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1056188881
+# MAGIC: 984180054

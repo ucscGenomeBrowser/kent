@@ -7045,30 +7045,6 @@ subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2Sig
 view Signal
 
-metaObject wgEncodeOpenChromChipMonocd14InputAln
-objType file
-antibody Input
-cell Monocytes-CD14+
-composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-17
-dateUnrestricted 2011-10-17
-dccAccession wgEncodeEH001137
-expId 1137
-fileName wgEncodeOpenChromChipMonocd14InputAln.bam,wgEncodeOpenChromChipMonocd14InputAln.bam.bai
-geoSampleAccession GSM822296
-grant Crawford
-lab UT-A
-labVersion align_on_cluster_bwa.pl v 1
-md5sum 490c5d71e6c847ca77d93b562f173a6a,543d82be8f8ca67f7313949a86733e7d
-origAssembly hg19
-project wgEncode
-setType input
-subId 3271
-view Alignments
-
 metaObject wgEncodeOpenChromChipMonocd14InputRawData
 objType file
 antibody Input
@@ -7116,6 +7092,30 @@ setType input
 subId 3271
 tableName wgEncodeOpenChromChipMonocd14InputSig
 view Signal
+
+metaObject wgEncodeOpenChromChipMonocd14ro1746InputAln
+objType file
+antibody Input
+cell Monocytes-CD14+
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001137
+expId 1137
+fileName wgEncodeOpenChromChipMonocd14ro1746InputAln.bam,wgEncodeOpenChromChipMonocd14ro1746InputAln.bam.bai
+geoSampleAccession GSM822296
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+md5sum 490c5d71e6c847ca77d93b562f173a6a,543d82be8f8ca67f7313949a86733e7d
+origAssembly hg19
+project wgEncode
+setType input
+subId 3271
+view Alignments
 
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep1
 objType file
@@ -7620,4 +7620,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -140363302
+# MAGIC: 1214267123
