@@ -532,7 +532,7 @@ tableName wgEncodeHaibMethyl450Hct116HaibSitesRep1
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethyl450Hct116StanfordSitesRep
+metaObject wgEncodeHaibMethyl450Hct116StanfordSitesRep1
 objType table
 cell HCT-116
 composite wgEncodeHaibMethyl450
@@ -542,7 +542,7 @@ dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
 dccAccession wgEncodeEH002214
 expId 2214
-fileName wgEncodeHaibMethyl450Hct116StanfordSitesRep.bed.gz
+fileName wgEncodeHaibMethyl450Hct116StanfordSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
 labVersion Methyl450K
@@ -551,7 +551,7 @@ obtainedBy Stanford
 project wgEncode
 replicate 1
 subId 4942
-tableName wgEncodeHaibMethyl450Hct116StanfordSitesRep
+tableName wgEncodeHaibMethyl450Hct116StanfordSitesRep1
 treatment None
 view Sites
 
@@ -1452,4 +1452,4 @@ tableName wgEncodeHaibMethyl450U87SitesRep1
 treatment None
 view Sites
 
-# MAGIC: -680996760
+# MAGIC: -1837496651
