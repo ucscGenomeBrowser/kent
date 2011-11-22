@@ -493,7 +493,7 @@ release alpha
 
     track t2gPmc
     shortLabel PubmedCentral
-    longLabel Articles from PubmedCentral (Open-Access)
+    longLabel Publications from PubmedCentral (OA)
     parent t2g
     type bed 12
     articleTable t2gPmcArticle
@@ -503,7 +503,7 @@ release alpha
 
     track t2gElsevier
     shortLabel Elsevier (alpha)
-    longLabel Articles from Elsevier (paywall)
+    longLabel Publications from Elsevier
     parent t2g
     priority 2
     articleTable t2gElsevierArticle
