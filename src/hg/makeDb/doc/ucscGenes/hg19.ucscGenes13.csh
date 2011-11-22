@@ -595,9 +595,6 @@ pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 rm -r protein/raw
 
 
-
-
-
 cd $dir
 
 # Get parts of multiple alignments corresponding to transcripts.
@@ -661,7 +658,6 @@ cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.uniq.psl \
 txCdsCluster pick.bed pick.cluster
 
 
-
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
 # Map CDS to gene set.  Takes 10 seconds.  Might want to reconsider using
 # txCdsWeed here.
@@ -670,6 +666,11 @@ txCdsWeed pick.tce pick.info weededCds.tce weededCds.info
 txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 	-bedOut=weededCds.bed -exceptions=abWalk.exceptions \
 	-tweaked=weededCds.tweaked
+
+# After txCdsToGene, the transcripts in weeded.bed might be slightly different from
+# those in abWalk.bed.  Make a new sequence file, weeded.fa, to replace abWalk.fa.
+sequenceForBed -db=$db -bedIn=weeded.bed -fastaOut=weeded.fa -upCase -keepName
+
 
 # Separate out transcripts into coding and 4 uncoding categories.
 # Generate new gene set that weeds out the junkiest. Takes 9 seconds.
@@ -722,7 +723,7 @@ cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.t
 # The reresentative proteins and mrnas will be taken from RefSeq for the RefSeq ones, 
 # and derived from our transcripts for the rest.
 # Load these sequences into database. Takes 17 seconds.
-txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa \
+txGeneProtAndRna weeded.bed weeded.info weeded.fa weededCds.faa \
     refSeq.fa refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa \
     ucscGenesTx.fa ucscGenesTx.faa
 
