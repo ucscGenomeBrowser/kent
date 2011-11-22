@@ -139,7 +139,7 @@ for (;;)
 	for (;;)
 	    {
 	    if (!nextLine(lf, &line))
-		errAbort("Unexpected end of file %s", lf->fileName);
+		break;
 	    word = nextWord(&line);
 	    if (word == NULL)
 		break;
