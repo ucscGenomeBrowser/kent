@@ -5379,7 +5379,7 @@ lots N/A
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation eGFP-FOS:human_validation_White.pdf
-label FOS
+label eGFP-FOS
 
 term eGFP-GATA2
 tag GATA2e
@@ -5726,7 +5726,7 @@ targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
 validation GATA-1_(WesternBlot,ChIP):human_GATA-1_validation_Farnham.pdf
-label GATA1 (GATA-1)
+label GATA-1
 
 term GATA1_(SC-265)
 tag GATA1a
@@ -5741,7 +5741,7 @@ targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
 validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
-label GATA1 ( sc-265)
+label GATA1 (sc-265)
 
 term  GATA1_(SC-266)
 tag  GATA1b
@@ -6464,7 +6464,7 @@ lots N/A
 targetId GeneCard:IKZF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IKZF1
 validation IKZF1_(IkN)_(UCLA)(missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
-label IKZF1 (IKZF1_(IkN))
+label IKZF1 (IkN)
 
 term Ini1
 tag INI1
@@ -7150,7 +7150,7 @@ targetId GeneCards:KDM5B
 #PLU1 is a alias for KDM5B ~Jeff
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
-label PLU1 (PLU1)
+label PLU1
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7940,7 +7940,7 @@ lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation TR4_(WesternBlot,ChIP):mouse_TR4_validation_Farnham.pdf
-label TR4 (TR4)
+label TR4
 
 term TRIM37_(SC-49548)
 tag TRIM37
@@ -8343,7 +8343,7 @@ lots 1) B2508(Nov2008)
 targetId Gene:1994
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
 validation missing
-label ELAVL1 (SC-5261)
+label ELAVL1 (sc-5261)
 
 ##This does not appear in metaDb
 term FXR1
@@ -8563,7 +8563,7 @@ lots 3) 7308-S2
 targetId 7884
 targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
 validation missing
-label SLBP (06-1376; 26522; MA156353)
+label SLBP
 
 term T7Tag
 tag T7

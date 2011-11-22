@@ -115,6 +115,11 @@ described below.
 <UL> 
 <LI> <B>kgXref</B> identifies the RefSeq, SwissProt, Rfam, or tRNA
 sequences (if any) on which each each transcript was based.
+<LI> <B>knownToRefSeq</B> identifies the RefSeq transcript that each 
+UCSC Genes transcript is most closely associated with.  That RefSeq 
+transcript is either the RefSeq on which the UCSC Genes transcript was 
+based, if there is one, or otherwise it's the RefSeq transcript that 
+the UCSC Genes transcript overlaps at the most bases.  
 <LI> <B>knownGeneMrna</B> contains the mRNA sequence that represents
 each UCSC Genes transcript.  If the transcript is based on a RefSeq
 transcript, then this table contains the RefSeq transcript, including
