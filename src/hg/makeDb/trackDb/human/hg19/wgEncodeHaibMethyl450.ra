@@ -351,8 +351,8 @@ scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethyl450Hct116StanfordSitesRep
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCT-116 HAIB 
-        longLabel HCT-116 HAIB Methylation 450K Bead Array from ENCODE/HAIB
+        shortLabel HCT-116 Stanford
+        longLabel HCT-116 Stanford Methylation 450K Bead Array from ENCODE/HAIB
         subGroups cellType=HCT116H obtainedBy=Stanford treatment=NONE
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
@@ -361,8 +361,8 @@ scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethyl450Hct116HaibSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCT-116 Stan
-        longLabel HCT-116 Stanford Methylation 450K Bead Array from ENCODE/HAIB
+        shortLabel HCT-116 HAIB
+        longLabel HCT-116 HAIB Methylation 450K Bead Array from ENCODE/HAIB
         subGroups cellType=HCT116S obtainedBy=HAIB treatment=NONE
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
