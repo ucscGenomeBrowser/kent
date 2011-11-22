@@ -3368,7 +3368,7 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets
+description pancreatic islets from 2 donors
 tissue pancreas
 lineage endoderm
 vendorName Refer to protocol documents for differing sources
