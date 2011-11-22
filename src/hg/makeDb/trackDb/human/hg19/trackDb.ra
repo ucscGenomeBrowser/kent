@@ -2614,5 +2614,12 @@ oldToNew kg5ToKg6
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+searchName knownGeneOld5
+searchTable knownGeneOld5
+searchDescription Previous Version of UCSC Genes
+searchMethod fuzzy
+query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
+searchPriority 3.53
+
 include lincRNAs.ra
 
