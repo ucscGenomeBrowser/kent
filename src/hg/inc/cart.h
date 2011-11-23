@@ -5,6 +5,8 @@
 #ifndef CART_H
 #define CART_H
 
+struct cart;         // forward definition for use in trackDb.h
+
 #include "jksql.h"
 #include "errabort.h"
 #include "dystring.h"

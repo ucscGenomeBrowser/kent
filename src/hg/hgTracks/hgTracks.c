@@ -4143,22 +4143,16 @@ return NULL;
 }
 
 static void setSearchedTrackToPackOrFull(struct track *trackList)
-/* Open track associated with search position if any.   Also open its parents
- * if any.  At the moment parents include composites but not supertracks. */
+// Open track associated with search position if any. Also open its parents if any.
 {
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     char *tableName = hgp->tableList->name;
     struct track *matchTrack = rFindTrackWithTable(tableName, trackList);
     if (matchTrack != NULL)
-	{
-	struct track *track;
-	for (track = matchTrack; track != NULL; track = track->parent)
-	    cartSetString(cart, track->track, hCarefulTrackOpenVis(database, track->track));
-	}
+        tdbSetCartVisibility(matchTrack->tdb, cart, hCarefulTrackOpenVis(database, matchTrack->track));
     }
 }
-
 
 struct track *getTrackList( struct group **pGroupList, int vis)
 /* Return list of all tracks, organizing by groups.
@@ -4316,7 +4310,7 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *cartVis = cartOptionalString(cart, track->track);
     if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
-    cartRemove(cart, track->track);
+        cartRemove(cart, track->track);
     }
 }
 
@@ -5005,7 +4999,7 @@ if (!hideControls)
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 #ifdef MERGE_GENE_SUGGEST
-	hPrintf("&nbsp;&nbsp;<span class='positionBox' id='positionDisplay' style='font-weight:bold;'>%s</span>", addCommasToPos(database, position));
+	hPrintf("<span class='positionDisplay' id='positionDisplay' style='font-weight:bold;'>%s</span>", addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
