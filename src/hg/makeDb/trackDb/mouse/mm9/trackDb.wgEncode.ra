@@ -35,7 +35,7 @@ include wgEncodeLicrRnaSeq.ra
 include wgEncodeUwRnaSeq.ra alpha
 
 # Caltech TFBS (wrangler: Venkat)
-include wgEncodeCaltechTfbs.ra alpha,beta
+include wgEncodeCaltechTfbs.ra 
 #include wgEncdeCaltechTfbs.new.ra (release2)
 
 # Caltech Histone (wrangler: Venkat)
