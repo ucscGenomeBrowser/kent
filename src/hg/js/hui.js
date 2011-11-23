@@ -99,8 +99,8 @@ function exposeAll()
     // Make main display dropdown show full if currently hide
     var visDD = $("select.visDD"); // limit to hidden
     if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0) {  // limit to hidden
-        $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
-        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
+            $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
+	        $(visDD).change();// trigger on change code, which may trigger supertrack reshaping
     }
 }
 
@@ -190,7 +190,7 @@ function _matSetMatrixCheckBoxes(state)
         subCbs = objsFilterByClasses(subCbs,"not",classes);  // remove unchecked abcCB classes
     }
     $( subCbs ).each( function (i) {
-        this.checked = state;
+            this.checked = state;
         matSubCBsetShadow(this);
     });
     if(state)
@@ -247,7 +247,7 @@ function matSubCBsCheck(state)
 
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
         var classes = matAbcCBclasses(false);
-        subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
+            subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
         if(arguments.length == 1 || arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
         } else {//if(arguments.length == 2) { // Requested dim ABC (or only 1 dimension so this code is harmless)
@@ -292,10 +292,10 @@ function matSubCBsEnable(state)
 function matSubCBcheckOne(subCB,state)
 {
 // setting a single subCB may cause it to appear/disappear
-    subCB.checked = state;
+        subCB.checked = state;
     matSubCBsetShadow(subCB);
-    hideOrShowSubtrack(subCB);
-}
+        hideOrShowSubtrack(subCB);
+    }
 
 function matSubCBsetShadow(subCB)
 {
@@ -766,14 +766,14 @@ function showOrHideSelectedSubtracks(inp)
 function matInitializeMatrix()
 {
 // Called at Onload to coordinate all subtracks with the matrix of check boxes
-//var start = startTiming();
+    //var start = startTiming();
 jQuery('body').css('cursor', 'wait');
     if (document.getElementsByTagName) {
         matSubCBsSelected();
         showOrHideSelectedSubtracks();
     }
 jQuery('body').css('cursor', '');
-//showTiming(start,"matInitializeMatrix()");
+    //showTiming(start,"matInitializeMatrix()");
 }
 
 function multiSelectLoad(div,sizeWhenOpen)
@@ -1238,53 +1238,78 @@ var superT = {
     }
 }
 
-/* SOON TO BE ENABLED
 var mat = { // Beginings of matrix object
 
+    matrix: undefined,
     dimensions: 0,
+    cellInFocus: undefined,
 
-    cellHover: function (obj,on)
+    cellHover: function (cell,on)
     {
-        var classList = $( obj ).attr("class").split(" ");
-        classList = aryRemove(classList,"matCell");
+        if (on) {
+            if (mat.cellInFocus != undefined)
+                mat.clearGhostHilites();  // Necessary to clear ghosts
+            mat.cellInFocus = cell;
+        } else
+            mat.cellInFocus = undefined;
+
+        var classList = $( cell ).attr("class").split(" ");
+        classList = aryRemove(classList,["matCell"]);
+        var color = (on ? "#FCECC0" : "");// "#FFF9D2");  setting to "" removes the hilite
         for (var ix=0;ix < classList.length;ix++) {
-            var cells = $(".matCell."+classList[ix]);
-            if (on)
-                $(cells).css({backgroundColor:"#FCECC0"});
-            else
-                $(cells).css({backgroundColor:"#FFF9D2"});
+            if (classList[ix] == 'all')
+                continue;
+            if (ix == 0) {
+                $(".matCell."+classList[ix]).css({backgroundColor: color });
+            } else {
+                $(cell).closest('tr').css({backgroundColor: color }) // faster?
+            }
         }
-        if (on && obj.title.length == 0) {
+        if (on && cell.title.length == 0) {
             for (var ix=0;ix < classList.length;ix++) {
-                if (ix > 0)
-                    obj.title += " and ";
-                obj.title += $("th."+classList[ix]).first().text();
+                if (classList[ix] == 'all') { // on a label already
+                    cell.title = "";
+                    break;
+                }
+                if (cell.title.length > 0)
+                    cell.title += " and ";
+                cell.title += $("th."+classList[ix]).first().text();
             }
         }
     },
 
+    clearGhostHilites: function ()
+    {
+        $('.matCell').css({backgroundColor:""});
+        $(mat.matrix).find('tr').css({backgroundColor:""});
+    },
+
     init: function ()
     {
-        var cells = $('td.matCell');
-        if (cells != undefined && cells.length > 0) {
-            var classList = $( cells[0] ).attr("class").split(" ");
-            classList = aryRemove(classList,"matCell");
-            mat.dimensions = classList.length;
-            if (mat.dimensions > 1) { // No need unless this is a 2D matrix
-                $('td.matCell').hover(
-                    function (e) {mat.cellHover(this,true)},
-                    function (e) {mat.cellHover(this,false)}
-                );
+        mat.matrix = $('table.matrix');
+        if (mat.matrix != undefined && mat.matrix.length == 1) {
+            var cells = $('td.matCell');
+            if (cells != undefined && cells.length > 0) {
+                var classList = $( cells[0] ).attr("class").split(" ");
+                classList = aryRemove(classList,["matCell"]);
+                mat.dimensions = classList.length;
+                if (mat.dimensions > 1) { // No need unless this is a 2D matrix
+                    $('.matCell').hover(
+                        function (e) {mat.cellHover(this,true)},
+                        function (e) {mat.cellHover(this,false)}
+                    );
+                    $(mat.matrix).blur(mat.clearGhostHilites());
+                    $(window).bind('focus',function (e) {mat.clearGhostHilites();}); // blur doesn't work because the screen isn't repainted
+                }
             }
         }
     }
 }
-*/
 
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
-    // SOON TO BE ENABLED: mat.init();
+    mat.init();
 
     // Initialize sortable tables
     $('table.sortable').each(function (ix) {
