@@ -9137,8 +9137,14 @@ type treatment
 term diffProtA_0d PROVISIONAL
 tag DIFFPROTA0D
 type treatment
-description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 0 days (control), lineage: mesoderm
+description H7-hESC day 0 (negative control) for differentiation of cardiomyocyte, endothelial, smooth muscle, no specific growth factors added, lineage: inner cell mass
 label 0 day diff prot A
+
+term diffProtA_2d PROVISIONAL
+tag DIFFPROTA2D
+type treatment
+description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
+label 2 day diff prot A
 
 term diffProtA_5d PROVISIONAL
 tag DIFFPROTA5D
@@ -9155,7 +9161,7 @@ label 7 day diff prot A
 term diffProtA_14d PROVISIONAL
 tag DIFFPROTA14D
 type treatment
-description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, lineage: mesoderm
+description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
 label 14 day diff prot A
 
 term DMSO_0.02pct
