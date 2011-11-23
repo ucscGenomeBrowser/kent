@@ -1280,3 +1280,26 @@ safef(query, sizeof(query), "select fileName from %s", tdb->table);
 return sqlQuickString(conn, query);
 }
 
+void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis)
+{
+// Set visibility in the cart. Handles all the complications necessary for subtracks.
+char buf[512];
+cartSetString(cart, tdb->track, vis);
+if (tdbIsSubtrack(tdb))
+    {
+    safef(buf,sizeof buf, "%s_sel", tdb->track);
+    cartSetString(cart, buf, "1");   // Will reshape composite
+    struct trackDb *composite = tdbGetComposite(tdb);
+    if (composite && tdbIsSuperTrackChild(composite))
+        {
+        safef(buf,sizeof buf, "%s_sel", composite->track);
+        cartSetString(cart, buf, "1");   // Will reshape supertrack
+        }
+    }
+else if (tdbIsSuperTrackChild(tdb)) // solo track
+    {
+    safef(buf,sizeof buf, "%s_sel", tdb->track);
+    cartSetString(cart, buf, "1");   // Will reshape supertrack
+    }
+}
+
