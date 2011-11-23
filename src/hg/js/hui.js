@@ -1309,7 +1309,8 @@ var mat = { // Beginings of matrix object
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
-    mat.init();
+    if (!$.browser.msie) // IE can't handle the hover
+        mat.init();
 
     // Initialize sortable tables
     $('table.sortable').each(function (ix) {
