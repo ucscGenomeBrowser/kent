@@ -6,7 +6,7 @@ QA Count Summaries for Release 1:
 Tables: 63
 Files: 63
 Gbdbs: 0
-Supplemental: 0
+Supplemental: 2
 Other: 3
 
 REVOKED:
@@ -153,6 +153,11 @@ New Download Files (63):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/release1/wgEncodeHaibMethyl450SknshraSitesRep1.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/release1/wgEncodeHaibMethyl450T47dDm002p24hSitesRep1.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/release1/wgEncodeHaibMethyl450U87SitesRep1.bed.gz
+
+
+New Supplemental Files (2):
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/release1/supplemental/wgEncodeHaibMethyl450CpgIslandDetails.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibMethyl450/release1/supplemental/wgEncodeHaibMethyl450IlluminaProtocol.pdf
 
 
 New Other Files (3):

@@ -276,6 +276,8 @@ class CompositeTrack(object):
         lines = f.readlines()
         p = re.compile(".*(%s\S+) ?(\S+)" % self._name)
         for i in lines:
+            if re.match("^\s*#.*", i):
+                continue
             m = p.match(i)
             if m and re.search('alpha', m.group(2)):
                 tdbpath = "%s%s" % (self._trackDbDir, m.group(1))
