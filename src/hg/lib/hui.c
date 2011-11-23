@@ -35,6 +35,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+#include "memgfx.h"
 
 #define SMALLBUF 128
 #define MAX_SUBGROUP 9
@@ -6185,15 +6186,19 @@ if(dimensionX && dimensionY)
                 {
                 cntX++;
                 char *ptr = dimensionX->titles[ixX];
-                int ttlLen = strlen(ptr);
-                while((ptr = strstr(ptr+1,"&nbsp;")) != NULL)  // &nbsp; ????
-                    ttlLen -= 5;
+                int ttlLen = mgFontStringWidth(mgTimes10Font(), ptr);
+                ttlLen += (6 * countCase(ptr,TRUE)); // double counts upperCase letters
+                while((ptr = strstr(ptr+1,"&nbsp;")) != NULL)   // &nbsp; dropped from calculation
+                    ttlLen -= 35;
+                ptr = dimensionX->titles[ixX];
+                while((ptr = strstr(ptr+1,"<BR>")) != NULL)     // Breaks will be removed later
+                    ttlLen -= 21;
                 if (labelHeight < ttlLen)
                     labelHeight = ttlLen;
                 }
             }
         if(cntX>MATRIX_SQUEEZE)
-            labelHeight = (labelHeight * 8) + 5;//0.50;
+            labelHeight = (labelHeight/14)+1;
         else
             labelHeight = 0;
         }
@@ -6230,7 +6235,7 @@ if(dimensionX)
         {
         #ifdef MATRIX_SQUEEZE
         if(squeeze>0)
-            printf("<TH align=RIGHT style='height:%dpx;'><div class='%s'><B><EM>%s</EM></B></div></TH>",
+            printf("<TH align=RIGHT style='height:%d.2em;'><div class='%s'><B><EM>%s</EM></B></div></TH>",
                    squeeze, (top?"up45":"dn45"), dimensionX->groupTitle);
         else
         #endif///def MATRIX_SQUEEZE
@@ -6245,8 +6250,11 @@ if(dimensionX)
             {
         #ifdef MATRIX_SQUEEZE
             if(dimensionY && squeeze>0)
+                {
+                strSwapStrs(dimensionX->titles[ixX],strlen(dimensionX->titles[ixX]),"<BR>"," "); // Breaks must be removed!
                 printf("<TH nowrap='' class='%s'><div class='%s'>%s</div></TH>\n",dimensionX->tags[ixX],(top?"up45":"dn45"),
                        compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,dimensionX->titles[ixX]));
+                }
             else
         #endif///def MATRIX_SQUEEZE
                 {
