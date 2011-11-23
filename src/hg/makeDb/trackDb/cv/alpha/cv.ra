@@ -5762,7 +5762,7 @@ targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
 validation Human_-_GATA-1_(Western_blot,ChIP):human_GATA-1_validation_Farnham.pdf Mouse_-_:missing
-label GATA1 (GATA-1)
+label GATA1
 
 term GATA1_(SC-265)
 tag GATA1a
@@ -5777,7 +5777,7 @@ targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
 validation Mouse_-_GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
-label GATA1 ( sc-265)
+label GATA1 (sc-265)
 
 term  GATA1_(SC-266)
 tag  GATA1b
@@ -7186,7 +7186,7 @@ targetId GeneCards:KDM5B
 #PLU1 is a alias for KDM5B ~Jeff
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
-label PLU1 (PLU1)
+label PLU1
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7976,7 +7976,7 @@ lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
-label TR4 (TR4)
+label TR4
 
 term TRIM37_(SC-49548)
 tag TRIM37
@@ -8224,7 +8224,7 @@ lots 060729QCS1
 targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274
 validation Human_-_ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
-label ZNF274 (H00010782-A01)
+label ZNF274
 
 term ZNF274_(M01)
 tag ZNF274M01
@@ -8233,7 +8233,7 @@ antibodyDescription Mouse monoclonal antibody raised against a partial recombina
 target ZNF274
 targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
 vendorName Abnova ZNF74
-vendorId M01
+vendorId H00010782-M01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-M01
 lab Farnham
 lots 08064-4C12
@@ -8288,14 +8288,14 @@ target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA. Antibody Target: CELF1
 vendorName Millipore
-vendorId 05621
+vendorId 05-621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
 # lots
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation Human_-_:missing
-label CELF1 (05621)
+label CELF1 (05-621)
 
 ##This does not appear in metaDb
 term CELF2
