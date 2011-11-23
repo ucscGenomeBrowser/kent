@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeHaibMethyl450 Release 1
-2011-11-22
+2011-11-23
 
 QA Count Summaries for Release 1:
 Tables: 63
@@ -18,9 +18,9 @@ Sizes of New:
 Table: 1464 MB (1 GB)
 Files: 543 MB
 Gbdbs: 0 MB
-Supplemental: 0 MB
+Supplemental: 194 MB
 Other: 1 MB
-Total: 2008 MB (2 GB)
+Total: 2202 MB (2 GB)
 
 
 New Tables (63):
