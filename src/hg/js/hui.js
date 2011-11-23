@@ -1255,7 +1255,7 @@ var mat = { // Beginings of matrix object
 
         var classList = $( cell ).attr("class").split(" ");
         classList = aryRemove(classList,["matCell"]);
-        var color = (on ? "#FCECC0" : "");// "#FFF9D2");  setting to "" removes the hilite
+        var color = (on ? "#FEF3CC" : "");// "#FFF9D2");  setting to "" removes the hilite   ("#FCECC0" is LEVEL3)
         for (var ix=0;ix < classList.length;ix++) {
             if (classList[ix] == 'all')
                 continue;
