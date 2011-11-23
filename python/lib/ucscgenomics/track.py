@@ -203,6 +203,8 @@ class CompositeTrack(object):
                     elif not os.path.isdir(releasepath + file):
                         releasefiles[file] = TrackFile(releasepath + file, None)
                     elif os.path.isdir(releasepath + file):
+                        if not re.match('supplemental', releasepath + file):
+                            continue
                         for innerfile in os.listdir(releasepath + file):
                             pathfile = file + "/" + innerfile 
                             releasefiles[pathfile] = TrackFile(releasepath + pathfile, None)
