@@ -6187,7 +6187,7 @@ if(dimensionX && dimensionY)
                 cntX++;
                 char *ptr = dimensionX->titles[ixX];
                 int ttlLen = mgFontStringWidth(mgTimes10Font(), ptr);
-                ttlLen += (7 * countCase(ptr,TRUE)); // double counts upperCase letters
+                ttlLen += (6 * countCase(ptr,TRUE)); // double counts upperCase letters
                 while((ptr = strstr(ptr+1,"&nbsp;")) != NULL)   // &nbsp; dropped from calculation
                     ttlLen -= 35;
                 ptr = dimensionX->titles[ixX];
@@ -6198,7 +6198,7 @@ if(dimensionX && dimensionY)
                 }
             }
         if(cntX>MATRIX_SQUEEZE)
-            labelHeight = labelHeight + 30;
+            labelHeight = (labelHeight/14)+1;
         else
             labelHeight = 0;
         }
@@ -6235,7 +6235,7 @@ if(dimensionX)
         {
         #ifdef MATRIX_SQUEEZE
         if(squeeze>0)
-            printf("<TH align=RIGHT style='height:%dpx;'><div class='%s'><B><EM>%s</EM></B></div></TH>",
+            printf("<TH align=RIGHT style='height:%d.2em;'><div class='%s'><B><EM>%s</EM></B></div></TH>",
                    squeeze, (top?"up45":"dn45"), dimensionX->groupTitle);
         else
         #endif///def MATRIX_SQUEEZE
