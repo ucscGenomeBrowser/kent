@@ -5,6 +5,8 @@
 #ifndef TRACKDB_H
 #define TRACKDB_H
 
+struct trackDb;         // forward definition for use in cart.h
+
 #include "common.h"
 
 #ifndef JKSQL_H
@@ -13,6 +15,10 @@
 
 #ifndef LINEFILE_H
 #include "linefile.h"
+#endif
+
+#ifndef CART_H
+#include "cart.h"
 #endif
 
 #define TRACKDB_NUM_COLS 21
@@ -558,6 +564,9 @@ void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership);
 
 char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb);
 // Return file name associated with bigWig.  Do a freeMem on returned string when done.
+
+void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
+// Set visibility in the cart. Handles all the complications necessary for subtracks.
 
 // More INLINES which depend on what the definition of "is" is
 INLINE boolean tdbIsBigBed(struct trackDb *tdb)

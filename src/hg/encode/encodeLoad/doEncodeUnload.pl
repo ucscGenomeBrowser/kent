@@ -157,9 +157,8 @@ if(dirname($submitDir) =~ /_(.*)/) {
     $tableSuffix = "_" . basename($submitDir);;
 }
 
-my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields, $pipelineInstance);
+my $daf = Encode::getDaf($submitDir, $fields, $pipelineInstance);
 my $downloadDir = Encode::downloadDir($daf);
 
 chdir($submitDir) || die "Couldn't chdir to '$submitDir'";
