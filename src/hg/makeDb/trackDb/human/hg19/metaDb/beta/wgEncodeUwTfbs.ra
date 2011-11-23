@@ -14,7 +14,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -38,7 +37,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -62,7 +60,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -87,7 +84,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -112,7 +108,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -137,7 +132,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -162,7 +156,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -185,7 +178,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -208,7 +200,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -233,7 +224,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000975
 fileName wgEncodeUwTfbsAg04449CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -258,7 +248,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000928
 fileName wgEncodeUwTfbsAg04449InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -282,7 +271,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000928
 fileName wgEncodeUwTfbsAg04449InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -305,7 +293,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
-dccAccession wgEncodeEH000928
 fileName wgEncodeUwTfbsAg04449InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -330,7 +317,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000976
 fileName wgEncodeUwTfbsAg04450CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -354,7 +340,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000976
 fileName wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -379,7 +364,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000976
 fileName wgEncodeUwTfbsAg04450CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -404,7 +388,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000976
 fileName wgEncodeUwTfbsAg04450CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -427,7 +410,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000976
 fileName wgEncodeUwTfbsAg04450CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -452,7 +434,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000930
 fileName wgEncodeUwTfbsAg04450InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -476,7 +457,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000930
 fileName wgEncodeUwTfbsAg04450InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -499,7 +479,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000930
 fileName wgEncodeUwTfbsAg04450InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -524,7 +503,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -548,7 +526,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -572,7 +549,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -597,7 +573,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -622,7 +597,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -647,7 +621,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -672,7 +645,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -695,7 +667,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -718,7 +689,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -743,7 +713,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000977
 fileName wgEncodeUwTfbsAg09309CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -768,7 +737,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000932
 fileName wgEncodeUwTfbsAg09309InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -792,7 +760,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000932
 fileName wgEncodeUwTfbsAg09309InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -815,7 +782,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000932
 fileName wgEncodeUwTfbsAg09309InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -840,7 +806,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -864,7 +829,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -888,7 +852,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -913,7 +876,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -938,7 +900,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -963,7 +924,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -988,7 +948,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -1011,7 +970,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -1034,7 +992,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -1059,7 +1016,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000978
 fileName wgEncodeUwTfbsAg09319CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -1084,7 +1040,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000934
 fileName wgEncodeUwTfbsAg09319InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -1108,7 +1063,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000934
 fileName wgEncodeUwTfbsAg09319InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -1131,7 +1085,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000934
 fileName wgEncodeUwTfbsAg09319InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -1156,7 +1109,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -1180,7 +1132,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -1204,7 +1155,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -1229,7 +1179,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -1254,7 +1203,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -1279,7 +1227,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -1304,7 +1251,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -1327,7 +1273,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -1350,7 +1295,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -1375,7 +1319,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000979
 fileName wgEncodeUwTfbsAg10803CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -1400,7 +1343,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000936
 fileName wgEncodeUwTfbsAg10803InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -1424,7 +1366,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000936
 fileName wgEncodeUwTfbsAg10803InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -1447,7 +1388,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000936
 fileName wgEncodeUwTfbsAg10803InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -1472,7 +1412,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -1496,7 +1435,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -1520,7 +1458,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -1545,7 +1482,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -1570,7 +1506,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -1595,7 +1530,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -1620,7 +1554,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -1643,7 +1576,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -1666,7 +1598,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -1691,7 +1622,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000980
 fileName wgEncodeUwTfbsAoafCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -1716,7 +1646,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000938
 fileName wgEncodeUwTfbsAoafInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -1740,7 +1669,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000938
 fileName wgEncodeUwTfbsAoafInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -1763,7 +1691,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000938
 fileName wgEncodeUwTfbsAoafInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -1789,7 +1716,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 fileIndex wgEncodeUwTfbsBjCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsBjCtcfStdAlnRep1.bam
 fragLength 350
@@ -1815,7 +1741,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000403
 fileIndex wgEncodeUwTfbsBjCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsBjCtcfStdAlnRep2.bam
 fragLength 350
@@ -1841,7 +1766,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -1867,7 +1791,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -1893,7 +1816,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -1919,7 +1841,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -1945,7 +1866,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -1968,7 +1888,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -1992,7 +1911,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2018,7 +1936,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-dccAccession wgEncodeEH000403
 fileName wgEncodeUwTfbsBjCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -2044,7 +1961,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000453
 fileIndex wgEncodeUwTfbsBjInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsBjInputStdAlnRep1.bam
 fragLength 350
@@ -2069,7 +1985,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000453
 fileName wgEncodeUwTfbsBjInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -2093,7 +2008,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000453
 fileName wgEncodeUwTfbsBjInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2119,7 +2033,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileIndex wgEncodeUwTfbsCaco2CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsCaco2CtcfStdAlnRep1.bam
 fragLength 350
@@ -2145,7 +2058,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileIndex wgEncodeUwTfbsCaco2CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsCaco2CtcfStdAlnRep2.bam
 fragLength 350
@@ -2171,7 +2083,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -2197,7 +2108,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -2223,7 +2133,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -2249,7 +2158,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2011-03-07
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -2273,7 +2181,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -2295,7 +2202,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -2319,7 +2225,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2345,7 +2250,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000404
 fileName wgEncodeUwTfbsCaco2CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -2371,7 +2275,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000454
 fileIndex wgEncodeUwTfbsCaco2InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsCaco2InputStdAlnRep1.bam
 fragLength 350
@@ -2396,7 +2299,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000454
 fileName wgEncodeUwTfbsCaco2InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -2420,7 +2322,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000454
 fileName wgEncodeUwTfbsCaco2InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2446,7 +2347,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 fileIndex wgEncodeUwTfbsGm06990CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm06990CtcfStdAlnRep1.bam
 fragLength 350
@@ -2472,7 +2372,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 fileIndex wgEncodeUwTfbsGm06990CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm06990CtcfStdAlnRep2.bam
 fragLength 350
@@ -2498,7 +2397,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -2524,7 +2422,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -2550,7 +2447,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -2576,7 +2472,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -2601,7 +2496,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -2623,7 +2517,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -2647,7 +2540,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2673,7 +2565,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000392
 fileName wgEncodeUwTfbsGm06990CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -2699,7 +2590,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000455
 fileIndex wgEncodeUwTfbsGm06990InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm06990InputStdAlnRep1.bam
 fragLength 350
@@ -2724,7 +2614,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000455
 fileName wgEncodeUwTfbsGm06990InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -2748,7 +2637,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000455
 fileName wgEncodeUwTfbsGm06990InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2774,7 +2662,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 fileIndex wgEncodeUwTfbsGm12801CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12801CtcfStdAlnRep1.bam
 fragLength 350
@@ -2800,7 +2687,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 fileName wgEncodeUwTfbsGm12801CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -2826,7 +2712,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 fileName wgEncodeUwTfbsGm12801CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -2850,7 +2735,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 fileName wgEncodeUwTfbsGm12801CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -2875,7 +2759,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000393
 fileName wgEncodeUwTfbsGm12801CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2901,7 +2784,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000456
 fileIndex wgEncodeUwTfbsGm12801InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12801InputStdAlnRep1.bam
 fragLength 350
@@ -2926,7 +2808,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000456
 fileName wgEncodeUwTfbsGm12801InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -2950,7 +2831,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000456
 fileName wgEncodeUwTfbsGm12801InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -2976,7 +2856,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileIndex wgEncodeUwTfbsGm12864CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12864CtcfStdAlnRep1.bam
 fragLength 350
@@ -3002,7 +2881,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileIndex wgEncodeUwTfbsGm12864CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12864CtcfStdAlnRep2.bam
 fragLength 350
@@ -3028,7 +2906,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -3054,7 +2931,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -3080,7 +2956,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -3106,7 +2981,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2011-03-07
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -3130,7 +3004,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -3152,7 +3025,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -3176,7 +3048,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -3202,7 +3073,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000447
 fileName wgEncodeUwTfbsGm12864CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -3228,7 +3098,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000457
 fileIndex wgEncodeUwTfbsGm12864InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12864InputStdAlnRep1.bam
 fragLength 350
@@ -3253,7 +3122,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000457
 fileName wgEncodeUwTfbsGm12864InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -3277,7 +3145,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000457
 fileName wgEncodeUwTfbsGm12864InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -3303,7 +3170,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileIndex wgEncodeUwTfbsGm12865CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12865CtcfStdAlnRep1.bam
 fragLength 350
@@ -3329,7 +3195,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileIndex wgEncodeUwTfbsGm12865CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12865CtcfStdAlnRep2.bam
 fragLength 350
@@ -3355,7 +3220,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -3381,7 +3245,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -3407,7 +3270,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -3433,7 +3295,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2011-03-07
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -3457,7 +3318,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -3479,7 +3339,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -3503,7 +3362,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -3529,7 +3387,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000448
 fileName wgEncodeUwTfbsGm12865CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -3555,7 +3412,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000458
 fileIndex wgEncodeUwTfbsGm12865InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12865InputStdAlnRep1.bam
 fragLength 350
@@ -3580,7 +3436,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000458
 fileName wgEncodeUwTfbsGm12865InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -3604,7 +3459,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000458
 fileName wgEncodeUwTfbsGm12865InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -3630,7 +3484,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileIndex wgEncodeUwTfbsGm12872CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12872CtcfStdAlnRep1.bam
 fragLength 350
@@ -3656,7 +3509,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileIndex wgEncodeUwTfbsGm12872CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12872CtcfStdAlnRep2.bam
 fragLength 350
@@ -3682,7 +3534,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -3708,7 +3559,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -3734,7 +3584,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -3760,7 +3609,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2011-03-07
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -3784,7 +3632,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -3806,7 +3653,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -3830,7 +3676,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -3856,7 +3701,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000449
 fileName wgEncodeUwTfbsGm12872CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -3882,7 +3726,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000459
 fileIndex wgEncodeUwTfbsGm12872InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12872InputStdAlnRep1.bam
 fragLength 350
@@ -3907,7 +3750,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000459
 fileName wgEncodeUwTfbsGm12872InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -3931,7 +3773,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000459
 fileName wgEncodeUwTfbsGm12872InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -3957,7 +3798,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileIndex wgEncodeUwTfbsGm12873CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12873CtcfStdAlnRep1.bam
 fragLength 350
@@ -3983,7 +3823,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileIndex wgEncodeUwTfbsGm12873CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12873CtcfStdAlnRep2.bam
 fragLength 350
@@ -4009,7 +3848,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -4035,7 +3873,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -4061,7 +3898,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -4087,7 +3923,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -4111,7 +3946,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -4133,7 +3967,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -4157,7 +3990,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -4183,7 +4015,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000450
 fileName wgEncodeUwTfbsGm12873CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -4209,7 +4040,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000460
 fileIndex wgEncodeUwTfbsGm12873InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12873InputStdAlnRep1.bam
 fragLength 350
@@ -4234,7 +4064,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000460
 fileName wgEncodeUwTfbsGm12873InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -4258,7 +4087,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
-dccAccession wgEncodeEH000460
 fileName wgEncodeUwTfbsGm12873InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -4284,7 +4112,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileIndex wgEncodeUwTfbsGm12874CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12874CtcfStdAlnRep1.bam
 fragLength 350
@@ -4310,7 +4137,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileIndex wgEncodeUwTfbsGm12874CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12874CtcfStdAlnRep2.bam
 fragLength 350
@@ -4336,7 +4162,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -4362,7 +4187,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -4388,7 +4212,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -4414,7 +4237,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2011-03-07
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -4438,7 +4260,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -4460,7 +4281,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -4484,7 +4304,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -4510,7 +4329,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000451
 fileName wgEncodeUwTfbsGm12874CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -4536,7 +4354,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000461
 fileIndex wgEncodeUwTfbsGm12874InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12874InputStdAlnRep1.bam
 fragLength 350
@@ -4561,7 +4378,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000461
 fileName wgEncodeUwTfbsGm12874InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -4585,7 +4401,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-dccAccession wgEncodeEH000461
 fileName wgEncodeUwTfbsGm12874InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -4611,7 +4426,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileIndex wgEncodeUwTfbsGm12875CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12875CtcfStdAlnRep1.bam
 fragLength 350
@@ -4637,7 +4451,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileIndex wgEncodeUwTfbsGm12875CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12875CtcfStdAlnRep2.bam
 fragLength 350
@@ -4663,7 +4476,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -4689,7 +4501,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -4715,7 +4526,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -4741,7 +4551,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-15
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -4765,7 +4574,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -4787,7 +4595,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -4811,7 +4618,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -4837,7 +4643,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-dccAccession wgEncodeEH000452
 fileName wgEncodeUwTfbsGm12875CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -4863,7 +4668,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000462
 fileIndex wgEncodeUwTfbsGm12875InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12875InputStdAlnRep1.bam
 fragLength 350
@@ -4888,7 +4692,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000462
 fileName wgEncodeUwTfbsGm12875InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -4912,7 +4715,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-15
-dccAccession wgEncodeEH000462
 fileName wgEncodeUwTfbsGm12875InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -4938,7 +4740,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 fileIndex wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12878CtcfStdAlnRep1.bam
 fragLength 350
@@ -4964,7 +4765,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 fileIndex wgEncodeUwTfbsGm12878CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsGm12878CtcfStdAlnRep2.bam
 fragLength 350
@@ -4990,7 +4790,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -5016,7 +4815,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -5042,7 +4840,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -5068,7 +4865,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -5093,7 +4889,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5115,7 +4910,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -5139,7 +4933,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5165,7 +4958,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000394
 fileName wgEncodeUwTfbsGm12878CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -5191,7 +4983,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000463
 fileIndex wgEncodeUwTfbsGm12878InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsGm12878InputStdAlnRep1.bam
 fragLength 350
@@ -5216,7 +5007,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000463
 fileName wgEncodeUwTfbsGm12878InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5240,7 +5030,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000463
 fileName wgEncodeUwTfbsGm12878InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5265,7 +5054,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000989
 fileName wgEncodeUwTfbsHaspCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -5289,7 +5077,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000989
 fileName wgEncodeUwTfbsHaspCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -5314,7 +5101,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000989
 fileName wgEncodeUwTfbsHaspCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -5339,7 +5125,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000989
 fileName wgEncodeUwTfbsHaspCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5362,7 +5147,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000989
 fileName wgEncodeUwTfbsHaspCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5387,7 +5171,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000974
 fileName wgEncodeUwTfbsHaspInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -5411,7 +5194,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000974
 fileName wgEncodeUwTfbsHaspInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5434,7 +5216,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
-dccAccession wgEncodeEH000974
 fileName wgEncodeUwTfbsHaspInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5459,7 +5240,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -5483,7 +5263,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -5507,7 +5286,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -5532,7 +5310,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -5557,7 +5334,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -5582,7 +5358,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -5607,7 +5382,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5630,7 +5404,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -5653,7 +5426,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5678,7 +5450,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000981
 fileName wgEncodeUwTfbsHbmecCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -5703,7 +5474,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000940
 fileName wgEncodeUwTfbsHbmecInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -5727,7 +5497,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000940
 fileName wgEncodeUwTfbsHbmecInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5750,7 +5519,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000940
 fileName wgEncodeUwTfbsHbmecInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5775,7 +5543,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000942
 fileName wgEncodeUwTfbsHcfInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -5799,7 +5566,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000942
 fileName wgEncodeUwTfbsHcfInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5822,7 +5588,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000942
 fileName wgEncodeUwTfbsHcfInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5847,7 +5612,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000982
 fileName wgEncodeUwTfbsHcfaaCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -5871,7 +5635,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000982
 fileName wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -5896,7 +5659,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000982
 fileName wgEncodeUwTfbsHcfaaCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -5921,7 +5683,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000982
 fileName wgEncodeUwTfbsHcfaaCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -5944,7 +5705,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000982
 fileName wgEncodeUwTfbsHcfaaCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -5969,7 +5729,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000944
 fileName wgEncodeUwTfbsHcfaaInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -5993,7 +5752,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000944
 fileName wgEncodeUwTfbsHcfaaInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6016,7 +5774,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000944
 fileName wgEncodeUwTfbsHcfaaInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -6041,7 +5798,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000946
 fileName wgEncodeUwTfbsHcmInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -6065,7 +5821,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000946
 fileName wgEncodeUwTfbsHcmInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6088,7 +5843,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000946
 fileName wgEncodeUwTfbsHcmInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -6113,7 +5867,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -6137,7 +5890,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -6161,7 +5913,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -6186,7 +5937,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -6211,7 +5961,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -6236,7 +5985,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -6261,7 +6009,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6284,7 +6031,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -6307,7 +6053,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -6332,7 +6077,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000983
 fileName wgEncodeUwTfbsHcpeCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -6357,7 +6101,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000948
 fileName wgEncodeUwTfbsHcpeInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -6381,7 +6124,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000948
 fileName wgEncodeUwTfbsHcpeInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6404,7 +6146,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000948
 fileName wgEncodeUwTfbsHcpeInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -6429,7 +6170,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000950
 fileName wgEncodeUwTfbsHct116InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -6453,7 +6193,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000950
 fileName wgEncodeUwTfbsHct116InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6476,7 +6215,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000950
 fileName wgEncodeUwTfbsHct116InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -6501,7 +6239,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -6525,7 +6262,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -6549,7 +6285,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -6574,7 +6309,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -6599,7 +6333,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -6624,7 +6357,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -6649,7 +6381,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6672,7 +6403,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -6695,7 +6425,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -6720,7 +6449,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000984
 fileName wgEncodeUwTfbsHeeCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -6745,7 +6473,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000952
 fileName wgEncodeUwTfbsHeeInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -6769,7 +6496,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000952
 fileName wgEncodeUwTfbsHeeInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6792,7 +6518,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000952
 fileName wgEncodeUwTfbsHeeInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -6818,7 +6543,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 fileIndex wgEncodeUwTfbsHek293CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHek293CtcfStdAlnRep1.bam
 fragLength 350
@@ -6844,7 +6568,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 fileIndex wgEncodeUwTfbsHek293CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHek293CtcfStdAlnRep2.bam
 fragLength 350
@@ -6870,7 +6593,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -6896,7 +6618,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -6922,7 +6643,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -6948,7 +6668,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -6973,7 +6692,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -6995,7 +6713,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -7019,7 +6736,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -7045,7 +6761,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000396
 fileName wgEncodeUwTfbsHek293CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -7071,7 +6786,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000464
 fileIndex wgEncodeUwTfbsHek293InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHek293InputStdAlnRep1.bam
 fragLength 350
@@ -7096,7 +6810,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000464
 fileName wgEncodeUwTfbsHek293InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -7120,7 +6833,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-dccAccession wgEncodeEH000464
 fileName wgEncodeUwTfbsHek293InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -7146,7 +6858,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000398
 fileIndex wgEncodeUwTfbsHelas3CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHelas3CtcfStdAlnRep1.bam
 fragLength 350
@@ -7172,7 +6883,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 fileIndex wgEncodeUwTfbsHelas3CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHelas3CtcfStdAlnRep2.bam
 fragLength 350
@@ -7198,7 +6908,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -7224,7 +6933,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -7250,7 +6958,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -7276,7 +6983,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -7300,7 +7006,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -7322,7 +7027,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -7346,7 +7050,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -7372,7 +7075,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-dccAccession wgEncodeEH000398
 fileName wgEncodeUwTfbsHelas3CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -7398,7 +7100,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000469
 fileIndex wgEncodeUwTfbsHelas3InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHelas3InputStdAlnRep1.bam
 fragLength 350
@@ -7423,7 +7124,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000469
 fileName wgEncodeUwTfbsHelas3InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -7447,7 +7147,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-dccAccession wgEncodeEH000469
 fileName wgEncodeUwTfbsHelas3InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -7473,7 +7172,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileIndex wgEncodeUwTfbsHepg2CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHepg2CtcfStdAlnRep1.bam
 fragLength 350
@@ -7499,7 +7197,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileIndex wgEncodeUwTfbsHepg2CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHepg2CtcfStdAlnRep2.bam
 fragLength 350
@@ -7525,7 +7222,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -7551,7 +7247,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -7577,7 +7272,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -7603,7 +7297,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -7627,7 +7320,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -7651,7 +7343,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -7675,7 +7366,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -7701,7 +7391,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000401
 fileName wgEncodeUwTfbsHepg2CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -7727,7 +7416,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000470
 fileIndex wgEncodeUwTfbsHepg2InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHepg2InputStdAlnRep1.bam
 fragLength 350
@@ -7752,7 +7440,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000470
 fileName wgEncodeUwTfbsHepg2InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -7776,7 +7463,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-14
-dccAccession wgEncodeEH000470
 fileName wgEncodeUwTfbsHepg2InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -7802,7 +7488,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 fileIndex wgEncodeUwTfbsHl60CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHl60CtcfStdAlnRep1.bam
 fragLength 350
@@ -7828,7 +7513,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 fileName wgEncodeUwTfbsHl60CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -7854,7 +7538,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 fileName wgEncodeUwTfbsHl60CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -7878,7 +7561,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 fileName wgEncodeUwTfbsHl60CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -7903,7 +7585,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000397
 fileName wgEncodeUwTfbsHl60CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -7929,7 +7610,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000465
 fileIndex wgEncodeUwTfbsHl60InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHl60InputStdAlnRep1.bam
 fragLength 350
@@ -7954,7 +7634,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000465
 fileName wgEncodeUwTfbsHl60InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -7978,7 +7657,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-14
-dccAccession wgEncodeEH000465
 fileName wgEncodeUwTfbsHl60InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -8004,7 +7682,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 fileIndex wgEncodeUwTfbsHmecCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHmecCtcfStdAlnRep1.bam
 fragLength 350
@@ -8030,7 +7707,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 fileName wgEncodeUwTfbsHmecCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -8056,7 +7732,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 fileName wgEncodeUwTfbsHmecCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -8080,7 +7755,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 fileName wgEncodeUwTfbsHmecCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -8104,7 +7778,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-dccAccession wgEncodeEH000419
 fileName wgEncodeUwTfbsHmecCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -8130,7 +7803,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000466
 fileIndex wgEncodeUwTfbsHmecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHmecInputStdAlnRep1.bam
 fragLength 350
@@ -8155,7 +7827,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000466
 fileName wgEncodeUwTfbsHmecInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -8179,7 +7850,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000466
 fileName wgEncodeUwTfbsHmecInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -8204,7 +7874,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -8228,7 +7897,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -8252,7 +7920,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -8277,7 +7944,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -8302,7 +7968,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -8327,7 +7992,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -8352,7 +8016,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -8375,7 +8038,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -8398,7 +8060,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -8423,7 +8084,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000985
 fileName wgEncodeUwTfbsHmfCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -8448,7 +8108,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000956
 fileName wgEncodeUwTfbsHmfInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -8472,7 +8131,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000956
 fileName wgEncodeUwTfbsHmfInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -8495,7 +8153,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000956
 fileName wgEncodeUwTfbsHmfInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -8520,7 +8177,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -8544,7 +8200,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -8568,7 +8223,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -8593,7 +8247,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -8618,7 +8271,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -8643,7 +8295,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -8668,7 +8319,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -8691,7 +8341,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -8714,7 +8363,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -8739,7 +8387,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000986
 fileName wgEncodeUwTfbsHpafCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -8764,7 +8411,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000958
 fileName wgEncodeUwTfbsHpafInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -8788,7 +8434,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000958
 fileName wgEncodeUwTfbsHpafInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -8811,7 +8456,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000958
 fileName wgEncodeUwTfbsHpafInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -8836,7 +8480,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -8860,7 +8503,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
@@ -8884,7 +8526,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -8909,7 +8550,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -8934,7 +8574,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -8959,7 +8598,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -8984,7 +8622,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9007,7 +8644,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -9030,7 +8666,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -9055,7 +8690,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000987
 fileName wgEncodeUwTfbsHpfCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -9080,7 +8714,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000960
 fileName wgEncodeUwTfbsHpfInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -9104,7 +8737,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000960
 fileName wgEncodeUwTfbsHpfInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9127,7 +8759,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000960
 fileName wgEncodeUwTfbsHpfInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -9153,7 +8784,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 fileIndex wgEncodeUwTfbsHreCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHreCtcfStdAlnRep1.bam
 fragLength 350
@@ -9179,7 +8809,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 fileIndex wgEncodeUwTfbsHreCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHreCtcfStdAlnRep2.bam
 fragLength 350
@@ -9205,7 +8834,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -9231,7 +8859,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -9257,7 +8884,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -9283,7 +8909,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -9307,7 +8932,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9329,7 +8953,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -9353,7 +8976,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -9379,7 +9001,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000405
 fileName wgEncodeUwTfbsHreCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -9405,7 +9026,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000467
 fileIndex wgEncodeUwTfbsHreInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHreInputStdAlnRep1.bam
 fragLength 350
@@ -9430,7 +9050,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000467
 fileName wgEncodeUwTfbsHreInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9454,7 +9073,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000467
 fileName wgEncodeUwTfbsHreInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -9479,7 +9097,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000988
 fileName wgEncodeUwTfbsHrpeCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -9503,7 +9120,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000988
 fileName wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -9528,7 +9144,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000988
 fileName wgEncodeUwTfbsHrpeCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -9553,7 +9168,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000988
 fileName wgEncodeUwTfbsHrpeCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9576,7 +9190,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000988
 fileName wgEncodeUwTfbsHrpeCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -9601,7 +9214,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000962
 fileName wgEncodeUwTfbsHrpeInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -9625,7 +9237,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000962
 fileName wgEncodeUwTfbsHrpeInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9648,7 +9259,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000962
 fileName wgEncodeUwTfbsHrpeInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -9674,7 +9284,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 fileIndex wgEncodeUwTfbsHuvecCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHuvecCtcfStdAlnRep1.bam
 fragLength 350
@@ -9700,7 +9309,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 fileIndex wgEncodeUwTfbsHuvecCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsHuvecCtcfStdAlnRep2.bam
 fragLength 350
@@ -9726,7 +9334,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -9752,7 +9359,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -9778,7 +9384,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -9804,7 +9409,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -9829,7 +9433,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9851,7 +9454,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -9875,7 +9477,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -9901,7 +9502,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000410
 fileName wgEncodeUwTfbsHuvecCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -9927,7 +9527,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000468
 fileIndex wgEncodeUwTfbsHuvecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsHuvecInputStdAlnRep1.bam
 fragLength 350
@@ -9952,7 +9551,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000468
 fileName wgEncodeUwTfbsHuvecInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -9976,7 +9574,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-dccAccession wgEncodeEH000468
 fileName wgEncodeUwTfbsHuvecInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10001,7 +9598,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000964
 fileName wgEncodeUwTfbsHvmfInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -10025,7 +9621,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000964
 fileName wgEncodeUwTfbsHvmfInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10048,7 +9643,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000964
 fileName wgEncodeUwTfbsHvmfInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10073,7 +9667,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000966
 fileName wgEncodeUwTfbsJurkatInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -10097,7 +9690,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000966
 fileName wgEncodeUwTfbsJurkatInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10120,7 +9712,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000966
 fileName wgEncodeUwTfbsJurkatInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10146,7 +9737,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 fileIndex wgEncodeUwTfbsK562CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsK562CtcfStdAlnRep1.bam
 fragLength 350
@@ -10172,7 +9762,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 fileIndex wgEncodeUwTfbsK562CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsK562CtcfStdAlnRep2.bam
 fragLength 350
@@ -10198,7 +9787,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -10224,7 +9812,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -10250,7 +9837,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -10276,7 +9862,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -10301,7 +9886,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10323,7 +9907,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -10347,7 +9930,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10373,7 +9955,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000399
 fileName wgEncodeUwTfbsK562CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -10399,7 +9980,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000471
 fileIndex wgEncodeUwTfbsK562InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsK562InputStdAlnRep1.bam
 fragLength 350
@@ -10424,7 +10004,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000471
 fileName wgEncodeUwTfbsK562InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10448,7 +10027,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000471
 fileName wgEncodeUwTfbsK562InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10473,7 +10051,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000968
 fileName wgEncodeUwTfbsMcf7InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -10497,7 +10074,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000968
 fileName wgEncodeUwTfbsMcf7InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10520,7 +10096,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000968
 fileName wgEncodeUwTfbsMcf7InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10545,7 +10120,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000970
 fileName wgEncodeUwTfbsNb4InputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -10569,7 +10143,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000970
 fileName wgEncodeUwTfbsNb4InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10592,7 +10165,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000970
 fileName wgEncodeUwTfbsNb4InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10617,7 +10189,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000972
 fileName wgEncodeUwTfbsNhdfneoInputStdAlnRep1.bam
 fragLength 350
 grant Stam
@@ -10641,7 +10212,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000972
 fileName wgEncodeUwTfbsNhdfneoInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10664,7 +10234,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
-dccAccession wgEncodeEH000972
 fileName wgEncodeUwTfbsNhdfneoInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10690,7 +10259,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 fileIndex wgEncodeUwTfbsNhekCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsNhekCtcfStdAlnRep1.bam
 fragLength 350
@@ -10716,7 +10284,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 fileIndex wgEncodeUwTfbsNhekCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsNhekCtcfStdAlnRep2.bam
 fragLength 350
@@ -10742,7 +10309,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -10768,7 +10334,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -10794,7 +10359,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -10820,7 +10384,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -10845,7 +10408,6 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10867,7 +10429,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -10891,7 +10452,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -10917,7 +10477,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000406
 fileName wgEncodeUwTfbsNhekCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -10943,7 +10502,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000472
 fileIndex wgEncodeUwTfbsNhekInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsNhekInputStdAlnRep1.bam
 fragLength 350
@@ -10968,7 +10526,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000472
 fileName wgEncodeUwTfbsNhekInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -10992,7 +10549,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-dccAccession wgEncodeEH000472
 fileName wgEncodeUwTfbsNhekInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -11018,7 +10574,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileIndex wgEncodeUwTfbsSaecCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSaecCtcfStdAlnRep1.bam
 fragLength 350
@@ -11044,7 +10599,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileIndex wgEncodeUwTfbsSaecCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsSaecCtcfStdAlnRep2.bam
 fragLength 350
@@ -11070,7 +10624,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -11096,7 +10649,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -11122,7 +10674,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -11148,7 +10699,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -11172,7 +10722,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -11194,7 +10743,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -11218,7 +10766,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -11244,7 +10791,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000437
 fileName wgEncodeUwTfbsSaecCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -11270,7 +10816,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000473
 fileIndex wgEncodeUwTfbsSaecInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSaecInputStdAlnRep1.bam
 fragLength 350
@@ -11295,7 +10840,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000473
 fileName wgEncodeUwTfbsSaecInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -11319,7 +10863,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-dccAccession wgEncodeEH000473
 fileName wgEncodeUwTfbsSaecInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -11345,7 +10888,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 fileIndex wgEncodeUwTfbsSknshraCtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSknshraCtcfStdAlnRep1.bam
 fragLength 350
@@ -11371,7 +10913,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000439
 fileIndex wgEncodeUwTfbsSknshraCtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsSknshraCtcfStdAlnRep2.bam
 fragLength 350
@@ -11397,7 +10938,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -11423,7 +10963,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -11449,7 +10988,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -11475,7 +11013,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -11499,7 +11036,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -11521,7 +11057,6 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -11545,7 +11080,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -11571,7 +11105,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-dccAccession wgEncodeEH000439
 fileName wgEncodeUwTfbsSknshraCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -11597,7 +11130,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000474
 fileIndex wgEncodeUwTfbsSknshraInputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsSknshraInputStdAlnRep1.bam
 fragLength 350
@@ -11622,7 +11154,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000474
 fileName wgEncodeUwTfbsSknshraInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -11646,7 +11177,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-dccAccession wgEncodeEH000474
 fileName wgEncodeUwTfbsSknshraInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -11672,7 +11202,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileIndex wgEncodeUwTfbsWerirb1CtcfStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsWerirb1CtcfStdAlnRep1.bam
 fragLength 350
@@ -11698,7 +11227,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileIndex wgEncodeUwTfbsWerirb1CtcfStdAlnRep2.bam.bai
 fileName wgEncodeUwTfbsWerirb1CtcfStdAlnRep2.bam
 fragLength 350
@@ -11724,7 +11252,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep1.broadPeak.gz
 fragLength 350
 grant Stam
@@ -11750,7 +11277,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep2.broadPeak.gz
 fragLength 350
 grant Stam
@@ -11776,7 +11302,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdPkRep1.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -11802,7 +11327,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdPkRep2.narrowPeak.gz
 fragLength 350
 grant Stam
@@ -11826,7 +11350,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -11849,7 +11372,6 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
@@ -11874,7 +11396,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
@@ -11900,7 +11421,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-dccAccession wgEncodeEH000402
 fileName wgEncodeUwTfbsWerirb1CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
@@ -11926,7 +11446,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-dccAccession wgEncodeEH000475
 fileIndex wgEncodeUwTfbsWerirb1InputStdAlnRep1.bam.bai
 fileName wgEncodeUwTfbsWerirb1InputStdAlnRep1.bam
 fragLength 350
@@ -11951,7 +11470,6 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
-dccAccession wgEncodeEH000475
 fileName wgEncodeUwTfbsWerirb1InputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
@@ -11975,7 +11493,6 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-dccAccession wgEncodeEH000475
 fileName wgEncodeUwTfbsWerirb1InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
