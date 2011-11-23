@@ -1,6 +1,6 @@
 mkChangeNotes v2
 mm9 wgEncodeCaltechHist Release 1
-2011-10-31
+2011-11-23
 
 QA Count Summaries for Release 1:
 Tables: 29
@@ -139,23 +139,23 @@ New Download Files (80):
 
 
 New Gbdb Files (17):
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xSigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/mm9/encodeDCC/wgEncodeCaltechHist/release1/wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12Ab2621FCntrl50bPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12Ab32356FCntrl50bE2p60hPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12Ab3594FCntrl50bE2p60hPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12Ab3594FCntrl50bPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3ac06599FCntrl32bE2p24hPcr2xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3ac06599FCntrl32bPcr2xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3k04me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3k04me3FCntrl50bPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3k27me3FCntrl32bE2p60hPcr2xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3k27me3FCntrl32bPcr2xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3k36me3FCntrl50bE2p60hPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12H3k36me3FCntrl50bPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12InputFCntrl32bE2p24hPcr2xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12InputFCntrl32bE2p60hPcr2xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12InputFCntrl32bPcr2xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12InputFCntrl50bE2p60hPcr1xSigRep1.bigWig
+/gbdb/mm9/bbi/wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1.bigWig
 
 
 New Other Files (3):
