@@ -194,8 +194,10 @@ void printSeqInfo(struct sqlConnection* conn, char* trackTable,
     skippedRows = printSeqSection(docId, "Sequences used to construct this feature", fileDesc, conn, clickedSeqs, 1, fasta);
     if (skippedRows)
         printSeqSection(docId, "Other Sequences in this article", fileDesc, conn, clickedSeqs, 0, fasta);
-    else
-        printf("<P>No more sequences found in this article<P>");
+    //else
+    //printf("<P>No more sequences<P>");
+    if (endsWith(trackTable, "Elsevier"))
+        printf("<P><SMALL>Article information and excerpts are Copyright 2011 Elsevier B.V. All rights reserved.</SMALL><P>");
     freeHash(&clickedSeqs);
 
 }
