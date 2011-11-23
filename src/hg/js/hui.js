@@ -1255,7 +1255,7 @@ var mat = { // Beginings of matrix object
 
         var classList = $( cell ).attr("class").split(" ");
         classList = aryRemove(classList,["matCell"]);
-        var color = (on ? "#FCECC0" : "");// "#FFF9D2");  setting to "" removes the hilite
+        var color = (on ? "#FEF3CC" : "");// "#FFF9D2");  setting to "" removes the hilite   ("#FCECC0" is LEVEL3)
         for (var ix=0;ix < classList.length;ix++) {
             if (classList[ix] == 'all')
                 continue;
@@ -1309,7 +1309,8 @@ var mat = { // Beginings of matrix object
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
-    mat.init();
+    if (!$.browser.msie) // IE can't handle the hover
+        mat.init();
 
     // Initialize sortable tables
     $('table.sortable').each(function (ix) {
