@@ -2473,11 +2473,11 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         for(ixIn=0;ixIn<members->count;ixIn++)
             {
             if(sameString(members->tags[ixIn],belongsTo))
-                {
-                members->subtrackCount[ixIn]++;
-                if(cart && fourStateVisible(subtrackFourStateChecked(subtrack,cart)))
-                    members->currentlyVisible[ixIn]++;
-                refAdd(&(members->subtrackList[ixIn]), subtrack);
+            {
+            members->subtrackCount[ixIn]++;
+            if(cart && fourStateVisible(subtrackFourStateChecked(subtrack,cart)))
+                members->currentlyVisible[ixIn]++;
+            refAdd(&(members->subtrackList[ixIn]), subtrack);
                 break;
                 }
             }
@@ -2641,7 +2641,7 @@ if(membersForAll != NULL)
 
 int ix;
 membersForAll = needMem(sizeof(membersForAll_t));
-membersForAll->members[dimV]=subgroupMembersGet(parentTdb,"view");
+    membersForAll->members[dimV]=subgroupMembersGet(parentTdb,"view");
 membersForAll->letters[dimV]='V';
 membersForAll->dimMax=dimA;  // This can expand, depending upon ABC dimensions
 membersForAll->dimensions = dimensionSettingsGet(parentTdb);
@@ -3480,10 +3480,10 @@ else
     printf("<B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 
 filterBy_t *filterBy = NULL;
-webIncludeResourceFile("ui.dropdownchecklist.css");
-jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
 #ifdef NEW_JQUERY
-jsIncludeFile("ddcl.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
 #endif///def NEW_JQUERY
 
 int ix=0;
@@ -3498,7 +3498,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
 
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
     #ifdef NEW_JQUERY
-        #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
+    #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s' multiple style='display: none; font-size:.9em;' class='filterBy'><BR>\n"
     #else///ifndef NEW_JQUERY
         #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s' multiple style='display: none;' class='filterBy'><BR>\n"
     #endif///ndef NEW_JQUERY
@@ -3709,12 +3709,12 @@ if (tdbIsComposite(tdb) && tdbIsSubtrack(tdb->subtracks))
 switch(cType)
     {
     case cfgBedScore:
-	{
-	char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
-	int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
-	scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
-	}
-	break;
+                        {
+                        char *scoreMax = trackDbSettingClosestToHome(tdb, SCORE_FILTER _MAX);
+                        int maxScore = (scoreMax ? sqlUnsigned(scoreMax):1000);
+                        scoreCfgUi(db, cart,tdb,prefix,title,maxScore,boxed);
+                        }
+                        break;
     case cfgPeak:
                         encodePeakCfgUi(cart,tdb,prefix,title,boxed);
                         break;
@@ -3726,17 +3726,17 @@ switch(cType)
                         break;
     case cfgChain:      chainCfgUi(db,cart,tdb,prefix,title,boxed, NULL);
                         break;
-    case cfgNetAlign:	netAlignCfgUi(db,cart,tdb,prefix,title,boxed);
+    case cfgNetAlign:   netAlignCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     case cfgBedFilt:    bedUi(tdb,cart,title, boxed);
-                 	break;
+                        break;
 #ifdef USE_BAM
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
-			break;
+                        break;
 #endif
-    case cfgVcf:	vcfCfgUi(cart, tdb, prefix, title, boxed);
-			break;
-    case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
+    case cfgVcf:        vcfCfgUi(cart, tdb, prefix, title, boxed);
+                        break;
+    case cfgPsl:        pslCfgUi(db,cart,tdb,prefix,title,boxed);
                         break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
                         break;
@@ -3982,9 +3982,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     // Turn this off only if configurable explicitly set to off
     if (trackDbSettingClosestToHome(subtrack, "configurable") && trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
 #else///ifndef SUBTRACK_CFG_POPUP
-    if (trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
+        if (trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
 #endif///ndef SUBTRACK_CFG_POPUP
-        cType = cfgNone;
+            cType = cfgNone;
     membership_t *membership = subgroupMembershipGet(subtrack);
 
     if (sortOrder == NULL && !useDragAndDrop)
@@ -4113,8 +4113,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     if (cType != cfgNone)
         {
         dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
-    #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
-    #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
+        #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
+        #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
         safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->track);
         boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
         MAKE_CFG_SUBTRACK_DIV(subtrack->track,htmlIdentifier,open);
@@ -5346,13 +5346,13 @@ if(!sameString(tdb->track, "tigrGeneIndex")
 
 if (cartOptionalString(cart, "ajax") == NULL)
     {
-    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-    if(filterBySet != NULL)
-        {
-        printf("<BR>");
+filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+if(filterBySet != NULL)
+    {
+    printf("<BR>");
         filterBySetCfgUi(tdb,filterBySet,FALSE);
-        filterBySetFree(&filterBySet);
-        }
+    filterBySetFree(&filterBySet);
+    }
     }
 cfgEndBox(boxed);
 }
@@ -5361,7 +5361,7 @@ static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species
 /* check the cart to see if species is turned off or on (default is defaultState) */
 {
 boolean ret = defaultState;
-safef(option, optionSize, "%s.%s", tdb->track, species);
+    safef(option, optionSize, "%s.%s", tdb->track, species);
 
 /* see if this is a simple multiz (not composite track) */
 char *s = cartOptionalString(cart, option);
@@ -5379,8 +5379,8 @@ else
 		tdb->parent->track, viewString,  species);
 	    ret = cartUsualBoolean(cart, option, ret);
 	    }
-	}
     }
+}
 
 return ret;
 }
@@ -5710,7 +5710,7 @@ else
 if (viewString != NULL)
     safef(option, sizeof option, "%s.%s.%s", name, viewString, MAF_DOT_VAR);
 else
-    safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
+safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 
 if (isWigMafProt)
@@ -5721,7 +5721,7 @@ else
 if (viewString != NULL)
     safef(option, sizeof option, "%s.%s.%s", name, viewString, MAF_CHAIN_VAR);
 else
-    safef(option, sizeof option, "%s.%s", name, MAF_CHAIN_VAR);
+safef(option, sizeof option, "%s.%s", name, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
 
 char *irowStr = trackDbSetting(tdb, "irows");
@@ -5756,7 +5756,7 @@ if (framesTable)
     if (viewString != NULL)
 	safef(buffer, sizeof(buffer), "%s.%s.codons",name, viewString);
     else
-	safef(buffer, sizeof(buffer), "%s.codons",name);
+    safef(buffer, sizeof(buffer), "%s.codons",name);
     cartMakeRadioButton(cart, buffer,"codonNone", "codonDefault");
     printf("No codon translation<BR>");
     cartMakeRadioButton(cart, buffer,"codonDefault", "codonDefault");
@@ -6129,9 +6129,9 @@ return cloneString(label);
 }
 
 #ifdef BUTTONS_BY_CSS
-    #define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
+#define BUTTON_MAT "<span class='pmButton' onclick=\"matSetMatrixCheckBoxes(%s%s%s%s)\">%c</span>"
 #else///ifndef BUTTONS_BY_CSS
-    #define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'>"
+#define PM_BUTTON_UC "<IMG height=18 width=18 onclick=\"return (matSetMatrixCheckBoxes(%s%s%s%s%s%s) == false);\" id='btn_%s' src='../images/%s'>"
 #endif///def BUTTONS_BY_CSS
 
 #define MATRIX_RIGHT_BUTTONS_AFTER 8
@@ -6167,6 +6167,10 @@ printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 static int matrixSqueeze(membersForAll_t* membersForAll)
 // Returns non-zero if the matrix will be squeezed.  Non-zero is actually squeezedLabelHeight
 {
+char *browserVersion;
+if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion < '9')
+    return 0;
+
 boolean labelHeight = 0;
 members_t *dimensionX = membersForAll->members[dimX];
 members_t *dimensionY = membersForAll->members[dimY];
@@ -6206,7 +6210,11 @@ static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb,int squeeze, 
 members_t *dimensionX = membersForAll->members[dimX];
 members_t *dimensionY = membersForAll->members[dimY];
 
+#ifdef MATRIX_SQUEEZE
+printf("<TR ALIGN=CENTER valign=%s>\n",top?"BOTTOM":"TOP");
+#else///ifndef MATRIX_SQUEEZE
 printf("<TR ALIGN=CENTER BGCOLOR='%s' valign=%s>\n",COLOR_BG_ALTDEFAULT,top?"BOTTOM":"TOP");
+#endif///ndef MATRIX_SQUEEZE
 if(dimensionX && dimensionY)
     {
     printf("<TH ALIGN=LEFT valign=%s>",top?"TOP":"BOTTOM");
@@ -6237,14 +6245,14 @@ if(dimensionX)
             {
         #ifdef MATRIX_SQUEEZE
             if(dimensionY && squeeze>0)
-                printf("<TH nowrap='' class='%s'><div class='%s'>%s</div></TH>",dimensionX->tags[ixX],(top?"up45":"dn45"),
+                printf("<TH nowrap='' class='%s'><div class='%s'>%s</div></TH>\n",dimensionX->tags[ixX],(top?"up45":"dn45"),
                        compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,dimensionX->titles[ixX]));
             else
         #endif///def MATRIX_SQUEEZE
                 {
                 char *label =replaceChars(dimensionX->titles[ixX]," (","<BR>(");
         #ifdef MATRIX_SQUEEZE
-                printf("<TH WIDTH='60' class='%s'>&nbsp;%s&nbsp;</TH>",dimensionX->tags[ixX],
+                printf("<TH WIDTH='60' class='matCell %s all'>&nbsp;%s&nbsp;</TH>",dimensionX->tags[ixX],
         #else///ifndef MATRIX_SQUEEZE
                 printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",
         #endif///ndef MATRIX_SQUEEZE
@@ -6295,14 +6303,18 @@ members_t *dimensionY = membersForAll->members[dimY];
 if(dimensionX && dimensionY)
     {
     int ixX,cntX=0;
+    #ifdef MATRIX_SQUEEZE
+    printf("<TR ALIGN=CENTER><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",dimensionY->groupTitle);
+    #else///ifndef MATRIX_SQUEEZE
     printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->groupTitle);
+    #endif///ndef MATRIX_SQUEEZE
     for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
         {
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
             {
             char objName[SMALLBUF];
             #ifdef MATRIX_SQUEEZE
-            puts("<TD nowrap>");
+            printf("<TD nowrap class='matCell %s all'>\n",dimensionX->tags[ixX]);
             #else///ifndef MATRIX_SQUEEZE
             puts("<TD>");
             #endif///ndef MATRIX_SQUEEZE
@@ -6353,7 +6365,7 @@ if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of
     {
     char objName[SMALLBUF];
     #ifdef MATRIX_SQUEEZE
-    printf("<TH class='%s' ALIGN=%s nowrap colspan=2>",dimensionY->tags[ixY],left?"RIGHT":"LEFT");
+    printf("<TH class='matCell all %s' ALIGN=%s nowrap colspan=2>",dimensionY->tags[ixY],left?"RIGHT":"LEFT");
     #else///ifndef MATRIX_SQUEEZE
     printf("<TH ALIGN=%s nowrap colspan=2>",left?"RIGHT":"LEFT");
     #endif///ndef MATRIX_SQUEEZE
@@ -6373,7 +6385,7 @@ else if (dimensionX)
     }
 else if (left && dimensionY && childTdb != NULL)
     #ifdef MATRIX_SQUEEZE
-    printf("<TH class='%s' ALIGN=RIGHT nowrap>%s</TH>\n",dimensionY->tags[ixY],
+    printf("<TH class='matCell all %s' ALIGN=RIGHT nowrap>%s</TH>\n",dimensionY->tags[ixY],
            compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
     #else///ifndef MATRIX_SQUEEZE
     printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
@@ -6507,10 +6519,10 @@ static boolean compositeUiByFilter(char *db, struct cart *cart, struct trackDb *
 membersForAll_t* membersForAll = membersForAllSubGroupsGet(parentTdb,cart);
 if(membersForAll == NULL || membersForAll->filters == FALSE) // Not Matrix or filters
     return FALSE;
-webIncludeResourceFile("ui.dropdownchecklist.css");
-jsIncludeFile("ui.dropdownchecklist.js",NULL);
+    webIncludeResourceFile("ui.dropdownchecklist.css");
+    jsIncludeFile("ui.dropdownchecklist.js",NULL);
 #ifdef NEW_JQUERY
-jsIncludeFile("ddcl.js",NULL);
+    jsIncludeFile("ddcl.js",NULL);
 #endif///def NEW_JQUERY
 
 cgiDown(0.7);
@@ -6684,7 +6696,7 @@ if(dimensionX == NULL && dimensionY == NULL) // Could have been just filterCompo
     return FALSE;
 
 #ifdef MATRIX_SQUEEZE
-printf("<TABLE class='greenBox' cellspacing=0 style='background-color:%s;'>\n",COLOR_BG_ALTDEFAULT);
+printf("<TABLE class='greenBox matrix' cellspacing=0 style='background-color:%s;'>\n",COLOR_BG_ALTDEFAULT);
 #else///ifndef MATRIX_SQUEEZE
 printf("<TABLE class='greenBox' style='background-color:%s;'>\n",COLOR_BG_DEFAULT);
 #endif///ndef MATRIX_SQUEEZE
@@ -6700,7 +6712,11 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
         {
         cntY++;
         assert(!dimensionY || ixY < dimensionY->count);
+    #ifdef MATRIX_SQUEEZE
+        printf("<TR ALIGN=CENTER>");
+    #else///ifndef MATRIX_SQUEEZE
         printf("<TR ALIGN=CENTER BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
+    #endif///ndef MATRIX_SQUEEZE
 
         matrixYheadings(db,parentTdb, membersForAll,ixY,TRUE);
 
@@ -6817,13 +6833,13 @@ if(dimensionsExist(parentTdb))
     return FALSE;
 
 #ifdef BUTTONS_BY_CSS
-    #define BUTTON_ALL   "<span class='pmButton' onclick='matSubCBsCheck(%s)'>%c</span>"
-    #define BUTTON_PLUS_ALL_GLOBAL()  printf(BUTTON_ALL,"true", '+')
-    #define BUTTON_MINUS_ALL_GLOBAL() printf(BUTTON_ALL,"false",'-')
+#define BUTTON_ALL   "<span class='pmButton' onclick='matSubCBsCheck(%s)'>%c</span>"
+#define BUTTON_PLUS_ALL_GLOBAL()  printf(BUTTON_ALL,"true", '+')
+#define BUTTON_MINUS_ALL_GLOBAL() printf(BUTTON_ALL,"false",'-')
 #else///ifndef BUTTONS_BY_CSS
-    #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" id='btn_%s' src='../images/%s'>"
-    #define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
-    #define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
+#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"matSubCBsCheck(%s);\" id='btn_%s' src='../images/%s'>"
+#define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
+#define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
 #endif///ndef BUTTONS_BY_CSS
 BUTTON_PLUS_ALL_GLOBAL();
 BUTTON_MINUS_ALL_GLOBAL();
@@ -6999,13 +7015,13 @@ boolean viewsOnly = FALSE;
 if (primarySubtrack == NULL)
     {
     if (!cartVarExists(cart, "ajax"))
-        {
-        if(trackDbSetting(tdb, "dragAndDrop") != NULL)
-            jsIncludeFile("jquery.tablednd.js", NULL);
-        jsIncludeFile("ajax.js",NULL);
-        #ifdef TABLE_SCROLL
-        jsIncludeFile("jquery.fixedtable.js",NULL);
-        #endif//def TABLE_SCROLL
+    {
+    if(trackDbSetting(tdb, "dragAndDrop") != NULL)
+        jsIncludeFile("jquery.tablednd.js", NULL);
+    jsIncludeFile("ajax.js",NULL);
+    #ifdef TABLE_SCROLL
+    jsIncludeFile("jquery.fixedtable.js",NULL);
+    #endif//def TABLE_SCROLL
         }
     jsIncludeFile("hui.js",NULL);
     }
