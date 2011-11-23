@@ -354,4 +354,15 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
 
 .hubError {color: #F00000;}
 
+/* [+][-] buttons are no longer images but divs */
+.pmButton { font-size: small; font-weight:bold; text-align:center; font-family: courier; color: black;
+            display: inline-block; width:16px; height:16px; vertical-align: top;
+            border: 2px outset lightGray; border-bottom-color:darkgray; border-right-color:darkgray; border-radius: 5px; /* radius not working */
+            background-color:#F3EDED; cursor: pointer;}
+.pmButton:hover { border-bottom-color:DarkBlue; border-right-color:DarkBlue; color: #0000AA; background-color:#AADDFF; }
+
+/* Experimental hilighting of all buttons on hover */
+/* input[type=submit]:hover,input[type=button]:hover { color: #0000AA; border:2px outset #008800; } */
+/* img[src="../images/add_sm.gif"]:hover,img[src="../images/remove_sm.gif"]:hover { outline:#008800 outset 1px; } */
+
 /* END - hgHubConnect Styles */
