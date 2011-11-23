@@ -563,12 +563,9 @@ if (w <= 1)
     }
 double hapsPerPix = (double)gtHapCount / (tg->height-1);
 int pixIx;
-for (pixIx = 0;  pixIx < tg->height;  pixIx++)
+for (pixIx = 0;  pixIx < tg->height-1;  pixIx++)
     {
-    int gtHapOrderIxStart = round(hapsPerPix * pixIx);
-    // Watch out for overflow:
-    if (gtHapOrderIxStart >= gtHapCount)
-	break;
+    int gtHapOrderIxStart = (int)(hapsPerPix * pixIx);
     int gtHapOrderIxEnd = round(hapsPerPix * (pixIx + 1));
     if (gtHapOrderIxEnd == gtHapOrderIxStart)
 	gtHapOrderIxEnd++;
@@ -855,7 +852,8 @@ for (rec = vcff->records, i = 0;  rec != NULL && i < endIx;  rec = rec->next, i+
     if (i < startIx)
 	continue;
     th->refs[i-startIx] = rec->alleles[0];
-    th->alts[i-startIx] = rec->alleles[1];
+    th->alts[i-startIx] = cloneString(rec->alleles[1]);
+    tolowers(th->alts[i-startIx]);
     }
 }
 
