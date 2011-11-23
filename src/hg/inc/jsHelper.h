@@ -24,7 +24,8 @@
 #define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
 
 // Make toggle and [+][-] buttons without image gifs.
-#define BUTTONS_BY_CSS
+// Not ready for this release.
+//#define BUTTONS_BY_CSS
 
 void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 	char **vars, int varCount);
