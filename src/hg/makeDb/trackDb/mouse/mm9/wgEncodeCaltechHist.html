@@ -87,7 +87,7 @@ fixation conditions and the number of PCR rounds. Reads of 32 bp, 36 bp or 50 bp
 <p>
 Sequencing reads (fastq files) were assigned to the corresponding libraries based on the multiplexing tag for pooled libraries 
 (all tags have been removed from reads in the fastq files available for download) or directly processed. Bowtie (Langmead <em>et al.</em>, 2009) was used to map reads 
-to the male or female version of the mouse genome (excluding the _random chromosomes in the assembly) depending on the cell line sex. The following parameteres were used:
+to the male or female version of the mouse genome (excluding the _random chromosomes in the assembly) depending on the cell line sex. The following parameters were used:
 "-v 2 -k 11 -m 10 -t --best --strata". Aligned reads were converted into rds files using the ERANGE package (Johnson & Mortazavi <em>et al.</em>, 2007) and the findall.py program in 
 ERANGE was used to identify enriched regions against the matching input sample. The following settings were used for point-source transcription factors: 
  "--shift learn --ratio 3 --minimum 2 --listPeak --revbackground". For histone modifications, the settings were changed to
