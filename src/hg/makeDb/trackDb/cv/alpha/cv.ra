@@ -9135,31 +9135,31 @@ description 1 h with 500 pM DEX (Myers)
 type treatment
 
 term diffProtA_0d PROVISIONAL
-tag DIFFPROTA0D
+tag DIFFA0D
 type treatment
 description H7-hESC day 0 (negative control) for differentiation of cardiomyocyte, endothelial, smooth muscle, no specific growth factors added, lineage: inner cell mass
 label 0 day control
 
 term diffProtA_2d PROVISIONAL
-tag DIFFPROTA2D
+tag DIFFA2D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
 label 2 day diff prot A
 
 term diffProtA_5d PROVISIONAL
-tag DIFFPROTA5D
+tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
 label 5 day diffProtA
 
 term diffProtA_7d PROVISIONAL
-tag DIFFPROTA7D
+tag DIFFA7D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 7 days, lineage: mesoderm
 label 7 day diffProtA
 
 term diffProtA_14d PROVISIONAL
-tag DIFFPROTA14D
+tag DIFFA14D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
 label 14 day diffProtA
