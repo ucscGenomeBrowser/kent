@@ -184,7 +184,7 @@ class makeNotes(object):
             for j in fields:
                 tablesize = tablesize + float(j)
 
-        return math.ceil(tablesize)
+        return int(math.ceil(tablesize))
 
     def __checkMd5sums(self):
         (newfiles, oldfiles, loose) = (self.newReleaseFiles, self.oldReleaseFiles, self.loose)
