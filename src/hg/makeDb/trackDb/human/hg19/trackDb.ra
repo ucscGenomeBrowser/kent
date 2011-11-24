@@ -462,7 +462,7 @@ compositeTrack on
 shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aChimp=Chimp bGorilla=Gorilla cOrangutan=Orangutan dRhesus=Rhesus eBaboon=Baboon fMarmoset=Marmoset gTarsier=Tarsier hMouse_lemur=Mouse_lemur iBushbaby=Bushbaby
+subGroup2 species Species aChimp=Chimp bGorilla=Gorilla cOrangutan=Orangutan dGibbon=Gibbon eRhesus=Rhesus fBaboon=Baboon gMarmoset=Marmoset hTarsier=Tarsier iMouse_lemur=Mouse_lemur jBushbaby=Bushbaby
 subGroup3 clade Clade aHom=Hominidae bCerco=Cercopithecinae cHaplo=Haplorrhini dStrep=Strepsirrhini
 dragAndDrop subTracks
 visibility hide
@@ -495,14 +495,14 @@ html hg19primateChainNet
         type chain panTro3
         otherDb panTro3
 
-        track chainGorGor1
-    #replaces record chainGorGor1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
+        track chainGorGor3
+    #replaces record chainGorGor3 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
         subTrack primateChainNetViewchain off
         subGroups view=chain species=bGorilla clade=aHom
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain gorGor1
-        otherDb gorGor1
+        type chain gorGor3
+        otherDb gorGor3
 
         track chainPonAbe2
     #replaces record chainPonAbe2 in parent dir missing/extra release
@@ -513,10 +513,18 @@ html hg19primateChainNet
         type chain ponAbe2
         otherDb ponAbe2
 
+        track chainNomLeu1
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=dGibbon clade=aHom
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain nomLeu1
+        otherDb nomLeu1
+
         track chainRheMac2
     #replaces record chainRheMac2 in parent dir missing/extra release
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=dRhesus clade=bCerco
+        subGroups view=chain species=eRhesus clade=bCerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain rheMac2
@@ -524,7 +532,7 @@ html hg19primateChainNet
 
         track chainPapHam1
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=eBaboon clade=bCerco
+        subGroups view=chain species=fBaboon clade=bCerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain papHam1
@@ -533,7 +541,7 @@ html hg19primateChainNet
         track chainCalJac3
     #replaces record chainCalJac1 in parent dir missing/extra group,priority,visibility,color,altColor,matrixHeader,matrix,spectrum
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=fMarmoset clade=cHaplo
+        subGroups view=chain species=gMarmoset clade=cHaplo
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain calJac3
@@ -541,7 +549,7 @@ html hg19primateChainNet
 
         track chainTarSyr1
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=gTarsier clade=cHaplo
+        subGroups view=chain species=hTarsier clade=cHaplo
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain tarSyr1
@@ -549,7 +557,7 @@ html hg19primateChainNet
 
         track chainMicMur1
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=hMouse_lemur clade=dStrep
+        subGroups view=chain species=iMouse_lemur clade=dStrep
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain micMur1
@@ -558,7 +566,7 @@ html hg19primateChainNet
         track chainOtoGar1
     #replaces record chainOtoGar1 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum
         subTrack primateChainNetViewchain off
-        subGroups view=chain species=iBushbaby clade=dStrep
+        subGroups view=chain species=jBushbaby clade=dStrep
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain otoGar1
@@ -579,14 +587,14 @@ html hg19primateChainNet
         type netAlign panTro3 chainPanTro3
         otherDb panTro3
 
-        track netGorGor1
-    #replaces record netGorGor1 in parent dir missing/extra group,priority,visibility,spectrum
+        track netGorGor3
+    #replaces record netGorGor3 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet off
         subGroups view=net species=bGorilla clade=aHom
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign gorGor1 chainGorGor1
-        otherDb gorGor1
+        type netAlign gorGor3 chainGorGor3
+        otherDb gorGor3
 
         track netPonAbe2
     #replaces record netPonAbe2 in parent dir missing/extra release
@@ -597,10 +605,18 @@ html hg19primateChainNet
         type netAlign ponAbe2 chainPonAbe2
         otherDb ponAbe2
 
+        track netNomLeu1
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=dGibbon clade=aHom
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign nomLeu1 chainNomLeu1
+        otherDb nomLeu1
+
         track netRheMac2
     #replaces record netRheMac2 in parent dir missing/extra release
         subTrack primateChainNetViewnet on 
-        subGroups view=net species=dRhesus clade=bCerco
+        subGroups view=net species=eRhesus clade=bCerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign rheMac2 chainRheMac2
@@ -608,7 +624,7 @@ html hg19primateChainNet
 
         track netPapHam1
         subTrack primateChainNetViewnet off
-        subGroups view=net species=eBaboon clade=bCerco
+        subGroups view=net species=fBaboon clade=bCerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign papHam1 chainPapHam1
@@ -617,7 +633,7 @@ html hg19primateChainNet
         track netCalJac3
     #replaces record netCalJac1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet on 
-        subGroups view=net species=fMarmoset clade=cHaplo
+        subGroups view=net species=gMarmoset clade=cHaplo
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign calJac3 chainCalJac3
@@ -625,7 +641,7 @@ html hg19primateChainNet
 
         track netTarSyr1
         subTrack primateChainNetViewnet off
-        subGroups view=net species=gTarsier clade=cHaplo
+        subGroups view=net species=hTarsier clade=cHaplo
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign tarSyr1 chainTarSyr1
@@ -633,7 +649,7 @@ html hg19primateChainNet
 
         track netMicMur1
         subTrack primateChainNetViewnet off
-        subGroups view=net species=hMouse_lemur clade=dStrep
+        subGroups view=net species=iMouse_lemur clade=dStrep
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign micMur1 chainMicMur1
@@ -642,7 +658,7 @@ html hg19primateChainNet
         track netOtoGar1
     #replaces record netOtoGar1 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack primateChainNetViewnet on
-        subGroups view=net species=iBushbaby clade=dStrep
+        subGroups view=net species=jBushbaby clade=dStrep
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign otoGar1 chainOtoGar1

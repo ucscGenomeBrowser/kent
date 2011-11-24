@@ -477,23 +477,41 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
     var retval = true;
     var hidden = $("input[name='"+hiddenPrefix+"_"+prefix+"_close']");
     if($(button) != undefined && $(hidden) != undefined && $(hidden).length > 0) {
-        var oldSrc = $(button).attr("src");
-	var newVal;
-        if(arguments.length > 5)
+	var newVal = -1;
+        if (arguments.length > 5)
             newVal = arguments[5] ? 0 : 1;
-        else
-            newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
-        var newSrc;
+        var oldSrc = $(button).attr("src");
+        if (oldSrc != undefined && oldSrc.length > 0) {
+            // Old img version of the toggleButton
+            if (newVal == -1)
+                newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
+            if(newVal == 1)
+                $(button).attr("src", oldSrc.replace("/remove", "/add") );
+            else
+                $(button).attr("src", oldSrc.replace("/add", "/remove") );
+        } else {
+            // new BUTTONS_BY_CSS
+            if (newVal == -1) {
+                oldSrc = $(button).text();
+                if (oldSrc != undefined && oldSrc.length == 1)
+                    newVal = $(button).text() == "+" ? 0 : 1;
+                else {
+                    warn("Uninterpretable toggleButton!");
+                    newVal = 0;
+                }
+            }
+            if(newVal == 1)
+                $(button).text('+');
+            else
+                $(button).text('-');
+        }
         if(newVal == 1) {
-            newSrc = oldSrc.replace("/remove", "/add");
             $(button).attr('title', 'Expand this '+titleDesc);
             $("tr[id^='"+prefix+"-']").hide();
         } else {
-            newSrc = oldSrc.replace("/add", "/remove");
             $(button).attr('title', 'Collapse this '+titleDesc);
             $("tr[id^='"+prefix+"-']").show();
         }
-        $(button).attr("src", newSrc);
         $(hidden).val(newVal);
 	if (doAjax) {
 	    setCartVar(hiddenPrefix+"_"+prefix+"_close", newVal);
@@ -824,9 +842,9 @@ function getHgsid()
         hgsid = ele.value;
     }
     if(!hgsid) {
-        hgsid = getURLParam(window.location.href, "hgsid");
+    hgsid = getURLParam(window.location.href, "hgsid");
     }
-    return hgsid;
+        return hgsid;
 }
 
 function getDb()
@@ -1105,10 +1123,10 @@ function tableDragAndDropRegister(thisTable)
         onDragClass: "trDrag",
         dragHandle: "dragHandle",
         onDrop: function(table, row, dragStartIndex) {
-                if(tableSetPositions) {
-                    tableSetPositions(table);
+                    if(tableSetPositions) {
+                        tableSetPositions(table);
+                    }
                 }
-            }
     });
     $(thisTable).find("td.dragHandle").hover(
         function(){ $(this).closest('tr').addClass('trDrag'); },
@@ -1887,7 +1905,7 @@ var findTracks = {
                 }
             }
             $(td).find('.filterBy').each( function(i) { // Do this by 'each' to set noneIsAll individually
-                    ddcl.setup(this,'noneIsAll');
+                ddcl.setup(this,'noneIsAll');
             });
         }
         findTracks.updateMdbHelp(this.num);
@@ -2065,7 +2083,7 @@ var findTracks = {
         var counter = $('.selCbCount');
         if(counter != undefined) {
             var selCbs =  $("input.selCb");
-            $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+                $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
         }
     },
 
@@ -2202,7 +2220,7 @@ var findTracks = {
 
     mdbSelectRowsNormalize: function (table)
     { // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
-    // Will walk through each row and get the numberings of addressable elements correct.
+      // Will walk through each row and get the numberings of addressable elements correct.
         if (table != undefined) {
             var mdbSelectRows = $(table).find('tr.mdbSelect');
             var needMinus = (mdbSelectRows.length > 2);
@@ -2252,6 +2270,7 @@ var findTracks = {
                 if (element != undefined)
                     $(element).attr('id','hgt_mdbVal' + rowNum);
             });
+
             return mdbSelectRows.length;
         }
         return 0;

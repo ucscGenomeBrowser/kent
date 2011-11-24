@@ -63,6 +63,9 @@ libFiles: mkDir $(LIB_FILES:%=%.libFile)
 
 alpha: all
  
+development:
+	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_${USER}/bin/scripts pipelibs
+
 beta:
 	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_beta/bin/scripts pipelibs 
 
