@@ -254,14 +254,12 @@ class makeNotes(object):
 
         nicesize = self.__determineNiceSize(size)
         if nicesize:
-            strout = "%s: %d MB (%s)" % (type, size, nicesize)
-            output.append(strout)
+            output.append("%s: %d MB (%s)" % (type, size, nicesize))
         else:
-            strout = "%s: %d MB" % (type, size)
-            output.append(strout)
+            output.append("%s: %d MB" % (type, size))
         totalsize = totalsize + size
 
-        return (output, totalsize, strout)
+        return (output, totalsize, str(size))
 
     def __printSection(self, new, untouched, revoked, all, title, path, summary):
         output = []
