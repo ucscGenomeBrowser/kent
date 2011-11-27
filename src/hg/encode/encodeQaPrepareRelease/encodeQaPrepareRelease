@@ -98,6 +98,8 @@ sub processTrackDb {
         } elsif ($stage eq "public") {
             my $line1join = join " ", @line1;
             my $line2join = join " ", @line2;
+            $line1join =~ s/\s+$//g;
+            $line2join =~ s/\s+$//g;
             if ($line1join =~ m/wgEncode\S+new/) {
                 push @returnlines, $line2join;
             } elsif ($line2join =~ m/wgEncode\S+new/) {
