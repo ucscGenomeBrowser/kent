@@ -59,7 +59,7 @@ class TrackFile(object):
     
     def __init__(self, fullname, md5, metaObj=None):
         if not os.path.isfile(fullname):
-            raise FileError('invalid file: %s' % fullname)
+            raise KeyError('invalid file: %s' % fullname)
         self._path, self._name = fullname.rsplit('/', 1)
         self._path = self._path + '/'
         self._fullname = fullname
