@@ -5379,7 +5379,7 @@ lots N/A
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation eGFP-FOS:human_validation_White.pdf
-label FOS
+label FOS (eGFP-FOS)
 
 term eGFP-GATA2
 tag GATA2e
@@ -5395,7 +5395,7 @@ lots N/A
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation eGFP-GATA2:human_validation_White.pdf
-label eGFP-GATA2
+label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
 tag HDAC8e
@@ -5411,7 +5411,7 @@ lots N/A
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation eGFP-HDAC8:human_validation_White.pdf
-label eGFP-HDAC8
+label HDAC8 (eGFP-HDAC8)
 
 term eGFP-JunB
 tag JUNBe
@@ -5427,7 +5427,7 @@ lots N/A
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation eGFP-JunB:human_validation_White.pdf
-label eGFP-JunB
+label JunB (eGFP-JunB)
 
 term eGFP-JunD
 tag JUNDe
@@ -5443,7 +5443,7 @@ lots N/A
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation eGFP-JunD:human_validation_White.pdf
-label eGFP-JunD
+label JunB (eGFP-JunD)
 
 term eGFP-NR4A1
 tag NR4A1e
@@ -5459,7 +5459,7 @@ lots N/A
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation eGFP-NR4A1:human_validation_White.pdf
-label eGFP-NR4A1
+label NR4A1 (eGFP-NR4A1)
 
 term ELF1_(SC-631)
 tag ELF1
