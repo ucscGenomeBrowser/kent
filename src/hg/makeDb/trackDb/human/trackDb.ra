@@ -3014,7 +3014,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol mim2gene
+tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol omim2gene
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
