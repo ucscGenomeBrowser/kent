@@ -1,5 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABRO01
+
 # Dipodomys ordii  Kangaroo rat
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE braney 2008-10-07)
