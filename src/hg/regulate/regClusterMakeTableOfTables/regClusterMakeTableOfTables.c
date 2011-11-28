@@ -9,7 +9,7 @@
 
 static char const rcsid[] = "$Id: regClusterMakeTableOfTables.c,v 1.4 2010/05/17 02:21:36 kent Exp $";
 
-int scoreColIx = 6;
+int scoreColIx = 7;
 
 void usage()
 /* Explain usage and exit. */
@@ -26,7 +26,7 @@ errAbort(
   "        enh01 - From enhancer picks\n"
   "options:\n"
   "    scoreColIx=N (default %d) Index (1 based) of score column in files.  Use 5 for bed,\n"
-  "               6 for narrowPeak"
+  "               7 for narrowPeak"
   , scoreColIx
   );
 }
@@ -250,6 +250,7 @@ uglyf("regClusterMakeTableOfTables(type=%s, input=%s, output=%s)\n", type, input
 int scoreIx = scoreColIx - 1;
 for (in = inList; in != NULL; in = in->next)
     {
+    verbose(2, "Processing %s\n", in->name);
     fprintf(f, "%s\t0\t1\t2\t%d\t", in->name, scoreIx);
     fprintf(f, "%g", calcNormScoreFactor(in->name, scoreIx));
     char *s = in->name;
