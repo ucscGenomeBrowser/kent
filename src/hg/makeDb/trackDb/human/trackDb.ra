@@ -3924,7 +3924,7 @@ noScoreFilter .
 
     track iscaLikelyPathogenic
     parent iscaComposite
-    shortLabel ISCA Unc Lik Path
+    shortLabel ISCA Uncert Path
     longLabel ISCA CNVs: Uncertain: Likely Pathogenic
     priority 3
 
@@ -3936,7 +3936,7 @@ noScoreFilter .
 
     track iscaLikelyBenign
     parent iscaComposite
-    shortLabel ISCA Unc Lik Ben
+    shortLabel ISCA Uncert Ben
     longLabel ISCA CNVs: Uncertain: Likely Benign
     priority 5
 
