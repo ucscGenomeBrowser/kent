@@ -5420,8 +5420,8 @@ label FOS
 term eGFP-GATA2
 tag GATA2e
 type Antibody
-target eGFP-GATA2
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-GATA2
+target GATA2
+antibodyDescription Goat polyclonal. Antibody Target: GATA2
 targetDescription GATA2
 vendorName Kevin White
 vendorId Missing
@@ -5436,8 +5436,8 @@ label eGFP-GATA2
 term eGFP-HDAC8
 tag HDAC8e
 type Antibody
-target eGFP-HDAC8
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-HDAC8
+target HDAC8
+antibodyDescription Goat polyclonal. Antibody Target: HDAC8
 targetDescription HDAC8
 vendorName Kevin White
 vendorId Missing
@@ -5452,8 +5452,8 @@ label eGFP-HDAC8
 term eGFP-JunB
 tag JUNBe
 type Antibody
-target eGFP-JunB
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunB
+target JunB
+antibodyDescription Goat polyclonal. Antibody Target: JunB
 targetDescription JunB
 vendorName Kevin White
 vendorId Missing
@@ -5468,8 +5468,8 @@ label eGFP-JunB
 term eGFP-JunD
 tag JUNDe
 type Antibody
-target eGFP-JunD
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunD
+target JunD
+antibodyDescription Goat polyclonal. Antibody Target: JunD
 targetDescription JunD
 vendorName Kevin White
 vendorId Missing
@@ -5484,8 +5484,8 @@ label eGFP-JunD
 term eGFP-NR4A1
 tag NR4A1e
 type Antibody
-target eGFP-NR4A1
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-NR4A1
+target NR4A1
+antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 targetDescription NR4A1
 vendorName Kevin White
 vendorId Missing
