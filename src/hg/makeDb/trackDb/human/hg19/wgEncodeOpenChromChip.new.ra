@@ -749,6 +749,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3271 dateSubmitted=2011-01-17
         # was wgEncodeOpenChromChipMonocd14InputSig wong Mon Nov 28 14:59:40 2011
 
+        #renamed to contain the donor name above
+        #track wgEncodeOpenChromChipMonocd14InputSig
+        #parent wgEncodeOpenChromChipViewSignal off
+        #shortLabel Mono-CD14+ Inp DS
+        #longLabel Monocytes-CD14+ Input TFBS ChIP Density Sig from ENCODE/OpenChrom-UTA
+        #subGroups treatment=AANONE view=SIG factor=zCTRL cellType=MonoCD14
+        #type bigWig 0.000000 3.876800
+        # subId=3271 dateSubmitted=2011-01-17
+
         track wgEncodeOpenChromChipA549InputSig
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel A549 Input Sig
