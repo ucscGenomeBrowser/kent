@@ -7063,6 +7063,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 md5sum 490c5d71e6c847ca77d93b562f173a6a,543d82be8f8ca67f7313949a86733e7d
+objStatus renamed - added in cell donor name - wgEncodeOpenChromChipMonocd14ro01746InputAln
 origAssembly hg19
 project wgEncode
 setType input
@@ -7086,6 +7087,7 @@ geoSampleAccession GSM822296
 grant Crawford
 lab UT-A
 md5sum f8628418043a552db8de137ffdadcabf
+objStatus renamed - added in cell donor name - wgEncodeOpenChromChipMonocd14ro01746InputRawData
 origAssembly hg19
 project wgEncode
 setType input
@@ -7093,7 +7095,7 @@ subId 3271
 view RawData
 
 metaObject wgEncodeOpenChromChipMonocd14InputSig
-objType table
+objType file
 antibody Input
 cell Monocytes-CD14+
 composite wgEncodeOpenChromChip
@@ -7110,11 +7112,11 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84
 md5sum 10c502bdfbdcdbf2fffee2318626c6e7
+objStatus renamed - added in cell donor name - wgEncodeOpenChromChipMonocd14ro01746InputSig
 origAssembly hg19
 project wgEncode
 setType input
 subId 3271
-tableName wgEncodeOpenChromChipMonocd14InputSig
 view Signal
 
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputAln
@@ -7692,4 +7694,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -297220686
+# MAGIC: -2090023817
