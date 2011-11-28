@@ -7045,54 +7045,6 @@ subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2Sig
 view Signal
 
-metaObject wgEncodeOpenChromChipMonocd14InputRawData
-objType file
-antibody Input
-cell Monocytes-CD14+
-composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-17
-dateUnrestricted 2011-10-17
-dccAccession wgEncodeEH001137
-expId 1137
-fileName wgEncodeOpenChromChipMonocd14InputRawData.fastq.gz
-geoSampleAccession GSM822296
-grant Crawford
-lab UT-A
-md5sum f8628418043a552db8de137ffdadcabf
-origAssembly hg19
-project wgEncode
-setType input
-subId 3271
-view RawData
-
-metaObject wgEncodeOpenChromChipMonocd14InputSig
-objType table
-antibody Input
-cell Monocytes-CD14+
-composite wgEncodeOpenChromChip
-controlId Monocytes-CD14+/Input
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-17
-dateUnrestricted 2011-10-17
-dccAccession wgEncodeEH001137
-expId 1137
-fileName wgEncodeOpenChromChipMonocd14InputSig.bigWig
-geoSampleAccession GSM822296
-grant Crawford
-lab UT-A
-labVersion fseq v 1.84
-md5sum 10c502bdfbdcdbf2fffee2318626c6e7
-origAssembly hg19
-project wgEncode
-setType input
-subId 3271
-tableName wgEncodeOpenChromChipMonocd14InputSig
-view Signal
-
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputAln
 objType file
 antibody Input
@@ -7116,6 +7068,54 @@ project wgEncode
 setType input
 subId 3271
 view Alignments
+
+metaObject wgEncodeOpenChromChipMonocd14ro1746InputRawData
+objType file
+antibody Input
+cell Monocytes-CD14+
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001137
+expId 1137
+fileName wgEncodeOpenChromChipMonocd14ro1746InputRawData.fastq.gz
+geoSampleAccession GSM822296
+grant Crawford
+lab UT-A
+md5sum f8628418043a552db8de137ffdadcabf
+origAssembly hg19
+project wgEncode
+setType input
+subId 3271
+view RawData
+
+metaObject wgEncodeOpenChromChipMonocd14ro1746InputSig
+objType table
+antibody Input
+cell Monocytes-CD14+
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+dccAccession wgEncodeEH001137
+expId 1137
+fileName wgEncodeOpenChromChipMonocd14ro1746InputSig.bigWig
+geoSampleAccession GSM822296
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+md5sum 10c502bdfbdcdbf2fffee2318626c6e7
+origAssembly hg19
+project wgEncode
+setType input
+subId 3271
+tableName wgEncodeOpenChromChipMonocd14ro1746InputSig
+view Signal
 
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep1
 objType file
@@ -7620,4 +7620,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 1214267123
+# MAGIC: 668747634
