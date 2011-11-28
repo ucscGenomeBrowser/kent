@@ -7122,7 +7122,7 @@ view Signal
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputAln
 objType file
 antibody Input
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeOpenChromChip
 controlId Monocytes-CD14+/Input
 dataType ChipSeq
@@ -7146,7 +7146,7 @@ view Alignments
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputRawData
 objType file
 antibody Input
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeOpenChromChip
 controlId Monocytes-CD14+/Input
 dataType ChipSeq
@@ -7169,7 +7169,7 @@ view RawData
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputSig
 objType table
 antibody Input
-cell Monocytes-CD14+
+cell Monocytes-CD14+_RO01746
 composite wgEncodeOpenChromChip
 controlId Monocytes-CD14+/Input
 dataType ChipSeq
@@ -7694,4 +7694,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -2090023817
+# MAGIC: -1666421634
