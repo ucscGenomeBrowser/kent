@@ -4,7 +4,7 @@ shortLabel RIKEN CAGE Loc
 longLabel RNA Subcellular CAGE Localization from ENCODE/RIKEN
 group expression
 subGroup1 view Views Clusters=Clusters PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments 
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLaS3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ MCF7=MCF7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_<i>retinoic_acid</i>
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLaS3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ MCF7=MCF7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract pAM=PolyA- pAP=PolyA+ total=Total_RNA
 subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
@@ -86,16 +86,16 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHelas3NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HeLa nlus tot
-        longLabel HeLa-S3 nucleolus total CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=2HeLaS3 localization=nucleolus rnaExtract=total
+        shortLabel HeLa nlus tot 1
+        longLabel HeLa-S3 nucleolus total CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=2HeLaS3 localization=nucleolus rnaExtract=total
         type bed 6 +
         color 0,119,158
         # subId=3991 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageNhekCytosolPapClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel NHEK cyto pA+
+        shortLabel NHEK cyto pA+ 1
         longLabel NHEK cytosol polyA+ CAGE Clusters from ENCODE/RIKEN
         subGroups view=Clusters rep=Pooled cellType=NHEK localization=cytosol rnaExtract=pAP
         type bed 6 +
@@ -114,8 +114,8 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageNhekNucleusPapClusters
         subTrack wgEncodeRikenCageViewClusters off
         shortLabel NHEK nucl pA+
-        longLabel NHEK nucleus polyA+ CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=NHEK localization=nucleus rnaExtract=pAP
+        longLabel NHEK nucleus polyA+ CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=NHEK localization=nucleus rnaExtract=pAP
         type bed 6 +
         color 179,0,134
         # subId=3983 dateSubmitted=2011-04-28
@@ -174,9 +174,9 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageHepg2NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HepG nlus tot
-        longLabel HepG2 nucleolus total CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=2HepG2 localization=nucleolus rnaExtract=total
+        shortLabel HepG nlus tot 1
+        longLabel HepG2 nucleolus total CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=2HepG2 localization=nucleolus rnaExtract=total
         type bed 6 +
         color 189,0,157
         # subId=3974 dateSubmitted=2011-04-28
@@ -228,36 +228,36 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageK562CytosolPamClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel K562 cyto pA-
-        longLabel K562 cytosol polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1K562 localization=cytosol rnaExtract=pAM
+        shortLabel K562 cyto pA- 1
+        longLabel K562 cytosol polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1K562 localization=cytosol rnaExtract=pAM
         type bed 6 +
         color 46,0,184
         # subId=3958 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562NucleusPamClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel K562 nucl pA-
-        longLabel K562 nucleus polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleus rnaExtract=pAM
+        shortLabel K562 nucl pA- 1
+        longLabel K562 nucleus polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1K562 localization=nucleus rnaExtract=pAM
         type bed 6 +
         color 46,0,184
         # subId=3995 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageNhekNucleusPamClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel NHEK nucl pA-
-        longLabel NHEK nucleus polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=NHEK localization=nucleus rnaExtract=pAM
+        shortLabel NHEK nucl pA- 1
+        longLabel NHEK nucleus polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=NHEK localization=nucleus rnaExtract=pAM
         type bed 6 +
         color 179,0,134
         # subId=3996 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageNhekCytosolPamClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel NHEK cyto pA-
-        longLabel NHEK cytosol polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=NHEK localization=cytosol rnaExtract=pAM
+        shortLabel NHEK cyto pA- 1
+        longLabel NHEK cytosol polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=NHEK localization=cytosol rnaExtract=pAM
         type bed 6 +
         color 179,0,134
         # subId=3989 dateSubmitted=2011-04-28
@@ -282,9 +282,9 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageH1hescCellPamClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel H1ES cell pA-
-        longLabel H1-hESC whole cell polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1H1hESC localization=cell rnaExtract=pAM
+        shortLabel H1ES cell pA- 1
+        longLabel H1-hESC whole cell polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1H1hESC localization=cell rnaExtract=pAM
         type bed 6 +
         color 0,107,27
         # subId=3984 dateSubmitted=2011-04-28
@@ -300,54 +300,54 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878CytosolPamClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel GM78 cyto pA-
-        longLabel GM12878 cytosol polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=cytosol rnaExtract=pAM
+        shortLabel GM78 cyto pA- 1
+        longLabel GM12878 cytosol polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1GM12878 localization=cytosol rnaExtract=pAM
         type bed 6 +
         color 153,38,0
         # subId=3978 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageHuvecCytosolPamClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HUVE cyto pA-
-        longLabel HUVEC cytosol polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=2HUVEC localization=cytosol rnaExtract=pAM
+        shortLabel HUVE cyto pA- 1
+        longLabel HUVEC cytosol polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=2HUVEC localization=cytosol rnaExtract=pAM
         type bed 6 +
         color 224,75,0
         # subId=3977 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562NucleoplasmTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel K562 nplm tot
-        longLabel K562 nucleoplasm total CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleoplasm rnaExtract=total
+        shortLabel K562 nplm tot 1
+        longLabel K562 nucleoplasm total CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1K562 localization=nucleoplasm rnaExtract=total
         type bed 6 +
         color 46,0,184
         # subId=3980 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageH1hescCytosolPapClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel H1ES cyto pA+
-        longLabel H1-hESC cytosol polyA+ CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1H1hESC localization=cytosol rnaExtract=pAP
+        shortLabel H1ES cyto pA+ 2
+        longLabel H1-hESC cytosol polyA+ CAGE Clusters Rep 2 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep2 cellType=1H1hESC localization=cytosol rnaExtract=pAP
         type bed 6 +
         color 0,107,27
         # subId=3971 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageHepg2CytosolPamClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HepG cyto pA-
-        longLabel HepG2 cytosol polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=2HepG2 localization=cytosol rnaExtract=pAM
+        shortLabel HepG cyto pA- 1
+        longLabel HepG2 cytosol polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=2HepG2 localization=cytosol rnaExtract=pAM
         type bed 6 +
         color 189,0,157
         # subId=3969 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562PolysomePamClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel K562 poly pA-
-        longLabel K562 polysome polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1K562 localization=polysome rnaExtract=pAM
+        shortLabel K562 poly pA- 1
+        longLabel K562 polysome polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1K562 localization=polysome rnaExtract=pAM
         type bed 6 +
         color 46,0,184
         # subId=3967 dateSubmitted=2011-04-28
@@ -355,26 +355,26 @@ html wgEncodeRikenCage.new
         track wgEncodeRikenCageK562ChromatinTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
         shortLabel K562 chrm tot
-        longLabel K562 chromatin total CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1K562 localization=chromatin rnaExtract=total
+        longLabel K562 chromatin total CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1K562 localization=chromatin rnaExtract=total
         type bed 6 +
         color 46,0,184
         # subId=3970 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageHepg2NucleusPamClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HepG nucl pA-
-        longLabel HepG2 nucleus polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=2HepG2 localization=nucleus rnaExtract=pAM
+        shortLabel HepG nucl pA- 1
+        longLabel HepG2 nucleus polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=2HepG2 localization=nucleus rnaExtract=pAM
         type bed 6 +
         color 189,0,157
         # subId=3966 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878NucleusPamClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel GM78 nucl pA-
-        longLabel GM12878 nucleus polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=nucleus rnaExtract=pAM
+        shortLabel GM78 nucl pA- 1
+        longLabel GM12878 nucleus polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1GM12878 localization=nucleus rnaExtract=pAM
         type bed 6 +
         color 153,38,0
         # subId=3965 dateSubmitted=2011-04-28
@@ -390,44 +390,44 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageH1hescNucleusPapClusters
         subTrack wgEncodeRikenCageViewClusters on
-        shortLabel H1ES nucl pA+
-        longLabel H1-hESC nucleus polyA+ CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1H1hESC localization=nucleus rnaExtract=pAP
+        shortLabel H1ES nucl pA+ 2
+        longLabel H1-hESC nucleus polyA+ CAGE Clusters Rep 2 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep2 cellType=1H1hESC localization=nucleus rnaExtract=pAP
         type bed 6 +
         color 0,107,27
         # subId=3961 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageGm12878NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel GM78 nlus tot
-        longLabel GM12878 nucleolus total CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1GM12878 localization=nucleolus rnaExtract=total
+        shortLabel GM78 nlus tot 1
+        longLabel GM12878 nucleolus total CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1GM12878 localization=nucleolus rnaExtract=total
         type bed 6 +
         color 153,38,0
         # subId=3964 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageProstateCellPamClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel Pros cell pA-
-        longLabel prostate whole cell polyA- CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=prostate localization=cell rnaExtract=pAM
+        shortLabel Pros cell pA- 1
+        longLabel Prostate whole cell polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=prostate localization=cell rnaExtract=pAM
         type bed 6 +
         # subId=3957 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageK562NucleolusTotalClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel K562 nlus tot
-        longLabel K562 nucleolus total CAGE Clusters from ENCODE/RIKEN
-        subGroups view=Clusters rep=Pooled cellType=1K562 localization=nucleolus rnaExtract=total
+        shortLabel K562 nlus tot 1
+        longLabel K562 nucleolus total CAGE Clusters Rep 1 from ENCODE/RIKEN
+        subGroups view=Clusters rep=rep1 cellType=1K562 localization=nucleolus rnaExtract=total
         type bed 6 +
         color 46,0,184
         # subId=3963 dateSubmitted=2011-04-28
 
         track wgEncodeRikenCageHelas3CytosolPamClusters
         subTrack wgEncodeRikenCageViewClusters off
-        shortLabel HeLa cyto pA-
-        longLabel HeLa-S3 cytosol polyA- CAGE Clusters from ENCODE/RIKEN 
-        subGroups view=Clusters rep=Pooled  cellType=2HeLaS3 localization=cytosol rnaExtract=pAM
+        shortLabel HeLa cyto pA- 1
+        longLabel HeLa-S3 cytosol polyA- CAGE Clusters Rep 1 from ENCODE/RIKEN 
+        subGroups view=Clusters rep=rep1  cellType=2HeLaS3 localization=cytosol rnaExtract=pAM
         type bed 6 +
         color 0,119,158
         # subId=3992 dateSubmitted=2011-04-28
