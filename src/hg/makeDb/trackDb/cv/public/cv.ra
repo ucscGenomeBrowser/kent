@@ -1043,7 +1043,7 @@ vendorName S. Heimfeld Laboratory, FHCRC
 vendorId Monocytes-CD14+
 orderUrl http://labs.fhcrc.org/heimfeld/contact.html
 termId BTO:0000876
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876 
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
 #formerly tier 3
 tier 2
 protocol Stam:MonoCD14_Stam_protocol.pdf
@@ -2672,7 +2672,7 @@ vendorId Muscle needle biopsies
 sex U
 tissue muscle
 lab Crawford
-protocol Crawford(Missing):HSMMFSHD_Crawford_protocol.pdf
+protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -2719,7 +2719,7 @@ vendorId Muscle needle biopsies
 sex U
 tissue muscle
 lab Crawford
-protocol Crawford(Missing):HSMMtubeFSHD_Crawford_protocol.pdf
+protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -3519,7 +3519,7 @@ termId BTO:0002397
 termUrl missing
 sex M
 tier 3
-protocol Crawford(missing):RWPE_protocol.pdf
+protocol Crawford:RWPE_Crawford_protocol.pdf
 
 term SAEC
 tag SAEC
@@ -4804,7 +4804,7 @@ lab Myers
 lots A1111
 targetId GeneCard:ATF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF2
-validation ATF2_(SC-81188)(WesternBlot,IP-MassSpec):human_ATF2_SC-81188_sc-81188_validation_Myers.pdf
+validation ATF2_(SC-81188)(Western_blot,IP-MassSpec):human_ATF2_SC-81188_sc-81188_validation_Myers.pdf
 label ATF2 (sc-81188)
 
 term ATF3
@@ -5008,8 +5008,8 @@ term Brg1
 tag BRG1
 type Antibody
 target BRG1
-antibodyDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: BRG1  
-targetDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex. 
+antibodyDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin. Antibody Target: BRG1
+targetDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId 16189
@@ -5346,7 +5346,7 @@ lab Farnham, Myers
 lots D1206 (Myers)
 targetId GeneCard:E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf E2F6_(Myers)(WesternBlot,IP-MassSpec):human_E2F6_validation_Myers.pdf
+validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf E2F6_(Myers)(Western_blot,IP-MassSpec):human_E2F6_validation_Myers.pdf
 label E2F6 (sc-22823)
 
 term EBF1_(SC-137065)
@@ -5362,7 +5362,7 @@ lab Myers
 lots J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation EBF1_(SC-137065)(Immunoprecipitation-WesternBlotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
+validation EBF1_(SC-137065)(Immunoprecipitation-Western_blotMassSpec):human_EBF1_SC-137065_validation_Myers.pdf
 label EBF1 (sc-137065)
 
 term eGFP-FOS
@@ -5372,94 +5372,94 @@ target FOS
 antibodyDescription Goat polyclonal. Antibody Target: FOS
 targetDescription Fos
 vendorName Kevin White
-vendorId (None)
+vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation eGFP-FOS:human_validation_White.pdf
-label eGFP-FOS
+label FOS (eGFP-FOS)
 
 term eGFP-GATA2
 tag GATA2e
 type Antibody
-target eGFP-GATA2
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-GATA2
+target GATA2
+antibodyDescription Goat polyclonal. Antibody Target: GATA2
 targetDescription GATA2
 vendorName Kevin White
-vendorId (None)
+vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation eGFP-GATA2:human_validation_White.pdf
-label eGFP-GATA2
+label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
 tag HDAC8e
 type Antibody
-target eGFP-HDAC8
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-HDAC8
+target HDAC8
+antibodyDescription Goat polyclonal. Antibody Target: HDAC8
 targetDescription HDAC8
 vendorName Kevin White
-vendorId (None)
+vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation eGFP-HDAC8:human_validation_White.pdf
-label eGFP-HDAC8
+label HDAC8 (eGFP-HDAC8)
 
 term eGFP-JunB
 tag JUNBe
 type Antibody
-target eGFP-JunB
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunB
+target JunB
+antibodyDescription Goat polyclonal. Antibody Target: JunB
 targetDescription JunB
 vendorName Kevin White
-vendorId (None)
+vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation eGFP-JunB:human_validation_White.pdf
-label eGFP-JunB
+label JunB (eGFP-JunB)
 
 term eGFP-JunD
 tag JUNDe
 type Antibody
-target eGFP-JunD
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunD
+target JunD
+antibodyDescription Goat polyclonal. Antibody Target: JunD
 targetDescription JunD
 vendorName Kevin White
-vendorId (None)
+vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation eGFP-JunD:human_validation_White.pdf
-label eGFP-JunD
+label JunB (eGFP-JunD)
 
 term eGFP-NR4A1
 tag NR4A1e
 type Antibody
-target eGFP-NR4A1
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-NR4A1
+target NR4A1
+antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 targetDescription NR4A1
 vendorName Kevin White
-vendorId (None)
+vendorId Missing
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White
 lots N/A
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation eGFP-NR4A1:human_validation_White.pdf
-label eGFP-NR4A1
+label NR4A1 (eGFP-NR4A1)
 
 term ELF1_(SC-631)
 tag ELF1
@@ -5474,7 +5474,7 @@ lab Myers
 lots L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation ELF1_(SC-631)(WesternBlot,IP-MassSpec):human_ELF1_SC-631_validation_Myers.pdf
+validation ELF1_(SC-631)(Western_blot,IP-MassSpec):human_ELF1_SC-631_validation_Myers.pdf
 label  ELF1 (sc-631)
 
 term ELK4
@@ -5489,7 +5489,7 @@ vendorId sc-13030
 lab Farnham
 targetId GeneCard:ELK4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
-validation ELK4(Missing)(WesternBlot,ChIPseq):human_ELK4_validation_Farnham.pdf
+validation ELK4(Western_blot,ChIP-seq):human_ELK4_validation_Farnham.pdf
 label ELK4 (sc-13030)
 
 term ERalpha_a
@@ -5505,7 +5505,7 @@ lots C2510, G1509
 lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
-validation ERalpha_a(Immunoprecipitation-WesternBlot,MassSpect):human_ERalpha_a_validation_Myers.pdf
+validation ERalpha_a(Immunoprecipitation-Western_blot,MassSpect):human_ERalpha_a_validation_Myers.pdf
 label ERalpha_a (sc-543)
 
 ##This does not appear in metaDb
@@ -5568,7 +5568,7 @@ targetId GeneCard:ETS1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ETS1
 lots A1608
 lab Myers
-validation ETS1(Immunoprecipitation-WesternBlot,MassSpec):human_ETS1_validation_Myers.pdf
+validation ETS1(Immunoprecipitation-Western_blot,MassSpec):human_ETS1_validation_Myers.pdf
 label ETS1 (sc-350)
 
 term EZH2_(39875)
@@ -5646,7 +5646,7 @@ orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
 lab Myers
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
+validation FOXA1(Immunoprecipitation-Western_blot,MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
 label FOXA1 (sc-6553)
 
 term  FOXA1_(SC-101058)
@@ -5662,7 +5662,7 @@ lab Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
+validation FOXA1_(SC-101058)(Immunoprecipitation-Western_blot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
 label  FOXA1 (sc-101058)
 
 term FOXA2_(SC-6554)
@@ -5694,7 +5694,7 @@ lots AB-2B
 lab Myers
 targetId GeneCard:FOXP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
-validation FOXP2(WesternBlot,siRNA):human_FOXP2_validation_Myers.pdf
+validation FOXP2(Western_blot,siRNA):human_FOXP2_validation_Myers.pdf
 label FOXP2 (ab16046)
 
 term GABP
@@ -5710,7 +5710,7 @@ targetId GeneCard:GABPB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GABPB1
 lab Myers
 lots F1804
-validation GABP(Immunoprecipitation-WesternBlot,MassSpec):human_GABP_validation_Myers.pdf
+validation GABP(Immunoprecipitation-Western_blot,MassSpec):human_GABP_validation_Myers.pdf
 label GABP (sc-28312)
 
 term GATA-1
@@ -5725,8 +5725,8 @@ orderUrl http://stemcells.wisc.edu/faculty/bresnick.html
 targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
-validation GATA-1_(WesternBlot,ChIP):human_GATA-1_validation_Farnham.pdf
-label GATA-1
+validation GATA-1_(Western_blot,ChIP):human_GATA-1_validation_Farnham.pdf
+label GATA1
 
 term GATA1_(SC-265)
 tag GATA1a
@@ -5788,7 +5788,7 @@ targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
 lots E2708
-validation GATA2_(SC-267)(Immunoprecipitation-WesternBlot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
+validation GATA2_(SC-267)(Immunoprecipitation-Western_blot,MassSpec):human_GATA2_SC-267_validation_Myers.pdf
 label GATA2 (sc-267)
 
 term GATA2_(SC-9008)
@@ -5820,7 +5820,7 @@ lab Farnham
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(missing):human_GATA3-SC-268_validation_Farnham.pdf
+validation GATA3_SC-268(Western_blot,ChIP-seq):human_GATA3_SC-268_validation_Farnham.pdf
 label  GATA3 (sc-268)
 
 term GATA3_(SC-269)
@@ -5846,7 +5846,7 @@ target GCN5
 antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC). Antibody Target: GCN5
 targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 vendorName Laszlo Tora
-vendorId (None)
+vendorId Missing
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
 #lots
@@ -5978,7 +5978,7 @@ lab Farnham
 lots Lot# A399-002341P
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation H3K4me1_(pAb-037-050)(WesternBlot,DotBlot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
+validation H3K4me1_(pAb-037-050)(Western_blot,DotBlot):human_H3K4me1_pAb-037-050_validation_Farnham.pdf
 label H3K4me1 (pAb-037-050)
 
 term H3K4me2
@@ -6088,7 +6088,7 @@ tag H3K09ACc
 type Antibody
 antibodyDescription Rabbit monoclonal antibody corrresponds to the amino terminus of acetyl-histone H3 (Lys9), this antibody does not cross-react with other acetylated histones. Antibody Target: H3K9Ac
 target H3K9Ac
-targetDescription H3K9Ac, acetyl-histone H3 (Lys9) 
+targetDescription H3K9Ac, acetyl-histone H3 (Lys9)
 vendorName Cell Signaling
 vendorId 9649
 orderUrl http://www.cellsignal.com/products/9649.html
@@ -6096,7 +6096,7 @@ lab Farnham
 lots 1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation H3K9Ac_(9649)(WesternBlot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
+validation H3K9Ac_(9649)(Western_blot,DotBlot):human_H3K9Ac_9649_validation_Farnham.pdf
 label H3K9Ac (9649)
 
 term H3K9me1
@@ -6143,7 +6143,7 @@ lab Farnham
 lots Lot#1
 targetId GeneCard:HIST2H3C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
-validation H3K9me3_(9754)(WesternBlot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
+validation H3K9me3_(9754)(Western_blot,PeptideELISA):human_H3K9me3_9754_validation_Farnham.pdf
 label H3K9me3 (9754)
 
 term H3K27ac
@@ -6353,7 +6353,7 @@ lab Myers
 lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation HDAC2_(SC-6296)(Immunoprecipitation-WesternBlot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
+validation HDAC2_(SC-6296)(Immunoprecipitation-Western_blot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
 label  HDAC2 (sc-6296)
 
 term HEY1
@@ -6378,8 +6378,8 @@ target HMGN3
 antibodyDescription Rabbit polyclonal. Raised against an amino acids 60 to 99 of human HMGN3. Vendor recommeds its use for detection of HMGN3 in human samples using immunohistochemistry. Antibody Target: HMGN3
 targetDescription HMGN3 is a high-mobility group protein. These proteins are small, 8 to 11 kDa, ubiquitous proteins believed to play a role in chromatin structure. HMGNs bind to nucleosomes between the histone core and DNA and reduce chromatin compaction. As a result HMGNs, HMGN3 included, are believed to increase access to DNA for DNA replication, repair and transcription. HMGN3 has specifically been implicated in the action of Thyroid horomone receptors.
 # wrong orderUrl: mixing vendorName and vendorIds
-orderUrl http://www.acris-antibodies.com/NB100-61076.htm
-vendorName Acris Antibodies
+orderUrl http://www.novusbio.com/HMGN3-Antibody_NB100-61076.html
+vendorName Novus Biologicals
 vendorId NB100-61076
 lots 1
 lab Struhl
@@ -6416,7 +6416,7 @@ lab Myers
 lots G1309
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
-validation HNF4A_(SC-8987)(Immunoprecipitation-WesternBlot,MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
+validation HNF4A_(SC-8987)(Immunoprecipitation-Western_blot,MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
 label HNF4A (sc-8987)
 
 term HNF4G_(SC-6558)
@@ -6463,15 +6463,15 @@ lab Farnham
 lots N/A
 targetId GeneCard:IKZF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IKZF1
-validation IKZF1_(IkN)_(UCLA)(missing):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
-label IKZF1 (IkN)
+validation IKZF1_(IkN)_(UCLA)(Western_blot,ChIPseq):human_IKZF1_IkN_UCLA_validation_Farnham.pdf
+label IKZF1 (IKZF1_(IkN))
 
 term Ini1
 tag INI1
 type Antibody
 target INI1
-antibodyDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1 
-targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex. 
+antibodyDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus of Ini1 of human origin. Antibody Target: INI1
+targetDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-17796
@@ -6524,7 +6524,7 @@ lab Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_(SC-6059)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
+validation IRF4_(SC-6059)(Immunoprecipitation-Western_blot,MassSpec):human_IRF4_SC-6059_validation_Myers.pdf
 label  IRF4 (sc-6059)
 
 term IRF9_(SC-496)
@@ -6540,7 +6540,7 @@ lab Myers
 lots A1111
 targetId GeneCard:IRF9
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF9
-validation IRF9_(SC-496)(WesternBlot,IP-MassSpec):human_IRF9_SC-496_sc-496_validation_Myers.pdf
+validation IRF9_(SC-496)(Western_blot,IP-MassSpec):human_IRF9_SC-496_sc-496_validation_Myers.pdf
 label IRF9 (sc-496)
 
 term JARID1A_(ab26049)
@@ -6602,7 +6602,7 @@ orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
 lab Myers
 targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
-validation LEF1_(SC-8592)(Immunoprecipitation-WesternBlot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
+validation LEF1_(SC-8592)(Immunoprecipitation-Western_blot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
 label LEF1 (sc-8592)
 
 term MafF_(M8194)
@@ -6666,7 +6666,7 @@ lab Myers
 lots  J0809
 targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX(Immunoprecipitation-WesternBlot,MassSpec):human_Max_validation_Myers.pdf
+validation MAX(Immunoprecipitation-Western_blot,MassSpec):human_Max_validation_Myers.pdf
 label Max (sc-197)
 
 term MBD4_(SC-271530)
@@ -6682,7 +6682,7 @@ lab Myers
 lots A1111
 targetId GeneCard:MBD4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MBD4
-validation MBD4_(SC-271530)(WesternBlot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
+validation MBD4_(SC-271530)(Western_blot,IP-MassSpec):human_MBD4_SC-271530_sc-271530_validation_Myers.pdf
 label MBD4 (sc-271530)
 
 ##This does not appear in metaDb
@@ -6730,7 +6730,7 @@ lab Myers
 lots F1110
 targetId GeneCard:MTA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MTA3
-validation MTA3_(SC-81325)(WesternBlot,IP-MassSpec):human_MTA3_SC-81325_sc-81325_validation_Myers.pdf
+validation MTA3_(SC-81325)(Western_blot,IP-MassSpec):human_MTA3_SC-81325_sc-81325_validation_Myers.pdf
 label MTA3 (sc-81325)
 
 term MYBL2_(SC-81192)
@@ -6746,7 +6746,7 @@ lab Myers
 lots B1611
 targetId GeneCard:MYBL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYBL2
-validation MYBL2_(SC-81192)(WesternBlot,IP-MassSpec):human_MYBL2_SC-81192_sc-81192_validation_Myers.pdf
+validation MYBL2_(SC-81192)(Western_blot,IP-MassSpec):human_MYBL2_SC-81192_sc-81192_validation_Myers.pdf
 label MYBL2 (sc-81192)
 
 term MyoD_(sc-32758)
@@ -6888,7 +6888,7 @@ lab Myers
 lots G2007
 targetId GeneCard:NFATC
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFATC1
-validation NFATC1_(SC-17834)(WesternBlot,IP-MassSpec):human_NFATC1_SC-17834_sc-17834_validation_Myers.pdf
+validation NFATC1_(SC-17834)(Western_blot,IP-MassSpec):human_NFATC1_SC-17834_sc-17834_validation_Myers.pdf
 label NFATC1 (sc-17834)
 
 term NFKB
@@ -6913,7 +6913,7 @@ target NF-YA
 targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA. Antibody Target: NF-YA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId NF-YA
+vendorId missing
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYA
@@ -6928,7 +6928,7 @@ target NF-YB
 targetDescription NF-YB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB. Antibody Target: NF-YB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId NF-YB
+vendorId missing
 orderUrl http://www.unimi.it/didattica/scienzemfn/
 lab Struhl
 targetId GeneCard:NFYB
@@ -7040,7 +7040,7 @@ orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-C20(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-C20_validation_Myers.pdf
+validation PAX5-C20(Immunoprecipitation-Western_blot,MassSpec):human_PAX5-C20_validation_Myers.pdf
 label PAX5 (sc-1974)
 
 term PAX5-N19
@@ -7055,7 +7055,7 @@ orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-N19(Immunoprecipitation-WesternBlot,MassSpec):human_PAX5-N19_validation_Myers.pdf
+validation PAX5-N19(Immunoprecipitation-Western_blot,MassSpec):human_PAX5-N19_validation_Myers.pdf
 label PAX5 (sc-1975)
 
 term PAX5_(N-15)
@@ -7132,7 +7132,7 @@ lab Myers
 lots J0109
 targetId GeneCards:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
-validation PITX1_(SC-81979)(Immunoprecipitation-WesternBlot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
+validation PITX1_(SC-81979)(Immunoprecipitation-Western_blot,MassSpec):human_PITX1_SC-81979_validation_Myers.pdf
 label PITX1 (sc-81979)
 
 term PLU1
@@ -7165,7 +7165,7 @@ lab Myers
 lots H1908
 targetId GeneCard:PML
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PML
-validation PML_(SC-71910)(WesternBlot,IP-MassSpec):human_PML_SC-71910_sc-71910_validation_Myers.pdf
+validation PML_(SC-71910)(Western_blot,IP-MassSpec):human_PML_SC-71910_sc-71910_validation_Myers.pdf
 label PML (sc-71910)
 
 term Pol2
@@ -7258,7 +7258,7 @@ lab Myers
 lots F2609
 targetId GeneCards:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
-validation POU5F1_(SC-9081)(WesternBlot,IP-MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
+validation POU5F1_(SC-9081)(Western_blot,IP-MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
 label POU5F1 (sc-9081)
 
 term POU2F2
@@ -7273,7 +7273,7 @@ orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 lab Myers
 targetId GeneCard:POU2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
-validation POU2F2(Immunoprecipitation-WesternBlot,MassSpec):human_POU2F2_validation_Myers.pdf
+validation POU2F2(Immunoprecipitation-Western_blot,MassSpec):human_POU2F2_validation_Myers.pdf
 label POU2F2 (sc-233)
 
 term PRDM1_(9115)
@@ -7303,7 +7303,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=22805
 lab Myers
 targetId GeneCard:SPI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SPI1
-validation PU.1(Immunoprecipitation-WesternBlot,MassSpec):human_PU.1_validation_Myers.pdf
+validation PU.1(Immunoprecipitation-Western_blot,MassSpec):human_PU.1_validation_Myers.pdf
 label PU1 (sc-22805)
 
 term Rad21
@@ -7396,7 +7396,7 @@ orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 lab Myers
 targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
-validation RXRA(Immunoprecipitation-WesternBlot,MassSpec):human_RXRA_validation_Myers.pdf
+validation RXRA(Immunoprecipitation-Western_blot,MassSpec):human_RXRA_validation_Myers.pdf
 label RXRA (sc-553)
 
 term SAP30_(39731)
@@ -7427,7 +7427,7 @@ orderUrl http://www.ptglab.com/Products/SETDB1-Antibody-11231-1-AP.htm
 lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
-validation SETDB1(missing):human_SETDB1_validation_Farnham.pdf
+validation SETDB1(Western_blot,ChIPseq):human_SETDB1_validation_Farnham.pdf
 label SETDB1 (11231-1-AP)
 
 term  SETDB1_(SC-66884)
@@ -7458,7 +7458,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
 targetId GeneCard:SIN3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIN3A
-validation Sin3Ak-20(Immunoprecipitation-WesternBlot,MassSpec):human_Sin3Ak-20_validation_Myers.pdf
+validation Sin3Ak-20(Immunoprecipitation-Western_blot,MassSpec):human_Sin3Ak-20_validation_Myers.pdf
 label SIN3AK20 (sc-994)
 
 term SIRT6
@@ -7519,7 +7519,7 @@ orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 lab Myers
 targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
-validation SP1(Immunoprecipitation-WesternBlot,MassSpec):human_SP1_validation_Myers.pdf
+validation SP1(Immunoprecipitation-Western_blot,MassSpec):human_SP1_validation_Myers.pdf
 label SP1 (sc-17824)
 
 term SP2_(SC-643)
@@ -7561,7 +7561,7 @@ target SPT20
 antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids). Antibody Target: SPT20
 targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 vendorName Laszlo Tora
-vendorId SPT20 
+vendorId missing
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
 lab Struhl
 #lots
@@ -7613,7 +7613,7 @@ lab Myers, Wold
 lots F3006 L2005 H2604
 targetId GeneCard:SRF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SRF
-validation SRF(Immunoprecipitation-WesternBlot,MassSpec):human_SRF_validation_Myers.pdf
+validation SRF(Immunoprecipitation-Western_blot,MassSpec):human_SRF_validation_Myers.pdf
 label SRF (sc-335)
 
 term STAT1
@@ -7706,7 +7706,7 @@ orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
 lab Farnham
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
-validation SUZ12_(WesternBlot,ChIP):human_SUZ12_validation_Farnham.pdf
+validation SUZ12_(Western_blot,ChIP):human_SUZ12_validation_Farnham.pdf
 label SUZ12 (SUZ12)
 
 term TAF1
@@ -7739,7 +7739,7 @@ lab Myers
 lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
-validation TAF7_(SC-101167)(Immunoprecipitation-WesternBlot,MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
+validation TAF7_(SC-101167)(Immunoprecipitation-Western_blot,MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
 label  TAF7 (sc-101167)
 
 term TAL1_(SC-12984)
@@ -7796,7 +7796,7 @@ orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 lab Myers
 targetId GeneCard:TCF12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
-validation TCF12(Immunoprecipitation-WesternBlot,MassSpec):human_TCF12_validation_Myers.pdf
+validation TCF12(Immunoprecipitation-Western_blot,MassSpec):human_TCF12_validation_Myers.pdf
 label TCF12 (sc-357)
 
 term TCF3_(SC-349)
@@ -7812,7 +7812,7 @@ lab Myers
 lots A1111
 targetId GeneCard:TCF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
-validation TCF3_(SC-349)(WesternBlot,IP-MassSpec):human_TCF3_SC-349_validation_Myers.pdf
+validation TCF3_(SC-349)(Western_blot,IP-MassSpec):human_TCF3_SC-349_validation_Myers.pdf
 label TCF3 (sc-349)
 
 # TCF-4 *IS AN ALIAS* for TCF7L2 and is located on chr 10.
@@ -7939,7 +7939,7 @@ orderUrl https://www.umms.med.umich.edu/facultysearch/facultyPage.do?facUniqname
 lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
-validation TR4_(WesternBlot,ChIP):mouse_TR4_validation_Farnham.pdf
+validation TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
 label TR4
 
 term TRIM37_(SC-49548)
@@ -7970,7 +7970,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=229
 lab Myers
 targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF1_SC-229(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_SC-229_validation_Myers.pdf
+validation USF1_SC-229(Immunoprecipitation-Western_blot,MassSpec):human_USF1_SC-229_validation_Myers.pdf
 label USF1 (sc-229)
 
 term USF1_(SC-8983)
@@ -7986,7 +7986,7 @@ lab Myers
 lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF1_SC-8983(Immunoprecipitation-WesternBlot,MassSpec):human_USF1_SC-8983_validation_Myers.pdf
+validation USF1_SC-8983(Immunoprecipitation-Western_blot,MassSpec):human_USF1_SC-8983_validation_Myers.pdf
 label  USF1 (sc-8983)
 
 term USF2
@@ -8077,7 +8077,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=281
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation YY1_(SC-281)(Immunoprecipitation-WesternBlot,MassSpec):human_YY1_SC-281_validation_Myers.pdf
+validation YY1_(SC-281)(Immunoprecipitation-Western_blot,MassSpec):human_YY1_SC-281_validation_Myers.pdf
 label YY1 (sc-281)
 
 term ZBTB33
@@ -8092,7 +8092,7 @@ orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
 lab Myers
 targetId GeneCard:ZBTB33
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
-validation ZBTB33(WesternBlot,IP-MassSpec):human_ZBTB33_6F8_validation_Myers.pdf
+validation ZBTB33(Western_blot,IP-MassSpec):human_ZBTB33_6F8_validation_Myers.pdf
 label ZBTB33 (sc-23871)
 
 term ZBTB7A_(SC-34508)
@@ -8108,7 +8108,7 @@ lab Myers
 lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
-validation ZBTB7A_SC-34508(Immunoprecipitation-WesternBlot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
+validation ZBTB7A_SC-34508(Immunoprecipitation-Western_blot,MassSpec):human_ZBTB7A_SC-34508_validation_Myers.pdf
 label  ZBTB7A (sc-34508)
 
 term ZEB1_(SC-25388)
@@ -8124,7 +8124,7 @@ lab Myers
 lots D2010
 targetId GeneCards:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
-validation ZEB1_(SC-25388)(WesternBlot,IP-MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
+validation ZEB1_(SC-25388)(Western_blot,IP-MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
 label ZEB1 (sc-25388)
 
 term Znf143_(16618-1-AP)
@@ -8156,7 +8156,7 @@ lab Farnham
 lots N/A
 targetId GeneCards:ZNF217
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF217
-validation ZNF217_(WesternBlot,SiRNA):human_ZNF217_validation_Farnham.pdf
+validation ZNF217_(Western_blot,SiRNA):human_ZNF217_validation_Farnham.pdf
 label ZNF217 (ZNF217)
 
 term ZNF263
@@ -8171,7 +8171,7 @@ orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
 lab Farnham
 targetId GeneCard:ZNF263
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF263
-validation ZNF263_(WesternBlot,siRNA):human_ZNF263_validation_Farnham.pdf
+validation ZNF263_(Western_blot,siRNA):human_ZNF263_validation_Farnham.pdf
 label ZNF263 (H00010127-A01)
 
 term ZNF274
@@ -8203,7 +8203,7 @@ lab Farnham
 lots 08064-4C12
 targetId Genecard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
-validation ZNF274_(M01)(missing):human_ZNF274_M01_validation_Farnham.pdf
+validation ZNF274_(M01)(Western_blot,ChIPseq):human_ZNF274_M01_validation_Farnham.pdf
 label ZNF274 (H00010782-M01)
 
 term ZZZ3
@@ -8252,14 +8252,14 @@ target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA. Antibody Target: CELF1
 vendorName Millipore
-vendorId 05621
+vendorId 05-621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
 # lots
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation missing
-label CELF1 (05621)
+label CELF1 (05-621)
 
 ##This does not appear in metaDb
 term CELF2
@@ -8343,7 +8343,7 @@ lots 1) B2508(Nov2008)
 targetId Gene:1994
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
 validation missing
-label ELAVL1 (sc-5261)
+label ELAVL1 (SC-5261; 07-1735 is recommended replacement for AB5831)
 
 ##This does not appear in metaDb
 term FXR1
@@ -8402,7 +8402,7 @@ tag HNRNPM
 type Antibody
 target hnRNPM
 targetDescription Heterogeneous nuclear ribonucleoprotein M
-antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM 
+antibodyDescription Mouse monoclonal Anti-hnRNP M1-M4, clone 1D8. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB, Antibody Target: hnRNPM
 vendorName Millipore
 vendorId 05-620
 orderUrl http://www.millipore.com/catalogue/item/05-620
@@ -8563,7 +8563,7 @@ lots 3) 7308-S2
 targetId 7884
 targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
 validation missing
-label SLBP
+label SLBP (06-1376; 26522; MA156353)
 
 term T7Tag
 tag T7
@@ -8579,7 +8579,7 @@ lab Tenenbaum
 targetId (input)
 #targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
 validation missing
-label T7Tag (AB3790)
+label T7Tag (AB3790; Nov_69522)
 
 ### mapAlgorithm : Comparing map algorithms
 # term (human-readable map algorithm name)
@@ -9835,11 +9835,11 @@ type view
 label TSS Gencode V7
 description Expression level estimates for GENCODE v7 transcription start sites (TSS) in gtf format derived by summing the expression levels in FPKM for all transcripts originating from a given TSS
 
-term TssHmm   
+term TssHmm
 tag TssHmm
 type view
 label TSS HMM
-description Expression level estimates for transcription start sites (TSS) 
+description Expression level estimates for transcription start sites (TSS)
 
 term UniformSignal
 tag UNISIG
@@ -11302,7 +11302,7 @@ priority 025
 term control
 tag CONTROLi
 type typeOfTerm
-label Control or Input for ChIPseq
+label Control or Input for ChIP-seq
 description The type of control (or 'input') used in ChIP-seq experiments to remove background noise before peak calling.
 searchable multiSelect
 cvDefined yes
