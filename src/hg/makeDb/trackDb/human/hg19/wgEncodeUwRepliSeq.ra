@@ -337,7 +337,7 @@ wgEncode 1
 	view 1PctSignal
 	visibility dense
 	parent wgEncodeUwRepliSeq
-	windowingFunction maximum
+	windowingFunction mean+whiskers
 	viewLimits 15:35
 
         track wgEncodeUwRepliSeqGm12878G1bPctSignalRep1
@@ -1245,7 +1245,8 @@ wgEncode 1
 	view 5SumSignal
 	visibility full
 	parent wgEncodeUwRepliSeq
-	windowingFunction maximum
+	windowingFunction mean+whiskers
+	viewLimits 0:2500
 
         track wgEncodeUwRepliSeqGm12878SumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal
@@ -1402,7 +1403,8 @@ wgEncode 1
 	view 4WaveSignal
 	visibility full
 	parent wgEncodeUwRepliSeq
-	windowingFunction maximum
+	windowingFunction mean+whiskers
+	viewLimits -10:100
 
         track wgEncodeUwRepliSeqGm12878WaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal
