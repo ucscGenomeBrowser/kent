@@ -73,6 +73,12 @@ rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/chr*_${TBL}.${EXT} \
   done
 done
 
+Please note, as of November 2011, there is a second rsync server
+you can use in place of the hgdownload mentioned above.  Depending
+upon your internet location, the second server may provide
+better transfer speed.  To use the second rsync server, use
+the name hgdownload-sd in place of the hgdownload in the above commands.
+
 If you instead need to fetch the goldenPath database text
 dumps and load them, please note the following discussion.
 
