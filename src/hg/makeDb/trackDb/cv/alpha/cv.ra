@@ -4869,6 +4869,7 @@ orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10756
 lab Snyder
+#The SMARCC1 genecard is for BAF155
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
 validation Human_-_:missing
@@ -5415,13 +5416,13 @@ lots N/A
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation Human_-_eGFP-FOS:human_validation_White.pdf
-label FOS
+label FOS (eGFP-FOS)
 
 term eGFP-GATA2
 tag GATA2e
 type Antibody
-target eGFP-GATA2
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-GATA2
+target GATA2
+antibodyDescription Goat polyclonal. Antibody Target: GATA2
 targetDescription GATA2
 vendorName Kevin White
 vendorId Missing
@@ -5431,13 +5432,13 @@ lots N/A
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation Human_-_eGFP-GATA2:human_validation_White.pdf
-label eGFP-GATA2
+label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
 tag HDAC8e
 type Antibody
-target eGFP-HDAC8
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-HDAC8
+target HDAC8
+antibodyDescription Goat polyclonal. Antibody Target: HDAC8
 targetDescription HDAC8
 vendorName Kevin White
 vendorId Missing
@@ -5447,13 +5448,13 @@ lots N/A
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation Human_-_eGFP-HDAC8:human_validation_White.pdf
-label eGFP-HDAC8
+label HDAC8 (eGFP-HDAC8)
 
 term eGFP-JunB
 tag JUNBe
 type Antibody
-target eGFP-JunB
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunB
+target JunB
+antibodyDescription Goat polyclonal. Antibody Target: JunB
 targetDescription JunB
 vendorName Kevin White
 vendorId Missing
@@ -5463,13 +5464,13 @@ lots N/A
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation Human_-_eGFP-JunB:human_validation_White.pdf
-label eGFP-JunB
+label JunB (eGFP-JunB)
 
 term eGFP-JunD
 tag JUNDe
 type Antibody
-target eGFP-JunD
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunD
+target JunD
+antibodyDescription Goat polyclonal. Antibody Target: JunD
 targetDescription JunD
 vendorName Kevin White
 vendorId Missing
@@ -5479,13 +5480,13 @@ lots N/A
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation Human_-_eGFP-JunD:human_validation_White.pdf
-label eGFP-JunD
+label JunB (eGFP-JunD)
 
 term eGFP-NR4A1
 tag NR4A1e
 type Antibody
-target eGFP-NR4A1
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-NR4A1
+target NR4A1
+antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 targetDescription NR4A1
 vendorName Kevin White
 vendorId Missing
@@ -5495,7 +5496,7 @@ lots N/A
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation Human_-_eGFP-NR4A1:human_validation_White.pdf
-label eGFP-NR4A1
+label NR4A1 (eGFP-NR4A1)
 
 term ELF1_(SC-631)
 tag ELF1
@@ -8590,7 +8591,7 @@ tag SLBP
 type Antibody
 target SLBP
 targetDescription  Stem-loop binding protein (Homo sapiens)
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
 vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
 vendorId 06-1376; 26522; MA156353
 orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com

@@ -199,6 +199,7 @@ table.chainTbl td, .descTbl td, .descTbl th {border: 1px solid #666; padding: 5p
              -moz-transform: rotate(-45deg);    -moz-transform-origin:0% 0%;/* for firefox */
               -ms-transform: rotate(-45deg);     -ms-transform-origin:0% 0%;/* IE 9 */
                -o-transform: rotate(-45deg);      -o-transform-origin:0% 0%;/* Opera */
+               display: none;  /* made visible in js code */
            /* filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* IE <9 90deg NOT SUPPORTED */
            /*filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.999884,M12=0.015230,M21=-0.015230,M22=0.999884);*/ /* IE<9 NOT SUPPORTED, conflits with IE9 */
          }
@@ -208,6 +209,7 @@ table.chainTbl td, .descTbl td, .descTbl th {border: 1px solid #666; padding: 5p
              -moz-transform: rotate(45deg);    -moz-transform-origin:0% 100%;/* for firefox */
               -ms-transform: rotate(45deg);     -ms-transform-origin:0% 100%;/* IE 9 */
                -o-transform: rotate(45deg);      -o-transform-origin:0% 100%;/* Opera */
+               display: none;  /* made visible in js code */
            /* filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1); /* IE <9 90deg NOT SUPPORTED */
            /* filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.999884,M12=-0.015230,M21=0.015230,M22=0.999884);*/ /* IE<9 NOT SUPPORTED, conflits with IE9 */
          }
