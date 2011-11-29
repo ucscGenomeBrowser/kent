@@ -5379,13 +5379,13 @@ lots N/A
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation eGFP-FOS:human_validation_White.pdf
-label FOS
+label FOS (eGFP-FOS)
 
 term eGFP-GATA2
 tag GATA2e
 type Antibody
-target eGFP-GATA2
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-GATA2
+target GATA2
+antibodyDescription Goat polyclonal. Antibody Target: GATA2
 targetDescription GATA2
 vendorName Kevin White
 vendorId Missing
@@ -5395,13 +5395,13 @@ lots N/A
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation eGFP-GATA2:human_validation_White.pdf
-label eGFP-GATA2
+label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
 tag HDAC8e
 type Antibody
-target eGFP-HDAC8
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-HDAC8
+target HDAC8
+antibodyDescription Goat polyclonal. Antibody Target: HDAC8
 targetDescription HDAC8
 vendorName Kevin White
 vendorId Missing
@@ -5411,13 +5411,13 @@ lots N/A
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation eGFP-HDAC8:human_validation_White.pdf
-label eGFP-HDAC8
+label HDAC8 (eGFP-HDAC8)
 
 term eGFP-JunB
 tag JUNBe
 type Antibody
-target eGFP-JunB
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunB
+target JunB
+antibodyDescription Goat polyclonal. Antibody Target: JunB
 targetDescription JunB
 vendorName Kevin White
 vendorId Missing
@@ -5427,13 +5427,13 @@ lots N/A
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation eGFP-JunB:human_validation_White.pdf
-label eGFP-JunB
+label JunB (eGFP-JunB)
 
 term eGFP-JunD
 tag JUNDe
 type Antibody
-target eGFP-JunD
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunD
+target JunD
+antibodyDescription Goat polyclonal. Antibody Target: JunD
 targetDescription JunD
 vendorName Kevin White
 vendorId Missing
@@ -5443,13 +5443,13 @@ lots N/A
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation eGFP-JunD:human_validation_White.pdf
-label eGFP-JunD
+label JunB (eGFP-JunD)
 
 term eGFP-NR4A1
 tag NR4A1e
 type Antibody
-target eGFP-NR4A1
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-NR4A1
+target NR4A1
+antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 targetDescription NR4A1
 vendorName Kevin White
 vendorId Missing
@@ -5459,7 +5459,7 @@ lots N/A
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation eGFP-NR4A1:human_validation_White.pdf
-label eGFP-NR4A1
+label NR4A1 (eGFP-NR4A1)
 
 term ELF1_(SC-631)
 tag ELF1
@@ -5726,7 +5726,7 @@ targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
 validation GATA-1_(Western_blot,ChIP):human_GATA-1_validation_Farnham.pdf
-label GATA1 (GATA-1)
+label GATA1
 
 term GATA1_(SC-265)
 tag GATA1a
@@ -5741,7 +5741,7 @@ targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
 validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
-label GATA1 ( sc-265)
+label GATA1 (sc-265)
 
 term  GATA1_(SC-266)
 tag  GATA1b
@@ -7150,7 +7150,7 @@ targetId GeneCards:KDM5B
 #PLU1 is a alias for KDM5B ~Jeff
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
-label PLU1 (PLU1)
+label PLU1
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7940,7 +7940,7 @@ lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
-label TR4 (TR4)
+label TR4
 
 term TRIM37_(SC-49548)
 tag TRIM37
@@ -8197,7 +8197,7 @@ antibodyDescription Mouse monoclonal antibody raised against a partial recombina
 target ZNF274
 targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
 vendorName Abnova ZNF74
-vendorId M01
+vendorId H00010782-M01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-M01
 lab Farnham
 lots 08064-4C12
@@ -8252,14 +8252,14 @@ target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA. Antibody Target: CELF1
 vendorName Millipore
-vendorId 05621
+vendorId 05-621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
 # lots
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation missing
-label CELF1 (05621)
+label CELF1 (05-621)
 
 ##This does not appear in metaDb
 term CELF2

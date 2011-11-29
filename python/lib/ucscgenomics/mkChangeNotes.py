@@ -184,7 +184,7 @@ class makeNotes(object):
             for j in fields:
                 tablesize = tablesize + float(j)
 
-        return math.ceil(tablesize)
+        return int(math.ceil(tablesize))
 
     def __checkMd5sums(self):
         (newfiles, oldfiles, loose) = (self.newReleaseFiles, self.oldReleaseFiles, self.loose)
@@ -257,10 +257,9 @@ class makeNotes(object):
             output.append("%s: %d MB (%s)" % (type, size, nicesize))
         else:
             output.append("%s: %d MB" % (type, size))
-
         totalsize = totalsize + size
 
-        return (output, totalsize)
+        return (output, totalsize, str(size))
 
     def __printSection(self, new, untouched, revoked, all, title, path, summary):
         output = []
@@ -337,12 +336,18 @@ class makeNotes(object):
 
         totalsize = 0
 
-        (output, totalsize) = self.__printSize(tableSize, output, totalsize, "Table")
-        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(pushFiles, self.releasePath)), output, totalsize, "Files")
-        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(pushGbdbs, self.releasePath)), output, totalsize, "Gbdbs")
-        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(newSupp, self.releasePath)), output, totalsize, "Supplemental")
-        (output, totalsize) = self.__printSize(int(ucscUtils.makeFileSizes(additionalList, self.releasePath)), output, totalsize, "Other")
-        (output, totalsize) = self.__printSize(totalsize, output, 0, "Total")
+        (output, totalsize, strout) = self.__printSize(tableSize, output, totalsize, "Table")
+        self.totalTableSize = strout
+        (output, totalsize, strout) = self.__printSize(int(ucscUtils.makeFileSizes(pushFiles, self.releasePath)), output, totalsize, "Files")
+        self.totalFilesSize = strout
+        (output, totalsize, strout) = self.__printSize(int(ucscUtils.makeFileSizes(pushGbdbs, self.releasePath)), output, totalsize, "Gbdbs")
+        self.totalGbdbsSize = strout
+        (output, totalsize, strout) = self.__printSize(int(ucscUtils.makeFileSizes(newSupp, self.releasePath)), output, totalsize, "Supplemental")
+        self.totalSupplementalSize = strout
+        (output, totalsize, strout) = self.__printSize(int(ucscUtils.makeFileSizes(additionalList, self.releasePath)), output, totalsize, "Other")
+        self.totalAdditionalSize = strout
+        (output, totalsize, strout) = self.__printSize(totalsize, output, 0, "Total")
+        self.totalEverythingSize = strout
         output.append("")
 
         return output
@@ -515,9 +520,11 @@ class makeNotes(object):
         self.gbdbPath = "/gbdb/%s/bbi" % args['database']
         self.trackDbFile = c.currentTrackDb
         if not self.trackDbFile:
+            self.trackDb = None
             errors.append("track: There is no entry in trackDb.wgEncode.ra for %s with the alpha tag" % self.composite)
         else:
             self.trackDb = ra.RaFile(self.trackDbFile)
+            
         if int(self.releaseNew) > 1 and str(self.releaseOld) != 'solo':
 
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
@@ -526,6 +533,8 @@ class makeNotes(object):
 
             self.newMdb = c.alphaMetaDb
             self.oldMdb = c.publicMetaDb
+     
+           
 
             #make a list of missing files
             self.missingFiles = self.__checkFilesForDropped()
@@ -538,8 +547,11 @@ class makeNotes(object):
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
             (self.oldMdb, spam, eggs, ham, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
 
+            self.expIds = set(self.newMdb.filter(lambda s: 'expId' in s, lambda s: s['expId']))
+
             #check that attic fiels aren't in trackDb
-            errors.extend(self.__checkAtticNotInTrackDb())
+            if self.trackDb:
+                errors.extend(self.__checkAtticNotInTrackDb())
 
 
 
@@ -603,13 +615,16 @@ class makeNotes(object):
         elif self.releaseOld == 'solo':
 
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
+            self.oldReleaseFiles = set()
 
             self.newMdb = c.alphaMetaDb
 
             #check that attic fiels aren't in trackDb
-            errors.extend(self.__checkAtticNotInTrackDb())
+            if self.trackDb:
+                errors.extend(self.__checkAtticNotInTrackDb())
 
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
+            self.expIds = set(self.newMdb.filter(lambda s: 'expId' in s, lambda s: s['expId']))
 
             (self.newTableSet, self.revokedTableSet, spam, newTableError) = self.checkTableStatus("alpha metaDb", "new")
             

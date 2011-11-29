@@ -1681,6 +1681,18 @@ while ((c = *in) != 0)
 *out = 0;
 }
 
+int countCase(char *s,boolean upper)
+// Count letters with case (upper or lower)
+{
+char a;
+int count = 0;
+while ((a = *s++) != 0)
+    if (( upper && isupper(a))
+    ||  (!upper && islower(a)))
+        ++count;
+return count;
+}
+
 int countChars(char *s, char c)
 /* Return number of characters c in string s. */
 {
@@ -2517,7 +2529,7 @@ void mustReadFd(int fd, void *buf, size_t size)
 ssize_t actualSize;
 char *cbuf = buf;
 // using a loop because linux was not returning all data in a single request when request size exceeded 2GB.
-while (size > 0) 
+while (size > 0)
     {
     actualSize = read(fd, cbuf, size);
     if (actualSize < 0)
