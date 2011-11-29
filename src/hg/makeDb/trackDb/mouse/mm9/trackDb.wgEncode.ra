@@ -39,4 +39,4 @@ include wgEncodeCaltechTfbs.ra
 #include wgEncdeCaltechTfbs.new.ra (release2)
 
 # Caltech Histone (wrangler: Venkat)
-include wgEncodeCaltechHist.ra alpha,beta
+include wgEncodeCaltechHist.ra 

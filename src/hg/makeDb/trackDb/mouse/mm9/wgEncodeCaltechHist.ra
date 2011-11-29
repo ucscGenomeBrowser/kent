@@ -36,7 +36,7 @@
 track wgEncodeCaltechHist
 compositeTrack on
 shortLabel Caltech Histone
-longLabel Histone Modifications by ChIP-seq by ChIP-seq from ENCODE/Caltech
+longLabel Histone Modifications by ChIP-seq from ENCODE/Caltech
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line C2C12=C2C12

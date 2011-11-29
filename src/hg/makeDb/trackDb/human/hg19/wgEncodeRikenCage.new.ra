@@ -11,6 +11,7 @@ subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4 Pooled=Pooled
 dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dimensionB=rep
 dimensionCchecked pAP,pAM
 dimensionBchecked rep0,rep1,Pooled
+filterComposite dimC=multi dimB=multi
 sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum 
 dragAndDrop subTracks
