@@ -12,7 +12,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfAg10803Aln.bam
+fileName wgEncodeUwDgfAg10803Aln.bam,wgEncodeUwDgfAg10803Aln.bam.bai
 grant Stam
 lab UW
 labExpId DS12374
@@ -244,7 +244,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfCd20ro01778Aln.bam
+fileName wgEncodeUwDgfCd20ro01778Aln.bam,wgEncodeUwDgfCd20ro01778Aln.bam.bai
 grant Stam
 lab UW
 labExpId DS18208
@@ -487,7 +487,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfGm12865Aln.bam
+fileName wgEncodeUwDgfGm12865Aln.bam,wgEncodeUwDgfGm12865Aln.bam.bai
 grant Stam
 lab UW
 labExpId DS12436
@@ -855,7 +855,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfHahAln.bam
+fileName wgEncodeUwDgfHahAln.bam,wgEncodeUwDgfHahAln.bam.bai
 grant Stam
 lab UW
 labExpId DS15192
@@ -965,7 +965,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfHcfAln.bam
+fileName wgEncodeUwDgfHcfAln.bam,wgEncodeUwDgfHcfAln.bam.bai
 grant Stam
 lab UW
 labExpId DS12501
@@ -1075,7 +1075,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfHcmAln.bam
+fileName wgEncodeUwDgfHcmAln.bam,wgEncodeUwDgfHcmAln.bam.bai
 grant Stam
 lab UW
 labExpId DS12599
@@ -1314,7 +1314,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfHeeAln.bam
+fileName wgEncodeUwDgfHeeAln.bam,wgEncodeUwDgfHeeAln.bam.bai
 grant Stam
 lab UW
 labExpId DS12763
@@ -1557,7 +1557,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfHffAln.bam
+fileName wgEncodeUwDgfHffAln.bam,wgEncodeUwDgfHffAln.bam.bai
 grant Stam
 lab UW
 labExpId DS15115
@@ -1667,7 +1667,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfHipeAln.bam
+fileName wgEncodeUwDgfHipeAln.bam,wgEncodeUwDgfHipeAln.bam.bai
 grant Stam
 lab UW
 labExpId DS12684
@@ -1906,7 +1906,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfHmvecbAln.bam
+fileName wgEncodeUwDgfHmvecbAln.bam,wgEncodeUwDgfHmvecbAln.bam.bai
 grant Stam
 lab UW
 labExpId DS13185
@@ -2016,7 +2016,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfHmvecdAln.bam
+fileName wgEncodeUwDgfHmvecdAln.bam,wgEncodeUwDgfHmvecdAln.bam.bai
 grant Stam
 lab UW
 labExpId DS13242
@@ -2255,7 +2255,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfHmvecfAln.bam
+fileName wgEncodeUwDgfHmvecfAln.bam,wgEncodeUwDgfHmvecfAln.bam.bai
 grant Stam
 lab UW
 labExpId DS13150
@@ -2853,7 +2853,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfHsmmAln.bam
+fileName wgEncodeUwDgfHsmmAln.bam,wgEncodeUwDgfHsmmAln.bam.bai
 grant Stam
 lab UW
 labExpId DS14426
@@ -2963,7 +2963,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfHvmfAln.bam
+fileName wgEncodeUwDgfHvmfAln.bam,wgEncodeUwDgfHvmfAln.bam.bai
 grant Stam
 lab UW
 labExpId DS13981
@@ -3206,7 +3206,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfMonocd14ro1746Aln.bam
+fileName wgEncodeUwDgfMonocd14ro1746Aln.bam,wgEncodeUwDgfMonocd14ro1746Aln.bam.bai
 grant Stam
 lab UW
 labExpId DS16508
@@ -3322,7 +3322,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
-fileName wgEncodeUwDgfNb4Aln.bam
+fileName wgEncodeUwDgfNb4Aln.bam,wgEncodeUwDgfNb4Aln.bam.bai
 grant Stam
 lab UW
 labExpId DS12543
@@ -3683,7 +3683,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfNhdfneoAln.bam
+fileName wgEncodeUwDgfNhdfneoAln.bam,wgEncodeUwDgfNhdfneoAln.bam.bai
 grant Stam
 lab UW
 labExpId DS11923
@@ -3793,7 +3793,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-28
-fileName wgEncodeUwDgfNhlfAln.bam
+fileName wgEncodeUwDgfNhlfAln.bam,wgEncodeUwDgfNhlfAln.bam.bai
 grant Stam
 lab UW
 labExpId DS12829
