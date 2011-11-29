@@ -68,6 +68,12 @@ struct hash *raReadWithFilter(char *fileName, char *keyField,char *filterKey,cha
  * The values of the hash are themselves hashes.  The filter is a key/value pair that must exist.
  * Example raReadWithFilter(file,"term","type","antibody"): returns hash of hashes of every term with type=antibody */
 
+struct hash *raReadThreeLevels(char *fileName, char *lowKeyField, char *middleKeyField);
+/* Return 3 level hash that contains all ra records in file keyed by lowKeyField, which must exist.
+ * and broken into sub hashes based upon middleKeyField that must exist.
+ * Example raReadThreeLevels("cv.ra","term","type"):
+ *         returns hash of 'type' hashes of 'term' hashes of every stanza in cv.ra */
+
 struct hash *raTagVals(char *fileName, char *tag);
 /* Return a hash of all values of given tag seen in any stanza of ra file. */
 

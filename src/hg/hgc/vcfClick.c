@@ -259,6 +259,7 @@ printf("<B>Name:</B> %s<BR>\n", rec->name);
 printCustomUrl(tdb, rec->name, TRUE);
 static char *formName = "vcfCfgHapCenter";
 printf("<FORM NAME=\"%s\" ACTION=\"%s\">\n", formName, hgTracksName());
+cartSaveSession(cart);
 vcfCfgHaplotypeCenter(cart, tdb, tdb->track, FALSE, rec->file, rec->name,
 		      seqName, rec->chromStart, formName);
 printf("</FORM>\n");
