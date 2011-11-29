@@ -8730,6 +8730,11 @@ tag R2X76D
 type readType
 description Paired 76 n.t. directed reads
 
+term 2x100
+tag R2X100
+type readType
+description Paired 100 n.t. reads PROVISIONAL
+
 #### insertLength
 #### This is being used by the Wold lab as a variable.
 #### I do not think that it needs to be controlled. - Cricket
