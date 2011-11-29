@@ -1,28 +1,7 @@
-metaObject wgEncode450tmp
-objType table
-cell HCT-116
-composite wgEncodeHaibMethyl450
-dataType MethylArray
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-01
-dateUnrestricted 2012-06-30
-fileName wgEncode450tmp.bed.gz
-grant Myers
-lab HudsonAlpha
-labVersion Methyl450K
-md5sum 8ff466bca66b938f255e6b2d9cb2b3c0
-obtainedBy Stanford
-project wgEncode
-replicate 1
-subId 4942
-tableName wgEncode450tmp
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethyl450
 objType composite
 composite wgEncodeHaibMethyl450
-expVars lab,dataType,cell,labVersion
+expVars lab,dataType,cell,labVersion,treatment
 
 metaObject wgEncodeHaibMethyl450A549Etoh02SitesRep1
 objType table
@@ -32,6 +11,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002174
+expId 2174
 fileName wgEncodeHaibMethyl450A549Etoh02SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -53,6 +34,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002198
+expId 2198
 fileName wgEncodeHaibMethyl450Ag04449SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -74,6 +57,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002199
+expId 2199
 fileName wgEncodeHaibMethyl450Ag04450SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -95,6 +80,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002200
+expId 2200
 fileName wgEncodeHaibMethyl450Ag09309SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -116,6 +103,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002201
+expId 2201
 fileName wgEncodeHaibMethyl450Ag09319SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -137,6 +126,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002202
+expId 2202
 fileName wgEncodeHaibMethyl450Ag10803SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -158,6 +149,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002209
+expId 2209
 fileName wgEncodeHaibMethyl450AosmcSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -179,6 +172,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002210
+expId 2210
 fileName wgEncodeHaibMethyl450Be2cSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -200,6 +195,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002203
+expId 2203
 fileName wgEncodeHaibMethyl450BjSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -221,6 +218,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002205
+expId 2205
 fileName wgEncodeHaibMethyl450Caco2SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -242,6 +241,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002204
+expId 2204
 fileName wgEncodeHaibMethyl450CmkSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -263,6 +264,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002175
+expId 2175
 fileName wgEncodeHaibMethyl450Ecc1SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -284,6 +287,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002206
+expId 2206
 fileName wgEncodeHaibMethyl450Gm06990SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -305,6 +310,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002185
+expId 2185
 fileName wgEncodeHaibMethyl450Gm12878SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -326,6 +333,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002186
+expId 2186
 fileName wgEncodeHaibMethyl450Gm12891SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -347,6 +356,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002187
+expId 2187
 fileName wgEncodeHaibMethyl450Gm12892SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -368,6 +379,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002207
+expId 2207
 fileName wgEncodeHaibMethyl450Gm19239SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -389,6 +402,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002188
+expId 2188
 fileName wgEncodeHaibMethyl450H1hescSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -410,6 +425,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEH002208
+expId 2208
 fileName wgEncodeHaibMethyl450HaeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -431,6 +448,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002211
+expId 2211
 fileName wgEncodeHaibMethyl450HcfSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -452,6 +471,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002212
+expId 2212
 fileName wgEncodeHaibMethyl450HcmSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -473,6 +494,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002213
+expId 2213
 fileName wgEncodeHaibMethyl450HcpeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -494,6 +517,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002214
+expId 2214
 fileName wgEncodeHaibMethyl450Hct116HaibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -507,6 +532,29 @@ tableName wgEncodeHaibMethyl450Hct116HaibSitesRep1
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethyl450Hct116StanfordSitesRep1
+objType table
+cell HCT-116
+composite wgEncodeHaibMethyl450
+dataType MethylArray
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-01
+dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002214
+expId 2214
+fileName wgEncodeHaibMethyl450Hct116StanfordSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+labVersion Methyl450K
+md5sum 8ff466bca66b938f255e6b2d9cb2b3c0
+obtainedBy Stanford
+project wgEncode
+replicate 1
+subId 4942
+tableName wgEncodeHaibMethyl450Hct116StanfordSitesRep1
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethyl450HeeSitesRep1
 objType table
 cell HEEpiC
@@ -515,6 +563,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002189
+expId 2189
 fileName wgEncodeHaibMethyl450HeeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -536,6 +586,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002176
+expId 2176
 fileName wgEncodeHaibMethyl450Hek293SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -557,6 +609,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002191
+expId 2191
 fileName wgEncodeHaibMethyl450Helas3SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -578,6 +632,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002193
+expId 2193
 fileName wgEncodeHaibMethyl450HepatoSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -599,6 +655,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002192
+expId 2192
 fileName wgEncodeHaibMethyl450Hepg2SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -620,6 +678,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002190
+expId 2190
 fileName wgEncodeHaibMethyl450HipeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -641,6 +701,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002215
+expId 2215
 fileName wgEncodeHaibMethyl450Hl60SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -662,6 +724,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002216
+expId 2216
 fileName wgEncodeHaibMethyl450HmecSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -683,6 +747,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002217
+expId 2217
 fileName wgEncodeHaibMethyl450HnpceSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -704,6 +770,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002218
+expId 2218
 fileName wgEncodeHaibMethyl450HpaeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -725,6 +793,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002219
+expId 2219
 fileName wgEncodeHaibMethyl450HrceSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -746,6 +816,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002220
+expId 2220
 fileName wgEncodeHaibMethyl450HreSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -767,6 +839,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002221
+expId 2221
 fileName wgEncodeHaibMethyl450HrpeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -788,6 +862,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002177
+expId 2177
 fileName wgEncodeHaibMethyl450HuvecSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -809,6 +885,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002194
+expId 2194
 fileName wgEncodeHaibMethyl450Imr90SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -830,6 +908,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002178
+expId 2178
 fileName wgEncodeHaibMethyl450JurkatSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -851,6 +931,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002195
+expId 2195
 fileName wgEncodeHaibMethyl450K562SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -872,6 +954,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002179
+expId 2179
 fileName wgEncodeHaibMethyl450LncapSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -893,6 +977,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002222
+expId 2222
 fileName wgEncodeHaibMethyl450Mcf10aesSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -914,6 +1000,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002235
+expId 2235
 fileName wgEncodeHaibMethyl450Mcf10aesTamSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -935,6 +1023,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002180
+expId 2180
 fileName wgEncodeHaibMethyl450Mcf7SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -956,6 +1046,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002223
+expId 2223
 fileName wgEncodeHaibMethyl450Nb4SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -977,6 +1069,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002224
+expId 2224
 fileName wgEncodeHaibMethyl450NhaSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -998,6 +1092,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002225
+expId 2225
 fileName wgEncodeHaibMethyl450NhbeSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1019,6 +1115,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002226
+expId 2226
 fileName wgEncodeHaibMethyl450NhdfneoSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1040,6 +1138,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002181
+expId 2181
 fileName wgEncodeHaibMethyl450Nt2d1SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1061,6 +1161,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002234
+expId 2234
 fileName wgEncodeHaibMethyl450Ovcar3SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1082,6 +1184,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002227
+expId 2227
 fileName wgEncodeHaibMethyl450Panc1SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1103,6 +1207,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002182
+expId 2182
 fileName wgEncodeHaibMethyl450Pfsk1SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1124,6 +1230,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002228
+expId 2228
 fileName wgEncodeHaibMethyl450PrecSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1145,6 +1253,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002196
+expId 2196
 fileName wgEncodeHaibMethyl450ProgfibSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1166,6 +1276,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-29
 dateUnrestricted 2012-05-29
+dccAccession wgEncodeEH002197
+expId 2197
 fileName wgEncodeHaibMethyl450RptecSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1187,6 +1299,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002229
+expId 2229
 fileName wgEncodeHaibMethyl450SaecSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1208,6 +1322,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002232
+expId 2232
 fileName wgEncodeHaibMethyl450SkmcSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1229,6 +1345,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002183
+expId 2183
 fileName wgEncodeHaibMethyl450SknmcSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1250,6 +1368,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002230
+expId 2230
 fileName wgEncodeHaibMethyl450SknshSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1271,6 +1391,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002231
+expId 2231
 fileName wgEncodeHaibMethyl450SknshraSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1292,6 +1414,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-29
+dccAccession wgEncodeEH002184
+expId 2184
 fileName wgEncodeHaibMethyl450T47dDm002p24hSitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1313,6 +1437,8 @@ dataType MethylArray
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-01
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH002233
+expId 2233
 fileName wgEncodeHaibMethyl450U87SitesRep1.bed.gz
 grant Myers
 lab HudsonAlpha
@@ -1326,4 +1452,4 @@ tableName wgEncodeHaibMethyl450U87SitesRep1
 treatment None
 view Sites
 
-# MAGIC: 772630916
+# MAGIC: -1837496651

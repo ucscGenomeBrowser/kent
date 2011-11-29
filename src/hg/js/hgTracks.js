@@ -448,9 +448,8 @@ var vis = {
     {   // Set visibility of all track groups to newState (true means expanded).
         // This code also modifies the corresponding hidden fields and the gif's of the +/- img tag.
         imageV2.markAsDirtyPage();
-        $("img[id$='_button']").each( function (i) {
-            if(this.src.indexOf("/remove") > 0 || this.src.indexOf("/add") > 0)
-                vis.toggleForGroup(this,this.id.substring(0,this.id.length - 7),newState); // clip '_button' suffix
+        $(".toggleButton[id$='_button']").each( function (i) {  // works for old img type AND new BUTTONS_BY_CSS
+            vis.toggleForGroup(this,this.id.substring(0,this.id.length - 7),newState); // clip '_button' suffix
         });
         return false;
     }
@@ -2686,7 +2685,7 @@ var imageV2 = {
             imageV2.updateTiming(response);
         }
         if(this.disabledEle) {
-            this.disabledEle.attr('disabled', '');
+            this.disabledEle.removeAttr('disabled');
         }
         if(this.loadingId) {
             hideLoadingImage(this.loadingId);

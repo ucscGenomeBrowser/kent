@@ -521,7 +521,7 @@ release alpha
 
     track t2gPmc
     shortLabel PubmedCentral
-    longLabel Publications from PubmedCentral (Open-Access)
+    longLabel Publications from PubmedCentral (OA)
     parent t2g
     type bed 12
     articleTable t2gPmcArticle

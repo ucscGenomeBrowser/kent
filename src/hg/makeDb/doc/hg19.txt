@@ -17390,8 +17390,9 @@ TMPDIR=/scratch/tmp
 ############################################################################
 # ISCA FROM DBVAR (DONE 10/18/11 angie)
     # Redmine: Track #34 (dbVar for human)
-    mkdir -p /hive/data/genomes/hg19/bed/isca/2011_10_18
-    cd /hive/data/genomes/hg19/bed/isca/2011_10_18
+    set today = `date +%Y_%m_%d`
+    mkdir /hive/data/genomes/hg19/bed/isca/$today
+    cd /hive/data/genomes/hg19/bed/isca/$today
     # Get variants submitted on this assembly, and variants remapped from other assemblies.
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.GRCh37.submitted.all.germline.ucsc.gvf.gz
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.GRCh37.remap.all.germline.ucsc.gvf.gz
