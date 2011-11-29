@@ -251,6 +251,17 @@ static const char *filterOrAltRegex =
     "^##(FILTER|ALT)="
     "<ID=([^,]+),"
     "(Description|Type)=\"?(.*)\"?>$";
+// VCF version 3.3 was different enough to warrant separate regexes:
+static const char *infoOrFormatRegex3_3 =
+    "^##(INFO|FORMAT)="
+    "([A-Za-z0-9_:-]+),"
+    "(\\.|A|G|[0-9-]+),"
+    "([A-Za-z]+),"
+    "\"?(.*)\"?$";
+static const char *filterRegex3_3 =
+    "^##(FILTER)="
+    "([^,]+),"
+    "()\"?(.*)\"?$";
 
 INLINE void nonAsciiWorkaround(char *line)
 // Workaround for annoying 3-byte quote marks included in some 1000 Genomes files:
@@ -292,7 +303,8 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
     {
     boolean isInfo = startsWith("##INFO=", line);
     nonAsciiWorkaround(line);
-    if (regexMatchSubstr(line, infoOrFormatRegex, substrs, ArraySize(substrs)))
+    if (regexMatchSubstr(line, infoOrFormatRegex, substrs, ArraySize(substrs)) ||
+	regexMatchSubstr(line, infoOrFormatRegex3_3, substrs, ArraySize(substrs)))
 	// substrs[2] is ID/key, substrs[3] is Number, [4] is Type and [5] is Description.
 	{
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
@@ -313,13 +325,14 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
 	slAddHead((isInfo ? &(vcff->infoDefs) : &(vcff->gtFormatDefs)), def);
 	}
     else
-	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/: \"%s\"",
-		   (isInfo ? "INFO" : "FORMAT"), infoOrFormatRegex, line);
+	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/ or /%s/: \"%s\"",
+		   (isInfo ? "INFO" : "FORMAT"), infoOrFormatRegex, infoOrFormatRegex3_3, line);
     }
 else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
     {
     boolean isFilter = startsWith("##FILTER", line);
-    if (regexMatchSubstr(line, filterOrAltRegex, substrs, ArraySize(substrs)))
+    if (regexMatchSubstr(line, filterOrAltRegex, substrs, ArraySize(substrs)) ||
+	regexMatchSubstr(line, filterRegex3_3, substrs, ArraySize(substrs)))
 	{
 	// substrs[2] is ID/key, substrs[4] is Description.
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
@@ -328,8 +341,14 @@ else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
 	slAddHead((isFilter ? &(vcff->filterDefs) : &(vcff->altDefs)), def);
 	}
     else
-	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/: \"%s\"",
-		   (isFilter ? "FILTER" : "ALT"), filterOrAltRegex, line);
+	{
+	if (isFilter)
+	    vcfFileErr(vcff, "##FILTER line does not match expected pattern /%s/ or /%s/: \"%s\"",
+		       filterOrAltRegex, filterRegex3_3, line);
+	else
+	    vcfFileErr(vcff, "##ALT line does not match expected pattern /%s/: \"%s\"",
+		       filterOrAltRegex, line);
+	}
     }
 }
 
