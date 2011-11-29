@@ -117,14 +117,17 @@ else if (sameString(term,CV_TERM_ANTIBODY))
 if (cvHashOfHashOfHashes == NULL)
     cvHashOfHashOfHashes = hashNew(9);
 
-struct hash *cvHashForTerm = hashFindVal(cvHashOfHashOfHashes,(char *)term);
+struct hashEl *hel = hashLookup(cvHashOfHashOfHashes, (char *) term);
+struct hash *cvHashForTerm = NULL;
+
 // Establish cv hash of Term Types if it doesn't already exist
-if (cvHashForTerm == NULL)
+if (hel == NULL)
     {
     cvHashForTerm = raReadWithFilter((char *)cvFile(), CV_TERM,CV_TYPE,(char *)term);
-    if (cvHashForTerm != NULL)
-        hashAdd(cvHashOfHashOfHashes,(char *)term,cvHashForTerm);
+    hashAdd(cvHashOfHashOfHashes,(char *)term,cvHashForTerm);
     }
+else
+    cvHashForTerm = hel->val;
 
 return cvHashForTerm;
 }
