@@ -60,7 +60,7 @@ while (<IN>) {
 		push @{$fields{$currentField}},$line;
 	}
 }
-
+close IN;
 my @columns;
 my @values;
 
