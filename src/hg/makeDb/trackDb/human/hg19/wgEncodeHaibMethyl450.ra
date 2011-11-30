@@ -5,7 +5,7 @@ shortLabel HAIB Methyl450
 longLabel CpG Methylation by Methyl 450K  Bead Arrays from ENCODE/HAIB
 group regulation
 subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC BE2C=BE2C BJ=BJ CACO2=Caco-2 CMK=CMK ECC1=ECC-1 Fibrobl=Fibrobl GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116H=HCT-116_<i>HAIB</i> HCT116S=HCT-116_<i>Stanford</i> HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube HTB11=HTB-11 HEPATO=Hepatocytes HTR8=HTR-8 IMR90=IMR90  JURKAT=Jurkat LNCAP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast OVCAR3=ovcar-3 PANC1=PANC-1 PanIslets=PanIslets PFSK1=PFSK-1 PrEC=PrEC PROGFIB=ProgFib RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSH=SK-N-SH SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCAdiposeUHN00001=BC_Adipose_UHN00001 BCAdrenalGlandH12803N=BC_Adrenal_Gland_H12803N BCBladder0111002=BC_Bladder_01-11002 BCBrainH11058N=BC_Brain_H11058N BCBreast0203015=BC_Breast_02-03015 BCColon0111002=BC_Colon_01-11002 BCColonH12817N=BC_Colon_H12817N BCEsophagus0111002=BC_Esophagus_01-11002 BCEsophagusH12817N=BC_Esophagus_H12817N BCJejunumH12817N=BC_Jejunum_H12817N BCKidney0111002=BC_Kidney_01-11002 BCKidneyH12817N=BC_Kidney_H12817N BCLeftVentricleN41=BC_Left_Ventricle_N41 BCLeukocyteUHN00204=BC_Leukocyte_UHN00204 BCLiver0111002=BC_Liver_01-11002 BCLung0111002=BC_Lung_01-11002 BCLungH12817N=BC_Lung_H12817N BCPancreasH12817N=BC_Pancreas_H12817N BCPenisH12817N=BC_Penis_H12817N BCPericardiumH12529N=BC_Pericardium_H12529N BCPlacentaUHN00189=BC_Placenta_UHN00189 BCProstateGlandH12817N=BC_Prostate_Gland_H12817N BCRectumN29=BC_Rectum_N29 BCSkeletalMuscle0111002=BC_Skeletal_Muscle_01-11002 BCSkeletalMuscleH12817N=BC_Skeletal_Muscle_H12817N BCSkin0111002=BC_Skin_01-11002 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 
-subGroup2 treatment Treatment NONE=None ETOH02=EtOH_.02%_1h DM002P24H=DMSO_.02%_24h TAM=Tamoxifen_1uM_36h
+subGroup2 treatment Treatment NONE=None DM002P24H=DMSO_.02%_24h ETOH02=EtOH_.02%_1h TAM=Tamoxifen_1uM_36h
 subGroup3 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Stanford=Stanford DUKE=Duke
 dimensions dimY=cellType dimX=treatment
 fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
@@ -349,21 +349,22 @@ scoreFilterLimits 0:1000
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
 
-        track wgEncodeHaibMethyl450Hct116StanfordSitesRep
+        track wgEncodeHaibMethyl450Hct116StanfordSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCT-116 HAIB 
-        longLabel HCT-116 HAIB Methylation 450K Bead Array from ENCODE/HAIB
-        subGroups cellType=HCT116H obtainedBy=Stanford treatment=NONE
+        shortLabel HCT-116 Stanford
+        longLabel HCT-116 Stanford Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HCT116S obtainedBy=Stanford treatment=NONE
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
         # was wgEncodeHaibMethyl450Hct116SitesRep1 cricket Fri Nov  4 15:15:55 2011
         # was wgEncodeHaibMethyl450Hct116HaibSitesRep1 cricket Tue Nov  8 16:20:16 2011
+        # was wgEncodeHaibMethyl450Hct116StanfordSitesRep cricket Tue Nov 22 09:24:05 2011
 
         track wgEncodeHaibMethyl450Hct116HaibSitesRep1
         parent wgEncodeHaibMethyl450 off
-        shortLabel HCT-116 Stan
-        longLabel HCT-116 Stanford Methylation 450K Bead Array from ENCODE/HAIB
-        subGroups cellType=HCT116S obtainedBy=HAIB treatment=NONE
+        shortLabel HCT-116 HAIB
+        longLabel HCT-116 HAIB Methylation 450K Bead Array from ENCODE/HAIB
+        subGroups cellType=HCT116H obtainedBy=HAIB treatment=NONE
         type bed 9
         # subId=4942 dateSubmitted=2011-10-01
         # was wgEncodeHaibMethyl450Hct116SitesRep2 cricket Fri Nov  4 15:24:12 2011

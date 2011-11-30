@@ -1220,7 +1220,7 @@ var mat = { // Beginings of matrix object
 
         var classList = $( cell ).attr("class").split(" ");
         classList = aryRemove(classList,["matCell"]);
-        var color = (on ? "#FCECC0" : "");// "#FFF9D2");  setting to "" removes the hilite
+        var color = (on ? "#FEF3CC" : "");// "#FFF9D2");  setting to "" removes the hilite   ("#FCECC0" is LEVEL3)
         for (var ix=0;ix < classList.length;ix++) {
             if (classList[ix] == 'all')
                 continue;
@@ -1249,22 +1249,50 @@ var mat = { // Beginings of matrix object
         $(mat.matrix).find('tr').css({backgroundColor:""});
     },
 
+    resizeAngleLabels: function ()
+    {   // Sets the height on the angled matrix labels
+        var longest = "";
+        var up45 = $('div.up45');
+        $(up45).each(function (i) {
+            if (longest.length < $(this).text().length)
+                longest = $(this).text();
+        });
+        if (longest.length > 5) {
+            $(mat.matrix).append("<span id='noShow' style='color:#FFF9D2;'>"+longest+"</span>");
+            var noShow = $('span#noShow');
+            var newHeight = ($(noShow).width() * 0.9) + 10;
+            if (newHeight < 20)
+                newHeight = longest.length * 7;
+            $(up45).first().parent('th').css('height',newHeight + 'px');
+            $(up45).show();
+            var dn45 = $('div.dn45');
+            if (dn45 != undefined && dn45.length > 0) {
+                $(dn45).first().parent('th').css('height',newHeight + 'px');
+                $(dn45).show();
+            }
+            $(noShow).remove();
+        }
+    },
+
     init: function ()
     {
-        mat.matrix = normed($('table.matrix'));
-        if (mat.matrix != undefined) {
-            var cells = $('td.matCell');
-            if (cells != undefined && cells.length > 0) {
-                var classList = $( cells[0] ).attr("class").split(" ");
-                classList = aryRemove(classList,["matCell"]);
-                mat.dimensions = classList.length;
-                if (mat.dimensions > 1) { // No need unless this is a 2D matrix
-                    $('.matCell').hover(
-                        function (e) {mat.cellHover(this,true)},
-                        function (e) {mat.cellHover(this,false)}
-                    );
-                    $(mat.matrix).blur(mat.clearGhostHilites());
-                    $(window).bind('focus',function (e) {mat.clearGhostHilites();}); // blur doesn't work because the screen isn't repainted
+        mat.matrix = $('table.matrix');
+        if (mat.matrix != undefined && mat.matrix.length == 1) {
+            mat.resizeAngleLabels();
+            if (!$.browser.msie) { // IE can't handle the hover!
+                var cells = $('td.matCell');
+                if (cells != undefined && cells.length > 0) {
+                    var classList = $( cells[0] ).attr("class").split(" ");
+                    classList = aryRemove(classList,["matCell"]);
+                    mat.dimensions = classList.length;
+                    if (mat.dimensions > 1) { // No need unless this is a 2D matrix
+                        $('.matCell').hover(
+                            function (e) {mat.cellHover(this,true)},
+                            function (e) {mat.cellHover(this,false)}
+                        );
+                        $(mat.matrix).blur(mat.clearGhostHilites());
+                        $(window).bind('focus',function (e) {mat.clearGhostHilites();}); // blur doesn't work because the screen isn't repainted
+                    }
                 }
             }
         }

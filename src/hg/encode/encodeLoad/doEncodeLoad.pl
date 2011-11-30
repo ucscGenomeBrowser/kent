@@ -340,16 +340,10 @@ if (defined $opt_configDir) {
 }
 HgAutomate::verbose(1, "Using config path $configPath\n");
 
-my $grants = Encode::getGrants($configPath);
 my $fields = Encode::getFields($configPath);
-my $daf = Encode::getDaf($submitDir, $grants, $fields, $pipelineInstance);
+my $daf = Encode::getDaf($submitDir, $fields, $pipelineInstance);
 my $db = HgDb->new(DB => $daf->{assembly});
-my $email;
 my %labels;
-
-if($grants->{$daf->{grant}} && $grants->{$daf->{grant}}{wranglerEmail}) {
-    $email = $grants->{$daf->{grant}}{wranglerEmail};
-}
 
 # Add a suffix for non-production loads (to avoid loading over existing tables).
 
@@ -412,7 +406,7 @@ my $downloadDir = Encode::downloadDir($daf);
 # make the download dir if it doesn't exist
 if(!$opt_skipDownload and !(-d $downloadDir)) {
     if(!(-d $downloadDir)) {
-        mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact your wrangler at: $email\n");
+        mkdir $downloadDir || die ("Can't create download directory (error: '$!'); please contact the ENCODE staff at encode-staff\@soe.ucsc.edu\n");
     }
 }
 
@@ -583,26 +577,7 @@ unless (-e $readme){
 
 
 
-
-
-if(!$opt_skipDownload and !$opt_skipLoad) {
-    # Send "data is ready" email to email contact assigned to $daf{lab}
-    if($email) {
-        if(!$opt_noEmail) {
-            `echo "dir: $submitPath" | /bin/mail -s "ENCODE data from $daf->{grant}/$daf->{lab} lab is ready" $email`;
-        }
-    } else {
-        # XXXX Should this be fatal? Or s/d we send email to encode alias?
-        # die "No wrangler is configured for '$daf->{grant}'\n";
-    }
-}
-
-my $wranglerName;
-if($email && $email =~ /([^@]+)/) {
-    $wranglerName = $1;
-} else {
-    $wranglerName = 'encode';
-}
+my $wranglerName = 'encode';
 
 my $tables = join("\\n", @{$pushQ->{TABLES}});
 push(@{$pushQ->{FILES}}, "/usr/local/apache/cgi-bin/encode/cv.ra");

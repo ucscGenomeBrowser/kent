@@ -604,9 +604,11 @@ else
         "genome-preview.ucsc.edu", db, tdb->track);
 }
 
-static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,int filterable)
+static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,int filterable,boolean timeIt)
 // Prints filesList as a sortable table. Returns count
 {
+if (timeIt)
+    uglyTime("Start table");
 // Table class=sortable
 int columnCount = 0;
 int restrictedColumn = 0;
@@ -672,6 +674,8 @@ if (hIsBetaHost())
     }
 struct fileDb *oneFile = fileList;
 printf("<TBODY class='sortable sorting'>\n"); // 'sorting' is a fib but it conveniently greys the list till the table is initialized.
+if (timeIt)
+    uglyTime("Finished column headers");
 for( ;oneFile!= NULL;oneFile=oneFile->next)
     {
     oneFile->mdb->next = NULL; // mdbs were in list for generating sortOrder, but list no longer needed
@@ -701,7 +705,6 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
         {
         for(ix=0;ix<sortOrder->count;ix++)
             {
-            char *align = (sameString("labVersion",sortOrder->column[ix]) || sameString("softwareVersion",sortOrder->column[ix]) ? " align='left'":" align='center'");
             if (sameString("fileSize",sortOrder->column[ix]))
                 {
                 char niceNumber[128];
@@ -712,9 +715,18 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
             else
                 {
                 field = oneFile->sortFields[sortOrder->order[ix] - 1];
-                boolean isFieldEmpty = cvTermIsEmpty(sortOrder->column[ix],field);
+
+                boolean isFieldEmpty = isEmpty(field);
+                struct hash *termHash = NULL;
+                if (!isFieldEmpty)
+                    {
+                    termHash = (struct hash *)cvOneTermHash(sortOrder->column[ix],field);
+                    if (termHash && sameString(field,MDB_VAL_ENCODE_EDV_NONE))
+                        isFieldEmpty = cvTermIsEmpty(sortOrder->column[ix],field);
+                    }
                 char class[128];
                 class[0] = '\0';
+
                 if (filterable & (0x1<<ix))
                     {
                     char *cleanClass = NULL;
@@ -723,7 +735,8 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                         cleanClass = CV_LABEL_EMPTY_IS_NONE;
                     else
                         {
-                        cleanClass = (char *)cvTag(sortOrder->column[ix],field); // class should be tag
+                        if (termHash)
+                            cleanClass = (char *)hashFindVal((struct hash *)termHash,CV_TAG);
                         if (cleanClass == NULL)
                             {
                             safecpy(buf,sizeof buf,field);
@@ -734,13 +747,18 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                     safef(class,sizeof class," class='%s %s'",sortOrder->column[ix],cleanClass);
                     }
 
+                char *align = (sameString("labVersion",sortOrder->column[ix]) || sameString("softwareVersion",sortOrder->column[ix]) ? " align='left'":" align='center'");
                 if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
                     printf("<TD%s nowrap style='color: #BBBBBB;'%s>%s</td>",align,class,field);
                 else
                     {
                     // use label
-                    if (!isFieldEmpty && cvTermIsCvDefined(sortOrder->column[ix]))
-                        field = (char *)cvLabel(sortOrder->column[ix],field);
+                    if (!isFieldEmpty && termHash)
+                        {
+                        char *label = hashFindVal(termHash,CV_LABEL);
+                        if (label != NULL)
+                            field = label;
+                        }
                     printf("<TD%s nowrap%s>%s</td>",align,class,isFieldEmpty?" &nbsp;":field);
                     }
                 if (!sameString("fileType",sortOrder->column[ix]))
@@ -753,10 +771,6 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
 #endif///ndef INCLUDE_FILENAMES
         { // fileName
         printf("<TD nowrap>%s",oneFile->fileName);
-        //// FIXME: " The "..." encapsulation could be rebuilt so it could be called here
-        //printf("&nbsp;<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",true,true);' title='Show metadata details...'>...</A>",
-        //    oneFile->mdb->obj,oneFile->mdb->obj);
-        //printf("<DIV id='div_%s_meta' style='display:none;'></div></td>",oneFile->mdb->obj);
         }
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
@@ -766,6 +780,8 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
 
     printf("</TR>\n");
     }
+if (timeIt)
+    uglyTime("Finished files");
 
 printf("</TBODY><TFOOT class='bgLevel1'>\n");
 printf("<TR valign='top'>");
@@ -790,6 +806,8 @@ printf("</TFOOT></TABLE>\n");
 if (parentTdb == NULL)
     printf("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>\n");
 
+if (timeIt)
+    uglyTime("Finished table");
 return filesCount;
 }
 
@@ -936,6 +954,9 @@ void filesDownloadUi(char *db, struct cart *cart, struct trackDb *tdb)
 // will have links to their download and have metadata information associated.
 // The list will be a sortable table and there may be filtering controls.
 {
+boolean timeIt = cartUsualBoolean(cart, "measureTiming",FALSE);
+if (timeIt)
+    uglyTime(NULL); // kicks off timing now
 boolean debug = cartUsualBoolean(cart,"debug",FALSE);
 
 struct sqlConnection *conn = hAllocConn(db);
@@ -969,6 +990,8 @@ if (slCount(mdbList) == 0)
 struct fileDb *fileList = NULL; // Will contain found files
 
 int fileCount = filesFindInDir(db, &mdbList, &fileList, NULL, 0, NULL);
+if (timeIt)
+    uglyTime("Found %d files in dir",fileCount);
 assert(fileCount == slCount(fileList));
 
 if (fileCount == 0)
@@ -1004,13 +1027,17 @@ if (sortOrder != NULL)
 
     // Fill in and sort fileList
     fileDbSortList(&fileList,sortOrder);
+    if (timeIt)
+        uglyTime("<BR>Sorted %d files on %d columns",fileCount,sortOrder->count);
 
     // FilterBoxes
     filterable = filterBoxesForFilesList(db,mdbList,sortOrder);
+    if (timeIt && filterable)
+        uglyTime("Created filter boxes 0x%X",filterable);
     }
 
 // Print table
-filesPrintTable(db,tdb,fileList,sortOrder,filterable);
+filesPrintTable(db,tdb,fileList,sortOrder,filterable,timeIt);
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?
 //mdbObjsFree(&mdbList);
@@ -1052,8 +1079,7 @@ if (fileCount == 0)
     return 0;  // No files so nothing to do.
     }
 
-// TODO Could sort on varValPairs by creating a sortOrder struct of them
-//// Now update all files with their sortable fields and sort the list
+// Now update all files with their sortable fields and sort the list
 mdbObjReorderByCv(mdbList,FALSE);// Start with cv defined order for visible vars. NOTE: will not need to reorder during print!
 sortOrder_t *sortOrder = fileSortOrderGet(NULL,NULL,mdbList); // No cart, no tdb
 if (sortOrder != NULL)
@@ -1063,9 +1089,6 @@ if (sortOrder != NULL)
     }
 
 mdbObjRemoveVars(mdbList,"tableName"); // Remove this from mdb now so that it isn't displayed in "extras'
-
-//jsIncludeFile("hui.js",NULL);
-//jsIncludeFile("ajax.js",NULL);
 
 // Print table
 printf("<DIV id='filesFound'>");
@@ -1077,10 +1100,9 @@ if (exceededLimit)
 
     printf("<DIV class='redBox' style='width: 380px;'>Too many files found.  Displaying first %d of at least %d.<BR>Narrow search parameters and try again.</DIV><BR>\n",
            fileCount,filesExpected);
-    //warn("Too many files found.  Displaying first %d of at least %d.<BR>Narrow search parameters and try again.\n", fileCount,filesExpected);
     }
 
-fileCount = filesPrintTable(db,NULL,fileList,sortOrder,0); // FALSE=Don't offer more filtering on the file search page
+fileCount = filesPrintTable(db,NULL,fileList,sortOrder,0,FALSE); // 0=No columns are 'filtered' on the file search page
 printf("</DIV><BR>\n");
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?

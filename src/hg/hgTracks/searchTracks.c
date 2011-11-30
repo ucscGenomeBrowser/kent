@@ -431,7 +431,6 @@ else
     hPrintf("</td><td align='right'>\n");
     hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
 #ifdef BUTTONS_BY_CSS
-    // TODO: Replace the pm buttons on tab.
     #define BUTTON_PM  "<span class='pmButton' onclick='findTracks.checkAllWithWait(%s)' title='%s all found tracks'>%c</span>"
     hPrintf(BUTTON_PM,"true",   "Select",'+');
     hPrintf(BUTTON_PM,"false","Unselect",'-');

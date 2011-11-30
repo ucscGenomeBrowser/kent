@@ -114,6 +114,7 @@ ifeq (${USE_TABIX},1)
 endif
 
 SYS = $(shell uname -s)
+FULLWARN = $(shell uname -n)
 
 ifeq (${HG_WARN},)
   ifeq (${SYS},Darwin)
@@ -124,9 +125,13 @@ ifeq (${HG_WARN},)
       HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     else
-      HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
-      # HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
-      HG_WARN_UNINIT=-Wuninitialized
+      ifeq (${FULLWARN},hgwdev)
+        HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
+        HG_WARN_UNINIT=-Wuninitialized
+      else
+        HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
+        HG_WARN_UNINIT=-Wuninitialized
+      endif
     endif
   endif
   # -Wuninitialized generates a warning without optimization

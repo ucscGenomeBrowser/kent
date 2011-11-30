@@ -285,7 +285,7 @@ if (!fileNames)
 
 char buffer[10 * 1024];
 
-// deal with muliple files in fileName value
+// deal with multiple files in fileName value
 struct hash *allNames = hashNew(8);
 struct hash *bamNames = hashNew(8);
 struct slName *list = slNameListFromString(fileNames, ','), *el;

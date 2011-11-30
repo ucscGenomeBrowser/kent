@@ -1054,6 +1054,7 @@ type Cell Line
 tier 3
 organism human
 description B cells from donors RO01778 and RO01794.
+deprecated Use donor-specific cell lines
 sex F
 tissue blood
 vendorName Heimfeld Lab, FHCRC
@@ -3368,7 +3369,7 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets
+description pancreatic islets from 2 donors
 tissue pancreas
 lineage endoderm
 vendorName Refer to protocol documents for differing sources
@@ -3747,7 +3748,6 @@ sex U
 tier 3
 protocol Stam:Th2_Stam_protocol.pdf
 
-
 term T-47D
 tag T47D
 type Cell Line
@@ -3762,7 +3762,7 @@ termId BTO:0001248
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
 sex F
 tier 3
-protocol Myers:T47D_Myers_protocol.pdf
+protocol Stam_and_Myers:T47D_StamandMyers_protocol.pdf
 
 term Urothelia
 tag UROTHEL
@@ -4869,6 +4869,7 @@ orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10756
 lab Snyder
+#The SMARCC1 genecard is for BAF155
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
 validation Human_-_:missing
@@ -5415,13 +5416,13 @@ lots N/A
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation Human_-_eGFP-FOS:human_validation_White.pdf
-label FOS
+label FOS (eGFP-FOS)
 
 term eGFP-GATA2
 tag GATA2e
 type Antibody
-target eGFP-GATA2
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-GATA2
+target GATA2
+antibodyDescription Goat polyclonal. Antibody Target: GATA2
 targetDescription GATA2
 vendorName Kevin White
 vendorId Missing
@@ -5431,13 +5432,13 @@ lots N/A
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation Human_-_eGFP-GATA2:human_validation_White.pdf
-label eGFP-GATA2
+label GATA2 (eGFP-GATA2)
 
 term eGFP-HDAC8
 tag HDAC8e
 type Antibody
-target eGFP-HDAC8
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-HDAC8
+target HDAC8
+antibodyDescription Goat polyclonal. Antibody Target: HDAC8
 targetDescription HDAC8
 vendorName Kevin White
 vendorId Missing
@@ -5447,13 +5448,13 @@ lots N/A
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation Human_-_eGFP-HDAC8:human_validation_White.pdf
-label eGFP-HDAC8
+label HDAC8 (eGFP-HDAC8)
 
 term eGFP-JunB
 tag JUNBe
 type Antibody
-target eGFP-JunB
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunB
+target JunB
+antibodyDescription Goat polyclonal. Antibody Target: JunB
 targetDescription JunB
 vendorName Kevin White
 vendorId Missing
@@ -5463,13 +5464,13 @@ lots N/A
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation Human_-_eGFP-JunB:human_validation_White.pdf
-label eGFP-JunB
+label JunB (eGFP-JunB)
 
 term eGFP-JunD
 tag JUNDe
 type Antibody
-target eGFP-JunD
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-JunD
+target JunD
+antibodyDescription Goat polyclonal. Antibody Target: JunD
 targetDescription JunD
 vendorName Kevin White
 vendorId Missing
@@ -5479,13 +5480,13 @@ lots N/A
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation Human_-_eGFP-JunD:human_validation_White.pdf
-label eGFP-JunD
+label JunB (eGFP-JunD)
 
 term eGFP-NR4A1
 tag NR4A1e
 type Antibody
-target eGFP-NR4A1
-antibodyDescription Goat polyclonal. Antibody Target: eGFP-NR4A1
+target NR4A1
+antibodyDescription Goat polyclonal. Antibody Target: NR4A1
 targetDescription NR4A1
 vendorName Kevin White
 vendorId Missing
@@ -5495,7 +5496,7 @@ lots N/A
 targetId GeneCards:NR4A1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
 validation Human_-_eGFP-NR4A1:human_validation_White.pdf
-label eGFP-NR4A1
+label NR4A1 (eGFP-NR4A1)
 
 term ELF1_(SC-631)
 tag ELF1
@@ -5762,7 +5763,7 @@ targetId GeneCard:GATA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
 validation Human_-_GATA-1_(Western_blot,ChIP):human_GATA-1_validation_Farnham.pdf Mouse_-_:missing
-label GATA1 (GATA-1)
+label GATA1
 
 term GATA1_(SC-265)
 tag GATA1a
@@ -5777,7 +5778,7 @@ targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
 validation Mouse_-_GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
-label GATA1 ( sc-265)
+label GATA1 (sc-265)
 
 term  GATA1_(SC-266)
 tag  GATA1b
@@ -7186,7 +7187,7 @@ targetId GeneCards:KDM5B
 #PLU1 is a alias for KDM5B ~Jeff
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KDM5B
 validation Human_-_PLU1(ChIP-String,ChIP-seq):human_PLU1_validation_Bernstein.pdf
-label PLU1 (PLU1)
+label PLU1
 
 term PML_(SC-71910)
 tag PMLSC71910
@@ -7976,7 +7977,7 @@ lab Farnham
 targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation Human_-_:missing Mouse_-_TR4_(Western_blot,ChIP):mouse_TR4_validation_Farnham.pdf
-label TR4 (TR4)
+label TR4
 
 term TRIM37_(SC-49548)
 tag TRIM37
@@ -8224,7 +8225,7 @@ lots 060729QCS1
 targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274
 validation Human_-_ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
-label ZNF274 (H00010782-A01)
+label ZNF274 (AH00010782-A01)
 
 term ZNF274_(M01)
 tag ZNF274M01
@@ -8233,7 +8234,7 @@ antibodyDescription Mouse monoclonal antibody raised against a partial recombina
 target ZNF274
 targetDescription ZNF274 is a zinc finger protein containing five C2H2-type zinc finger domains, two Kruppel-associated box A (KRABA) domains, and a leucine-rich SCAN domain. The encoded protein has been suggested to be a transcriptional repressor and interacts with the KAP1 corepressor complex.
 vendorName Abnova ZNF74
-vendorId M01
+vendorId H00010782-M01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-M01
 lab Farnham
 lots 08064-4C12
@@ -8288,14 +8289,14 @@ target CELF1
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens)
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA. Antibody Target: CELF1
 vendorName Millipore
-vendorId 05621
+vendorId 05-621
 orderUrl http://www.millipore.com/
 lab Tenenbaum
 # lots
 targetId GeneCards:CELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF1
 validation Human_-_:missing
-label CELF1 (05621)
+label CELF1 (05-621)
 
 ##This does not appear in metaDb
 term CELF2
@@ -8590,7 +8591,7 @@ tag SLBP
 type Antibody
 target SLBP
 targetDescription  Stem-loop binding protein (Homo sapiens)
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
 vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
 vendorId 06-1376; 26522; MA156353
 orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
@@ -8728,6 +8729,16 @@ term 2x76D
 tag R2X76D
 type readType
 description Paired 76 n.t. directed reads
+
+term 2x100
+tag R2X100
+type readType
+description Paired 100 n.t. reads PROVISIONAL
+
+term 2x101D
+tag R2X101D
+type readType
+description Paired 101 n.t. directed reads PROVISIONAL
 
 #### insertLength
 #### This is being used by the Wold lab as a variable.
@@ -8904,6 +8915,27 @@ term proteinRnaExtracts
 tag PROTEINRNAEXTRACTS
 type rnaExtract
 description RNA associated with RNA binding proteins
+
+
+### RNA treatments
+term TAP-Only
+tag TAP  
+type rnaTreatment
+description PROVISIONAL This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning.  Hence, both capped and 5' monophosphate RNAs will be cloned.
+label TAP Only Treatment
+
+term CIP-TAP 
+tag CIPTAP
+type rnaTreatment
+description PROVISIONAL This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase.  Hence, it will be enriched for capped RNAs.
+label CIP and TAP Treatments
+
+term Untreated 
+tag Untreated 
+type rnaTreatment
+description  PROVISIONAL Untreated
+label Untreated       
+
 
 ### promoters
 term SV40
@@ -9134,29 +9166,29 @@ tag DEX500PM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
-term diffProtA_0d PROVISIONAL
-tag DIFFPROTA0D
+term diffProtA_2d PROVISIONAL
+tag DIFFA2D
 type treatment
-description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 0 days (control), lineage: mesoderm
-label 0 day diff prot A
+description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
+label 2 day diff prot A
 
 term diffProtA_5d PROVISIONAL
-tag DIFFPROTA5D
+tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
-label 5 day diff prot A
+label 5 day diffProtA
 
-term diffProtA_7d PROVISIONAL
-tag DIFFPROTA7D
+term diffProtA_9d PROVISIONAL
+tag DIFFA9D
 type treatment
-description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 7 days, lineage: mesoderm
-label 7 day diff prot A
+description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 9 days, lineage: mesoderm
+label 9 day diffProtA
 
 term diffProtA_14d PROVISIONAL
-tag DIFFPROTA14D
+tag DIFFA14D
 type treatment
-description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, lineage: mesoderm
-label 14 day diff prot A
+description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
+label 14 day diffProtA
 
 term DMSO_0.02pct
 #tag DMSO2
@@ -11757,6 +11789,16 @@ tag RNAEXTRACT
 type typeOfTerm
 label RNA Extract
 description Fraction of total cellular RNA selected for by an experiment. This includes size fractionation (long versus short) and feature frationation (PolyA-, PolyA+, rRNA-).
+searchable multiSelect
+cvDefined yes
+validate cv
+priority 160
+
+term rnaTreatment
+tag RNATREATMENT
+type typeOfTerm
+label RNA Treatment
+description  PROVISIONAL
 searchable multiSelect
 cvDefined yes
 validate cv

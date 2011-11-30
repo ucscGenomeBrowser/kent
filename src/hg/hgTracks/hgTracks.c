@@ -4143,22 +4143,16 @@ return NULL;
 }
 
 static void setSearchedTrackToPackOrFull(struct track *trackList)
-/* Open track associated with search position if any.   Also open its parents
- * if any.  At the moment parents include composites but not supertracks. */
+// Open track associated with search position if any. Also open its parents if any.
 {
 if (NULL != hgp && NULL != hgp->tableList && NULL != hgp->tableList->name)
     {
     char *tableName = hgp->tableList->name;
     struct track *matchTrack = rFindTrackWithTable(tableName, trackList);
     if (matchTrack != NULL)
-	{
-	struct track *track;
-	for (track = matchTrack; track != NULL; track = track->parent)
-	    cartSetString(cart, track->track, hCarefulTrackOpenVis(database, track->track));
-	}
+        tdbSetCartVisibility(matchTrack->tdb, cart, hCarefulTrackOpenVis(database, matchTrack->track));
     }
 }
-
 
 struct track *getTrackList( struct group **pGroupList, int vis)
 /* Return list of all tracks, organizing by groups.
@@ -4316,7 +4310,7 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *cartVis = cartOptionalString(cart, track->track);
     if (cartVis != NULL && hTvFromString(cartVis) == track->tdb->visibility)
-    cartRemove(cart, track->track);
+        cartRemove(cart, track->track);
     }
 }
 
@@ -5004,7 +4998,7 @@ if (!hideControls)
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 #ifdef MERGE_GENE_SUGGEST
-	hPrintf("&nbsp;&nbsp;<span class='positionBox' id='positionDisplay' style='font-weight:bold;'>%s</span>", addCommasToPos(database, position));
+	hPrintf("<span class='positionDisplay' id='positionDisplay' style='font-weight:bold;'>%s</span>", addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
@@ -5228,13 +5222,14 @@ if (!hideControls)
 
             hPrintf("<table style='width:100%%;'><tr><td style='text-align:left;'>");
             hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-        #ifdef BUTTONS_BY_CSS
+        //#define BUTTONS_BY_CSS_NOT_HERE
+        #ifdef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("<span class='pmButton toggleButton' onclick=\"vis.toggleForGroup(this,'%s')\" id='%s_button' title='%s this group'>%s</span>&nbsp;&nbsp;",
                 group->name, group->name, isOpen?"Collapse":"Expand", indicator);
-        #else///ifndef BUTTONS_BY_CSS
+        #else///ifndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("<IMG class='toggleButton' onclick=\"return vis.toggleForGroup(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this group'>&nbsp;&nbsp;",
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
-        #endif///ndef BUTTONS_BY_CSS
+        #endif///ndef BUTTONS_BY_CSS_NOT_HERE
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");

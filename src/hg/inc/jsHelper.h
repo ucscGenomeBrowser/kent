@@ -24,6 +24,10 @@
 // Make toggle and [+][-] buttons without image gifs.
 #define BUTTONS_BY_CSS
 
+// Make toggle and [+][-] buttons without image gifs.
+// Not ready for this release.
+//#define BUTTONS_BY_CSS
+
 void jsCreateHiddenForm(struct cart *cart, char *scriptName,
 	char **vars, int varCount);
 /* Create a hidden form with the given variables.  Must be
