@@ -39,6 +39,7 @@ wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwTfbs.ra 
+wgEncodeHaibMethyl450.ra \
 
 include ../../../../makefile.metaDb
 
