@@ -542,27 +542,22 @@ sub validateBed {
     while(<$fh>) {
         my $line = $_;
         chomp $_;
-        $line =~ s/\s+$//g;
         $lineNumber++;
         if (scalar(@localerrors) != $oldError) {
             $oldError = scalar(@localerrors);
             $errorCount++;
         }
         if ($errorCount >= $errorLimit) {
-
+            push @localerrors, "Error limit exceeded, there may be more after this point.\n";
             last
         }
         next if m/^#/; # allow comment lines, consistent with lineFile and hgLoadBed
-        my @fields = split /\t/, $line;
+        my @fields = split /\s+/, $line;
         my $fieldCount = scalar(@fields);
         next if(!$fieldCount);
         my $prefix = "line $lineNumber:";
-        if($fieldCount < 3) {
+        if($fieldCount <= 2) {
             push @localerrors, "$prefix not enough fields; " . scalar(@fields) . " present; at least 3 are required\n";
-            next
-        }
-        if ($type ne 'bed5FloatScore' and !$fields[3]) {
-            push @localerrors, "$prefix field 4 must contain a value\n";
             next
         }
         if (!$chromInfo{$fields[0]}) {
@@ -577,14 +572,14 @@ sub validateBed {
         if ($fields[2] < $fields[1]) {
             push @localerrors, "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
         }
-        if ($fieldCount > 5 && $fields[4] !~ /^\d+$/ && $fields[4] =~ /^\d+\.\d+$/) {
+        if ($fieldCount > 5 && $fields[4] !~ /^\d+$/ && $fields[4] =~ /^$floatRegEx$/) {
             push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; value must be a positive integer\n";
         }
         if ($fieldCount > 5 && $fields[4] < 0 || $fields[4] > 1000) {
             push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000\n";
         }
-        if ($type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-)$/) {
-            push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or -\n";
+        if ($type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
+            push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
         }
         if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
             push @localerrors, "$prefix field 6 invalid; bed5FloatScore requires 6 fields";
