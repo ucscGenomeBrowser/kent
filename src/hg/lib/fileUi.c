@@ -725,11 +725,15 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
             else
                 {
                 field = oneFile->sortFields[sortOrder->order[ix] - 1];
-                struct hash *termHash = (struct hash *)cvOneTermHash(sortOrder->column[ix],field);
 
                 boolean isFieldEmpty = isEmpty(field);
-                if (!isFieldEmpty && termHash && sameString(field,MDB_VAL_ENCODE_EDV_NONE))
-                    isFieldEmpty = cvTermIsEmpty(sortOrder->column[ix],field);
+                struct hash *termHash = NULL;
+                if (!isFieldEmpty)
+                    {
+                    termHash = (struct hash *)cvOneTermHash(sortOrder->column[ix],field);
+                    if (termHash && sameString(field,MDB_VAL_ENCODE_EDV_NONE))
+                        isFieldEmpty = cvTermIsEmpty(sortOrder->column[ix],field);
+                    }
                 char class[128];
                 class[0] = '\0';
 
