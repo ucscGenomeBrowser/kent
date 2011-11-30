@@ -38,7 +38,8 @@ wgEncodeUwAffyExonArray.ra \
 wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
-wgEncodeUwTfbs.ra 
+wgEncodeUwTfbs.ra \
+wgEncodeHaibMethyl450.ra \
 
 include ../../../../makefile.metaDb
 
