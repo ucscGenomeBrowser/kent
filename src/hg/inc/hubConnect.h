@@ -7,9 +7,9 @@
 #ifndef HUBCONNECT_H
 #define HUBCONNECT_H
 
-#define hubPublicTableName "hubPublic"
+#define defaultHubPublicTableName "hubPublic"
 /* Name of our table with list of public hubs. read only */
-#define hubStatusTableName "hubStatus"
+#define defaultHubStatusTableName "hubStatus"
 /* Name of table that maintains status of hubs  read/write. */
 
 #define hgHubDataText      "hubUrl"
@@ -33,12 +33,6 @@ struct hubConnectStatus
     struct trackHub *trackHub; /* pointer to structure that describes hub */
     unsigned  status;   /* 1 if private */
     };
-
-/* status bits */
-#define HUB_UNLISTED    (1 << 0)
-
-boolean isHubUnlisted(struct hubConnectStatus *hub) ;
-/* Return TRUE if it's an unlisted hub */
 
 void hubConnectStatusFree(struct hubConnectStatus **pHub);
 /* Free hubConnectStatus */
