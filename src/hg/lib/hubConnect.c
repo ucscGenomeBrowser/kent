@@ -34,7 +34,7 @@ static char *getHubStatusTableName()
 {
 if (hubStatusTableName == NULL)
     hubStatusTableName = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE",
-	    "hubStatusTableName", defaultHubStatusTableName);
+	    hubStatusTableConfVariable, defaultHubStatusTableName);
 
 return hubStatusTableName;
 }
@@ -362,9 +362,14 @@ static void insertHubUrlInStatus(char *url)
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
+char *statusTable = getHubStatusTableName();
 
-safef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
-    getHubStatusTableName(), url);
+if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
+    safef(query, sizeof(query), "insert into %s (hubUrl,firstAdded) values (\"%s\",now())",
+	statusTable, url);
+else
+    safef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
+	statusTable, url);
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
 }
