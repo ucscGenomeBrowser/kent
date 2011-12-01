@@ -205,7 +205,6 @@ identifier goDbXrefId external=GO
 identifier UniProtId external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) display ID."
      uniProt.displayId.val
-     $rn.rgdGene2ToUniProt.value minCheck=0.8
      proteome.uniProtAlias.alias minCheck=0.2
      proteome.spOldNew.newDisplayId minCheck=0.3
      proteome.spOldNew.oldDisplayId minCheck=0.3
@@ -2136,6 +2135,10 @@ identifier rgdGene2IdRaw external=RGD
 "Raw RGD Genes ID"
     $rn.rgdGene2.name chopBefore=RGD:
     $rn.genes_rat.gene_rgd_id minCheck=0.40 
+
+identifier rgdPathwayId external=RGD
+"RGD Pathway ID"
+    $rn.rgdPathway.pathwayId
 
 identifier rgdGene2Id external=RGD
 "RGD Genes ID"
