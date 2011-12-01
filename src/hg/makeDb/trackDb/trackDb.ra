@@ -479,17 +479,37 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
-# track text2Genome
 track t2g
 shortLabel Publications
-longLabel Mapped sequences from publications
+longLabel Publications: Sequences found in scientific articles
 group map
-priority 800
+priority 12
 visibility hide
-color 20,50,100
-articleTable t2gArticle
-sequenceTable t2gSequence
+color 100,0,0
+altColor 100,0,0
 type bed 12
+compositeTrack on
+release alpha
+
+    track t2gPmc
+    shortLabel PubmedCentral
+    longLabel Publications from PubmedCentral (OA)
+    parent t2g
+    type bed 12
+    articleTable t2gPmcArticle
+    sequenceTable t2gPmcSequence
+    priority 1
+    release alpha
+
+    track t2gElsevier
+    shortLabel Elsevier (alpha)
+    longLabel Publications from Elsevier
+    parent t2g
+    priority 2
+    articleTable t2gElsevierArticle
+    sequenceTable t2gElsevierSequence
+    type bed 12
+    release alpha
 
 searchTable mgcFullMrna
 searchType psl

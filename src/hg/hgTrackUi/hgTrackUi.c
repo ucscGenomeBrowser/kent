@@ -1949,6 +1949,16 @@ puts("&nbsp;<B>position</B>");
 
 }
 
+void t2gUi(struct trackDb *tdb)
+/* UI for t2g match track */
+{
+char* keywordTag = "t2gKeywords";
+char *keywords = cartUsualString(cart, keywordTag, "");
+puts("<P><B>Filter articles by keywords in abstract, title or authors:</B>");
+cgiMakeTextVar(keywordTag, keywords, 45);
+}
+
+
 void oligoMatchUi(struct trackDb *tdb)
 /* UI for oligo match track */
 {
@@ -2384,9 +2394,15 @@ void superTrackUi(struct trackDb *superTdb, struct trackDb *tdbList)
 {
 #define SUPERS_WITH_CHECKBOXES
 #ifdef SUPERS_WITH_CHECKBOXES
-#define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" id='btn_%s' src='../images/%s'>"
-#define    BUTTON_PLUS_ALL_GLOBAL()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
-#define    BUTTON_MINUS_ALL_GLOBAL() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
+#ifdef BUTTONS_BY_CSS
+    #define BUTTON_SUPER   "<span class='pmButton' onclick='superT.plusMinus(%s)'>%c</span>"
+    #define BUTTON_PLUS_SUPER()  printf(BUTTON_SUPER,"true", '+')
+    #define BUTTON_MINUS_SUPER() printf(BUTTON_SUPER,"false",'-')
+#else///ifndef BUTTONS_BY_CSS
+    #define PM_BUTTON_GLOBAL "<IMG height=18 width=18 onclick=\"superT.plusMinus(%s);\" id='btn_%s' src='../images/%s'>"
+    #define    BUTTON_PLUS_SUPER()  printf(PM_BUTTON_GLOBAL,"true",  "plus_all",   "add_sm.gif")
+    #define    BUTTON_MINUS_SUPER() printf(PM_BUTTON_GLOBAL,"false","minus_all","remove_sm.gif")
+#endif///ndef BUTTONS_BY_CSS
 jsIncludeFile("hui.js",NULL);
 #endif///def SUPERS_WITH_CHECKBOXES
 printf("\n<P><TABLE CELLPADDING=2>");
@@ -2399,8 +2415,8 @@ for (childRef = superTdb->children; childRef != NULL; childRef = childRef->next)
     if (childRef == superTdb->children) // first time through
         {
         printf("\n<TR><TD NOWRAP colspan=2>");
-        BUTTON_PLUS_ALL_GLOBAL();
-        BUTTON_MINUS_ALL_GLOBAL();
+        BUTTON_PLUS_SUPER();
+        BUTTON_MINUS_SUPER();
         printf("&nbsp;<B>All</B><BR>");
         printf("</TD></TR>\n");
         }
@@ -2567,6 +2583,8 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
+else if (startsWith("t2g", track))
+        t2gUi(tdb);
 else if (startsWith("blastDm", track))
         blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))

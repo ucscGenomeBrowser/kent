@@ -1464,7 +1464,11 @@ for(;col != NULL && count < fieldCount;col=col->next)
         }
     #else///ifndef EXTRA_FIELDS_SUPPORT
     printf("<tr><td><B>%s:</B></td>", col->comment);
-    if (asTypesIsInt(col->lowType->type))
+    if (col->isList || col->isArray || col->lowType->stringy)
+        {
+        printf("<td>%s</td></tr>\n", fields[ix]);
+        }
+    else if (asTypesIsInt(col->lowType->type))
         {
         long long valInt = sqlLongLong(fields[ix]);
         printf("<td>%lld</td></tr>\n", valInt);
@@ -9723,6 +9727,10 @@ if (url != NULL && url[0] != 0)
 	    title2 = cloneString(row[1]);
     	    printf(" %s ", title2);
 	    }
+	}
+    else
+        {
+	printf("<BR>");
 	}
     sqlFreeResult(&sr);
 
@@ -23982,7 +23990,7 @@ while ((row = sqlNextRow(sr)) != NULL)
              }
            }
          printf("%-10s    ", diseaseID);
-        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
+        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank><B>%s</B></A><BR>", diseaseName, diseaseName);
 
     }  /* end while */
  printf("</TT></PRE>");
@@ -24012,13 +24020,13 @@ while ((row = sqlNextRow(sr)) != NULL)
           firstTime = FALSE;
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
        printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
        printf(")");
         } else {
           printf(", ");
        printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/books/n/gene/%s\" TARGET=_blank><B>%s</B></A>", grShort, grShort);
        printf(" (");
-       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param==begins_with\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
+       printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/sites/GeneTests/review/disease/%s?db=genetests&search_param=contains\" TARGET=_blank>%s</A>", diseaseName, diseaseName);
        printf(")");
         }
      }
@@ -25223,7 +25231,7 @@ else if (sameString("par", table))
     {
     doParDetails(tdb, item);
     }
-else if (sameString("t2g", table))
+else if (startsWith("t2g", table))
     {
     doT2gDetails(tdb, item);
     }

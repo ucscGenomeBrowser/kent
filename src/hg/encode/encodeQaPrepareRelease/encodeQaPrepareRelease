@@ -14,26 +14,18 @@ sub includeWordCount {
 
 sub processLines {
 
-    my @newlines = @{$_[0]};
-    my @lines = @{$_[1]};
+    my $new = $_[0];
+    my $old = $_[1];
     my $stage = $_[2];
 
     my @return;
 
     if ($stage eq "beta") {
-        $newlines[2] = "alpha,beta";
-        $lines[2] = "public";
-        my $new = join " ", @newlines;
-        my $line = join " ", @lines;
-        push @return, $new;
-        push @return, $line;
+        $$new[2] = "alpha,beta";
+        $$old[2] = "public";
     } elsif ($stage eq "public") {
-        $lines[2] = "";
-        my $line = join " ", @lines;
-        push @return, $line;
-
+        $$old[2] = "";
     }
-    return (\@return);
 
 }
 
@@ -83,23 +75,36 @@ sub processTrackDb {
         my @line2 = split /\s+/, $complines[1];
         &includeWordCount(\@line1, $complines[0]);
         &includeWordCount(\@line2, $complines[1]);
-        my @newlines;
-        my @lines;
+        my $new;
+        my $old;
         if ($line1[1] =~ m/wgEncode\S+new/) {
-            @newlines = @line1;
-            @lines = @line2;
+            $new = \@line1;
+            $old = \@line2;
         } elsif ($line2[1] =~ m/wgEncode\S+new/) {
-            @newlines = @line2;
-            @lines = @line1;
+            $new = \@line2;
+            $old = \@line1;
         } else {
             die "there are two include statements for $composite, neither of which have a .new";
         }
         if ($stage eq "public") {
-            &moveForPublic($newlines[1], $lines[1], $trackDbDir);
+            &moveForPublic($$new[1], $$old[1], $trackDbDir);
         }
-        my @return = @{&processLines(\@newlines, \@lines, $stage)};
-        foreach my $returnlines (@return){
-            push @returnlines, $returnlines;
+        &processLines($new, $old, $stage);
+        if ($stage eq "beta"){
+            my $line1join = join " ", @line1;
+            my $line2join = join " ", @line2;
+            push @returnlines, $line1join;
+            push @returnlines, $line2join;
+        } elsif ($stage eq "public") {
+            my $line1join = join " ", @line1;
+            my $line2join = join " ", @line2;
+            $line1join =~ s/\s+$//g;
+            $line2join =~ s/\s+$//g;
+            if ($line1join =~ m/wgEncode\S+new/) {
+                push @returnlines, $line2join;
+            } elsif ($line2join =~ m/wgEncode\S+new/) {
+                push @returnlines, $line1join;
+            }
         }
     } elsif (scalar (@complines) == 3) {
         die "you have a special situation where there are three include statements, you must proceed by hand";
@@ -396,7 +401,13 @@ if ($assm =~ m/^mm\d+$/){
 my $gitstat = `git status 2>&1`;
 
 if ($gitstat =~ m/fatal/) {
-    die "must be run in your git repository";
+    print STDERR<<END;
+This program must be run in your git repository.
+Please go to somewhere in the source tree.
+
+END
+
+    die
 }
 
 

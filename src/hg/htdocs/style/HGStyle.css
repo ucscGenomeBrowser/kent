@@ -170,7 +170,7 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
 }
 
 table.chainTbl, .descTbl {border-collapse: collapse;}
-table.chainTbl td, .descTbl td {border: 1px solid #666; padding: 5px;}
+table.chainTbl td, .descTbl td, .descTbl th {border: 1px solid #666; padding: 5px;}
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
@@ -199,7 +199,9 @@ table.chainTbl td, .descTbl td {border: 1px solid #666; padding: 5px;}
              -moz-transform: rotate(-45deg);    -moz-transform-origin:0% 0%;/* for firefox */
               -ms-transform: rotate(-45deg);     -ms-transform-origin:0% 0%;/* IE 9 */
                -o-transform: rotate(-45deg);      -o-transform-origin:0% 0%;/* Opera */
-           filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.999884,M12=0.015230,M21=-0.015230,M22=0.999884); /* for IE */
+               display: none;  /* made visible in js code */
+           /* filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* IE <9 90deg NOT SUPPORTED */
+           /*filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.999884,M12=0.015230,M21=-0.015230,M22=0.999884);*/ /* IE<9 NOT SUPPORTED, conflits with IE9 */
          }
 .dn45 { text-align: left; vertical-align: middle; width: 20px; margin: 0px; padding: 10px 3px 0px 3px; white-space: nowrap;
            position: relative; top: -1.4em; /* left: -0.1em; */
@@ -207,26 +209,26 @@ table.chainTbl td, .descTbl td {border: 1px solid #666; padding: 5px;}
              -moz-transform: rotate(45deg);    -moz-transform-origin:0% 100%;/* for firefox */
               -ms-transform: rotate(45deg);     -ms-transform-origin:0% 100%;/* IE 9 */
                -o-transform: rotate(45deg);      -o-transform-origin:0% 100%;/* Opera */
-           filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.999884,M12=-0.015230,M21=0.015230,M22=0.999884); /* for IE */
+               display: none;  /* made visible in js code */
+           /* filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1); /* IE <9 90deg NOT SUPPORTED */
+           /* filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.999884,M12=-0.015230,M21=0.015230,M22=0.999884);*/ /* IE<9 NOT SUPPORTED, conflits with IE9 */
          }
 /* For a cleaner site, we can remove underlines from links
 a:link {text-decoration:none;}
 a:visited {text-decoration:none;}
 a:hover {text-decoration:underline;}
 a:active {text-decoration:underline;}    */
-/* Soon to be enabled
 a.cv:link {text-decoration:none;}
 a.cv:visited {text-decoration:none;}
 a.cv:hover {text-decoration:underline;}
 a.cv:active {text-decoration:underline;}
 .matCell  { border: 1px solid #FFFEE8; }
-.matCell:hover  { background-color: #FCECC0; } */
+/*.matCell:hover  { background-color: #FCECC0; }*/
 
 .hintCol { font-size: 70%; line-height: 80%; border-style: hidden; background-color: #FFF9D2; }
 .hintRow { font-size: 70%; line-height: 80%; border-style: hidden; background-color: #FFF9D2; }
-/*  not ready for prime time because ff and ie can't agree
-.halfVis { opacity: 0.5; filters.alpha.opacity=50; }
-*/
+/* halfVis may need to be removed again, but I am hoping it works in DTD 4.01 transitional */
+.halfVis { opacity: 0.5; filters.alpha.opacity:50; }
 
 /* waitMask allows waiting on long running javascript using utils.js::waitOnFunction */
 .waitMask { display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #fff; }
@@ -295,6 +297,21 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
         text-align: center;
 }
 
+.clickable:hover { cursor: pointer; }
+.fauxInput  { border: 2px inset #CCCCCC; background-color: #fff; font-size: 10pt; display: inline-block; }
+div.disabled  { border-color: gray; color: gray;  }
+input.disabled  { opacity: 0.5; filters.alpha.opacity:50;  }
+span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
+
+.positionDisplay {
+        padding: 7px; background-color:#E0E0E0; -moz-border-radius: 3px; border-radius: 3px;
+        border: gray 1px solid;
+}
+
+.positionInput {
+        padding: 7px; -moz-border-radius: 3px; border-radius: 3px;
+        border: gray 1px solid;
+}
 
 /*
    Styles for hgHubConnect (formerly in separate .css)
@@ -344,5 +361,16 @@ tbody.sorting { color: #DDDDDD; cursor: wait;  }
 .tabFooter .small {margin: 2px 40px; font-size: 0.8em;}
 
 .hubError {color: #F00000;}
+
+/* [+][-] buttons are no longer images but divs */
+.pmButton { font-size: small; font-weight:bold; text-align:center; font-family: courier; color: black;
+            display: inline-block; width:16px; height:16px; vertical-align: top;
+            border: 2px outset lightGray; border-bottom-color:darkgray; border-right-color:darkgray; border-radius: 5px; /* radius not working */
+            background-color:#F3EDED; cursor: pointer;}
+.pmButton:hover { border-bottom-color:DarkBlue; border-right-color:DarkBlue; color: #0000AA; background-color:#AADDFF; }
+
+/* Experimental hilighting of all buttons on hover */
+/* input[type=submit]:hover,input[type=button]:hover { color: #0000AA; border:2px outset #008800; } */
+/* img[src="../images/add_sm.gif"]:hover,img[src="../images/remove_sm.gif"]:hover { outline:#008800 outset 1px; } */
 
 /* END - hgHubConnect Styles */

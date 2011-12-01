@@ -35,7 +35,7 @@ errAbort(
   "   oldObj              old mdb object name\n"
   "   newObj              new mdb object name\n"
   "options:\n"
-  "   -help               print out extended information about what metaCheck is doing\n"
+  "   -help               print out extended information about what encodeRenameObj is doing\n"
   "\n"
   "Example:\n"
   " encodeRenameObj hg19 wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1 wgEncodeHaibMethylRrbsAg04449UwSitesRep1\n"
@@ -248,15 +248,24 @@ if (differentString(oldObj, tableName))
     return;
     }
 
+
+struct mdbVar *atticVar = hashFindVal(mdbObj->varHash, "attic");
+
 if (!sqlTableExists(conn, tableName))
     {
-    logWarn("metaDb table %s not found in database %s",tableName, database);
-    ++errorCount;
-    return;
+    if (atticVar)
+	{
+	logWarn("attic! metaDb table %s not found in database %s; this is as expected.",tableName, database); // just informational
+	}
+    else
+	{
+	logWarn("metaDb table %s not found in database %s", tableName, database);
+	++errorCount;
+	return;
+	}
     }
 else
     verbose(2,"table %s found\n", tableName);
-
 }
 
 void checkMetaFileNameAndDownloads(struct mdbObj *mdbObj, char *downDir, char *composite)
@@ -266,81 +275,117 @@ verbose(1, "-------------------------------------------------------------\n");
 verbose(1, "Checking that files specified in metaDb exist in download dir\n");
 verbose(1, "-------------------------------------------------------------\n");
 
-char *fileName =  mdbObjFindValue(mdbObj, "fileName");
-if (!fileName)
+char *fileNames =  mdbObjFindValue(mdbObj, "fileName");
+if (!fileNames)
     {
     logWarn("fileName not found in object %s", mdbObj->obj);
     ++errorCount;
     return;
     }
 
-if (!startsWith(oldObj, fileName))
-    {
-    logWarn("fileName %s does not start with oldObj %s", fileName, oldObj);
-    ++errorCount;
-    return;
-    }
 char buffer[10 * 1024];
-char *newFileName = NULL;
-char newBuffer[10 * 1024];
-newFileName = replaceChars(fileName, oldObj, newObj);
 
-int i = 0;
-for(i=0; i < 2; ++i)
+// deal with multiple files in fileName value
+struct hash *allNames = hashNew(8);
+struct hash *bamNames = hashNew(8);
+struct slName *list = slNameListFromString(fileNames, ','), *el;
+for(el=list; el; el=el->next)
     {
-    if (i==0)
+    if (hashLookup(allNames, el->name))
 	{
-	safef(buffer, sizeof buffer, "%s/%s/%s", downDir, composite, fileName); 
-	safef(newBuffer, sizeof newBuffer, "%s/%s/%s", downDir, composite, newFileName); 
-	}
-    else
-	{ /* check for files in newest release dir found */ 
-	char *releaseN = findNewestReleaseDir(downDir,composite);
-	if (!releaseN)
-	    break;
-	safef(buffer, sizeof buffer, "%s/%s/%s/%s", downDir, composite, releaseN, fileName); 
-	safef(newBuffer, sizeof newBuffer, "%s/%s/%s/%s", downDir, composite, releaseN, newFileName); 
-	freeMem(releaseN);
-	}
-
-    if (fileExists(newBuffer))
-	{
-	logWarn("Error: Renaming collision %s already exists in download dir %s", newBuffer, downDir);
-	++errorCount;
-	return;
-	}
-
-    if (!fileExists(buffer))
-	{
-	logWarn("metaDb file %s not found in download dir %s",buffer, downDir);
+	logWarn("duplicate fileName entry: %s", el->name);
 	++errorCount;
 	return;
 	}
     else
 	{
-	if (pass == 1)
+	hashAdd(allNames, el->name, NULL);
+	}
+    if (endsWith(el->name,".bam"))
+	{
+	hashAdd(bamNames, el->name, NULL);
+	}
+    if (endsWith(el->name,".bam.bai"))
+	{
+	el->name[strlen(el->name)-4] = 0;
+	struct hashEl *hel = hashLookup(bamNames, el->name);
+	el->name[strlen(el->name)] = '.';
+	if (hel == NULL)
 	    {
-	    if (rename(buffer, newBuffer) != 0)
+	    logWarn(".bam.bai without corresponding .bam: %s", el->name);  
+	    // TODO should this count as a hard error? maybe not.
+	    ++errorCount;
+	    return;
+	    }
+	else
+	    {
+	    hel->val = (void *)1;
+	    }
+	}
+    }
+
+// see if we have to add any .bam.bai to the list 
+for(el=list; el; el=el->next)
+    {
+    if (endsWith(el->name,".bam"))
+	{
+	struct hashEl *hel = hashLookup(bamNames, el->name);
+	if (hel->val == NULL)
+	    {  // we have to add a .bam.bai to the list 
+	    char *bambai = addSuffix(el->name, ".bai");
+	    warn(".bam.bai not found for corresponding .bam in meta.fileName: %s", el->name);
+	    slNameAddTail(&list, bambai);		
+	    if (hashLookup(allNames, bambai))
 		{
-		logErrnoWarn("Failed to rename %s to %s\n", buffer, newBuffer);
+		logWarn("duplicate fileName entry: %s", bambai);
 		++errorCount;
 		return;
 		}
 	    else
-		logChange("renamed %s to %s\n", buffer, newBuffer);
+		hashAdd(allNames, bambai, NULL);		
 	    }
-	else
-	    verbose(2, "fileExists %s\n", buffer);
+	}
+    }
+
+
+// make sure all the files are there
+struct dyString *newFileNames = newDyString(256);
+for(el=list; el; el=el->next)
+    {
+
+    char *fileName = el->name;
+
+    if (!startsWith(oldObj, fileName))
+	{
+	logWarn("fileName %s does not start with oldObj %s", fileName, oldObj);
+	++errorCount;
+	return;
 	}
 
-    /* Note we can't use fileIndex var for .bai but it's not always present in mdb
-     so we'll just hard-wire in the .bai support */
-    // check the .bai index file
-    if (endsWith(buffer,".bam"))
+    char *newFileName = NULL;
+    char newBuffer[10 * 1024];
+    newFileName = replaceChars(fileName, oldObj, newObj);
+    if (el != list)
+	dyStringAppend(newFileNames, ",");
+    dyStringAppend(newFileNames, newFileName);
+
+    int i = 0;
+    for(i=0; i < 2; ++i)  // do main (i==0) and newest release (i==1)
 	{
-     
-	safecat(buffer, sizeof buffer, ".bai"); 
-	safecat(newBuffer, sizeof newBuffer, ".bai"); 
+	if (i==0)
+	    {
+	    safef(buffer, sizeof buffer, "%s/%s/%s", downDir, composite, fileName); 
+	    safef(newBuffer, sizeof newBuffer, "%s/%s/%s", downDir, composite, newFileName); 
+	    }
+	else
+	    { /* check for files in newest release dir found */ 
+	    char *releaseN = findNewestReleaseDir(downDir,composite);
+	    if (!releaseN)
+		break;
+	    safef(buffer, sizeof buffer, "%s/%s/%s/%s", downDir, composite, releaseN, fileName); 
+	    safef(newBuffer, sizeof newBuffer, "%s/%s/%s/%s", downDir, composite, releaseN, newFileName); 
+	    freeMem(releaseN);
+	    }
 
 	if (fileExists(newBuffer))
 	    {
@@ -361,7 +406,7 @@ for(i=0; i < 2; ++i)
 		{
 		if (rename(buffer, newBuffer) != 0)
 		    {
-		    logErrnoWarn("Failed to renamed %s to %s\n", buffer, newBuffer);
+		    logErrnoWarn("Failed to rename %s to %s\n", buffer, newBuffer);
 		    ++errorCount;
 		    return;
 		    }
@@ -372,7 +417,6 @@ for(i=0; i < 2; ++i)
 		verbose(2, "fileExists %s\n", buffer);
 	    }
 
-
 	}
 
     }
@@ -381,14 +425,14 @@ if (pass == 1)
     {
     struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "fileName");
     freeMem(mdbVar->val);
-    mdbVar->val = newFileName;
+    mdbVar->val = newFileNames->string;
     logChange("renamed mdbObj->fileName from %s to %s\n", oldObj, newObj);
 
     // update mdb_$USER
     char sql[1024];
     safef(sql, sizeof sql, 
-	"update %s set val=concat('%s',substring(val,1+length('%s'))) where obj='%s' and var='fileName'",
-    	metaUser, newObj, oldObj, oldObj);
+	"update %s set val='%s' where obj='%s' and var='fileName'",
+	metaUser, newFileNames->string, oldObj);
     if (sqlUpdateRows(conn, sql, NULL) == 0)
 	{
 	logWarn("error: no rows changed for: %s", sql);	
@@ -399,6 +443,7 @@ if (pass == 1)
 	logChange("%s\n",sql);
 
 
+    // fileIndex field has been obsoleted from mdb anyway. just for some backwards-compatibility:
     mdbVar = hashFindVal(mdbObj->varHash, "fileIndex");
     if (mdbVar) 
 	{
@@ -406,19 +451,18 @@ if (pass == 1)
 	freeMem(mdbVar->val);
 	mdbVar->val = newFileIndex;
 	verbose(2, "renamed mdbObj->fileIndex to %s\n", newFileIndex);
-        // It looks like they are dropping fileIndex field from mdb anyway.
 
-    	// update mdb_$USER
+	// update mdb_$USER
 	char sql[1024];
-    	safef(sql, sizeof sql, 
+	safef(sql, sizeof sql, 
 	    "update %s set val=concat('%s',substring(val,1+length('%s'))) where obj='%s' and var='fileIndex'",
 	    metaUser, newObj, oldObj, oldObj);
-    	if (sqlUpdateRows(conn, sql, NULL) == 0)
-    	    {
+	if (sqlUpdateRows(conn, sql, NULL) == 0)
+	    {
 	    logWarn("error: no rows changed for: %s", sql);	
-    	    ++errorCount;
-    	    return;
-    	    }
+	    ++errorCount;
+	    return;
+	    }
 	else
 	    logChange("%s\n",sql);
 
@@ -458,22 +502,60 @@ for(trackObj = trackObjs; trackObj; trackObj = trackObj->next)
 return hash;
 }
 
-void checkMetaTableInTrackDb(struct hash *trackHash)
+void checkMetaTableInTrackDb(struct mdbObj *mdbObj, struct hash *trackHash)
 {
 verbose(1, "\n");
 verbose(1, "---------------------------------------------------------\n");
 verbose(1, "Checking that table specified in metaDb exists in trackDb\n");
 verbose(1, "---------------------------------------------------------\n");
 
-struct trackDb *trackObj = hashFindVal(trackHash, oldObj);
-if (!trackObj)
+struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "tableName");
+if (mdbVar == NULL)
     {
-    logWarn("table %s: not found in trackDb",oldObj);
+    logWarn("tableName not found in object %s", mdbObj->obj);
     ++errorCount;
     return;
     }
-else
+
+struct mdbVar *atticVar = hashFindVal(mdbObj->varHash, "attic");
+struct mdbVar *statusVar = hashFindVal(mdbObj->varHash, "objStatus");
+char *reason = NULL;
+if (atticVar)
+    reason = "attic";
+if (statusVar)
+    {
+    if (startsWith("renamed", statusVar->val))
+	reason = "renamed";
+    if (startsWith("replaced", statusVar->val))
+	reason = "replaced";
+    if (startsWith("revoked", statusVar->val))
+	reason = "revoked";
+    }
+
+struct trackDb *trackObj = hashFindVal(trackHash, oldObj);
+if (trackObj)
+    {
+    if (reason)
+	{
+	logWarn("%s table %s: should NOT be found in trackDb", reason, oldObj);
+	++errorCount;
+	return;
+	}
     verbose(2, "tableName %s found in trackDb\n", oldObj);
+    }
+else
+    {
+    if (reason)
+	{ 
+	// ok because attic, replaced, revoked, renamed should not be in trackDb
+	}
+    else
+	{
+	logWarn("table %s: not found in trackDb",oldObj);
+	++errorCount;
+	return;
+	}
+    }
 
 // this was copied from another removed routine, not sure if it is needed
 char *compSetting = trackDbSetting(trackObj, "compositeTrack");
@@ -497,6 +579,7 @@ if (hashLookup(trackHash, newObj) != NULL)
     {
     logWarn("Renaming collision: trackDb entry %s already exists", newObj);
     ++errorCount;
+    return;
     }
 }
 
@@ -859,7 +942,7 @@ verbose(1, "--------------------------------------------------------------------
 verbose(1, "Checking that track is in trackDb.wgEncode.ra with alpha tag or none\n");
 verbose(1, "--------------------------------------------------------------------\n");
 char *warnMsg = NULL;
-result = findCompositeInIncluder(tdbFile, composite, pNumTagsFound, FALSE, &warnMsg);
+result = findCompositeInIncluder(tdbFile, composite, "alpha", pNumTagsFound, FALSE, &warnMsg);
 if (result)
     {
     verbose(2, "Found <composite>.ra %s in trackDb.wgEncode.ra for composite %s\n", result, composite);
@@ -914,7 +997,7 @@ verbose(1, "Editing trackDb.wgEncode.ra to split into alpha and other\n");
 verbose(1, "---------------------------------------------------------\n");
 // Eliminate the old alpha tag (or add beta,public if none)
 char *warnMsg = NULL;
-result = findCompositeInIncluder(tdbFile, composite, NULL, TRUE, &warnMsg);
+result = findCompositeInIncluder(tdbFile, composite, "alpha", NULL, TRUE, &warnMsg);
 if (result)
     {
     logChange("Removed alpha tag from includer:  %s in trackDb.wgEncode.ra for composite %s\n", result, composite);
@@ -953,8 +1036,8 @@ return newCompositeRaName;
 }
 
 
-boolean metaCheck(char *src, char *org, char *database, char *composite, char *metaDb, char *downDir)
-/* metaCheck 
+boolean encodeRenameObj(char *src, char *org, char *database, char *composite, char *metaDb, char *downDir)
+/* encodeRenameObj 
  * For a list of all the checks and updates, see the description at the top of this file.
  * It returns true if errorCount==0 at end of run.*/
 {
@@ -968,6 +1051,13 @@ if (strlen(newObj) > 64)
     {
     ++errorCount;
     logErrAbort("ERROR: new name %s is too long for mysql table name, length %ld exceeds 64 chars in length.", newObj, strlen(newObj));
+    }
+
+// newObj should still begin with <composite>
+if (!startsWith(composite,newObj))
+    {
+    ++errorCount;
+    logErrAbort("ERROR: new name %s does not begin with %s", newObj, composite);
     }
 
 // Does object exist in mdb
@@ -1076,7 +1166,7 @@ while (pass < 2)
 
     if (pass == 0 && sameString(objType, "table"))
 	{
-	checkMetaTableInTrackDb(trackHash);
+	checkMetaTableInTrackDb(mdbObj, trackHash);
 	if (errorCount > 0) break;
 	}
 
@@ -1226,7 +1316,7 @@ while(1)
 return NULL;  // never gets here
 }
 
-void encodeRenameObj(char *database)
+void encodeRenameObjMain(char *database)
 /* Try to rename oldObj to newObj in mdb, trackDb, tables, and downloads.
  * The need arises if a mistake in meta data daf/ddf is caught too late
  * to be reloaded in the pipeline. */
@@ -1250,7 +1340,7 @@ encodeRenamerLogId = initializeEncodeRenamerLogRecord();
 
 verbose(2,"encodeRenamerLog id = %d\n", encodeRenamerLogId);
 
-boolean result = metaCheck(src, org, database, composite, metaDb, downDir);
+boolean result = encodeRenameObj(src, org, database, composite, metaDb, downDir);
 sqlDisconnect(&conn);
 
 exit( result ? 0 : 1);
@@ -1310,6 +1400,6 @@ if (argc != 4)
 
 oldObj = argv[2];
 newObj = argv[3];
-encodeRenameObj(argv[1]);
+encodeRenameObjMain(argv[1]);
 return 0;
 }

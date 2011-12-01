@@ -313,6 +313,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -336,6 +337,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -359,6 +361,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
+dccAccession wgEncodeEH000125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -382,6 +385,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2011-10-06
+dccAccession wgEncodeEH000125
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -616,6 +620,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -637,6 +642,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -658,6 +664,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -679,6 +686,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -862,6 +870,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SigRep2V2.bigWig
 grant Myers
 insertLength 400
@@ -883,6 +892,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400SplicesRep2V2.bam
 grant Myers
 insertLength 400
@@ -1379,6 +1389,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -1402,6 +1413,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000122
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -1746,6 +1758,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
 grant Myers
 insertLength 400
@@ -2056,6 +2069,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -2075,6 +2089,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001423
 fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -2733,6 +2748,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -2752,6 +2768,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001424
 fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
@@ -3271,6 +3288,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -3294,6 +3312,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -3317,6 +3336,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -3340,6 +3360,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000132
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -3738,6 +3759,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -3759,6 +3781,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -3780,6 +3803,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep3V2.bigWig
 grant Myers
 insertLength 200
@@ -3801,6 +3825,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SigRep4V2.bigWig
 grant Myers
 insertLength 200
@@ -3822,6 +3847,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -3843,6 +3869,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -3864,6 +3891,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep3V2.bam
 grant Myers
 insertLength 200
@@ -3885,6 +3913,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200SplicesRep4V2.bam
 grant Myers
 insertLength 200
@@ -4899,6 +4928,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -4922,6 +4952,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -4945,6 +4976,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
 grant Myers
 insertLength 200
@@ -4968,6 +5000,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000128
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
 grant Myers
 insertLength 200
@@ -5488,6 +5521,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
+dccAccession wgEncodeEH000138
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
 grant Myers
 insertLength 400
@@ -5901,6 +5935,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -5924,6 +5959,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -5947,6 +5983,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -5970,6 +6007,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000134
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -6204,6 +6242,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -6225,6 +6264,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -6246,6 +6286,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -6267,6 +6308,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -6763,6 +6805,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -6786,6 +6829,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000130
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -7265,6 +7309,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -7288,6 +7333,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -7311,6 +7357,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -7334,6 +7381,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000135
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -7568,6 +7616,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -7589,6 +7638,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -7610,6 +7660,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -7631,6 +7682,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -8127,6 +8179,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
+dccAccession wgEncodeEH000127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -8150,6 +8203,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
+dccAccession wgEncodeEH000127
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -8508,6 +8562,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -8529,6 +8584,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -8550,6 +8606,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -8571,6 +8628,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -9050,6 +9108,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -9072,6 +9131,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001420
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -9567,6 +9627,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -9590,6 +9651,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -9613,6 +9675,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -9636,6 +9699,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000133
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -9870,6 +9934,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -9891,6 +9956,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -9912,6 +9978,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -9933,6 +10000,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -10429,6 +10497,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -10452,6 +10521,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000129
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -10952,6 +11022,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -10975,6 +11046,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -10998,6 +11070,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -11021,6 +11094,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
+dccAccession wgEncodeEH000126
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
@@ -11255,6 +11329,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -11276,6 +11351,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -11297,6 +11373,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -11318,6 +11395,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000124
 fileName wgEncodeCaltechRnaSeqK562R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -11804,6 +11882,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -11827,6 +11906,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
+dccAccession wgEncodeEH000124
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -12119,6 +12199,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -12140,6 +12221,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -12589,6 +12671,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
+dccAccession wgEncodeEH001421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -12611,6 +12694,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-24
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001421
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -12959,6 +13043,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -12982,6 +13067,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000136
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
@@ -13192,6 +13278,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -13213,6 +13300,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -13234,6 +13322,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -13255,6 +13344,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH000131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -13743,6 +13833,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
+dccAccession wgEncodeEH000131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -13765,6 +13856,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH000131
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
@@ -14121,6 +14213,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep1V2.bigWig
 grant Myers
 insertLength 200
@@ -14142,6 +14235,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SigRep2V2.bigWig
 grant Myers
 insertLength 200
@@ -14163,6 +14257,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep1V2.bam
 grant Myers
 insertLength 200
@@ -14184,6 +14279,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
+dccAccession wgEncodeEH001422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200SplicesRep2V2.bam
 grant Myers
 insertLength 200
@@ -14663,6 +14759,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
@@ -14685,6 +14782,7 @@ dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
+dccAccession wgEncodeEH001422
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200

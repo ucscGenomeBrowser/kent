@@ -446,6 +446,11 @@ boolean isOpen = !cartUsualBoolean(cart, collapseGroupVar, !isOpenDefault);
 printf("<TR><TD colspan=2 style='text-align:left;'>\n");
 printf("<input type='hidden' name='%s' id='%s' value='%s'>\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
+#ifdef BUTTONS_BY_CSS
+    hPrintf("<span class='pmButton bigBlue' onclick=\"setTableRowVisibility(this, '%s', '%s.section', 'section', true)\" "
+            "id='%s_button' title='%s this section'>%c</span>",
+       section, track, section, (isOpen ? "Collapse": "Expand"), (isOpen ? '-' : '+'));
+#else///ifndef BUTTONS_BY_CSS
 char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
 printf("<IMG height='18' width='18' "
        "onclick=\"return setTableRowVisibility(this, '%s', '%s.section', 'section', true);\" "
@@ -453,6 +458,7 @@ printf("<IMG height='18' width='18' "
        " style='cursor:pointer;'>\n",
        section, track,
        section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
+#endif///ndef BUTTONS_BY_CSS
 printf("<B style='font-size:larger;'>&nbsp;%s</B></TD></TR>\n", sectionTitle);
 printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
 }
@@ -569,6 +575,8 @@ jsonListAdd(list, (struct jsonElement *) newJsonString(val ? "true" : "false"));
 
 static char *makeIndentBuf(int indentLevel)
 {
+if (indentLevel < 0)
+    return "";
 char *indentBuf;
 indentBuf = needMem(indentLevel + 1);
 memset(indentBuf, '\t', indentLevel);
@@ -578,13 +586,22 @@ return indentBuf;
 
 static void jsonPrintRecurse(struct jsonElement *json, int indentLevel)
 {
+if (indentLevel >= -1) // Note that < -1 will result in no indenting
+    indentLevel++;
+char *tab = "\t";
+char *nl = "\n";
+if (indentLevel < 0)
+    {
+    tab = "";
+    nl = "";
+    }
 char *indentBuf = makeIndentBuf(indentLevel);
 switch (json->type)
     {
     case jsonHash:
         {
         struct jsonHashElement *ele = (struct jsonHashElement *) json;
-        hPrintf("{\n");
+        hPrintf("{%s",nl);
         if(hashNumEntries(ele->hash))
             {
             struct hashEl *el, *list = hashElListHash(ele->hash);
@@ -592,9 +609,9 @@ switch (json->type)
             for (el = list; el != NULL; el = el->next)
                 {
                 struct jsonElement *val = (struct jsonElement *) el->val;
-                hPrintf("%s\t\"%s\": ", indentBuf, el->name);
-                jsonPrintRecurse(val, indentLevel + 1);
-                hPrintf("%s\n", el->next == NULL ? "" : ",");
+                hPrintf("%s%s\"%s\": ", indentBuf, tab, el->name);
+                jsonPrintRecurse(val, indentLevel);
+                hPrintf("%s%s", el->next == NULL ? "" : ",",nl);
                 }
             hashElFreeList(&list);
             }
@@ -605,15 +622,15 @@ switch (json->type)
         {
         struct jsonListElement *rec = (struct jsonListElement *) json;
         struct slRef *el;
-        hPrintf("[\n");
+        hPrintf("[%s",nl);
         if(rec->list)
             {
             for (el = rec->list; el != NULL; el = el->next)
                 {
                 struct jsonElement *val = (struct jsonElement *) el->val;
-                hPrintf("%s\t", indentBuf);
-                jsonPrintRecurse(val, indentLevel + 1);
-                hPrintf("%s\n", el->next == NULL ? "" : ",");
+                hPrintf("%s%s", indentBuf,tab);
+                jsonPrintRecurse(val, indentLevel);
+                hPrintf("%s%s", el->next == NULL ? "" : ",",nl);
                 }
             }
         hPrintf("%s]", indentBuf);
@@ -630,20 +647,30 @@ switch (json->type)
         break;
         }
     }
-freez(&indentBuf);
+if (indentLevel >= 0)
+    freez(&indentBuf);
 }
 
 void jsonPrint(struct jsonElement *json, char *name, int indentLevel)
 {
-// print out a jsonElement
+// print out a jsonElement, indentLevel -1 means no indenting
 
 char *indentBuf = makeIndentBuf(indentLevel);
 if(name != NULL)
-    hPrintf("// START %s\n%svar %s = ", name, indentBuf, name);
-jsonPrintRecurse(json, indentLevel);
+    {
+    if (indentLevel >= 0 )
+        hPrintf("// START %s\n%s", name, indentBuf);
+    hPrintf("var %s = ", name);
+    }
+jsonPrintRecurse(json, (indentLevel - 1)); // will increment back to indentLevel
 if(name != NULL)
-    hPrintf("%s;\n// END %s\n", indentBuf, name);
-freez(&indentBuf);
+    {
+    hPrintf("%s;\n", indentBuf);
+    if (indentLevel >= 0 )
+        hPrintf("// END %s\n", name);
+    }
+if (indentLevel >= 0)
+    freez(&indentBuf);
 }
 
 void jsonErrPrintf(struct dyString *ds, char *format, ...)

@@ -46772,6 +46772,190 @@ tableName wgEncodeHaibTfbsK562Zbtb7asc34508V0416101RawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsLhcnm2InputPcr1xDiff7dRawDataRep1
+objType file
+antibody Input
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11639
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-10-27
+dateUnrestricted 2012-07-27
+fileName wgEncodeHaibTfbsLhcnm2InputPcr1xDiff7dRawDataRep1.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11639
+md5sum 6ded98959c22b6728401a830e4cbbb1d
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+subId 4940
+treatment DIFF_7d
+view RawData
+
+metaObject wgEncodeHaibTfbsLhcnm2InputPcr1xDiff7dRawDataRep2
+objType file
+antibody Input
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11424
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-04
+dateUnrestricted 2012-08-04
+fileName wgEncodeHaibTfbsLhcnm2InputPcr1xDiff7dRawDataRep2.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11424
+md5sum 5e92f43eccd72bdcc1c32b8d2b4004b3
+project wgEncode
+protocol PCR1x
+replicate 2
+setType input
+subId 5089
+treatment DIFF_7d
+view RawData
+
+metaObject wgEncodeHaibTfbsLhcnm2InputPcr1xRawDataRep1
+objType file
+antibody Input
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11640
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-04
+dateUnrestricted 2012-08-04
+fileName wgEncodeHaibTfbsLhcnm2InputPcr1xRawDataRep1.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11640
+md5sum f4dc07f25f520e818f1fec0c30016c72
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+subId 5091
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsLhcnm2NrsfPcr1xDiff7dRawDataRep1
+objType file
+antibody NRSF
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11639
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-04
+dateUnrestricted 2012-08-04
+fileName wgEncodeHaibTfbsLhcnm2NrsfPcr1xDiff7dRawDataRep1.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11908
+md5sum 05a448c36f01a00ef75ff70d8002156a
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 5095
+treatment DIFF_7d
+view RawData
+
+metaObject wgEncodeHaibTfbsLhcnm2Pol24h8Pcr1xDiff7dRawDataRep1
+objType file
+antibody Pol2-4H8
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11639
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodeHaibTfbsLhcnm2Pol24h8Pcr1xDiff7dRawDataRep1.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11890
+md5sum d26d0b472a7680c86ca98200eb1db83f
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 5093
+treatment DIFF_7d
+view RawData
+
+metaObject wgEncodeHaibTfbsLhcnm2Pol24h8Pcr1xRawDataRep1
+objType file
+antibody Pol2-4H8
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11640
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodeHaibTfbsLhcnm2Pol24h8Pcr1xRawDataRep1.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11888
+md5sum 09b33b83f0af2563cb984f092b3e9e88
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 5092
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsLhcnm2Sc12732Pcr1xDiff7dRawDataRep1
+objType file
+antibody Myogenin_(sc-12732)
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11639
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-17
+dateUnrestricted 2012-08-17
+fileName wgEncodeHaibTfbsLhcnm2Sc12732Pcr1xDiff7dRawDataRep1.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11904
+md5sum 941f536f5685b6a6938d50c370573d8c
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 5094
+treatment DIFF_7d
+view RawData
+
+metaObject wgEncodeHaibTfbsLhcnm2Sc32758Pcr1xDiff7dRawDataRep2
+objType file
+antibody MyoD_(sc-32758)
+cell LHCN-M2
+composite wgEncodeHaibTfbs
+controlId 11424
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-11-04
+dateUnrestricted 2012-08-04
+fileName wgEncodeHaibTfbsLhcnm2Sc32758Pcr1xDiff7dRawDataRep2.fastq.gz
+grant Myers
+lab Caltech
+labExpId 11425
+md5sum d0720938e90d3b693181e5de2f37b9e5
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 5090
+treatment DIFF_7d
+view RawData
+
 metaObject wgEncodeHaibTfbsPanc1ControlV0416101AlnRep1
 objType file
 antibody Control
@@ -55013,4 +55197,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 501455852
+# MAGIC: -1154664282
