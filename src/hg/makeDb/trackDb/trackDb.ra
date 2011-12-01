@@ -1,5 +1,7 @@
 #	"$Id: trackDb.ra,v 1.643 2010/06/11 22:12:18 mary Exp $";
 
+include max.trackDb.ra
+
 include trackDb.chainNet.ra
 include trackDb.nt.ra
 
@@ -538,6 +540,7 @@ release alpha
     sequenceTable t2gElsevierSequence
     type bed 12
     release alpha
+
 
 searchTable mgcFullMrna
 searchType psl
