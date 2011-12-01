@@ -34,12 +34,6 @@ struct hubConnectStatus
     unsigned  status;   /* 1 if private */
     };
 
-/* status bits */
-#define HUB_UNLISTED    (1 << 0)
-
-boolean isHubUnlisted(struct hubConnectStatus *hub) ;
-/* Return TRUE if it's an unlisted hub */
-
 void hubConnectStatusFree(struct hubConnectStatus **pHub);
 /* Free hubConnectStatus */
 
