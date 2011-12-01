@@ -10,7 +10,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.13.2
+set dir = $genomes/hg19/bed/ucsc.13.3
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -26,8 +26,8 @@ set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer7
 set flyDb = dm3
-set wormDb = ce9
-set yeastDb = sacCer2
+set wormDb = ce6
+set yeastDb = sacCer3
 
 # The net alignment for the closely-related species indicated in $xdb
 set xdbNetDir = $genomes/$db/bed/lastz.${xdb}/axtChain
@@ -105,7 +105,8 @@ if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
 
-
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 
 # Get Genbank info
@@ -164,7 +165,7 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 # probably should be revisited later, but affects only a few sequences 
 # at this time (10/09/11).
 mkdir -p rfam
-pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
+pslToBed ${rfam}/${db}/rfam.bed
 bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
 pslCDnaFilter -uniqueMapped rfam.syntenic.psl rfam.syntenic.uniq.psl
@@ -593,6 +594,10 @@ pslCat -nohead protein/raw/ref*.psl | sort -k 10 | \
 pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
 rm -r protein/raw
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 
 cd $dir
@@ -1314,9 +1319,6 @@ hgsql hgcentraltest -e \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 		
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
@@ -1340,9 +1342,6 @@ sudo ln -s /var/lib/mysql/$spDb /var/lib/mysql/uniProt
 sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # Make full text index.  Takes a minute or so.  After this the genome browser

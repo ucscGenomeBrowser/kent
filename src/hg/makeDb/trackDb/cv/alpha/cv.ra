@@ -8730,6 +8730,16 @@ tag R2X76D
 type readType
 description Paired 76 n.t. directed reads
 
+term 2x100
+tag R2X100
+type readType
+description Paired 100 n.t. reads PROVISIONAL
+
+term 2x101D
+tag R2X101D
+type readType
+description Paired 101 n.t. directed reads PROVISIONAL
+
 #### insertLength
 #### This is being used by the Wold lab as a variable.
 #### I do not think that it needs to be controlled. - Cricket
@@ -8905,6 +8915,27 @@ term proteinRnaExtracts
 tag PROTEINRNAEXTRACTS
 type rnaExtract
 description RNA associated with RNA binding proteins
+
+
+### RNA treatments
+term TAP-Only
+tag TAP  
+type rnaTreatment
+description PROVISIONAL This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning.  Hence, both capped and 5' monophosphate RNAs will be cloned.
+label TAP Only Treatment
+
+term CIP-TAP 
+tag CIPTAP
+type rnaTreatment
+description PROVISIONAL This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase.  Hence, it will be enriched for capped RNAs.
+label CIP and TAP Treatments
+
+term Untreated 
+tag Untreated 
+type rnaTreatment
+description  PROVISIONAL Untreated
+label Untreated       
+
 
 ### promoters
 term SV40
@@ -11758,6 +11789,16 @@ tag RNAEXTRACT
 type typeOfTerm
 label RNA Extract
 description Fraction of total cellular RNA selected for by an experiment. This includes size fractionation (long versus short) and feature frationation (PolyA-, PolyA+, rRNA-).
+searchable multiSelect
+cvDefined yes
+validate cv
+priority 160
+
+term rnaTreatment
+tag RNATREATMENT
+type typeOfTerm
+label RNA Treatment
+description  PROVISIONAL
 searchable multiSelect
 cvDefined yes
 validate cv
