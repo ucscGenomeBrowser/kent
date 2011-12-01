@@ -218,13 +218,12 @@ printf("</TR></tbody></TABLE>\n");
 printf("</div>");
 }
 
-void hgHubConnectPublic()
+static boolean outputPublicTable(struct sqlConnection *conn, char *publicTable)
 /* Put up the list of public hubs and other controls for the page. */
 {
-struct sqlConnection *conn = hConnectCentral();
 char query[512];
 safef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %s", 
-	hubPublicTableName); 
+	publicTable); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 
@@ -297,15 +296,24 @@ sqlFreeResult(&sr);
 if (gotAnyRows)
     {
     printf("</TR></tbody></TABLE>\n");
+    printf("</div>");
     }
-else
+return gotAnyRows;
+}
+
+
+void hgHubConnectPublic()
+/* Put up the list of public hubs and other controls for the page. */
+{
+struct sqlConnection *conn = hConnectCentral();
+char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", 
+	"hubPublicTableName", defaultHubPublicTableName);
+if (!(sqlTableExists(conn, publicTable) && outputPublicTable(conn, publicTable) ))
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
     printf("No Public Track Hubs for this genome assembly<BR>");
+    printf("</div>");
     }
-
-printf("</div>");
-
 hDisconnectCentral(&conn);
 }
 

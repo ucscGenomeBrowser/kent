@@ -286,6 +286,15 @@ if (val == NULL || (strlen(val) == 0))
 return val;
 }
 
+char *cfgOptionEnvDefault(char *envName, char* name, char *def)
+/* get a configuration optional value, from either the environment or the cfg
+ * file, with the env take precedence.  Return default if not found */
+{
+char *val = cfgOptionEnv(envName, name);
+
+return (val == NULL) ? def : val;
+}
+
 char *cfgVal(char *name)
 /* Return option with given name.  Squawk and die if it
  * doesn't exist. */
