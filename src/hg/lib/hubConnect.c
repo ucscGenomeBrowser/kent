@@ -34,7 +34,7 @@ static char *getHubStatusTableName()
 {
 if (hubStatusTableName == NULL)
     hubStatusTableName = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE",
-	    "hubStatusTableName", defaultHubStatusTableName);
+	    hubStatusTableConfVariable, defaultHubStatusTableName);
 
 return hubStatusTableName;
 }
