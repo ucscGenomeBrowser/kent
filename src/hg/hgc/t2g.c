@@ -13,8 +13,6 @@
 
 // cgi var to activate debug output
 int debug = 0;
-// cgi var  to activate fasta output
-int fasta = 0;
 
 char* sequenceTable;
 char* articleTable;
@@ -263,8 +261,9 @@ void doT2gDetails(struct trackDb *tdb, char *item)
 int start = cgiInt("o");
 int end = cgiInt("t");
 char* trackTable = cgiString("g");
+int fasta = cgiOptionalInt("fasta", 0);
+
 debug = cgiOptionalInt("debug", 0);
-fasta = cgiOptionalInt("fasta", 0);
 
 struct sqlConnection *conn = hAllocConn(database);
 printTrackVersion(tdb, conn, item);
