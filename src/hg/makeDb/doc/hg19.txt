@@ -13875,27 +13875,22 @@ tail +3 agilentCghSnpCancer4x180k.bed | hgLoadBed hg19 agilentCghSnpCancer4x180k
 
 
 #################################################################################
-# Rfam (2011-10-05 Melissa Cline)
+# Rfam (2011-11-30 Melissa Cline)
 #
 # This contains genomic alignments of Rfam sequences, from the Rfam group.
 #
 # This data is used in building UCSC Genes.
 #
 cd /hive/data/outside/Rfam
-mkdir 111005
-cd 111005
-wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/Rfam.fasta.gz
-gunzip Rfam.fasta.gz
-grep -i "Homo Sapiens" Rfam.fasta |awk '{ print $1}' |sed 's/^>//' \
-    > human.sequenceIds.txt
-faSomeRecords Rfam.fasta human.sequenceIds.txt Rfam.human.fasta
-gzip Rfam.fasta
-mkdir -p hg19
-blat -q=rna -minIdentity=100 /hive/data/genomes/hg19/hg19.2bit \
-    Rfam.human.fasta hg19/Rfam.human.psl
-pslCDnaFilter -globalNearBest=0.01 -minCover=1.0 hg19/Rfam.human.psl \
-    hg19/Rfam.human.bestHits.psl
-pslToBed hg19/Rfam.human.bestHits.psl hg19/Rfam.human.bestHits.bed
+mkdir 111130
+cd 111130
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/genome.gff3.tar.gz
+tar xzvf genome.gff3.tar.gz
+mkdir hg19
+cat /hive/data/genomes/hg19/chrom.aliases \
+ |awk '{ print "cat /hive/data/outside/Rfam/111130/genome_gff/" $1 ".gff3",  
+               "|sed", sprintf("%c", 39) "s/" $1 "/" $2 "/" sprintf("%c", 39)}' |bash \
+ |awk '{ print $1 "\t" $4 - 1 "\t" $5 "\t" $9 "\t1\t" $7 }' > hg19/rfam.bed      
 
 
 
