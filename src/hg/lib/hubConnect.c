@@ -17,6 +17,7 @@
 #include "hui.h"
 #include "errCatch.h"
 #include "obscure.h"
+#include "hgConfig.h"
 
 
 boolean isHubTrack(char *trackName)
@@ -25,11 +26,24 @@ boolean isHubTrack(char *trackName)
 return startsWith(hubTrackPrefix, trackName);
 }
 
+static char *hubStatusTableName = NULL;
+
+static char *getHubStatusTableName()
+/* return the hubStatus table name from the environment, 
+ * or hg.conf, or use the default.  Cache the result */
+{
+if (hubStatusTableName == NULL)
+    hubStatusTableName = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE",
+	    "hubStatusTableName", defaultHubStatusTableName);
+
+return hubStatusTableName;
+}
+
 boolean hubConnectTableExists()
 /* Return TRUE if the hubPublic table exists. */
 {
 struct sqlConnection *conn = hConnectCentral();
-boolean exists = sqlTableExists(conn, hubPublicTableName);
+boolean exists = sqlTableExists(conn, getHubStatusTableName());
 hDisconnectCentral(&conn);
 return exists;
 }
@@ -140,14 +154,14 @@ if (gotWarning)
 return tHub;
 }
 
-struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id)
 /* Given a hub ID return associated status. Returns NULL if no such hub.  If hub
  * exists but has problems will return with errorMessage field filled in. */
+struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id)
 {
 struct hubConnectStatus *hub = NULL;
 char query[1024];
 safef(query, sizeof(query), 
-    "select hubUrl,status, errorMessage from %s where id=%d", hubStatusTableName, id);
+    "select hubUrl,status, errorMessage from %s where id=%d", getHubStatusTableName(), id);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row != NULL)
@@ -356,7 +370,7 @@ struct sqlConnection *conn = hConnectCentral();
 char query[512];
 
 safef(query, sizeof(query), "insert into %s (hubUrl,status) values (\"%s\",%d)",
-    hubStatusTableName, url, unlisted ? 1 : 0);
+    getHubStatusTableName(), url, unlisted ? 1 : 0);
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
 }
@@ -370,7 +384,8 @@ char **row;
 boolean foundOne = FALSE;
 int id = 0;
 
-safef(query, sizeof(query), "select id,errorMessage from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+char *statusTableName = getHubStatusTableName();
+safef(query, sizeof(query), "select id,errorMessage from %s where hubUrl = \"%s\"", statusTableName, url);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
 
@@ -378,7 +393,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     if (foundOne)
 	errAbort("more than one line in %s with hubUrl %s\n", 
-	    hubStatusTableName, url);
+	    statusTableName, url);
 
     foundOne = TRUE;
 
@@ -481,14 +496,14 @@ unsigned hubResetError(char *url)
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
 
-safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
 unsigned id = sqlQuickNum(conn, query);
 
 if (id == 0)
     errAbort("could not find url %s in status table (%s)\n", 
-	url, hubStatusTableName);
+	url, getHubStatusTableName());
 
-safef(query, sizeof(query), "update %s set errorMessage=\"\" where hubUrl = \"%s\"", hubStatusTableName, url);
+safef(query, sizeof(query), "update %s set errorMessage=\"\" where hubUrl = \"%s\"", getHubStatusTableName(), url);
 
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
@@ -502,14 +517,14 @@ unsigned hubClearStatus(char *url)
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
 
-safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+safef(query, sizeof(query), "select id from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
 unsigned id = sqlQuickNum(conn, query);
 
 if (id == 0)
     errAbort("could not find url %s in status table (%s)\n", 
-	url, hubStatusTableName);
+	url, getHubStatusTableName());
 
-safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", hubStatusTableName, url);
+safef(query, sizeof(query), "delete from %s where hubUrl = \"%s\"", getHubStatusTableName(), url);
 
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
@@ -548,7 +563,7 @@ if (errorMessage != NULL)
 	buffer[strlen(buffer) - 1] = '\0';
     safef(query, sizeof(query),
 	"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d",
-	hubStatusTableName, buffer, hub->id);
+	getHubStatusTableName(), buffer, hub->id);
     sqlUpdate(conn, query);
     }
 else if (tHub != NULL)
@@ -558,7 +573,7 @@ else if (tHub != NULL)
 
     safef(query, sizeof(query),
 	"update %s set shortLabel=\"%s\",longLabel=\"%s\",dbCount=\"%d\",dbList=\"%s\",errorMessage=\"\",lastOkTime=now() where id=%d",
-	hubStatusTableName, tHub->shortLabel, tHub->shortLabel, 
+	getHubStatusTableName(), tHub->shortLabel, tHub->shortLabel, 
 	dbCount, dbList,
 	hub->id);
     sqlUpdate(conn, query);

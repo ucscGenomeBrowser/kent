@@ -155,27 +155,26 @@ static void vcfCfgHapClusterEnable(struct cart *cart, struct trackDb *tdb, char 
 				   boolean compositeLevel)
 /* Let the user enable/disable haplotype sorting display. */
 {
-printf("<B>Enable Haplotype sorting display: </B>");
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
 							VCF_HAP_ENABLED_VAR, TRUE);
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s." VCF_HAP_ENABLED_VAR, name);
 cgiMakeCheckBox(cartVar, hapClustEnabled);
-printf("<BR>\n");
+printf("<B>Enable Haplotype sorting display</B><BR>\n");
 }
 
 static void vcfCfgHapClusterColor(struct cart *cart, struct trackDb *tdb, char *name,
 				   boolean compositeLevel)
 /* Let the user choose how to color the sorted haplotypes. */
 {
-printf("<B>Color sorted haplotypes by:</B>\n");
+printf("<B>Haplotype coloring scheme:</B><BR>\n");
 char *colorBy = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
 					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
 boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
 char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, colorByRefAlt);
-printf("reference/alternate alleles (reference = blue, alternate = red)\n");
+printf("reference/alternate alleles (reference = blue, alternate = red)<BR>\n");
 cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, !colorByRefAlt);
 printf("first base of allele (A = red, C = blue, G = green, T = magenta)<BR>\n");
 }
@@ -205,8 +204,7 @@ vcfCfgHapClusterEnable(cart, tdb, name, compositeLevel);
 vcfCfgHaplotypeCenter(cart, tdb, name, compositeLevel, vcff, NULL, NULL, 0, "mainForm");
 vcfCfgHapClusterColor(cart, tdb, name, compositeLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, compositeLevel);
-//      thicken lines?
-//      outline center variant?
+puts("<BR>");
 }
 
 static void vcfCfgMinQual(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
@@ -283,7 +281,17 @@ if (vcff != NULL)
     {
     boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
     if (vcff->genotypeCount > 1)
+	{
+	puts("<H3>Haplotype sorting display</H3>");
+	puts("<P>When this display mode is enabled and genotypes are phased or homozygous, "
+	     "each genotype is split into two independent haplotypes. "
+	     "These local haplotypes are clustered by similarity around a central variant. "
+	     "Haplotypes are reordered for display using the clustering tree, which is "
+	     "drawn in the left label area. "
+	     "Local haplotype blocks can often be identified using this display.</P>");
 	vcfCfgHapCluster(cart, tdb, vcff, name, compositeLevel);
+	}
+    puts("<H3>Filters</H3>");
     vcfCfgMinQual(cart, tdb, vcff, name, compositeLevel);
     vcfCfgFilterColumn(cart, tdb, vcff, name, compositeLevel);
     vcfCfgMinAlleleFreq(cart, tdb, vcff, name, compositeLevel);

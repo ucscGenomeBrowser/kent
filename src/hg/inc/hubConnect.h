@@ -7,9 +7,9 @@
 #ifndef HUBCONNECT_H
 #define HUBCONNECT_H
 
-#define hubPublicTableName "hubPublic"
+#define defaultHubPublicTableName "hubPublic"
 /* Name of our table with list of public hubs. read only */
-#define hubStatusTableName "hubStatus"
+#define defaultHubStatusTableName "hubStatus"
 /* Name of table that maintains status of hubs  read/write. */
 
 #define hgHubDataText      "hubUrl"
