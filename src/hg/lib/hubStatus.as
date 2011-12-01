@@ -12,4 +12,5 @@ table hubStatus
     string lastOkTime;	"Time when hub last was ok"
     string lastNotOkTime; "Time when hub last was not ok"
     lstring errorMessage; "If non-empty contains last error message from hub. If empty hub is ok."
+    string firstAdded;   "Time when hub was first added"
     )

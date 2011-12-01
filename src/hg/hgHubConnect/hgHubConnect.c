@@ -316,7 +316,7 @@ struct hash *hgHubConnectPublic()
 struct hash *retHash = NULL;
 struct sqlConnection *conn = hConnectCentral();
 char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", 
-	"hubPublicTableName", defaultHubPublicTableName);
+	hubPublicTableConfVariable, defaultHubPublicTableName);
 if (!(sqlTableExists(conn, publicTable) && 
 	(retHash = outputPublicTable(conn, publicTable)) != NULL ))
     {
