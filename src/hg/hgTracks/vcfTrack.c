@@ -1005,7 +1005,7 @@ boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg->tdb);
