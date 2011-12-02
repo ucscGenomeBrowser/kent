@@ -34,7 +34,7 @@ wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
     # verify nothing lost in the translation, should be same numbers as above
     faSize ucsc.fa.gz
 
-927725912 bases (111657865 N's 816068047 real 816068047 upper 0 lower) in 5900 sequences in 1 files
+# 927725912 bases (111657865 N's 816068047 real 816068047 upper 0 lower) in 5900 sequences in 1 files
     # verify the names are OK
     zcat ucsc.fa.gz | grep "^>" | sort | head
     zcat ucsc.fa.gz | grep "^>" | sort | tail
