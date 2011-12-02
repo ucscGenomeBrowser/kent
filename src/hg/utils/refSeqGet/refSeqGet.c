@@ -13,7 +13,6 @@
 #include "genbank.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: refSeqGet.c,v 1.3 2010/01/21 20:43:23 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -18,7 +18,6 @@
 #include "localmem.h"
 #include "bandExt.h"
 
-static char const rcsid[] = "$Id: bandExt.c,v 1.13 2006/03/14 19:02:31 angie Exp $";
 
 /* Definitions for traceback byte.  This is encoded as so:
  *     xxxxLUMM

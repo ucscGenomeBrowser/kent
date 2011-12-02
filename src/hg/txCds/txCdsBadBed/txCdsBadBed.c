@@ -9,7 +9,6 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: txCdsBadBed.c,v 1.3 2007/03/14 23:46:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

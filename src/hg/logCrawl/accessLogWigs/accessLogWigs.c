@@ -7,7 +7,6 @@
 #include "portable.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: accessLogWigs.c,v 1.2 2009/09/09 19:11:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

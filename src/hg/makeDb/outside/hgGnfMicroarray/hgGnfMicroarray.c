@@ -8,7 +8,6 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.3 2006/11/02 17:22:08 hartera Exp $";
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";

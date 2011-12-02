@@ -6,7 +6,6 @@
 #include "obscure.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafSpeciesSubset.c,v 1.2 2007/03/14 04:16:16 kent Exp $";
 
 boolean keepFirst = FALSE;
 

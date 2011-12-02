@@ -9,7 +9,6 @@ errAbort("addAveMedScoreToPsls - Combines unigene pslFile and sage file into bed
          "usage:\n\taddAveMedScoresToPsls <pslFile> <sageFile> <bedOutputFile>\n");
 }
 
-static char const rcsid[] = "$Id: addAveMedScoreToPsls.c,v 1.3 2008/09/03 19:21:18 markd Exp $";
 
 void createSageHash(struct hash *sgHash, struct sage *sgList)
 {

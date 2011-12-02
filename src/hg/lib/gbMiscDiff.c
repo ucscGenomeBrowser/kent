@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gbMiscDiff.h"
 
-static char const rcsid[] = "$Id: gbMiscDiff.c,v 1.1 2006/10/07 20:37:07 markd Exp $";
 
 void gbMiscDiffStaticLoad(char **row, struct gbMiscDiff *ret)
 /* Load a row from gbMiscDiff table into ret.  The contents of ret will

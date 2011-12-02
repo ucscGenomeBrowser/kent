@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "genotype.h"
 
-static char const rcsid[] = "$Id: genotype.c,v 1.1 2004/04/09 02:27:12 daryl Exp $";
 
 void genotypeStaticLoad(char **row, struct genotype *ret)
 /* Load a row from genotype table into ret.  The contents of ret will

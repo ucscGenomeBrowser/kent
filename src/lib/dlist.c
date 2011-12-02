@@ -5,7 +5,6 @@
 #include "common.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: dlist.c,v 1.11 2005/07/04 18:44:09 markd Exp $";
 
 void dlListInit(struct dlList *dl)
 /* Initialize list to be empty */

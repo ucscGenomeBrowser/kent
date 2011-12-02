@@ -10,7 +10,6 @@
 #include "nt4.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nt4.c,v 1.5 2005/04/10 14:41:24 markd Exp $";
 
 static size_t bits32PaddedSize(size_t size)
 {

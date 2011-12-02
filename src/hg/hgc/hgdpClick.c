@@ -9,7 +9,6 @@
 #include "obscure.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: hgdpClick.c,v 1.9 2010/05/11 01:43:28 kent Exp $";
 
 struct hgdpPopInfo
     {

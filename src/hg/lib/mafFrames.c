@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mafFrames.h"
 
-static char const rcsid[] = "$Id: mafFrames.c,v 1.6 2008/02/21 03:44:32 braney Exp $";
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret)
 /* Load a row from mafFrames table into ret.  The contents of ret will

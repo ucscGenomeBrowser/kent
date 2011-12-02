@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: regBedStats.c,v 1.2 2010/03/10 19:45:19 kent Exp $";
 
 int chromColIx = 0, startColIx=1, endColIx=2, scoreColIx=4;
 

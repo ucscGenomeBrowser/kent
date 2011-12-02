@@ -10,7 +10,6 @@
 #include "memalloc.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.13 2009/07/07 17:58:56 hiram Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */

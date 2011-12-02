@@ -5,7 +5,6 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: wigTestMaker.c,v 1.2 2009/01/29 18:45:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

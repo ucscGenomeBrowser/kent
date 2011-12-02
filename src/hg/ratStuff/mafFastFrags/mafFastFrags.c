@@ -6,7 +6,6 @@
 #include "obscure.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: mafFastFrags.c,v 1.1 2007/03/22 06:57:04 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

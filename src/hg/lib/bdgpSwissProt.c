@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bdgpSwissProt.h"
 
-static char const rcsid[] = "$Id: bdgpSwissProt.c,v 1.1 2003/10/28 16:21:13 angie Exp $";
 
 void bdgpSwissProtStaticLoad(char **row, struct bdgpSwissProt *ret)
 /* Load a row from bdgpSwissProt table into ret.  The contents of ret will

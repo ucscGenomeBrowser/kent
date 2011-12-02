@@ -7,7 +7,6 @@
 #include "hdb.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.19 2008/09/03 19:19:27 markd Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */

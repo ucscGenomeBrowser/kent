@@ -5,7 +5,6 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: qacToWig.c,v 1.6 2006/08/18 22:14:33 angie Exp $";
 
 static char *name = NULL;
 static bool fixed = FALSE;

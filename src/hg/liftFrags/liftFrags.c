@@ -9,7 +9,6 @@
 #include "rmskOut.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: liftFrags.c,v 1.6 2006/04/13 16:59:56 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

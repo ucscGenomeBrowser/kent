@@ -7,7 +7,6 @@
 #include "dnaseq.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: faToMaf.c,v 1.3 2008/02/06 01:34:03 rhead Exp $";
 
 void usage()
 /* Explain usage and exit. */

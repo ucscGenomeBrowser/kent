@@ -5,7 +5,6 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.17 2009/09/23 18:42:26 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

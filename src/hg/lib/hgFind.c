@@ -32,7 +32,6 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.231 2010/05/31 22:42:33 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";

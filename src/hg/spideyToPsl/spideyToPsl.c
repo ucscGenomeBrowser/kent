@@ -9,7 +9,6 @@
 #include "sqlNum.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spideyToPsl.c,v 1.4 2008/02/21 02:13:24 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

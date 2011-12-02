@@ -43,7 +43,6 @@ switch (srcDb)
  return "?";
 }
 
-static char const rcsid[] = "$Id: ccdsInfo.c,v 1.6 2006/09/20 22:48:53 markd Exp $";
 
 void ccdsInfoStaticLoad(char **row, struct ccdsInfo *ret)
 /* Load a row from ccdsInfo table into ret.  The contents of ret will

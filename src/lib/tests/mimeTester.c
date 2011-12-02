@@ -7,7 +7,6 @@
 #include "mime.h"
 extern char **environ;
 
-static char const rcsid[] = "$Id: mimeTester.c,v 1.4 2007/03/31 04:32:27 markd Exp $";
 
 char *altHeader = NULL;
 

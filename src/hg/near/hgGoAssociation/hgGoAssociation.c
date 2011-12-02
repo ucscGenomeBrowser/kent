@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgGoAssociation.c,v 1.4 2006/12/20 16:32:18 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */

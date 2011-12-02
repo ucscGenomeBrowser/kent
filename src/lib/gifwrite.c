@@ -5,7 +5,6 @@
 #include "memgfx.h"
 #include "gifcodes.h"
 
-static char const rcsid[] = "$Id: gifwrite.c,v 1.9 2010/06/05 19:29:53 braney Exp $";
 
 static char gifsig[] = "GIF87a";
 

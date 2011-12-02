@@ -1,6 +1,5 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.12 2009/01/14 18:59:18 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"

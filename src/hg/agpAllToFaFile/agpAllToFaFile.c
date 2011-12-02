@@ -7,7 +7,6 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.9 2005/07/22 18:14:24 galt Exp $";
 
 boolean doSort = FALSE;
 

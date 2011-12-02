@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "altSpliceSite.h"
 
-static char const rcsid[] = "$Id: altSpliceSite.c,v 1.3 2007/01/08 19:23:36 sugnet Exp $";
 
 struct altSpliceSite *altSpliceSiteLoad(char **row)
 /* Load a altSpliceSite from row fetched with select * from altSpliceSite

@@ -15,7 +15,6 @@
 #include "errabort.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbGetTestSubset.c,v 1.5 2004/02/23 16:46:00 kent Exp $";
 
 /* FIXME: need a way to get both native and xenos that are know to align */
 

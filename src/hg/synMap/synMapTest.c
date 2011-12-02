@@ -2,7 +2,6 @@
 #include "common.h"
 #include "synMap.h"
 
-static char const rcsid[] = "$Id: synMapTest.c,v 1.2 2003/05/06 07:22:35 kate Exp $";
 
 void usage()
 {

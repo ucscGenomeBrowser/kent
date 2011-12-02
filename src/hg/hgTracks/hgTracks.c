@@ -58,7 +58,6 @@
 #include "search.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.

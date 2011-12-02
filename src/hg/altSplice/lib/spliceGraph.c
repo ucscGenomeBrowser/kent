@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "spliceGraph.h"
 
-static char const rcsid[] = "$Id: spliceGraph.c,v 1.4 2007/01/08 19:23:36 sugnet Exp $";
 
 struct spliceNode **_sgTmpLoadingArray = NULL;
 int _sgTmpLoadingArraySize = 0;

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "udHistory.h"
 
-static char const rcsid[] = "$Id: udHistory.c,v 1.1 2004/10/06 17:29:46 kent Exp $";
 
 void udHistoryStaticLoad(char **row, struct udHistory *ret)
 /* Load a row from udHistory table into ret.  The contents of ret will

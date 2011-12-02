@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rhMapZfishInfo.h"
 
-static char const rcsid[] = "$Id: rhMapZfishInfo.c,v 1.1 2007/02/26 18:43:37 hartera Exp $";
 
 void rhMapZfishInfoStaticLoad(char **row, struct rhMapZfishInfo *ret)
 /* Load a row from rhMapZfishInfo table into ret.  The contents of ret will

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "transMapSrc.h"
 
-static char const rcsid[] = "$Id: transMapSrc.c,v 1.2 2008/09/03 19:19:27 markd Exp $";
 
 void transMapSrcStaticLoad(char **row, struct transMapSrc *ret)
 /* Load a row from transMapSrc table into ret.  The contents of ret will

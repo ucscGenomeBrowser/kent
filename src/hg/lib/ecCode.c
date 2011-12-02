@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ecCode.h"
 
-static char const rcsid[] = "$Id: ecCode.c,v 1.1 2005/10/17 00:12:09 baertsch Exp $";
 
 void ecCodeStaticLoad(char **row, struct ecCode *ret)
 /* Load a row from ecCode table into ret.  The contents of ret will

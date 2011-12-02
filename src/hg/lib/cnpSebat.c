@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cnpSebat.h"
 
-static char const rcsid[] = "$Id: cnpSebat.c,v 1.1 2005/07/10 02:02:54 daryl Exp $";
 
 void cnpSebatStaticLoad(char **row, struct cnpSebat *ret)
 /* Load a row from cnpSebat table into ret.  The contents of ret will

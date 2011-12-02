@@ -6,7 +6,6 @@
 #include "obscure.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: ooChains.c,v 1.4 2003/05/06 07:22:31 kate Exp $";
 
 char *finfFiles[] = {"predraft.finf", "draft.finf", "finished.finf", "extras.finf"};
 char *infoFile = "sequence.inf";

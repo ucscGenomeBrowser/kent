@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "oreganno.h"
 
-static char const rcsid[] = "$Id: oreganno.c,v 1.2 2006/09/12 15:23:05 giardine Exp $";
 
 void oregannoStaticLoad(char **row, struct oreganno *ret)
 /* Load a row from oreganno table into ret.  The contents of ret will

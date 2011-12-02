@@ -12,7 +12,6 @@
 #include "bed.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.17 2009/01/09 00:14:34 galt Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will

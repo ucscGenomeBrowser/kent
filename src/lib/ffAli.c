@@ -9,7 +9,6 @@
 #include "dnautil.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: ffAli.c,v 1.9 2004/02/13 09:33:32 kent Exp $";
 
 void ffFreeAli(struct ffAli **pAli)
 /* Dispose of memory gotten from fuzzyFind(). */

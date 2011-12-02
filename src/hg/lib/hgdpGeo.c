@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "hgdpGeo.h"
 
-static char const rcsid[] = "$Id: hgdpGeo.c,v 1.1 2009/02/07 00:02:59 angie Exp $";
 
 void hgdpGeoStaticLoad(char **row, struct hgdpGeo *ret)
 /* Load a row from hgdpGeo table into ret.  The contents of ret will

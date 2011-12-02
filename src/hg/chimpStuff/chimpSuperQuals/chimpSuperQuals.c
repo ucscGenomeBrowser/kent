@@ -7,7 +7,6 @@
 #include "rle.h"
 #include "agpFrag.h"
 
-static char const rcsid[] = "$Id: chimpSuperQuals.c,v 1.2 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

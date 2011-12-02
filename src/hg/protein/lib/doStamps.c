@@ -14,7 +14,6 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doStamps.c,v 1.8 2009/07/28 15:54:21 fanhsu Exp $";
 
 Color boundaryColor;
 

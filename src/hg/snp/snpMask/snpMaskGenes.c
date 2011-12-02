@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.6 2006/08/25 15:45:16 angie Exp $";
 
 char *database = NULL;
 char *chromName = NULL;

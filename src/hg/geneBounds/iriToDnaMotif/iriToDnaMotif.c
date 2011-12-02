@@ -8,7 +8,6 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: iriToDnaMotif.c,v 1.4 2005/01/27 21:01:44 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */

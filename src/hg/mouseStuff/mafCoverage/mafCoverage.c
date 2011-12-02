@@ -14,7 +14,6 @@
 
 #define MAXALIGN 50  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.10 2008/12/04 22:26:31 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */

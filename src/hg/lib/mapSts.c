@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "mapSts.h"
 
-static char const rcsid[] = "$Id: mapSts.c,v 1.4 2005/04/13 06:25:55 markd Exp $";
 
 void mapStsStaticLoad(char **row, struct mapSts *ret)
 /* Load a row from mapSts table into ret.  The contents of ret will

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "lowelabTIGROperonScore.h"
 
-static char const rcsid[] = "$Id: lowelabTIGROperonScore.c,v 1.1 2007/09/18 10:26:42 pchan Exp $";
 
 void lowelabTIGROperonScoreStaticLoad(char **row, struct lowelabTIGROperonScore *ret)
 /* Load a row from lowelabTIGROperonScore table into ret.  The contents of ret will

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "growthCondition.h"
 
-static char const rcsid[] = "$Id: growthCondition.c,v 1.2 2004/10/06 20:54:09 kent Exp $";
 
 void growthConditionStaticLoad(char **row, struct growthCondition *ret)
 /* Load a row from growthCondition table into ret.  The contents of ret will

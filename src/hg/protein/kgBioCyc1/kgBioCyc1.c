@@ -6,7 +6,6 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: kgBioCyc1.c,v 1.2 2008/08/27 22:34:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

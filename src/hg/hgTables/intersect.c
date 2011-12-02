@@ -18,7 +18,6 @@
 #include "hubConnect.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.54 2010/06/03 18:53:59 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */

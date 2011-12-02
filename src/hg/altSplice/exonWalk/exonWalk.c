@@ -17,7 +17,6 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.18 2007/02/04 21:48:03 kent Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */

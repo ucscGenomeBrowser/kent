@@ -6,7 +6,6 @@
 #include "sig.h"
 #include "xa.h"
 
-static char const rcsid[] = "$Id: xa.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
 
 void xaAliFree(struct xaAli *xa)
 /* Free up a single xaAli. */

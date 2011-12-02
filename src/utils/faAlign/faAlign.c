@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: faAlign.c,v 1.2 2005/01/10 00:45:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

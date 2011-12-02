@@ -9,7 +9,6 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.19 2008/09/03 19:18:50 markd Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */

@@ -7,7 +7,6 @@
 #include "bed.h"
 #include "cdsPick.h"
 
-static char const rcsid[] = "$Id: txGeneFromBed.c,v 1.3 2007/03/28 06:06:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

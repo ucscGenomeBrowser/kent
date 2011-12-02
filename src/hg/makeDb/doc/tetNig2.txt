@@ -1,9 +1,11 @@
 # for emacs: -*- mode: sh; -*-
 
 
-# Tetraodon Nigirividis from Genoscope, version v8 (released Mar 2007)
+# Tetraodon Nigroviridis from Genoscope, version v8 (released Mar 2007)
 #    Project website:
 #    http://www.genoscope.cns.fr/externe/Download/Projets/Projet_C/genomique/goldenpath_v2/
+
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAAE01
 
 ##########################################################################
 # Download sequence (DONE - 2009-08-06 - Hiram)

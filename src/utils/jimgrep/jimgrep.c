@@ -2,7 +2,6 @@
 #include "common.h"
 #include <io.h>
 
-static char const rcsid[] = "$Id: jimgrep.c,v 1.2 2003/05/06 07:41:07 kate Exp $";
 
 _inline toUp(char c)
 {

@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneTest.c,v 1.3 2005/07/14 07:17:05 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

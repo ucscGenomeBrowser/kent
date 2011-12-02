@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: gad.c,v 1.9 2008/09/09 23:11:56 markd Exp $";
 
 static boolean gadExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)

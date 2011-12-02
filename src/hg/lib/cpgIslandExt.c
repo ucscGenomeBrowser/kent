@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cpgIslandExt.h"
 
-static char const rcsid[] = "$Id: cpgIslandExt.c,v 1.2 2005/04/13 06:25:51 markd Exp $";
 
 void cpgIslandExtStaticLoad(char **row, struct cpgIslandExt *ret)
 /* Load a row from cpgIslandExt table into ret.  The contents of ret will
