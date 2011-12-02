@@ -15,6 +15,7 @@ CREATE TABLE hubStatus (
     lastOkTime varchar(255) not null,	# Time when hub last was ok
     lastNotOkTime varchar(255) not null,	# Time when hub last was not ok
     errorMessage longblob not null,	# If non-empty contains last error message from hub. If empty hub is ok.
+    firstAdded varchar(255) not null,	# Time when hub was first added
               #Indices
     PRIMARY KEY(id)
 );

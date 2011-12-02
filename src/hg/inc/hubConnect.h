@@ -1,7 +1,7 @@
 /* hubConnect - stuff to manage connections to track hubs.  Most of this is mediated through
- * the hubConnect table in the hgCentral database.  Here there are routines to translate between
+ * the hubStatus table in the hgcentral database.  Here there are routines to translate between
  * hub symbolic names and hub URLs,  to see if a hub is up or down or sideways (up but badly
- * formatted) etc.  Note that there is no C structure corresponding to a row in the hubConnect 
+ * formatted) etc.  Note that there is no C structure corresponding to a row in the hubStatus 
  * table by design.  We just want field-by-field access to this. */
 
 #ifndef HUBCONNECT_H
@@ -9,14 +9,22 @@
 
 #define defaultHubPublicTableName "hubPublic"
 /* Name of our table with list of public hubs. read only */
+
+#define hubPublicTableConfVariable    "hub.publicTableName"
+/* the name of the hg.conf variable to use something other than the default */
+
 #define defaultHubStatusTableName "hubStatus"
 /* Name of table that maintains status of hubs  read/write. */
+
+#define hubStatusTableConfVariable    "hub.statusTableName"
+/* the name of the hg.conf variable to use something other than the default */
 
 #define hgHubDataText      "hubUrl"
 /* name of cgi variable containing new hub name */
 
 #define hubTrackPrefix "hub_"
 /* The names of all hub tracks begin with this.  Use in cart. */
+
 
 boolean isHubTrack(char *trackName);
 /* Return TRUE if it's a hub track. */
