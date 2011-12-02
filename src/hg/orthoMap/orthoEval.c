@@ -4,7 +4,6 @@
 #include "bed.h"
 #include "altGraphX.h"
 
-static char const rcsid[] = "$Id: orthoEval.c,v 1.2 2003/08/05 19:54:13 sugnet Exp $";
 
 void orthoEvalTabOut(struct orthoEval *ev, FILE *f)
 /* Tab out an orthoEval record. Skipping the agxBed, and agx records. */

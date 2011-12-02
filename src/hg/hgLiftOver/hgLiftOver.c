@@ -17,7 +17,6 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.62 2009/07/14 20:17:30 markd Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */

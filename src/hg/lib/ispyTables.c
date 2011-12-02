@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ispyTables.h"
 
-static char const rcsid[] = "$Id: ispyTables.c,v 1.2 2007/10/11 18:02:33 fanhsu Exp $";
 
 void patientStaticLoadWithNull(char **row, struct patient *ret)
 /* Load a row from patient table into ret.  The contents of ret will

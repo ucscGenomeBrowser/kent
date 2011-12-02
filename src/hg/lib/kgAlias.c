@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "kgAlias.h"
 
-static char const rcsid[] = "$Id: kgAlias.c,v 1.2 2005/04/13 06:25:54 markd Exp $";
 
 void kgAliasStaticLoad(char **row, struct kgAlias *ret)
 /* Load a row from kgAlias table into ret.  The contents of ret will

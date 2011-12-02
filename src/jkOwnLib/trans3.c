@@ -5,7 +5,6 @@
 #include "dnaseq.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: trans3.c,v 1.5 2007/04/20 22:43:37 kent Exp $";
 
 struct trans3 *trans3New(struct dnaSeq *seq)
 /* Create a new set of translated sequences. */

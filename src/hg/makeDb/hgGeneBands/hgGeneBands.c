@@ -9,7 +9,6 @@
 #include "refLink.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgGeneBands.c,v 1.4 2008/09/03 19:19:41 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

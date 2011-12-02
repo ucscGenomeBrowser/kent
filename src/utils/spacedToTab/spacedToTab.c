@@ -5,7 +5,6 @@
 #include "options.h"
 #include "spacedColumn.h"
 
-static char const rcsid[] = "$Id: spacedToTab.c,v 1.4 2007/03/23 06:29:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

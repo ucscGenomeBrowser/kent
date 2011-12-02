@@ -339,7 +339,7 @@ printf("</div>"); // Restricts to max-width:1000px;
 cgiDown(0.8);
 
 if (measureTiming)
-    uglyTime("Rendered tabs");
+    uglyTime("Generated search controls");
 
 
 #ifdef USE_TABS
@@ -390,7 +390,7 @@ if(doSearch)
             }
 
         if (doSearch && mdbSelects != NULL && isNotEmpty(fileTypeSearch))
-            fileSearchResults(db, conn, mdbSelects, fileTypeSearch);
+            fileSearchResults(db, conn, cart, mdbSelects, fileTypeSearch);
         else
             printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
 
@@ -447,7 +447,7 @@ printf("<BR>\n");
 webEnd();
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", "ajax", FILE_SEARCH,TRACK_SEARCH_ADD_ROW,TRACK_SEARCH_DEL_ROW};  // HOW IS 'ajax" going to be supported?
+char *excludeVars[] = { "submit", "Submit", "g", "ajax", "clearCache", FILE_SEARCH,TRACK_SEARCH_ADD_ROW,TRACK_SEARCH_DEL_ROW};  // HOW IS 'ajax" going to be supported?
 
 int main(int argc, char *argv[])
 /* Process command line. */

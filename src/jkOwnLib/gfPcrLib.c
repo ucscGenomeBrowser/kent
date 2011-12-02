@@ -13,7 +13,6 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.13 2010/05/15 06:28:15 galt Exp $";
 
 /**** Input and Output Handlers *****/
 

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "uniref.h"
 
-static char const rcsid[] = "$Id: uniref.c,v 1.1 2005/07/09 05:55:16 markd Exp $";
 
 void unirefStaticLoad(char **row, struct uniref *ret)
 /* Load a row from uniref table into ret.  The contents of ret will

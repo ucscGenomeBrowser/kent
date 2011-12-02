@@ -18,7 +18,6 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.28 2009/09/23 18:42:27 angie Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 

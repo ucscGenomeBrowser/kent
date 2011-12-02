@@ -5,7 +5,6 @@
 #include "linefile.h"
 #include "gapCalc.h"
 
-static char const rcsid[] = "$Id: gapCalc.c,v 1.4 2006/06/18 23:09:36 kate Exp $";
 
 struct gapCalc
 /* A structure that bundles together stuff to help us

@@ -40,7 +40,6 @@
  * scanned for.
  */
 
-static char const rcsid[] = "$Id: fuzzyFind.c,v 1.18 2009/08/20 22:31:46 kent Exp $";
 
 #include "common.h"
 #include "dnautil.h"

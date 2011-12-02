@@ -23,7 +23,6 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.79 2010/06/03 18:54:00 kent Exp $";
 
 extern char *maxOutMenu[];
 

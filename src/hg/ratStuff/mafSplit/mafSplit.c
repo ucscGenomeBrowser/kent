@@ -9,7 +9,6 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafSplit.c,v 1.7 2010/05/21 01:24:24 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

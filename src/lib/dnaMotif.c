@@ -9,7 +9,6 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.5 2009/09/07 23:40:22 markd Exp $";
 
 struct dnaMotif *dnaMotifCommaIn(char **pS, struct dnaMotif *ret)
 /* Create a dnaMotif out of a comma separated string. 

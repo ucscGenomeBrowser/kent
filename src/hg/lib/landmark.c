@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "landmark.h"
 
-static char const rcsid[] = "$Id: landmark.c,v 1.2 2006/06/20 14:58:49 giardine Exp $";
 
 void landmarkStaticLoad(char **row, struct landmark *ret)
 /* Load a row from landmark table into ret.  The contents of ret will

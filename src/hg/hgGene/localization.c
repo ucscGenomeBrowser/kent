@@ -8,7 +8,6 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: localization.c,v 1.2 2005/12/08 19:02:56 fanhsu Exp $";
 
 
 static boolean localizationExists(struct section *section,

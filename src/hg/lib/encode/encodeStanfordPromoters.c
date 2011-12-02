@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeStanfordPromoters.h"
 
-static char const rcsid[] = "$Id: encodeStanfordPromoters.c,v 1.1 2008/08/01 17:49:07 aamp Exp $";
 
 void encodeStanfordPromotersStaticLoad(char **row, struct encodeStanfordPromoters *ret)
 /* Load a row from encodeStanfordPromoters table into ret.  The contents of ret will

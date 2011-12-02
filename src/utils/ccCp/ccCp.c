@@ -8,7 +8,6 @@
 #include "options.h"
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: ccCp.c,v 1.7 2009/09/23 18:42:29 angie Exp $";
 
 int crossSwitchMax = 40;		/* Max copies between switches at once. */
 

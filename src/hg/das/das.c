@@ -19,7 +19,6 @@
 #include "trackTable.h"
 
 
-static char const rcsid[] = "$Id: das.c,v 1.46 2010/01/03 07:42:33 markd Exp $";
 
 /* Including the count in the types response can be very slow for large
  * regions and is optional.  Inclusion of count if controlled by this compile-

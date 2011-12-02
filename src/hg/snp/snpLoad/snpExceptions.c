@@ -5,7 +5,6 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpExceptions.c,v 1.7 2006/01/25 23:06:44 heather Exp $";
 
 char *database = NULL;
 static struct slName *chromList = NULL;

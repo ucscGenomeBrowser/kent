@@ -10,7 +10,6 @@
 #include "nib.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: netToBedWithId.c,v 1.6 2006/06/20 16:44:18 angie Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 5000;

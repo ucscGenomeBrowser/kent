@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "apacheLog.h"
 
-static char const rcsid[] = "$Id: crawlForPosAndTime.c,v 1.1 2009/09/09 01:57:56 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

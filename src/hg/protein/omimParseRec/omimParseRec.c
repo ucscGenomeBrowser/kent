@@ -9,7 +9,6 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: omimParseRec.c,v 1.3 2006/10/18 18:04:25 fanhsu Exp $";
 
 FILE *fh2; /* 2nd file handle pointing to the OMIM text file */
 FILE *recFh;

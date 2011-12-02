@@ -15,6 +15,8 @@
 #include "trashDir.h"
 
 
+static boolean timeIt = FALSE; // Can remove when satisfied with timing.
+
 void fileDbFree(struct fileDb **pFileList)
 // free one or more fileDb objects
 {
@@ -59,11 +61,13 @@ return fileList;
 }
 
 // Cache is not faster, so just use it as a backup
-//#define CACHE_IS_FASTER_THAN_RSYNC
+#define CACHE_IS_FASTER_THAN_RSYNC
 #ifdef CACHE_IS_FASTER_THAN_RSYNC
 static boolean fileDbBackupAvailable(char *db, char *dir, char *subDir)
 { // Checks if there is a recent enough cache file
-  // TODO: Add some other trick to invalidate cache at will.
+if (cgiVarExists("clearCache")) // Trick to invalidate cache at will.
+    return FALSE;
+
 struct tempName buFile;
 boolean exists = trashDirReusableFile(&buFile, dir, subDir, db);  // encodeDCC/composite.db
 if (exists)
@@ -186,7 +190,11 @@ if (foundFiles == NULL
                 }
             }
         else
+            {
             fileDbWriteToBackup(db, dir, subDir,foundFiles);
+            if (timeIt)
+                uglyTime("Successful rsync found %d files",slCount(foundFiles));
+            }
         }
 
     // mark this as done to avoid excessive io
@@ -286,7 +294,6 @@ else
     carveSetting = cloneString(setting);
     sortOrder->setting = NULL;
     }
-
 if (parentTdb)
     {
     sortOrder->htmlId = needMem(strlen(parentTdb->track)+20);
@@ -347,9 +354,15 @@ char **fieldsA = a->sortFields;
 char **fieldsB = b->sortFields;
 int ix=0;
 int compared = 0;
-while(fieldsA[ix] != NULL && fieldsB[ix] != NULL && compared == 0)
+while(fieldsA[ix] != NULL && fieldsB[ix] != NULL)
     {
-    compared = strcmp(fieldsA[ix], fieldsB[ix]) * (a->reverse[ix]? -1: 1);
+    compared = strcmp(fieldsA[ix], fieldsB[ix]);
+    if (compared != 0)
+        {
+        if (a->reverse[ix])
+            compared *= -1;
+        break;
+        }
     ix++;
     }
 return compared;
@@ -389,19 +402,20 @@ if (sortOrder && fileList)
                 oneFile->sortFields[sortOrder->order[ix] - 1] = NULL;
                 oneFile->reverse[   sortOrder->order[ix] - 1] = FALSE;
                 }
-            oneFile->sortFields[sortOrder->count] = NULL;
             }
+        oneFile->sortFields[sortOrder->count] = NULL;
         }
     slSort(fileList,fileDbSortCmp);
     }
 }
 
-static char *removeCommonMdbVarsNotInSortOrder(struct mdbObj *mdbObjs,sortOrder_t *sortOrder)
-{  // Removes varaibles common to all mdbObjs and not found in sortOrder. Returns allocated string oh removed var=val pairs
+static int removeCommonMdbVarsNotInSortOrder(struct mdbObj *mdbObjs,sortOrder_t *sortOrder)
+{  // Removes varaibles common to all mdbObjs and not found in sortOrder. Returns count of vars removed
 if (sortOrder != NULL)
     {
     // Remove common vars from mdbs grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
     // However, keep the term if it is in the sortOrder
+    int count = 0;
     struct dyString *dyCommon = dyStringNew(256);
     char *commonTerms[] = { "grant", "lab", "dataType", "control", "setType" };
     int tIx=0,sIx = 0;
@@ -413,13 +427,18 @@ if (sortOrder != NULL)
         if (sIx<sortOrder->count) // Found in sort Order so leave it in mdbObjs
             continue;
 
-        char *val = mdbRemoveCommonVar(mdbObjs, commonTerms[tIx]); // All mdbs have it and have the same val for it.
-        if (val)
-            dyStringPrintf(dyCommon,"%s=%s ",commonTerms[tIx],val);
+        if (mdbObjsHasCommonVar(mdbObjs, commonTerms[tIx], TRUE)) // val the same or missing
+            {
+            count++;
+            dyStringPrintf(dyCommon,"%s ",commonTerms[tIx]);
+            }
         }
-    return dyStringCannibalize(&dyCommon);
+    if (count > 0)
+        mdbObjRemoveVars(mdbObjs,dyStringContents(dyCommon)); // removes from full list of mdbs
+    dyStringFree(&dyCommon);
+    return count;
     }
-return NULL;
+return 0;
 }
 
 static char *labelWithVocabLink(char *var,char *title,struct slPair *valsAndLabels,boolean tagsNotVals)
@@ -604,7 +623,7 @@ else
         "genome-preview.ucsc.edu", db, tdb->track);
 }
 
-static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,int filterable,boolean timeIt)
+static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder,int filterable)
 // Prints filesList as a sortable table. Returns count
 {
 if (timeIt)
@@ -687,7 +706,10 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
     if (parentTdb)
         field = parentTdb->track;
     else
-        field = mdbObjFindValue(oneFile->mdb,"composite");
+        {
+        field = mdbObjFindValue(oneFile->mdb,MDB_VAR_COMPOSITE);
+        mdbObjRemoveOneVar(oneFile->mdb,MDB_VAR_COMPOSITE,NULL);
+        }
     assert(field != NULL);
 
     printf("<input type='button' value='Download' onclick=\"window.location='http://%s/goldenPath/%s/%s/%s%s/%s';\" title='Download %s ...'>",
@@ -762,7 +784,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
                     printf("<TD%s nowrap%s>%s</td>",align,class,isFieldEmpty?" &nbsp;":field);
                     }
                 if (!sameString("fileType",sortOrder->column[ix]))
-                    mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
+                    mdbObjRemoveOneVar(oneFile->mdb,sortOrder->column[ix],NULL);
                 }
             }
         }
@@ -774,7 +796,6 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
         }
 
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
-    mdbObjRemoveVars(oneFile->mdb,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT); // Remove this from mdb now so that it isn't displayed in "extras'
     field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE,FALSE);
     printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
 
@@ -879,7 +900,7 @@ while (mdbList && (limit == 0 || fileCount < limit))
             if (md5 != NULL)
                 mdbObjSetVar(oneFile->mdb,MDB_VAR_MD5SUM,md5->name);
             else
-                mdbObjRemoveVars(oneFile->mdb,MDB_VAR_MD5SUM);
+                mdbObjRemoveOneVar(oneFile->mdb,MDB_VAR_MD5SUM,NULL);
             slAddHead(&mdbFiles,oneFile->mdb);
             found = TRUE;
             fileCount++;
@@ -921,7 +942,7 @@ while (mdbList && (limit == 0 || fileCount < limit))
                 oneFile->mdb = mdbObjClone(mdbFile);
             else
                 oneFile->mdb = mdbFile;
-            mdbObjRemoveVars(oneFile->mdb,MDB_VAR_MD5SUM);
+            mdbObjRemoveOneVar(oneFile->mdb,MDB_VAR_MD5SUM,NULL);
             slAddHead(&mdbFiles,oneFile->mdb);
             fileCount++;
             found = TRUE;
@@ -954,9 +975,10 @@ void filesDownloadUi(char *db, struct cart *cart, struct trackDb *tdb)
 // will have links to their download and have metadata information associated.
 // The list will be a sortable table and there may be filtering controls.
 {
-boolean timeIt = cartUsualBoolean(cart, "measureTiming",FALSE);
+timeIt = cartUsualBoolean(cart, "measureTiming",FALSE); // static to file
 if (timeIt)
-    uglyTime(NULL); // kicks off timing now
+    uglyTime("Starting file search");
+
 boolean debug = cartUsualBoolean(cart,"debug",FALSE);
 
 struct sqlConnection *conn = hAllocConn(db);
@@ -985,6 +1007,8 @@ if (slCount(mdbList) == 0)
     warn("No files specified in metadata for: %s\n%s",tdb->track,tdb->longLabel);
     return;
     }
+if (timeIt)
+    uglyTime("Found %d mdb objects",slCount(mdbList));
 
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL; // Will contain found files
@@ -1011,41 +1035,48 @@ jsIncludeFile("ajax.js",NULL);
 // standard preamble
 filesDownloadsPreamble(db,tdb);
 
+// remove these now to get them out of the way
+mdbObjRemoveVars(mdbList,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_COMPOSITE " " MDB_VAR_PROJECT);
+if (timeIt)
+    uglyTime("<BR>Removed 4 unwanted vars");
+
 // Now update all files with their sortable fields and sort the list
 mdbObjReorderByCv(mdbList,FALSE);// Start with cv defined order for visible vars. NOTE: will not need to reorder during print!
 sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb,mdbList);
 int filterable = 0;
 if (sortOrder != NULL)
     {
-    char *vars = removeCommonMdbVarsNotInSortOrder(mdbList,sortOrder);
-    if (vars)
-        {
-        if (debug)
-            warn("These terms are common:%s",vars);
-        freeMem(vars);
-        }
+    int removed = removeCommonMdbVarsNotInSortOrder(mdbList,sortOrder);
+    if (removed && debug)
+        warn("%d terms are common and were removed",removed);
+    if (timeIt)
+        uglyTime("Removed %d common vars",removed);
 
     // Fill in and sort fileList
     fileDbSortList(&fileList,sortOrder);
     if (timeIt)
-        uglyTime("<BR>Sorted %d files on %d columns",fileCount,sortOrder->count);
+        uglyTime("Sorted %d files on %d columns",fileCount,sortOrder->count);
 
     // FilterBoxes
     filterable = filterBoxesForFilesList(db,mdbList,sortOrder);
     if (timeIt && filterable)
-        uglyTime("Created filter boxes 0x%X",filterable);
+        uglyTime("Created filter boxes");
     }
 
 // Print table
-filesPrintTable(db,tdb,fileList,sortOrder,filterable,timeIt);
+filesPrintTable(db,tdb,fileList,sortOrder,filterable);
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?
 //mdbObjsFree(&mdbList);
 }
 
-int fileSearchResults(char *db, struct sqlConnection *conn, struct slPair *varValPairs, char *fileType)
+int fileSearchResults(char *db, struct sqlConnection *conn, struct cart *cart, struct slPair *varValPairs, char *fileType)
 // Prints list of files in downloads directories matching mdb search terms. Returns count
 {
+timeIt = cartUsualBoolean(cart, "measureTiming",FALSE); // static to file
+if (timeIt)
+    uglyTime("Starting file search");
+
 struct sqlConnection *connLocal = conn;
 if (conn == NULL)
     connLocal = hAllocConn(db);
@@ -1053,6 +1084,7 @@ struct mdbObj *mdbList = mdbObjRepeatedSearch(connLocal,varValPairs,FALSE,TRUE);
 if (conn == NULL)
     hFreeConn(&connLocal);
 
+mdbObjRemoveHiddenVars(mdbList);
 if (mdbList)
     (void)mdbObjsFilter(&mdbList,"objStatus","re*",TRUE); // revoked, replaced, renamed
 
@@ -1061,16 +1093,19 @@ if (slCount(mdbList) == 0)
     printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
     return 0;
     }
+if (timeIt)
+    uglyTime("Found %d mdb objects",slCount(mdbList));
 
 // Now sort mdbObjs so that composites will stay together and lookup of files will be most efficient
 mdbObjsSortOnVars(&mdbList, MDB_VAR_COMPOSITE);
-mdbObjRemoveHiddenVars(mdbList);
 
 #define FOUND_FILE_LIMIT 1000
 struct fileDb *fileList = NULL; // Will contain found files
 int filesExpected = slCount(mdbList);
 boolean exceededLimit = FALSE;
 int fileCount = filesFindInDir(db, &mdbList, &fileList, fileType, FOUND_FILE_LIMIT, &exceededLimit);
+if (timeIt)
+    uglyTime("Found %d files in dir",fileCount);
 assert(fileCount == slCount(fileList));
 
 if (fileCount == 0)
@@ -1079,6 +1114,11 @@ if (fileCount == 0)
     return 0;  // No files so nothing to do.
     }
 
+// remove these now to get them out of the way
+mdbObjRemoveVars(mdbList,MDB_VAR_FILENAME " " MDB_VAR_FILEINDEX " " MDB_VAR_PROJECT " " MDB_VAR_TABLENAME);
+if (timeIt)
+    uglyTime("Removed 4 unwanted vars");
+
 // Now update all files with their sortable fields and sort the list
 mdbObjReorderByCv(mdbList,FALSE);// Start with cv defined order for visible vars. NOTE: will not need to reorder during print!
 sortOrder_t *sortOrder = fileSortOrderGet(NULL,NULL,mdbList); // No cart, no tdb
@@ -1086,9 +1126,9 @@ if (sortOrder != NULL)
     {
     // Fill in and sort fileList
     fileDbSortList(&fileList,sortOrder);
+    if (timeIt)
+        uglyTime("Sorted %d files on %d columns",fileCount,sortOrder->count);
     }
-
-mdbObjRemoveVars(mdbList,"tableName"); // Remove this from mdb now so that it isn't displayed in "extras'
 
 // Print table
 printf("<DIV id='filesFound'>");
@@ -1102,7 +1142,7 @@ if (exceededLimit)
            fileCount,filesExpected);
     }
 
-fileCount = filesPrintTable(db,NULL,fileList,sortOrder,0,FALSE); // 0=No columns are 'filtered' on the file search page
+fileCount = filesPrintTable(db,NULL,fileList,sortOrder,0); // 0=No columns are 'filtered' on the file search page
 printf("</DIV><BR>\n");
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?

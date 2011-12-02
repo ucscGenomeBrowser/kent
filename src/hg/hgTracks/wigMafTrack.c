@@ -19,7 +19,6 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.146 2010/05/11 01:43:28 kent Exp $";
 
 #define GAP_ITEM_LABEL  "Gaps"
 #define MAX_SP_SIZE 2000

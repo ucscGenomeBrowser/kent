@@ -6,7 +6,6 @@
 #include "fa.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: faFilterN.c,v 1.5 2006/03/18 01:53:15 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

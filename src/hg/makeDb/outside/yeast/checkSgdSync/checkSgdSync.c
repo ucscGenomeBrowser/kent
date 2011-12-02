@@ -8,7 +8,6 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkSgdSync.c,v 1.3 2009/02/02 19:41:44 hiram Exp $";
 
 static char *gffFile = "chromosomal_feature/s_cerevisiae.gff3";
 static char *faExtn = "fsa";

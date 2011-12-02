@@ -10,7 +10,6 @@
 #include "liftSpec.h"
 #include "ctgPos.h"
 
-static char const rcsid[] = "$Id: hgCtgPos.c,v 1.7 2007/05/14 21:34:45 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

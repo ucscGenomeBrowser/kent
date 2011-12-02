@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "chainGap.h"
 
-static char const rcsid[] = "$Id: chainGap.c,v 1.3 2003/05/06 07:22:21 kate Exp $";
 
 void chainGapStaticLoad(char **row, struct chainGap *ret)
 /* Load a row from chainGap table into ret.  The contents of ret will

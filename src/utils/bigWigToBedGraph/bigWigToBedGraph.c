@@ -8,7 +8,6 @@
 #include "bigWig.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.5 2009/09/08 19:50:25 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;

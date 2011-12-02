@@ -28,7 +28,6 @@
 #include <signal.h>
 /* phoneHome business */
 
-static char const rcsid[] = "$Id: web.c,v 1.173 2010/05/20 03:14:17 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;

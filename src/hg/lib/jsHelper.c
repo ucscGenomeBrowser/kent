@@ -24,7 +24,6 @@
 #include "hgConfig.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: jsHelper.c,v 1.31 2009/09/10 04:19:26 larrym Exp $";
 
 static boolean jsInited = FALSE;
 

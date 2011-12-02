@@ -7,7 +7,6 @@
 #include "portable.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: gpFakeData.c,v 1.1 2006/05/02 03:17:39 kent Exp $";
 
 int subjects = 1000;
 int loci = 10000;

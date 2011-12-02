@@ -11,7 +11,6 @@
 #include "dbRIP.h"
 #include "polyGenotype.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.9 2010/05/11 01:43:28 kent Exp $";
 
 
 static int sortEthnicGroup(const void *e1, const void *e2)

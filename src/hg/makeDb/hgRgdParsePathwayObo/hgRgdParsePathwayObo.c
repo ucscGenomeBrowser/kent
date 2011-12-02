@@ -4,7 +4,6 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgRgdParsePathwayObo.c,v 1.1 2010/02/20 00:59:22 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */

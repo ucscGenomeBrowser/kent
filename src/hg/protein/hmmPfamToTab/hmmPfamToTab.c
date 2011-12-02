@@ -5,7 +5,6 @@
 #include "options.h"
 #include "hmmPfamParse.h"
 
-static char const rcsid[] = "$Id: hmmPfamToTab.c,v 1.3 2007/03/27 02:01:56 kent Exp $";
 
 double eVal = 0.0001;
 boolean eValCol = FALSE;

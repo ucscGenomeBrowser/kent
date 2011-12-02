@@ -7,7 +7,6 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: kgGetCds.c,v 1.5 2008/09/03 19:20:57 markd Exp $";
 
 char cdsBloc[2000][30];
 void usage(char *msg)

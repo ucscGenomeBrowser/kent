@@ -17,7 +17,6 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.67 2010/02/19 07:17:10 galt Exp $";
 
 jmp_buf htmlRecover;
 

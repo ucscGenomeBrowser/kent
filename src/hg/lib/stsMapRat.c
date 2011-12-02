@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "stsMapRat.h"
 
-static char const rcsid[] = "$Id: stsMapRat.c,v 1.3 2005/04/13 06:25:57 markd Exp $";
 
 void stsMapRatStaticLoad(char **row, struct stsMapRat *ret)
 /* Load a row from stsMapRat table into ret.  The contents of ret will

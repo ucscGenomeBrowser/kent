@@ -6,7 +6,6 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orfEnum.c,v 1.6 2007/08/16 16:56:02 kent Exp $";
 
 int minSize=24;
 boolean doAll = TRUE;

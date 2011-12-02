@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "synteny100000.h"
 
-static char const rcsid[] = "$Id: synteny100000.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void synteny100000StaticLoad(char **row, struct synteny100000 *ret)
 /* Load a row from synteny100000 table into ret.  The contents of ret will

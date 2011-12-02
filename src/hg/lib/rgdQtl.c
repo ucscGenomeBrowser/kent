@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rgdQtl.h"
 
-static char const rcsid[] = "$Id: rgdQtl.c,v 1.1 2006/06/01 22:37:50 fanhsu Exp $";
 
 void rgdQtlStaticLoad(char **row, struct rgdQtl *ret)
 /* Load a row from rgdQtl table into ret.  The contents of ret will

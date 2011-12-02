@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "taxonNode.h"
 
-static char const rcsid[] = "$Id: taxonNode.c,v 1.1 2006/04/11 21:43:10 baertsch Exp $";
 
 void taxonNodeStaticLoad(char **row, struct taxonNode *ret)
 /* Load a row from taxonNode table into ret.  The contents of ret will

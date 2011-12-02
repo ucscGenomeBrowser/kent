@@ -6,7 +6,6 @@
 #include "errabort.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: catDir.c,v 1.5 2005/03/04 19:52:02 galt Exp $";
 
 boolean recurse = FALSE;
 char *wildCard = NULL;

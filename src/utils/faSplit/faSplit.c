@@ -9,7 +9,6 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.37 2010/05/23 03:13:53 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

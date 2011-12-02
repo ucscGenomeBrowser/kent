@@ -46784,7 +46784,7 @@ dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 fileName wgEncodeHaibTfbsLhcnm2InputPcr1xDiff7dRawDataRep1.fastq.gz
 grant Myers
-lab Caltech-m
+lab Caltech
 labExpId 11639
 md5sum 6ded98959c22b6728401a830e4cbbb1d
 project wgEncode
@@ -46876,7 +46876,7 @@ dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
 fileName wgEncodeHaibTfbsLhcnm2Pol24h8Pcr1xDiff7dRawDataRep1.fastq.gz
 grant Myers
-lab Caltech-m
+lab Caltech
 labExpId 11890
 md5sum d26d0b472a7680c86ca98200eb1db83f
 project wgEncode

@@ -5,7 +5,6 @@
 #include "hash.h"
 #include "xmlEscape.h"
 
-static char const rcsid[] = "$Id: xmlEscape.c,v 1.2 2008/09/17 17:56:38 kent Exp $";
 
 struct hash *xmlEscapeSymHash()
 /* Return hash of predefined xml character symbols to lookup. */

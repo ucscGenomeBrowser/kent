@@ -14,7 +14,6 @@
 #include "dystring.h"
 #include "regexHelper.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.71 2010/06/03 18:08:07 kent Exp $";
 
 
 void usage()

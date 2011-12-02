@@ -14,7 +14,6 @@
 
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: custom.c,v 1.5 2010/05/11 01:43:24 kent Exp $";
 
 struct customTrack *theCtList = NULL;	/* List of custom tracks. */
 struct slName *browserLines = NULL;	/* Browser lines in custom tracks. */

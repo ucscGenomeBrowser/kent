@@ -10,7 +10,6 @@
 #include "hgRelate.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgMapMicroarray.c,v 1.2 2005/01/04 23:09:17 angie Exp $";
 
 char *pslPrefix = NULL;
 char *pslSuffix = NULL;

@@ -5,7 +5,6 @@
 #include "options.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: onePassBedToBigBed.c,v 1.1 2009/08/18 21:29:46 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 256;

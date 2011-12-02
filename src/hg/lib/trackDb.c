@@ -9,7 +9,6 @@
 #include "trackDb.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDb.c,v 1.11 2010/05/11 01:43:30 kent Exp $";
 
 struct trackDb *trackDbLoad(char **row)
 /* Load a trackDb from row fetched with select * from trackDb

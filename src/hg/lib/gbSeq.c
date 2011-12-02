@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gbSeq.h"
 
-static char const rcsid[] = "$Id: gbSeq.c,v 1.1 2009/07/04 07:14:20 markd Exp $";
 
 /* definitions for type column */
 static char *values_type[] = {"EST", "mRNA", "PEP", NULL};

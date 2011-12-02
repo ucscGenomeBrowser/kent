@@ -10,7 +10,6 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: rangeHistogram.c,v 1.6 2009/05/20 20:59:56 mikep Exp $";
 
 static void printValueHistogram(char *db, char *table, char *field)
 /* Print very simple-minded text histogram. */

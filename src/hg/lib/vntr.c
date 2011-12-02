@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "vntr.h"
 
-static char const rcsid[] = "$Id: vntr.c,v 1.2 2005/04/13 06:25:58 markd Exp $";
 
 void vntrStaticLoad(char **row, struct vntr *ret)
 /* Load a row from vntr table into ret.  The contents of ret will

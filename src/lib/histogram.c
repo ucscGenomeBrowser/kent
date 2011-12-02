@@ -3,7 +3,6 @@
 #include "common.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: histogram.c,v 1.4 2004/09/14 23:43:58 hiram Exp $";
 
 static unsigned autoScale(float *values, size_t N, float *binSize,
 	unsigned *binCount, float *minValue, float *min, float *max)

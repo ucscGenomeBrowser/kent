@@ -8,7 +8,6 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: nibTwo.c,v 1.6 2010/03/23 17:09:47 markd Exp $";
 
 struct nibTwoCache *nibTwoCacheNew(char *pathName)
 /* Get something that will more or less transparently get sequence from 

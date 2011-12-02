@@ -8,7 +8,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpOrthoJoin.c,v 1.2 2006/10/04 04:29:00 heather Exp $";
 
 static char *database = NULL;
 static char *snpSimpleTable = NULL;

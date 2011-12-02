@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cogs.h"
 
-static char const rcsid[] = "$Id: cogs.c,v 1.1 2004/09/08 22:18:58 kschneid Exp $";
 
 void COGStaticLoad(char **row, struct COG *ret)
 /* Load a row from COG table into ret.  The contents of ret will

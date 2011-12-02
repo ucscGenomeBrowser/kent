@@ -15,7 +15,6 @@
 #endif /* GBROWSE */
 #include <signal.h>
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.137 2010/06/11 22:34:53 tdreszer Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
