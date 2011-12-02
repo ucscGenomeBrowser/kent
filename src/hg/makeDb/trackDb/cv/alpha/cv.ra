@@ -3553,7 +3553,7 @@ vendorId CRL-11609
 karyotype normal
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-11609&Template=cellBiology
 termId BTO:0002397
-termUrl missing
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002397 
 sex M
 tier 3
 protocol Crawford:RWPE_Crawford_protocol.pdf
