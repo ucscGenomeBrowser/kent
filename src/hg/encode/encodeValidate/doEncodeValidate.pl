@@ -557,6 +557,9 @@ sub validateBed {
         my $fieldCount = scalar(@fields);
         next if(!$fieldCount);
         my $prefix = "line $lineNumber:";
+        if ($fields[0] =~ m/(track|browser)/) {
+            next
+        }
         if($fieldCount <= 2) {
             push @localerrors, "$prefix not enough fields; " . scalar(@fields) . " present; at least 3 are required\n";
             next
@@ -566,10 +569,10 @@ sub validateBed {
             next
         } elsif ($fields[0] !~ m/chrM/) {
             if ($fields[1] > $chromSizes{$fields[0]}) {
-                push @localerrors, "$prefix field 2 value exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
+                push @localerrors, "$prefix field 2 value ($fields[1]) exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
             }
             if ($fields[2] > $chromSizes{$fields[0]}) {
-                push @localerrors, "$prefix field 3 value exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
+                push @localerrors, "$prefix field 3 value ($fields[2]) exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
             }
         } 
         if ($fields[1] !~ /^\d+$/) {
