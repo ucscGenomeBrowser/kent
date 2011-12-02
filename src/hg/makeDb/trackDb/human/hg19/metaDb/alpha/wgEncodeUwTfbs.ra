@@ -19217,7 +19217,7 @@ dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH002173
 expId 2173
-fileName wgEncodeUwTfbsSkmcInputStdAlnRep1.bam
+fileName wgEncodeUwTfbsSkmcInputStdAlnRep1.bam,wgEncodeUwTfbsSkmcInputStdAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS16208
