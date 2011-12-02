@@ -3,6 +3,7 @@
 # chainNet tracks
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
+include trackDb.merckPolyA.all.ra
 
 #large composites
 include uMassBrainHistone.ra
@@ -61,8 +62,6 @@ type altGraphX
 url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&tromer=$$
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track gwasCatalog override
 snpTable snp132
