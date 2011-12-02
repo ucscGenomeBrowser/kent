@@ -466,19 +466,19 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=2000 -chainLinearGap=medium \
 	-workhorse=hgwdev -tRepeats=windowmaskerSdust \
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
-XXX - running - Thu Dec  1 14:47:37 PST 2011
-    #	real    144m0.459s
+    #	real    764m6.061s
 
     cat fb.fr3.chainDanRer7Link.txt 
-    #	103798841 bases of 1409770109 (7.363%) in intersection
+    #	80101694 bases of 350961831 (22.823%) in intersection
 
     mkdir /hive/data/genomes/danRer7/bed/blastz.fr3.swap
     cd /hive/data/genomes/danRer7/bed/blastz.fr3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/fr3/bed/lastzDanRer7.2011-12-01/DEF \
 	-chainMinScore=2000 -chainLinearGap=medium \
-	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-workhorse=hgwdev -tRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+XXX - running - Fri Dec  2 10:17:19 PST 2011
     #	real    10m26.244s
     cat fb.danRer7.chainFr3Link.txt 
     #	80078057 bases of 393312790 (20.360%) in intersection
@@ -525,19 +525,19 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
 	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
-XXX - running - Thu Dec  1 14:47:37 PST 2011
-    #	real    144m0.459s
+    #	real    1023m19.470s
 
     cat fb.fr3.chainOreNil1Link.txt 
-    #	103798841 bases of 1409770109 (7.363%) in intersection
+    #	200890618 bases of 350961831 (57.240%) in intersection
 
     mkdir /hive/data/genomes/oreNil1/bed/blastz.fr3.swap
     cd /hive/data/genomes/oreNil1/bed/blastz.fr3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/fr3/bed/lastzOreNil1.2011-12-01/DEF \
-	-chainMinScore=2000 -chainLinearGap=medium \
-	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+XXX - running - Fri Dec  2 10:18:19 PST 2011
     #	real    10m26.244s
     cat fb.oreNil1.chainFr3Link.txt 
     #	80078057 bases of 393312790 (20.360%) in intersection
@@ -584,30 +584,37 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
 	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
-XXX - running - Thu Dec  1 15:01:04 PST 2011
-    #	real    144m0.459s
+    #	real    468m6.556s
 
     cat fb.fr3.chainTetNig2Link.txt 
-    #	103798841 bases of 1409770109 (7.363%) in intersection
+    #	248874754 bases of 350961831 (70.912%) in intersection
 
     mkdir /hive/data/genomes/tetNig2/bed/blastz.fr3.swap
     cd /hive/data/genomes/tetNig2/bed/blastz.fr3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/fr3/bed/lastzTetNig2.2011-12-01/DEF \
-	-chainMinScore=2000 -chainLinearGap=medium \
-	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+XXX - running - Fri Dec  2 10:19:17 PST 2011
     #	real    10m26.244s
     cat fb.tetNig2.chainFr3Link.txt 
     #	80078057 bases of 393312790 (20.360%) in intersection
 
 ############################################################################
 # lastz Stickleback gasAcu1 (WORKING - 2011-12-01 - Hiram)
+#	experiment here, two runs on Stickleback, one with gasAcu1
+#	as it stands with little masking, and a second with it masked
+#	with WindowMasker.
 
-# XXX working up windowMasker for gasAcu1 - Thu Dec  1 15:19:58 PST 2011
+    twoBitToFa /scratch/data/gasAcu1/gasAcu1.2bit stdout | faSize stdin
+    #	463354448 bases (16726587 N's 446627861 real 435123380 upper
+    #	11504481 lower) in 23 sequences in 1 files
+    #	%2.48 masked total, %2.58 masked real
+    twoBitToFa /hive/data/genomes/gasAcu1/bed/windowMasker/gasAcu1.TRF.WMSdust.2bit stdout | faSize stdin
 
-    mkdir /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-01
-    cd /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-01
+    mkdir /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02
+    cd /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02
 
     cat << '_EOF_' > DEF
 # Fugu vs. Stickleback
@@ -635,7 +642,7 @@ SEQ2_CHUNK=10000000
 SEQ2_LIMIT=1
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-01
+BASE=/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -644,7 +651,7 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	`pwd`/DEF \
 	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
-	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-tRepeats=windowmaskerSdust \
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
 XXX - running - Thu Dec  1 15:01:04 PST 2011
     #	real    144m0.459s
@@ -655,13 +662,74 @@ XXX - running - Thu Dec  1 15:01:04 PST 2011
     mkdir /hive/data/genomes/gasAcu1/bed/blastz.fr3.swap
     cd /hive/data/genomes/gasAcu1/bed/blastz.fr3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-01/DEF \
+	/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02/DEF \
 	-chainMinScore=2000 -chainLinearGap=medium \
 	-noLoadChainSplit -qRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
     #	real    10m26.244s
     cat fb.gasAcu1.chainFr3Link.txt 
     #	80078057 bases of 393312790 (20.360%) in intersection
+
+##############################################################################
+# lastz test on Stickleback with window masker sequence
+#	(DONE - Hiram - 2011-12-02)
+    mkdir /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02maskTest
+    cd /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02maskTest
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Stickleback
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Stickleback gasAcu1
+SEQ2_DIR=/hive/data/genomes/gasAcu1/bed/windowMasker/gasAcu1.TRF.WMSdust.2bit
+SEQ2_LEN=/scratch/data/gasAcu1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=1
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02maskTest
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+XXX - running - Thu Dec  1 15:01:04 PST 2011
+    #	real    144m0.459s
+
+    cat fb.fr3.chainGasAcu1Link.txt 
+    #	103798841 bases of 1409770109 (7.363%) in intersection
+
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.fr3.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02maskTest/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    10m26.244s
+    cat fb.gasAcu1.chainFr3Link.txt 
+    #	80078057 bases of 393312790 (20.360%) in intersection
+
 
 ############################################################################
 # lastz Medaka oryLat2 (WORKING - 2011-12-01 - Hiram)
@@ -705,19 +773,19 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
 	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
-XXX - running - Thu Dec  1 15:01:04 PST 2011
-    #	real    144m0.459s
+    #	real    725m19.856s
 
     cat fb.fr3.chainOryLat2Link.txt 
-    #	103798841 bases of 1409770109 (7.363%) in intersection
+    #	153943192 bases of 350961831 (43.863%) in intersection
 
     mkdir /hive/data/genomes/oryLat2/bed/blastz.fr3.swap
     cd /hive/data/genomes/oryLat2/bed/blastz.fr3.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/fr3/bed/lastzOryLat2.2011-12-01/DEF \
 	-chainMinScore=2000 -chainLinearGap=medium \
-	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
 	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+XXX - running - Fri Dec  2 10:16:01 PST 2011
     #	real    10m26.244s
     cat fb.oryLat2.chainFr3Link.txt 
     #	80078057 bases of 393312790 (20.360%) in intersection
