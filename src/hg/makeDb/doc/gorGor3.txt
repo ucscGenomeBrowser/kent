@@ -136,6 +136,8 @@ taxId 9595
     featureBits -countGaps gorGor3 rmsk
     #	1384011521 bases of 3029553646 (45.684%) in intersection
     # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
 # running simple repeat (DONE - 2011-10-12 - Hiram)
@@ -1016,7 +1018,6 @@ tarSyr1:0.137823):0.011062,(micMur1:0.092749,otoGar1:0.129725):0.035463);
 '_EOF_'
     # << happy emacs
 
-XXX - working on this
     # convert to species names
     /cluster/bin/phast/tree_doctor --rename \
 "gorGor3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; rheMac2->Rhesus; papHam1->Baboon; calJac3->Marmoset; tarSyr1->Tarsier; micMur1->Mouse_lemur; otoGar1->Bushbaby" \
@@ -1091,10 +1092,10 @@ done
     # construct a list of all possible maf file names.
     # they do not all exist in each of the species directories
     find . -type f | wc -l
-    # 2048
+    # 1071
     find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
     wc -l maf.list
-    # 256 maf.list
+    # 206 maf.list
 
     mkdir /hive/data/genomes/gorGor3/bed/multiz11way/splitRun
     cd /hive/data/genomes/gorGor3/bed/multiz11way/splitRun
@@ -1156,13 +1157,14 @@ popd > /dev/null
     cd /hive/data/genomes/gorGor3/bed/multiz11way/splitRun/run
     # the tac reverses the list to get the small jobs first
     gensub2 maf.list single template stdout | tac > jobList
-    para -ram=8g create jobsList
-# Completed: 256 of 256 jobs
-# CPU time in finished jobs:      14427s     240.45m     4.01h    0.17d  0.000 y
-# IO & Wait Time:                  1927s      32.12m     0.54h    0.02d  0.000 y
-# Average job time:                  64s       1.06m     0.02h    0.00d
-# Longest finished job:             280s       4.67m     0.08h    0.00d
-# Submission to last job:          1536s      25.60m     0.43h    0.02d
+    # the ram=8g will allow only one job on a node to slow them down
+    para -ram=8g create jobList
+# Completed: 206 of 206 jobs
+# CPU time in finished jobs:     436154s    7269.23m   121.15h    5.05d  0.014 y
+# IO & Wait Time:                 38798s     646.64m    10.78h    0.45d  0.001 y
+# Average job time:                2306s      38.43m     0.64h    0.03d
+# Longest finished job:           37853s     630.88m    10.51h    0.44d
+# Submission to last job:         37884s     631.40m    10.52h    0.44d
 
     # assemble into a single maf file
     cd /hive/data/genomes/gorGor3/bed/multiz11way
@@ -1173,7 +1175,7 @@ do
 done >> multiz11way.maf
     tail -1 splitRun/maf/001.maf >> multiz11way.maf
 
-# -rw-rw-r--  1 1524521286 Sep 28 13:28 multiz11way.maf
+# -rw-rw-r--  1 25370474447 Dec  1 15:33 multiz11way.maf
 
     # Load into database
     ssh hgwdev
@@ -1183,20 +1185,20 @@ done >> multiz11way.maf
     cd /scratch/tmp
     time nice -n +19 hgLoadMaf gorGor3 multiz11way
     #	Indexing and tabulating /gbdb/gorGor3/multiz11way/multiz11way.maf
-    #	Loaded 2591342 mafs in 1 files from /gbdb/gorGor3/multiz11way
-    #	real    1m4.383s
+    #	Loaded 12607889 mafs in 1 files from /gbdb/gorGor3/multiz11way
+    #	real    12m16.842s
 
     time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 gorGor3 multiz11waySummary \
 	/gbdb/gorGor3/multiz11way/multiz11way.maf
-    #	Created 516059 summary blocks from 5782695 components and 2591342 mafs
-    #	from /gbdb/gorGor3/multiz11way/multiz11way.maf
-    #	real    1m2.197s
+    #	Created 1350677 summary blocks from 84367135 components
+    #	and 12607889 mafs from /gbdb/gorGor3/multiz11way/multiz11way.maf
+    #	real    17m3.441s
 
     wc -l multiz11way*.tab
-    #	2591342 multiz11way.tab
-    #	516059 multiz11waySummary.tab
-    #	3107401 total
+    #	12607889 multiz11way.tab
+    #	1350677 multiz11waySummary.tab
+    #	13958566 total
 
     rm multiz11way*.tab
 
