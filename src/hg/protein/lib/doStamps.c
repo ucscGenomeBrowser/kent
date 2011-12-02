@@ -407,7 +407,7 @@ int i;
 
 conn2= hAllocConn(database);
 safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
-    	
+
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 pbStampPtr = pbStampLoad(row2);
