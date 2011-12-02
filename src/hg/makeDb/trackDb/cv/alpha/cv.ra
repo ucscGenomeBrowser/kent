@@ -3962,7 +3962,7 @@ termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 189,0,157
 sex M
-protocol ENCODE:missing
+protocol missing
 
 term B-cell_(CD19+)
 tag BCELLCD19P
