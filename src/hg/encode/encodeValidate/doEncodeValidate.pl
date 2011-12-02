@@ -71,6 +71,7 @@ our $quickOpt = "";     # option to pass to validateFiles prog
 our $time0 = time;
 our $timeStart = time;
 our %chromInfo;         # chromInfo from assembly for chrom validation
+our %chromSizes;
 our $maxBedRows=80_000_000; # number of rows to allow in a bed-type file
 our %tableNamesUsed;
 our ($fields, $daf);
@@ -562,6 +563,14 @@ sub validateBed {
         }
         if (!$chromInfo{$fields[0]}) {
             push @localerrors, "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
+            next
+        } elsif ($fields[0] !~ m/chrM/) {
+            if ($fields[1] > $chromSizes{$fields[0]}) {
+                push @localerrors, "$prefix field 2 value exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
+            }
+            if ($fields[2] > $chromSizes{$fields[0]}) {
+                push @localerrors, "$prefix field 3 value exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
+            }
         } 
         if ($fields[1] !~ /^\d+$/) {
             push @localerrors, "$prefix field 2 value ($fields[1]) is invalid; value must be a positive integer\n";
@@ -572,13 +581,10 @@ sub validateBed {
         if ($fields[2] < $fields[1]) {
             push @localerrors, "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
         }
-        if ($fieldCount > 5 && $fields[4] !~ /^\d+$/ && $fields[4] =~ /^$floatRegEx$/) {
-            push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; value must be a positive integer\n";
+        if ($fieldCount >= 5 && ($fields[4] !~ /^\d+$/ or $fields[4] > 1000)) {
+            push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; value must be a positive integer between 0-1000\n";
         }
-        if ($fieldCount > 5 && $fields[4] < 0 || $fields[4] > 1000) {
-            push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; score must be 0-1000\n";
-        }
-        if ($type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
+        if ($fieldCount >= 5 && $type ne 'bed5FloatScore' && $fields[5] !~ m/^(\+|\-|\.)$/) {
             push @localerrors, "$prefix field 6 ($fields[5]) value must be either + or - or .\n";
         }
         if ($type eq 'bed5FloatScore' && $fieldCount < 6) {
@@ -1505,6 +1511,7 @@ if($opt_validateFile) {
     }
     my $db = HgDb->new(DB => $assembly);
     $db->getChromInfo(\%chromInfo);
+    $db->getChromSizes(\%chromSizes);
     if(my @errors = checkDataFormat($opt_fileType, $submitDir)) {
         die "Invalid file: " . join(", ", @errors) . "\n";
     } else {
@@ -1575,7 +1582,7 @@ $assembly = $daf->{assembly};
 
 my $db = HgDb->new(DB => $daf->{assembly});
 $db->getChromInfo(\%chromInfo);
-
+$db->getChromSizes(\%chromSizes);
 
 # Add the variables in the DAF file to the required fields list
 if (defined($daf->{variables})) {
