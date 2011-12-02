@@ -205,7 +205,6 @@ identifier goDbXrefId external=GO
 identifier UniProtId external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) display ID."
      uniProt.displayId.val
-     $rn.rgdGene2ToUniProt.value minCheck=0.8
      proteome.uniProtAlias.alias minCheck=0.2
      proteome.spOldNew.newDisplayId minCheck=0.3
      proteome.spOldNew.oldDisplayId minCheck=0.3
@@ -2178,6 +2177,11 @@ identifier rgdGene2Id external=RGD
     $rn.rgdGene2Canonical.transcript
     $rn.rgdGene2Isoforms.transcript
     $rn.rgdGene2KeggPathway.rgdId
+
+identifier rgdPathwayId external=RGD
+"RGD Pathway ID"
+    $rn.rgdPathway.pathwayId
+    $rn.rgdGenePathway.pathwayId minCheck=.90
 
 # The Ensembl Gmish
 

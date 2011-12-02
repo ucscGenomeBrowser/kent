@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "megablastInfo.h"
 
-static char const rcsid[] = "$Id: megablastInfo.c,v 1.1 2009/11/09 22:24:31 holmes Exp $";
 
 void megablastInfoStaticLoad(char **row, struct megablastInfo *ret)
 /* Load a row from megablastInfo table into ret.  The contents of ret will

@@ -69,7 +69,6 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: paraHub.c,v 1.134 2010/06/10 00:23:38 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

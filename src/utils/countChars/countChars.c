@@ -1,7 +1,6 @@
 /* countChars - Count the number of occurences of a particular char. */
 #include "common.h"
 
-static char const rcsid[] = "$Id: countChars.c,v 1.3 2003/06/14 16:21:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

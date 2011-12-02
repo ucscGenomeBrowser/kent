@@ -8,7 +8,6 @@
 #include "trackDb.h"
 #include "tdbRecord.h"
 
-static char const rcsid[] = "$Id: tdbRecord.c,v 1.8 2010/03/07 01:32:42 kent Exp $";
 
 static struct tdbFilePos *tdbFilePosNew(struct lm *lm, 
     char *fileName, 		/* File name. */

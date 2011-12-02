@@ -4,7 +4,6 @@
 #include "linefile.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: rowReader.c,v 1.5 2009/07/31 18:09:24 markd Exp $";
 
 struct rowReader *rowReaderOpen(char *fileName, boolean isPslFile)
 /* create a row reader for a file */

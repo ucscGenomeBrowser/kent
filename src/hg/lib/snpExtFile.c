@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snpExtFile.h"
 
-static char const rcsid[] = "$Id: snpExtFile.c,v 1.1 2006/10/12 22:53:52 heather Exp $";
 
 void snpExtFileStaticLoad(char **row, struct snpExtFile *ret)
 /* Load a row from snpExtFile table into ret.  The contents of ret will

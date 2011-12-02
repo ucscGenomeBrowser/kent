@@ -57,6 +57,33 @@ subId 3426
 tableName wgEncodeRikenCageA549CellPapAlnRep2
 view Alignments
 
+metaObject wgEncodeRikenCageA549CellPapClusters
+objType file
+attic auxSup
+bioRep 022WC,021WC
+cell A549
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001158
+expId 1158
+fileName wgEncodeRikenCageA549CellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K17,K16
+labProtocolId 022WC+cage,021WC+cage
+labVersion iIDR
+localization cell
+md5sum a13a7c771595fbb0df80f56c6b4f8051
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3998
+tableName wgEncodeRikenCageA549CellPapClusters
+view Clusters
+
 metaObject wgEncodeRikenCageA549CellPapMinusSignalRep1
 objType table
 bioRep 021WC
@@ -252,7 +279,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001158
 expId 1158
-fileName wgEncodeRikenCageA549CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageA549CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K16,K17
@@ -319,6 +346,33 @@ rnaExtract longPolyA
 subId 3427
 tableName wgEncodeRikenCageAg04450CellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageAg04450CellPapClusters
+objType file
+attic auxSup
+bioRep 018WC,017WC
+cell AG04450
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001159
+expId 1159
+fileName wgEncodeRikenCageAg04450CellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K13,K12
+labProtocolId 018WC+cage,017WC+cage
+labVersion iIDR
+localization cell
+md5sum ed8dfd8b5c258048198450db16d0811c
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3975
+tableName wgEncodeRikenCageAg04450CellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageAg04450CellPapMinusSignalRep1
 objType table
@@ -515,7 +569,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001159
 expId 1159
-fileName wgEncodeRikenCageAg04450CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageAg04450CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K12,K13
@@ -582,6 +636,33 @@ rnaExtract longPolyA
 subId 3429
 tableName wgEncodeRikenCageBjCellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageBjCellPapClusters
+objType file
+attic auxSup
+bioRep 037WC,038WC
+cell BJ
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001160
+expId 1160
+fileName wgEncodeRikenCageBjCellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K18,K19
+labProtocolId 037WC+cage,038WC+cage
+labVersion iIDR
+localization cell
+md5sum 9da4d940415a6c13845ff8111dfc082a
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3954
+tableName wgEncodeRikenCageBjCellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageBjCellPapMinusSignalRep1
 objType table
@@ -778,7 +859,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001160
 expId 1160
-fileName wgEncodeRikenCageBjCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageBjCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K18,K19
@@ -845,6 +926,33 @@ rnaExtract longPolyA
 subId 3951
 tableName wgEncodeRikenCageGm12878CellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageGm12878CellPapClusters
+objType file
+attic auxSup
+bioRep 004WC,003WC
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001680
+expId 1680
+fileName wgEncodeRikenCageGm12878CellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J73,J72
+labProtocolId 004WC+cage,003WC+cage
+labVersion iIDR
+localization cell
+md5sum 1562c00184c58c4efc673eb98947ca09
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3955
+tableName wgEncodeRikenCageGm12878CellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageGm12878CellPapMinusSignalRep1
 objType table
@@ -1041,7 +1149,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001680
 expId 1680
-fileName wgEncodeRikenCageGm12878CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J72,J73
@@ -1082,6 +1190,34 @@ rnaExtract longNonPolyA
 subId 1797
 tableName wgEncodeRikenCageGm12878CytosolPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageGm12878CytosolPamClusters
+objType file
+attic auxSup
+bioRep gen0104C
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000338
+dccRep 1
+expId 338
+fileName wgEncodeRikenCageGm12878CytosolPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I27
+labProtocolId gen0104C-cage
+labVersion iIDR
+localization cytosol
+md5sum eee2fdb57c3c5379c27b7c38d6933a25
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3978
+tableName wgEncodeRikenCageGm12878CytosolPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageGm12878CytosolPamMinusSignal
 objType table
@@ -1201,7 +1337,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000338
 dccRep 1
 expId 338
-fileName wgEncodeRikenCageGm12878CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I27
@@ -1268,6 +1404,33 @@ rnaExtract longPolyA
 subId 3947
 tableName wgEncodeRikenCageGm12878CytosolPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageGm12878CytosolPapClusters
+objType file
+attic auxSup
+bioRep 004C,003C
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001679
+expId 1679
+fileName wgEncodeRikenCageGm12878CytosolPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J85,J84
+labProtocolId 004C+cage,003C+cage
+labVersion iIDR
+localization cytosol
+md5sum b05c53bf481030f80a142decbbb29c9c
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3962
+tableName wgEncodeRikenCageGm12878CytosolPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageGm12878CytosolPapMinusSignalRep1
 objType table
@@ -1464,7 +1627,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001679
 expId 1679
-fileName wgEncodeRikenCageGm12878CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J84,J85
@@ -1504,6 +1667,34 @@ rnaExtract total
 subId 2125
 tableName wgEncodeRikenCageGm12878NucleolusTotalAln
 view Alignments
+
+metaObject wgEncodeRikenCageGm12878NucleolusTotalClusters
+objType file
+attic auxSup
+bioRep gen0109NL
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000340
+dccRep 1
+expId 340
+fileName wgEncodeRikenCageGm12878NucleolusTotalClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I69
+labProtocolId gen0109NLtcage
+labVersion iIDR
+localization nucleolus
+md5sum a0819757c0811615bd2fc50ec1216d21
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 3964
+tableName wgEncodeRikenCageGm12878NucleolusTotalClusters
+view Clusters
 
 metaObject wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
 objType table
@@ -1621,7 +1812,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000340
 dccRep 1
 expId 340
-fileName wgEncodeRikenCageGm12878NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I69
@@ -1660,6 +1851,34 @@ rnaExtract longNonPolyA
 subId 2350
 tableName wgEncodeRikenCageGm12878NucleusPamAlnRep1
 view Alignments
+
+metaObject wgEncodeRikenCageGm12878NucleusPamClusters
+objType file
+attic auxSup
+bioRep gen0110N
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000339
+dccRep 1
+expId 339
+fileName wgEncodeRikenCageGm12878NucleusPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J59
+labProtocolId gen0110N-cage
+labVersion iIDR
+localization nucleus
+md5sum ded2c25c7fa7ecb2ce1ac68d8830b0a8
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3965
+tableName wgEncodeRikenCageGm12878NucleusPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageGm12878NucleusPamMinusSignalRep1
 objType table
@@ -1775,7 +1994,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000339
 dccRep 1
 expId 339
-fileName wgEncodeRikenCageGm12878NucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -1842,6 +2061,33 @@ rnaExtract longPolyA
 subId 3949
 tableName wgEncodeRikenCageGm12878NucleusPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageGm12878NucleusPapClusters
+objType file
+attic auxSup
+bioRep 003N,004N
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001678
+expId 1678
+fileName wgEncodeRikenCageGm12878NucleusPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J93,J94
+labProtocolId 003N+cage,004N+cage
+labVersion iIDR
+localization nucleus
+md5sum f517bffb4c3ac2467655b800fa58a8d5
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3993
+tableName wgEncodeRikenCageGm12878NucleusPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageGm12878NucleusPapMinusSignalRep1
 objType table
@@ -2038,7 +2284,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001678
 expId 1678
-fileName wgEncodeRikenCageGm12878NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J93,J94
@@ -2079,6 +2325,34 @@ softwareVersion Delve version 0.9
 subId 1799
 tableName wgEncodeRikenCageH1hescCellPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageH1hescCellPamClusters
+objType file
+attic auxSup
+bioRep gen0113WC
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000341
+dccRep 1
+expId 341
+fileName wgEncodeRikenCageH1hescCellPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I67
+labProtocolId gen0113WC-cage
+labVersion iIDR
+localization cell
+md5sum 74a82df4d21216c5b646e274d0dc8a7e
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3984
+tableName wgEncodeRikenCageH1hescCellPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageH1hescCellPamMinusSignal
 objType table
@@ -2198,7 +2472,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000341
 dccRep 1
 expId 341
-fileName wgEncodeRikenCageH1hescCellPamTssHmm.bed.gz
+fileName wgEncodeRikenCageH1hescCellPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I67
@@ -2265,6 +2539,33 @@ rnaExtract longPolyA
 subId 2370
 tableName wgEncodeRikenCageH1hescCellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageH1hescCellPapClusters
+objType file
+attic auxSup
+bioRep 006WC,005WC
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001138
+expId 1138
+fileName wgEncodeRikenCageH1hescCellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J75,J74
+labProtocolId 006WC+cage,005WC+cage
+labVersion iIDR
+localization cell
+md5sum 52229b163e96c33cd95538e712328ec8
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3982
+tableName wgEncodeRikenCageH1hescCellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageH1hescCellPapMinusSignalRep1
 objType table
@@ -2461,7 +2762,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001138
 expId 1138
-fileName wgEncodeRikenCageH1hescCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageH1hescCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J74,J75
@@ -2501,6 +2802,35 @@ rnaExtract longPolyA
 subId 2379
 tableName wgEncodeRikenCageH1hescCytosolPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageH1hescCytosolPapClusters
+objType file
+attic auxSup
+bioRep 006C
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001139
+dccRep 2
+expId 1139
+fileName wgEncodeRikenCageH1hescCytosolPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J86
+labProtocolId 006C+cage
+labVersion iIDR
+localization cytosol
+md5sum 48681042f5a39bbeaaf4f7f3e8f98955
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3971
+tableName wgEncodeRikenCageH1hescCytosolPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageH1hescCytosolPapMinusSignalRep2
 objType table
@@ -2608,6 +2938,35 @@ rnaExtract longPolyA
 subId 2360
 tableName wgEncodeRikenCageH1hescNucleusPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageH1hescNucleusPapClusters
+objType file
+attic auxSup
+bioRep 006N
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001140
+dccRep 2
+expId 1140
+fileName wgEncodeRikenCageH1hescNucleusPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J95
+labProtocolId 006N+cage
+labVersion iIDR
+localization nucleus
+md5sum bf50c8c45250ed28dcff459b5c576df3
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3961
+tableName wgEncodeRikenCageH1hescNucleusPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageH1hescNucleusPapMinusSignalRep2
 objType table
@@ -2742,6 +3101,33 @@ rnaExtract longPolyA
 subId 2374
 tableName wgEncodeRikenCageHelas3CellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageHelas3CellPapClusters
+objType file
+attic auxSup
+bioRep 011WC,012WC
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001146
+expId 1146
+fileName wgEncodeRikenCageHelas3CellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J80,J81
+labProtocolId 011WC+cage,012WC+cage
+labVersion iIDR
+localization cell
+md5sum f3a6cc2eb8cba6cb3d1599b385478fce
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3960
+tableName wgEncodeRikenCageHelas3CellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHelas3CellPapMinusSignalRep1
 objType table
@@ -2938,7 +3324,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001146
 expId 1146
-fileName wgEncodeRikenCageHelas3CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J80,J81
@@ -2977,6 +3363,34 @@ rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageHelas3CytosolPamClusters
+objType file
+attic auxSup
+bioRep gen0121C
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001155
+dccRep 1
+expId 1155
+fileName wgEncodeRikenCageHelas3CytosolPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J56
+labProtocolId gen0121C-cage
+labVersion iIDR
+localization cytosol
+md5sum abf53a49f07f3593fd2bd949fc0a9eb4
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3992
+tableName wgEncodeRikenCageHelas3CytosolPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHelas3CytosolPamMinusSignal
 objType table
@@ -3092,7 +3506,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001155
 dccRep 1
 expId 1155
-fileName wgEncodeRikenCageHelas3CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -3159,6 +3573,33 @@ rnaExtract longPolyA
 subId 2355
 tableName wgEncodeRikenCageHelas3CytosolPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageHelas3CytosolPapClusters
+objType file
+attic auxSup
+bioRep 012C,011C
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001144
+expId 1144
+fileName wgEncodeRikenCageHelas3CytosolPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J88,J87
+labProtocolId 012C+cage,011C+cage
+labVersion iIDR
+localization cytosol
+md5sum b579a9f4916bc405cad0c535d15f1bf6
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3988
+tableName wgEncodeRikenCageHelas3CytosolPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHelas3CytosolPapMinusSignalRep1
 objType table
@@ -3355,7 +3796,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001144
 expId 1144
-fileName wgEncodeRikenCageHelas3CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J87,J88
@@ -3394,6 +3835,34 @@ rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalAln
 view Alignments
+
+metaObject wgEncodeRikenCageHelas3NucleolusTotalClusters
+objType file
+attic auxSup
+bioRep gen0123NL
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001156
+dccRep 1
+expId 1156
+fileName wgEncodeRikenCageHelas3NucleolusTotalClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J58
+labProtocolId gen0123NLtcage
+labVersion iIDR
+localization nucleolus
+md5sum 900e597227fa4a74402306d1e9064ecf
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 3991
+tableName wgEncodeRikenCageHelas3NucleolusTotalClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalMinusSignal
 objType table
@@ -3509,7 +3978,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001156
 dccRep 1
 expId 1156
-fileName wgEncodeRikenCageHelas3NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J58
@@ -3576,6 +4045,33 @@ rnaExtract longPolyA
 subId 2384
 tableName wgEncodeRikenCageHelas3NucleusPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageHelas3NucleusPapClusters
+objType file
+attic auxSup
+bioRep 011N,012N
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001145
+expId 1145
+fileName wgEncodeRikenCageHelas3NucleusPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J96,J97
+labProtocolId 011N+cage,012N+cage
+labVersion iIDR
+localization nucleus
+md5sum 83ccdec1df0d0895fcdf5ea0f74fe4f3
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3976
+tableName wgEncodeRikenCageHelas3NucleusPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHelas3NucleusPapMinusSignalRep1
 objType table
@@ -3772,7 +4268,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001145
 expId 1145
-fileName wgEncodeRikenCageHelas3NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J96,J97
@@ -3839,6 +4335,33 @@ rnaExtract longPolyA
 subId 2378
 tableName wgEncodeRikenCageHepg2CellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageHepg2CellPapClusters
+objType file
+attic auxSup
+bioRep 014WC,013WC
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001149
+expId 1149
+fileName wgEncodeRikenCageHepg2CellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K02,K01
+labProtocolId 014WC+cage,013WC+cage
+labVersion iIDR
+localization cell
+md5sum 10e2d8fc256a0776b0fd4e213661b1ea
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3985
+tableName wgEncodeRikenCageHepg2CellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHepg2CellPapMinusSignalRep1
 objType table
@@ -4035,7 +4558,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001149
 expId 1149
-fileName wgEncodeRikenCageHepg2CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K01,K02
@@ -4076,6 +4599,34 @@ rnaExtract longNonPolyA
 subId 1801
 tableName wgEncodeRikenCageHepg2CytosolPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageHepg2CytosolPamClusters
+objType file
+attic auxSup
+bioRep gen0125C
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000343
+dccRep 1
+expId 343
+fileName wgEncodeRikenCageHepg2CytosolPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I42
+labProtocolId gen0125C-cage
+labVersion iIDR
+localization cytosol
+md5sum 52ceaaa5a930f4996a3227dd0a9fabd0
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3969
+tableName wgEncodeRikenCageHepg2CytosolPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHepg2CytosolPamMinusSignal
 objType table
@@ -4195,7 +4746,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000343
 dccRep 1
 expId 343
-fileName wgEncodeRikenCageHepg2CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I42
@@ -4262,6 +4813,33 @@ rnaExtract longPolyA
 subId 2369
 tableName wgEncodeRikenCageHepg2CytosolPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageHepg2CytosolPapClusters
+objType file
+attic auxSup
+bioRep 013C,014C
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001147
+expId 1147
+fileName wgEncodeRikenCageHepg2CytosolPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J89,J90
+labProtocolId 013C+cage,014C+cage
+labVersion iIDR
+localization cytosol
+md5sum 071b3b5cf8cbe44919206f3a69f88c7b
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3968
+tableName wgEncodeRikenCageHepg2CytosolPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHepg2CytosolPapMinusSignalRep1
 objType table
@@ -4458,7 +5036,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001147
 expId 1147
-fileName wgEncodeRikenCageHepg2CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J89,J90
@@ -4498,6 +5076,34 @@ rnaExtract total
 subId 2124
 tableName wgEncodeRikenCageHepg2NucleolusTotalAln
 view Alignments
+
+metaObject wgEncodeRikenCageHepg2NucleolusTotalClusters
+objType file
+attic auxSup
+bioRep gen0127NL
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000344
+dccRep 1
+expId 344
+fileName wgEncodeRikenCageHepg2NucleolusTotalClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I68
+labProtocolId gen0127NLtcage
+labVersion iIDR
+localization nucleolus
+md5sum 4825b309b01542669ccf29bd23b84ed5
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 3974
+tableName wgEncodeRikenCageHepg2NucleolusTotalClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHepg2NucleolusTotalMinusSignal
 objType table
@@ -4615,7 +5221,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000344
 dccRep 1
 expId 344
-fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I68
@@ -4656,6 +5262,34 @@ rnaExtract longNonPolyA
 subId 1802
 tableName wgEncodeRikenCageHepg2NucleusPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageHepg2NucleusPamClusters
+objType file
+attic auxSup
+bioRep gen0128N
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000345
+dccRep 1
+expId 345
+fileName wgEncodeRikenCageHepg2NucleusPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I44
+labProtocolId gen0128N-cage
+labVersion iIDR
+localization nucleus
+md5sum f089f5a8bc5a629c0ae41a9154890d45
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3966
+tableName wgEncodeRikenCageHepg2NucleusPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHepg2NucleusPamMinusSignal
 objType table
@@ -4775,7 +5409,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000345
 dccRep 1
 expId 345
-fileName wgEncodeRikenCageHepg2NucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I44
@@ -4842,6 +5476,33 @@ rnaExtract longPolyA
 subId 2366
 tableName wgEncodeRikenCageHepg2NucleusPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageHepg2NucleusPapClusters
+objType file
+attic auxSup
+bioRep 013N,014N
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001148
+expId 1148
+fileName wgEncodeRikenCageHepg2NucleusPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J98,J99
+labProtocolId 013N+cage,014N+cage
+labVersion iIDR
+localization nucleus
+md5sum 6ada26e7444a7cdd6fb38b5a95a0a31b
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3981
+tableName wgEncodeRikenCageHepg2NucleusPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHepg2NucleusPapMinusSignalRep1
 objType table
@@ -5038,7 +5699,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001148
 expId 1148
-fileName wgEncodeRikenCageHepg2NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J98,J99
@@ -5105,6 +5766,33 @@ rnaExtract longPolyA
 subId 2388
 tableName wgEncodeRikenCageHuvecCellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageHuvecCellPapClusters
+objType file
+attic auxSup
+bioRep 010WC,009WC
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001141
+expId 1141
+fileName wgEncodeRikenCageHuvecCellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J79,J78
+labProtocolId 010WC+cage,009WC+cage
+labVersion iIDR
+localization cell
+md5sum 38fc52bbaa7df42563b5f681d7876941
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3973
+tableName wgEncodeRikenCageHuvecCellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHuvecCellPapMinusSignalRep1
 objType table
@@ -5301,7 +5989,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001141
 expId 1141
-fileName wgEncodeRikenCageHuvecCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J78,J79
@@ -5342,6 +6030,34 @@ rnaExtract longNonPolyA
 subId 1800
 tableName wgEncodeRikenCageHuvecCytosolPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageHuvecCytosolPamClusters
+objType file
+attic auxSup
+bioRep gen0116C
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000342
+dccRep 1
+expId 342
+fileName wgEncodeRikenCageHuvecCytosolPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I72
+labProtocolId gen0116C-cage
+labVersion iIDR
+localization cytosol
+md5sum ede418fd3c228548fc16370b848c5781
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3977
+tableName wgEncodeRikenCageHuvecCytosolPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHuvecCytosolPamMinusSignal
 objType table
@@ -5461,7 +6177,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000342
 dccRep 1
 expId 342
-fileName wgEncodeRikenCageHuvecCytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I72
@@ -5528,6 +6244,33 @@ rnaExtract longPolyA
 subId 2354
 tableName wgEncodeRikenCageHuvecCytosolPapAlnRep4
 view Alignments
+
+metaObject wgEncodeRikenCageHuvecCytosolPapClusters
+objType file
+attic auxSup
+bioRep 030C,029C
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001142
+expId 1142
+fileName wgEncodeRikenCageHuvecCytosolPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K04,K03
+labProtocolId 030C+cage,029C+cage
+labVersion iIDR
+localization cytosol
+md5sum 1f2601ae5daa4e989a1ed1b176585928
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3953
+tableName wgEncodeRikenCageHuvecCytosolPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHuvecCytosolPapMinusSignalRep3
 objType table
@@ -5724,7 +6467,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001142
 expId 1142
-fileName wgEncodeRikenCageHuvecCytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecCytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K03,K04
@@ -5791,6 +6534,33 @@ rnaExtract longPolyA
 subId 2356
 tableName wgEncodeRikenCageHuvecNucleusPapAlnRep4
 view Alignments
+
+metaObject wgEncodeRikenCageHuvecNucleusPapClusters
+objType file
+attic auxSup
+bioRep 030N,029N
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001143
+expId 1143
+fileName wgEncodeRikenCageHuvecNucleusPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K06,K05
+labProtocolId 030N+cage,029N+cage
+labVersion iIDR
+localization nucleus
+md5sum 52a61a4e543c6f536312f6d0f588ecbf
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3959
+tableName wgEncodeRikenCageHuvecNucleusPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageHuvecNucleusPapMinusSignalRep3
 objType table
@@ -5987,7 +6757,7 @@ dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH001143
 expId 1143
-fileName wgEncodeRikenCageHuvecNucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecNucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K05,K06
@@ -6054,6 +6824,33 @@ rnaExtract longPolyA
 subId 2362
 tableName wgEncodeRikenCageK562CellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageK562CellPapClusters
+objType file
+attic auxSup
+bioRep 001WC,002WC
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001150
+expId 1150
+fileName wgEncodeRikenCageK562CellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J70,J71
+labProtocolId 001WC+cage,002WC+cage
+labVersion iIDR
+localization cell
+md5sum 73e4a44613d9b044d446c993c12333d5
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3987
+tableName wgEncodeRikenCageK562CellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562CellPapMinusSignalRep1
 objType table
@@ -6250,7 +7047,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001150
 expId 1150
-fileName wgEncodeRikenCageK562CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageK562CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J70,J71
@@ -6291,6 +7088,34 @@ rnaExtract total
 subId 1804
 tableName wgEncodeRikenCageK562ChromatinTotalAln
 view Alignments
+
+metaObject wgEncodeRikenCageK562ChromatinTotalClusters
+objType file
+attic auxSup
+bioRep gen0134CH
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000334
+dccRep 1
+expId 334
+fileName wgEncodeRikenCageK562ChromatinTotalClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I35
+labProtocolId gen0134CHtcage
+labVersion iIDR
+localization chromatin
+md5sum 292140fd480b132cebf060d55a71b03a
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 3970
+tableName wgEncodeRikenCageK562ChromatinTotalClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562ChromatinTotalMinusSignal
 objType table
@@ -6410,7 +7235,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000334
 dccRep 1
 expId 334
-fileName wgEncodeRikenCageK562ChromatinTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageK562ChromatinTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I35
@@ -6451,6 +7276,34 @@ softwareVersion bowtie version 0.12.5
 subId 1805
 tableName wgEncodeRikenCageK562CytosolPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageK562CytosolPamClusters
+objType file
+attic auxSup
+bioRep gen0136C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000329
+dccRep 1
+expId 329
+fileName wgEncodeRikenCageK562CytosolPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I22
+labProtocolId gen0136C-cage
+labVersion iIDR
+localization cytosol
+md5sum 75968d0a409ccf2842739e1d1617a387
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3958
+tableName wgEncodeRikenCageK562CytosolPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562CytosolPamMinusSignal
 objType table
@@ -6597,7 +7450,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000329
 dccRep 1
 expId 329
-fileName wgEncodeRikenCageK562CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageK562CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I22
@@ -6694,6 +7547,88 @@ subId 2383
 tableName wgEncodeRikenCageK562CytosolPapAlnRep2
 view Alignments
 
+metaObject wgEncodeRikenCageK562CytosolPapClusters
+objType file
+attic auxSup
+bioRep 002C,001C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000332
+expId 332
+fileName wgEncodeRikenCageK562CytosolPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J83,J82
+labProtocolId 002C+cage,001C+cage
+labVersion iIDR
+localization cytosol
+md5sum e01063dde8072f880a3d0d3d8e471897
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3956
+tableName wgEncodeRikenCageK562CytosolPapClusters
+view Clusters
+
+metaObject wgEncodeRikenCageK562CytosolPapClustersI40
+objType file
+attic auxSup
+bioRep gen0137C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000332
+dccRep 1
+expId 332
+fileName wgEncodeRikenCageK562CytosolPapClustersI40.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I40
+labProtocolId gen0137C+cage
+labVersion iIDR
+localization cytosol
+md5sum f235ac533df3fb2b914f2aaad3ec18b1
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3952
+view Clusters
+
+metaObject wgEncodeRikenCageK562CytosolPapMinusSignal
+objType file
+attic auxExp
+bioRep gen0137C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-09
+dccAccession wgEncodeEH000332
+dccRep 1
+expId 332
+fileName wgEncodeRikenCageK562CytosolPapMinusSignal.bigWig
+grant Gingeras
+lab RIKEN
+labExpId I40
+labProtocolId gen0137C+cage
+labVersion bedtools v2.7.1
+localization cytosol
+md5sum 6bfd6923f449ef9a7153601d03a25c96
+origAssembly hg18
+project wgEncode
+rnaExtract longPolyA
+subId 1806
+view MinusRawSignal
+
 metaObject wgEncodeRikenCageK562CytosolPapMinusSignalRep1
 objType table
 bioRep 001C
@@ -6747,6 +7682,34 @@ rnaExtract longPolyA
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapMinusSignalRep2
 view MinusRawSignal
+
+metaObject wgEncodeRikenCageK562CytosolPapPlusSignal
+objType file
+attic auxExp
+bioRep gen0137C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-09
+dccAccession wgEncodeEH000332
+dccRep 1
+expId 332
+fileName wgEncodeRikenCageK562CytosolPapPlusSignal.bigWig
+grant Gingeras
+lab RIKEN
+labExpId I40
+labProtocolId gen0137C+cage
+labVersion bedtools v2.7.1
+localization cytosol
+md5sum 7581b8936432aa99d1ec01329e202789
+origAssembly hg18
+project wgEncode
+rnaExtract longPolyA
+subId 1806
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusSignalRep1
 objType table
@@ -6915,7 +7878,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000332
 expId 332
-fileName wgEncodeRikenCageK562CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageK562CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J82,J83
@@ -6954,6 +7917,34 @@ rnaExtract total
 subId 2929
 tableName wgEncodeRikenCageK562NucleolusTotalAln
 view Alignments
+
+metaObject wgEncodeRikenCageK562NucleolusTotalClusters
+objType file
+attic auxSup
+bioRep gen0144NL
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000335
+dccRep 1
+expId 335
+fileName wgEncodeRikenCageK562NucleolusTotalClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I33
+labProtocolId gen0144NLtcage
+labVersion iIDR
+localization nucleolus
+md5sum 132653cbea450072c5d890c094503d38
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 3963
+tableName wgEncodeRikenCageK562NucleolusTotalClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562NucleolusTotalMinusSignal
 objType table
@@ -7069,7 +8060,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000335
 dccRep 1
 expId 335
-fileName wgEncodeRikenCageK562NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I33
@@ -7110,6 +8101,34 @@ rnaExtract total
 subId 1808
 tableName wgEncodeRikenCageK562NucleoplasmTotalAln
 view Alignments
+
+metaObject wgEncodeRikenCageK562NucleoplasmTotalClusters
+objType file
+attic auxSup
+bioRep gen0147NP
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000336
+dccRep 1
+expId 336
+fileName wgEncodeRikenCageK562NucleoplasmTotalClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I34
+labProtocolId gen0147NPtcage
+labVersion iIDR
+localization nucleoplasm
+md5sum 0f186bd40aaa461e6685e3da859d6d3b
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 3980
+tableName wgEncodeRikenCageK562NucleoplasmTotalClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalMinusSignal
 objType table
@@ -7229,7 +8248,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000336
 dccRep 1
 expId 336
-fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I34
@@ -7269,6 +8288,34 @@ rnaExtract longNonPolyA
 subId 2127
 tableName wgEncodeRikenCageK562NucleusPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageK562NucleusPamClusters
+objType file
+attic auxSup
+bioRep gen0149N
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000330
+dccRep 1
+expId 330
+fileName wgEncodeRikenCageK562NucleusPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I23
+labProtocolId gen0149N-cage
+labVersion iIDR
+localization nucleus
+md5sum 2f3cec45953b8c254a6cb51a73a4c2df
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3995
+tableName wgEncodeRikenCageK562NucleusPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562NucleusPamMinusSignal
 objType table
@@ -7413,7 +8460,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000330
 dccRep 1
 expId 330
-fileName wgEncodeRikenCageK562NucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I23
@@ -7480,6 +8527,33 @@ rnaExtract longPolyA
 subId 2358
 tableName wgEncodeRikenCageK562NucleusPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageK562NucleusPapClusters
+objType file
+attic auxSup
+bioRep 002N,001N
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000333
+expId 333
+fileName wgEncodeRikenCageK562NucleusPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J92,J91
+labProtocolId 002N+cage,001N+cage
+labVersion iIDR
+localization nucleus
+md5sum dd76aba0250993eb2e9a00ad99d33e6d
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3986
+tableName wgEncodeRikenCageK562NucleusPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562NucleusPapMinusSignalRep1
 objType table
@@ -7676,7 +8750,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000333
 expId 333
-fileName wgEncodeRikenCageK562NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J91,J92
@@ -7717,6 +8791,34 @@ rnaExtract longNonPolyA
 subId 1810
 tableName wgEncodeRikenCageK562PolysomePamAln
 view Alignments
+
+metaObject wgEncodeRikenCageK562PolysomePamClusters
+objType file
+attic auxSup
+bioRep gen0152P
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000337
+dccRep 1
+expId 337
+fileName wgEncodeRikenCageK562PolysomePamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I32
+labProtocolId gen0152P-cage
+labVersion iIDR
+localization polysome
+md5sum e9c4d26b870f96489b4fb023500f5045
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3967
+tableName wgEncodeRikenCageK562PolysomePamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageK562PolysomePamMinusSignal
 objType table
@@ -7836,7 +8938,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000337
 dccRep 1
 expId 337
-fileName wgEncodeRikenCageK562PolysomePamTssHmm.bed.gz
+fileName wgEncodeRikenCageK562PolysomePamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I32
@@ -7903,6 +9005,33 @@ rnaExtract longPolyA
 subId 3425
 tableName wgEncodeRikenCageMcf7CellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageMcf7CellPapClusters
+objType file
+attic auxSup
+bioRep 016WC,015WC
+cell MCF-7
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001151
+expId 1151
+fileName wgEncodeRikenCageMcf7CellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K11,K07
+labProtocolId 016WC+cage,015WC+cage
+labVersion iIDR
+localization cell
+md5sum d6decd0fd32face7c29bead15e69a36a
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3997
+tableName wgEncodeRikenCageMcf7CellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageMcf7CellPapMinusRawRep2
 objType table
@@ -8099,7 +9228,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001151
 expId 1151
-fileName wgEncodeRikenCageMcf7CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageMcf7CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K07,K11
@@ -8166,6 +9295,33 @@ rnaExtract longPolyA
 subId 2361
 tableName wgEncodeRikenCageNhekCellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageNhekCellPapClusters
+objType file
+attic auxSup
+bioRep 008WC,007WC
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001152
+expId 1152
+fileName wgEncodeRikenCageNhekCellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId J77,J76
+labProtocolId 008WC+cage,007WC+cage
+labVersion iIDR
+localization cell
+md5sum 2239f36db3740c96b3b1c0cba534e3d9
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3994
+tableName wgEncodeRikenCageNhekCellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageNhekCellPapMinusSignalRep1
 objType table
@@ -8362,7 +9518,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001152
 expId 1152
-fileName wgEncodeRikenCageNhekCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J76,J77
@@ -8403,6 +9559,34 @@ rnaExtract longNonPolyA
 subId 1811
 tableName wgEncodeRikenCageNhekCytosolPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageNhekCytosolPamClusters
+objType file
+attic auxSup
+bioRep gen0155C
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000346
+dccRep 1
+expId 346
+fileName wgEncodeRikenCageNhekCytosolPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I70
+labProtocolId gen0155C-cage
+labVersion iIDR
+localization cytosol
+md5sum b02f21895a4afbb3e0991d1e553a517b
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3989
+tableName wgEncodeRikenCageNhekCytosolPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageNhekCytosolPamMinusSignal
 objType table
@@ -8522,7 +9706,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000346
 dccRep 1
 expId 346
-fileName wgEncodeRikenCageNhekCytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I70
@@ -8589,6 +9773,33 @@ rnaExtract longPolyA
 subId 3420
 tableName wgEncodeRikenCageNhekCytosolPapAlnRep4
 view Alignments
+
+metaObject wgEncodeRikenCageNhekCytosolPapClusters
+objType file
+attic auxSup
+bioRep 028C,027C
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001153
+expId 1153
+fileName wgEncodeRikenCageNhekCytosolPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K20,K08
+labProtocolId 028C+cage,027C+cage
+labVersion iIDR
+localization cytosol
+md5sum ae42418e36a6c9152f24d97bd24abeb2
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3990
+tableName wgEncodeRikenCageNhekCytosolPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageNhekCytosolPapMinusRawRep4
 objType table
@@ -8785,7 +9996,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001153
 expId 1153
-fileName wgEncodeRikenCageNhekCytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekCytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K08,K20
@@ -8826,6 +10037,34 @@ rnaExtract longNonPolyA
 subId 1812
 tableName wgEncodeRikenCageNhekNucleusPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageNhekNucleusPamClusters
+objType file
+attic auxSup
+bioRep gen0157N
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000347
+dccRep 1
+expId 347
+fileName wgEncodeRikenCageNhekNucleusPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I71
+labProtocolId gen0157N-cage
+labVersion iIDR
+localization nucleus
+md5sum a1fd5710672251a41752cf08d0784cd9
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3996
+tableName wgEncodeRikenCageNhekNucleusPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageNhekNucleusPamMinusSignal
 objType table
@@ -8945,7 +10184,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000347
 dccRep 1
 expId 347
-fileName wgEncodeRikenCageNhekNucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekNucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I71
@@ -8985,6 +10224,34 @@ rnaExtract longPolyA
 subId 2382
 tableName wgEncodeRikenCageNhekNucleusPapAlnRep3
 view Alignments
+
+metaObject wgEncodeRikenCageNhekNucleusPapClusters
+objType file
+attic auxSup
+bioRep 027N
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001154
+dccRep 1
+expId 1154
+fileName wgEncodeRikenCageNhekNucleusPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K09
+labProtocolId 027N+cage
+labVersion iIDR
+localization nucleus
+md5sum 80cb23e67a1d6c165515dd1571780340
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3983
+tableName wgEncodeRikenCageNhekNucleusPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageNhekNucleusPapMinusSignalRep3
 objType table
@@ -9103,7 +10370,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001154
 dccRep 1
 expId 1154
-fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K09
@@ -9144,6 +10411,34 @@ softwareVersion Delve version 0.9
 subId 1813
 tableName wgEncodeRikenCageProstateCellPamAln
 view Alignments
+
+metaObject wgEncodeRikenCageProstateCellPamClusters
+objType file
+attic auxSup
+bioRep gen0159WC
+cell prostate
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH000331
+dccRep 1
+expId 331
+fileName wgEncodeRikenCageProstateCellPamClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId I09
+labProtocolId gen0159WC-cage
+labVersion iIDR
+localization cell
+md5sum 2f42c7370f53c21d4651d8ddad4c458f
+origAssembly hg19
+project wgEncode
+rnaExtract longNonPolyA
+subId 3957
+tableName wgEncodeRikenCageProstateCellPamClusters
+view Clusters
 
 metaObject wgEncodeRikenCageProstateCellPamMinusSignal
 objType table
@@ -9306,6 +10601,33 @@ rnaExtract longPolyA
 subId 3339
 tableName wgEncodeRikenCageSknshraCellPapAlnRep2
 view Alignments
+
+metaObject wgEncodeRikenCageSknshraCellPapClusters
+objType file
+attic auxSup
+bioRep 019WC,020WC
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-28
+dateUnrestricted 2012-01-28
+dccAccession wgEncodeEH001157
+expId 1157
+fileName wgEncodeRikenCageSknshraCellPapClusters.bed.gz
+grant Gingeras
+lab RIKEN
+labExpId K14,K15
+labProtocolId 019WC+cage,020WC+cage
+labVersion iIDR
+localization cell
+md5sum 67328ad82def5d1cf5e3da833943d068
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 3979
+tableName wgEncodeRikenCageSknshraCellPapClusters
+view Clusters
 
 metaObject wgEncodeRikenCageSknshraCellPapMinusRawRep1
 objType table
@@ -9502,7 +10824,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001157
 expId 1157
-fileName wgEncodeRikenCageSknshraCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageSknshraCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K14,K15
@@ -9516,4 +10838,4 @@ rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: 1843964296
+# MAGIC: -2111790137

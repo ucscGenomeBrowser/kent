@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: xmfaToMaf.c,v 1.1 2003/08/20 21:03:09 krish Exp $";
 
 /* counts the number of non-gap bases in a seq */
 int ungappedSize(struct dnaSeq * seq) {

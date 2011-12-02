@@ -2,7 +2,6 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: tailLines.c,v 1.1 2006/07/26 05:51:51 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

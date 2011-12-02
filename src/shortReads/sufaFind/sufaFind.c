@@ -11,7 +11,6 @@
 #include "dnaLoad.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaFind.c,v 1.11 2008/11/07 23:56:44 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;

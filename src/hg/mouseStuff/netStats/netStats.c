@@ -6,7 +6,6 @@
 #include "chainNet.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: netStats.c,v 1.7 2009/01/15 06:35:27 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

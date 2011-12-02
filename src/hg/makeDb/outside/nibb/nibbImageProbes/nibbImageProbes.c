@@ -7,7 +7,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibbImageProbes.c,v 1.1 2006/07/26 04:00:03 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

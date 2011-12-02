@@ -11,7 +11,6 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.17 2009/07/10 18:11:56 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

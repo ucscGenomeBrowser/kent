@@ -9,7 +9,6 @@
 #include "rmskOut.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: rmskOut.c,v 1.9 2006/03/09 21:11:21 angie Exp $";
 
 void rmskOutStaticLoad(char **row, struct rmskOut *ret)
 /* Load a row from rmskOut table into ret.  The contents of ret will

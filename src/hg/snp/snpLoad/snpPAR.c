@@ -3,7 +3,6 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpPAR.c,v 1.6 2006/06/20 20:27:48 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;

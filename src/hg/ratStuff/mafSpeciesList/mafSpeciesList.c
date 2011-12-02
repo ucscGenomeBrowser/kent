@@ -5,7 +5,6 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafSpeciesList.c,v 1.2 2009/07/22 17:28:27 markd Exp $";
 
 boolean ignoreFirst = FALSE;
 

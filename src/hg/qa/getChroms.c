@@ -4,7 +4,6 @@
 #include "chromInfo.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: getChroms.c,v 1.2 2008/09/03 19:21:13 markd Exp $";
 
 static char *db = NULL;
 

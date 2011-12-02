@@ -12,7 +12,6 @@
 #include "htmshell.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.28 2009/08/21 18:39:59 angie Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen,
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)

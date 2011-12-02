@@ -5,7 +5,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: regChromiaMergeWindows.c,v 1.1 2010/04/29 20:52:47 kent Exp $";
 
 int scoreColumn = 4;
 int labelColumn = 3;

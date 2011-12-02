@@ -15,7 +15,6 @@
 #include "txInfo.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: txGeneCanonical.c,v 1.5 2007/04/03 01:43:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

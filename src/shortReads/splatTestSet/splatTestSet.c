@@ -13,7 +13,6 @@
 #include "fa.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: splatTestSet.c,v 1.6 2010/04/01 17:31:11 markd Exp $";
 
 /* Command line variables. */
 int chromCount = 1;

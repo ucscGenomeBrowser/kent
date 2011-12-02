@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: timePosTable.c,v 1.4 2008/09/03 19:21:13 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */

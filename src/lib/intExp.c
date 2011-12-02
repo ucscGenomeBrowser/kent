@@ -7,7 +7,6 @@
 #include "common.h"
 #include "kxTok.h"
 
-static char const rcsid[] = "$Id: intExp.c,v 1.6 2003/05/06 07:33:43 kate Exp $";
 
 static struct kxTok *tok;
 

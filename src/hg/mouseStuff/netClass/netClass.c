@@ -12,7 +12,6 @@
 #include "liftUp.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netClass.c,v 1.22 2008/09/03 19:20:38 markd Exp $";
 
 /* Command line switches. */
 char *tNewR = NULL;

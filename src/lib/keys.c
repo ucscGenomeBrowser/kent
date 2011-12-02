@@ -8,7 +8,6 @@
 #include "keys.h"
 #include "kxTok.h"
 
-static char const rcsid[] = "$Id: keys.c,v 1.10 2005/04/10 14:41:23 markd Exp $";
 
 struct kvt
 /* Key/value table. */

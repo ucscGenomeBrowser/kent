@@ -13,7 +13,6 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.61 2010/05/11 01:43:29 kent Exp $";
 
 #define ADDEXONCAPITAL
 

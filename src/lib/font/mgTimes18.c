@@ -1,6 +1,5 @@
 
 /* Times18.c - compiled data for font -Adobe-Times-M-R-N--18-180-75-7 */
-static char const rcsid[] = "$Id: mgTimes18.c,v 1.2 2010/03/31 00:07:46 kent Exp $";
 /* generated source code by utils/bdfToGem, do not edit */
 /* BDF data file input: 75dpi/timR18.bdf */
 

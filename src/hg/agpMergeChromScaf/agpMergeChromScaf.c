@@ -21,7 +21,6 @@
 #include "agpGap.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: agpMergeChromScaf.c,v 1.1 2009/06/23 07:46:43 galt Exp $";
 
 static void usage()
 /* Explain usage and exit. */

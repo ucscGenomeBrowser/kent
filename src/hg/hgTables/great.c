@@ -8,7 +8,6 @@
 #include "textOut.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: great.c,v 1.3 2010/06/01 20:09:36 galt Exp $";
 
 static char* greatData = "greatData/supportedAssemblies.txt";
 

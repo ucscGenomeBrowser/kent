@@ -5,7 +5,6 @@
 #include "options.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.1 2010/05/27 05:59:46 kent Exp $";
 
 int xCol;	/* Columns used 0 based. */
 int yCol;

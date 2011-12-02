@@ -6,7 +6,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: ooTester.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
 
 struct dnaSeq *randomSeq(int size)
 /* Make up a random sequence of given size. */

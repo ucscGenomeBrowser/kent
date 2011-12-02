@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "est3.h"
 
-static char const rcsid[] = "$Id: est3.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
 
 void est3StaticLoad(char **row, struct est3 *ret)
 /* Load a row from est3 table into ret.  The contents of ret will

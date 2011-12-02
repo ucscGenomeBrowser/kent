@@ -11,7 +11,6 @@
 #include "txCommon.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: txGeneProtAndRna.c,v 1.4 2008/09/23 04:34:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

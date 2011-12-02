@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "hapmapSnpsCombined.h"
 
-static char const rcsid[] = "$Id: hapmapSnpsCombined.c,v 1.3 2007/03/26 17:14:12 heather Exp $";
 
 void hapmapSnpsCombinedStaticLoad(char **row, struct hapmapSnpsCombined *ret)
 /* Load a row from hapmapSnpsCombined table into ret.  The contents of ret will

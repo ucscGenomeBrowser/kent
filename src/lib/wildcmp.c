@@ -5,7 +5,6 @@
 
 #include "common.h"
 
-static char const rcsid[] = "$Id: wildcmp.c,v 1.7 2009/11/20 19:11:16 angie Exp $";
 
 static int subMatch(const char *str, const char *wild, char single, char multi)
 /* Returns number of characters that match between str and wild up

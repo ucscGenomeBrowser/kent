@@ -6,7 +6,6 @@
 #include "ncbiBlast.h"
 #include "pslBuild.h"
 
-static char const rcsid[] = "$Id: blastXmlToPsl.c,v 1.2 2010/04/16 17:32:12 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

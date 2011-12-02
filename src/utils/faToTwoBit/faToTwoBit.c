@@ -8,7 +8,6 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: faToTwoBit.c,v 1.9 2007/04/24 18:37:46 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */

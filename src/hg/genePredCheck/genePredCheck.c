@@ -8,7 +8,6 @@
 #include "genePredReader.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: genePredCheck.c,v 1.8 2008/09/03 19:18:38 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {

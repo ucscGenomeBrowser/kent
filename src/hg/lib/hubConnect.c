@@ -34,7 +34,7 @@ static char *getHubStatusTableName()
 {
 if (hubStatusTableName == NULL)
     hubStatusTableName = cfgOptionEnvDefault("HGDB_HUB_STATUS_TABLE",
-	    "hubStatusTableName", defaultHubStatusTableName);
+	    hubStatusTableConfVariable, defaultHubStatusTableName);
 
 return hubStatusTableName;
 }
@@ -124,13 +124,7 @@ if (hub != NULL)
 return FALSE;
 }
 
-boolean isHubUnlisted(struct hubConnectStatus *hub) 
-/* Return TRUE if it's an unlisted hub */
-{
-    return (hub->status & HUB_UNLISTED);
-}
-
-static struct trackHub *fetchHub(char *url, boolean unlisted, char **errorMessage)
+static struct trackHub *fetchHub(char *url, char **errorMessage)
 {
 struct errCatch *errCatch = errCatchNew();
 struct trackHub *tHub = NULL;
@@ -173,7 +167,7 @@ if (row != NULL)
 
     char *errorMessage = cloneString(row[2]);
     if (isEmpty(errorMessage))
-	hub->trackHub = fetchHub( hub->hubUrl, isHubUnlisted(hub), &errorMessage);
+	hub->trackHub = fetchHub( hub->hubUrl, &errorMessage);
     if (errorMessage != NULL)
 	hub->errorMessage = cloneString(errorMessage);
 
@@ -363,14 +357,19 @@ while ((hel = hashNext(&cookie)) != NULL)
 return dy->string;
 }
 
-static void insertHubUrlInStatus(char *url, boolean unlisted)
+static void insertHubUrlInStatus(char *url)
 /* add a url to the hubStatus table */
 {
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
+char *statusTable = getHubStatusTableName();
 
-safef(query, sizeof(query), "insert into %s (hubUrl,status) values (\"%s\",%d)",
-    getHubStatusTableName(), url, unlisted ? 1 : 0);
+if (sqlFieldIndex(conn, statusTable, "firstAdded") >= 0)
+    safef(query, sizeof(query), "insert into %s (hubUrl,firstAdded) values (\"%s\",now())",
+	statusTable, url);
+else
+    safef(query, sizeof(query), "insert into %s (hubUrl) values (\"%s\")",
+	statusTable, url);
 sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
 }
@@ -412,7 +411,7 @@ return id;
 }
 
 static void getAndSetHubStatus(char *database, struct cart *cart, char *url, 
-    boolean set, boolean unlisted)
+    boolean set)
 /* make sure url is in hubStatus table, fetch the hub to get latest
  * labels and db information.
  * Set the cart variable to turn the hub on if set == TRUE.  
@@ -425,7 +424,7 @@ unsigned id;
 if ((id = getHubId(url, &errorMessage)) == 0)
     {
     /* the url is not in the hubStatus table, add it */
-    insertHubUrlInStatus(url, unlisted);
+    insertHubUrlInStatus(url);
     if ((id = getHubId(url, &errorMessage)) == 0)
 	{
 	errAbort("opened hub, but could not get it out of the hubStatus table");
@@ -440,7 +439,7 @@ hub->id = id;
 hub->hubUrl = cloneString(url);
 
 /* new fetch the contents of the hub to fill in the status table */
-struct trackHub *tHub = fetchHub( url, unlisted, &errorMessage);
+struct trackHub *tHub = fetchHub( url, &errorMessage);
 if (tHub != NULL)
     hub->trackHub = tHub;
 
@@ -469,7 +468,7 @@ int id = 0;
 if ((id = getHubId(url, errorMessage)) > 0)
     return id;
 
-getAndSetHubStatus(database, cart, url, FALSE, FALSE);
+getAndSetHubStatus(database, cart, url, FALSE);
 
 if ((id = getHubId(url, errorMessage)) == 0)
     errAbort("inserted new hubUrl %s, but cannot find it", url);
@@ -485,7 +484,7 @@ char *url = cartOptionalString(cart, hgHubDataText);
 if (url != NULL)
     {
     trimSpaces(url);
-    getAndSetHubStatus(database, cart, url, TRUE, TRUE);
+    getAndSetHubStatus(database, cart, url, TRUE);
     cartRemove(cart, hgHubDataText);
     }
 }

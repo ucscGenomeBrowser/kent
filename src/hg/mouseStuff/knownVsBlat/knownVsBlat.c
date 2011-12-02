@@ -13,7 +13,6 @@
 #include "bed.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: knownVsBlat.c,v 1.15 2008/09/03 19:20:36 markd Exp $";
 
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */

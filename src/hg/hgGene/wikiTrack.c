@@ -15,7 +15,6 @@
 #include "wikiLink.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.24 2009/09/23 18:42:17 angie Exp $";
 
 static char *hgGeneUrl()
 {

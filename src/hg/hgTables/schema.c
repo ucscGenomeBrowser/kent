@@ -26,7 +26,6 @@
 #include "hubConnect.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.66 2010/06/07 16:53:10 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */

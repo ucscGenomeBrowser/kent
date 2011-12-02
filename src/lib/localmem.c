@@ -11,7 +11,6 @@
 #include "common.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: localmem.c,v 1.13 2009/12/03 20:04:29 kent Exp $";
 
 struct lm
     {

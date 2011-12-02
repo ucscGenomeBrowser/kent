@@ -84,8 +84,10 @@ if (thub != NULL)
     }
 }
 
-static void hgHubConnectUnlisted(struct hubConnectStatus *hubList)
+static void hgHubConnectUnlisted(struct hubConnectStatus *hubList, 
+    struct hash *publicHash)
 /* Put up the list of unlisted hubs and other controls for the page. */
+/* adds hubUrls to publicHash */
 /* NOTE: Destroys hubList */
 {
 // put out the top of our page
@@ -111,7 +113,8 @@ struct hash *assHash = newHash(5);
 for(hub = hubList; hub; hub = nextHub)
     {
     nextHub = hub->next;
-    if (isHubUnlisted(hub) )
+    // if url is not in publicHash, it's unlisted */
+    if (!((publicHash != NULL) && hashLookup(publicHash, hub->hubUrl)))
 	{
 	addGenomesToHash(hub, assHash);
 	unlistedHubCount++;
@@ -218,9 +221,10 @@ printf("</TR></tbody></TABLE>\n");
 printf("</div>");
 }
 
-static boolean outputPublicTable(struct sqlConnection *conn, char *publicTable)
+static struct hash *outputPublicTable(struct sqlConnection *conn, char *publicTable)
 /* Put up the list of public hubs and other controls for the page. */
 {
+struct hash *publicHash = NULL;
 char query[512];
 safef(query, sizeof(query), "select hubUrl,shortLabel,longLabel,dbList from %s", 
 	publicTable); 
@@ -250,6 +254,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	// start first row
 	printf("<tbody> <tr>");
 	gotAnyRows = TRUE;
+
+	// allocate the hash to store hubUrl's
+	publicHash = newHash(5);
 	}
 
     char *errorMessage = NULL;
@@ -290,6 +297,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     ourPrintCell(removeLastComma(dbList));
     ourPrintCell(url);
+    hashStore(publicHash, url);
     }
 sqlFreeResult(&sr);
 
@@ -298,23 +306,27 @@ if (gotAnyRows)
     printf("</TR></tbody></TABLE>\n");
     printf("</div>");
     }
-return gotAnyRows;
+return publicHash;
 }
 
 
-void hgHubConnectPublic()
+struct hash *hgHubConnectPublic()
 /* Put up the list of public hubs and other controls for the page. */
 {
+struct hash *retHash = NULL;
 struct sqlConnection *conn = hConnectCentral();
 char *publicTable = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", 
-	"hubPublicTableName", defaultHubPublicTableName);
-if (!(sqlTableExists(conn, publicTable) && outputPublicTable(conn, publicTable) ))
+	hubPublicTableConfVariable, defaultHubPublicTableName);
+if (!(sqlTableExists(conn, publicTable) && 
+	(retHash = outputPublicTable(conn, publicTable)) != NULL ))
     {
     printf("<div id=\"publicHubs\" class=\"hubList\"> \n");
     printf("No Public Track Hubs for this genome assembly<BR>");
     printf("</div>");
     }
 hDisconnectCentral(&conn);
+
+return retHash;
 }
 
 static void tryHubOpen(unsigned id)
@@ -501,8 +513,8 @@ printf("<div id=\"tabs\">"
        "<li><a href=\"#unlistedHubs\">My Hubs</a></li> "
        "</ul> ");
 
-hgHubConnectPublic();
-hgHubConnectUnlisted(hubList);
+struct hash *publicHash = hgHubConnectPublic();
+hgHubConnectUnlisted(hubList, publicHash);
 printf("</div>");
 
 printf("<div class=\"tabFooter\">");

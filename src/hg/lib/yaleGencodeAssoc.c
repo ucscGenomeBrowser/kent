@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: yaleGencodeAssoc.c,v 1.1 2010/04/30 21:23:38 braney Exp $";
 
 void yaleGencodeAssocStaticLoad(char **row, struct yaleGencodeAssoc *ret)
 /* Load a row from yaleGencodeAssoc table into ret.  The contents of ret will

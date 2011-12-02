@@ -12,7 +12,6 @@
 #include "expData.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgExperiment.c,v 1.2 2006/04/19 14:54:26 angie Exp $";
 
 char *tabDir = ".";
 char *chopName = NULL;

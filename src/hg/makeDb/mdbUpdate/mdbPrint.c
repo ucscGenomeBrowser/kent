@@ -5,7 +5,6 @@
 #include "options.h"
 #include "mdb.h"
 
-static char const rcsid[] = "$Id: mdbPrint.c,v 1.6 2010/06/11 17:33:57 tdreszer Exp $";
 
 #define OBJTYPE_DEFAULT "table"
 

@@ -9,7 +9,6 @@
 #include "hgRelate.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.34 2009/03/12 17:40:33 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

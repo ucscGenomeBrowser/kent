@@ -7,7 +7,6 @@
 #include "hgConfig.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.39 2009/07/10 01:40:37 markd Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */

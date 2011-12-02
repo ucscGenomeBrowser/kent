@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "gcPercent.h"
 
-static char const rcsid[] = "$Id: gcPercent.c,v 1.4 2005/04/13 06:25:53 markd Exp $";
 
 void gcPercentStaticLoad(char **row, struct gcPercent *ret)
 /* Load a row from gcPercent table into ret.  The contents of ret will

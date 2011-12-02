@@ -39,7 +39,6 @@
 #include "pgSnp.h"
 #include "regexHelper.h"
 
-static char const rcsid[] = "$Id: customFactory.c,v 1.126 2010/06/01 20:38:07 galt Exp $";
 
 static boolean doExtraChecking = FALSE;
 

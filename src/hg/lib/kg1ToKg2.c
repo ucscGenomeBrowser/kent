@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "kg1ToKg2.h"
 
-static char const rcsid[] = "$Id: kg1ToKg2.c,v 1.1 2007/03/27 05:20:50 kent Exp $";
 
 void kg1ToKg2StaticLoad(char **row, struct kg1ToKg2 *ret)
 /* Load a row from kg1ToKg2 table into ret.  The contents of ret will

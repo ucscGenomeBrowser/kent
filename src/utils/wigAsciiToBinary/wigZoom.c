@@ -12,7 +12,6 @@
 #include	"options.h"
 #include	"linefile.h"
 
-static char const rcsid[] = "$Id: wigZoom.c,v 1.5 2004/12/15 20:17:56 hiram Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

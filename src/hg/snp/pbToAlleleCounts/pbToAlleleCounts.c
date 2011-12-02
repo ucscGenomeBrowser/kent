@@ -14,7 +14,6 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pbToAlleleCounts.c,v 1.4 2006/07/10 04:18:52 daryl Exp $";
 
 static int ssnpId=0;
 boolean strictSnp=FALSE;

@@ -9,7 +9,6 @@
 #include "gbSql.h"
 #include "mgcStage1.h"
 
-static char const rcsid[] = "$Id: mgcStage1.c,v 1.2 2004/02/16 19:30:07 markd Exp $";
 
 void mgcStage1StaticLoad(char **row, struct mgcStage1 *ret)
 /* Load a row from mgcStage1 table into ret.  The contents of ret will

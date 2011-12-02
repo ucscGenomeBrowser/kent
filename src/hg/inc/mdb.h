@@ -362,6 +362,9 @@ void mdbObjsSortOnCv(struct mdbObj **mdbObjs, boolean includeHidden);
 // Puts obj->vars in order based upon cv.ra typeOfTerms priority,
 //  then case-sensitively sorts all objs in list based upon that var order.
 
+boolean mdbObjRemoveOneVar(struct mdbObj *mdbObj, char *var, char *val);
+// returns TRUE if var (and optional val) are found and surgically removed from one mdbObj
+
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 

@@ -10,7 +10,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.14 2006/06/28 19:09:27 heather Exp $";
 
 struct snpData
     {

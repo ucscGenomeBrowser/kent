@@ -5,7 +5,6 @@
 #include "options.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.11 2006/01/20 17:29:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
