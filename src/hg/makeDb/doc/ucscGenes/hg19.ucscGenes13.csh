@@ -76,7 +76,7 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
-set rfam = /hive/data/outside/Rfam/111005
+set rfam = /hive/data/outside/Rfam/111130
 
 
 # Tracks
@@ -104,9 +104,6 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
-
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
 
 
 # Get Genbank info
@@ -165,11 +162,8 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 # probably should be revisited later, but affects only a few sequences 
 # at this time (10/09/11).
 mkdir -p rfam
-pslToBed ${rfam}/${db}/rfam.bed
-bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
+bedIntersect -aHitAny ${rfam}/${db}/Rfam.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
-pslCDnaFilter -uniqueMapped rfam.syntenic.psl rfam.syntenic.uniq.psl
-pslToBed rfam.syntenic.uniq.psl rfam.syntenic.uniq.bed
  
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna 
@@ -595,8 +589,9 @@ pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
 rm -r protein/raw
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+
 
 
 
@@ -640,11 +635,11 @@ cat cdsEvidence/*.tce | sort  > unweighted.tce
 
 # Merge back in antibodies, and add the small, noncoding genes that are not well-represented
 # in GenBank (Rfam, tRNA)
-cat txWalk.bed antibody.bed trna.bed rfam.syntenic.uniq.bed > abWalk.bed
+cat txWalk.bed antibody.bed trna.bed rfam.syntenic.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
 sequenceForBed -db=$db -bedIn=trna.bed -fastaOut=stdout -upCase -keepName > trna.fa
-sequenceForBed -db=$db -bedIn=rfam.syntenic.uniq.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.uniq.fa
-cat txWalk.fa antibody.fa trna.fa rfam.syntenic.uniq.fa > abWalk.fa
+sequenceForBed -db=$db -bedIn=rfam.syntenic.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.fa
+cat txWalk.fa antibody.fa trna.fa rfam.syntenic.fa > abWalk.fa
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -732,6 +727,9 @@ txGeneProtAndRna weeded.bed weeded.info weeded.fa weededCds.faa \
     refSeq.fa refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa \
     ucscGenesTx.fa ucscGenesTx.faa
 
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 
 # Generate ucscGene/uniprot blat run.
