@@ -1,6 +1,7 @@
 import sys
 import re
 from ucscgenomics.ordereddict import OrderedDict
+import collections
 
 class RaFile(OrderedDict):
     """
@@ -167,11 +168,14 @@ class RaFile(OrderedDict):
         """
         select useful data from matching criteria
 
-        where: the conditional function that must be met. Where takes one argument, the stanza and should return true or false
-        select: the data to return. Takes in stanza, should return whatever to be added to the list for that stanza.
+        where: the conditional function that must be met. Where takes one
+        argument, the stanza and should return true or false
+        select: the data to return. Takes in stanza, should return whatever
+        to be added to the list for that stanza.
 
-        For each stanza, if where(stanza) holds, it will add select(stanza) to the list of returned entities.
-        Also forces silent failure of key errors, so you don't have to check that a value is or is not in the stanza.
+        For each stanza, if where(stanza) holds, it will add select(stanza)
+        to the list of returned entities. Also forces silent failure of key
+        errors, so you don't have to check that a value is or is not in the stanza.
         """
 
         ret = list()
@@ -186,21 +190,178 @@ class RaFile(OrderedDict):
     def filter2(self, where):
         """
         select useful data from matching criteria
+        Filter2 returns a Ra dictionary. Easier to use but more memory intensive.
 
-        where: the conditional function that must be met. Where takes one argument, the stanza and should return true or false
-        select: the data to return. Takes in stanza, should return whatever to be added to the list for that stanza.
+        where: the conditional function that must be met. Where takes one
+        argument, the stanza and should return true or false
+        select: the data to return. Takes in stanza, should return whatever
+        to be added to the list for that stanza.
 
-        For each stanza, if where(stanza) holds, it will add select(stanza) to the list of returned entities.
-        Also forces silent failure of key errors, so you don't have to check that a value is or is not in the stanza.
+        For each stanza, if where(stanza) holds, it will add select(stanza)
+        to the list of returned entities. Also forces silent failure of key
+        errors, so you don't have to check that a value is or is not in the stanza.
         """
-
         ret = RaFile()
         for stanza in self.itervalues():
             try:
                 if where(stanza):
-                    ret[stanza.name] = stanza
+                        ret[stanza.name] = stanza
             except KeyError:
                 continue
+        return ret
+
+    def summaryDiff(self,other):
+        """
+        Input:
+            RaFile object being compared.
+        Output: RaFile with differences.
+
+        Returns ***partial*** stanzas of ***anything*** different
+        from the self dictionary compared to the other dictionary.
+        For versatility, it only returns stanzas from the self Ra file. In other
+        words, it returns the self dictionary lines that are either not present
+        in or different from the other dictionary.
+
+        To obtain full set of differences, run summaryDiff twice
+        ra1 = this.summaryDiff(that)
+        and
+        ra2 = that.summaryDiff(this)
+        """
+        this = RaFile()
+        RetThis = RaFile()
+        for stanza in self.itervalues():
+            if stanza.name not in other.keys():
+                RetThis[stanza.name] = stanza
+            else:
+                if stanza.difference(other[stanza.name]):
+                    RetThis[stanza.name] = stanza.difference(other[stanza.name])
+        return RetThis
+
+    def changeSummary(self, otherRa):
+        """
+        Input:
+            Two RaFile objects
+        Output:
+            Dictionary showing differences between stanzas, list of added and dropeed stanzas
+        """
+        retDict = collections.defaultdict(list)
+        dropList = set(self.iterkeys()) - set(otherRa.iterkeys())
+        addList = set(otherRa.iterkeys()) - set(self.iterkeys())
+        common = set(self.iterkeys()) & set(otherRa.iterkeys())
+
+        p = re.compile('^\s*#')
+        for stanza in common:
+            if p.match(stanza):
+                continue
+            for key in self[stanza]:
+                if p.match(key):
+                    continue
+                if key in otherRa[stanza]:
+                    if self[stanza][key] != otherRa[stanza][key]:
+                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, self[stanza][key], otherRa[stanza][key]))
+                else:
+                    retDict[stanza].append("Added %s -> %s" %(key, self[stanza][key]))
+            for key in otherRa[stanza]:
+                if p.match(key):
+                    continue
+                if key not in self[stanza]:
+                    retDict[stanza].append("Dropped %s -> %s" %(key, otherRa[stanza][key]))
+        return retDict, dropList, addList
+
+    def diffFilter(self, select, other):
+        """
+        Input:
+            Lambda function of desired comparison term
+            RaFile object being compared.
+        Output: RaFile with differences.
+
+        Filter returns ***full*** stanzas of a ***select function*** from
+        the self dictionary compared to the other dictionary. For
+        versatility, it only returns stanzas from the self Ra file. In other
+        words, it only returns self dictionary stanzas with the function term
+        that are either not found in or different from the other
+        dictionary.
+
+        To obtain full set of differences, run diffFilter twice
+        ra1 = this.diffFilter(select function, that)
+        and
+        ra2 = that.diffFilter(select function, this)
+        """
+        this = RaFile()
+        RetThis = RaFile()
+        thisSelectDict = dict()
+        thatSelectDict = dict()
+        #Build 2 dict of stanzas to later compare line-by-line
+        for stanza in self.itervalues():
+            try:
+                if select(stanza):
+                    this[stanza.name] = stanza #'this' only records stanzas of the self dict
+                    thisSelectDict[stanza.name] = select(stanza)
+            except KeyError:
+                continue
+        for stanza in other.itervalues():
+            #Exact code as filter2 but kept for clarity.
+            try:
+                if select(stanza):
+                    thatSelectDict[stanza.name] = select(stanza)
+            except KeyError:
+                continue
+        #Compare this and that dict
+        for stanza in this.itervalues():
+            if stanza.name not in thatSelectDict:
+                RetThis[stanza.name] = stanza
+            elif thisSelectDict[stanza.name] != thatSelectDict[stanza.name]:
+                RetThis[stanza.name] = stanza
+        return RetThis
+
+    def updateDiffFilter(self, term, other):
+        """
+        Replicates updateMetadata.
+        Input:
+            Term
+            Other raFile
+
+        Output:
+            Merged RaFile
+                Stanzas found in 'self' and 'other' that have the 'Term' in 'other'
+                are overwritten (or inserted if not found) into 'self'. Final merged
+                dictionary is returned.
+        """
+        ret = self
+        common = set(self.iterkeys()) & set(self.iterkeys())
+        for stanza in common:
+            if term not in self[stanza] and term not in other[stanza]:
+                continue
+            if term in self[stanza] and term not in other[stanza]:
+                    del ret[stanza][term]
+                    continue
+
+            if term in other[stanza]:
+                #Remake stanza to keep order of terms
+                tempStanza = RaStanza()
+                tempStanza._name = stanza
+                try:
+                    tempStanza['metaObject'] = self[stanza]['metaObject']
+                    tempStanza['objType'] = self[stanza]['objType']
+                    termList = self[stanza].keys()
+                    termList.remove('metaObject')
+                    termList.remove('objType')
+                except KeyError:
+                    termList = self[stanza].keys()
+                if term not in termList:
+                    termList.append(term)
+                for t in sorted(termList, key=str.lower):
+                    if t == term:
+                        if t not in self[stanza]:
+                            tempStanza[t] = other[stanza][t]
+                        elif self[stanza][t] != other[stanza][t]:
+                            tempStanza[t] = other[stanza][t]
+                        else:
+                            tempStanza[t] = self[stanza][t]
+                    else:
+                        tempStanza[t] = self[stanza][t]
+                ret[stanza] = tempStanza
+
         return ret
 
     def __str__(self):
@@ -267,6 +428,24 @@ class RaStanza(OrderedDict):
                 #raise KeyError(raKey + ' already exists')
             self[raKey] = raVal
 
+    def difference(self, other):
+        '''
+        Complement function to summaryDiff.
+        Takes in self and a comparison Stanza.
+        Returns new stanza with terms from 'self' that are different from 'other'
+        Like the summaryDiff, to get the other terms, this needs to be run
+        again with self and other switched.
+        '''
+        retRa = RaStanza()
+        retRa._name = self.name
+        for key in other.keys():
+            try:
+                if other[key] != self[key] and not key.startswith('#'):
+                    retRa[key] = self[key]
+            except KeyError:
+                continue
+                #maybe add empty keys
+        return retRa
 
     def iterkeys(self):
         for item in self._OrderedDict__ordering:
@@ -288,7 +467,6 @@ class RaStanza(OrderedDict):
 
     def iter(self):
         iterkeys(self)
-
 
     def __str__(self):
         str = ''
