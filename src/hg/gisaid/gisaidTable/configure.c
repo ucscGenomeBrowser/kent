@@ -8,7 +8,6 @@
 
 #include "gisaidTable.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.1 2009/06/09 15:57:49 fanhsu Exp $";
 
 char *configVarName(struct column *col, char *varName)
 /* Return variable name for configuration. */

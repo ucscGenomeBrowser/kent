@@ -14,7 +14,6 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbRelease.c,v 1.5 2007/11/16 18:19:50 markd Exp $";
 
 /* size power of hash tables for shared strings */
 #define ORG_NAMES_HASH_SIZE   19

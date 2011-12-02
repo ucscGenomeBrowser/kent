@@ -11,7 +11,6 @@
 #include "txRnaAccs.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: txCdsEvFromBed.c,v 1.3 2008/04/16 15:24:27 kent Exp $";
 struct hash *compatibleTxPerCds = NULL;
 
 void usage()

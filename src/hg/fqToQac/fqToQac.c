@@ -9,7 +9,6 @@
 #include "hCommon.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: fqToQac.c,v 1.4 2006/04/03 16:27:16 angie Exp $";
 
 FILE *errLog;
 

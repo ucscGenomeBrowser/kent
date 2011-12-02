@@ -19,7 +19,6 @@
 #include "customFactory.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.53 2010/03/05 22:26:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

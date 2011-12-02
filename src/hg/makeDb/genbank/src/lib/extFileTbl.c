@@ -9,7 +9,6 @@
 #include "localmem.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.8 2008/07/28 17:28:48 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables

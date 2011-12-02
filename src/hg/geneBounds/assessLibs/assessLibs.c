@@ -9,7 +9,6 @@
 #include "genePred.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: assessLibs.c,v 1.7 2008/09/03 19:18:33 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

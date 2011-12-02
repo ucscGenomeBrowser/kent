@@ -9,7 +9,6 @@
 #include "verbose.h"
 
 
-static char const rcsid[] = "$Id: timeGifPng.c,v 1.2 2010/05/04 23:56:01 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: faRenameRecords.c,v 1.1 2009/10/22 04:01:17 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

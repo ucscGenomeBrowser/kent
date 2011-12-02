@@ -5,7 +5,6 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtFilter.c,v 1.13 2006/01/26 22:08:36 lowec Exp $";
 
 void usage()
 /* Explain usage and exit. */

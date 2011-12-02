@@ -8,7 +8,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckLocTypeSize.c,v 1.1 2006/02/06 22:05:11 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;

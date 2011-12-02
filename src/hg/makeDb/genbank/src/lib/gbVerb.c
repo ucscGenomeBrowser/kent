@@ -8,7 +8,6 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char const rcsid[] = "$Id: gbVerb.c,v 1.6 2005/11/04 08:07:38 markd Exp $";
 
 struct times
 /* used to record time */

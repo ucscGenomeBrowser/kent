@@ -9,7 +9,6 @@
 #include "chromInfo.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.13 2009/07/10 17:48:36 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =

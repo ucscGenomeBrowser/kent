@@ -25,7 +25,6 @@
 #include "dystring.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: errabort.c,v 1.16 2010/01/12 18:16:27 markd Exp $";
 
 
 #define maxWarnHandlers 20

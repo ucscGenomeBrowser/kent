@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "itemConf.h"
 
-static char const rcsid[] = "$Id: itemConf.c,v 1.1 2007/09/22 23:53:30 hartera Exp $";
 
 void itemConfStaticLoad(char **row, struct itemConf *ret)
 /* Load a row from itemConf table into ret.  The contents of ret will

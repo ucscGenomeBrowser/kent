@@ -9,7 +9,6 @@
 #include "sqlNum.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: bfastMafFix.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
 
 char *out = "maf";
 

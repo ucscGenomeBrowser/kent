@@ -5,7 +5,6 @@
 #include "cheapcgi.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: kvsSummary.c,v 1.4 2006/06/20 16:44:17 angie Exp $";
 
 #define maxRuns 256
 #define maxChroms 256

@@ -13,7 +13,6 @@
 #include "visiSearch.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.30 2006/06/25 01:11:45 galt Exp $";
 
 char titleMessage[1024] = "";
 

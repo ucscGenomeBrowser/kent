@@ -8,7 +8,6 @@
 #include "fa.h"
 #include "rangeTree.h"
 
-static char const rcsid[] = "$Id: txCdsOrfInfo.c,v 1.1 2007/03/14 05:56:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

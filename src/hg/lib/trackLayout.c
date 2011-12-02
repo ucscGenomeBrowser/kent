@@ -8,7 +8,6 @@
 #include "hCommon.h"
 #include "trackLayout.h"
 
-static char const rcsid[] = "$Id: trackLayout.c,v 1.5 2010/04/22 19:35:38 kent Exp $";
 
 
 void trackLayoutSetPicWidth(struct trackLayout *tl, char *s)

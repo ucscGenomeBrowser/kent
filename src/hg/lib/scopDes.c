@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "scopDes.h"
 
-static char const rcsid[] = "$Id: scopDes.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void scopDesStaticLoad(char **row, struct scopDes *ret)
 /* Load a row from scopDes table into ret.  The contents of ret will

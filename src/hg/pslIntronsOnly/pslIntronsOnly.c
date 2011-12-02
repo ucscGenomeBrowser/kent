@@ -8,7 +8,6 @@
 #include "twoBit.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.10 2005/08/21 15:49:45 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

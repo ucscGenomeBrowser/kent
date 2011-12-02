@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeHapMapAlleleFreq.h"
 
-static char const rcsid[] = "$Id: encodeHapMapAlleleFreq.c,v 1.1 2008/08/01 17:49:06 aamp Exp $";
 
 void encodeHapMapAlleleFreqStaticLoad(char **row, struct encodeHapMapAlleleFreq *ret)
 /* Load a row from encodeHapMapAlleleFreq table into ret.  The contents of ret will

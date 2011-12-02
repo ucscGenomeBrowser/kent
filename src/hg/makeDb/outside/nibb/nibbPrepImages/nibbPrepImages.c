@@ -7,7 +7,6 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: nibbPrepImages.c,v 1.1 2006/07/26 04:00:09 markd Exp $";
 
 int thumbSize = 200;
 

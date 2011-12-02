@@ -7,7 +7,6 @@
 #include "sig.h"
 #include "fof.h"
 
-static char const rcsid[] = "$Id: fof.c,v 1.7 2006/03/10 17:43:36 angie Exp $";
 
 struct fofRecord
 /* This holds a record of an index file. */

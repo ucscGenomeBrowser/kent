@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: subSnpCondense.c,v 1.4 2006/06/23 20:15:52 heather Exp $";
 
 static char *snpDb = NULL;
 

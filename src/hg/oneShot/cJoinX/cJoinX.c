@@ -5,7 +5,6 @@
 #include "options.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: cJoinX.c,v 1.4 2004/07/17 00:37:59 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

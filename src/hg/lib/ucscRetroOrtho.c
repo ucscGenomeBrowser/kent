@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ucscRetroOrtho.h"
 
-static char const rcsid[] = "$Id:$";
 
 void ucscRetroOrthoStaticLoad(char **row, struct ucscRetroOrtho *ret)
 /* Load a row from ucscRetroOrtho table into ret.  The contents of ret will

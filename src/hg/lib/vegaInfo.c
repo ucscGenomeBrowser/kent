@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "vegaInfo.h"
 
-static char const rcsid[] = "$Id: vegaInfo.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void vegaInfoStaticLoad(char **row, struct vegaInfo *ret)
 /* Load a row from vegaInfo table into ret.  The contents of ret will

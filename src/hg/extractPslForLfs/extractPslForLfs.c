@@ -19,7 +19,6 @@
 
 #define MAXFILES 100
 
-static char const rcsid[] = "$Id: extractPslForLfs.c,v 1.3 2006/08/09 19:07:40 hartera Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

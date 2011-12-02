@@ -12,7 +12,6 @@
 #include "customTrack.h"
 #endif /* GBROWSE */
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.56 2010/05/11 01:43:30 kent Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {

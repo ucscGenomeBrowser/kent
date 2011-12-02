@@ -10,7 +10,6 @@
 #include "fbTables.h"
 #include "bdgpExprLink.h"
 
-static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.8 2006/03/06 17:46:34 angie Exp $";
 
 boolean isFly()
 /* Return true if organism is D. melanogaster. */

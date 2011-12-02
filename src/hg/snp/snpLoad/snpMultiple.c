@@ -8,7 +8,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.14 2006/06/20 23:34:52 heather Exp $";
 
 static char *snpDb = NULL;
 

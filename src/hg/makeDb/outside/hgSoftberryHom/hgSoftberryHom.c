@@ -5,7 +5,6 @@
 #include "dystring.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgSoftberryHom.c,v 1.1 2006/07/26 03:59:58 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

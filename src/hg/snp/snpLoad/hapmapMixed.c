@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmapMixed.c,v 1.3 2007/03/14 21:19:36 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */

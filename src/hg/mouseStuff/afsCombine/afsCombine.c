@@ -5,7 +5,6 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: afsCombine.c,v 1.1 2005/01/24 21:02:07 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

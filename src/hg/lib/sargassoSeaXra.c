@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "sargassoSeaXra.h"
 
-static char const rcsid[] = "$Id: sargassoSeaXra.c,v 1.1 2004/09/29 21:41:18 kschneid Exp $";
 
 void sargassoSeaXraStaticLoad(char **row, struct sargassoSeaXra *ret)
 /* Load a row from sargassoSeaXra table into ret.  The contents of ret will

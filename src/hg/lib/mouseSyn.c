@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "mouseSyn.h"
 
-static char const rcsid[] = "$Id: mouseSyn.c,v 1.4 2005/04/13 06:25:55 markd Exp $";
 
 void mouseSynStaticLoad(char **row, struct mouseSyn *ret)
 /* Load a row from mouseSyn table into ret.  The contents of ret will

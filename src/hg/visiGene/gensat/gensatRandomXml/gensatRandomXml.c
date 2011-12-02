@@ -9,7 +9,6 @@
 #include "obscure.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: gensatRandomXml.c,v 1.1 2005/11/25 16:34:23 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

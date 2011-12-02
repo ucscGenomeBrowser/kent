@@ -9,7 +9,6 @@
 #include "txInfo.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: info.c,v 1.5 2010/02/23 23:03:37 kent Exp $";
 
 void doTxInfoDescription()
 /* Put up info on fields in txInfo table. */

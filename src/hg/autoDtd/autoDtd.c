@@ -10,7 +10,6 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.15 2006/09/19 14:59:56 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

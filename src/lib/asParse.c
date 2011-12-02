@@ -6,7 +6,6 @@
 #include "dystring.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: asParse.c,v 1.9 2009/08/13 21:48:17 braney Exp $";
 
 /* n.b. switched double/float from %f to %g to partially address losing
  * precision.  Values like 2e-12 were being rounded to 0.0 with %f.  While %g

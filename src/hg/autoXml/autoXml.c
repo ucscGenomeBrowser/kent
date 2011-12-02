@@ -8,7 +8,6 @@
 #include "portable.h"
 #include "dtdParse.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.24 2006/03/22 16:52:23 angie Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";

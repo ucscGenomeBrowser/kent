@@ -7,7 +7,6 @@
 #include "portable.h"
 #include "ooUtils.h"
 
-static char const rcsid[] = "$Id: ooNtInput.c,v 1.4 2003/05/06 07:22:33 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

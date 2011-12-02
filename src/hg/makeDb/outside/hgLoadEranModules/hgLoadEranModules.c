@@ -13,7 +13,6 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: hgLoadEranModules.c,v 1.4 2008/09/03 19:19:50 markd Exp $";
 
 
 void usage()

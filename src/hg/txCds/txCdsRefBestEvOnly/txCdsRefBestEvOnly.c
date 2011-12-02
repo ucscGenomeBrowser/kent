@@ -5,7 +5,6 @@
 #include "options.h"
 #include "cdsEvidence.h"
 
-static char const rcsid[] = "$Id: txCdsRefBestEvOnly.c,v 1.1 2007/03/10 07:21:37 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

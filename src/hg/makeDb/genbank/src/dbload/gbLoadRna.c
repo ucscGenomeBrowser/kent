@@ -32,7 +32,6 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.40 2008/10/12 07:33:02 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 

@@ -5,7 +5,6 @@
 #include "options.h"
 #include "emblParse.h"
 
-static char const rcsid[] = "$Id: hgEmblProtLinks.c,v 1.2 2006/06/21 14:38:30 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

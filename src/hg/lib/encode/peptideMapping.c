@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "peptideMapping.h"
 
-static char const rcsid[] = "$Id:$";
 
 void peptideMappingStaticLoad(char **row, struct peptideMapping *ret)
 /* Load a row from peptideMapping table into ret.  The contents of ret will

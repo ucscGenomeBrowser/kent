@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "celeraCoverage.h"
 
-static char const rcsid[] = "$Id: celeraCoverage.c,v 1.3 2005/04/13 06:25:50 markd Exp $";
 
 void celeraCoverageStaticLoad(char **row, struct celeraCoverage *ret)
 /* Load a row from celeraCoverage table into ret.  The contents of ret will

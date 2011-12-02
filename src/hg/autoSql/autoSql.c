@@ -18,11 +18,9 @@
 #include "asParse.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.39 2010/01/07 19:13:42 markd Exp $";
 
 boolean withNull = FALSE;
 boolean makeJson = FALSE;
-boolean addRcsId = TRUE;
 
 void usage()
 /* Explain usage and exit. */
@@ -42,14 +40,12 @@ errAbort("autoSql - create SQL and C code for permanently storing\n"
          "              applications to accept and load data into objects\n"
 	 "              with potential 'missing data' (NULL in SQL)\n"
          "              situations.\n"
-         "  -noRcsIds - don't add rcsid definitions to generate code.\n"
 	 "  -json - generate method to output the object in JSON format.\n");
 }
 
 static struct optionSpec optionSpecs[] = {
     {"dbLink", OPTION_BOOLEAN},
     {"withNull", OPTION_BOOLEAN},
-    {"noRcsIds", OPTION_BOOLEAN},
     {"json", OPTION_BOOLEAN},
     {NULL, 0}
 };
@@ -1762,7 +1758,6 @@ boolean doDbLoadAndSave = FALSE;
 optionInit(&argc, argv, optionSpecs);
 doDbLoadAndSave = optionExists("dbLink");
 withNull = optionExists("withNull");
-addRcsId = !optionExists("noRcsIds");
 makeJson = optionExists("json");
 
 if (argc != 3)
@@ -1816,11 +1811,6 @@ fprintf(cFile, "#include \"dystring.h\"\n");
 fprintf(cFile, "#include \"jksql.h\"\n");
 fprintf(cFile, "#include \"%s\"\n", dotH);
 fprintf(cFile, "\n");
-if (addRcsId)
-    {
-    /* split string so cvs doesn't substitute in this file */
-    fprintf(cFile, "static char const rcsid[] = \"$" "Id:" "$\";\n");
-    }
 fprintf(cFile, "\n");
 
 /* Process each object in specification file and output to .c, 

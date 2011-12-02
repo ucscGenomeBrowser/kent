@@ -8,7 +8,6 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.27 2008/10/22 01:16:03 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */

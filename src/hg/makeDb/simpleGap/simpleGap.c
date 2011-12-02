@@ -8,7 +8,6 @@
 #include "nib.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: simpleGap.c,v 1.3 2004/06/28 17:12:02 braney Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *strand = (char *)NULL;

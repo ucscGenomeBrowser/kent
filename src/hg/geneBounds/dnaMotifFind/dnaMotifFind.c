@@ -12,7 +12,6 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: dnaMotifFind.c,v 1.7 2006/04/07 14:29:10 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -9,7 +9,6 @@
 #include "axt.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: axtForEst.c,v 1.6 2008/09/03 19:18:33 markd Exp $";
 
 char *clChrom = "all";
 char *track = "est";

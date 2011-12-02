@@ -12,7 +12,6 @@
 #include "portable.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.39 2008/09/03 19:19:45 markd Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */

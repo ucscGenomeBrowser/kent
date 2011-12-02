@@ -13,7 +13,6 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.12 2008/02/06 07:02:56 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */

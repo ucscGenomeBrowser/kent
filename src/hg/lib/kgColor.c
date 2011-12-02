@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "kgColor.h"
 
-static char const rcsid[] = "$Id: kgColor.c,v 1.1 2007/03/02 09:36:05 kent Exp $";
 
 void kgColorStaticLoad(char **row, struct kgColor *ret)
 /* Load a row from kgColor table into ret.  The contents of ret will

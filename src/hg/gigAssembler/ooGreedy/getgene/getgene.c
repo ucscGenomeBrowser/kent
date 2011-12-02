@@ -5,7 +5,6 @@
 #include "dnaseq.h"
 #include "wormdna.h"
 
-static char const rcsid[] = "$Id: getgene.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
 
 struct dfm
 /* Output formatter. */

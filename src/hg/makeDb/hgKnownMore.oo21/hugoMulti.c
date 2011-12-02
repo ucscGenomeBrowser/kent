@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "hugoMulti.h"
 
-static char const rcsid[] = "$Id: hugoMulti.c,v 1.4 2006/04/30 16:20:05 angie Exp $";
 
 void hugoMultiStaticLoad(char **row, struct hugoMulti *ret)
 /* Load a row from hugoMulti table into ret.  The contents of ret will

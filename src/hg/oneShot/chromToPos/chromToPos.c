@@ -11,7 +11,6 @@
 #include "sig.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: chromToPos.c,v 1.1 2009/01/08 00:28:49 kent Exp $";
 
 int blockSize = 100;
 

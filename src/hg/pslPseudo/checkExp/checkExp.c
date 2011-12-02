@@ -24,7 +24,6 @@
 #include "twoBit.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: checkExp.c,v 1.6 2009/08/02 21:26:09 baertsch Exp $";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
 struct hash *pseudoHash = NULL, *mrnaHash = NULL, *chainHash = NULL, *faHash = NULL, *tHash = NULL;
