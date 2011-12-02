@@ -3830,7 +3830,7 @@ orderUrl http://www.chordomafoundation.org/research/
 termId BTO:0001768
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001768&termName=notochord
 lab Crawford
-protocol Crawford(Missing):UCH1_Crawford_protocol.pdf
+protocol Crawford:UCH1_Crawford_protocol.pdf
 
 term WERI-Rb-1
 tag WERIRB1
