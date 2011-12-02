@@ -13,7 +13,6 @@
 #include "portable.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: oldGff.c,v 1.6 2005/04/10 14:41:24 markd Exp $";
 
 #define errfile stdout
 

@@ -10,7 +10,6 @@
 #include "options.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaRepeatFind.c,v 1.4 2008/11/06 07:03:00 kent Exp $";
 
 int readSize = 25;
 int minCount = 5;

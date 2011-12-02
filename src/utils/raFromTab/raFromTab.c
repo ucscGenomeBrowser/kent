@@ -6,7 +6,6 @@
 #include "asParse.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: raFromTab.c,v 1.2 2007/03/13 01:41:53 kent Exp $";
 
 struct slName *colList = NULL;
 boolean space;

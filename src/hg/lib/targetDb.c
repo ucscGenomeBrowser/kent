@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "targetDb.h"
 
-static char const rcsid[] = "$Id: targetDb.c,v 1.3 2008/11/10 21:00:52 angie Exp $";
 
 void targetDbStaticLoad(char **row, struct targetDb *ret)
 /* Load a row from targetDb table into ret.  The contents of ret will

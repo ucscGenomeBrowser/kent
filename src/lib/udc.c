@@ -32,7 +32,6 @@
 #include "cheapcgi.h"
 #include "udc.h"
 
-static char const rcsid[] = "$Id: udc.c,v 1.37 2010/03/19 19:16:37 angie Exp $";
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */

@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "sageExp.h"
 
-static char const rcsid[] = "$Id: sageExp.c,v 1.4 2005/04/13 06:25:56 markd Exp $";
 
 void sageExpStaticLoad(char **row, struct sageExp *ret)
 /* Load a row from sageExp table into ret.  The contents of ret will

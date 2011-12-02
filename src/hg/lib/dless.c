@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: dless.c,v 1.1 2005/09/10 07:42:12 acs Exp $";
 
 void dlessStaticLoad(char **row, struct dless *ret)
 /* Load a row from dless table into ret.  The contents of ret will

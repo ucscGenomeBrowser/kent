@@ -13,7 +13,6 @@
 #include "dystring.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.27 2009/09/23 18:42:22 angie Exp $";
 
 /* Command line options */
 

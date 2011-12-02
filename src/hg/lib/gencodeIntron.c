@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "gencodeIntron.h"
 
-static char const rcsid[] = "$Id: gencodeIntron.c,v 1.3 2006/05/18 17:37:21 angie Exp $";
 
 void gencodeIntronStaticLoad(char **row, struct gencodeIntron *ret)
 /* Load a row from gencodeIntron table into ret.  The contents of ret will

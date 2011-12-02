@@ -2,7 +2,6 @@
 #include "oregannoUi.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: oregannoUi.c,v 1.2 2008/09/22 18:53:00 giardine Exp $";
 
 /* some stuff for mutation type choices */
 /* labels for checkboxes */

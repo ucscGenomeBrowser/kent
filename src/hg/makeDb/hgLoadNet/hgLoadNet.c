@@ -10,7 +10,6 @@
 #include "chainNet.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.16 2007/03/12 21:57:10 angie Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */

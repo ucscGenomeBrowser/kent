@@ -8,7 +8,6 @@
 #include "hmmstats.h"
 #include "codebias.h"
 
-static char const rcsid[] = "$Id: codebias.c,v 1.6 2005/04/10 14:41:21 markd Exp $";
 
 
 struct codonBias *codonLoadBias(char *fileName)

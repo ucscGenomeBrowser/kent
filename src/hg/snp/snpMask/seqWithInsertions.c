@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: seqWithInsertions.c,v 1.6 2006/09/06 21:49:02 heather Exp $";
 
 static char *database = NULL;
 static char *chromName = NULL;

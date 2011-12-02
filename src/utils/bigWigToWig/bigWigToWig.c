@@ -9,7 +9,6 @@
 #include "bigWig.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: bigWigToWig.c,v 1.1 2009/11/13 00:26:28 kent Exp $";
 
 char *clChrom = NULL;
 int clStart = -1;

@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.5 2007/03/18 00:10:14 kent Exp $";
 
 char *uniProt = UNIPROT_DB_NAME;
 

@@ -4,7 +4,6 @@
 #include "gbFileOps.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbFaCheck.c,v 1.3 2004/02/23 16:40:12 kent Exp $";
 static unsigned gVerbose = 0;
 
 /* command line option specifications */

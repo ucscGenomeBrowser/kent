@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "pgSiftPred.h"
 
-static char const rcsid[] = "$Id: pgSiftPred.c,v 1.1 2010/03/08 17:45:40 giardine Exp $";
 
 void pgSiftPredStaticLoadWithNull(char **row, struct pgSiftPred *ret)
 /* Load a row from pgSiftPred table into ret.  The contents of ret will

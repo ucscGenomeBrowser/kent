@@ -11,7 +11,6 @@
 #include "portimpl.h"
 #include <dirent.h>
 
-static char const rcsid[] = "$Id: portimpl.c,v 1.16 2010/04/21 19:23:47 galt Exp $";
 
 static struct webServerSpecific *wss = NULL;
 

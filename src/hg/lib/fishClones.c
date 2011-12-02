@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "fishClones.h"
 
-static char const rcsid[] = "$Id: fishClones.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
 
 struct fishClones *fishClonesLoad(char **row)
 /* Load a fishClones from row fetched with select * from fishClones

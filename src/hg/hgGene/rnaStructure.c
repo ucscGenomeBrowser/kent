@@ -10,7 +10,6 @@
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.11 2009/09/23 18:42:16 angie Exp $";
 
 static void rnaTrashDirsInit(char **tables, int count)
 /*	create trash directories if necessary */

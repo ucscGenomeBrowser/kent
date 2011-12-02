@@ -9,7 +9,6 @@
 #include "basicBed.h"
 #include "bedDetail.h"
 
-static char const rcsid[] = "$Id:$";
 
 struct bedDetail *bedDetailLoad(char **row)
 /* Load a bedDetail from row fetched with select * from bedDetail

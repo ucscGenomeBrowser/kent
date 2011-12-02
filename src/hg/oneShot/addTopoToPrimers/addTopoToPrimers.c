@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: addTopoToPrimers.c,v 1.1 2004/10/05 07:44:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

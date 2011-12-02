@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snp125CodingCoordless.h"
 
-static char const rcsid[] = "$Id: snp125CodingCoordless.c,v 1.1 2009/06/04 20:18:03 angie Exp $";
 
 /* definitions for frame column */
 static char *values_frame[] = {"1", "2", "3", NULL};

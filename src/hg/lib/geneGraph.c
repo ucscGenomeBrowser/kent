@@ -18,7 +18,6 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.25 2009/08/13 03:08:30 markd Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */

@@ -3,7 +3,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: gotCr.c,v 1.2 2003/05/06 07:41:07 kate Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment, 
     char **retCommentLine, struct dnaSeq **retSeq)

@@ -6,7 +6,6 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: agpCloneCheck.c,v 1.4 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

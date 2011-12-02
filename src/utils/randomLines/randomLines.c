@@ -5,7 +5,6 @@
 #include "options.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: randomLines.c,v 1.6 2008/10/24 01:09:24 kent Exp $";
 
 int seed;
 

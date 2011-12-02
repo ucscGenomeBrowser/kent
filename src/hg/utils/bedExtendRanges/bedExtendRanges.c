@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: bedExtendRanges.c,v 1.4 2009/04/06 18:36:36 larrym Exp $";
 
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static struct hash *chromHash = NULL;

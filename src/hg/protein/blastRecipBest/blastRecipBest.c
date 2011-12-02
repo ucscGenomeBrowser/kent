@@ -5,7 +5,6 @@
 #include "options.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: blastRecipBest.c,v 1.1 2007/03/18 21:09:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

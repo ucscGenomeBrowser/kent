@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txRnaAccs.c,v 1.1 2007/03/02 09:36:06 kent Exp $";
 
 struct txRnaAccs *txRnaAccsLoad(char **row)
 /* Load a txRnaAccs from row fetched with select * from txRnaAccs

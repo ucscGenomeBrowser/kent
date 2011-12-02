@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snpMap.h"
 
-static char const rcsid[] = "$Id: snpMap.c,v 1.3 2005/04/13 06:25:57 markd Exp $";
 
 void snpMapStaticLoad(char **row, struct snpMap *ret)
 /* Load a row from snpMap table into ret.  The contents of ret will

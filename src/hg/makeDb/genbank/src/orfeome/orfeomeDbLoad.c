@@ -18,7 +18,6 @@
 #include "hdb.h"
 #include "orfeomeImageIds.h"
 
-static char const rcsid[] = "$Id: orfeomeDbLoad.c,v 1.4 2008/09/03 19:19:36 markd Exp $";
 
 /* Notes:
  *  - Identifies ORFeome clones by both image id and genbank keywords, as it

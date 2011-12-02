@@ -13,7 +13,6 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.15 2010/05/11 01:43:30 kent Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */

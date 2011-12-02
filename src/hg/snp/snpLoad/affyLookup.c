@@ -3,7 +3,6 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyLookup.c,v 1.4 2007/04/06 22:57:44 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;

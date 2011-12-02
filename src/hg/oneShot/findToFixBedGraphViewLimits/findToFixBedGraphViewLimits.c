@@ -7,7 +7,6 @@
 #include "hmmstats.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: findToFixBedGraphViewLimits.c,v 1.2 2009/11/25 09:24:59 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -7,7 +7,6 @@
 #include "pipeline.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadMafFrames.c,v 1.3 2008/09/03 19:19:44 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {

@@ -12,7 +12,6 @@
 #include "hdb.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteRemoveUnused.c,v 1.2 2010/01/04 19:12:40 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 

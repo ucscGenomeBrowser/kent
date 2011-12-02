@@ -10,7 +10,6 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.9 2009/06/26 21:28:23 hiram Exp $";
 
 static boolean mrnaDescriptionsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)

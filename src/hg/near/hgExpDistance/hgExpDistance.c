@@ -8,7 +8,6 @@
 #include "bed.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgExpDistance.c,v 1.5 2006/06/23 20:31:07 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

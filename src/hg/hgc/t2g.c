@@ -12,9 +12,7 @@
 //include "hgTrackUi.h"
 
 // cgi var to activate debug output
-int debug = 0;
-// cgi var  to activate fasta output
-int fasta = 0;
+int t2gDebug = 0;
 
 char* sequenceTable;
 char* articleTable;
@@ -54,7 +52,7 @@ struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* do
     char query[512];
     safef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
         "and chrom='%s' and chromStart=%d", trackTable, item, seqName, start);
-    if (debug)
+    if (t2gDebug)
         puts(query);
     char* seqIdCoordString = sqlQuickString(conn, query);
     char* seqIdCoords[1024];
@@ -66,7 +64,7 @@ struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* do
     {
         char* seqId[1024];
         chopString(seqIdCoords[i], ":", seqId, ArraySize(seqId));
-        if (debug)
+        if (t2gDebug)
             printf("%s, %s<br>", seqId[0], seqId[1]);
         hashAdd(seqIdHash, seqId[0], seqId[1]);
     }
@@ -74,17 +72,17 @@ struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* do
     return seqIdHash;
 }
 
-void printSeqHeaders(bool debug, bool showDesc, bool isClickedSection) 
+void printSeqHeaders(bool showDesc, bool isClickedSection) 
 {
     printf("<TABLE style=\"background-color: #%s\" WIDTH=\"100%%\" CELLPADDING=\"2\">\n", HG_COL_BORDER);
     printf("<TR style=\"background-color: #%s; color: #FFFFFF\">\n", HG_COL_TABLE_LABEL);
     if (showDesc)
         puts("  <TH style=\"width: 10%\">Article file</TH>\n");
     puts("  <TH style=\"width: 70%\">Sequence (in bold) with flanking text</TH>\n");
-    if (debug)
+    if (t2gDebug)
         puts("  <TH style=\"width: 30%\">Identifiers</TH>\n");
 
-    if (!isClickedSection && !debug)
+    if (!isClickedSection && !t2gDebug)
         puts("  <TH style=\"width: 20%\">Matches</TH>\n");
     puts("</TR>\n");
 }
@@ -96,7 +94,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
     // get data from mysql
     char query[4096];
     safef(query, sizeof(query), "SELECT fileDesc, snippet, locations, articleId,fileId, seqId, sequence FROM %s WHERE articleId='%s';", sequenceTable, docId);
-    if (debug)
+    if (t2gDebug)
         puts(query);
     struct sqlResult *sr = sqlGetResult(conn, query);
 
@@ -110,7 +108,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
     webNewSection(fullTitle);
 
     if (!fasta) 
-        printSeqHeaders(debug, showDesc, isClickedSection);
+        printSeqHeaders(showDesc, isClickedSection);
 
     char **row;
     bool foundSkippedRows = FALSE;
@@ -146,13 +144,13 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
                 printf("<TD style=\"word-break: normal\">%s\n", fileDesc);
             //printf("<TD><I>%s</I></TD>\n", snippet); 
             printf("<TD style=\"word-break: normal\"><I>%s</I></TD>\n", snippet); 
-            if (debug) 
+            if (t2gDebug) 
             {
                 printf("<TD>article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);
             }
 
             // print links to locations 
-            if (!isClickedSection && !debug) {
+            if (!isClickedSection && !t2gDebug) {
                 struct slName *locs;
                 // format: hg19/chr1:300-400,mm9/chr1:60006-23234
                 // split on "," then split on "/"
@@ -263,8 +261,9 @@ void doT2gDetails(struct trackDb *tdb, char *item)
 int start = cgiInt("o");
 int end = cgiInt("t");
 char* trackTable = cgiString("g");
-debug = cgiOptionalInt("debug", 0);
-fasta = cgiOptionalInt("fasta", 0);
+int fasta = cgiOptionalInt("fasta", 0);
+
+t2gDebug = cgiOptionalInt("debug", 0);
 
 struct sqlConnection *conn = hAllocConn(database);
 printTrackVersion(tdb, conn, item);

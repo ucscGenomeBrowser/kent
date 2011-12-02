@@ -4,7 +4,6 @@
 #include	<unistd.h>
 #include	<stdlib.h>
 
-static char const rcsid[] = "$Id: gmtime.c,v 1.1 2006/05/19 23:49:19 hiram Exp $";
 
 void usage()
 {

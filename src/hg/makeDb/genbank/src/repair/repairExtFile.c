@@ -5,7 +5,6 @@
 #include "gbVerb.h"
 #include "refPepRepair.h"
 
-static char const rcsid[] = "$Id: repairExtFile.c,v 1.5 2006/01/26 00:40:33 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

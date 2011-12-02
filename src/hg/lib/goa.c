@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "goa.h"
 
-static char const rcsid[] = "$Id: goa.c,v 1.2 2005/04/13 06:25:53 markd Exp $";
 
 void goaStaticLoad(char **row, struct goa *ret)
 /* Load a row from goa table into ret.  The contents of ret will

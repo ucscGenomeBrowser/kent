@@ -25,7 +25,6 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.29 2009/09/23 18:42:17 angie Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;

@@ -8,7 +8,6 @@
 #include "bed.h"
 #include "minChromSize.h"
 
-static char const rcsid[] = "$Id: minChromSize.c,v 1.2 2007/03/03 20:34:17 kent Exp $";
 
 struct hash *minChromSizeFromBeds(struct bed *bedList)
 /* Go through bed list, creating a hash full of minChromSizes. 

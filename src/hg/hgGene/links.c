@@ -10,7 +10,6 @@
 #include "hgGene.h"
 #include "wikiTrack.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.38 2009/06/18 20:19:18 hiram Exp $";
 
 struct link
 /* A link to another web site. */

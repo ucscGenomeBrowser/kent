@@ -9,7 +9,6 @@
 #include "bits.h"
 #include "basicBed.h"
 
-static char const rcsid[] = "$Id: bbTest.c,v 1.2 2009/08/26 18:41:29 braney Exp $";
 
 int numTests = 1000;
 char *testChrom = NULL;

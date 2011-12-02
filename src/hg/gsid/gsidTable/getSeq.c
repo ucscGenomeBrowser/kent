@@ -9,7 +9,6 @@
 #include "hPrint.h"
 #include "gsidTable.h"
 
-static char const rcsid[] = "$Id: getSeq.c,v 1.7 2008/08/24 19:14:53 fanhsu Exp $";
 
 
 static void getSeqFromBlob(struct sqlConnection *conn,

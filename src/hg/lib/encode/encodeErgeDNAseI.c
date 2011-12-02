@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeErgeDNAseI.h"
 
-static char const rcsid[] = "$Id: encodeErgeDNAseI.c,v 1.1 2008/08/01 17:49:04 aamp Exp $";
 
 struct encodeErgeDNAseI *encodeErgeDNAseILoad(char **row)
 /* Load a encodeErgeDNAseI from row fetched with select * from encodeErgeDNAseI

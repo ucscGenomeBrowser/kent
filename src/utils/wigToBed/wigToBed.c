@@ -7,7 +7,6 @@
 #include "metaWig.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: wigToBed.c,v 1.1 2010/06/04 21:32:17 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

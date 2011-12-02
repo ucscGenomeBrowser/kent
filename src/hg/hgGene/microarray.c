@@ -10,7 +10,6 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.18 2010/04/15 00:05:26 aamp Exp $";
 
 struct expColumn
 /* An expression column. */

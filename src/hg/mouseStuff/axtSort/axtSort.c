@@ -7,7 +7,6 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtSort.c,v 1.7 2005/08/18 07:31:30 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */

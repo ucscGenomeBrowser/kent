@@ -4,7 +4,6 @@
 #include "xap.h"
 #include "riken.h"
 
-static char const rcsid[] = "$Id: riken.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
 
 void *rikenStartHandler(struct xap *xp, char *name, char **atts);
 /* Called by expat with start tag.  Does most of the parsing work. */

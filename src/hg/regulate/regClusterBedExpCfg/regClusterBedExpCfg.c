@@ -7,7 +7,6 @@
 #include "sqlNum.h"
 #include "hmmstats.h"
 
-static char const rcsid[] = "$Id: regClusterBedExpCfg.c,v 1.2 2010/05/05 00:50:37 kent Exp $";
 
 boolean encodeList = FALSE;
 boolean tabList = FALSE;

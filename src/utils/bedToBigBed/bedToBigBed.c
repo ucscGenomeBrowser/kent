@@ -13,7 +13,6 @@
 #include "sqlNum.h"
 #include "bigBed.h"
 
-static char const rcsid[] = "$Id: bedToBigBed.c,v 1.24 2010/05/19 18:51:13 hiram Exp $";
 
 int blockSize = 256;
 int itemsPerSlot = 512;

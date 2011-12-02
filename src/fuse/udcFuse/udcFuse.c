@@ -13,7 +13,6 @@
 #endif
 #include "fuse.h"
 
-static char const rcsid[] = "$Id: udcFuse.c,v 1.7 2010/01/05 00:39:06 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -4,7 +4,6 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 boolean jkhgap = FALSE;
 boolean cgi = FALSE;
@@ -138,8 +137,6 @@ if (cgi)
     fprintf(f, "#include \"cart.h\"\n");
     fprintf(f, "#include \"hui.h\"\n");
     }
-fprintf(f, "\n");
-fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $\";\n");
 fprintf(f, "\n");
 
 if (cgi)

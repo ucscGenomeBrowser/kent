@@ -5,7 +5,6 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpImages.c,v 1.3 2005/11/19 03:28:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

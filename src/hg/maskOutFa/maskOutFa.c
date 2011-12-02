@@ -8,7 +8,6 @@
 #include "bed.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: maskOutFa.c,v 1.10 2009/08/02 19:47:35 markd Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"soft", OPTION_BOOLEAN},

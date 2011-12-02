@@ -8,7 +8,6 @@
 #include "axt.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: pairHmm.c,v 1.5 2005/04/11 06:43:58 kent Exp $";
 
 UBYTE phmmNullMommy = 0; /* mommy value for orphans.... */
 

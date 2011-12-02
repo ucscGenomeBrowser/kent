@@ -8,7 +8,6 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: subsetAxt.c,v 1.9 2006/06/20 16:37:58 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

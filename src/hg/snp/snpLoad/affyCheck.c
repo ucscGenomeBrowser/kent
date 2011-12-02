@@ -2,7 +2,6 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyCheck.c,v 1.4 2006/01/11 20:08:02 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;

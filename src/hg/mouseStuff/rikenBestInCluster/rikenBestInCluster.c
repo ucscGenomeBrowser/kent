@@ -9,7 +9,6 @@
 #include "rikenCluster.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: rikenBestInCluster.c,v 1.4 2008/09/03 19:20:39 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

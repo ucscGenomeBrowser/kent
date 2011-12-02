@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mrnaMisMatch.h"
 
-static char const rcsid[] = "$Id: mrnaMisMatch.c,v 1.1 2005/06/17 21:18:15 baertsch Exp $";
 
 struct mrnaMisMatch *mrnaMisMatchLoad(char **row)
 /* Load a mrnaMisMatch from row fetched with select * from mrnaMisMatch

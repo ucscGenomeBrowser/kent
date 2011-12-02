@@ -27,7 +27,6 @@
 #include "common.h"
 #include "quickHeap.h"
 
-static char const rcsid[] = "$Id: quickHeap.c,v 1.1 2005/10/21 05:36:08 galt Exp $";
 
 
 struct quickHeap *newQuickHeap(int initSize, 
