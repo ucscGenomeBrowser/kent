@@ -279,7 +279,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001158
 expId 1158
-fileName wgEncodeRikenCageA549CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageA549CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K16,K17
@@ -569,7 +569,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001159
 expId 1159
-fileName wgEncodeRikenCageAg04450CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageAg04450CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K12,K13
@@ -859,7 +859,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001160
 expId 1160
-fileName wgEncodeRikenCageBjCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageBjCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K18,K19
@@ -1149,7 +1149,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001680
 expId 1680
-fileName wgEncodeRikenCageGm12878CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J72,J73
@@ -1337,7 +1337,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000338
 dccRep 1
 expId 338
-fileName wgEncodeRikenCageGm12878CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I27
@@ -1627,7 +1627,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001679
 expId 1679
-fileName wgEncodeRikenCageGm12878CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J84,J85
@@ -1812,7 +1812,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000340
 dccRep 1
 expId 340
-fileName wgEncodeRikenCageGm12878NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I69
@@ -1994,7 +1994,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000339
 dccRep 1
 expId 339
-fileName wgEncodeRikenCageGm12878NucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -2284,7 +2284,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001678
 expId 1678
-fileName wgEncodeRikenCageGm12878NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageGm12878NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J93,J94
@@ -2472,7 +2472,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000341
 dccRep 1
 expId 341
-fileName wgEncodeRikenCageH1hescCellPamTssHmm.bed.gz
+fileName wgEncodeRikenCageH1hescCellPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I67
@@ -2762,7 +2762,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001138
 expId 1138
-fileName wgEncodeRikenCageH1hescCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageH1hescCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J74,J75
@@ -3324,7 +3324,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001146
 expId 1146
-fileName wgEncodeRikenCageHelas3CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J80,J81
@@ -3506,7 +3506,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001155
 dccRep 1
 expId 1155
-fileName wgEncodeRikenCageHelas3CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -3796,7 +3796,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001144
 expId 1144
-fileName wgEncodeRikenCageHelas3CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J87,J88
@@ -3978,7 +3978,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001156
 dccRep 1
 expId 1156
-fileName wgEncodeRikenCageHelas3NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J58
@@ -4268,7 +4268,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001145
 expId 1145
-fileName wgEncodeRikenCageHelas3NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHelas3NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J96,J97
@@ -4558,7 +4558,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001149
 expId 1149
-fileName wgEncodeRikenCageHepg2CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K01,K02
@@ -4746,7 +4746,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000343
 dccRep 1
 expId 343
-fileName wgEncodeRikenCageHepg2CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I42
@@ -5036,7 +5036,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001147
 expId 1147
-fileName wgEncodeRikenCageHepg2CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J89,J90
@@ -5221,7 +5221,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000344
 dccRep 1
 expId 344
-fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I68
@@ -5409,7 +5409,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000345
 dccRep 1
 expId 345
-fileName wgEncodeRikenCageHepg2NucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I44
@@ -5699,7 +5699,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001148
 expId 1148
-fileName wgEncodeRikenCageHepg2NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHepg2NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J98,J99
@@ -5989,7 +5989,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001141
 expId 1141
-fileName wgEncodeRikenCageHuvecCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J78,J79
@@ -6177,7 +6177,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000342
 dccRep 1
 expId 342
-fileName wgEncodeRikenCageHuvecCytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I72
@@ -6467,7 +6467,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001142
 expId 1142
-fileName wgEncodeRikenCageHuvecCytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecCytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K03,K04
@@ -6757,7 +6757,7 @@ dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH001143
 expId 1143
-fileName wgEncodeRikenCageHuvecNucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageHuvecNucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K05,K06
@@ -7047,7 +7047,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001150
 expId 1150
-fileName wgEncodeRikenCageK562CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageK562CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J70,J71
@@ -7235,7 +7235,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000334
 dccRep 1
 expId 334
-fileName wgEncodeRikenCageK562ChromatinTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageK562ChromatinTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I35
@@ -7450,7 +7450,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000329
 dccRep 1
 expId 329
-fileName wgEncodeRikenCageK562CytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageK562CytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I22
@@ -7492,62 +7492,6 @@ rnaExtract longPolyA
 subId 1806
 tableName wgEncodeRikenCageK562CytosolPapAln
 view Alignments
-
-metaObject wgEncodeRikenCageK562CytosolPapPlusSignal
-objType file
-attic auxExp
-bioRep gen0137C
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2009-02-04
-dateUnrestricted 2009-11-09
-dccAccession wgEncodeEH000332
-dccRep 1
-expId 332
-fileName wgEncodeRikenCageK562CytosolPapPlusSignal.bigWig
-grant Gingeras
-lab RIKEN
-labExpId I40
-labProtocolId gen0137C+cage
-labVersion bedtools v2.7.1
-localization cytosol
-md5sum 7581b8936432aa99d1ec01329e202789
-origAssembly hg18
-project wgEncode
-rnaExtract longPolyA
-subId 1806
-view PlusRawSignal
-
-metaObject wgEncodeRikenCageK562CytosolPapMinusSignal
-objType file
-attic auxExp
-bioRep gen0137C
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
-dateSubmitted 2009-02-04
-dateUnrestricted 2009-11-09
-dccAccession wgEncodeEH000332
-dccRep 1
-expId 332
-fileName wgEncodeRikenCageK562CytosolPapMinusSignal.bigWig
-grant Gingeras
-lab RIKEN
-labExpId I40
-labProtocolId gen0137C+cage
-labVersion bedtools v2.7.1
-localization cytosol
-md5sum 6bfd6923f449ef9a7153601d03a25c96
-origAssembly hg18
-project wgEncode
-rnaExtract longPolyA
-subId 1806
-view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapAlnRep1
 objType table
@@ -7657,6 +7601,34 @@ rnaExtract longPolyA
 subId 3952
 view Clusters
 
+metaObject wgEncodeRikenCageK562CytosolPapMinusSignal
+objType file
+attic auxExp
+bioRep gen0137C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-09
+dccAccession wgEncodeEH000332
+dccRep 1
+expId 332
+fileName wgEncodeRikenCageK562CytosolPapMinusSignal.bigWig
+grant Gingeras
+lab RIKEN
+labExpId I40
+labProtocolId gen0137C+cage
+labVersion bedtools v2.7.1
+localization cytosol
+md5sum 6bfd6923f449ef9a7153601d03a25c96
+origAssembly hg18
+project wgEncode
+rnaExtract longPolyA
+subId 1806
+view MinusRawSignal
+
 metaObject wgEncodeRikenCageK562CytosolPapMinusSignalRep1
 objType table
 bioRep 001C
@@ -7710,6 +7682,34 @@ rnaExtract longPolyA
 subId 2383
 tableName wgEncodeRikenCageK562CytosolPapMinusSignalRep2
 view MinusRawSignal
+
+metaObject wgEncodeRikenCageK562CytosolPapPlusSignal
+objType file
+attic auxExp
+bioRep gen0137C
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-09
+dccAccession wgEncodeEH000332
+dccRep 1
+expId 332
+fileName wgEncodeRikenCageK562CytosolPapPlusSignal.bigWig
+grant Gingeras
+lab RIKEN
+labExpId I40
+labProtocolId gen0137C+cage
+labVersion bedtools v2.7.1
+localization cytosol
+md5sum 7581b8936432aa99d1ec01329e202789
+origAssembly hg18
+project wgEncode
+rnaExtract longPolyA
+subId 1806
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusSignalRep1
 objType table
@@ -7878,7 +7878,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000332
 expId 332
-fileName wgEncodeRikenCageK562CytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageK562CytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J82,J83
@@ -8060,7 +8060,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000335
 dccRep 1
 expId 335
-fileName wgEncodeRikenCageK562NucleolusTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleolusTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I33
@@ -8248,7 +8248,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000336
 dccRep 1
 expId 336
-fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I34
@@ -8460,7 +8460,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000330
 dccRep 1
 expId 330
-fileName wgEncodeRikenCageK562NucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I23
@@ -8750,7 +8750,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000333
 expId 333
-fileName wgEncodeRikenCageK562NucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageK562NucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J91,J92
@@ -8938,7 +8938,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000337
 dccRep 1
 expId 337
-fileName wgEncodeRikenCageK562PolysomePamTssHmm.bed.gz
+fileName wgEncodeRikenCageK562PolysomePamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I32
@@ -9228,7 +9228,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001151
 expId 1151
-fileName wgEncodeRikenCageMcf7CellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageMcf7CellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K07,K11
@@ -9518,7 +9518,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001152
 expId 1152
-fileName wgEncodeRikenCageNhekCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId J76,J77
@@ -9706,7 +9706,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000346
 dccRep 1
 expId 346
-fileName wgEncodeRikenCageNhekCytosolPamTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekCytosolPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I70
@@ -9996,7 +9996,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001153
 expId 1153
-fileName wgEncodeRikenCageNhekCytosolPapTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekCytosolPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K08,K20
@@ -10184,7 +10184,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000347
 dccRep 1
 expId 347
-fileName wgEncodeRikenCageNhekNucleusPamTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekNucleusPamTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId I71
@@ -10370,7 +10370,7 @@ dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001154
 dccRep 1
 expId 1154
-fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bed.gz
+fileName wgEncodeRikenCageNhekNucleusPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K09
@@ -10824,7 +10824,7 @@ dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001157
 expId 1157
-fileName wgEncodeRikenCageSknshraCellPapTssHmm.bed.gz
+fileName wgEncodeRikenCageSknshraCellPapTssHmm.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
 labExpId K14,K15
@@ -10838,4 +10838,4 @@ rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: -1451982667
+# MAGIC: -2111790137
