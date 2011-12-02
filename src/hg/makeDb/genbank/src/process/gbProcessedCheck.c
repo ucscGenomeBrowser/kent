@@ -20,7 +20,6 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
-static char const rcsid[] = "$Id: gbProcessedCheck.c,v 1.3 2006/12/24 20:48:42 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

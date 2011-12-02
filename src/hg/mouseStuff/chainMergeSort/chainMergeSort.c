@@ -9,7 +9,6 @@
 #include "portable.h"
 #include "quickHeap.h"
 
-static char const rcsid[] = "$Id: chainMergeSort.c,v 1.12 2006/06/20 15:52:48 angie Exp $";
 
 #define MAXFILES 400
 

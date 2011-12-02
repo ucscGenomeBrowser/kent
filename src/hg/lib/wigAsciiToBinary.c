@@ -39,7 +39,6 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.35 2010/06/05 00:47:47 kent Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business

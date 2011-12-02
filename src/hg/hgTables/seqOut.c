@@ -16,7 +16,6 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.24 2010/05/11 01:43:25 kent Exp $";
 
 static char *genePredMenu[] =
     {

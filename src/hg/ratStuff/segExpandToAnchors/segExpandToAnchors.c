@@ -5,7 +5,6 @@
 #include "options.h"
 #include "seg.h"
 
-static char const rcsid[] = "$Id: segExpandToAnchors.c,v 1.2 2008/05/02 17:43:20 rico Exp $";
 
 void usage()
 /* Explain usage and exit. */

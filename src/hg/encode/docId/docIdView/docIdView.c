@@ -15,7 +15,6 @@
 #include "trashDir.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */

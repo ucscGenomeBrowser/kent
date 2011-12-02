@@ -10,7 +10,6 @@
 #include "dnaseq.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxMake.c,v 1.13 2008/10/30 04:29:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -4,7 +4,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: preProcGgfAndy.c,v 1.1 2005/08/24 23:06:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -10,7 +10,6 @@
 #include "jksql.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: geneGraphTest.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
 
 
 void usage()

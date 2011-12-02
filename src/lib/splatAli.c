@@ -11,7 +11,6 @@
 #include "sqlList.h"
 #include "splatAli.h"
 
-static char const rcsid[] = "$Id: splatAli.c,v 1.3 2008/11/06 05:07:06 kent Exp $";
 
 void splatAliStaticLoad(char **row, struct splatAli *ret)
 /* Load a row from splatAli table into ret.  The contents of ret will

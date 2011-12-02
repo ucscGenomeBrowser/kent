@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "affyTransLifted.h"
 
-static char const rcsid[] = "$Id: affyTransLifted.c,v 1.2 2003/05/06 07:22:20 kate Exp $";
 
 void affyTransLiftedStaticLoad(char **row, struct affyTransLifted *ret)
 /* Load a row from affyTransLifted table into ret.  The contents of ret will

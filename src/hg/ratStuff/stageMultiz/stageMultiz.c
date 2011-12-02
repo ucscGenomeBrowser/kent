@@ -10,7 +10,6 @@
 #include "dnautil.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: stageMultiz.c,v 1.11 2006/08/14 15:42:14 angie Exp $";
 
 int winSize = 1010000;
 int overlapSize = 10000;

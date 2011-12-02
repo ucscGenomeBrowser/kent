@@ -8,7 +8,6 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.15 2009/09/10 16:54:49 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -10,7 +10,6 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidMsaToTab.c,v 1.2 2008/09/08 17:20:03 markd Exp $";
 
 char *seq, *id;
 char newSeq[100000];

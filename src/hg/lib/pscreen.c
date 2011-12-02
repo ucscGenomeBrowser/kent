@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "pscreen.h"
 
-static char const rcsid[] = "$Id: pscreen.c,v 1.3 2004/08/25 23:58:20 angie Exp $";
 
 struct pscreen *pscreenLoad(char **row)
 /* Load a pscreen from row fetched with select * from pscreen

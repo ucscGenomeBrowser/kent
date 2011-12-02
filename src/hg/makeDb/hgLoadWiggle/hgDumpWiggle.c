@@ -10,7 +10,6 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgDumpWiggle.c,v 1.5 2004/05/19 23:08:39 hiram Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* do not expect a bin column in the table */

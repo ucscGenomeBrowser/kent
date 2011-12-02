@@ -12,7 +12,6 @@
 #include "expData.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.6 2006/07/21 21:58:00 aamp Exp $";
 
 char *tabDir = ".";
 boolean doLoad;

@@ -4,7 +4,6 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faCount.c,v 1.8 2009/08/02 19:51:20 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 {

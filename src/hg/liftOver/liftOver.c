@@ -10,7 +10,6 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.28 2009/09/23 18:42:21 angie Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;

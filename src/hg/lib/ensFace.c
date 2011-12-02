@@ -6,7 +6,6 @@
 #include "hCommon.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.13 2009/09/17 21:43:03 hiram Exp $";
 
 struct stringPair
 /* A pair of strings. */

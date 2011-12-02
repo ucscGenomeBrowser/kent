@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bacCloneXRef.h"
 
-static char const rcsid[] = "$Id: bacCloneXRef.c,v 1.3 2005/04/25 21:28:07 hartera Exp $";
 
 void bacCloneXRefStaticLoad(char **row, struct bacCloneXRef *ret)
 /* Load a row from bacCloneXRef table into ret.  The contents of ret will

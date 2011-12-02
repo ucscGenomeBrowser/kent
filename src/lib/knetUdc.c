@@ -8,7 +8,6 @@
 #include "knetUdc.h"
 #include "knetfile.h"
 
-static char const rcsid[] = "$Id: knetUdc.c,v 1.3 2010/03/10 23:52:06 angie Exp $";
 
 struct knetFile_s {
     struct udcFile *udcf;

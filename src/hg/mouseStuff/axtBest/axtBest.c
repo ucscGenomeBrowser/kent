@@ -9,7 +9,6 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.18 2006/06/15 14:33:55 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

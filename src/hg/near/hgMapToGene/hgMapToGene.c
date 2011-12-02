@@ -11,7 +11,6 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.16 2009/11/23 23:39:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

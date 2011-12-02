@@ -1,6 +1,5 @@
 /* trashDir.c - temporary file creation and directory creation in /trash */
 
-static char const rcsid[] = "$Id: trashDir.c,v 1.6 2008/07/09 22:55:35 angie Exp $";
 
 #include "common.h"
 #include "hash.h"

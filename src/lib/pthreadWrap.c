@@ -7,7 +7,6 @@
 #include "errabort.h"
 #include "pthreadWrap.h"
 
-static char const rcsid[] = "$Id: pthreadWrap.c,v 1.3 2003/05/06 07:33:44 kate Exp $";
 
 static void pwarn(char *function, int err)
 /* Print a warning message on non-zero error code. */

@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: wigToBedGraph.c,v 1.1 2010/01/05 22:16:44 kent Exp $";
 
 boolean clNoCollapse = FALSE;
 

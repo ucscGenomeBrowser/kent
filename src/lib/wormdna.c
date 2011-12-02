@@ -17,7 +17,6 @@
 #include "sig.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: wormdna.c,v 1.11 2009/09/23 18:42:29 angie Exp $";
 
 static char *jkwebDir = NULL;
 

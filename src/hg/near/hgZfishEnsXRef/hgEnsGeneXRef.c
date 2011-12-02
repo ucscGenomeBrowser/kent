@@ -10,7 +10,6 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgEnsGeneXRef.c,v 1.6 2006/03/09 19:52:17 hartera Exp $";
 
 void usage()
 /* Explain usage and exit. */

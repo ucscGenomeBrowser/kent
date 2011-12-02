@@ -25,7 +25,6 @@
 #include "pgSnp.h"
 #include "samAlignment.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.82 2010/06/03 18:53:59 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bdgpExprLink.h"
 
-static char const rcsid[] = "$Id: bdgpExprLink.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
 
 void bdgpExprLinkStaticLoad(char **row, struct bdgpExprLink *ret)
 /* Load a row from bdgpExprLink table into ret.  The contents of ret will

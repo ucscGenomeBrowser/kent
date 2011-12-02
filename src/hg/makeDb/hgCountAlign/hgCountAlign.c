@@ -10,7 +10,6 @@
 #include <limits.h>
 
 
-static char const rcsid[] = "$Id: hgCountAlign.c,v 1.7 2009/09/23 18:42:21 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bgiSnp.h"
 
-static char const rcsid[] = "$Id: bgiSnp.c,v 1.3 2005/04/11 08:13:43 markd Exp $";
 
 void bgiSnpStaticLoad(char **row, struct bgiSnp *ret)
 /* Load a row from bgiSnp table into ret.  The contents of ret will

@@ -9,7 +9,6 @@
 #include "obscure.h"
 #include "hmmstats.h"
 
-static char const rcsid[] = "$Id: bigBedInfo.c,v 1.2 2009/11/13 19:02:38 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

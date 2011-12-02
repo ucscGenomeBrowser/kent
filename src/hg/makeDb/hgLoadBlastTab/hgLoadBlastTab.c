@@ -8,7 +8,6 @@
 #include "hgRelate.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.9 2007/06/04 22:57:42 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

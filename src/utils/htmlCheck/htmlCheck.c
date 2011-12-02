@@ -12,7 +12,6 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.32 2009/11/10 23:23:59 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

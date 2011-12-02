@@ -6,7 +6,6 @@
 #include "xp.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: testXap.c,v 1.5 2003/05/06 07:22:31 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

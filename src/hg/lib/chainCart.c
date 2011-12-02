@@ -10,7 +10,6 @@
 #include "hui.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainCart.c,v 1.4 2009/03/18 21:16:31 hiram Exp $";
 
 enum chainColorEnum chainFetchColorOption(struct cart *cart,
     struct trackDb *tdb, boolean compositeLevel)

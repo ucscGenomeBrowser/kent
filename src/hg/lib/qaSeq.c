@@ -10,7 +10,6 @@
 #include "qaSeq.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: qaSeq.c,v 1.5 2006/03/09 18:26:58 angie Exp $";
 
 void qaSeqFree(struct qaSeq **pQa)
 /* Free up qaSeq. */

@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: testIntersect.c,v 1.2 2004/11/19 23:50:49 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

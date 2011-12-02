@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: rnaFoldBig.c,v 1.1 2003/10/15 03:14:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -12,7 +12,6 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.24 2006/04/17 17:32:49 angie Exp $";
 
 static boolean noLoad = FALSE;
 

@@ -9,7 +9,6 @@
 #include "obscure.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: servcis.c,v 1.10 2006/06/19 22:02:57 hiram Exp $";
 
 static char *__trashDir = "../trash";
 

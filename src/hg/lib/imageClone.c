@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "imageClone.h"
 
-static char const rcsid[] = "$Id: imageClone.c,v 1.3 2005/04/13 06:25:54 markd Exp $";
 
 struct imageClone *imageCloneLoad(char **row)
 /* Load a imageClone from row fetched with select * from imageClone

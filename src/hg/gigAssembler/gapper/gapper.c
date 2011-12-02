@@ -12,7 +12,6 @@
 #include "psl.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gapper.c,v 1.4 2009/07/07 18:44:59 hiram Exp $";
 
 FILE *logFile;		/* Report stuff here. */
 struct lm *lm;		/* Fast local memory pool. */

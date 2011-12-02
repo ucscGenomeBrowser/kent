@@ -6,7 +6,6 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafFetch.c,v 1.5 2010/05/18 21:27:18 galt Exp $";
 
 static void usage()
 /* Explain usage and exit. */

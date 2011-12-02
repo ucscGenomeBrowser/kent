@@ -6,7 +6,6 @@
 #include "nt4.h"
 #include "xenalign.h"
 
-static char const rcsid[] = "$Id: xenshow.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
 
 static void printMatchers(char *a, char *b, int lineSize, FILE *f)
 /* Print '|' where a[i] and b[i] match, ' ' where they don't */

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "geneBands.h"
 
-static char const rcsid[] = "$Id: geneBands.c,v 1.3 2005/04/13 06:25:53 markd Exp $";
 
 struct geneBands *geneBandsLoad(char **row)
 /* Load a geneBands from row fetched with select * from geneBands

@@ -10,7 +10,6 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: splice.c,v 1.4 2005/06/01 01:08:38 sugnet Exp $";
 
 struct path *pathCommaIn(char **pS, struct path *ret)
 /* Create a path out of a comma separated string. 

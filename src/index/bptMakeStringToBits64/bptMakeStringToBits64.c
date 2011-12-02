@@ -8,7 +8,6 @@
 #include "localmem.h"
 #include "bPlusTree.h"
 
-static char const rcsid[] = "$Id: bptMakeStringToBits64.c,v 1.3 2009/01/29 19:53:33 mikep Exp $";
 
 int blockSize = 1000;
 

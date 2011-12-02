@@ -17,7 +17,6 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.13 2009/04/23 00:35:41 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL

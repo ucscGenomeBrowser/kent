@@ -10,7 +10,6 @@
 #include "snof.h"
 #include "snofmake.h"
 
-static char const rcsid[] = "$Id: snof.c,v 1.5 2009/09/23 18:42:29 angie Exp $";
 
 void snofClose(struct snof **pSnof)
 /* Close down the index file. */

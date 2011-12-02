@@ -5,7 +5,6 @@
 #include "common.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafScore.c,v 1.9 2005/11/23 17:20:50 braney Exp $";
 
 
 typedef struct gap_scores {

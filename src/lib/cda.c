@@ -11,7 +11,6 @@
 #include "fuzzyFind.h"
 #include "cda.h"
 
-static char const rcsid[] = "$Id: cda.c,v 1.6 2003/05/06 07:33:41 kate Exp $";
 
 char *cdaLoadString(FILE *f)
 /* Load in a string from CDA file. */

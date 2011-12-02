@@ -8,7 +8,6 @@
 #include "portable.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: fakeFinContigs.c,v 1.8 2004/07/21 23:44:12 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

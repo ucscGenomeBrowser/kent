@@ -4,7 +4,6 @@
 #include "hgColors.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgColors.c,v 1.3 2008/05/31 21:14:19 markd Exp $";
 
 void hMakeGrayShades(struct hvGfx *hvg, Color *shades, int maxShade)
 /* Make up gray scale with 0 = white, and maxShade = black. 

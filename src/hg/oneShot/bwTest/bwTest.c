@@ -12,7 +12,6 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bwTest.c,v 1.10 2009/01/27 22:11:50 kent Exp $";
 
 
 int blockSize = 1024;

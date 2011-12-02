@@ -11,7 +11,6 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.30 2008/09/03 19:19:41 markd Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */

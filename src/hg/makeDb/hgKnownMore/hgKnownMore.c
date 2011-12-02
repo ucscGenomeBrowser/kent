@@ -7,7 +7,6 @@
 #include "hugoMulti.h"
 #include "knownInfo.h"
 
-static char const rcsid[] = "$Id: hgKnownMore.c,v 1.3 2006/04/29 16:45:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

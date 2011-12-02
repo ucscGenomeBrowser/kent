@@ -31,7 +31,6 @@
 #include "hubConnect.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.198 2010/05/19 01:37:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

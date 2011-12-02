@@ -8,7 +8,6 @@
 #include "jsHelper.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cartDump.c,v 1.14 2008/12/09 00:41:20 angie Exp $";
 
 #define CART_DUMP_REMOVE_VAR "n/a"
 struct hash *oldVars = NULL;

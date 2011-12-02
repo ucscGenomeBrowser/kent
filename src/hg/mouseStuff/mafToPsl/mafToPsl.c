@@ -5,7 +5,6 @@
 #include "psl.h"
 
 
-static char const rcsid[] = "$Id: mafToPsl.c,v 1.2 2005/10/20 21:05:44 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {

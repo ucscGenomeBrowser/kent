@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "delConrad2.h"
 
-static char const rcsid[] = "$Id: delConrad2.c,v 1.1 2007/04/05 05:33:37 heather Exp $";
 
 void delConrad2StaticLoad(char **row, struct delConrad2 *ret)
 /* Load a row from delConrad2 table into ret.  The contents of ret will

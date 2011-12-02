@@ -6,7 +6,6 @@
 #include "sqlNum.h"
 #include "crTree.h"
 
-static char const rcsid[] = "$Id: crTreeIndexBed.c,v 1.1 2009/01/21 20:35:10 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 32;	/* Set in main. */

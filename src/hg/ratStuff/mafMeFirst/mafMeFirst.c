@@ -8,7 +8,6 @@
 #include "obscure.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafMeFirst.c,v 1.1 2007/03/13 22:21:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

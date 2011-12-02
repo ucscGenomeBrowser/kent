@@ -17,7 +17,6 @@
 
 #include <time.h>
 
-static char const rcsid[] = "$Id: hgBlatTest.c,v 1.3 2004/11/07 05:26:30 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "./";

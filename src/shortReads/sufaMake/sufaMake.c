@@ -11,7 +11,6 @@
 #include "dnaseq.h"
 #include "sufa.h"
 
-static char const rcsid[] = "$Id: sufaMake.c,v 1.5 2008/10/28 23:34:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

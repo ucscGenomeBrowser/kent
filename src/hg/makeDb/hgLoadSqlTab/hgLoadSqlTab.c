@@ -9,7 +9,6 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.7 2008/09/03 19:19:45 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

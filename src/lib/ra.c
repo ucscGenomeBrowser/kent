@@ -13,7 +13,6 @@
 #include "dystring.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: ra.c,v 1.17 2009/12/08 20:42:50 kent Exp $";
 
 boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy)
 /* Skip leading empty lines and comments.  Returns FALSE at end of file.

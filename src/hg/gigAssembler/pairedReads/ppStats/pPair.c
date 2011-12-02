@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "pPair.h"
 
-static char const rcsid[] = "$Id: pPair.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
 
 void pPairInfoStaticLoad(char **row, struct pPairInfo *ret)
 /* Load a row from pPairInfo table into ret.  The contents of ret will

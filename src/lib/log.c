@@ -13,7 +13,6 @@
 #endif
 #include <time.h>
 
-static char const rcsid[] = "$Id: log.c,v 1.10 2010/01/12 09:06:24 markd Exp $";
 
 static char *gProgram = "unknown";  /* name of program */
 static boolean gSysLogOn = FALSE;   /* syslog logging enabled? */

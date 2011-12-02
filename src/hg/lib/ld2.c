@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ld2.h"
 
-static char const rcsid[] = "$Id: ld2.c,v 1.1 2007/10/30 01:16:39 angie Exp $";
 
 void ld2StaticLoad(char **row, struct ld2 *ret)
 /* Load a row from ld2 table into ret.  The contents of ret will

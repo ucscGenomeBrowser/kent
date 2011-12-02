@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "genMapDb.h"
 
-static char const rcsid[] = "$Id: genMapDb.c,v 1.3 2005/04/13 06:25:53 markd Exp $";
 
 void genMapDbStaticLoad(char **row, struct genMapDb *ret)
 /* Load a row from genMapDb table into ret.  The contents of ret will

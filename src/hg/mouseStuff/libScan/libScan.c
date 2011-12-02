@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: libScan.c,v 1.3 2003/05/06 07:22:28 kate Exp $";
 
 int dotEvery = 0;
 

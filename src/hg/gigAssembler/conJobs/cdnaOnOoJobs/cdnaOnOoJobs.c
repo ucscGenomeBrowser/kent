@@ -3,7 +3,6 @@
 #include "portable.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: cdnaOnOoJobs.c,v 1.3 2003/05/06 07:22:15 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

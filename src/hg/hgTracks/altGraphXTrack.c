@@ -10,7 +10,6 @@
 #include "geneGraph.h"
 #include "spaceSaver.h"
 
-static char const rcsid[] = "$Id: altGraphXTrack.c,v 1.17 2010/05/11 01:43:26 kent Exp $";
 
 const static int altGraphXMaxRows = 20;
 

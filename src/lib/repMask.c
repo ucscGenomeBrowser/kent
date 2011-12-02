@@ -7,7 +7,6 @@
 #include "sqlNum.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: repMask.c,v 1.6 2005/04/10 14:41:25 markd Exp $";
 
 void repeatMaskOutStaticLoad(char **row, struct repeatMaskOut *ret)
 /* Load a row from repeatMaskOut table into ret.  The contents of ret will

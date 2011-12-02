@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bed5Pval.h"
 
-static char const rcsid[] = "$Id: bed5Pval.c,v 1.1 2006/11/30 04:49:55 kate Exp $";
 
 void bed5PvalStaticLoad(char **row, struct bed5Pval *ret)
 /* Load a row from bed5Pval table into ret.  The contents of ret will

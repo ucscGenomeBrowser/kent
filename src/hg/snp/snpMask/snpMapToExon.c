@@ -4,7 +4,6 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMapToExon.c,v 1.2 2006/04/27 22:12:23 heather Exp $";
 
 char *database = NULL;
 char *geneTable = NULL;

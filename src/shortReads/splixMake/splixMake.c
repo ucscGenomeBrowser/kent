@@ -11,7 +11,6 @@
 #include "dnaseq.h"
 #include "splix.h"
 
-static char const rcsid[] = "$Id: splixMake.c,v 1.3 2008/10/28 23:34:51 kent Exp $";
 
 #define splixMaxStackSize 4096
 

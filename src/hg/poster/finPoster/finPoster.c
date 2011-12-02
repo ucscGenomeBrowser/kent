@@ -29,7 +29,6 @@
 #include "axt.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.13 2003/12/21 06:35:23 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";

@@ -9,7 +9,6 @@
 #include "nib.h"
 #include "hdb.h"
 
-static char const rcsid[] = "";
 
 int reward = 1;
 int cost = 1;
