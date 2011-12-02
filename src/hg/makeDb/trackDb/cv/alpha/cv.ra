@@ -2773,7 +2773,8 @@ termId BTO:0001282
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282
 sex M
 tier 3
-protocol SUNY(missing):HT1080_SUNY_protocol.pdf
+lab Tenenbaum
+protocol missing
 
 #This cell line has been superceded by SK-N-SH, HTB-11 was the venderId.
 #term HTB-11
@@ -5653,7 +5654,7 @@ lab Wold
 lots G0109
 targetId Genecard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation Human_-_FOSL1_(sc-605)(missing):human_FOSL1-SC605_validation_Wold.pdf Mouse_-_:missing
+validation Human_-_FOSL1_(sc-605): Mouse_-_:missing
 label FOSL1 (sc-605)
 
 term FOSL2
