@@ -284,6 +284,9 @@ MgFont *mgTimes18Font();
 MgFont *mgTimes24Font();
 MgFont *mgTimes34Font();
 
+/* free Meslo font */
+MgFont *mgMenloMediumFont();
+
 void mgText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text);
 /* Draw a line of text with upper left corner x,y. */

@@ -17,7 +17,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o bamFile.o base64.o \
     font/mgHelveticaBold14.o font/mgHelveticaBold18.o font/mgHelveticaBold24.o \
     font/mgHelveticaBold34.o font/mgHelveticaBold8.o font/mgSixhi6.o font/mgSail8.o \
     font/mgTimes10.o font/mgTimes12.o font/mgTimes14.o font/mgTimes18.o \
-    font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o \
+    font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o font/mgMenlo12.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
