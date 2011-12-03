@@ -3,7 +3,6 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: geneStarts.c,v 1.2 2003/05/06 07:41:07 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

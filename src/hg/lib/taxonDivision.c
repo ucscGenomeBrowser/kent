@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "taxonDivision.h"
 
-static char const rcsid[] = "$Id: taxonDivision.c,v 1.1 2006/04/11 21:43:09 baertsch Exp $";
 
 void taxonDivisionStaticLoad(char **row, struct taxonDivision *ret)
 /* Load a row from taxonDivision table into ret.  The contents of ret will

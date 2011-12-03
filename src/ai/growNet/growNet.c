@@ -7,7 +7,6 @@
 #include "dlist.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: growNet.c,v 1.6 2004/11/24 17:17:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

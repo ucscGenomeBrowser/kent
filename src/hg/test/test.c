@@ -9,7 +9,6 @@
 #include "ens.h"
 #include "unfin.h"
 
-static char const rcsid[] = "$Id: test.c,v 1.6 2003/11/04 16:10:02 angie Exp $";
 
 
 char *database = "ensdev";

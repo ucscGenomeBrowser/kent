@@ -6,7 +6,6 @@
 #include "psl.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: relPairs.c,v 1.3 2006/08/15 17:45:57 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

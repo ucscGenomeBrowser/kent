@@ -8,7 +8,6 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.17 2008/11/17 22:35:20 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */

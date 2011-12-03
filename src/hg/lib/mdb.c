@@ -11,7 +11,6 @@
 #include "mdb.h"
 #include "encode/encodeExp.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will

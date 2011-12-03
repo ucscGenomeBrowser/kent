@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mouseAPSetEventMap.h"
 
-static char const rcsid[] = "$Id: mouseAPSetEventMap.c,v 1.1 2005/09/23 21:00:03 sugnet Exp $";
 
 struct mouseAPSetEventMap *mouseAPSetEventMapLoad(char **row)
 /* Load a mouseAPSetEventMap from row fetched with select * from mouseAPSetEventMap

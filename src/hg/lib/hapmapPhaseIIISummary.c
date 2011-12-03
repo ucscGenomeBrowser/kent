@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "hapmapPhaseIIISummary.h"
 
-static char const rcsid[] = "$Id: hapmapPhaseIIISummary.c,v 1.1 2009/03/06 23:34:41 angie Exp $";
 
 struct hapmapPhaseIIISummary *hapmapPhaseIIISummaryLoad(char **row)
 /* Load a hapmapPhaseIIISummary from row fetched with select * from hapmapPhaseIIISummary

@@ -5,7 +5,6 @@
 #include "options.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: scrapeCruzBiotech.c,v 1.1 2006/06/15 15:27:00 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

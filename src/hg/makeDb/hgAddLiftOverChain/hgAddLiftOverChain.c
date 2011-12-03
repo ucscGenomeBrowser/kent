@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.8 2006/07/11 05:51:39 kate Exp $";
 
 #define TABLE_NAME "liftOverChain"
 

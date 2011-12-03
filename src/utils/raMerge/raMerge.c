@@ -6,7 +6,6 @@
 #include "localmem.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: raMerge.c,v 1.3 2009/11/23 07:38:17 kent Exp $";
 
 boolean dupeOk = FALSE, firstOnly = FALSE;
 

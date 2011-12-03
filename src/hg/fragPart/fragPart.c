@@ -5,7 +5,6 @@
 #include "fa.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: fragPart.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
 
 char *faDirs[] = 
     {

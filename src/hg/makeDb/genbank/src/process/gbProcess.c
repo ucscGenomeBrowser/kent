@@ -42,7 +42,6 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.24 2009/08/19 03:21:23 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

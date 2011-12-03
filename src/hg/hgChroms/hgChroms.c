@@ -3,7 +3,6 @@
 #include "hdb.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgChroms.c,v 1.4 2008/09/03 19:18:48 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

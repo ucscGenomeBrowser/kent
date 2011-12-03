@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "taxonName.h"
 
-static char const rcsid[] = "$Id: taxonName.c,v 1.2 2006/04/11 22:15:09 baertsch Exp $";
 
 void taxonNameStaticLoad(char **row, struct taxonName *ret)
 /* Load a row from taxonName table into ret.  The contents of ret will

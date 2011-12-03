@@ -4,7 +4,6 @@
 #include "dlist.h"
 #include "diGraph.h"
 
-static char const rcsid[] = "$Id: diGraph.c,v 1.9 2005/08/17 03:01:29 galt Exp $";
 
 struct diGraph *dgNew()
 /* Return a new directed graph object. */

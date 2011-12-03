@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "kgMapName.h"
 
-static char const rcsid[] = "$Id: kgMapName.c,v 1.1 2004/06/02 23:09:59 braney Exp $";
 
 void kgMapNameStaticLoad(char **row, struct kgMapName *ret)
 /* Load a row from kgMapName table into ret.  The contents of ret will

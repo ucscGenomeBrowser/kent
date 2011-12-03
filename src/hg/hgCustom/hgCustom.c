@@ -23,7 +23,6 @@
 
 static long loadTime = 0;
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.142 2010/05/28 23:04:56 kuhn Exp $";
 
 void usage()
 /* Explain usage and exit. */

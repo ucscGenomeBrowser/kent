@@ -21,7 +21,6 @@
 #include "bigWarn.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: bamTrack.c,v 1.32 2010/05/27 21:13:24 angie Exp $";
 
 struct bamTrackData
     {

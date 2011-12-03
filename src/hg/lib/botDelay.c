@@ -11,7 +11,6 @@
 #include "hCommon.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: botDelay.c,v 1.15 2009/07/14 21:11:48 markd Exp $";
 
 int botDelayTime(char *host, int port, char *botCheckString)
 /* Figure out suggested delay time for ip address in

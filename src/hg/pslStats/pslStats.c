@@ -8,7 +8,6 @@
 #include "psl.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pslStats.c,v 1.9 2009/10/30 21:08:18 markd Exp $";
 
 /* size for query name hashs */
 static int queryHashPowTwo = 22;

@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: createSlamParaSpec.c,v 1.4 2003/05/06 07:22:35 kate Exp $";
 
 int maxFaSize = BIGNUM;
 boolean dontCheckLargeSize = FALSE;

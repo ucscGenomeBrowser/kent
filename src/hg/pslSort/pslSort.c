@@ -7,7 +7,6 @@
 #include "options.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSort.c,v 1.8 2006/08/02 16:44:26 angie Exp $";
 
 boolean nohead = FALSE; /* No header for psl files?  Command line option. */
 

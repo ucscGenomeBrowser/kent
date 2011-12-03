@@ -15,7 +15,6 @@
 #include "bwgInternal.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: bedGraphToBigWig.c,v 1.28 2010/06/10 20:14:14 braney Exp $";
 
 static int blockSize = 256;
 static int itemsPerSlot = 1024;

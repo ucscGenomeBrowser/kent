@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "switchDbTss.h"
 
-static char const rcsid[] = "$Id: switchDbTss.c,v 1.3 2007/04/27 18:30:22 aamp Exp $";
 
 void switchDbTssStaticLoad(char **row, struct switchDbTss *ret)
 /* Load a row from switchDbTss table into ret.  The contents of ret will

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "pgPhenoAssoc.h"
 
-static char const rcsid[] = "$Id: pgPhenoAssoc.c,v 1.1 2010/03/08 17:45:40 giardine Exp $";
 
 void pgPhenoAssocStaticLoad(char **row, struct pgPhenoAssoc *ret)
 /* Load a row from pgPhenoAssoc table into ret.  The contents of ret will

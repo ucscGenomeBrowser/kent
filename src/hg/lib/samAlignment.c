@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "samAlignment.h"
 
-static char const rcsid[] = "$Id:$";
 
 void samAlignmentStaticLoad(char **row, struct samAlignment *ret)
 /* Load a row from samAlignment table into ret.  The contents of ret will

@@ -6,7 +6,6 @@
 #include "options.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: makeTrackDbTypeTags.c,v 1.1 2009/12/04 22:19:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

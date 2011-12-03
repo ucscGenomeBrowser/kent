@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ccdsNotes.h"
 
-static char const rcsid[] = "$Id:$";
 
 void ccdsNotesStaticLoad(char **row, struct ccdsNotes *ret)
 /* Load a row from ccdsNotes table into ret.  The contents of ret will

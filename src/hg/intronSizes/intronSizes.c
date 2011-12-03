@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: intronSizes.c,v 1.2 2005/05/12 00:24:38 baertsch Exp $";
 
 char *chromName;
 

@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExceptionCheck.c,v 1.1 2006/04/15 03:43:33 heather Exp $";
 
 static char *snpDb = NULL;
 

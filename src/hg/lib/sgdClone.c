@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "sgdClone.h"
 
-static char const rcsid[] = "$Id: sgdClone.c,v 1.4 2005/04/13 06:25:56 markd Exp $";
 
 void sgdCloneStaticLoad(char **row, struct sgdClone *ret)
 /* Load a row from sgdClone table into ret.  The contents of ret will

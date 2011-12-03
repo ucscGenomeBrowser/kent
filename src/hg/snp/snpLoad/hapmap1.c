@@ -37,7 +37,6 @@
 #include "linefile.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: hapmap1.c,v 1.5 2007/03/13 22:07:19 heather Exp $";
 
 FILE *logFileHandle = NULL;
 FILE *outputFileHandle = NULL;

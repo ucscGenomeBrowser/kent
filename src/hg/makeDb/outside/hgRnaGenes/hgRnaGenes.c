@@ -7,7 +7,6 @@
 #include "bed.h"
 #include "rnaGene.h"
 
-static char const rcsid[] = "$Id: hgRnaGenes.c,v 1.1 2006/07/26 03:59:54 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

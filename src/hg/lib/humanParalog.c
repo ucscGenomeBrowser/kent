@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "humanParalog.h"
 
-static char const rcsid[] = "$Id: humanParalog.c,v 1.3 2005/04/13 06:25:54 markd Exp $";
 
 void humanParalogStaticLoad(char **row, struct humanParalog *ret)
 /* Load a row from humanParalog table into ret.  The contents of ret will

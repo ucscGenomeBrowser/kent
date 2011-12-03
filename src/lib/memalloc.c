@@ -13,7 +13,6 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.31 2007/04/24 18:35:43 hiram Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */

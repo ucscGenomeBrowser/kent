@@ -10,7 +10,6 @@
 #include "errabort.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbStatusTbl.c,v 1.5 2006/08/30 05:06:41 markd Exp $";
 
 // FIXME: the stateChg flags vs the list is a little confusing; maybe
 // have simpler lists (new, deleted, change, orphaned)

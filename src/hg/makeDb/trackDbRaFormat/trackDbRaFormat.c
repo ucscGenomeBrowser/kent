@@ -5,7 +5,6 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDbRaFormat/trackDbRaFormat.c,v 1.4 2009/02/03 00:01:21 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */

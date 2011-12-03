@@ -7,7 +7,6 @@
 #include "sqlUpdater.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: sqlDeleter.c,v 1.4 2005/09/27 21:39:36 markd Exp $";
 
 /* FIXME: the point where copying the table is more efficient varies with
  * the size of the table.  It turned out that the 50000 row cutoff was

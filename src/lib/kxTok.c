@@ -8,7 +8,6 @@
 #include "common.h"
 #include "kxTok.h"
 
-static char const rcsid[] = "$Id: kxTok.c,v 1.10 2004/11/05 23:08:58 kent Exp $";
 
 boolean includeQuotes = FALSE;
 

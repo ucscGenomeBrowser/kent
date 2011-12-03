@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: accessLogMerge.c,v 1.1 2009/08/28 00:56:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

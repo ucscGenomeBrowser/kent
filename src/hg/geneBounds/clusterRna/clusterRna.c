@@ -11,7 +11,6 @@
 #include "ggMrnaAli.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: clusterRna.c,v 1.16 2008/09/03 19:18:35 markd Exp $";
 
 /* Global variables set for sorting alignments. */
 char *clusterStrand = NULL;

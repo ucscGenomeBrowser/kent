@@ -7,7 +7,6 @@
 #include "options.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: trfBig.c,v 1.20 2009/12/24 05:10:49 markd Exp $";
 
 /* Variables that can be set from command line. */
 char *trfExe = "trf";	/* trf executable name. */

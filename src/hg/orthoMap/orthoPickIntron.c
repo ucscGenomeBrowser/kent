@@ -58,7 +58,6 @@ chosen if it is overlapped by any transcript evidence. </li>
 #include "dnautil.h"
 #include "orthoEval.h"
 #include "rbTree.h"
-static char const rcsid[] = "$Id: orthoPickIntron.c,v 1.8 2008/09/03 19:20:52 markd Exp $";
 
 struct intronEv
 /** Data about one intron. */
@@ -113,15 +112,7 @@ void usage()
 /** Print usage and quit. */
 {
 int i=0;
-char *version = cloneString((char*)rcsid);
-char *tmp = strstr(version, "orthoPickIntron.c,v ");
-if(tmp != NULL)
-    version = tmp + strlen("orthoPickIntron.c,v ");
-tmp = strrchr(version, 'E');
-if(tmp != NULL)
-    (*tmp) = '\0';
-warn("orthoPickIntron - Pick best intron from orthoEval.\n"
-     "   (version: %s)", version );
+warn("orthoPickIntron - Pick best intron from orthoEval.\n");
 for(i=0; i<ArraySize(optionSpecs) -1; i++)
     fprintf(stderr, "  -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
 errAbort("\nusage:\n"

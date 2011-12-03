@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "omicia.h"
 
-static char const rcsid[] = "$Id: omicia.c,v 1.1 2007/06/11 15:10:52 giardine Exp $";
 
 void omiciaAutoStaticLoad(char **row, struct omiciaAuto *ret)
 /* Load a row from omiciaAuto table into ret.  The contents of ret will

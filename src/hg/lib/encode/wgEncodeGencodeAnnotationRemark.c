@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/wgEncodeGencodeAnnotationRemark.h"
 
-static char const rcsid[] = "$Id:$";
 
 void wgEncodeGencodeAnnotationRemarkStaticLoad(char **row, struct wgEncodeGencodeAnnotationRemark *ret)
 /* Load a row from wgEncodeGencodeAnnotationRemark table into ret.  The contents of ret will

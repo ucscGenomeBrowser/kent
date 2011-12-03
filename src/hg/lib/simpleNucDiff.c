@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: simpleNucDiff.c,v 1.2 2005/04/13 06:25:57 markd Exp $";
 
 void simpleNucDiffStaticLoad(char **row, struct simpleNucDiff *ret)
 /* Load a row from simpleNucDiff table into ret.  The contents of ret will

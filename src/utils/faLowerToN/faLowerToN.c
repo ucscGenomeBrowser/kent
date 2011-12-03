@@ -4,7 +4,6 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faLowerToN.c,v 1.1 2008/10/10 16:38:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

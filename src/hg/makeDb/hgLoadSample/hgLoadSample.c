@@ -9,7 +9,6 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadSample.c,v 1.6 2007/05/14 21:34:45 angie Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */

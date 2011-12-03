@@ -5,7 +5,6 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGeneBands.c,v 1.5 2008/09/03 19:18:53 markd Exp $";
 
 char *database = NULL;
 char *chromName = NULL;

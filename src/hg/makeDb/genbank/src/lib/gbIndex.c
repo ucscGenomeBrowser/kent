@@ -19,7 +19,6 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbIndex.c,v 1.4 2004/03/09 02:11:36 markd Exp $";
 
 unsigned gbTypeFromName(char* fileName, boolean checkSpecies)
 /* Determine the type flags for a filename based on the naming conventions.

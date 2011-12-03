@@ -2773,7 +2773,8 @@ termId BTO:0001282
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282
 sex M
 tier 3
-protocol SUNY(missing):HT1080_SUNY_protocol.pdf
+lab Tenenbaum
+protocol missing
 
 #This cell line has been superceded by SK-N-SH, HTB-11 was the venderId.
 #term HTB-11
@@ -3553,7 +3554,7 @@ vendorId CRL-11609
 karyotype normal
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-11609&Template=cellBiology
 termId BTO:0002397
-termUrl missing
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002397 
 sex M
 tier 3
 protocol Crawford:RWPE_Crawford_protocol.pdf
@@ -3830,7 +3831,7 @@ orderUrl http://www.chordomafoundation.org/research/
 termId BTO:0001768
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001768&termName=notochord
 lab Crawford
-protocol Crawford(Missing):UCH1_Crawford_protocol.pdf
+protocol Crawford:UCH1_Crawford_protocol.pdf
 
 term WERI-Rb-1
 tag WERIRB1
@@ -3962,7 +3963,7 @@ termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 189,0,157
 sex M
-protocol ENCODE:missing
+protocol missing
 
 term B-cell_(CD19+)
 tag BCELLCD19P
@@ -5653,7 +5654,7 @@ lab Wold
 lots G0109
 targetId Genecard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation Human_-_FOSL1_(sc-605)(missing):human_FOSL1-SC605_validation_Wold.pdf Mouse_-_:missing
+validation Human_-_FOSL1_(sc-605): Mouse_-_:missing
 label FOSL1 (sc-605)
 
 term FOSL2

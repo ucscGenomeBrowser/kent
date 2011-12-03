@@ -11,7 +11,6 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.15 2008/09/03 19:21:21 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

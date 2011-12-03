@@ -6,7 +6,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: hgFakeAgp.c,v 1.1 2004/10/23 20:46:43 kent Exp $";
 
 int minContigGap = 25;
 int minScaffoldGap = 50000;
