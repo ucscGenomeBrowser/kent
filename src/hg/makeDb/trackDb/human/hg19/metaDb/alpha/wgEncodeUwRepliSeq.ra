@@ -11,6 +11,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esG1bAlnRep1.bam,wgEncodeUwRepliSeqBg02esG1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -32,6 +34,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esG1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -54,6 +58,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esG1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -75,6 +81,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esG2AlnRep1.bam,wgEncodeUwRepliSeqBg02esG2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -96,6 +104,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esG2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -118,6 +128,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esG2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -139,6 +151,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esPkRep1.bed.gz
 grant Stam
 lab UW
@@ -161,6 +175,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS1AlnRep1.bam,wgEncodeUwRepliSeqBg02esS1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -182,6 +198,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -204,6 +222,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -225,6 +245,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS2AlnRep1.bam,wgEncodeUwRepliSeqBg02esS2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -246,6 +268,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -268,6 +292,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -289,6 +315,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS3AlnRep1.bam,wgEncodeUwRepliSeqBg02esS3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -310,6 +338,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -332,6 +362,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -353,6 +385,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS4AlnRep1.bam,wgEncodeUwRepliSeqBg02esS4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -374,6 +408,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -396,6 +432,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esS4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -417,6 +455,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esSumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -439,6 +479,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -461,6 +503,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002250
+expId 2250
 fileName wgEncodeUwRepliSeqBg02esWaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -483,6 +527,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG1bAlnRep1.bam,wgEncodeUwRepliSeqBjG1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -503,6 +549,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG1bAlnRep2.bam,wgEncodeUwRepliSeqBjG1bAlnRep2.bam.bai
 grant Stam
 lab UW
@@ -523,6 +571,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -544,6 +594,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG1bPctSignalRep2.bigWig
 grant Stam
 lab UW
@@ -565,6 +617,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -585,6 +639,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG1bRawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -605,6 +661,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG2AlnRep1.bam,wgEncodeUwRepliSeqBjG2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -625,6 +683,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG2AlnRep2.bam,wgEncodeUwRepliSeqBjG2AlnRep2.bam.bai
 grant Stam
 lab UW
@@ -645,6 +705,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -666,6 +728,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG2PctSignalRep2.bigWig
 grant Stam
 lab UW
@@ -687,6 +751,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -707,6 +773,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjG2RawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -727,6 +795,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjPkRep1.bed.gz
 grant Stam
 lab UW
@@ -748,6 +818,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjPkRep2.bed.gz
 grant Stam
 lab UW
@@ -769,6 +841,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS1AlnRep1.bam,wgEncodeUwRepliSeqBjS1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -789,6 +863,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS1AlnRep2.bam,wgEncodeUwRepliSeqBjS1AlnRep2.bam.bai
 grant Stam
 lab UW
@@ -809,6 +885,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -830,6 +908,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS1PctSignalRep2.bigWig
 grant Stam
 lab UW
@@ -851,6 +931,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -871,6 +953,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS1RawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -891,6 +975,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS2AlnRep1.bam,wgEncodeUwRepliSeqBjS2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -911,6 +997,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS2AlnRep2.bam,wgEncodeUwRepliSeqBjS2AlnRep2.bam.bai
 grant Stam
 lab UW
@@ -931,6 +1019,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -952,6 +1042,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS2PctSignalRep2.bigWig
 grant Stam
 lab UW
@@ -973,6 +1065,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -993,6 +1087,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS2RawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -1013,6 +1109,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS3AlnRep1.bam,wgEncodeUwRepliSeqBjS3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1033,6 +1131,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS3AlnRep2.bam,wgEncodeUwRepliSeqBjS3AlnRep2.bam.bai
 grant Stam
 lab UW
@@ -1053,6 +1153,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1074,6 +1176,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS3PctSignalRep2.bigWig
 grant Stam
 lab UW
@@ -1095,6 +1199,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -1115,6 +1221,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS3RawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -1135,6 +1243,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS4AlnRep1.bam,wgEncodeUwRepliSeqBjS4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1155,6 +1265,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS4AlnRep2.bam,wgEncodeUwRepliSeqBjS4AlnRep2.bam.bai
 grant Stam
 lab UW
@@ -1175,6 +1287,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1196,6 +1310,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS4PctSignalRep2.bigWig
 grant Stam
 lab UW
@@ -1217,6 +1333,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -1237,6 +1355,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjS4RawDataRep2.fastq.gz
 grant Stam
 lab UW
@@ -1257,6 +1377,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjSumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1278,6 +1400,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjSumSignalRep2.bigWig
 grant Stam
 lab UW
@@ -1299,6 +1423,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -1320,6 +1446,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjValleysRep2.bed.gz
 grant Stam
 lab UW
@@ -1341,6 +1469,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjWaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1362,6 +1492,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002236
+expId 2236
 fileName wgEncodeUwRepliSeqBjWaveSignalRep2.bigWig
 grant Stam
 lab UW
@@ -1383,6 +1515,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990G1bAlnRep1.bam,wgEncodeUwRepliSeqGm06990G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1403,6 +1537,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1424,6 +1560,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990G1bRawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -1444,6 +1582,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990G2AlnRep1.bam,wgEncodeUwRepliSeqGm06990G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1464,6 +1604,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1485,6 +1627,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990G2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -1505,6 +1649,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990PkRep1.bed.gz
 grant Stam
 lab UW
@@ -1526,6 +1672,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S1AlnRep1.bam,wgEncodeUwRepliSeqGm06990S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1546,6 +1694,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1567,6 +1717,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -1587,6 +1739,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S2AlnRep1.bam,wgEncodeUwRepliSeqGm06990S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1607,6 +1761,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1628,6 +1784,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -1648,6 +1806,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S3AlnRep1.bam,wgEncodeUwRepliSeqGm06990S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1668,6 +1828,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1689,6 +1851,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S3RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -1709,6 +1873,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S4AlnRep1.bam,wgEncodeUwRepliSeqGm06990S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1729,6 +1895,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1750,6 +1918,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990S4RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -1770,6 +1940,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1791,6 +1963,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -1812,6 +1986,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002237
+expId 2237
 fileName wgEncodeUwRepliSeqGm06990WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1833,6 +2009,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801G1bAlnRep1.bam,wgEncodeUwRepliSeqGm12801G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1853,6 +2031,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1874,6 +2054,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -1894,6 +2076,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801G2AlnRep1.bam,wgEncodeUwRepliSeqGm12801G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1914,6 +2098,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -1935,6 +2121,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801G2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -1955,6 +2143,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801PkRep1.bed.gz
 grant Stam
 lab UW
@@ -1976,6 +2166,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S1AlnRep1.bam,wgEncodeUwRepliSeqGm12801S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -1996,6 +2188,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2017,6 +2211,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2037,6 +2233,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S2AlnRep1.bam,wgEncodeUwRepliSeqGm12801S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2057,6 +2255,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2078,6 +2278,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2098,6 +2300,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S3AlnRep1.bam,wgEncodeUwRepliSeqGm12801S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2118,6 +2322,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2139,6 +2345,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2159,6 +2367,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S4AlnRep1.bam,wgEncodeUwRepliSeqGm12801S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2179,6 +2389,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2200,6 +2412,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2220,6 +2434,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2241,6 +2457,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -2262,6 +2480,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002238
+expId 2238
 fileName wgEncodeUwRepliSeqGm12801WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2283,6 +2503,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812G1bAlnRep1.bam,wgEncodeUwRepliSeqGm12812G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2303,6 +2525,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2324,6 +2548,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2344,6 +2570,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812G2AlnRep1.bam,wgEncodeUwRepliSeqGm12812G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2364,6 +2592,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2385,6 +2615,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812G2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2405,6 +2637,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812PkRep1.bed.gz
 grant Stam
 lab UW
@@ -2426,6 +2660,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S1AlnRep1.bam,wgEncodeUwRepliSeqGm12812S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2446,6 +2682,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2467,6 +2705,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2487,6 +2727,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S2AlnRep1.bam,wgEncodeUwRepliSeqGm12812S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2507,6 +2749,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2528,6 +2772,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2548,6 +2794,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S3AlnRep1.bam,wgEncodeUwRepliSeqGm12812S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2568,6 +2816,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2589,6 +2839,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2609,6 +2861,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S4AlnRep1.bam,wgEncodeUwRepliSeqGm12812S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2629,6 +2883,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2650,6 +2906,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2670,6 +2928,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2691,6 +2951,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -2712,6 +2974,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002239
+expId 2239
 fileName wgEncodeUwRepliSeqGm12812WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2733,6 +2997,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813G1bAlnRep1.bam,wgEncodeUwRepliSeqGm12813G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2753,6 +3019,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2774,6 +3042,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2794,6 +3064,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813G2AlnRep1.bam,wgEncodeUwRepliSeqGm12813G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2814,6 +3086,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2835,6 +3109,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813G2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2855,6 +3131,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813PkRep1.bed.gz
 grant Stam
 lab UW
@@ -2876,6 +3154,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S1AlnRep1.bam,wgEncodeUwRepliSeqGm12813S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2896,6 +3176,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2917,6 +3199,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2937,6 +3221,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S2AlnRep1.bam,wgEncodeUwRepliSeqGm12813S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -2957,6 +3243,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -2978,6 +3266,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -2998,6 +3288,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S3AlnRep1.bam,wgEncodeUwRepliSeqGm12813S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3018,6 +3310,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3039,6 +3333,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S3RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -3059,6 +3355,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S4AlnRep1.bam,wgEncodeUwRepliSeqGm12813S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3079,6 +3377,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3100,6 +3400,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3120,6 +3422,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3141,6 +3445,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -3162,6 +3468,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002240
+expId 2240
 fileName wgEncodeUwRepliSeqGm12813WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3183,6 +3491,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878G1bAlnRep1.bam,wgEncodeUwRepliSeqGm12878G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3203,6 +3513,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3224,6 +3536,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3244,6 +3558,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878G2AlnRep1.bam,wgEncodeUwRepliSeqGm12878G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3264,6 +3580,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3285,6 +3603,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878G2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3305,6 +3625,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878PkRep1.bed.gz
 grant Stam
 lab UW
@@ -3326,6 +3648,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S1AlnRep1.bam,wgEncodeUwRepliSeqGm12878S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3346,6 +3670,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3367,6 +3693,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3387,6 +3715,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S2AlnRep1.bam,wgEncodeUwRepliSeqGm12878S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3407,6 +3737,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3428,6 +3760,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3448,6 +3782,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S3AlnRep1.bam,wgEncodeUwRepliSeqGm12878S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3468,6 +3804,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3489,6 +3827,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3509,6 +3849,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S4AlnRep1.bam,wgEncodeUwRepliSeqGm12878S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3529,6 +3871,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3550,6 +3894,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3570,6 +3916,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3591,6 +3939,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -3612,6 +3962,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002241
+expId 2241
 fileName wgEncodeUwRepliSeqGm12878WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3633,6 +3985,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3G1bAlnRep1.bam,wgEncodeUwRepliSeqHelas3G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3653,6 +4007,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3674,6 +4030,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3694,6 +4052,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3G2AlnRep1.bam,wgEncodeUwRepliSeqHelas3G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3714,6 +4074,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3735,6 +4097,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3G2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3755,6 +4119,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3PkRep1.bed.gz
 grant Stam
 lab UW
@@ -3776,6 +4142,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S1AlnRep1.bam,wgEncodeUwRepliSeqHelas3S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3796,6 +4164,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3817,6 +4187,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3837,6 +4209,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S2AlnRep1.bam,wgEncodeUwRepliSeqHelas3S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3857,6 +4231,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3878,6 +4254,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3898,6 +4276,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S3AlnRep1.bam,wgEncodeUwRepliSeqHelas3S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3918,6 +4298,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -3939,6 +4321,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -3959,6 +4343,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S4AlnRep1.bam,wgEncodeUwRepliSeqHelas3S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -3979,6 +4365,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4000,6 +4388,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -4020,6 +4410,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4041,6 +4433,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -4062,6 +4456,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002243
+expId 2243
 fileName wgEncodeUwRepliSeqHelas3WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4083,6 +4479,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2G1bAlnRep1.bam,wgEncodeUwRepliSeqHepg2G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4103,6 +4501,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4124,6 +4524,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -4144,6 +4546,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2G2AlnRep1.bam,wgEncodeUwRepliSeqHepg2G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4164,6 +4568,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4185,6 +4591,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2G2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -4205,6 +4613,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2PkRep1.bed.gz
 grant Stam
 lab UW
@@ -4226,6 +4636,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S1AlnRep1.bam,wgEncodeUwRepliSeqHepg2S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4246,6 +4658,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4267,6 +4681,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -4287,6 +4703,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S2AlnRep1.bam,wgEncodeUwRepliSeqHepg2S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4307,6 +4725,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4328,6 +4748,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -4348,6 +4770,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S3AlnRep1.bam,wgEncodeUwRepliSeqHepg2S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4368,6 +4792,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4389,6 +4815,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S3RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -4409,6 +4837,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S4AlnRep1.bam,wgEncodeUwRepliSeqHepg2S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4429,6 +4859,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4450,6 +4882,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2S4RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -4470,6 +4904,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4491,6 +4927,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -4512,6 +4950,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002244
+expId 2244
 fileName wgEncodeUwRepliSeqHepg2WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4533,6 +4973,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecG1bAlnRep1.bam,wgEncodeUwRepliSeqHuvecG1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4553,6 +4995,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecG1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4574,6 +5018,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecG1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -4594,6 +5040,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecG2AlnRep1.bam,wgEncodeUwRepliSeqHuvecG2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4614,6 +5062,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecG2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4635,6 +5085,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecG2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -4655,6 +5107,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecPkRep1.bed.gz
 grant Stam
 lab UW
@@ -4676,6 +5130,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS1AlnRep1.bam,wgEncodeUwRepliSeqHuvecS1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4696,6 +5152,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4717,6 +5175,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -4737,6 +5197,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS2AlnRep1.bam,wgEncodeUwRepliSeqHuvecS2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4757,6 +5219,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4778,6 +5242,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -4798,6 +5264,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS3AlnRep1.bam,wgEncodeUwRepliSeqHuvecS3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4818,6 +5286,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4839,6 +5309,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -4859,6 +5331,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS4AlnRep1.bam,wgEncodeUwRepliSeqHuvecS4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -4879,6 +5353,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4900,6 +5376,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecS4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -4920,6 +5398,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecSumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4941,6 +5421,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -4962,6 +5444,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002242
+expId 2242
 fileName wgEncodeUwRepliSeqHuvecWaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -4983,6 +5467,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90G1bAlnRep1.bam,wgEncodeUwRepliSeqImr90G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5003,6 +5489,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5024,6 +5512,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5044,6 +5534,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90G2AlnRep1.bam,wgEncodeUwRepliSeqImr90G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5064,6 +5556,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5085,6 +5579,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90G2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5105,6 +5601,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90PkRep1.bed.gz
 grant Stam
 lab UW
@@ -5126,6 +5624,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S1AlnRep1.bam,wgEncodeUwRepliSeqImr90S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5146,6 +5646,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5167,6 +5669,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5187,6 +5691,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S2AlnRep1.bam,wgEncodeUwRepliSeqImr90S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5207,6 +5713,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5228,6 +5736,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5248,6 +5758,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S3AlnRep1.bam,wgEncodeUwRepliSeqImr90S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5268,6 +5780,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5289,6 +5803,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5309,6 +5825,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S4AlnRep1.bam,wgEncodeUwRepliSeqImr90S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5329,6 +5847,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5350,6 +5870,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5370,6 +5892,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5391,6 +5915,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -5412,6 +5938,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002245
+expId 2245
 fileName wgEncodeUwRepliSeqImr90WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5433,6 +5961,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562G1AlnRep1.bam,wgEncodeUwRepliSeqK562G1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5453,6 +5983,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562G1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5474,6 +6006,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562G1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -5494,6 +6028,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562G2AlnRep1.bam,wgEncodeUwRepliSeqK562G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5514,6 +6050,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5535,6 +6073,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562G2RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -5555,6 +6095,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562PkRep1.bed.gz
 grant Stam
 lab UW
@@ -5576,6 +6118,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S1AlnRep1.bam,wgEncodeUwRepliSeqK562S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5596,6 +6140,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5617,6 +6163,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S1RawDataRep1.fastq.tgz
 grant Stam
 lab UW
@@ -5637,6 +6185,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S2AlnRep1.bam,wgEncodeUwRepliSeqK562S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5657,6 +6207,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5678,6 +6230,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5698,6 +6252,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S3AlnRep1.bam,wgEncodeUwRepliSeqK562S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5718,6 +6274,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5739,6 +6297,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5759,6 +6319,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S4AlnRep1.bam,wgEncodeUwRepliSeqK562S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5779,6 +6341,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5800,6 +6364,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5820,6 +6386,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5841,6 +6409,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -5862,6 +6432,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002246
+expId 2246
 fileName wgEncodeUwRepliSeqK562WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5883,6 +6455,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7G1bAlnRep1.bam,wgEncodeUwRepliSeqMcf7G1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5903,6 +6477,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7G1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5924,6 +6500,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7G1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -5944,6 +6522,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7G2AlnRep1.bam,wgEncodeUwRepliSeqMcf7G2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -5964,6 +6544,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7G2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -5985,6 +6567,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7G2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6005,6 +6589,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7PkRep1.bed.gz
 grant Stam
 lab UW
@@ -6026,6 +6612,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S1AlnRep1.bam,wgEncodeUwRepliSeqMcf7S1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6046,6 +6634,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6067,6 +6657,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6087,6 +6679,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S2AlnRep1.bam,wgEncodeUwRepliSeqMcf7S2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6107,6 +6701,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6128,6 +6724,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6148,6 +6746,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S3AlnRep1.bam,wgEncodeUwRepliSeqMcf7S3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6168,6 +6768,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6189,6 +6791,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6209,6 +6813,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S4AlnRep1.bam,wgEncodeUwRepliSeqMcf7S4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6229,6 +6835,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6250,6 +6858,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7S4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6270,6 +6880,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7SumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6291,6 +6903,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7ValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -6312,6 +6926,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002247
+expId 2247
 fileName wgEncodeUwRepliSeqMcf7WaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6333,6 +6949,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekG1bAlnRep1.bam,wgEncodeUwRepliSeqNhekG1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6354,6 +6972,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekG1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6376,6 +6996,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekG1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6397,6 +7019,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekG2AlnRep1.bam,wgEncodeUwRepliSeqNhekG2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6418,6 +7042,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekG2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6440,6 +7066,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekG2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6461,6 +7089,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekPkRep1.bed.gz
 grant Stam
 lab UW
@@ -6483,6 +7113,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS1AlnRep1.bam,wgEncodeUwRepliSeqNhekS1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6504,6 +7136,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6526,6 +7160,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6547,6 +7183,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS2AlnRep1.bam,wgEncodeUwRepliSeqNhekS2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6568,6 +7206,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6590,6 +7230,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6611,6 +7253,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS3AlnRep1.bam,wgEncodeUwRepliSeqNhekS3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6632,6 +7276,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6654,6 +7300,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6675,6 +7323,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS4AlnRep1.bam,wgEncodeUwRepliSeqNhekS4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6696,6 +7346,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6718,6 +7370,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekS4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6739,6 +7393,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekSumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6761,6 +7417,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -6783,6 +7441,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEH002249
+expId 2249
 fileName wgEncodeUwRepliSeqNhekWaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6805,6 +7465,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraG1bAlnRep1.bam,wgEncodeUwRepliSeqSknshraG1bAlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6825,6 +7487,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraG1bPctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6846,6 +7510,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraG1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6866,6 +7532,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraG2AlnRep1.bam,wgEncodeUwRepliSeqSknshraG2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6886,6 +7554,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraG2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6907,6 +7577,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraG2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -6927,6 +7599,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraPkRep1.bed.gz
 grant Stam
 lab UW
@@ -6948,6 +7622,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS1AlnRep1.bam,wgEncodeUwRepliSeqSknshraS1AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -6968,6 +7644,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS1PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -6989,6 +7667,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS1RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -7009,6 +7689,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS2AlnRep1.bam,wgEncodeUwRepliSeqSknshraS2AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -7029,6 +7711,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS2PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -7050,6 +7734,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS2RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -7070,6 +7756,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS3AlnRep1.bam,wgEncodeUwRepliSeqSknshraS3AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -7090,6 +7778,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS3PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -7111,6 +7801,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS3RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -7131,6 +7823,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS4AlnRep1.bam,wgEncodeUwRepliSeqSknshraS4AlnRep1.bam.bai
 grant Stam
 lab UW
@@ -7151,6 +7845,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS4PctSignalRep1.bigWig
 grant Stam
 lab UW
@@ -7172,6 +7868,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraS4RawDataRep1.fastq.gz
 grant Stam
 lab UW
@@ -7192,6 +7890,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraSumSignalRep1.bigWig
 grant Stam
 lab UW
@@ -7213,6 +7913,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraValleysRep1.bed.gz
 grant Stam
 lab UW
@@ -7234,6 +7936,8 @@ dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEH002248
+expId 2248
 fileName wgEncodeUwRepliSeqSknshraWaveSignalRep1.bigWig
 grant Stam
 lab UW
@@ -7247,4 +7951,4 @@ subId 4862
 tableName wgEncodeUwRepliSeqSknshraWaveSignalRep1
 view WaveSignal
 
-# MAGIC: 1605946114
+# MAGIC: 204515594
