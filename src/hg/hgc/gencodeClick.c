@@ -17,6 +17,7 @@
 #include "encode/wgEncodeGencodeTranscriptSupport.h"
 #include "encode/wgEncodeGencodeExonSupport.h"
 #include "encode/wgEncodeGencodeUniProt.h"
+#include "encode/wgEncodeGencodeAnnotationRemark.h"
 
 /*
  * General notes:
@@ -220,6 +221,22 @@ else
     printf("<tr><td>");
     hgcAnchorSomewhere("htcGeneMrna", gencodeId, tdb->table, seqName);
     printf("Predicted mRNA</a><td></tr>\n");
+    }
+printf("</tbody></table>\n");
+}
+
+static void writeAnnotationRemarkHtml(struct wgEncodeGencodeAnnotationRemark *remarks)
+/* write HTML links to remarks */
+{
+printf("<table class=\"hgcCcds\"><thead>\n");
+printf("<tr><th colspan=\"1\">Annotation Remarks</tr>\n");
+printf("</thead><tbody>\n");
+struct wgEncodeGencodeAnnotationRemark *remark;
+for (remark = remarks; remark != NULL; remark = remark->next)
+    {
+    char *encRemark = htmlEncode(remark->remark);
+    printf("<tr><td>%s</td></tr>\n", encRemark);
+    freeMem(encRemark);
     }
 printf("</tbody></table>\n");
 }
@@ -521,6 +538,8 @@ struct wgEncodeGencodeAttrs *transAttrs = transAttrsLoad(tdb, conn, gencodeId);
 char * gencodeGeneId = transAttrs->geneId;
 struct wgEncodeGencodeGeneSource *geneSource = metaDataLoad(tdb, conn, gencodeGeneId, "wgEncodeGencodeGeneSource", "geneId", sqlQueryMust|sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeGeneSourceLoad);
 struct wgEncodeGencodeTranscriptSource *transcriptSource = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeTranscriptSource", "transcriptId", sqlQueryMust|sqlQuerySingle, (sqlLoadFunc)wgEncodeGencodeTranscriptSourceLoad);
+bool haveRemarks = (trackDbSetting(tdb, "wgEncodeGencodeAnnotationRemark") != NULL);
+struct wgEncodeGencodeAnnotationRemark *remarks = haveRemarks ? metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeAnnotationRemark", "transcriptId", 0, (sqlLoadFunc)wgEncodeGencodeAnnotationRemarkLoad) : NULL;
 struct wgEncodeGencodePdb *pdbs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePdb", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePdbLoad);
 struct wgEncodeGencodePubMed *pubMeds = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodePubMed", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodePubMedLoad);
 struct wgEncodeGencodeRefSeq *refSeqs = metaDataLoad(tdb, conn, gencodeId, "wgEncodeGencodeRefSeq", "transcriptId", sqlQueryMulti, (sqlLoadFunc)wgEncodeGencodeRefSeqLoad);
@@ -545,12 +564,15 @@ printf("<H2> %s</H2>\n", header);
 writeBasicInfoHtml(tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource);
 writeTagLinkHtml(tags);
 writeSequenceHtml(tdb, gencodeId, transAnno);
+if (haveRemarks)
+    writeAnnotationRemarkHtml(remarks);
 writePdbLinkHtml(pdbs);
 writePubMedLinkHtml(pubMeds);
 writeRefSeqLinkHtml(refSeqs);
 writeUniProtLinkHtml(uniProts);
 writeSupportingEvidenceLinkHtml(transcriptSupports, exonSupports);
 wgEncodeGencodeAttrsFree(&transAttrs);
+wgEncodeGencodeAnnotationRemarkFreeList(&remarks);
 wgEncodeGencodeGeneSourceFreeList(&geneSource);
 wgEncodeGencodeTranscriptSourceFreeList(&transcriptSource);
 wgEncodeGencodePdbFreeList(&pdbs);
