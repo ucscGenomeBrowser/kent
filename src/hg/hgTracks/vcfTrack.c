@@ -180,7 +180,7 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
     int len = strlen(pgs->name);
     if (len > maxLen)
 	{
-	int maxAlLen = maxLen / min(rec->alleleCount, maxAlCount);
+	int maxAlLen = (maxLen / min(rec->alleleCount, maxAlCount)) - 1;
 	pgs->name[0] = '\0';
 	int i;
 	for (i = 0;  i < rec->alleleCount;  i++)
@@ -1005,7 +1005,7 @@ boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE,
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, chromName, winStart, winEnd, vcfMaxErr, -1);
     if (vcff != NULL)
 	{
 	filterRecords(vcff, tg->tdb);
