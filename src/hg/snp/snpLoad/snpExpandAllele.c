@@ -11,7 +11,6 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.26 2006/08/24 22:50:23 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;

@@ -7,7 +7,6 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: chainConnect.c,v 1.3 2005/08/07 23:25:26 baertsch Exp $";
 
 double chainScoreBlock(char *q, char *t, int size, int matrix[256][256])
 /* Score block through matrix. */

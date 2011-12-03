@@ -7,7 +7,6 @@
 #include "linefile.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: getRna.c,v 1.7 2008/09/03 19:18:41 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

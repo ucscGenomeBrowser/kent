@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "sangerGene.h"
 
-static char const rcsid[] = "$Id: sangerGene.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 struct sangerGene *sangerGeneLoad(char **row)
 /* Load a sangerGene from row fetched with select * from sangerGene

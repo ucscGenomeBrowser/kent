@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "syntenyBerk.h"
 
-static char const rcsid[] = "$Id: syntenyBerk.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void syntenyBerkStaticLoad(char **row, struct syntenyBerk *ret)
 /* Load a row from syntenyBerk table into ret.  The contents of ret will

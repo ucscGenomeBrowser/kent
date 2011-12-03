@@ -9,7 +9,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMissing.c,v 1.2 2006/03/14 22:38:10 heather Exp $";
 
 
 void usage()

@@ -7,7 +7,6 @@
 #include "ra.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: trackDbPatch.c,v 1.6 2010/05/29 22:19:50 kent Exp $";
 
 char *clPatchDir = NULL;
 char *clKey = "track";

@@ -11,7 +11,6 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.40 2008/09/03 19:18:34 markd Exp $";
 
 /* Notes:
  *  strand is passed as '*' when -ignoreStrand is specified.

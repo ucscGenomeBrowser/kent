@@ -10,7 +10,6 @@
 #include "wikiTrack.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: wikiTrack.c,v 1.21 2010/05/11 01:43:28 kent Exp $";
 
 
 static void wikiTrackMapItem(struct track *tg, struct hvGfx *hvg, void *item,

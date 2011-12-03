@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.16 2005/12/07 18:44:44 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;

@@ -20,7 +20,6 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.11 2006/06/20 18:24:08 heather Exp $";
 
 static char *snpDb = NULL;
 static int version = 0;

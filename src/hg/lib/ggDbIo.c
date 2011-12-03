@@ -8,7 +8,6 @@
 #include "altGraph.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: ggDbIo.c,v 1.5 2005/04/13 06:25:53 markd Exp $";
 
 
 

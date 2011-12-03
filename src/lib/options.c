@@ -13,7 +13,6 @@
 #include "options.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: options.c,v 1.29 2009/12/02 19:10:38 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol

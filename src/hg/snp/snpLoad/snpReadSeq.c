@@ -6,7 +6,6 @@
 // needed for makeDir
 #include "portable.h"
 
-static char const rcsid[] = "$Id: snpReadSeq.c,v 1.6 2006/09/29 23:19:18 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */

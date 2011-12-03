@@ -5,7 +5,6 @@
 #include "hCommon.h"
 #include "ooUtils.h"
 
-static char const rcsid[] = "$Id: ooCloneInfo.c,v 1.3 2003/05/06 07:22:32 kate Exp $";
 
 struct clone
 /* Info on one clone. */

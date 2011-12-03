@@ -18,7 +18,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-static char const rcsid[] = "$Id: gbIndexTest.c,v 1.2 2003/08/02 16:18:08 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

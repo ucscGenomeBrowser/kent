@@ -11,7 +11,6 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pseudoGene.c,v 1.5 2008/09/03 19:18:50 markd Exp $";
 
 static boolean pseudoGeneExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)

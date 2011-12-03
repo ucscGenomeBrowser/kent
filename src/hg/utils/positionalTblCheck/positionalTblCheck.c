@@ -7,7 +7,6 @@
 #include "verbose.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: positionalTblCheck.c,v 1.2 2009/04/25 00:45:14 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */

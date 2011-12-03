@@ -7,7 +7,6 @@
 #include "gff3.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: gff3ToGenePred.c,v 1.7 2010/05/25 03:45:04 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -6,7 +6,6 @@
 #include "gbVerb.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: seqTbl.c,v 1.6 2006/03/11 00:07:59 markd Exp $";
 
 /*
  * Note: don't use autoincrement for id column, as it causes problems for

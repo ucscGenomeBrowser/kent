@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "lfs.h"
 
-static char const rcsid[] = "$Id: lfs.c,v 1.3 2005/04/13 06:25:55 markd Exp $";
 
 struct lfs *lfsLoad(char **row)
 /* Load a lfs from row fetched with select * from lfs

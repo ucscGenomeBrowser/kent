@@ -9,7 +9,6 @@
 #include "txInfo.h"
 #include "txRnaAccs.h"
 
-static char const rcsid[] = "$Id: txGeneXref.c,v 1.8 2008/06/07 00:41:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

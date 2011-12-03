@@ -3,7 +3,6 @@
 #include "../gemfont.h"
 
 /*	formerly known as sailfnt.c mgSmallFont() now mgSmallFont()	*/
-static char const rcsid[] = "$Id: mgSail8.c,v 1.2 2010/03/31 00:07:46 kent Exp $";
 
 /* static char sail_name[] = "SAIL.FNT"; */
 

@@ -7,7 +7,6 @@
 #include "slog.h"
 #include "dnaMarkov.h"
 
-static char const rcsid[] = "$Id: dnaMarkov.c,v 1.4 2005/04/10 14:41:22 markd Exp $";
 
 void dnaMark0(struct dnaSeq *seqList, double mark0[5], int slogMark0[5])
 /* Figure out frequency of bases in input.  Results go into

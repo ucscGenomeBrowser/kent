@@ -13,7 +13,6 @@
 #include "base64.h"
 #include "quotedP.h"
 
-static char const rcsid[] = "$Id: mimeDecodeTest.c,v 1.3 2006/10/27 18:52:14 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */

@@ -17,7 +17,6 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.8 2007/03/26 17:07:55 hiram Exp $";
 
 #define SCAFFOLD_GAP_TYPE "contig"   
 #define FRAGMENT_GAP_TYPE "frag"        /* within scaffolds (bridged) */

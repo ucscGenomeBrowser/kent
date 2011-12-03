@@ -15,7 +15,6 @@
 #include "hgMaf.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.2 2010/05/11 01:43:24 kent Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */

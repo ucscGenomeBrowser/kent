@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.7 2004/08/04 21:30:46 hiram Exp $";
 
 void wiggleStaticLoad(char **row, struct wiggle *ret)
 /* Load a row from wiggle table into ret.  The contents of ret will

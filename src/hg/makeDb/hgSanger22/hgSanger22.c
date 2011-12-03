@@ -10,7 +10,6 @@
 #include "gff.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgSanger22.c,v 1.9 2006/07/19 07:43:10 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

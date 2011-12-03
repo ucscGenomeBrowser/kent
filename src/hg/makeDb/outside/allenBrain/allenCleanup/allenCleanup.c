@@ -24,7 +24,6 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: allenCleanup.c,v 1.4 2007/02/15 00:51:16 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

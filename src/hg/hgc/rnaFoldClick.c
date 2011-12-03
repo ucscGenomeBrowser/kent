@@ -15,7 +15,6 @@
 #include "rnaSecStr.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: rnaFoldClick.c,v 1.9 2010/05/11 01:43:29 kent Exp $";
 
 /* Taken from hgc.c (should probably be in hgc.h)*/
 #define RED 0xFF0000

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/wgEncodeGencodePolyAFeature.h"
 
-static char const rcsid[] = "$Id:$";
 
 /* definitions for feature column */
 static char *values_feature[] = {"polyA_signal", "polyA_site", "pseudo_polyA", NULL};

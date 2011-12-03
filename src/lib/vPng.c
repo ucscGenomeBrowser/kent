@@ -6,7 +6,6 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: vPng.c,v 1.2 2009/08/20 21:36:17 angie Exp $";
 
 struct memPng
 /* Something that handles a PNG. */

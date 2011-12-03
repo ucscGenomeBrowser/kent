@@ -12,7 +12,6 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
-static char const rcsid[] = "$Id: bamClick.c,v 1.21 2010/05/11 01:43:28 kent Exp $";
 
 #include "hgBam.h"
 

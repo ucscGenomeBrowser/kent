@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cnpSharpSample.h"
 
-static char const rcsid[] = "$Id: cnpSharpSample.c,v 1.1 2005/07/10 02:02:55 daryl Exp $";
 
 void cnpSharpSampleStaticLoad(char **row, struct cnpSharpSample *ret)
 /* Load a row from cnpSharpSample table into ret.  The contents of ret will

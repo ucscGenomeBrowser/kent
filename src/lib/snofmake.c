@@ -8,7 +8,6 @@
 #include "snofmake.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: snofmake.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
 
 static jmp_buf errRecover;
 

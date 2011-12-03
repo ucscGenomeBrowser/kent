@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "dbRIP.h"
 
-static char const rcsid[] = "$Id: dbRIP.c,v 1.1 2006/07/13 18:16:07 hiram Exp $";
 
 void dbRIPStaticLoad(char **row, struct dbRIP *ret)
 /* Load a row from dbRIP table into ret.  The contents of ret will

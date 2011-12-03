@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinableFields.c,v 1.1 2004/03/14 19:15:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

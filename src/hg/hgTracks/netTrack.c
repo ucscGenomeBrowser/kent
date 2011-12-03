@@ -11,7 +11,6 @@
 #include "netCart.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.27 2010/05/11 01:43:28 kent Exp $";
 
 struct cartOptions
     {

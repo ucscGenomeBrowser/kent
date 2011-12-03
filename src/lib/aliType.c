@@ -2,7 +2,6 @@
 #include "common.h"
 #include "aliType.h"
 
-static char const rcsid[] = "$Id: aliType.c,v 1.4 2003/05/06 07:33:41 kate Exp $";
 
 char *gfTypeName(enum gfType type)
 /* Return string representing type. */

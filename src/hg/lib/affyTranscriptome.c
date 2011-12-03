@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "affyTranscriptome.h"
 
-static char const rcsid[] = "$Id: affyTranscriptome.c,v 1.1 2003/12/15 16:13:34 daryl Exp $";
 
 void affyTranscriptomeStaticLoad(char **row, struct affyTranscriptome *ret)
 /* Load a row from affyTranscriptome table into ret.  The contents of ret will

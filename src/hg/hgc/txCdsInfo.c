@@ -9,7 +9,6 @@
 #include "trackDb.h"
 #include "hgc.h"
 
-static char const rcsid[] = "$Id: txCdsInfo.c,v 1.9 2009/01/30 23:48:49 fanhsu Exp $";
 
 void showTxInfo(char *geneName, struct trackDb *tdb, char *txInfoTable)
 /* Print out stuff from txInfo table. */

@@ -30,7 +30,6 @@
 #include "hgGenome.h"
 #include "trashDir.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.29 2010/06/05 19:29:40 braney Exp $";
 
 
 static char *allColors[] = {

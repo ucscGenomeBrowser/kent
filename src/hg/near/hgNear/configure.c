@@ -14,7 +14,6 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.44 2006/03/06 18:09:41 angie Exp $";
 
 char *configVarName(struct column *col, char *varName)
 /* Return variable name for configuration. */

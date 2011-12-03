@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: mafSummary.c,v 1.3 2006/05/10 00:30:24 kate Exp $";
 
 void mafSummaryStaticLoad(char **row, struct mafSummary *ret)
 /* Load a row from mafSummary table into ret.  The contents of ret will

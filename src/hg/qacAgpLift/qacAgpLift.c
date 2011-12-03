@@ -9,7 +9,6 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: qacAgpLift.c,v 1.4 2007/03/31 19:38:16 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

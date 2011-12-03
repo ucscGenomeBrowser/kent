@@ -9,7 +9,6 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.19 2008/05/11 20:31:14 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

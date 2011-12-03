@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "softPromoter.h"
 
-static char const rcsid[] = "$Id: softPromoter.c,v 1.3 2005/04/13 06:25:57 markd Exp $";
 
 void softPromoterStaticLoad(char **row, struct softPromoter *ret)
 /* Load a row from softPromoter table into ret.  The contents of ret will

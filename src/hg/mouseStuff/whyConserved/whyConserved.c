@@ -8,7 +8,6 @@
 #include "bits.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: whyConserved.c,v 1.4 2008/09/03 19:20:40 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

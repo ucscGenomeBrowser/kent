@@ -6,7 +6,6 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orf.c,v 1.6 2007/03/13 23:01:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -17,7 +17,6 @@
 #include "bigBed.h"
 
 
-static char const rcsid[] = "$Id: testBb.c,v 1.2 2009/02/01 01:59:13 kent Exp $";
 
 int blockSize = 1024;
 int itemsPerSlot = 64;

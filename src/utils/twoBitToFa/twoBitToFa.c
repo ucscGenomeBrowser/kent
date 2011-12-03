@@ -9,7 +9,6 @@
 #include "bPlusTree.h"
 #include "basicBed.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.13 2009/08/26 03:09:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

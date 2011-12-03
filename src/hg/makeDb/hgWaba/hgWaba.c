@@ -4,7 +4,6 @@
 #include "xa.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgWaba.c,v 1.7 2007/05/14 21:34:45 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

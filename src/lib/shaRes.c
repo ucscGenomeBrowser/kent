@@ -6,7 +6,6 @@
 #include "common.h"
 #include "shaRes.h"
 
-static char const rcsid[] = "$Id: shaRes.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
 
 static void shaFreeNode(struct shaResNode *node)
 /* Free a node.  (Don't look at link count, just do it.) */

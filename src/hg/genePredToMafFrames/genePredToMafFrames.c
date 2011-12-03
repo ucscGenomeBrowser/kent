@@ -10,7 +10,6 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.10 2006/06/05 03:58:48 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {

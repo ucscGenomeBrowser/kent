@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "encode/encodeIndels.h"
 
-static char const rcsid[] = "$Id: encodeIndels.c,v 1.1 2008/08/01 17:49:06 aamp Exp $";
 
 void encodeIndelsStaticLoad(char **row, struct encodeIndels *ret)
 /* Load a row from encodeIndels table into ret.  The contents of ret will

@@ -10,7 +10,6 @@
 #include "hui.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.19 2008/09/03 19:18:54 markd Exp $";
 
 void makeNumMenu(char *varName, int minVal, int maxVal, int defaultVal)
 /* Make a drop down menu with a limited number of numerical choices. */

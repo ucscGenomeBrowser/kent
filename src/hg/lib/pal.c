@@ -11,7 +11,6 @@
 #include "hPrint.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.14 2009/07/06 17:43:08 braney Exp $";
 
 #define hgtaCGIGeneMafTable "hgta_mafGeneMafTable" 
 #define hgtaJSGeneMafTable  "mafGeneMafTable" 

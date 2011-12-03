@@ -2,7 +2,6 @@
 #include "cheapcgi.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: protDust.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
 
 int noneOrNumber(char *s)
 {

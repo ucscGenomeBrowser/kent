@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bedLogR.h"
 
-static char const rcsid[] = "$Id:$";
 
 void bedLogRStaticLoad(char **row, struct bedLogR *ret)
 /* Load a row from bedLogR table into ret.  The contents of ret will

@@ -5,7 +5,6 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faPolyASizes.c,v 1.1 2005/02/04 01:48:16 markd Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] =

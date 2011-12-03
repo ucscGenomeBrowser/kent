@@ -39,7 +39,6 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.49 2006/05/28 23:32:26 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -2587,7 +2586,6 @@ if (argc != 19)
 verboseSetLogFile("stdout");
 verbosity = optionInt("verbose", 1);
 verboseSetLevel(verbosity);
-verbose(1,"version is %s\n",rcsid);
 ss = axtScoreSchemeDefault();
 /* smaller gap to handle spliced introns */
 ss->gapExtend = 5;

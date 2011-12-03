@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "metaChromGraph.h"
 
-static char const rcsid[] = "$Id: metaChromGraph.c,v 1.2 2006/06/13 16:14:26 kent Exp $";
 
 void metaChromGraphStaticLoad(char **row, struct metaChromGraph *ret)
 /* Load a row from metaChromGraph table into ret.  The contents of ret will

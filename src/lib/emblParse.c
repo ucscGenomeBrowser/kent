@@ -49,7 +49,6 @@
 #include "hash.h"
 #include "emblParse.h"
 
-static char const rcsid[] = "$Id: emblParse.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
 
 boolean emblLineGroup(struct lineFile *lf, char type[16], struct dyString *val)
 /* Read next line of embl file.  Read line after that too if it

@@ -7,7 +7,6 @@
 #include "cdsPick.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: txCdsRedoUniprotPicks.c,v 1.1 2009/11/12 19:30:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

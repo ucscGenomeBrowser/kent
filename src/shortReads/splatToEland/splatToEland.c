@@ -9,7 +9,6 @@
 #include "splatAli.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: splatToEland.c,v 1.4 2010/04/01 17:31:11 markd Exp $";
 
 boolean multi = FALSE;
 char *reads = NULL;

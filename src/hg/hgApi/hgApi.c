@@ -11,7 +11,6 @@
 #include "encode/encodeExp.h"
 #include "cv.h"
 
-static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
 static void fail(char *msg)
 {

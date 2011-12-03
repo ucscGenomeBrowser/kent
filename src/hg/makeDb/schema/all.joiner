@@ -2136,10 +2136,6 @@ identifier rgdGene2IdRaw external=RGD
     $rn.rgdGene2.name chopBefore=RGD:
     $rn.genes_rat.gene_rgd_id minCheck=0.40 
 
-identifier rgdPathwayId external=RGD
-"RGD Pathway ID"
-    $rn.rgdPathway.pathwayId
-
 identifier rgdGene2Id external=RGD
 "RGD Genes ID"
     $rn.rgdGene2.name
@@ -2181,6 +2177,11 @@ identifier rgdGene2Id external=RGD
     $rn.rgdGene2Canonical.transcript
     $rn.rgdGene2Isoforms.transcript
     $rn.rgdGene2KeggPathway.rgdId
+
+identifier rgdPathwayId external=RGD
+"RGD Pathway ID"
+    $rn.rgdPathway.pathwayId
+    $rn.rgdGenePathway.pathwayId minCheck=.90
 
 # The Ensembl Gmish
 

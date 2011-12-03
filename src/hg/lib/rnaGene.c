@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "rnaGene.h"
 
-static char const rcsid[] = "$Id: rnaGene.c,v 1.4 2005/04/13 06:25:56 markd Exp $";
 
 void rnaGeneStaticLoad(char **row, struct rnaGene *ret)
 /* Load a row from rnaGene table into ret.  The contents of ret will

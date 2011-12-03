@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "retroMrnaInfo.h"
 
-static char const rcsid[] = "$Id: retroMrnaInfo.c,v 1.3 2008/08/10 00:06:48 baertsch Exp $";
 
 int sqlSignedForgiving(char *s)
 /* Convert string to signed integer.  Unlike atol assumes 

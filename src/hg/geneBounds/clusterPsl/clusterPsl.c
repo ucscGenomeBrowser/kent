@@ -14,7 +14,6 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: clusterPsl.c,v 1.10 2008/09/03 19:18:35 markd Exp $";
 
 int maxMergeGap = 5;
 char *prefix = "c";

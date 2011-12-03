@@ -9,7 +9,6 @@
 #include "internet.h"
 #include "net.h"
 
-static char const rcsid[] = "$Id: bottleneck.c,v 1.4 2004/06/15 17:20:53 kent Exp $";
 
 int port = 17776;	/* Default bottleneck port. */
 char *host = "localhost";   /* Default host. */

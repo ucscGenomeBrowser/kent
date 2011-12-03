@@ -7,7 +7,6 @@
 #include "hui.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: cartReset.c,v 1.10 2007/05/23 23:09:44 galt Exp $";
 
 
 static char *defaultDestination = "../cgi-bin/hgGateway";

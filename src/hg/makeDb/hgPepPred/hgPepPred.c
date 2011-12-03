@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.14 2006/03/28 00:25:12 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -2,7 +2,6 @@
 #include "args.h"
 
 #ifndef __lint
-static const char rcsid[] =
 "$Id: args.c,v 1.1 2002/08/17 23:38:21 tcbruen Exp $";
 #endif
 

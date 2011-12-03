@@ -5,7 +5,6 @@
 #include "portable.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.11 2009/11/12 19:31:52 kent Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have

@@ -6,7 +6,6 @@
 #include "pipeline.h"
 #include "textOut.h"
 
-static char const rcsid[] = "$Id: textOut.c,v 1.3 2006/08/04 06:00:20 markd Exp $";
 
 static void textOutWarnHandler(char *format, va_list args)
 /* Text mode error message handler. */

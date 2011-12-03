@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "refLink.h"
 
-static char const rcsid[] = "$Id: refLink.c,v 1.5 2005/04/13 06:25:56 markd Exp $";
 
 void refLinkStaticLoad(char **row, struct refLink *ret)
 /* Load a row from refLink table into ret.  The contents of ret will

@@ -6,7 +6,6 @@
 #include "portable.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netSplit.c,v 1.6 2009/09/23 18:42:23 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -15,7 +15,6 @@
 #include "gbSql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.19 2008/09/03 19:19:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

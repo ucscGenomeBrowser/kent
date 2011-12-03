@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mammalPsg.h"
 
-static char const rcsid[] = "$Id: mammalPsg.c,v 1.1 2008/07/03 21:52:09 acs Exp $";
 
 struct mammalPsg *mammalPsgLoad(char **row)
 /* Load a mammalPsg from row fetched with select * from mammalPsg

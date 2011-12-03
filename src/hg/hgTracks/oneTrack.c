@@ -8,7 +8,6 @@
 #include "hvGfx.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: oneTrack.c,v 1.3 2009/08/19 23:00:17 angie Exp $";
 
 void oneTrackInit()
 /* Set up global variables using cart settings and initialize libs. */

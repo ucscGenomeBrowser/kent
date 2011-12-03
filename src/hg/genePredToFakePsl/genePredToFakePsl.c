@@ -7,7 +7,6 @@
 #include "genePredReader.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: genePredToFakePsl.c,v 1.4 2010/04/28 04:46:37 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {

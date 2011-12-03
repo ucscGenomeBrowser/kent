@@ -7,7 +7,6 @@
 #include "gbGenome.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: gbAlignCommon.c,v 1.6 2010/04/10 18:09:13 markd Exp $";
 
 void gbCountNeedAligned(struct gbEntryCnts* cnts, struct gbEntry* entry,
                         unsigned accIncr, unsigned recIncr)
