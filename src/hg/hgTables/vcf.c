@@ -247,7 +247,7 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     char *fileName = vcfFileName(table, conn, region->chrom);
     struct vcfFile *vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
-					       100);
+					       100, maxOut);
     // If we are outputting all fields, but this VCF has no genotype info, omit the
     // genotype columns from output:
     if (allFields && vcff->genotypeCount == 0)
@@ -300,8 +300,9 @@ static void addFilteredBedsOnRegion(char *fileName, struct region *region, char 
 				    struct bed **pBedList, struct hash *idHash)
 /* Add relevant beds in reverse order to pBedList */
 {
+int maxOut = bigFileMaxOutput();
 struct vcfFile *vcff = vcfTabixFileMayOpen(fileName, region->chrom, region->start, region->end,
-					   100);
+					   100, maxOut);
 struct lm *lm = lmInit(0);
 char *row[VCFDATALINE_NUM_COLS];
 char numBuf[VCF_NUM_BUF_SIZE];

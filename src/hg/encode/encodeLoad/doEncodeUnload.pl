@@ -145,17 +145,6 @@ if (defined $opt_configDir) {
     $configPath = "$submitDir/../config"
 }
 
-# Add a suffix for non-production loads (to avoid loading over existing tables).
-
-my $tableSuffix = "";
-if(dirname($submitDir) =~ /_(.*)/) {
-    if($1 ne 'prod') {
-	# yank out "beta" from encinstance_beta
-        $tableSuffix = "_$1_" . basename($submitDir);;
-    }
-} else {
-    $tableSuffix = "_" . basename($submitDir);;
-}
 
 my $fields = Encode::getFields($configPath);
 my $daf = Encode::getDaf($submitDir, $fields, $pipelineInstance);
@@ -176,7 +165,7 @@ my %ra = RAFile::readRaFile($unloadRa, 'tablename');
 my $db;
 for my $key (keys %ra) {
     my $h = $ra{$key};
-    my $tablename = $h->{tablename} . $tableSuffix;
+    my $tablename = $h->{tablename};
     my $files = $h->{files};
     my @files = split(/\s+/, $files);
 
