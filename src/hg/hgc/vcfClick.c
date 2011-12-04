@@ -296,7 +296,7 @@ struct vcfFile *vcff = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, vcfMaxErr, -1);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)

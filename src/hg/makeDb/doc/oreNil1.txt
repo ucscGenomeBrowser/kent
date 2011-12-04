@@ -34,7 +34,7 @@ wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
     # verify nothing lost in the translation, should be same numbers as above
     faSize ucsc.fa.gz
 
-927725912 bases (111657865 N's 816068047 real 816068047 upper 0 lower) in 5900 sequences in 1 files
+# 927725912 bases (111657865 N's 816068047 real 816068047 upper 0 lower) in 5900 sequences in 1 files
     # verify the names are OK
     zcat ucsc.fa.gz | grep "^>" | sort | head
     zcat ucsc.fa.gz | grep "^>" | sort | tail
@@ -247,3 +247,22 @@ XXX - running - Wed Nov 30 09:27:18 PST 2011
     # request rsync copy from cluster admin
 
 #########################################################################
+#  BLATSERVERS ENTRY (DONE - 2011-12-02 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("oreNil1", "blat1", "17816", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("oreNil1", "blat1", "17817", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# set default position on the RHOA gene sequence (via blat)
+#	(DONE - 2011-12-02 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="GL831146:690296-694012" where name="oreNil1";' \
+	hgcentraltest
+
+############################################################################

@@ -139,7 +139,7 @@ struct vcfFile *vcff = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr, -1);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
