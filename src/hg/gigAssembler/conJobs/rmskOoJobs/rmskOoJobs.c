@@ -2,7 +2,6 @@
 #include "common.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: rmskOoJobs.c,v 1.3 2009/01/14 23:05:19 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */

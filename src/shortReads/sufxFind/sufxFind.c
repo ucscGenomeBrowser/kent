@@ -10,7 +10,6 @@
 #include "dnaLoad.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxFind.c,v 1.13 2008/10/30 05:07:10 kent Exp $";
 
 boolean mmap;
 int maxMismatch = 2;

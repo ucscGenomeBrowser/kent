@@ -28,7 +28,6 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 #define NOTALIGNEDFACTOR 8 /* unaligned bases divided by this factor reduce score */
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.28 2009/12/01 06:53:14 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;

@@ -5,7 +5,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hapmapLookup.c,v 1.3 2007/02/16 00:34:25 heather Exp $";
 
 FILE *errorFileHandle = NULL;
 FILE *logFileHandle = NULL;

@@ -236,7 +236,6 @@
 #include "mdb.h"
 #include "yaleGencodeAssoc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1638 2010/06/08 17:39:29 angie Exp $";
 static char *rootDir = "hgcData";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -1464,7 +1463,11 @@ for(;col != NULL && count < fieldCount;col=col->next)
         }
     #else///ifndef EXTRA_FIELDS_SUPPORT
     printf("<tr><td><B>%s:</B></td>", col->comment);
-    if (asTypesIsInt(col->lowType->type))
+    if (col->isList || col->isArray || col->lowType->stringy)
+        {
+        printf("<td>%s</td></tr>\n", fields[ix]);
+        }
+    else if (asTypesIsInt(col->lowType->type))
         {
         long long valInt = sqlLongLong(fields[ix]);
         printf("<td>%lld</td></tr>\n", valInt);

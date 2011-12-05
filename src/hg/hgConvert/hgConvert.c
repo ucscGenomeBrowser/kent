@@ -18,7 +18,6 @@
 #include "liftOverChain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.32 2008/11/10 19:15:09 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */

@@ -20,7 +20,6 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.186 2010/05/07 03:37:41 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL };
 /* The excludeVars are not saved to the cart. (We also exclude

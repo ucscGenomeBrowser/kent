@@ -5,7 +5,6 @@
 #include "common.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: vGfx.c,v 1.6 2006/06/23 23:45:02 kent Exp $";
 
 
 /* Most of the implementation of this is in macros in vGfx.h. */

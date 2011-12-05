@@ -10,7 +10,6 @@
 #include "sqlNum.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: fetchSeq.c,v 1.9 2007/02/20 21:35:43 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */

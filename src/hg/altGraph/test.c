@@ -2,7 +2,6 @@
 #include "ggPrivate.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: test.c,v 1.2 2003/05/06 07:22:13 kate Exp $";
 
 static struct ggAliInfo *makeTestDa(int *data, int dataSize)
 /* Make up ggAliInfo from test data. */

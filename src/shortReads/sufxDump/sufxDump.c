@@ -9,7 +9,6 @@
 #include "dnautil.h"
 #include "sufx.h"
 
-static char const rcsid[] = "$Id: sufxDump.c,v 1.2 2008/10/28 23:34:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

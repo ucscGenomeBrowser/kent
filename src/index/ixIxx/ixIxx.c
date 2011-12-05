@@ -6,7 +6,6 @@
 #include "options.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: ixIxx.c,v 1.4 2006/10/30 17:15:59 angie Exp $";
 
 /* Variables that can be set from command line. */
 int prefixSize = trixPrefixSize;

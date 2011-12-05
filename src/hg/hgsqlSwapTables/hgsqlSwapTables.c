@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgsqlSwapTables.c,v 1.1 2010/05/22 02:21:39 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */

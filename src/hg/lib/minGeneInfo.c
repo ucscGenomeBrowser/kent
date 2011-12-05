@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "minGeneInfo.h"
 
-static char const rcsid[] = "$Id: minGeneInfo.c,v 1.6 2005/10/19 01:10:13 baertsch Exp $";
 
 void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret)
 /* Load a row from minGeneInfo table into ret.  The contents of ret will

@@ -7,7 +7,6 @@
 #include "sqlNum.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: greedyPack.c,v 1.1 2008/10/23 02:31:23 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

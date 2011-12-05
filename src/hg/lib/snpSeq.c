@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snpSeq.h"
 
-static char const rcsid[] = "$Id: snpSeq.c,v 1.2 2007/07/23 21:33:28 heather Exp $";
 
 void snpSeqStaticLoad(char **row, struct snpSeq *ret)
 /* Load a row from snpSeq table into ret.  The contents of ret will

@@ -14,7 +14,6 @@
 #include "../dbload/dbLoadOptions.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.14 2009/10/13 21:24:49 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */

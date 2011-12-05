@@ -11,7 +11,6 @@
 #include "mdb.h"
 #include "encode/encodeExp.h"
 
-static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
 
 void mdbStaticLoad(char **row, struct mdb *ret)
 /* Load a row from mdb table into ret.  The contents of ret will
@@ -2163,52 +2162,81 @@ mdbObjReorderByCv(*mdbObjs, includeHidden);
 slSort(mdbObjs, mdbObjVarCmp);  // While sort will not be perfect (given missing values) it does a good job none the less.
 }
 
+boolean mdbObjRemoveOneVar(struct mdbObj *mdbObj, char *var, char *val)
+// returns TRUE if var (and optional val) are found and surgically removed from one mdbObj
+{
+struct mdbVar *lastVar = NULL;
+struct mdbVar *mdbVar = mdbObj->vars;
+for(;mdbVar != NULL;lastVar=mdbVar,mdbVar=mdbVar->next)
+    {
+    if (sameWord(mdbVar->var,var))
+        {
+        if (val && differentString(mdbVar->val,val))
+            break; // No need to continue
+        if (lastVar != NULL)
+            lastVar->next = mdbVar->next;
+        else
+            mdbObj->vars = mdbVar->next;
+        mdbVar->next = NULL;
+        if (mdbObj->varHash != NULL)
+            hashRemove(mdbObj->varHash,mdbVar->var);
+        mdbVarFree(&mdbVar);
+        return TRUE;
+        }
+    }
+return FALSE;
+}
+
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 {
-char *cloneLine = NULL;
 int count = 0;
 char **words = NULL;
 if(vars != NULL)
     {
-    cloneLine = cloneString(vars);
-    count = chopByWhite(cloneLine,NULL,0);
-    words = needMem(sizeof(char *) * count);
-    count = chopByWhite(cloneLine,words,count);
+    count = chopByWhite(vars,NULL,0);
+    if (count > 1)
+        {
+        words = needMem(sizeof(char *) * count);
+        count = chopByWhite(cloneString(vars),words,count);
+        }
     }
 struct mdbObj *mdbObj = NULL;
 for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     {
-    int ix;
-    struct mdbVar *keepTheseVars = NULL;
-
-    if(count == 0 && mdbObj->varHash != NULL)
-        hashFree(&mdbObj->varHash);
-
-    struct mdbVar *mdbVar = NULL;
-    while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
+    if (count == 0)
         {
-        if(count == 0)
-            ix = 1;
-        else
-            ix = stringArrayIx(mdbVar->var,words,count);
-        if(ix < 0)
-            slAddHead(&keepTheseVars,mdbVar);
-        else
-            {
-            if(count != 0 && mdbObj->varHash != NULL)
-                hashRemove(mdbObj->varHash, mdbVar->var);
-
-            mdbVarFree(&mdbVar);
-            }
+        if(mdbObj->varHash != NULL)
+            hashFree(&mdbObj->varHash);
+        mdbVarsFree(&mdbObj->vars);
         }
+    else if (count == 1)
+        mdbObjRemoveOneVar(mdbObj,vars,NULL);
+    else
+        {
+        struct mdbVar *keepTheseVars = NULL;
+        struct mdbVar *mdbVar = NULL;
+        while((mdbVar = slPopHead(&(mdbObj->vars))) != NULL)
+            {
+            int ix = stringArrayIx(mdbVar->var,words,count);
+            if(ix < 0)
+                slAddHead(&keepTheseVars,mdbVar);
+            else
+                {
+                if(count != 0 && mdbObj->varHash != NULL)
+                    hashRemove(mdbObj->varHash, mdbVar->var);
 
-    if(keepTheseVars != NULL)
-        slReverse(&keepTheseVars);
-    mdbObj->vars = keepTheseVars;
+                mdbVarFree(&mdbVar);
+                }
+            }
+
+        if(keepTheseVars != NULL)
+            slReverse(&keepTheseVars);
+        mdbObj->vars = keepTheseVars;
+        }
     }
-    if(words != NULL)
-        freeMem(words);
+if(words != NULL)
+    freeMem(words);
 }
 
 void mdbObjRemoveHiddenVars(struct mdbObj *mdbObjs)

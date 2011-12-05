@@ -14,7 +14,6 @@
 #include "options.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: tajD.c,v 1.3 2006/09/19 21:45:23 daryl Exp $";
 
 boolean strictSnp=FALSE;
 boolean strictBiallelic=FALSE;

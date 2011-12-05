@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: HInv.c,v 1.2 2005/04/13 06:25:50 markd Exp $";
 
 void HInvStaticLoad(char **row, struct HInv *ret)
 /* Load a row from HInv table into ret.  The contents of ret will

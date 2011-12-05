@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: promoSeqFromCluster.c,v 1.5 2008/09/03 19:18:37 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

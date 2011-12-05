@@ -12,7 +12,6 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.21 2010/04/06 04:30:44 hiram Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */
@@ -55,9 +54,9 @@ errAbort(
   "bedItemOverlapCount - count number of times a base is overlapped by the\n"
   "\titems in a bed file.  Output is bedGraph 4 to stdout.\n"
   "usage:\n"
-  " sort bedFile.bed | bedItemOverlapCount [options] <database> stdin\n"
+  " sort -k1,1 bedFile.bed | bedItemOverlapCount [options] <database> stdin\n"
   "To create a bigWig file from this data to use in a custom track:\n"
-  " sort bedFile.bed | bedItemOverlapCount [options] <database> stdin \\\n"
+  " sort -k1,1 bedFile.bed | bedItemOverlapCount [options] <database> stdin \\\n"
   "         > bedFile.bedGraph\n"
   " bedGraphToBigWig bedFile.bedGraph chrom.sizes bedFile.bw\n"
   "   where the chrom.sizes is obtained with the script: fetchChromSizes\n"

@@ -17,7 +17,6 @@
 #include "gbSeq.h"
 #include "gbExtFile.h"
 
-static char const rcsid[] = "$Id: refSeqCheck.c,v 1.1 2009/07/04 17:06:06 markd Exp $";
 
 /**
  *  Note: 

@@ -18,7 +18,6 @@
 #include "hPrint.h"
 #include "gisaidSample.h"
 
-static char const rcsid[] = "$Id: gisaidSample.c,v 1.3 2009/06/26 18:17:16 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */

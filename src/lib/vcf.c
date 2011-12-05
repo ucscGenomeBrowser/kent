@@ -251,6 +251,17 @@ static const char *filterOrAltRegex =
     "^##(FILTER|ALT)="
     "<ID=([^,]+),"
     "(Description|Type)=\"?(.*)\"?>$";
+// VCF version 3.3 was different enough to warrant separate regexes:
+static const char *infoOrFormatRegex3_3 =
+    "^##(INFO|FORMAT)="
+    "([A-Za-z0-9_:-]+),"
+    "(\\.|A|G|[0-9-]+),"
+    "([A-Za-z]+),"
+    "\"?(.*)\"?$";
+static const char *filterRegex3_3 =
+    "^##(FILTER)="
+    "([^,]+),"
+    "()\"?(.*)\"?$";
 
 INLINE void nonAsciiWorkaround(char *line)
 // Workaround for annoying 3-byte quote marks included in some 1000 Genomes files:
@@ -292,7 +303,8 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
     {
     boolean isInfo = startsWith("##INFO=", line);
     nonAsciiWorkaround(line);
-    if (regexMatchSubstr(line, infoOrFormatRegex, substrs, ArraySize(substrs)))
+    if (regexMatchSubstr(line, infoOrFormatRegex, substrs, ArraySize(substrs)) ||
+	regexMatchSubstr(line, infoOrFormatRegex3_3, substrs, ArraySize(substrs)))
 	// substrs[2] is ID/key, substrs[3] is Number, [4] is Type and [5] is Description.
 	{
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
@@ -313,13 +325,14 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
 	slAddHead((isInfo ? &(vcff->infoDefs) : &(vcff->gtFormatDefs)), def);
 	}
     else
-	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/: \"%s\"",
-		   (isInfo ? "INFO" : "FORMAT"), infoOrFormatRegex, line);
+	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/ or /%s/: \"%s\"",
+		   (isInfo ? "INFO" : "FORMAT"), infoOrFormatRegex, infoOrFormatRegex3_3, line);
     }
 else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
     {
     boolean isFilter = startsWith("##FILTER", line);
-    if (regexMatchSubstr(line, filterOrAltRegex, substrs, ArraySize(substrs)))
+    if (regexMatchSubstr(line, filterOrAltRegex, substrs, ArraySize(substrs)) ||
+	regexMatchSubstr(line, filterRegex3_3, substrs, ArraySize(substrs)))
 	{
 	// substrs[2] is ID/key, substrs[4] is Description.
 	struct vcfInfoDef *def = vcfFileAlloc(vcff, sizeof(struct vcfInfoDef));
@@ -328,8 +341,14 @@ else if (startsWith("##FILTER=", line) || startsWith("##ALT=", line))
 	slAddHead((isFilter ? &(vcff->filterDefs) : &(vcff->altDefs)), def);
 	}
     else
-	vcfFileErr(vcff, "##%s line does not match expected pattern /%s/: \"%s\"",
-		   (isFilter ? "FILTER" : "ALT"), filterOrAltRegex, line);
+	{
+	if (isFilter)
+	    vcfFileErr(vcff, "##FILTER line does not match expected pattern /%s/ or /%s/: \"%s\"",
+		       filterOrAltRegex, filterRegex3_3, line);
+	else
+	    vcfFileErr(vcff, "##ALT line does not match expected pattern /%s/: \"%s\"",
+		       filterOrAltRegex, line);
+	}
     }
 }
 
@@ -602,19 +621,21 @@ for (i = 0;  i < record->infoCount;  i++)
     }
 }
 
-static void vcfParseData(struct vcfFile *vcff)
+static void vcfParseData(struct vcfFile *vcff, int maxRecords)
 /* Given a vcfFile into which the header has been parsed, and whose lineFile is positioned
  * at the beginning of a data row, parse and store all data rows from lineFile. */
 {
 if (vcff == NULL)
     return;
-int expected = 8;
+int recCount = 0, expected = 8;
 if (vcff->genotypeCount > 0)
     expected = 9 + vcff->genotypeCount;
 char *words[VCF_MAX_COLUMNS];
 int wordCount;
 while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
     {
+    if (maxRecords >= 0 && recCount >= maxRecords)
+	break;
     lineFileExpectWords(vcff->lf, expected, wordCount);
     struct vcfRecord *record;
     AllocVar(record);
@@ -639,12 +660,13 @@ while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
 	    record->genotypeUnparsedStrings[i] = vcfFileCloneStr(vcff, words[9+i]);
 	}
     slAddHead(&(vcff->records), record);
+    recCount++;
     }
 slReverse(&(vcff->records));
 lineFileClose(&(vcff->lf));
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr)
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords)
 /* Parse a VCF file into a vcfFile object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
  * less than zero does not stop and reports all errors. */
@@ -656,12 +678,12 @@ if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
 else
     lf = lineFileMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
-vcfParseData(vcff);
+vcfParseData(vcff, maxRecords);
 return vcff;
 }
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
-				    int maxErr)
+				    int maxErr, int maxRecords)
 /* Parse header and rows within the given position range from a VCF file that has been
  * compressed and indexed by tabix into a vcfFile object; return NULL if or if file has
  * no items in range.
@@ -675,7 +697,7 @@ if (vcff == NULL)
 if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
-	vcfParseData(vcff);
+	vcfParseData(vcff, maxRecords);
     }
 return vcff;
 }

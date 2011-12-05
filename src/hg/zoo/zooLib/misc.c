@@ -2,7 +2,6 @@
 #include "misc.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: misc.c,v 1.3 2003/05/06 07:22:36 kate Exp $";
 
 /* Allocates space checking safety - should be improved */
 void *safe_alloc(size_t size)

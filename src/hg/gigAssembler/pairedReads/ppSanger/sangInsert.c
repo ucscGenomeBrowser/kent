@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "sangInsert.h"
 
-static char const rcsid[] = "$Id: sangInsert.c,v 1.3 2003/07/28 19:05:40 heather Exp $";
 
 void sangInsertStaticLoad(char **row, struct sangInsert *ret)
 /* Load a row from sangInsert table into ret.  The contents of ret will

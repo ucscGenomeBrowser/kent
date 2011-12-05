@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ensInfo.h"
 
-static char const rcsid[] = "$Id: ensInfo.c,v 1.1 2007/10/01 16:16:42 hartera Exp $";
 
 void ensInfoStaticLoad(char **row, struct ensInfo *ret)
 /* Load a row from ensInfo table into ret.  The contents of ret will

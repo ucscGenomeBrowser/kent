@@ -8,7 +8,6 @@
 #include "dnautil.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Dump.c,v 1.2 2008/11/06 07:03:00 kent Exp $";
 
 int maxSize = 50000;
 int maxOverflow = 16;

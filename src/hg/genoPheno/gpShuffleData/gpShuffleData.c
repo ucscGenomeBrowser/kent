@@ -6,7 +6,6 @@
 #include "md5.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: gpShuffleData.c,v 1.3 2006/05/07 18:20:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

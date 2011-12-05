@@ -13,7 +13,6 @@
 #include "featureBits.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.30 2008/09/03 19:19:22 markd Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 

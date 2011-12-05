@@ -11,7 +11,6 @@
 #include "errabort.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: tdbRewriteReduceReplaces.c,v 1.2 2010/01/04 19:12:39 kent Exp $";
 
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */

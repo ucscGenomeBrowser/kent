@@ -40,7 +40,8 @@ attempting to upload the whole file to UCSC.
 Both the VCF file and its tabix index file remain on your
 web-accessible server (http, https, or ftp), not on the UCSC server.
 UCSC temporarily caches the accessed portions of the files to speed up
-interactive display.
+interactive display. Please note that UCSC only supports VCF 
+versions 3.3, 3.4, 4.0 and 4.1.
 </P><P>
 The typical workflow for generating a VCF custom track is this:
 
@@ -145,10 +146,10 @@ listing to view the VCF track in the Genome Browser.</P>
 <H3>Example Two</H3>
 <P>
 In this example, you will create compressed, indexed VCF from an existing VCF text file.
-First, save this VCF file <A HREF="examples/vcfExample.vcf" TARGET=_BLANK>vcfExample.vcf</A> 
+First, save this VCF file <A HREF="examples/vcfExampleTwo.vcf" TARGET=_BLANK>vcfExampleTwo.vcf</A>
 to your machine.
 Perform steps 1 and 3-7 in the workflow described above, but substituting
-<TT>vcfExample.vcf</TT> for <TT>my.vcf</TT>.  On the 
+<TT>vcfExampleTwo.vcf</TT> for <TT>my.vcf</TT>.  On the
 <A HREF="../../cgi-bin/hgCustom" TARGET=_BLANK>custom track management page</A>, 
 click the &quot;add custom tracks&quot; button if necessary and 
 make sure that the genome is set to Human and the assembly is set to Feb. 

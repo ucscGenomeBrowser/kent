@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bdgpGeneInfo.h"
 
-static char const rcsid[] = "$Id: bdgpGeneInfo.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
 
 void bdgpGeneInfoStaticLoad(char **row, struct bdgpGeneInfo *ret)
 /* Load a row from bdgpGeneInfo table into ret.  The contents of ret will

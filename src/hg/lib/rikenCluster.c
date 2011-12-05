@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "rikenCluster.h"
 
-static char const rcsid[] = "$Id: rikenCluster.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 struct rikenUcscCluster *rikenUcscClusterLoad(char **row)
 /* Load a rikenUcscCluster from row fetched with select * from rikenUcscCluster

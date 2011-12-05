@@ -9,7 +9,6 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: cnpLookup.c,v 1.3 2006/07/11 01:32:59 heather Exp $";
 
 struct coords 
     {

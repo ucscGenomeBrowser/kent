@@ -6,7 +6,7 @@
 #Annotation remarks
 CREATE TABLE wgEncodeGencodeAnnotationRemark (
     transcriptId varchar(255) not null,	# GENCODE transcript identifier
-    remark varchar(255) not null,	# Comment by annotator
+    remark longblob not null,	# Comment by annotator
               #Indices
-    PRIMARY KEY(transcriptId)
+    index(transcriptId)
 );

@@ -1,4 +1,4 @@
-import os, re
+import os, re, hashlib
 from ucscgenomics import ra
 
 def readMd5sums(filename):
@@ -12,6 +12,14 @@ def readMd5sums(filename):
     else:
         return None
 
+        
+def hashfile(filename, hasher=hashlib.md5(), blocksize=65536):
+    afile = open(filename, 'rb')
+    buf = afile.read(blocksize)
+    while len(buf) > 0:
+        hasher.update(buf)
+        buf = afile.read(blocksize)
+    return hasher.hexdigest()
         
 class TrackFile(object):
     """
@@ -40,6 +48,8 @@ class TrackFile(object):
     @property 
     def md5sum(self):
         """The md5sum for this file, stored in the md5sum.txt file in the downloads directory"""
+        if self._md5sum == None:
+            self._md5sum = hashfile(self.fullname)
         return self._md5sum
         
     @property 
@@ -57,9 +67,10 @@ class TrackFile(object):
         """The size in bytes"""
         return self._metaObj
     
-    def __init__(self, fullname, md5, metaObj=None):
+    def __init__(self, fullname, md5=None, metaObj=None):
+        fullname = os.path.abspath(fullname)
         if not os.path.isfile(fullname):
-            raise FileError('invalid file: %s' % fullname)
+            raise KeyError('invalid file: %s' % fullname)
         self._path, self._name = fullname.rsplit('/', 1)
         self._path = self._path + '/'
         self._fullname = fullname
@@ -203,6 +214,8 @@ class CompositeTrack(object):
                     elif not os.path.isdir(releasepath + file):
                         releasefiles[file] = TrackFile(releasepath + file, None)
                     elif os.path.isdir(releasepath + file):
+                        if not re.match('.*supplemental.*', releasepath + file):
+                            continue
                         for innerfile in os.listdir(releasepath + file):
                             pathfile = file + "/" + innerfile 
                             releasefiles[pathfile] = TrackFile(releasepath + pathfile, None)
@@ -276,6 +289,8 @@ class CompositeTrack(object):
         lines = f.readlines()
         p = re.compile(".*(%s\S+) ?(\S+)" % self._name)
         for i in lines:
+            if re.match("^\s*#.*", i):
+                continue
             m = p.match(i)
             if m and re.search('alpha', m.group(2)):
                 tdbpath = "%s%s" % (self._trackDbDir, m.group(1))

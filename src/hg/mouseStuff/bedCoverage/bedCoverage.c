@@ -10,7 +10,6 @@
 #include "agpFrag.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: bedCoverage.c,v 1.8 2008/09/03 19:20:33 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

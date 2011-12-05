@@ -101,8 +101,10 @@ export AUTH_USER="yourUserName"
 #	the UCSC permissions on directories and files which are not
 #	consistent for 'group' rwx permissions.
 export RSYNC="rsync -rltgoD"
-#	rsync location at UCSC to fetch files
+#	rsync location at UCSC to fetch files, select one of these two servers:
 export HGDOWNLOAD="rsync://hgdownload.cse.ucsc.edu"
+#	alternate rsync location at UCSC to fetch files
+#  export HGDOWNLOAD="rsync://hgdownload-sd.cse.ucsc.edu"
 #
 #   END OF CONFIGURATION VARIABLES
 ########################################################################

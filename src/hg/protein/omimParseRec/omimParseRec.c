@@ -9,7 +9,6 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: omimParseRec.c,v 1.3 2006/10/18 18:04:25 fanhsu Exp $";
 
 FILE *fh2; /* 2nd file handle pointing to the OMIM text file */
 FILE *recFh;
@@ -99,7 +98,6 @@ if (((omimFd->endPos - omimFd->startPos + 1) + 1) >sizeof(buffer))
 fseek(fh2, (long)(omimFd->startPos), SEEK_SET);
 bytesRead = (long)fread(buffer, (size_t)1, (size_t)(omimFd->endPos - omimFd->startPos + 1), fh2);
 *(buffer+bytesRead) = '\0';
-//printf("%s\t%s===>%s<===%s\n", omimFd->omimId, omimFd->type, buffer, omimFd->type); fflush(stdout);
 }
     
 struct omimRecord *omimRecordNext(struct lineFile *lf, 
@@ -110,25 +108,19 @@ struct omimRecord *omimRecordNext(struct lineFile *lf,
 /* Read next record from file and parse it into omimRecord structure
  * that is allocated in memory. */
 {
-char *line, *word, *type;
+char *line;
 struct omimRecord *omimr;
-struct slName *n;
 char *chp;
-int j=0;
 int lineSize;
 char *fieldType;
-FILE *fh = NULL;
 boolean recDone, fieldDone;
 char *row[1];
-char *upperStr;
 
 boolean endOfFile = FALSE;
 boolean endOfRec  = FALSE;
 
 boolean firstFieldDone = FALSE;
 
-char avPosLine[255];
-struct omimField *omimPrevFd = NULL;
 struct omimField *omimFd = NULL;
 
 recDone = FALSE;
@@ -144,7 +136,6 @@ recDone = FALSE;
     lmAllocVar(lm, omimr);
     omimr->startPos = lf->lineStart + lf->bufOffsetInFile;
     
-    //lmAllocVar(lm, omimFd);
 
     if (!lineFileNext(lf, &line, &lineSize))
 	return NULL;
@@ -154,7 +145,7 @@ recDone = FALSE;
     
     if (!lineFileNextReal(lf, &line)) errAbort("%s ends in middle of a record", lf->fileName);
     omimr->id = lmCloneString(lm, line);
-    
+   
     if (!lineFileNextReal(lf, &line)) errAbort("%s ends in middle of a record", lf->fileName);
     if (!sameString(line, "*FIELD* TI"))
 	errAbort("Expecting *FIELD* TI line %d of %s ---%s---", lf->lineIx, lf->fileName, line);
@@ -190,13 +181,10 @@ recDone = FALSE;
     // !!! need to enhance it later to include startPos and length info.
     fprintf(recFh, "%s\t%c\t%s\t%s\n", omimr->id, omimr->type, omimr->geneSymbol, omimr->title);
    
-    //printf("%s|%s|%s\n", omimr->id, omimr->title, omimr->geneSymbol);
-    
     /* !!! temporarily skip lines before first FIELD after title */
     /* further processing TBD */
     while (strstr(line, "*FIELD*") == NULL)
     	{
-	//printf("skipping ... %s\n", line);fflush(stdout);
 	lineFileNext(lf, &line, &lineSize);
 	}
     lineFileReuse(lf);
@@ -274,12 +262,9 @@ struct dyString *dy = newDyString(4096);
 for (;;)
     {
     struct lm *lm = lmInit(8*1024);
-    char *acc;
-    struct slName *n;
     omimr = omimRecordNext(lf, lm, dy, recFh, fieldFh);
     if (omimr == NULL)
         break;
-    //printf("%s\t%d\t%d\n", omimr->id, omimr->startPos, omimr->endPos);fflush(stdout);
     lmCleanup(&lm);
     }
 dyStringFree(&dy);

@@ -3,7 +3,6 @@
 #include "linefile.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSimp.c,v 1.3 2003/10/10 16:56:25 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */

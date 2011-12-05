@@ -12,7 +12,6 @@
 #include "portable.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.69 2009/04/24 22:14:48 larrym Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */

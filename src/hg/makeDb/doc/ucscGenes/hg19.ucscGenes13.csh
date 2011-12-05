@@ -10,7 +10,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.13.2
+set dir = $genomes/hg19/bed/ucsc.13.3
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -26,8 +26,8 @@ set ratDb = rn4
 set RatDb = Rn4
 set fishDb = danRer7
 set flyDb = dm3
-set wormDb = ce9
-set yeastDb = sacCer2
+set wormDb = ce6
+set yeastDb = sacCer3
 
 # The net alignment for the closely-related species indicated in $xdb
 set xdbNetDir = $genomes/$db/bed/lastz.${xdb}/axtChain
@@ -76,7 +76,7 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
-set rfam = /hive/data/outside/Rfam/111005
+set rfam = /hive/data/outside/Rfam/111130
 
 
 # Tracks
@@ -104,8 +104,6 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
-
-
 
 
 # Get Genbank info
@@ -164,11 +162,8 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 # probably should be revisited later, but affects only a few sequences 
 # at this time (10/09/11).
 mkdir -p rfam
-pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
-bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
+bedIntersect -aHitAny ${rfam}/${db}/Rfam.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
-pslCDnaFilter -uniqueMapped rfam.syntenic.psl rfam.syntenic.uniq.psl
-pslToBed rfam.syntenic.uniq.psl rfam.syntenic.uniq.bed
  
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna 
@@ -594,6 +589,8 @@ pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
 rm -r protein/raw
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
 
 
 
@@ -638,11 +635,11 @@ cat cdsEvidence/*.tce | sort  > unweighted.tce
 
 # Merge back in antibodies, and add the small, noncoding genes that are not well-represented
 # in GenBank (Rfam, tRNA)
-cat txWalk.bed antibody.bed trna.bed rfam.syntenic.uniq.bed > abWalk.bed
+cat txWalk.bed antibody.bed trna.bed rfam.syntenic.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
 sequenceForBed -db=$db -bedIn=trna.bed -fastaOut=stdout -upCase -keepName > trna.fa
-sequenceForBed -db=$db -bedIn=rfam.syntenic.uniq.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.uniq.fa
-cat txWalk.fa antibody.fa trna.fa rfam.syntenic.uniq.fa > abWalk.fa
+sequenceForBed -db=$db -bedIn=rfam.syntenic.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.fa
+cat txWalk.fa antibody.fa trna.fa rfam.syntenic.fa > abWalk.fa
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -661,7 +658,6 @@ cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.uniq.psl \
 txCdsCluster pick.bed pick.cluster
 
 
-
 # Flag suspicious CDS regions, and add this to info file. Weed out bad CDS.
 # Map CDS to gene set.  Takes 10 seconds.  Might want to reconsider using
 # txCdsWeed here.
@@ -670,6 +666,11 @@ txCdsWeed pick.tce pick.info weededCds.tce weededCds.info
 txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 	-bedOut=weededCds.bed -exceptions=abWalk.exceptions \
 	-tweaked=weededCds.tweaked
+
+# After txCdsToGene, the transcripts in weeded.bed might be slightly different from
+# those in abWalk.bed.  Make a new sequence file, weeded.fa, to replace abWalk.fa.
+sequenceForBed -db=$db -bedIn=weeded.bed -fastaOut=weeded.fa -upCase -keepName
+
 
 # Separate out transcripts into coding and 4 uncoding categories.
 # Generate new gene set that weeds out the junkiest. Takes 9 seconds.
@@ -722,10 +723,13 @@ cat txWalk/*.ev | weedLines weeds.lst stdin stdout | subColumn 1 stdin txToAcc.t
 # The reresentative proteins and mrnas will be taken from RefSeq for the RefSeq ones, 
 # and derived from our transcripts for the rest.
 # Load these sequences into database. Takes 17 seconds.
-txGeneProtAndRna weeded.bed weeded.info abWalk.fa weededCds.faa \
+txGeneProtAndRna weeded.bed weeded.info weeded.fa weededCds.faa \
     refSeq.fa refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa \
     ucscGenesTx.fa ucscGenesTx.faa
 
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 
 # Generate ucscGene/uniprot blat run.
@@ -1313,9 +1317,6 @@ hgsql hgcentraltest -e \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 		
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
@@ -1339,9 +1340,6 @@ sudo ln -s /var/lib/mysql/$spDb /var/lib/mysql/uniProt
 sudo rm /var/lib/mysql/proteome
 sudo ln -s /var/lib/mysql/$pbDb /var/lib/mysql/proteome
 hgsqladmin flush-tables
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # Make full text index.  Takes a minute or so.  After this the genome browser

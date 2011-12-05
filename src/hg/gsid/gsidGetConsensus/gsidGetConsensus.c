@@ -10,7 +10,6 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: gsidGetConsensus.c,v 1.2 2008/09/08 17:20:03 markd Exp $";
 
 #define MAXSEQ 5000
 #define MAXSEQLEN 5000

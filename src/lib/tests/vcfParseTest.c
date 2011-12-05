@@ -6,7 +6,6 @@
 #include "sqlNum.h"
 #include "vcf.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,7 +27,7 @@ static struct optionSpec options[] = {
 void vcfParseTest(char *fileOrUrl, char *seqName, int start, int end)
 /* vcfParseTest - Parse VCF header and data lines in given position range.. */
 {
-struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, 100);
+struct vcfFile *vcff = vcfTabixFileMayOpen(fileOrUrl, seqName, start, end, 100, -1);
 if (vcff == NULL)
     errAbort("Failed to parse \"%s\" and/or its index file \"%s.tbi\"", fileOrUrl, fileOrUrl);
 int recCount = slCount(vcff->records);

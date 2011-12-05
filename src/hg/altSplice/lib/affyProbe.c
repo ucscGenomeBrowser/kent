@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "affyProbe.h"
 
-static char const rcsid[] = "$Id: affyProbe.c,v 1.2 2007/01/08 19:23:36 sugnet Exp $";
 
 struct affyProbe *affyProbeLoad(char **row)
 /* Load a affyProbe from row fetched with select * from affyProbe

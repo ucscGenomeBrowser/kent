@@ -15,7 +15,6 @@
 #include <limits.h>	/* For CHAR_BIT */
 
 
-static char const rcsid[] = "$Id: mafToAnc.c,v 1.7 2008/04/25 17:25:15 rico Exp $";
 
 struct aliCont
 /* A container for an alignment block. */

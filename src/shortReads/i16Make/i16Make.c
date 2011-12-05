@@ -12,7 +12,6 @@
 #include "verbose.h"
 #include "i16.h"
 
-static char const rcsid[] = "$Id: i16Make.c,v 1.3 2010/04/01 17:31:10 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

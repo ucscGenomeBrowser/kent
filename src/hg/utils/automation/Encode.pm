@@ -301,7 +301,7 @@ sub getDaf
 # hash keys are RA style plus an additional TRACKS key which is a nested hash for
 # the track list at the end of the DAF file; e.g.:
 # (lab => 'Myers', TRACKS => {'Alignments => {}, Signal => {}})
-    my ($submitDir, $grants, $fields, $pipelineInstance) = @_;
+    my ($submitDir, $fields, $pipelineInstance) = @_;
 
     # Verify required fields
     # are present and that the project is marked active.
@@ -316,13 +316,13 @@ sub getDaf
     $dafFile = cwd() . "/" . $dafFile;
     HgAutomate::verbose(2, "Using newest DAF file \'$dafFile\'\n");
     chdir($wd);
-    return parseDaf($dafFile, $grants, $fields, $pipelineInstance);
+    return parseDaf($dafFile, $fields, $pipelineInstance);
 }
 
 sub parseDaf
 {
 # Identical to getDaf, but first argument is the DAF filename.
-    my ($dafFile, $grants, $fields, $pipelineInstance) = @_;
+    my ($dafFile, $fields, $pipelineInstance) = @_;
     my %daf = ();
     $daf{TRACKS} = {};
     my $lines = readFile("$dafFile");
@@ -387,9 +387,6 @@ sub parseDaf
 
     if(!keys(%{$daf{TRACKS}})) {
         push(@errors, "no views defined for project \'$daf{project}\' in DAF '$dafFile'");
-    }
-    if(!defined($grants->{$daf{grant}})) {
-        push(@errors, "invalid lab '$daf{grant}' in DAF '$dafFile'");
     }
     push(@errors, validateAssembly($daf{assembly}, $pipelineInstance));
 

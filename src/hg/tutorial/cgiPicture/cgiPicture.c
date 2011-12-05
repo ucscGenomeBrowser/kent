@@ -12,7 +12,6 @@
 #include "hui.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: cgiPicture.c,v 1.4 2009/08/19 23:20:55 angie Exp $";
 
 /* Global Variables */
 struct cart *cart;             /* CGI and other variables */

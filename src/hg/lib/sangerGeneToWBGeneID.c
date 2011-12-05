@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "sangerGeneToWBGeneID.h"
 
-static char const rcsid[] = "$Id: sangerGeneToWBGeneID.c,v 1.1 2007/07/25 18:49:03 hiram Exp $";
 
 void sangerGeneToWBGeneIDStaticLoad(char **row, struct sangerGeneToWBGeneID *ret)
 /* Load a row from sangerGeneToWBGeneID table into ret.  The contents of ret will

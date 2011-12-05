@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: liftOverChain.c,v 1.5 2006/07/11 05:51:39 kate Exp $";
 
 void liftOverChainStaticLoad(char **row, struct liftOverChain *ret)
 /* Load a row from liftOverChain table into ret.  The contents of ret will

@@ -9,7 +9,6 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: dnaseq.c,v 1.20 2008/10/30 09:27:59 kent Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)

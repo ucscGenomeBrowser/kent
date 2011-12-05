@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "jgiGene.h"
 
-static char const rcsid[] = "$Id: jgiGene.c,v 1.1 2007/04/18 20:19:19 lowe Exp $";
 
 void jgiGeneStaticLoad(char **row, struct jgiGene *ret)
 /* Load a row from jgiGene table into ret.  The contents of ret will

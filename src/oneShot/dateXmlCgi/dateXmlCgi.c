@@ -1,7 +1,6 @@
 /* dateXmlCgi - A cgi that just returns date in XML. */
 #include "common.h"
 
-static char const rcsid[] = "$Id: dateXmlCgi.c,v 1.1 2005/12/27 18:04:29 kent Exp $";
 
 
 int main(int argc, char *argv[])

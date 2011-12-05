@@ -7,7 +7,6 @@
 #include "dnautil.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: gcForBed.c,v 1.5 2006/06/20 15:55:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

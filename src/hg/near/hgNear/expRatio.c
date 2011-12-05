@@ -13,7 +13,6 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.42 2009/03/03 23:29:02 aamp Exp $";
 
 
 static char *expCellVal(struct genePos *gp,

@@ -6,7 +6,6 @@
 #include "dystring.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hgWormLinks.c,v 1.5 2004/10/27 22:25:43 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

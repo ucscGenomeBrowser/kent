@@ -139,7 +139,7 @@ struct vcfFile *vcff = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr, -1);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -155,29 +155,46 @@ static void vcfCfgHapClusterEnable(struct cart *cart, struct trackDb *tdb, char 
 				   boolean compositeLevel)
 /* Let the user enable/disable haplotype sorting display. */
 {
-printf("<B>Enable Haplotype sorting display: </B>");
 boolean hapClustEnabled = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
 							VCF_HAP_ENABLED_VAR, TRUE);
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s." VCF_HAP_ENABLED_VAR, name);
 cgiMakeCheckBox(cartVar, hapClustEnabled);
-printf("<BR>\n");
+printf("<B>Enable Haplotype sorting display</B><BR>\n");
 }
 
 static void vcfCfgHapClusterColor(struct cart *cart, struct trackDb *tdb, char *name,
 				   boolean compositeLevel)
 /* Let the user choose how to color the sorted haplotypes. */
 {
-printf("<B>Color sorted haplotypes by:</B>\n");
+printf("<B>Haplotype coloring scheme:</B><BR>\n");
 char *colorBy = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
-					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
-boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+					     VCF_HAP_COLORBY_VAR, VCF_DEFAULT_HAP_COLORBY);
 char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
-cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, colorByRefAlt);
-printf("reference/alternate alleles (reference = blue, alternate = red)\n");
-cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, !colorByRefAlt);
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_ALTONLY, sameString(colorBy, VCF_HAP_COLORBY_ALTONLY));
+printf("reference alleles invisible, alternate alleles in black<BR>\n");
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, sameString(colorBy, VCF_HAP_COLORBY_REFALT));
+printf("reference alleles in blue, alternate alleles in red<BR>\n");
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, sameString(colorBy, VCF_HAP_COLORBY_BASE));
 printf("first base of allele (A = red, C = blue, G = green, T = magenta)<BR>\n");
+}
+
+static void vcfCfgHapClusterTreeAngle(struct cart *cart, struct trackDb *tdb, char *name,
+				   boolean compositeLevel)
+/* Let the user choose branch shape. */
+{
+printf("<B>Haplotype clustering tree branch shape:</B><BR>\n");
+char *treeAngle = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
+					     VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_HAP_TREEANGLE_VAR, name);
+cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_TRIANGLE,
+		   sameString(treeAngle, VCF_HAP_TREEANGLE_TRIANGLE));
+printf("triangular<BR>\n");
+cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_RECTANGLE,
+		   sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE));
+printf("rectangular<BR>\n");
 }
 
 static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
@@ -191,7 +208,7 @@ if (vcff != NULL && vcff->genotypeCount > 1)
 					       VCF_HAP_HEIGHT_VAR, VCF_DEFAULT_HAP_HEIGHT);
     char varName[1024];
     safef(varName, sizeof(varName), "%s." VCF_HAP_HEIGHT_VAR, name);
-    cgiMakeIntVarInRange(varName, cartHeight, "Height (in pixels) of track", 5, "10", "2500");
+    cgiMakeIntVarInRange(varName, cartHeight, "Height (in pixels) of track", 5, "4", "2500");
     puts("<BR>");
     }
 }
@@ -204,9 +221,9 @@ static void vcfCfgHapCluster(struct cart *cart, struct trackDb *tdb, struct vcfF
 vcfCfgHapClusterEnable(cart, tdb, name, compositeLevel);
 vcfCfgHaplotypeCenter(cart, tdb, name, compositeLevel, vcff, NULL, NULL, 0, "mainForm");
 vcfCfgHapClusterColor(cart, tdb, name, compositeLevel);
+vcfCfgHapClusterTreeAngle(cart, tdb, name, compositeLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, compositeLevel);
-//      thicken lines?
-//      outline center variant?
+puts("<BR>");
 }
 
 static void vcfCfgMinQual(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
@@ -218,7 +235,7 @@ safef(cartVar, sizeof(cartVar), "%s." VCF_APPLY_MIN_QUAL_VAR, name);
 boolean applyFilter = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
 					VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL);
 cgiMakeCheckBox(cartVar, applyFilter);
-printf("<B>Exclude items with QUAL score less than &nbsp;</B>\n");
+printf("<B>Exclude items with QUAL score less than</B>\n");
 double minQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
 					      VCF_DEFAULT_MIN_QUAL);
 safef(cartVar, sizeof(cartVar), "%s." VCF_MIN_QUAL_VAR, name);
@@ -283,7 +300,17 @@ if (vcff != NULL)
     {
     boolean compositeLevel = isNameAtCompositeLevel(tdb, name);
     if (vcff->genotypeCount > 1)
+	{
+	puts("<H3>Haplotype sorting display</H3>");
+	puts("<P>When this display mode is enabled and genotypes are phased or homozygous, "
+	     "each genotype is split into two independent haplotypes. "
+	     "These local haplotypes are clustered by similarity around a central variant. "
+	     "Haplotypes are reordered for display using the clustering tree, which is "
+	     "drawn in the left label area. "
+	     "Local haplotype blocks can often be identified using this display.</P>");
 	vcfCfgHapCluster(cart, tdb, vcff, name, compositeLevel);
+	}
+    puts("<H3>Filters</H3>");
     vcfCfgMinQual(cart, tdb, vcff, name, compositeLevel);
     vcfCfgFilterColumn(cart, tdb, vcff, name, compositeLevel);
     vcfCfgMinAlleleFreq(cart, tdb, vcff, name, compositeLevel);

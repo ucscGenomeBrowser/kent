@@ -15,7 +15,6 @@
 #include "wikiTrack.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.31 2010/05/20 16:19:43 kent Exp $";
 
 
 static boolean forCurTable()

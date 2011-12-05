@@ -9,7 +9,6 @@
 #include "metaData.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkSeqTbl.c,v 1.3 2009/04/23 00:35:41 markd Exp $";
 
 /* hash tables used to avoid repeating error messages */
 static struct hash* missingExtFileIds = NULL;  /* missing ext file ids that

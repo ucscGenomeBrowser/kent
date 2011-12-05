@@ -15,7 +15,6 @@
 #include "psl.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: mm.c,v 1.2 2003/05/06 07:22:26 kate Exp $";
 
 int version = 14;       /* Current version number. */
 int maxMapDeviation = 700000;   /* No map deviations further than this allowed. */

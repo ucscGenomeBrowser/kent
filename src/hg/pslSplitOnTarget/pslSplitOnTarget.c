@@ -6,7 +6,6 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSplitOnTarget.c,v 1.2 2005/09/29 19:07:26 galt Exp $";
 
 boolean lump = FALSE;
 int maxTargetCount = 300;

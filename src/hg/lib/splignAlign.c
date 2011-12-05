@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "splignAlign.h"
 
-static char const rcsid[] = "$Id: splignAlign.c,v 1.2 2005/04/13 06:25:57 markd Exp $";
 
 void splignAlignStaticLoad(char **row, struct splignAlign *ret)
 /* Load a row from splignAlign table into ret.  The contents of ret will

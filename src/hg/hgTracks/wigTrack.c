@@ -18,7 +18,6 @@
 #include "wigCommon.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.113 2010/05/25 17:50:51 kent Exp $";
 
 struct wigItem
 /* A wig track item. */

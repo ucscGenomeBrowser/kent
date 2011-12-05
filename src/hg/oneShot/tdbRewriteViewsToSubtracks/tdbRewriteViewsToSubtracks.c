@@ -11,7 +11,6 @@
 #include "ra.h"
 
 
-static char const rcsid[] = "$Id: tdbRewriteViewsToSubtracks.c,v 1.5 2010/01/04 19:12:40 kent Exp $";
 
 static char *clRoot = "~/kent/src/hg/makeDb/trackDb";	/* Root dir of trackDb system. */
 

@@ -7,7 +7,6 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: seqWithoutDeletions.c,v 1.3 2006/09/13 21:36:12 heather Exp $";
 
 static char *database = NULL;
 static char *chromName = NULL;

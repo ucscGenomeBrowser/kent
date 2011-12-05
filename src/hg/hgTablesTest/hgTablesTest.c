@@ -16,7 +16,6 @@
 
 #define MAX_ATTEMPTS 10
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.35 2006/04/12 14:17:35 angie Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */

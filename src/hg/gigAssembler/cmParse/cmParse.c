@@ -13,7 +13,6 @@
 #include "cheapcgi.h"
 #include "imreClone.h"
 
-static char const rcsid[] = "$Id: cmParse.c,v 1.21 2003/05/06 07:22:15 kate Exp $";
 
 /* Command line options. */
 boolean imreFormat = FALSE;

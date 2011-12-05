@@ -6,6 +6,7 @@
 # when the browser is public --
 # e-mail: mckinnoj@uww.edu   http://facstaff.uww.edu/mckinnoj/mckinnon.html
 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AANH01
 
 #########################################################################
 # DOWNLOAD SEQUENCE (DONE 8/15/06 angie)
@@ -2853,3 +2854,61 @@ see doc/builds.txt for specific details.
     #	55990919 bases of 446627861 (12.536%) in intersection
 
 #######################################################################
+## WINDOWMASKER (DONE - 2011-12-01 - Hiram)
+    #	this was actually run in 2006 without the extra step of eliminating
+    #	the gap masking.  The table was not reloaded with this result since
+    #	the old one is on the RR.  This business was done to run an experiment
+    #	with the fr3 lastz to see if it actually matters or not if the
+    #	query genome here is more masked or less.
+    mkdir /hive/data/genomes/gasAcu1/bed/windowMasker
+    cd /hive/data/genomes/gasAcu1/bed/windowMasker
+    time doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev gasAcu1 > do.log 2>&1 &
+    #	real    21m10.950s
+
+    # Masking statistics
+    twoBitToFa gasAcu1.wmsk.sdust.2bit stdout | faSize stdin
+    #	463354448 bases (16726587 N's 446627861 real 349071712 upper
+    #	97556149 lower) in 23 sequences in 1 files
+    #	%21.05 masked total, %21.84 masked real
+
+    hgLoadBed gasAcu1 windowmaskerSdust windowmasker.sdust.bed.gz
+    # Loaded 2285358 elements of size 3
+
+    featureBits -countGaps gasAcu1 windowmaskerSdust
+    #	114282736 bases of 463354448 (24.664%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits gasAcu1 -not gap -bed=notGap.bed
+    #	446627861 bases of 446627861 (100.000%) in intersection
+    time nice -n +19 featureBits gasAcu1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	97556149 bases of 446627861 (21.843%) in intersection
+
+    featureBits -countGaps gasAcu1 cleanWMask.bed.gz
+    #	97556149 bases of 463354448 (21.054%) in intersection
+
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../gasAcu1.unmasked.2bit stdin \
+	    -type=.bed gasAcu1.cleanWMSdust.2bit
+    twoBitToFa gasAcu1.cleanWMSdust.2bit stdout | faSize stdin \
+        > gasAcu1.cleanWMSdust.faSize.txt
+    cat gasAcu1.cleanWMSdust.faSize.txt
+    #	463354448 bases (16726587 N's 446627861 real 349071712 upper
+    #	97556149 lower) in 23 sequences in 1 files
+    #	%21.05 masked total, %21.84 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps gasAcu1 rmsk cleanWMask.bed.gz
+    #	13193723 bases of 463354448 (2.847%) in intersection
+
+    # add TRF mask:
+    twoBitMask gasAcu1.cleanWMSdust.2bit \
+      -add ../simpleRepeat/trfMask.bed gasAcu1.TRF.WMSdust.2bit
+    twoBitToFa gasAcu1.TRF.WMSdust.2bit stdout | faSize stdin \
+        > gasAcu1.TRF.WMSdust.faSize.txt
+
+    #	463354448 bases (16726587 N's 446627861 real 348847599 upper
+    #	97780262 lower) in 23 sequences in 1 files
+    #	%21.10 masked total, %21.89 masked real
+
+##########################################################################

@@ -2448,7 +2448,7 @@ view RawSignal
 
 metaObject wgEncodeUwDnaseCd20ro01778AlnRep2
 objType file
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
@@ -2470,7 +2470,7 @@ view Alignments
 
 metaObject wgEncodeUwDnaseCd20ro01778HotspotsRep2
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
@@ -2493,7 +2493,7 @@ view Hotspots
 
 metaObject wgEncodeUwDnaseCd20ro01778PkRep2
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
@@ -2516,7 +2516,7 @@ view Peaks
 
 metaObject wgEncodeUwDnaseCd20ro01778RawDataRep2
 objType file
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze
@@ -2537,7 +2537,7 @@ view RawData
 
 metaObject wgEncodeUwDnaseCd20ro01778RawRep2
 objType table
-cell CD20+
+cell CD20+_RO01778
 composite wgEncodeUwDnase
 dataType DnaseSeq
 dataVersion post ENCODE Jan 2011 Freeze

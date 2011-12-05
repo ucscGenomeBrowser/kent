@@ -13875,27 +13875,24 @@ tail +3 agilentCghSnpCancer4x180k.bed | hgLoadBed hg19 agilentCghSnpCancer4x180k
 
 
 #################################################################################
-# Rfam (2011-10-05 Melissa Cline)
+# Rfam (2011-11-30 Melissa Cline)
 #
 # This contains genomic alignments of Rfam sequences, from the Rfam group.
 #
 # This data is used in building UCSC Genes.
 #
 cd /hive/data/outside/Rfam
-mkdir 111005
-cd 111005
-wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/Rfam.fasta.gz
-gunzip Rfam.fasta.gz
-grep -i "Homo Sapiens" Rfam.fasta |awk '{ print $1}' |sed 's/^>//' \
-    > human.sequenceIds.txt
-faSomeRecords Rfam.fasta human.sequenceIds.txt Rfam.human.fasta
-gzip Rfam.fasta
-mkdir -p hg19
-blat -q=rna -minIdentity=100 /hive/data/genomes/hg19/hg19.2bit \
-    Rfam.human.fasta hg19/Rfam.human.psl
-pslCDnaFilter -globalNearBest=0.01 -minCover=1.0 hg19/Rfam.human.psl \
-    hg19/Rfam.human.bestHits.psl
-pslToBed hg19/Rfam.human.bestHits.psl hg19/Rfam.human.bestHits.bed
+mkdir 111130
+cd 111130
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/genome.gff3.tar.gz
+tar xzvf genome.gff3.tar.gz
+mkdir hg19
+cat /hive/data/genomes/hg19/chrom.aliases \
+ |awk '{ print("cat /hive/data/outside/Rfam/111130/genome_gff/" $1 ".gff3",  
+               "|sed", sprintf("%c", 39) "s/" $1 "/" $2 "/" sprintf("%c", 39))}' |bash \
+ |awk '{ print($1 "\t" $4 - 1 "\t" $5 "\t" $9 "\t1\t" $7 "\t" 
+               $4 - 1 "\t" $5 "\t0\t1\t" $5 - $4 + 1 "\t0"  }' \
+> hg19/Rfam.bed      
 
 
 
@@ -14690,6 +14687,9 @@ hgsqldump hg18 HInv | hgsql hg19
 
 #############################################################################
 # SIB ALT-SPLICING LIFT (DONE 2010-12-30, Andy)
+# Note: 
+# Obsolete. See the section "SIB Transcriptome (DONE 2011-12-02 Chin)" 
+# down below and redmine track #5630 for more details
 
 cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir sibTxGraph
@@ -17390,8 +17390,9 @@ TMPDIR=/scratch/tmp
 ############################################################################
 # ISCA FROM DBVAR (DONE 10/18/11 angie)
     # Redmine: Track #34 (dbVar for human)
-    mkdir -p /hive/data/genomes/hg19/bed/isca/2011_10_18
-    cd /hive/data/genomes/hg19/bed/isca/2011_10_18
+    set today = `date +%Y_%m_%d`
+    mkdir /hive/data/genomes/hg19/bed/isca/$today
+    cd /hive/data/genomes/hg19/bed/isca/$today
     # Get variants submitted on this assembly, and variants remapped from other assemblies.
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.GRCh37.submitted.all.germline.ucsc.gvf.gz
     wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_2011/gvf/nstd37_ISCA_2011.GRCh37.remap.all.germline.ucsc.gvf.gz
@@ -18047,6 +18048,56 @@ EOF
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp135Mask
     ln -s /hive/data/genomes/hg19/snp135Mask/substitutions/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp135Mask/
+
+
+#############################################################################
+# SIB Transcriptome (DONE 2011-12-02 Chin)
+
+    # Create working directory and download data from where Christian
+    # Iseli (Christian.Iseli at licr.org) put it, and unpack. 
+    mkdir -p /hive/data/outside/lirc
+    cd /hive/data/outside/lirc
+    wget --timestamping ftp://ftp.licr.org/pub/hg19/HTr.gtf.gz 
+    wget --timestamping ftp://ftp.licr.org/pub/hg19/txg.tar.gz 
+ 
+    cd /hive/data/genomes/hg19/bed/
+    mkdir sibTranscriptome
+    cd sibTranscriptome
+    tar -zxvf /hive/data/outside/lirc/txg.tar.gz
+    cp /hive/data/outside/lirc/HTr.gtf.gz .
+
+    zcat HTr.gtf.gz | ldHgGene hg19 sibGene stdin
+    # Reading stdin
+    # Read 195300 transcripts in 2564421 lines in 1 files
+    # 195300 groups 25 seqs 1 sources 2 feature types
+    # 195300 gene predictions
+
+    # Do a little data cleanup and transformation and load splice graphs
+    # into database.
+    sed 's/altGraphX/sibTxGraph/' ~/kent/src/hg/lib/altGraphX.sql > sibTxGraph.sql
+    cat txg/*.txg | txgToAgx stdin stdout | hgLoadBed -notItemRgb \
+      -sqlTable=sibTxGraph.sql hg19 sibTxGraph stdin
+    # Reading stdin
+    # Loaded 46973 elements of size 18
+    # Sorted
+    # Creating table definition for sibTxGraph
+    # Saving bed.tab
+    # Loading hg19
+
+    # Create sibAltEvents track for analysed alt-splices.
+    # Not on RR for hg18 and hg19, so do not push it out
+   cat txg/*.txg | txgAnalyze stdin /cluster/data/hg19/hg19.2bit sibAltEvents.bed
+   awk '$2 >= 0' sibAltEvents.bed | sort | uniq > foo.bed
+   hgLoadBed hg19 sibAltEvents foo.bed
+    # Reading foo.bed
+    # Loaded 431590 elements of size 6
+    # Sorted
+    # Creating table definition for sibAltEvents
+    # Saving bed.tab
+    # Loading hg19
+
+
+    # push sibGene and sibTxGraph for hg19
 
 
 ############################################################################

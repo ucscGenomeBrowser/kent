@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "delHinds2.h"
 
-static char const rcsid[] = "$Id: delHinds2.c,v 1.1 2007/03/30 20:35:28 heather Exp $";
 
 void delHinds2StaticLoad(char **row, struct delHinds2 *ret)
 /* Load a row from delHinds2 table into ret.  The contents of ret will

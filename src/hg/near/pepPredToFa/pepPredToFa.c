@@ -7,7 +7,6 @@
 #include "pepPred.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: pepPredToFa.c,v 1.3 2003/06/11 03:19:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

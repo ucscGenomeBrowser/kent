@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: ultraPlateau.c,v 1.1 2004/09/03 22:57:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

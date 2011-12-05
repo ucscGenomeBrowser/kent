@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "exonGraph.h"
 
-static char const rcsid[] = "$Id: exonGraph.c,v 1.6 2007/01/08 19:23:36 sugnet Exp $";
 
 struct exonNode **_egTmpLoadingArray = NULL;
 int _egTmpLoadingArraySize = 0;

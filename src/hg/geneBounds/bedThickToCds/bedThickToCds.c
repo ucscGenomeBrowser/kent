@@ -6,7 +6,6 @@
 #include "options.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: bedThickToCds.c,v 1.1 2007/03/22 06:51:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

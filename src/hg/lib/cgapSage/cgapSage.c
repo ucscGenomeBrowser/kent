@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "cgapSage/cgapSage.h"
 
-static char const rcsid[] = "$Id: cgapSage.c,v 1.3 2007/06/06 19:46:23 aamp Exp $";
 
 struct cgapSage *cgapSageLoad(char **row)
 /* Load a cgapSage from row fetched with select * from cgapSage

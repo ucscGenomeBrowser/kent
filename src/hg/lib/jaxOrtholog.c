@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "jaxOrtholog.h"
 
-static char const rcsid[] = "$Id: jaxOrtholog.c,v 1.3 2005/04/13 06:25:54 markd Exp $";
 
 void jaxOrthologStaticLoad(char **row, struct jaxOrtholog *ret)
 /* Load a row from jaxOrtholog table into ret.  The contents of ret will

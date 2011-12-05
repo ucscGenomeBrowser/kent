@@ -10,7 +10,6 @@
 #include "hgRelate.h"
 #include "microarray.h"
 
-static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.6 2006/11/14 02:04:46 aamp Exp $";
 
 /* Command line overridable options. */
 char *database = "hgFixed";
