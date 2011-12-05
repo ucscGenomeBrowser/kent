@@ -29,31 +29,7 @@ def main():
 	ra1 = ra.RaFile(args.RaFileOne)
 	ra2 = ra.RaFile(args.RaFileTwo)
 
-
-	ra1Objects = set(ra1.filter(lambda s: 1, lambda s: s.name))
-	ra2Objects = set(ra2.filter(lambda s: 1, lambda s: s.name))
-
-	commonStanzas = ra1Objects & ra2Objects
-
-	newStanzas = ra2Objects - ra1Objects
-	droppedStanzas = ra1Objects - ra2Objects
-
-	changelist = dict()
-	p = re.compile('^\s*#')
-
-	for i in sorted(commonStanzas):
-		for j in ra1[i]:
-			if p.search(j):
-				continue
-			if j not in ra2[i]:
-				changelist = addChange(changelist, i, "deleted %s = %s" % (j, ra1[i][j]))
-			elif ra1[i][j] != ra2[i][j]:
-				changelist = addChange(changelist, i, "changed %s from '%s' -> '%s'" % (j, ra1[i][j], ra2[i][j]))
-		for j in ra2[i]:
-			if p.search(j):
-				continue
-			if j not in ra1[i]:
-				changelist = addChange(changelist, i, "added %s = %s" % (j,ra2[i][j]))
+	changelist, newStanzas, droppedStanzas = ra1.changeSummary(ra2)
 
 	print "Dropped Stanzas (%s):" % len(droppedStanzas)
 	for i in sorted(droppedStanzas, key=str.lower):
