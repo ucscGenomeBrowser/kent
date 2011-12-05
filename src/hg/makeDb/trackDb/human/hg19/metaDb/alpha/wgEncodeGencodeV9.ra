@@ -11,9 +11,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion 2-way Pseudogene Annotation Set
-md5sum 3883af8de2f64a3253490d8cd7917b03
 project wgEncode
-subId 4347
 tableName wgEncodeGencode2wayConsPseudoV9
 
 metaObject wgEncodeGencodeAttrsV9
@@ -29,9 +27,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Transcript Attributes
-md5sum cdfd37d876b36dff0ad60f2aae9ddb28
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeAttrsV9
 
 metaObject wgEncodeGencodeBasicV9
@@ -47,9 +43,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Basic Gene Annotation Set
-md5sum ee1cdaa985ca47337dff5efb0cafb3ed
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeBasicV9
 
 metaObject wgEncodeGencodeCompV9
@@ -65,9 +59,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Comprehensive Gene Annotation Set
-md5sum cebccba7f4d2d458dbc7d0369af138ec
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeCompV9
 
 metaObject wgEncodeGencodeExonSupportV9
@@ -83,9 +75,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Exon Support
-md5sum b07804b2217b85aba4e8cdcfb60395c5
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeExonSupportV9
 
 metaObject wgEncodeGencodeGeneSourceV9
@@ -101,9 +91,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Source Lab
-md5sum 9b4951286d5f6bdc9a130b9e544ce244
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeGeneSourceV9
 
 metaObject wgEncodeGencodePdbV9
@@ -119,9 +107,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion PDB entry mapping
-md5sum 968dd19ae836bfc4d44c9844ec7ccee3
 project wgEncode
-subId 4347
 tableName wgEncodeGencodePdbV9
 
 metaObject wgEncodeGencodePolyaV9
@@ -137,9 +123,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion PolyA Transcript Annotation Set
-md5sum c74b3a6989e9a49c94daf94323ecd899
 project wgEncode
-subId 4347
 tableName wgEncodeGencodePolyaV9
 
 metaObject wgEncodeGencodePseudoGeneV9
@@ -155,9 +139,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Pseudogene Annotation Set
-md5sum f8ab4c97216c9ceb4089fbdf49df026b
 project wgEncode
-subId 4347
 tableName wgEncodeGencodePseudoGeneV9
 
 metaObject wgEncodeGencodePubMedV9
@@ -173,9 +155,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion PubMed ID mapping
-md5sum 325cc5ca14a9a9bd89ccd6e37fd64e30
 project wgEncode
-subId 4347
 tableName wgEncodeGencodePubMedV9
 
 metaObject wgEncodeGencodeRefSeqV9
@@ -191,9 +171,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion RefSeq mapping
-md5sum 42a8b1caf2097ae865bfc33ea5068310
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeRefSeqV9
 
 metaObject wgEncodeGencodeTagV9
@@ -209,9 +187,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Transcript Tags
-md5sum 3177ea396f743554a20cadab85c86c37
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeTagV9
 
 metaObject wgEncodeGencodeTranscriptSourceV9
@@ -227,9 +203,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Transcript Source Lab
-md5sum 5aa9ef5a008d71a9213814c3c9c8add5
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeTranscriptSourceV9
 
 metaObject wgEncodeGencodeTranscriptSupportV9
@@ -245,9 +219,7 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Transcript Support
-md5sum 17efca3f50bdcb49b8316b0662434441
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeTranscriptSupportV9
 
 metaObject wgEncodeGencodeUniProtV9
@@ -263,10 +235,24 @@ grant Hubbard
 lab Sanger
 labExpId V9
 labVersion UniProt ID mapping
-md5sum eb899fbb8ddd281a9487891df9a081c2
 project wgEncode
-subId 4347
 tableName wgEncodeGencodeUniProtV9
+
+metaObject wgEncodeGencodeAnnotationRemarkV9
+objType table
+composite wgEncodeGencodeV9
+dataType Gencode
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-05-01
+dccAccession wgEncodeEH002251
+expId 2251
+fileName wgEncodeGencodeAnnotationRemarkV9tab.gz
+grant Hubbard
+lab Sanger
+labExpId V9
+labVersion Annotation Remarks
+project wgEncode
+tableName wgEncodeGencodeAnnotationRemarkV9
 
 metaObject wgEncodeGencodeV9
 objType composite
