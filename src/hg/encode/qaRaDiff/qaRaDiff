@@ -29,7 +29,7 @@ def main():
 	ra1 = ra.RaFile(args.RaFileOne)
 	ra2 = ra.RaFile(args.RaFileTwo)
 
-	changelist, newStanzas, droppedStanzas = ra1.changeSummary(ra2)
+	changelist, newStanzas, droppedStanzas = ra2.changeSummary(ra1)
 
 	print "Dropped Stanzas (%s):" % len(droppedStanzas)
 	for i in sorted(droppedStanzas, key=str.lower):
