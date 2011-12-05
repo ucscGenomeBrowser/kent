@@ -12,6 +12,7 @@ lab Sanger
 labExpId V9
 labVersion 2-way Pseudogene Annotation Set
 project wgEncode
+subId 5126
 tableName wgEncodeGencode2wayConsPseudoV9
 
 metaObject wgEncodeGencodeAttrsV9
@@ -28,6 +29,7 @@ lab Sanger
 labExpId V9
 labVersion Transcript Attributes
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeAttrsV9
 
 metaObject wgEncodeGencodeBasicV9
@@ -44,6 +46,7 @@ lab Sanger
 labExpId V9
 labVersion Basic Gene Annotation Set
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeBasicV9
 
 metaObject wgEncodeGencodeCompV9
@@ -60,6 +63,7 @@ lab Sanger
 labExpId V9
 labVersion Comprehensive Gene Annotation Set
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeCompV9
 
 metaObject wgEncodeGencodeExonSupportV9
@@ -76,6 +80,7 @@ lab Sanger
 labExpId V9
 labVersion Exon Support
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeExonSupportV9
 
 metaObject wgEncodeGencodeGeneSourceV9
@@ -92,6 +97,7 @@ lab Sanger
 labExpId V9
 labVersion Source Lab
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeGeneSourceV9
 
 metaObject wgEncodeGencodePdbV9
@@ -108,6 +114,7 @@ lab Sanger
 labExpId V9
 labVersion PDB entry mapping
 project wgEncode
+subId 5126
 tableName wgEncodeGencodePdbV9
 
 metaObject wgEncodeGencodePolyaV9
@@ -124,6 +131,7 @@ lab Sanger
 labExpId V9
 labVersion PolyA Transcript Annotation Set
 project wgEncode
+subId 5126
 tableName wgEncodeGencodePolyaV9
 
 metaObject wgEncodeGencodePseudoGeneV9
@@ -140,6 +148,7 @@ lab Sanger
 labExpId V9
 labVersion Pseudogene Annotation Set
 project wgEncode
+subId 5126
 tableName wgEncodeGencodePseudoGeneV9
 
 metaObject wgEncodeGencodePubMedV9
@@ -156,6 +165,7 @@ lab Sanger
 labExpId V9
 labVersion PubMed ID mapping
 project wgEncode
+subId 5126
 tableName wgEncodeGencodePubMedV9
 
 metaObject wgEncodeGencodeRefSeqV9
@@ -172,6 +182,7 @@ lab Sanger
 labExpId V9
 labVersion RefSeq mapping
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeRefSeqV9
 
 metaObject wgEncodeGencodeTagV9
@@ -188,6 +199,7 @@ lab Sanger
 labExpId V9
 labVersion Transcript Tags
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeTagV9
 
 metaObject wgEncodeGencodeTranscriptSourceV9
@@ -204,6 +216,7 @@ lab Sanger
 labExpId V9
 labVersion Transcript Source Lab
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeTranscriptSourceV9
 
 metaObject wgEncodeGencodeTranscriptSupportV9
@@ -220,6 +233,7 @@ lab Sanger
 labExpId V9
 labVersion Transcript Support
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeTranscriptSupportV9
 
 metaObject wgEncodeGencodeUniProtV9
@@ -236,6 +250,7 @@ lab Sanger
 labExpId V9
 labVersion UniProt ID mapping
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeUniProtV9
 
 metaObject wgEncodeGencodeAnnotationRemarkV9
@@ -246,12 +261,13 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-05-01
 dccAccession wgEncodeEH002251
 expId 2251
-fileName wgEncodeGencodeAnnotationRemarkV9tab.gz
+fileName wgEncodeGencodeAnnotationRemarkV9.tab.gz
 grant Hubbard
 lab Sanger
 labExpId V9
 labVersion Annotation Remarks
 project wgEncode
+subId 5126
 tableName wgEncodeGencodeAnnotationRemarkV9
 
 metaObject wgEncodeGencodeV9
