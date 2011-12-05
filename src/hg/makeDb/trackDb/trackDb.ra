@@ -499,16 +499,6 @@ priority 41
 color 150,150,200
 visibility dense
 
-track elsevierNoBlocksTmp
-shortLabel ElsevierNoBlocks
-longLabel Elsevier without blocks
-color 0,0,0
-group x
-priority 12
-visibility hide
-type bed 3
-release alpha
-
 track t2g
 shortLabel Publications
 longLabel Publications: Sequences found in scientific articles
