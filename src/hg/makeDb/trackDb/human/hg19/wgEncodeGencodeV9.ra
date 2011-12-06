@@ -14,7 +14,7 @@ vegaTranscriptIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Transcript/Summary?db=
 vegaGeneIdUrl http://vega.sanger.ac.uk/Homo_sapiens/Gene/Summary?db=core;g=%s
 yalePseudoUrl http://tables.pseudogene.org/%s
 type genePred
-fileSortOrder labVersion=Contents
+fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
 hgGene on
 hgsid on
 # html wgEncodeGencodeV9
