@@ -823,7 +823,7 @@ if (ht->left != NULL && ht->right != NULL)
 	int yEnd = max(yEndLeft, yEndRight);
 	midY = (yStart + yEnd) / 2;
 	Color col = (ht->childDistance == 0) ? purple : MG_BLACK;
-	if (drawRectangle)
+	if (drawRectangle || ht->childDistance != 0)
 	    {
 	    hvGfxLine(hvg, x+branchW-1, yStart, x+branchW-1, yEnd-1, col);
 	    hvGfxLine(hvg, x+branchW, yStart, labelEnd, yStart, col);
@@ -831,8 +831,8 @@ if (ht->left != NULL && ht->right != NULL)
 	    }
 	else
 	    {
-	    hvGfxLine(hvg, x, midY, labelEnd, yStart, col);
-	    hvGfxLine(hvg, x, midY, labelEnd, yEnd-1, col);
+	    hvGfxLine(hvg, x, midY, labelEnd-1, yStart, col);
+	    hvGfxLine(hvg, x, midY, labelEnd-1, yEnd-1, col);
 	    }
 	addClusterMapItem(ht, x, yStart, labelEnd, yEnd-1, th);
 	}
@@ -843,16 +843,10 @@ if (ht->left != NULL && ht->right != NULL)
 	int rightMid = rDrawTreeInLabelArea(ht->right, hvg, yrtMidPoint, x+branchW,
 					    yFromNode, yh, th, drawRectangle);
 	midY = (leftMid + rightMid) / 2;
-	if (drawRectangle)
-	    hvGfxLine(hvg, x+branchW-1, leftMid, x+branchW-1, rightMid, MG_BLACK);
-	else
-	    {
-	    hvGfxLine(hvg, x, midY, x+branchW-1, leftMid, MG_BLACK);
-	    hvGfxLine(hvg, x, midY, x+branchW-1, rightMid, MG_BLACK);
-	    }
+	hvGfxLine(hvg, x+branchW-1, leftMid, x+branchW-1, rightMid, MG_BLACK);
 	addClusterMapItem(ht, x, min(leftMid, rightMid), x+branchW-1, max(leftMid, rightMid), th);
 	}
-    if (drawRectangle)
+    if (drawRectangle || ht->childDistance != 0)
 	hvGfxLine(hvg, x, midY, x+branchW-1, midY, MG_BLACK);
     return midY;
     }
