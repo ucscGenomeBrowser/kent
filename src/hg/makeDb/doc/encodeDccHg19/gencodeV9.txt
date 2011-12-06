@@ -162,3 +162,32 @@ sys	0m32.405s
 
     ENST00000469063.1      ENSG00000093072.9
     OTTHUMT00000316084.1   OTTHUMG00000030726.7
+
+
+
+#============================================================================
+#To bring it in line with ENCODE track standards;
+#
+#cd /hive/groups/encode/dcc/analysis/ftp/pipeline/hg19
+#mkdir wgEncodeGencodeV9
+#cd wgEncodeGencodeV9
+#mkdir supplemental
+#mkdir release1
+#ln release1 beta
+#ln release1 releaseLatest
+#*** I (cricket) copied the files in
+#/hive/groups/encode/dcc/data/gencodeV9/release to the supplemental dir.  Maybe this
+#should be a hardlink ****
+#
+#table dump for downloads files?  Need to check with Brian
+#
+#Add metaData
+#cd USER/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha
+#cp wgEncodeGencodeV7.ra wgEncodeGencodeV9.ra
+#vi wgEncodeGencodeV9.ra
+#edit to have the V9 tables,new submission date,new subId,drop the md5sums
+#encodeExp find hg19 -composite=wgEncodeGencodeV9 out.ra
+#encodeExp add out.ra
+#rm out.ra
+#mdbUpdate hg19 -composite=wgEncodeGencodeV9 -encodeExp= -accession
+#mdbPrint hg19 -composite=wgEncodeGencodeV9 > wgEncodeGencodeV9

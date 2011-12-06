@@ -12,6 +12,7 @@ wgEncodeGencodeV3.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
 wgEncodeGencodeV9.ra \
+wgEncodeGencodeV10.ra \
 wgEncodeGisChiaPet.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
