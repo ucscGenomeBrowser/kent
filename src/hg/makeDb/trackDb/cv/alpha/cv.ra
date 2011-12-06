@@ -9938,7 +9938,7 @@ description Regions of enriched signal in experiment (PROVISIONAL)
 term WaveSignal
 tag WAVESIG
 type view
-label Wavelet Smoothed Signal
+label Wavelet-smoothed Signal
 description Shows smoothed wavelet over all phases (PROVISIONAL)
 
 
