@@ -60,44 +60,44 @@
 # Config parameters for makeGenomeDb.pl:
 db hetGla1
 clade mammal
-genomeCladePriority ??31
+genomeCladePriority 35
 scientificName Heterocephalus glaber 
 commonName naked mole-rat
-assemblyDate Nov. 2009
-assemblyLabel UMD_3.1 (NCBI project 10708, accession GCA_000003055.3)
-assemblyShortLabel Bos_taurus_UMD_3.1
-orderKey 236
-mitoAcc NC_006853
-fastaFiles /hive/data/genomes/hetGla1/genbank/ucscChr/chr*.fa.gz
-agpFiles /hive/data/genomes/hetGla1/genbank/ucscChr/chr*.agp.gz
+assemblyDate Jul. 2011
+assemblyLabel HetGla_1.0 (NCBI project 68323, accession GCA_000230455.1)
+assemblyShortLabel HetGla_1.0
+orderKey 165
+mitoAcc NC_015112
+fastaFiles /hive/data/genomes/hetGla1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/hetGla1/genbank/ucsc.agp.gz
 # qualFiles none
-dbDbSpeciesDir cow
-taxId 9913
+dbDbSpeciesDir moleRat
+taxId 10181
 '_EOF_'
     # << happy emacs
     time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev hetGla1.config.ra \
 	> makeGenomeDb.log 2>&1 &
-    # real    21m31.993s
+    # real    19m42.489s
 
-    # real    real    12m42.419s
     #	add the trackDb entries to the source tree, and the 2bit link:
+    # we will re-ln with masked one after we done the mask business later! ***
     ln -s `pwd`/hetGla1.unmasked.2bit /gbdb/hetGla1/hetGla1.2bit
 
+XXXX stopped here 2011-12-02 4:30PM
     #  Per instructions in makeGenomeDb.log:
-#Search for '***' notes in each file in and make corrections (sometimes the
-#files used for a previous assembly might make a better template):
-#  description.html /cluster/data/hetGla1/html/{trackDb.ra,gap.html,gold.html}
-#
-#Then copy these files to your ~/kent/src/hg/makeDb/trackDb/cow/hetGla1
-# - cd ~/kent/src/hg/makeDb/trackDb
-# - edit makefile to add hetGla1 to DBS.
-# - git add cow/hetGla1/*.{ra,html}
-# - git commit -m "Added hetGla1 to DBS." makefile
-# - git commit -m "Initial descriptions for hetGla1." cow/hetGla1/*.{ra,html}
-# - git pull; git push
-# - Run make update DBS=hetGla1 and make alpha when done.
-# - (optional) Clean up /cluster/data/hetGla1/TemporaryTrackDbCheckout
-
+# Search for '***' notes in each file in and make corrections (sometimes the
+# files used for a previous assembly might make a better template):
+#   description.html /cluster/data/hetGla1/html/{trackDb.ra,gap.html,gold.html}
+# 
+# Then copy these files to your ~/kent/src/hg/makeDb/trackDb/moleRat/hetGla1
+#  - cd ~/kent/src/hg/makeDb/trackDb
+#  - edit makefile to add hetGla1 to DBS.
+#  - git add moleRat/hetGla1/*.{ra,html}
+#  - git commit -m "Added hetGla1 to DBS." makefile
+#  - git commit -m "Initial descriptions for hetGla1." moleRat/hetGla1/*.{ra,html}
+#  - git pull; git push
+#  - Run make update DBS=hetGla1 and make alpha when done.
+#  - (optional) Clean up /cluster/data/hetGla1/TemporaryTrackDbCheckout
 
 
 #########################################################################
