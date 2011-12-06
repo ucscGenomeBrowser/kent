@@ -481,24 +481,6 @@ showDiffBasesMaxZoom 10000.0
 showCdsAllScales .
 showCdsMaxZoom 10000.0
 
-track encodeEnhancers
-shortLabel Encode9 enhancers 
-longLabel Encode9 +-800 bp enhancers alpha
-group x
-type bed 4
-priority 40
-color 150,150,200
-visibility dense
-
-track encodeEnhancersPlus50
-shortLabel Encode9 enhancers plus 50k
-longLabel Encode9 +-800 bp enhancers  plus 50kbp
-group x
-type bed 4
-priority 41
-color 150,150,200
-visibility dense
-
 track t2g
 shortLabel Publications
 longLabel Publications: Sequences found in scientific articles
