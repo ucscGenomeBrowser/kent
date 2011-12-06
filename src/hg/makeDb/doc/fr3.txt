@@ -182,6 +182,8 @@ taxId 31033
     featureBits -countGaps fr3 rmsk
     #	28570382 bases of 391484715 (7.298%) in intersection
     # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
 # running simple repeat (DONE - 2011-11-16 - Hiram)
@@ -357,3 +359,423 @@ close (FH);
 	where name="fr3";' hgcentraltest
 
 #########################################################################
+# AUTO UPDATE GENBANK (DONE - 2011-11-17,28 - Hiram)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Takifugu rubripes       1271    26069   429
+    # to decide which "native" mrna or ests you want to specify in genbank.conf
+    # this appears that fr3 has plenty of native est's
+
+    ssh hgwdev  
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add fr3 just after fr2 and commit to GIT
+# fr3
+fr3.serverGenome = /hive/data/genomes/fr3/fr3.2bit
+fr3.clusterGenome = /scratch/data/fr3/fr3.2bit
+fr3.ooc = /scratch/data/fr3/fr3.11.ooc
+fr3.align.unplacedChroms = HE*
+fr3.lift = /scratch/data/fr3/fr3.nonBridged.lift
+fr3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+fr3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+fr3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+fr3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+fr3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+fr3.genbank.mrna.xeno.loadDesc = yes
+fr3.refseq.mrna.xeno.load  = no
+# fr3.upstreamGeneTbl = ensGene
+# fr3.upstreamMaf = multiz5way
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding fr3 Takifugu rubripes" genbank.conf
+    git push
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # fr genome information, if this is a new species, need to add stuff there
+
+    ssh hgwdev			# used to do this on "genbank" machine
+    screen			# long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial fr3 &
+    #	var/build/logs/2011.11.28-09:01:11.fr3.initalign.log
+    #	real    111m30.317s
+
+    # tail the log to make sure it is successful:
+# hgwdev 2011.11.28-10:52:34 fr3.initalign: Succeeded: fr3
+# hgwdev 2011.11.28-10:52:41 fr3.initalign: finish
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad fr3 &
+    #	logFile: var/dbload/hgwdev/logs/2011.11.28-18:56:26.dbload.log
+    #	real    56m28.463s
+
+    # enable daily alignment and update of hgwdev (DONE - 2011-04-14 - Hiram)
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add fr3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added fr3." etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+###########################################################################
+# lastz Zebrafish danRer7 (DONE - 2011-12-01 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/lastzDanRer7.2011-12-01
+    cd /hive/data/genomes/fr3/bed/lastzDanRer7.2011-12-01
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Zebrafish
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzDanRer7.2011-12-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -tRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    764m6.061s
+
+    cat fb.fr3.chainDanRer7Link.txt 
+    #	80101694 bases of 350961831 (22.823%) in intersection
+
+    mkdir /hive/data/genomes/danRer7/bed/blastz.fr3.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzDanRer7.2011-12-01/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -tRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    9m54.286s
+    cat fb.danRer7.chainFr3Link.txt 
+    #	103831209 bases of 1409770109 (7.365%) in intersection
+
+############################################################################
+# lastz Nile tilapia oreNil1 (DONE - 2011-12-01,02 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/lastzOreNil1.2011-12-01
+    cd /hive/data/genomes/fr3/bed/lastzOreNil1.2011-12-01
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Nile tilapia
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Nile tilapia oreNil1
+SEQ2_DIR=/scratch/data/oreNil1/oreNil1.2bit
+SEQ2_LEN=/scratch/data/oreNil1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=10
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzOreNil1.2011-12-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    1023m19.470s
+
+    cat fb.fr3.chainOreNil1Link.txt 
+    #	200890618 bases of 350961831 (57.240%) in intersection
+
+    mkdir /hive/data/genomes/oreNil1/bed/blastz.fr3.swap
+    cd /hive/data/genomes/oreNil1/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzOreNil1.2011-12-01/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    17m29.215s
+    cat fb.oreNil1.chainFr3Link.txt 
+    #	250828022 bases of 816084674 (30.736%) in intersection
+
+############################################################################
+# lastz Tetraodon tetNig2 (DONE - 2011-12-01,02 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/lastzTetNig2.2011-12-01
+    cd /hive/data/genomes/fr3/bed/lastzTetNig2.2011-12-01
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Tetraodon
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Tetraodon tetNig2
+SEQ2_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ2_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=1
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzTetNig2.2011-12-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    468m6.556s
+
+    cat fb.fr3.chainTetNig2Link.txt 
+    #	248874754 bases of 350961831 (70.912%) in intersection
+
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.fr3.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzTetNig2.2011-12-01/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    10m59.521s
+    cat fb.tetNig2.chainFr3Link.txt 
+    #	243890006 bases of 302314788 (80.674%) in intersection
+
+############################################################################
+# lastz Stickleback gasAcu1 (DONE - 2011-12-01 - Hiram)
+#	experiment here, two runs on Stickleback, one with gasAcu1
+#	as it stands with little masking, and a second with it masked
+#	with WindowMasker.  Result: we get more coverage with the less masked
+#	sequence
+
+    twoBitToFa /scratch/data/gasAcu1/gasAcu1.2bit stdout | faSize stdin
+    #	463354448 bases (16726587 N's 446627861 real 435123380 upper
+    #	11504481 lower) in 23 sequences in 1 files
+    #	%2.48 masked total, %2.58 masked real
+    twoBitToFa /hive/data/genomes/gasAcu1/bed/windowMasker/gasAcu1.TRF.WMSdust.2bit stdout | faSize stdin
+
+    mkdir /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02
+    cd /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Stickleback
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Stickleback gasAcu1
+SEQ2_DIR=/scratch/data/gasAcu1/gasAcu1.2bit
+SEQ2_LEN=/scratch/data/gasAcu1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=1
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-tRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    267m15.622s
+
+    cat fb.fr3.chainGasAcu1Link.txt 
+    #	194876988 bases of 350961831 (55.527%) in intersection
+    # vs. the more masked result:
+    #	188878416 bases of 350961831 (53.817%) in intersection
+
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.fr3.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-tRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    15m25.221s
+
+    cat fb.gasAcu1.chainFr3Link.txt 
+    #	214549957 bases of 446627861 (48.038%) in intersection
+
+##############################################################################
+# experiment lastz test on Stickleback with window masker sequence
+#	(DONE - Hiram - 2011-12-02)
+    mkdir /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02maskTest
+    cd /hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02maskTest
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Stickleback
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Stickleback gasAcu1
+SEQ2_DIR=/hive/data/genomes/gasAcu1/bed/windowMasker/gasAcu1.TRF.WMSdust.2bit
+SEQ2_LEN=/scratch/data/gasAcu1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=1
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzGasAcu1.2011-12-02maskTest
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-tRepeats=windowmaskerSdust -qRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    253m13.215s
+
+    cat fb.fr3.chainGasAcu1Link.txt 
+    #	188878416 bases of 350961831 (53.817%) in intersection
+    # vs. the less masked result:
+    #	194876988 bases of 350961831 (55.527%) in intersection
+
+############################################################################
+# lastz Medaka oryLat2 (DONE - 2011-12-01,02 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/lastzOryLat2.2011-12-01
+    cd /hive/data/genomes/fr3/bed/lastzOryLat2.2011-12-01
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Medaka
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Medaka oryLat2
+SEQ2_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ2_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzOryLat2.2011-12-01
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    725m19.856s
+
+    cat fb.fr3.chainOryLat2Link.txt 
+    #	153943192 bases of 350961831 (43.863%) in intersection
+
+    mkdir /hive/data/genomes/oryLat2/bed/blastz.fr3.swap
+    cd /hive/data/genomes/oryLat2/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzOryLat2.2011-12-01/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    15m6.162s
+    cat fb.oryLat2.chainFr3Link.txt 
+    #	181436751 bases of 700386597 (25.905%) in intersection
+
+############################################################################

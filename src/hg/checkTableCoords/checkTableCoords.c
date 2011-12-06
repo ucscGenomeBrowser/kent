@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.18 2008/09/03 19:18:21 markd Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */

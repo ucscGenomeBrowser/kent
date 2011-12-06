@@ -7,7 +7,6 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkYbr.c,v 1.6 2004/07/16 21:52:04 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -5,7 +5,6 @@
 #include "options.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainIndex.c,v 1.1 2005/11/17 16:50:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -10,7 +10,6 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDbAddVarSplice.c,v 1.5 2009/08/23 19:51:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -5,7 +5,6 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: twinOrf.c,v 1.6 2006/04/07 15:25:26 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

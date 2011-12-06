@@ -16,7 +16,6 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static char const rcsid[] = "$Id: hgEncodeScheduler.c,v 1.20 2008/02/01 10:11:32 galt Exp $";
 
 char *db = NULL;
 char *dir = NULL;

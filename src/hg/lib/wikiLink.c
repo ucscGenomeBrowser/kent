@@ -10,7 +10,6 @@
 #include "web.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: wikiLink.c,v 1.3 2006/10/09 21:08:01 angie Exp $";
 
 char *wikiLinkHost()
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */

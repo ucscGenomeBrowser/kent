@@ -38,7 +38,7 @@ void filesDownloadUi(char *db, struct cart *cart, struct trackDb *tdb);
 // will have links to their download and have metadata information associated.
 // The list will be a sortable table and there may be filtering controls.
 
-int fileSearchResults(char *db, struct sqlConnection *conn, struct slPair *varValPairs, char *fileType);
+int fileSearchResults(char *db, struct sqlConnection *conn, struct cart *cart, struct slPair *varValPairs, char *fileType);
 // Prints list of files in downloads directories matching mdb search terms. Returns count
 
 #endif /* FILEUI_H */

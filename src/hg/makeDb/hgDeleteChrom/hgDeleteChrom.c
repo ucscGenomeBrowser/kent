@@ -7,7 +7,6 @@
 #include "jksql.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgDeleteChrom.c,v 1.2 2008/09/03 19:19:40 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

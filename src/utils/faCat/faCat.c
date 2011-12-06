@@ -5,7 +5,6 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faCat.c,v 1.6 2007/01/22 19:30:38 hiram Exp $";
 
 struct liftSpec
 /* How to lift coordinates. */

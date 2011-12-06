@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "protVar.h"
 
-static char const rcsid[] = "$Id: protVar.c,v 1.1 2007/11/15 19:52:10 giardine Exp $";
 
 void protVarStaticLoad(char **row, struct protVar *ret)
 /* Load a row from protVar table into ret.  The contents of ret will

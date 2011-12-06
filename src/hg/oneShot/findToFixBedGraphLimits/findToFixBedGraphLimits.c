@@ -6,7 +6,6 @@
 #include "ra.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: findToFixBedGraphLimits.c,v 1.1 2009/11/22 18:37:43 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -7,7 +7,6 @@
 #include "dystring.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgSuggest.c,v 1.4 2010/03/04 19:53:28 larrym Exp $";
 
 static void fail(char *msg)
 {

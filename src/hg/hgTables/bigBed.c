@@ -22,7 +22,6 @@
 #include "asFilter.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: bigBed.c,v 1.11 2010/05/21 23:45:38 braney Exp $";
 
 boolean isBigBed(char *database, char *table, struct trackDb *parent,
 	struct customTrack *(*ctLookupName)(char *table))

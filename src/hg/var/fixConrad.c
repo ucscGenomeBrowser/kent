@@ -7,7 +7,6 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: fixConrad.c,v 1.3 2006/01/23 20:12:05 heather Exp $";
 
 int countByChrom[25];
 

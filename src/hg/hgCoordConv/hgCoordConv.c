@@ -28,7 +28,6 @@
 #include "hui.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgCoordConv.c,v 1.27 2008/09/03 19:18:48 markd Exp $";
 
 /* these variables are used for testing mode */
 boolean hgTest = FALSE;          /* are we in testing mode ? */

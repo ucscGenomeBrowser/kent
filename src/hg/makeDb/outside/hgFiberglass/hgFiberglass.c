@@ -7,7 +7,6 @@
 #include "dystring.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgFiberglass.c,v 1.1 2006/07/26 03:59:26 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: weedKnownBlastTab.c,v 1.1 2003/06/24 07:05:32 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

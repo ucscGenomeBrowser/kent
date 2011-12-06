@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snp125Exceptions.c,v 1.3 2006/02/23 02:38:35 heather Exp $";
 
 void snp125ExceptionsStaticLoad(char **row, struct snp125Exceptions *ret)
 /* Load a row from snp125Exceptions table into ret.  The contents of ret will

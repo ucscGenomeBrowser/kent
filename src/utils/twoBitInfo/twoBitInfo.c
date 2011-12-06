@@ -3,7 +3,6 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitInfo.c,v 1.5 2005/10/18 19:24:58 lowec Exp $";
 
 void usage()
 /* Explain usage and exit. */

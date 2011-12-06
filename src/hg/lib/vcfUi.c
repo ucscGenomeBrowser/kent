@@ -139,7 +139,7 @@ struct vcfFile *vcff = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr);
+    vcff = vcfTabixFileMayOpen(fileOrUrl, NULL, 0, 0, vcfMaxErr, -1);
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)
@@ -169,14 +169,32 @@ static void vcfCfgHapClusterColor(struct cart *cart, struct trackDb *tdb, char *
 {
 printf("<B>Haplotype coloring scheme:</B><BR>\n");
 char *colorBy = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
-					     VCF_HAP_COLORBY_VAR, VCF_HAP_COLORBY_REFALT);
-boolean colorByRefAlt = sameString(colorBy, VCF_HAP_COLORBY_REFALT);
+					     VCF_HAP_COLORBY_VAR, VCF_DEFAULT_HAP_COLORBY);
 char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_COLORBY_VAR, name);
-cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, colorByRefAlt);
-printf("reference/alternate alleles (reference = blue, alternate = red)<BR>\n");
-cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, !colorByRefAlt);
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_ALTONLY, sameString(colorBy, VCF_HAP_COLORBY_ALTONLY));
+printf("reference alleles invisible, alternate alleles in black<BR>\n");
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_REFALT, sameString(colorBy, VCF_HAP_COLORBY_REFALT));
+printf("reference alleles in blue, alternate alleles in red<BR>\n");
+cgiMakeRadioButton(varName, VCF_HAP_COLORBY_BASE, sameString(colorBy, VCF_HAP_COLORBY_BASE));
 printf("first base of allele (A = red, C = blue, G = green, T = magenta)<BR>\n");
+}
+
+static void vcfCfgHapClusterTreeAngle(struct cart *cart, struct trackDb *tdb, char *name,
+				   boolean compositeLevel)
+/* Let the user choose branch shape. */
+{
+printf("<B>Haplotype clustering tree branch shape:</B><BR>\n");
+char *treeAngle = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
+					     VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
+char varName[1024];
+safef(varName, sizeof(varName), "%s." VCF_HAP_TREEANGLE_VAR, name);
+cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_TRIANGLE,
+		   sameString(treeAngle, VCF_HAP_TREEANGLE_TRIANGLE));
+printf("triangular<BR>\n");
+cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_RECTANGLE,
+		   sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE));
+printf("rectangular<BR>\n");
 }
 
 static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
@@ -203,6 +221,7 @@ static void vcfCfgHapCluster(struct cart *cart, struct trackDb *tdb, struct vcfF
 vcfCfgHapClusterEnable(cart, tdb, name, compositeLevel);
 vcfCfgHaplotypeCenter(cart, tdb, name, compositeLevel, vcff, NULL, NULL, 0, "mainForm");
 vcfCfgHapClusterColor(cart, tdb, name, compositeLevel);
+vcfCfgHapClusterTreeAngle(cart, tdb, name, compositeLevel);
 vcfCfgHapClusterHeight(cart, tdb, vcff, name, compositeLevel);
 puts("<BR>");
 }
@@ -216,7 +235,7 @@ safef(cartVar, sizeof(cartVar), "%s." VCF_APPLY_MIN_QUAL_VAR, name);
 boolean applyFilter = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
 					VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL);
 cgiMakeCheckBox(cartVar, applyFilter);
-printf("<B>Exclude items with QUAL score less than &nbsp;</B>\n");
+printf("<B>Exclude items with QUAL score less than</B>\n");
 double minQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
 					      VCF_DEFAULT_MIN_QUAL);
 safef(cartVar, sizeof(cartVar), "%s." VCF_MIN_QUAL_VAR, name);

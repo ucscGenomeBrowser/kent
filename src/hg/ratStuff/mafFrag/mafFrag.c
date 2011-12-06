@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafFrag.c,v 1.5 2008/09/03 19:21:15 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */

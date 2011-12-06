@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "fosEndPairs.h"
 
-static char const rcsid[] = "$Id: fosEndPairs.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
 
 struct fosEndPairs *fosEndPairsLoad(char **row)
 /* Load a fosEndPairs from row fetched with select * from fosEndPairs

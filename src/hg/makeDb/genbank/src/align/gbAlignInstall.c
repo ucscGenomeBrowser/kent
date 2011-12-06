@@ -17,7 +17,6 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.10 2007/11/17 22:33:35 markd Exp $";
 
 /*
  * Notes:

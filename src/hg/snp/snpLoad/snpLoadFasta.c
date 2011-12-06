@@ -8,7 +8,6 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.21 2006/12/05 17:59:28 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */

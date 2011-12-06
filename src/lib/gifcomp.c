@@ -56,7 +56,6 @@
 #include "common.h"
 #include <setjmp.h>
 
-static char const rcsid[] = "$Id: gifcomp.c,v 1.7 2003/05/21 21:03:22 kent Exp $";
 
 #define UBYTE unsigned char
 

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "bacCloneAlias.h"
 
-static char const rcsid[] = "$Id: bacCloneAlias.c,v 1.2 2005/05/17 19:26:26 hartera Exp $";
 
 void bacCloneAliasStaticLoad(char **row, struct bacCloneAlias *ret)
 /* Load a row from bacCloneAlias table into ret.  The contents of ret will

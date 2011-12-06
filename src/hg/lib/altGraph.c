@@ -9,7 +9,6 @@
 #include "altGraph.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: altGraph.c,v 1.4 2005/12/12 02:48:40 kent Exp $";
 
 struct altGraph *altGraphLoad(char **row)
 /* Load a altGraph from row fetched with select * from altGraph

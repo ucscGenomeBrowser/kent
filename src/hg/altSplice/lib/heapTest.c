@@ -1,7 +1,6 @@
 #include "common.h"
 #include "heap.h"
 
-static char const rcsid[] = "$Id: heapTest.c,v 1.2 2003/05/06 07:22:14 kate Exp $";
 
 int randomVals[] = { 2, 2, 50, 100, -1, 0, 8, 8, 5, 10, };
 

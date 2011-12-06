@@ -3,7 +3,6 @@
 #include "linefile.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: stringify.c,v 1.4 2006/09/28 02:59:27 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

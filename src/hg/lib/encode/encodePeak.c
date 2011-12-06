@@ -9,7 +9,6 @@
 #include "hdb.h"
 #include "encode/encodePeak.h"
 
-static char const rcsid[] = "$Id: encodePeak.c,v 1.7 2008/12/11 00:07:21 aamp Exp $";
 
 struct encodePeak *encodePeakLoad(char **row)
 /* Load a encodePeak from row fetched with select * from encodePeak

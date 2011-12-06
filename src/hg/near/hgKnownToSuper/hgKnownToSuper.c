@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgKnownToSuper.c,v 1.2 2006/06/27 17:42:04 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

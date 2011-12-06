@@ -5,7 +5,6 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: compilerError.c,v 1.2 2007/10/04 20:07:19 jzhu Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -10,7 +10,6 @@
 #include "obscure.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: vgPatchJax.c,v 1.5 2005/10/08 15:58:34 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

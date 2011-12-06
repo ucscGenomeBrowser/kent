@@ -11,7 +11,6 @@
 #include "hgMaf.h"
 
 
-static char const rcsid[] = "$Id: mafFrags.c,v 1.11 2009/07/11 17:30:44 markd Exp $";
 
 static void usage()
 /* Explain usage and exit. */

@@ -16,7 +16,6 @@
 #include "hgMaf.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.90 2010/05/18 22:37:36 kent Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 

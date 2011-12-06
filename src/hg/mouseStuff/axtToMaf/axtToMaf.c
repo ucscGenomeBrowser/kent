@@ -8,7 +8,6 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: axtToMaf.c,v 1.7 2005/08/18 07:39:34 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */

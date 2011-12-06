@@ -11,7 +11,6 @@
 #include "hgNear.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.22 2010/05/07 03:37:41 galt Exp $";
 
 static boolean goExists(struct column *col, struct sqlConnection *conn)
 /* This returns true if go database and goaPart table exists. */

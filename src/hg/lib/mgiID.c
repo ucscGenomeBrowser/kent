@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "mgiID.h"
 
-static char const rcsid[] = "$Id: mgiID.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
 
 void MGIidStaticLoad(char **row, struct MGIid *ret)
 /* Load a row from MGIid table into ret.  The contents of ret will

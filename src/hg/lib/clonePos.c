@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "clonePos.h"
 
-static char const rcsid[] = "$Id:$";
 
 void clonePosStaticLoad(char **row, struct clonePos *ret)
 /* Load a row from clonePos table into ret.  The contents of ret will

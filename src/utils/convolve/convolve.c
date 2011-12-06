@@ -9,7 +9,6 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.11 2006/03/18 01:49:51 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

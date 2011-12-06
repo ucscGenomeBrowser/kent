@@ -6,7 +6,6 @@
 #include "memalloc.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCoverage.c,v 1.4 2006/07/18 14:47:01 angie Exp $";
 
 void usage()
 /* Print usage instructions and exit. */

@@ -12,7 +12,6 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.21 2010/04/06 04:30:44 hiram Exp $";
 
 /* define unitSize to be a larger storage class if your counts
  * are overflowing. */

@@ -64,7 +64,6 @@ errAbort("paraNode - version %s\n"
 	);
 }
 
-static char const rcsid[] = "$Id: paraNode.c,v 1.83 2010/01/12 09:09:15 markd Exp $";
 
 /* Command line overwriteable variables. */
 char *hubName;			/* Name of hub machine, may be NULL. */

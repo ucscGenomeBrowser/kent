@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpFasta.c,v 1.4 2006/01/27 20:27:00 heather Exp $";
 
 void snpFastaStaticLoad(char **row, struct snpFasta *ret)
 /* Load a row from snpFasta table into ret.  The contents of ret will

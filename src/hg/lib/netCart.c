@@ -10,7 +10,6 @@
 #include "hui.h"
 #include "netCart.h"
 
-static char const rcsid[] = "$Id: netCart.c,v 1.2 2010/05/11 01:43:30 kent Exp $";
 
 enum netColorEnum netFetchColorOption(struct cart *cart, struct trackDb *tdb,
 	boolean compositeLevel)

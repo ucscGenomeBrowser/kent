@@ -1,7 +1,6 @@
 #include "common.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: maxTranscriptomeExps.c,v 1.4 2008/09/03 19:18:12 markd Exp $";
 
 
 void usage()

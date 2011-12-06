@@ -7,7 +7,6 @@
 #include "obscure.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: lineFileSplit.c,v 1.2 2005/11/15 04:03:48 kent Exp $";
 
 int sizeColumn = 1;
 

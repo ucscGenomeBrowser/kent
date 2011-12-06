@@ -14,7 +14,6 @@
 #include "twoBit.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: snpNcbiToUcsc.c,v 1.12 2010/06/04 05:36:03 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

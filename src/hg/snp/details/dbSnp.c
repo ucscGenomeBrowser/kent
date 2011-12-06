@@ -12,7 +12,6 @@
 #include "jksql.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dbSnp.c,v 1.15 2004/04/09 02:04:46 daryl Exp $";
 
 #define FLANK  20                 /* Amount of flanking sequence on each side */
 #define ALLELE 210                /* Maximum supported allele length */

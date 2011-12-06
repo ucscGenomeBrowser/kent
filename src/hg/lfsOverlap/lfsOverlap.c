@@ -8,7 +8,6 @@
 #include "lfs.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: lfsOverlap.c,v 1.3 2006/05/05 15:39:35 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

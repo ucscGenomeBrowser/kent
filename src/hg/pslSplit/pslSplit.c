@@ -8,7 +8,6 @@
 #include "psl.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pslSplit.c,v 1.7 2006/07/26 01:22:18 baertsch Exp $";
 
 int chunkSize = 120;	/* cut out this many unique qNames in each output file. */
 int maxLines = 7000;	/* cut out this many unique qNames in each output file. */

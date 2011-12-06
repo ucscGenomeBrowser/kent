@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "knownToSuper.h"
 
-static char const rcsid[] = "$Id: knownToSuper.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void knownToSuperStaticLoad(char **row, struct knownToSuper *ret)
 /* Load a row from knownToSuper table into ret.  The contents of ret will

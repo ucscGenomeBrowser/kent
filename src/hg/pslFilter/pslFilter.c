@@ -7,7 +7,6 @@
 #include "cheapcgi.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: pslFilter.c,v 1.5 2005/01/15 17:31:52 kent Exp $";
 
 int reward = 1;
 int cost = 1;

@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "putaInfo.h"
 
-static char const rcsid[] = "$Id: putaInfo.c,v 1.1 2005/03/15 19:31:02 ytlu Exp $";
 
 struct putaInfo *putaInfoLoad(char **row)
 /* Load a putaInfo from row fetched with select * from putaInfo

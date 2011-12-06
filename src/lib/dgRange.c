@@ -5,7 +5,6 @@
 #include "common.h"
 #include "diGraph.h"
 
-static char const rcsid[] = "$Id: dgRange.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
 
 struct bfEdge
 /* An edge in a (lightweight) Belman Ford graph. */

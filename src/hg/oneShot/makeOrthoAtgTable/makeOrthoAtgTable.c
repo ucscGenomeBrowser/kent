@@ -6,7 +6,6 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: makeOrthoAtgTable.c,v 1.4 2007/09/03 15:33:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

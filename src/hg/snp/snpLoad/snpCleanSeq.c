@@ -6,7 +6,6 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpCleanSeq.c,v 1.3 2006/11/27 19:32:08 heather Exp $";
 
 static struct hash *snpHash = NULL;
 

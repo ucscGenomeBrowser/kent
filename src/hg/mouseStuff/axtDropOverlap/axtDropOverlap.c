@@ -6,7 +6,6 @@
 #include "hash.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtDropOverlap.c,v 1.5 2006/06/20 16:44:16 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

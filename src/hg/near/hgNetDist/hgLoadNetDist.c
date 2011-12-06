@@ -13,7 +13,6 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadNetDist.c,v 1.4 2008/09/03 19:20:44 markd Exp $";
 
 char *sqlRemap=NULL;
 

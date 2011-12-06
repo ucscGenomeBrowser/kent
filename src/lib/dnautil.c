@@ -15,7 +15,6 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.51 2008/10/24 18:20:17 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */

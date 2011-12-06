@@ -8,7 +8,6 @@
 #include "hgRelate.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: makeTableDescriptions.c,v 1.2 2006/06/13 15:50:51 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

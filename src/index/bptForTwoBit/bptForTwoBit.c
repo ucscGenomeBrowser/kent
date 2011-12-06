@@ -7,7 +7,6 @@
 #include "twoBit.h"
 #include "bPlusTree.h"
 
-static char const rcsid[] = "$Id: bptForTwoBit.c,v 1.1 2009/01/09 08:39:08 kent Exp $";
 
 int blockSize = 256;
 

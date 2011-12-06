@@ -11,7 +11,6 @@
 #include "customTrack.h"
 #include "bigWig.h"
 
-static char const rcsid[] = "$Id: wiggleClick.c,v 1.34 2010/05/11 01:43:29 kent Exp $";
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)

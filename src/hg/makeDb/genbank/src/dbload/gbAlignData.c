@@ -29,7 +29,6 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.31 2008/10/12 07:33:02 markd Exp $";
 
 /* objects handling table loads */
 static struct gbAlignTblSet *alignTblSet = NULL;

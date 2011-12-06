@@ -5,7 +5,6 @@
 #include "dnaseq.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: snpMaskCutDeletions.c,v 1.2 2009/05/16 00:03:05 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */

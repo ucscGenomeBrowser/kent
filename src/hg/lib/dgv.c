@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "dgv.h"
 
-static char const rcsid[] = "$Id: dgv.c,v 1.1 2008/05/09 20:41:18 angie Exp $";
 
 void dgvStaticLoad(char **row, struct dgv *ret)
 /* Load a row from dgv table into ret.  The contents of ret will

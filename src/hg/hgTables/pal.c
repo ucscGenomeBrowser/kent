@@ -4,7 +4,6 @@
 #include "hgTables.h"
 #include "pal.h"
 
-static char const rcsid[] = "$Id: pal.c,v 1.17 2010/05/11 01:43:25 kent Exp $";
 
 boolean isPalCompatible(struct sqlConnection *conn,
     struct trackDb *track, char *table)

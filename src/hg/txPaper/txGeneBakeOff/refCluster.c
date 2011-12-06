@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "refCluster.h"
 
-static char const rcsid[] = "$Id: refCluster.c,v 1.1 2007/03/31 00:45:54 kent Exp $";
 
 struct refCluster *refClusterLoad(char **row)
 /* Load a refCluster from row fetched with select * from refCluster

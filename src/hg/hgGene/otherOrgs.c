@@ -10,7 +10,6 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.29 2009/02/13 02:38:28 markd Exp $";
 
 struct otherOrg
 /* Links involving another organism. */

@@ -13,7 +13,6 @@
 extern char *createTablesSql;
 extern char *createKeysSql;
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.10 2008/10/02 20:34:24 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

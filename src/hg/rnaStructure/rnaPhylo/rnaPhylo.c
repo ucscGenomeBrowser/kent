@@ -9,7 +9,6 @@
 #include "bits.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: rnaPhylo.c,v 1.6 2009/04/30 08:33:00 mikep Exp $";
 
 #define ADDSEQ 0
 // issues: 

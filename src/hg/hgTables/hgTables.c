@@ -30,8 +30,10 @@
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "hgConfig.h"
-
-static char const rcsid[] = "$Id: hgTables.c,v 1.198 2010/05/19 01:37:13 kent Exp $";
+#include "udc.h"
+#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
+#include "knetUdc.h"
+#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 void usage()
 /* Explain usage and exit. */
@@ -1454,6 +1456,42 @@ else
     tabOutSelectedFields(database, table, NULL, fullTableFields(database, table));
 }
 
+void ensureVisibility(char *db, char *table, struct trackDb *tdb)
+/* Check track visibility; if hide, print out CGI to set it to pack or full. */
+{
+enum trackVisibility vis = tvHide;
+char *cartVis = cartOptionalString(cart, table);
+if (isNotEmpty(cartVis))
+    vis = hTvFromString(cartVis);
+else
+    {
+    if (tdb == NULL)
+	tdb = hTrackDbForTrackAndAncestors(db, table);
+    if (tdb != NULL)
+	{
+	cartVis = cartOptionalString(cart, tdb->track);
+	if (isNotEmpty(cartVis))
+	    vis = hTvFromString(cartVis);
+	else
+	    vis = tdb->visibility;
+	}
+    }
+if (vis == tvHide)
+    {
+    enum trackVisibility openVis = tvFull;
+    if (tdb != NULL)
+	{
+	if (tdb->canPack)
+	    openVis = tvPack;
+	hPrintf("&%s=%s", table, hStringFromTv(openVis));
+	if (!sameString(table, tdb->track))
+	    hPrintf("&%s_sel=1", table);
+	}
+    else
+	hPrintf("&%s=%s", table, hStringFromTv(openVis));
+    }
+}
+
 void doOutHyperlinks(char *table, struct sqlConnection *conn)
 /* Output as genome browser hyperlinks. */
 {
@@ -1486,9 +1524,9 @@ for (region = regionList; region != NULL; region = region->next)
         else
 	    hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
 	hPrintf("&position=%s", posBuf);
-	hPrintf("&%s=%s", table, hTrackOpenVis(database, table));
+	ensureVisibility(database, table, curTrack);
 	if (table2 != NULL)
-	    hPrintf("&%s=%s", table2, hTrackOpenVis(database, table2));
+	    ensureVisibility(database, table2, NULL);
 	hPrintf("\" TARGET=_blank>");
 	name = bed->name;
 	if (bed->name == NULL)
@@ -1907,6 +1945,12 @@ getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
 freezeName = hFreezeFromDb(database);
 
 setUdcCacheDir();
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
+#if ((defined USE_BAM || defined USE_TABIX) && defined KNETFILE_HOOKS)
+knetUdcInstall();
+#endif//def (USE_BAM || USE_TABIX) && KNETFILE_HOOKS
 
 if (lookupPosition())
     {
