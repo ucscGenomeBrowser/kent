@@ -1,0 +1,39 @@
+include max.pubDens.trackDb.ra
+include max.larryPop.trackDb.ra
+
+track elsevierNoBlocksTmp
+shortLabel ElsevierNoBlocks
+longLabel Elsevier without blocks
+color 0,0,0
+group x
+priority 12
+visibility hide
+type bed 3
+release alpha
+
+track t2gElsevierExons
+longLabel Elsevier without blocks
+color 0,0,0
+group x
+priority 12
+visibility hide
+type bed 12
+articleTable t2gElsevierArticle
+sequenceTable t2gElsevierSequence
+release alpha
+
+track encodeEnhancers
+shortLabel Encode9 enhancers alpha
+longLabel Encode9 +-800 bp enhancers alpha
+group x
+type bed 4
+priority 40
+color 150,150,200
+visibility dense
+
+searchTable encodeEnhancers
+searchType bed
+searchMethod exact
+termRegex enh[0-9]+
+searchPriority 50
+
