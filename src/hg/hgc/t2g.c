@@ -46,10 +46,15 @@ char* printArticleInfo(struct sqlConnection *conn, char* item)
 
 struct hash* getSeqIdHash(struct sqlConnection* conn, char* trackTable, char* docId, char *item, char* seqName, int start)
 {
-    /* get sequence-Ids for feature that was clicked (item&startPos are unique) and return as hash */
-    // there must be an easier way to do this...
-    // couldn't find a function that splits a string and converts it to a list
     char query[512];
+    /* check first if the column exists (some debugging tables on hgwdev don't have seqIds) */
+    safef(query, sizeof(query), "SHOW COLUMNS FROM %s LIKE 'seqIds';", trackTable);
+    char* seqIdPresent = sqlQuickString(conn, query);
+    if (!seqIdPresent) {
+        return NULL;
+    }
+
+    /* get sequence-Ids for feature that was clicked (item&startPos are unique) and return as hash */
     safef(query, sizeof(query), "SELECT seqIds,'' FROM %s WHERE name='%s' "
         "and chrom='%s' and chromStart=%d", trackTable, item, seqName, start);
     if (t2gDebug)
@@ -128,7 +133,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
 
         // only display this sequence if we're in the right section
-        if ((hashLookup(filterIdHash, annotId)==0) ^ !isClickedSection) {
+        if (filterIdHash!=NULL && ((hashLookup(filterIdHash, annotId)==0) ^ !isClickedSection)) {
             foundSkippedRows = FALSE;
             continue;
         }
@@ -189,7 +194,11 @@ void printSeqInfo(struct sqlConnection* conn, char* trackTable,
     struct hash* clickedSeqs = getSeqIdHash(conn, trackTable, docId, item, seqName, start);
 
     bool skippedRows;
-    skippedRows = printSeqSection(docId, "Sequences used to construct this feature", fileDesc, conn, clickedSeqs, 1, fasta);
+    if (clickedSeqs) 
+        skippedRows = printSeqSection(docId, "Sequences used to construct this feature", fileDesc, conn, clickedSeqs, 1, fasta);
+    else 
+        skippedRows=1;
+
     if (skippedRows)
         printSeqSection(docId, "Other Sequences in this article", fileDesc, conn, clickedSeqs, 0, fasta);
     //else
