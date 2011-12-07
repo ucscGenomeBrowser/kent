@@ -8734,12 +8734,12 @@ description Paired 76 n.t. directed reads
 term 2x100
 tag R2X100
 type readType
-description Paired 100 n.t. reads PROVISIONAL
+description Paired 100 n.t. reads
 
 term 2x101D
 tag R2X101D
 type readType
-description Paired 101 n.t. directed reads PROVISIONAL
+description Paired 101 n.t. directed reads
 
 #### insertLength
 #### This is being used by the Wold lab as a variable.
@@ -8928,13 +8928,13 @@ label TAP Only Treatment
 term CIP-TAP 
 tag CIPTAP
 type rnaTreatment
-description PROVISIONAL This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase.  Hence, it will be enriched for capped RNAs.
+description This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase.  Hence, it will be enriched for capped RNAs.
 label CIP and TAP Treatments
 
 term Untreated 
 tag Untreated 
 type rnaTreatment
-description  PROVISIONAL Untreated
+description Untreated
 label Untreated       
 
 
@@ -9167,25 +9167,25 @@ tag DEX500PM
 description 1 h with 500 pM DEX (Myers)
 type treatment
 
-term diffProtA_2d PROVISIONAL
+term diffProtA_2d
 tag DIFFA2D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 2 days, lineage: mesoderm
 label 2 day diff prot A
 
-term diffProtA_5d PROVISIONAL
+term diffProtA_5d
 tag DIFFA5D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 5 days, lineage: mesoderm
 label 5 day diffProtA
 
-term diffProtA_9d PROVISIONAL
+term diffProtA_9d
 tag DIFFA9D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 9 days, lineage: mesoderm
 label 9 day diffProtA
 
-term diffProtA_14d PROVISIONAL
+term diffProtA_14d
 tag DIFFA14D
 type treatment
 description H7 embryoid bodies differentiation protocol for cardiomyocyte, endothelial, smooth muscle, with markers cardiac troponin T (cTnT), CD31/PECAM1, smooth muscle alpha actin (SMA), respectively, using proteins from bone morphogenic protein 4 (BMP4), activin A and basic fibroblast growth factor (bFGF) for 14 days, cell sorting and specific growth factors were used, lineage: mesoderm
@@ -9479,32 +9479,32 @@ description Flow sorted, G1 phase
 term G1b
 tag G1B
 type phase
-description Flow sorted, G1b phase (PROVISIONAL)
+description Flow sorted, G1b phase
 
 term G2
 tag G2
 type phase
-description Flow sorted, G2 phase (PROVISIONAL)
+description Flow sorted, G2 phase
 
 term S1
 tag S1
 type phase
-description Flow sorted, S1 phase (PROVISIONAL)
+description Flow sorted, S1 phase
 
 term S2
 tag S2
 type phase
-description Flow sorted, S2 phase (PROVISIONAL)
+description Flow sorted, S2 phase
 
 term S3
 tag S3
 type phase
-description Flow sorted, S3 phase (PROVISIONAL)
+description Flow sorted, S3 phase
 
 term S4
 tag S4
 type phase
-description Flow sorted, S4 phase (PROVISIONAL)
+description Flow sorted, S4 phase
 
 
 ### region
@@ -9739,7 +9739,7 @@ term PctSignal
 tag PCTSIG
 type view
 label Percentage-normalized Signal
-description Percentage-normalized Signal (PROVISIONAL)
+description Percentage-normalized Signal
 
 term PlusRawSignal
 tag PLUSRAWSIG
@@ -9867,7 +9867,7 @@ term SumSignal
 tag SUMSIG
 type view
 label Summed Densities
-description Shows summed densities of all phases combined (PROVISIONAL)
+description Shows summed densities of all phases combined
 
 term TranscriptDeNovo
 tag TRANSDENOVO
@@ -9933,13 +9933,13 @@ term Valleys
 tag VALS
 type view
 label Valleys
-description Regions of enriched signal in experiment (PROVISIONAL)
+description Regions of enriched signal in experiment
 
 term WaveSignal
 tag WAVESIG
 type view
 label Wavelet Smoothed Signal
-description Shows smoothed wavelet over all phases (PROVISIONAL)
+description Shows smoothed wavelet over all phases
 
 
 ### dataType
@@ -10119,7 +10119,7 @@ term RepliSeq
 tag  REPLISEQ
 type dataType
 label Repli-Seq
-description Replication Timing (PROVISIONAL)
+description Replication Timing 
 dataGroup Other
 
 # tag not standard to match hg18
@@ -10431,7 +10431,7 @@ description Unknown
 term revoked
 tag REVOKED
 type objStatus
-description This file has been REVOKED by the submitting laboratory for some reason.  It should not be used for further research.
+description This file has been REVOKED by the submitting laboratory.  It should not be used for further research.
 
 term replaced
 tag REPLACED
@@ -10441,7 +10441,7 @@ description This file has been REPLACED by the submitting laboratory with an imp
 term renamed
 tag RENAMED
 type objStatus
-description This file has been RENAMED by the submitting laboratory for some reason. Please see updated file for newest metadata. (PROVISIONAL)
+description This file has been RENAMED by the submitting laboratory. Please see updated file for newest metadata. 
 
 ## Organisms
 term human
@@ -11323,7 +11323,7 @@ term bioRep
 tag BIOREP
 type typeOfTerm
 label  Cross Lab Bio-Replicate ID
-description Cross lab sample ID number used to track bio-replicates PROVISIONAL.
+description Cross lab sample ID number used to track biological replicates.
 searchable no
 cvDefined no
 validate none
