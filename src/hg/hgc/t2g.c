@@ -134,7 +134,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
 
         // only display this sequence if we're in the right section
         if (filterIdHash!=NULL && ((hashLookup(filterIdHash, annotId)==0) ^ !isClickedSection)) {
-            foundSkippedRows = FALSE;
+            foundSkippedRows = TRUE;
             continue;
         }
 
