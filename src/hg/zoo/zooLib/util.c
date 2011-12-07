@@ -1,5 +1,3 @@
-"$Id: util.c,v 1.1 2002/08/17 23:38:22 tcbruen Exp $";
-
 #include "util.h"
 
 char *argv0;
