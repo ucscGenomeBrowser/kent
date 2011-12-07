@@ -3,7 +3,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencode2wayConsPseudoV9.gp.gz
@@ -21,7 +21,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeAnnotationRemarkV9.tab.gz
@@ -39,7 +39,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeAttrsV9.tab.gz
@@ -57,7 +57,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeBasicV9.gp.gz
@@ -75,7 +75,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeCompV9.gp.gz
@@ -93,7 +93,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeExonSupportV9.tab.gz
@@ -111,7 +111,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeGeneSourceV9.tab.gz
@@ -129,7 +129,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodePdbV9.tab.gz
@@ -147,7 +147,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodePolyaV9.gp.gz
@@ -165,7 +165,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodePseudoGeneV9.gp.gz
@@ -183,7 +183,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodePubMedV9.tab.gz
@@ -201,7 +201,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeRefSeqV9.tab.gz
@@ -219,7 +219,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeTagV9.tab.gz
@@ -237,7 +237,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeTranscriptSourceV9.tab.gz
@@ -255,7 +255,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeTranscriptSupportV9.tab.gz
@@ -273,7 +273,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeAnnotationRemarkV9.tab.gz
@@ -290,7 +290,7 @@ objType table
 composite wgEncodeGencodeV9
 dataType Gencode
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-05-01
+dateSubmitted 2011-09-01
 dccAccession wgEncodeEH002251
 expId 2251
 fileName wgEncodeGencodeUniProtV9.tab.gz
