@@ -8721,6 +8721,11 @@ tag R1X75D
 type readType
 description Single 75 n.t. directed reads
 
+term 1x101
+tag R1X101
+type readType
+description Single 101 n.t. reads Provisional
+
 term 2x75
 tag R2X75
 type readType
@@ -9469,6 +9474,22 @@ term v042211.2
 tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
+
+term TAP-Only
+tag TAP
+description Provisional This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
+type protocol
+
+term untreated
+tag UNTREAT
+description Provisional (THIS MAY NEED TO BE NONE) This kind of library was made from RNA < 200 nucleotides that did not undergo any pre-enzymatic. Hence, only 5' monophosphate RNAs will be cloned.
+type protocol
+
+term CIP-TAP
+tag CIPTAP
+description Provisional This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
+type protocol
+
 
 ### phase
 term G1
@@ -11794,28 +11815,6 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 160
-
-term rnaTreatment
-tag RNATREATMENT
-type typeOfTerm
-label RNA Treatment
-description  PROVISIONAL
-searchable multiSelect
-cvDefined yes
-validate cv
-priority 160
-
-#term run
-#tag RUN
-#type typeOfTerm
-#label Sequencing Run
-#description Sequencing run
-#searchable multiSelect
-#cvDefined no
-#validate regex: ^[0-9]*r[0-9]*$
-#priority 500
-#This term was for the fastqs being submitted as separate lanes.  However, we are now bundling them as a tgz
-#We should remove this term  Sept 2 2011
 
 term seqPlatform
 tag SEQPLATFORM
