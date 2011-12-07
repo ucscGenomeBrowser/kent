@@ -1,0 +1,73 @@
+#!/hive/groups/encode/dcc/bin/python
+import sys, os, re, argparse, subprocess, httplib
+
+def main():
+    parser = argparse.ArgumentParser(
+    prog='encodeQaCheckRRFiles',
+    formatter_class=argparse.RawDescriptionHelpFormatter,
+    description='Compares files on the RR against a list of files',
+    epilog=
+"""Example:
+encodeQaCheckRRFiles hg19 wgEncodeSydhTfbs files.list
+encodeQaCheckRRFiles hg18 wgEncodeHudsonalphaChipSeq checkPushFilesList
+"""
+    )
+    parser.add_argument('database', help='The database, typically hg19 or mm9')
+    parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
+    parser.add_argument('files', help='The list of files')
+    parser.add_argument('-d', '--dev', action="store_true", default=0, help='Check for files missing on dev that are present on the RR')
+
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+        return
+
+    args = parser.parse_args(sys.argv[1:])
+
+    #http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/
+    sys.stderr.write("Initiating connection to hgdownload\n")
+    conn = httplib.HTTPConnection("hgdownload.cse.ucsc.edu")
+    conn.request("GET", "/goldenPath/%s/encodeDCC/%s/" % (args.database, args.composite))
+    sys.stderr.write("Getting index of files\n")
+    r1 = conn.getresponse()
+    r1lines = r1.read()
+    if re.search('404 Not Found', r1lines):
+        sys.stderr.write("404 Not Found, did you specify the right composite or database?\n")
+        return
+
+    lines = r1lines.split("\n")
+    RRFiles = set()
+    DevFiles = set()
+    p = re.compile('.*a href.*(wgEncode\S+)\<\/a\>')
+    for i in lines:
+        if p.search(i):
+            m = p.search(i)
+            RRFiles.add(m.group(1))
+    f = open(args.files, "r")
+    lines = f.readlines()
+    for i in lines:
+        DevFiles.add(i.rstrip("\n"))
+
+    missingFromRR = DevFiles - RRFiles
+    missingFromDev = RRFiles - DevFiles
+
+    print ""
+    if missingFromRR:
+        print "Missing from hgdownload (%s):" % len(missingFromRR)
+        for i in sorted(missingFromRR):
+            print i
+    else:
+        print "Nothing missing from hgdownload"     
+    
+    print ""
+    if args.dev:
+        
+        if missingFromDev:
+            print "Missing from hgwdev (%s):" % len(missingFromDev)
+            for i in sorted(missingFromDev):
+                print i
+        else:
+            print "Nothing missing on hgwdev"
+
+if  __name__ == "__main__":
+    main()

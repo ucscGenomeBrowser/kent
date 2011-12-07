@@ -184,17 +184,17 @@ static void vcfCfgHapClusterTreeAngle(struct cart *cart, struct trackDb *tdb, ch
 				   boolean compositeLevel)
 /* Let the user choose branch shape. */
 {
-printf("<B>Haplotype clustering tree branch shape:</B><BR>\n");
+printf("<B>Haplotype clustering tree leaf shape:</B><BR>\n");
 char *treeAngle = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
 					     VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
 char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_TREEANGLE_VAR, name);
 cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_TRIANGLE,
 		   sameString(treeAngle, VCF_HAP_TREEANGLE_TRIANGLE));
-printf("triangular<BR>\n");
+printf("draw leaf clusters as &lt;<BR>\n");
 cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_RECTANGLE,
 		   sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE));
-printf("rectangular<BR>\n");
+printf("draw leaf clusters as [<BR>\n");
 }
 
 static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
