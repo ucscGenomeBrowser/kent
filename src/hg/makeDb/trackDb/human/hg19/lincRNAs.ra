@@ -61,8 +61,6 @@ html lincRNAs
     # shadesOfSea
     color 0, 60, 120
     useScore 1
-    extraFields rawScore=[f]RNA-seq_expression_raw_score \
-                log2RawScore=[f]log2_of_expression_raw_score
 
 
 	track lincRNAsCTAdipose 

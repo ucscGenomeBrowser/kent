@@ -397,6 +397,13 @@ Thanks!
 	f.close()
 	return
 
+def writeCheckFilesList(files, qaDir):
+	delim = "\n"
+	filelist = delim.join(list(files))
+	f = open(qaDir + "/checkPushFilesList", "w")
+	f.write(filelist)
+	f.close
+	return
 
 
 def changeStatus(subIds):
@@ -527,6 +534,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	(short, long) = writeHtml(args, c, qaDir)
 	
 	writePushHtmlMail(args, user, qaDir)
+	writeCheckFilesList(genNotes.pushFiles, qaDir)
 
 	initDate = lastInitDate(qaDir + "/release.sql")
 	if not initDate:

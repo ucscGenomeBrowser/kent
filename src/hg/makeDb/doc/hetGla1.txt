@@ -60,131 +60,112 @@
 # Config parameters for makeGenomeDb.pl:
 db hetGla1
 clade mammal
-genomeCladePriority ??31
+genomeCladePriority 35
 scientificName Heterocephalus glaber 
 commonName naked mole-rat
-assemblyDate Nov. 2009
-assemblyLabel UMD_3.1 (NCBI project 10708, accession GCA_000003055.3)
-assemblyShortLabel Bos_taurus_UMD_3.1
-orderKey 236
-mitoAcc NC_006853
-fastaFiles /hive/data/genomes/hetGla1/genbank/ucscChr/chr*.fa.gz
-agpFiles /hive/data/genomes/hetGla1/genbank/ucscChr/chr*.agp.gz
+assemblyDate Jul. 2011
+assemblyLabel HetGla_1.0 (NCBI project 68323, accession GCA_000230455.1)
+assemblyShortLabel HetGla_1.0
+orderKey 165
+mitoAcc NC_015112
+fastaFiles /hive/data/genomes/hetGla1/genbank/ucsc.fa.gz
+agpFiles /hive/data/genomes/hetGla1/genbank/ucsc.agp.gz
 # qualFiles none
-dbDbSpeciesDir cow
-taxId 9913
+dbDbSpeciesDir moleRat
+taxId 10181
 '_EOF_'
     # << happy emacs
     time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev hetGla1.config.ra \
 	> makeGenomeDb.log 2>&1 &
-    # real    21m31.993s
+    # real    19m42.489s
 
-    # real    real    12m42.419s
     #	add the trackDb entries to the source tree, and the 2bit link:
+    # we will re-ln with masked one after we done the mask business later! ***
     ln -s `pwd`/hetGla1.unmasked.2bit /gbdb/hetGla1/hetGla1.2bit
 
     #  Per instructions in makeGenomeDb.log:
-#Search for '***' notes in each file in and make corrections (sometimes the
-#files used for a previous assembly might make a better template):
-#  description.html /cluster/data/hetGla1/html/{trackDb.ra,gap.html,gold.html}
-#
-#Then copy these files to your ~/kent/src/hg/makeDb/trackDb/cow/hetGla1
-# - cd ~/kent/src/hg/makeDb/trackDb
-# - edit makefile to add hetGla1 to DBS.
-# - git add cow/hetGla1/*.{ra,html}
-# - git commit -m "Added hetGla1 to DBS." makefile
-# - git commit -m "Initial descriptions for hetGla1." cow/hetGla1/*.{ra,html}
-# - git pull; git push
-# - Run make update DBS=hetGla1 and make alpha when done.
-# - (optional) Clean up /cluster/data/hetGla1/TemporaryTrackDbCheckout
-
+# Search for '***' notes in each file in and make corrections (sometimes the
+# files used for a previous assembly might make a better template):
+#   description.html /cluster/data/hetGla1/html/{trackDb.ra,gap.html,gold.html}
+# 
+# Then copy these files to your ~/kent/src/hg/makeDb/trackDb/moleRat/hetGla1
+#  - cd ~/kent/src/hg/makeDb/trackDb
+#  - edit makefile to add hetGla1 to DBS.
+#  - git add moleRat/hetGla1/*.{ra,html}
+#  - git commit -m "Added hetGla1 to DBS." makefile
+#  - git commit -m "Initial descriptions for hetGla1." moleRat/hetGla1/*.{ra,html}
+#  - git pull; git push
+#  - Run make update DBS=hetGla1 and make alpha when done.
+#  - (optional) Clean up /cluster/data/hetGla1/TemporaryTrackDbCheckout
 
 
 #########################################################################
-# RepeatMasker (working 2011-05-09 - Chin)
+# RepeatMasker (DONE 2011-12-02 - Chin)
     mkdir /hive/data/genomes/hetGla1/bed/repeatMasker
     cd /hive/data/genomes/hetGla1/bed/repeatMasker
     time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit hetGla1 > do.log 2>&1 &
-    #   real    355m43.294s
+    #   real     581m17.442s
     cat faSize.rmsk.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370807360 upper 
-    # 1278874669 lower) in 3317 sequences in 1 files
-    # %47.89 masked total, %48.27 masked real
+    # 2643978223 bases (213913418 N's 2430064805 real 1624736547 upper 
+    # 805328258 lower) in 39267 sequences in 1 files
+    # %30.46 masked total, %33.14 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+    featureBits -countGaps hetGla1 rmsk
+    # 812021314 bases of 2643978223 (30.712%) in intersection
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
 
 #########################################################################
-# simpleRepeats (working - 2011-05-09 - Chin)
+# simpleRepeats (DONE - 2011-12-06 - Chin)
     mkdir /hive/data/genomes/hetGla1/bed/simpleRepeat
     cd /hive/data/genomes/hetGla1/bed/simpleRepeat
-
     time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev -bigClusterHub=swarm -smallClusterHub=memk \
         hetGla1 > do.log 2>&1 &
-    #   real    13m47.346s
-
-    # Batch failed after 4 tries on 
-    #   ./TrfRun.csh /hive/data/genomes/hetGla1/TrfPart/071/071.lst.bed
-    # Command failed:
-    # ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' memk 
-    #  nice /hive/data/genomes/hetGla1/bed/simpleRepeat/run.cluster/doTrf.csh
-    # 071 failed due to no input TrfPart/071/071.lst.bed
-    #  which is chrM and can be ignored.
-    # to continue, create an empty TrfPart/071/071.lst.bed by:
-    touch /hive/data/genomes/hetGla1/TrfPart/071/071.lst.bed 
-    # run a para time > run.time on memk to get that file to exist:
-    # Checking finished jobs
-    # Completed: 71 of 72 jobs
-    # Crashed: 1 jobs
-    # CPU time in finished jobs: 12340s     205.67m     3.43h    0.14d  0.000 y
-    # IO & Wait Time:              236s       3.93m     0.07h    0.00d  0.000 y
-    # Average job time:            177s       2.95m     0.05h    0.00d
-    # Longest finished job:        606s      10.10m     0.17h    0.01d
-    # Submission to last job:      984s      16.40m     0.27h    0.01d
-
-
-    #   continue
-    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
-        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
-        -continue=filter hetGla1 > filter.log 2>&1 &
-    # real	0m20.430s
+    #   real    68m40.246s
 
     cat fb.simpleRepeat 
-    # 32390355 bases of 2649685036 (1.222%) in intersection
+    # 50055772 bases of 2430064805 (2.060%) in intersection
 
-    #	add to the repeatMasker
+    # add to rmsk after it is done:
     cd /hive/data/genomes/hetGla1
     twoBitMask hetGla1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed hetGla1.2bit
     #	safe to ignore warnings about >=13 fields
     twoBitToFa hetGla1.2bit stdout | faSize stdin > hetGla1.2bit.faSize.txt
     cat hetGla1.2bit.faSize.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370313596 upper 
-    #    1279368433 lower) in 3317 sequences in 1 files
-    # %47.91 masked total, %48.28 masked real
+    # 2643978223 bases (213913418 N's 2430064805 real 1624077548 upper
+    #    805987257 lower) in 39267 sequences in 1 files
+    # %30.48 masked total, %33.17 masked real
 
     # double check with featureBits
     featureBits -countGaps hetGla1 gap
-    # 20740270 bases of 2670422299 (0.777%) in intersection
+    # 213913418 bases of 2643978223 (8.091%) in intersection
 
     rm /gbdb/hetGla1/hetGla1.2bit
     ln -s `pwd`/hetGla1.2bit /gbdb/hetGla1/hetGla1.2bit
 
 #########################################################################
 # Marking *all* gaps - they are not all in the AGP file
-#	(working - 2011-05-10 - Chin)
+#	(DONE - 2011-12-06 - Chin)
     mkdir /hive/data/genomes/hetGla1/bed/allGaps
     cd /hive/data/genomes/hetGla1/bed/allGaps
 
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../hetGla1.unmasked.2bit > findMotif.txt 2>&1
-    #   real    1m10.942s
+    #   real     0m30.369s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     featureBits hetGla1 -not gap -bed=notGap.bed
-    # 2649685036 bases of 2649685036 (100.000%) in intersection
+    # 2430064805 bases of 2430064805 (100.000%) in intersection
     featureBits hetGla1 allGaps.bed notGap.bed -bed=new.gaps.bed
-    # 3007 bases of 2649685036 (0.000%) in intersection
+    # 0 bases of 2430064805 (0.000%) in intersection
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" hetGla1 | sort -n | tail -1
-    #	17354
+    #    1320	
 
     # use tcsh and ctrl-c to create the here doc
     cat << '_EOF_' > mkGap.pl
@@ -208,26 +189,91 @@ close (FH);
     # << happy emacs
     chmod +x ./mkGap.pl
     ./mkGap.pl > other.bed
-    featureBits hetGla1 other.bed
-    # 3007 bases of 2649685036 (0.000%) in intersection
+    featureBits -countGaps hetGla1 other.bed
+    # 0 bases of 2643978223 (0.000%) in intersection
     hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
 	-noLoad hetGla1 otherGap other.bed
-    #  Loaded 2011 elements of size 8
+    #  Loaded 0 elements of size 3
     #	adding this many:
-    wc -l bed.tab
-    #   2011 bed.tab 
-    #	starting with this many
     hgsql -e "select count(*) from gap;" hetGla1
-    #	72454
-    hgsql hetGla1 -e 'load data local infile "bed.tab" into table gap;'
+    #	 234724
+    # Since there is no line in other.bed, skip the add new gap
+    # hgsql hetGla1 -e 'load data local infile "bed.tab" into table gap;'
     #	result count:
-    hgsql -e "select count(*) from gap;" hetGla1
-    #	74465
-    # == 72454 + 2011
+    # hgsql -e "select count(*) from gap;" hetGla1
+
+##########################################################################
+## WINDOWMASKER (DONE - 2011-11-06 - Chin)
+    mkdir /hive/data/genomes/hetGla1/bed/windowMasker
+    cd /hive/data/genomes/hetGla1/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev hetGla1 > do.log 2>&1 &
+    #   real    187m50.729s
+
+    # Masking statistics
+    twoBitToFa hetGla1.wmsk.2bit stdout | faSize stdin
+    # 2643978223 bases (213913418 N's 2430064805 real 1648910110 upper 
+    #   781154695 lower) in 39267 sequences in 1 files
+    # %29.54 masked total, %32.15 masked real
+
+    twoBitToFa hetGla1.wmsk.sdust.2bit stdout | faSize stdin
+    # 2643978223 bases (213913418 N's 2430064805 real 1637135710 upper 
+    #   792929095 lower) in 39267 sequences in 1 files
+    # %29.99 masked total, %32.63 masked real
+
+    hgLoadBed hetGla1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #   Loaded 14228036 elements of size 3
+
+    featureBits -countGaps hetGla1 windowmaskerSdust
+    #   1006842513 bases of 2643978223 (38.081%) in intersection
+
+    #   eliminate the gaps from the masking
+    featureBits hetGla1 -not gap -bed=notGap.bed
+    #   2430064805 bases of 2430064805 (100.000%) in intersection
+    time nice -n +19 featureBits hetGla1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   792929095 bases of 2430064805 (32.630%) in intersection
+    #   real    26m11.675s
+    #   reload track to get it clean
+    hgLoadBed hetGla1 windowmaskerSdust cleanWMask.bed.gz
+    #   Loaded 14308684 elements of size 4
+    featureBits -countGaps hetGla1 windowmaskerSdust
+    # 792929095 bases of 2643978223 (29.990%) in intersection
+    #   mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+        | twoBitMask ../../hetGla1.unmasked.2bit stdin \
+            -type=.bed hetGla1.cleanWMSdust.2bit
+    twoBitToFa hetGla1.cleanWMSdust.2bit stdout | faSize stdin \
+        > hetGla1.cleanWMSdust.faSize.txt
+    cat hetGla1.cleanWMSdust.faSize.txt
+    # 2643978223 bases (213913418 N's 2430064805 real 1637135710 upper 
+    #    792929095 lower) in 39267 sequences in 1 files
+    # %29.99 masked total, %32.63 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps hetGla1 rmsk windowmaskerSdust
+    # 408993748 bases of 2643978223 (15.469%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-09-09 - Hiram)
+    cd /hive/data/genomes/hetGla1
+    twoBitMask -add bed/windowMasker/hetGla1.cleanWMSdust.2bit \
+        bed/simpleRepeat/trfMask.bed hetGla1.2bit
+    #   safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa hetGla1.2bit stdout | faSize stdin > faSize.hetGla1.txt
+    cat faSize.hetGla1.txt
+    #   1799143587 bases (97789820 N's 1701353767 real 987044085 upper
+    #   714309682 lower) in 6457 sequences in 1 files
+    #   %39.70 masked total, %41.98 masked real
+
+    #   create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/hetGla1/hetGla1.2bit
+    ln -s `pwd`/hetGla1.2bit /gbdb/hetGla1/hetGla1.2bit
 
 
 ########################################################################
-# Create kluster run files (working - 2011-05-10 - Chin)
+# Create kluster run files (working - 2011-12-06 - Chin)
     # numerator is hetGla1 gapless bases "real" as reported by: 
     featureBits -noRandom -noHap hetGla1 gap
     # 20740230 bases of 2640182513 (0.786%) in intersection
