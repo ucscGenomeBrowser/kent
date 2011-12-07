@@ -10143,7 +10143,7 @@ term RipGeneSt
 tag  GENEST
 type dataType
 label RIP-chip Gene ST
-description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
+description RIP-Chip on Affymetrix GeneChip (TM) Human Gene 1.0 ST Arrays
 dataGroup RNA Binding Proteins
 
 term RipTiling
