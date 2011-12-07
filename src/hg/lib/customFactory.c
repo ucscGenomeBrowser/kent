@@ -2111,7 +2111,7 @@ if (doExtraChecking)
     struct errCatch *errCatch = errCatchNew();
     if (errCatchStart(errCatch))
 	{
-	struct vcfFile *vcff = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, vcfMaxErr);
+	struct vcfFile *vcff = vcfTabixFileMayOpen(bigDataUrl, NULL, 0, 0, vcfMaxErr, -1);
 	if (vcff == NULL)
 	    {
             dyStringPrintf(dyErr, "Unable to load and/or parse %s's bigDataUrl %s",

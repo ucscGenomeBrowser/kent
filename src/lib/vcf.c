@@ -621,19 +621,21 @@ for (i = 0;  i < record->infoCount;  i++)
     }
 }
 
-static void vcfParseData(struct vcfFile *vcff)
+static void vcfParseData(struct vcfFile *vcff, int maxRecords)
 /* Given a vcfFile into which the header has been parsed, and whose lineFile is positioned
  * at the beginning of a data row, parse and store all data rows from lineFile. */
 {
 if (vcff == NULL)
     return;
-int expected = 8;
+int recCount = 0, expected = 8;
 if (vcff->genotypeCount > 0)
     expected = 9 + vcff->genotypeCount;
 char *words[VCF_MAX_COLUMNS];
 int wordCount;
 while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
     {
+    if (maxRecords >= 0 && recCount >= maxRecords)
+	break;
     lineFileExpectWords(vcff->lf, expected, wordCount);
     struct vcfRecord *record;
     AllocVar(record);
@@ -658,12 +660,13 @@ while ((wordCount = lineFileChop(vcff->lf, words)) > 0)
 	    record->genotypeUnparsedStrings[i] = vcfFileCloneStr(vcff, words[9+i]);
 	}
     slAddHead(&(vcff->records), record);
+    recCount++;
     }
 slReverse(&(vcff->records));
 lineFileClose(&(vcff->lf));
 }
 
-struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr)
+struct vcfFile *vcfFileMayOpen(char *fileOrUrl, int maxErr, int maxRecords)
 /* Parse a VCF file into a vcfFile object.  If maxErr not zero, then
  * continue to parse until this number of error have been reached.  A maxErr
  * less than zero does not stop and reports all errors. */
@@ -675,12 +678,12 @@ if (startsWith("http://", fileOrUrl) || startsWith("ftp://", fileOrUrl) ||
 else
     lf = lineFileMayOpen(fileOrUrl, TRUE);
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
-vcfParseData(vcff);
+vcfParseData(vcff, maxRecords);
 return vcff;
 }
 
 struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end,
-				    int maxErr)
+				    int maxErr, int maxRecords)
 /* Parse header and rows within the given position range from a VCF file that has been
  * compressed and indexed by tabix into a vcfFile object; return NULL if or if file has
  * no items in range.
@@ -694,7 +697,7 @@ if (vcff == NULL)
 if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
-	vcfParseData(vcff);
+	vcfParseData(vcff, maxRecords);
     }
 return vcff;
 }

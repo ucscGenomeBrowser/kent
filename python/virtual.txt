@@ -1,0 +1,46 @@
+Guide for Creating Virtual Environments for Python
+
+Reason
+
+To load modules and packages that are only relevant to you or
+to develop and test new modules and packages not ready for general use.
+
+
+How To
+
+1) Generate a virtual environment
+
+Generate a blank virtual environment: 
+
+virtualenv ENV
+
+Generate a snapshot environment with base packages(BeautifulSoup==3.2.0 and MySQL-python==1.2.3) used for ENCODE:
+
+python ~kent/python/ucsc_virtualenv.py ENV
+
+2) Switch to use virtual environement
+
+Bash:
+
+source ENV/bin/activate
+
+C-Shell:
+
+source ENV/bin/activate.csh
+
+3) Load packages and modules
+
+Third-Party:
+
+pip install <package name>
+
+Internal packages:
+
+python setup.py install
+
+4) Deactivate use of virtual environment
+
+deactivate
+
+ 
+
