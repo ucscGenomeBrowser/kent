@@ -78,7 +78,7 @@ class RaFile(OrderedDict):
         if filePath != None:
             self.read(filePath)
 
-    def read(self, filePath):
+    def read(self, filePath, key=None):
         """
         Reads an rafile stanza by stanza, and internalizes it.
         """
@@ -89,11 +89,16 @@ class RaFile(OrderedDict):
         stanza = list()
         keyValue = ''
 
-        for line in file:
-
+        reading = 1
+        
+        while reading:
+            line = file.readline()
+            if line == '':
+                reading = 0
+        
             line = line.strip()
 
-            if len(stanza) == 0 and (line.startswith('#') or line == ''):
+            if len(stanza) == 0 and (line.startswith('#') or (line == '' and reading)):
                 OrderedDict.append(self, line)
                 continue
 
@@ -101,38 +106,26 @@ class RaFile(OrderedDict):
                 stanza.append(line)
             elif len(stanza) > 0:
                 if keyValue == '':
-                    keyValue, name, entry = self.readStanza(stanza)
+                    keyValue, name, entry = self.readStanza(stanza, key)
                 else:
-                    testKey, name, entry = self.readStanza(stanza)
+                    testKey, name, entry = self.readStanza(stanza, key)
                     if entry != None and keyValue != testKey:
                         raise KeyError('Inconsistent Key ' + testKey)
 
                 if entry != None:
-                    if name in self:
-                        raise KeyError('Duplicate Key ' + name)
-                    self[name] = entry
+                    if name != None or key == None:
+                        if name in self:
+                            raise KeyError('Duplicate Key ' + name)
+                        self[name] = entry
 
                 stanza = list()
-
-        if len(stanza) > 0:
-            if keyValue == '':
-                keyValue, name, entry = self.readStanza(stanza)
-            else:
-                testKey, name, entry = self.readStanza(stanza)
-                if entry != None and keyValue != testKey:
-                    raise KeyError('Inconsistent Key ' + testKey)
-
-            if entry != None:
-                if name in self:
-                    raise KeyError('Duplicate Key ' + name)
-                self[name] = entry
 
         file.close()
 
 
-    def readStanza(self, stanza):
+    def readStanza(self, stanza, key=None):
         entry = RaStanza()
-        val1, val2 = entry.readStanza(stanza)
+        val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
 
@@ -371,7 +364,7 @@ class RaFile(OrderedDict):
                 str += item[0].__str__() + '\n'
             else:
                 str += item[1].__str__() + '\n'
-        return str
+        return str #.rsplit('\n', 1)[0]
 
 
 class RaStanza(OrderedDict):
@@ -388,7 +381,7 @@ class RaStanza(OrderedDict):
         return self._name
 
 
-    def readStanza(self, stanza):
+    def readStanza(self, stanza, key=None):
         """
         Populates this entry from a single stanza
         """
@@ -396,15 +389,26 @@ class RaStanza(OrderedDict):
         for line in stanza:
             self.readLine(line)
 
-        return self.readName(stanza[0])
+        return self.readName(stanza, key)
 
 
-    def readName(self, line):
+    def readName(self, stanza, key=None):
         """
         Extracts the Stanza's name from the value of the first line of the
         stanza.
         """
-
+        
+        if key == None:
+            line = stanza[0]
+        else:
+            line = None
+            for s in stanza:
+                if s.split(' ', 1)[0] == key:
+                    line = s
+                    break
+            if line == None:
+                return None
+        
         if len(line.split(' ', 1)) != 2:
             raise ValueError()
 
