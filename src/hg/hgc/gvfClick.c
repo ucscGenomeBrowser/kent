@@ -87,6 +87,20 @@ for (i = 0;  i < ba->attrCount;  i++)
 	       "<A HREF=\"http://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
 	       "TARGET=_BLANK>%s</A><BR>\n", ba->attrVals[i], htmlEncode(ba->attrVals[i]));
 	}
+    else if (sameString(tag, "Name"))
+	{
+	char *url = trackDbSetting(tdb, "url");
+	// Show the Name only if it hasn't already appeared in the URL:
+	if (url == NULL || !stringIn("$$", url))
+	    printf("<B>%s</B>: %s<BR>\n", tag, htmlEncode(ba->attrVals[i]));
+	}
+    else if (sameWord(tag, "Phenotype_id") && startsWith("HPO:HP:", ba->attrVals[i]))
+	{
+	subChar(tag, '_', ' ');
+	printf("<B>%s</B>: <A HREF=\"http://www.berkeleybop.org/obo/%s\" "
+	       "TARGET=_BLANK>%s</A><BR>\n", tag, ba->attrVals[i]+strlen("HPO:"),
+	       htmlEncode(ba->attrVals[i]));
+	}
     else
 	{
 	subChar(tag, '_', ' ');
