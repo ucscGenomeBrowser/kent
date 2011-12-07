@@ -477,7 +477,7 @@ var subCfg = { // subtrack config module.
     { // update value if parents values override child values.
         var myParents = subCfg.parentsFind(childObj);
         if (myParents == undefined || myParents.length < 1) {
-            warn('DEBUG: No parents were found for childObj: '+childObj.name);
+            //warn('DEBUG: No parents were found for childObj: '+childObj.name); // Not really a problem.
             return true;
         }
         var isVis = (undefined == subCfg.objSuffixGet(childObj));

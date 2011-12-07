@@ -74,7 +74,6 @@ function _matSelectViewForSubTracks(obj,view)
         }
     }
     // fix 3-way matCBs which may need to go from disabled to checked or unchecked depending
-    var matCBs = $("input.matCB").not(":checked").not(".disabled");
     var matCBs = matCBsWhichAreComplete(false);
     if(matCBs.length > 0) {
         if($("select.viewDD").not("[selectedIndex=0]").length = 0) { // No views visible so nothing is inconsistent
@@ -1309,7 +1308,8 @@ $(document).ready(function()
 
         // If divs with class 'subCfg' then initialize the subtrack cfg code
         // NOTE: must be before any ddcl setup
-        if (typeof(subCfg) !== "undefined" && normed($("div.subCfg")) != undefined) {
+        if (typeof(subCfg) !== "undefined"
+        && (normed($("div.subCfg")) != undefined || normed($("div.subVisDD")))) {
             subCfg.initialize();
         }
     }
