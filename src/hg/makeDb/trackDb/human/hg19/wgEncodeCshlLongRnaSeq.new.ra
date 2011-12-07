@@ -3550,12 +3550,6 @@ html wgEncodeCshlLongRna.new
     view Contigs 
     visibility pack
     subTrack wgEncodeCshlLongRnaSeq
-    #scoreFilter 0
-    #scoreFilterLimits 0:1000
-    #noScoreFilter .
-	extraFields level=[f]FPKM \
-                signif=[f]IDR \
-				score2=[f]Raw_Score
 
         track wgEncodeCshlLongRnaSeqA549CellPamContigs
         parent wgEncodeCshlLongRnaSeqViewContigs off

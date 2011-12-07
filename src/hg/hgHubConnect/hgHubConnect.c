@@ -87,7 +87,7 @@ if (thub != NULL)
 static void hgHubConnectUnlisted(struct hubConnectStatus *hubList, 
     struct hash *publicHash)
 /* Put up the list of unlisted hubs and other controls for the page. */
-/* adds hubUrls to publicHash */
+/* uses publicHash to distingusih public hubs from unlisted ones */
 /* NOTE: Destroys hubList */
 {
 // put out the top of our page
