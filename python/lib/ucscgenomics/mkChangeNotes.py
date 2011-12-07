@@ -602,6 +602,8 @@ class makeNotes(object):
             self.newGbdbs = set(ucscUtils.printIter(self.pushGbdbs, self.gbdbPath))
             self.newSupplemental = set(ucscUtils.printIter(self.newSupp, self.releasePath))
             self.newOthers = set(ucscUtils.printIter(self.additionalList, self.releasePath))
+            self.fullFiles = sorted(self.totalFiles - self.revokedFiles)
+            self.fullTables = self.oldTableSet & self.newTableSet
 
             self.errors = errors
             #don't output.append(report unless ignore option is on or no errors
@@ -643,6 +645,13 @@ class makeNotes(object):
             #clean out special fiels we don't push i.e. md5sum.history
             self.totalFiles = self.__cleanSpecialFiles(totalFiles)
 
+            self.pushTables = self.newTableSet
+            self.pushFiles = self.totalFiles
+            self.pushGbdbs = self.newGbdbSet
+            self.newSupp = self.newSupplementalSet
+            self.fullFiles = self.totalFiles
+            self.fullTables = self.newTableSet
+   
             #makes list for additional files
             (self.oldTotalFiles, self.oldSupplementalSet) = (set(), set())
             (self.oldReleaseFiles, self.additionalList, self.oldAdditionalList, self.totalFiles) = self.__separateOutAdditional()
