@@ -247,9 +247,8 @@ proc determineBlatParams {specsVar} {
     #- repeat-masking only used on xeno, ooc not used for translated
     switch $orgCat {
         native {
-            lappend blatParams -minScore=20 -stepSize=5
             switch $cdnaType {
-                mrna {lappend blatParams -q=rna -fine}
+                mrna {lappend blatParams -q=rna -fine -minScore=20 -stepSize=5}
                 est {}
             }
             if {[info exists specs(ooc)]} {

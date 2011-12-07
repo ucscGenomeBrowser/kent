@@ -9938,9 +9938,8 @@ description Regions of enriched signal in experiment
 term WaveSignal
 tag WAVESIG
 type view
-label Wavelet Smoothed Signal
 description Shows smoothed wavelet over all phases
-
+label Wavelet-smoothed Signal
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type

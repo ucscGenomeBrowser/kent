@@ -32,7 +32,7 @@ if ((row = sqlNextRow(sr)) == NULL)
     errAbort("doGvfDetails: can't find item '%s' in %s at %s:%d", item, database, seqName, start);
 int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 struct bed8Attrs *ba = bed8AttrsLoad(row+rowOffset);
-bedPrintPos((struct bed *)ba, 6, tdb);
+bedPrintPos((struct bed *)ba, 3, tdb);
 int i = 0;
 // Note: this loop modifies ba->attrVals[i], assuming we won't use them again:
 for (i = 0;  i < ba->attrCount;  i++)
@@ -83,7 +83,9 @@ for (i = 0;  i < ba->attrCount;  i++)
     // Parent sounds like mom or dad (as in var_origin)... tweak it too:
     else if (sameString(tag, "Parent"))
 	{
-	printf("<B>Structural variant cluster:</B> %s<BR>\n", htmlEncode(ba->attrVals[i]));
+	printf("<B>Variant region:</B> "
+	       "<A HREF=\"http://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
+	       "TARGET=_BLANK>%s</A><BR>\n", ba->attrVals[i], htmlEncode(ba->attrVals[i]));
 	}
     else
 	{
