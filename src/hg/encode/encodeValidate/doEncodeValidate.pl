@@ -564,17 +564,6 @@ sub validateBed {
             push @localerrors, "$prefix not enough fields; " . scalar(@fields) . " present; at least 3 are required\n";
             next
         }
-        if (!$chromInfo{$fields[0]}) {
-            push @localerrors, "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
-            next
-        } elsif ($fields[0] !~ m/chrM/) {
-            if ($fields[1] > $chromSizes{$fields[0]}) {
-                push @localerrors, "$prefix field 2 value ($fields[1]) exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
-            }
-            if ($fields[2] > $chromSizes{$fields[0]}) {
-                push @localerrors, "$prefix field 3 value ($fields[2]) exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
-            }
-        } 
         if ($fields[1] !~ /^\d+$/) {
             push @localerrors, "$prefix field 2 value ($fields[1]) is invalid; value must be a positive integer\n";
         }
@@ -583,7 +572,14 @@ sub validateBed {
         }
         if ($fields[2] < $fields[1]) {
             push @localerrors, "$prefix field 3 value ($fields[2]) is less than field 2 value ($fields[1])\n";
-        }
+        } elsif (!$chromInfo{$fields[0]}) {
+            push @localerrors, "$prefix field 1 value ($fields[0]) is invalid; not a valid chrom name\n";
+            next
+        } elsif ($fields[0] !~ m/chrM/) {
+            if ($fields[2] > $chromSizes{$fields[0]}) {
+                push @localerrors, "$prefix field 3 value ($fields[2]) exceeds the length of $fields[0] (max = $chromSizes{$fields[0]})\n";
+            }
+        } 
         if ($fieldCount >= 5 && ($fields[4] !~ /^\d+$/ or $fields[4] > 1000)) {
             push @localerrors, "$prefix field 5 value ($fields[4]) is invalid; value must be a positive integer between 0-1000\n";
         }
