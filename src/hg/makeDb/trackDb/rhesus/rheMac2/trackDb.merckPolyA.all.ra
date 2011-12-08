@@ -61,10 +61,10 @@ color 255,123,0
 altColor 255,123,0
 
 
-track merckPolyA_muscleFwd
+track merckPolyA_testisFwd
 parent merckPolyA
-shortLabel merckPolyAmuscleFwd
-longLabel Merck PolyA muscle Fwd
+shortLabel merckPolyAtestisFwd
+longLabel Merck PolyA testis Fwd
 group map
 priority 29
 type bedGraph 4
@@ -77,10 +77,10 @@ color 255,123,0
 altColor 255,123,0
 
 
-track merckPolyA_testisFwd
+track merckPolyA_ileumFwd
 parent merckPolyA
-shortLabel merckPolyAtestisFwd
-longLabel Merck PolyA testis Fwd
+shortLabel merckPolyAileumFwd
+longLabel Merck PolyA ileum Fwd
 group map
 priority 29
 type bedGraph 4
@@ -144,10 +144,10 @@ color 0,123,255
 altColor 0,123,255
 
 
-track merckPolyA_muscleRev
+track merckPolyA_testisRev
 parent merckPolyA
-shortLabel merckPolyAmuscleRev
-longLabel Merck PolyA muscle Rev
+shortLabel merckPolyAtestisRev
+longLabel Merck PolyA testis Rev
 group map
 priority 30
 type bedGraph 4
@@ -160,10 +160,10 @@ color 0,123,255
 altColor 0,123,255
 
 
-track merckPolyA_testisRev
+track merckPolyA_ileumRev
 parent merckPolyA
-shortLabel merckPolyAtestisRev
-longLabel Merck PolyA testis Rev
+shortLabel merckPolyAileumRev
+longLabel Merck PolyA ileum Rev
 group map
 priority 30
 type bedGraph 4
