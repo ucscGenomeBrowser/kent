@@ -539,12 +539,39 @@ lab Caltech
 labExpId 10515
 localization cell
 md5sum 5f1378912a890da956db7de0d6d4cc78
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1856
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000122
+expId 122
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd1Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10515
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5121
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep1
@@ -591,12 +618,39 @@ lab Caltech
 labExpId 10515
 localization cell
 md5sum 96d6aadb16da66a198aa50c5deca69a3
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1856
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000122
+expId 122
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200FastqRd2Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10515
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5136
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il200GeneDeNovoRep1V3
@@ -1113,12 +1167,39 @@ lab Caltech
 labExpId 10516
 localization cell
 md5sum f58d510cac0f14b185e8cd860777e0de
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1672
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd1Rep2V2.fastq.tgz
+grant Myers
+insertLength 400
+lab Caltech
+labExpId 10516
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5137
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2
@@ -1139,12 +1220,39 @@ lab Caltech
 labExpId 10516
 localization cell
 md5sum b1386c9919a18fe8738caa9facd7e342
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1672
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2V2
+objType file
+cell GM12878
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000137
+expId 137
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400FastqRd2Rep2V2.fastq.tgz
+grant Myers
+insertLength 400
+lab Caltech
+labExpId 10516
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5138
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Il400GeneDeNovoRep2V3
@@ -10370,12 +10478,39 @@ lab Caltech
 labExpId 10517
 localization cell
 md5sum e875c01724900f877e56d1ae1d3adddb
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1659
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10517
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 5139
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2
@@ -10395,12 +10530,39 @@ lab Caltech
 labExpId 10567
 localization cell
 md5sum ca0d6ac115e44f60e8724c78a73b17f1
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1658
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd1Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10567
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5140
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1
@@ -10421,12 +10583,39 @@ lab Caltech
 labExpId 10517
 localization cell
 md5sum a11eea94649481abf7bb2d1b33fdb3f5
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
 subId 1659
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep1V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10517
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 1
+rnaExtract longPolyA
+subId 5141
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2
@@ -10446,12 +10635,39 @@ lab Caltech
 labExpId 10567
 localization cell
 md5sum 7489e112f69e3f5d9a2477b2cd0f3877
+objStatus replaced - original had quality score issues, new object is wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2V2
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
 subId 1658
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2V2
+objType file
+cell K562
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-07
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-14
+dccAccession wgEncodeEH000124
+expId 124
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200FastqRd2Rep2V2.fastq.tgz
+grant Myers
+insertLength 200
+lab Caltech
+labExpId 10567
+localization cell
+origAssembly hg18
+project wgEncode
+readType 2x75
+replicate 2
+rnaExtract longPolyA
+subId 5142
+submittedDataVersion V2 - corrected some bad quality scores in the previous version
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75Il200GeneDeNovoRep1V3
@@ -14252,4 +14468,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: -616939382
+# MAGIC: 214129540
