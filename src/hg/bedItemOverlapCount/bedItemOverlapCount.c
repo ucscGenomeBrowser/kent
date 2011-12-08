@@ -54,7 +54,7 @@ errAbort(
   "bedItemOverlapCount - count number of times a base is overlapped by the\n"
   "\titems in a bed file.  Output is bedGraph 4 to stdout.\n"
   "usage:\n"
-  " sort -k1,1 bedFile.bed | bedItemOverlapCount [options] <database> stdin\n"
+  " sort bedFile.bed | bedItemOverlapCount [options] <database> stdin\n"
   "To create a bigWig file from this data to use in a custom track:\n"
   " sort -k1,1 bedFile.bed | bedItemOverlapCount [options] <database> stdin \\\n"
   "         > bedFile.bedGraph\n"
