@@ -13874,19 +13874,6 @@ ln -s 030587_D_BED_20101006_Colored.bed agilentCghSnpCancer4x180k.bed
 tail +3 agilentCghSnpCancer4x180k.bed | hgLoadBed hg19 agilentCghSnpCancer4x180k stdin
 
 
-
- |awk '{ print("cat /hive/data/outside/Rfam/111130/genome_gff/" $1 ".gff3",            
-               "|sed", sprintf("%c", 39) "s/" $1 "/" $2 "/" sprintf("%c", 39))}' |bash\
- \                                                                                     
- |grep -v -e "^#"\                                                                     
- |awk '{ split($9, nameTokens, "Name=");                                              
-         print($1 "\t" $4 - 1 "\t" $5 "\t" nameTokens[2] "\t1\t" $7 "\t" $4 - 1 "\t"  \
-                                                                                      
-                $5 "\t0\t1\t" $5 - $4 + 1 "\t0")  }' \                                
-> hg19/Rfam.bed
-
-
-
 #################################################################################
 # Rfam (2011-11-30 Melissa Cline)
 #
