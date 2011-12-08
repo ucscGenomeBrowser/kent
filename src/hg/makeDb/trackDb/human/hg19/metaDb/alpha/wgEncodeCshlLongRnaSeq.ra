@@ -22542,6 +22542,129 @@ subId 4602
 tableName wgEncodeCshlLongRnaSeqHuvecNucleusPapTranscriptGencV7
 view TranscriptGencV7
 
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1
+objType table
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam.bai
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd1Rep1
+objType file
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+view FastqRd1
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd2Rep1
+objType file
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
+objType table
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
+view MinusRawSignal
+
+metaObject wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
+objType table
+bioRep 045WC
+cell IMR90
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID45238
+labProtocolId 045WCt
+localization cell
+project wgEncode
+readType 2x101D
+replicate 1
+rnaExtract total
+seqPlatform Illumina_HiSeq_2000
+spikeInPool NIST14
+subId 5120
+tableName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
+view PlusRawSignal
+
 metaObject wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1
 objType table
 bioRep 001WC
@@ -35576,4 +35699,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1183047897
+# MAGIC: -1307191040

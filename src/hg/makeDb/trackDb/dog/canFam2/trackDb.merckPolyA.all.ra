@@ -45,38 +45,6 @@ color 255,123,0
 altColor 255,123,0
 
 
-track merckPolyA_liverFwd
-parent merckPolyA
-shortLabel merckPolyAliverFwd
-longLabel Merck PolyA liver Fwd
-group map
-priority 29
-type bedGraph 4
-minLimit 0
-maxLimit 100
-autoScale On
-yLineOnOff on
-visibility hide
-color 255,123,0
-altColor 255,123,0
-
-
-track merckPolyA_muscleFwd
-parent merckPolyA
-shortLabel merckPolyAmuscleFwd
-longLabel Merck PolyA muscle Fwd
-group map
-priority 29
-type bedGraph 4
-minLimit 0
-maxLimit 100
-autoScale On
-yLineOnOff on
-visibility hide
-color 255,123,0
-altColor 255,123,0
-
-
 track merckPolyA_testisFwd
 parent merckPolyA
 shortLabel merckPolyAtestisFwd
@@ -116,38 +84,6 @@ track merckPolyA_kidneyRev
 parent merckPolyA
 shortLabel merckPolyAkidneyRev
 longLabel Merck PolyA kidney Rev
-group map
-priority 30
-type bedGraph 4
-minLimit 0
-maxLimit 100
-autoScale On
-yLineOnOff on
-visibility hide
-color 0,123,255
-altColor 0,123,255
-
-
-track merckPolyA_liverRev
-parent merckPolyA
-shortLabel merckPolyAliverRev
-longLabel Merck PolyA liver Rev
-group map
-priority 30
-type bedGraph 4
-minLimit 0
-maxLimit 100
-autoScale On
-yLineOnOff on
-visibility hide
-color 0,123,255
-altColor 0,123,255
-
-
-track merckPolyA_muscleRev
-parent merckPolyA
-shortLabel merckPolyAmuscleRev
-longLabel Merck PolyA muscle Rev
 group map
 priority 30
 type bedGraph 4

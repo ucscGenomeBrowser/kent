@@ -331,6 +331,8 @@ for (rec = vcff->records;  rec != NULL;  rec = rec->next)
 	slAddHead(pBedList, bed);
 	}
     (*pMaxOut)--;
+    if (*pMaxOut <= 0)
+	break;
     }
 dyStringFree(&dyAlt);  dyStringFree(&dyFilter);  dyStringFree(&dyInfo);  dyStringFree(&dyGt);
 lmCleanup(&lm);
@@ -357,7 +359,11 @@ for (region = regionList; region != NULL; region = region->next)
     addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList, idHash, &maxOut);
     freeMem(fileName);
     if (maxOut <= 0)
-	break; //#*** need to warn here
+	{
+	warn("Reached output limit of %d data values, please make region smaller,\n"
+	     "\tor set a higher output line limit with the filter settings.", bigFileMaxOutput());
+	break;
+	}
     }
 slReverse(&bedList);
 return bedList;
