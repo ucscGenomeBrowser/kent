@@ -996,6 +996,13 @@ function waitOnFunction(func)
         warn("waitOnFunction called without a function");
         return false;
     }
+    if (gWaitFunc != null)
+    {
+        if (gWaitFunc == func) // already called (sometimes hapens when onchange event is triggered
+            return true;       // by js (rather than direct user action).  Happens in IE8
+        warn("waitOnFunction called but already waiting on a function");
+        return false;
+    }
     if(arguments.length > 6) {
         warn("waitOnFunction called with " + arguments.length - 1 + " arguments.  Only 5 are supported.");
         return false;
