@@ -772,11 +772,7 @@ struct pgSnp *pgSnpFromVcfRecord(struct vcfRecord *rec)
 /* Convert VCF rec to pgSnp; don't free rec->file (vcfFile) until
  * you're done with pgSnp because pgSnp points to rec->chrom. */
 {
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    dy = dyStringNew(0);
-else
-    dyStringClear(dy);
+struct dyString *dy = dyStringNew(0);
 struct pgSnp *pgs;
 AllocVar(pgs);
 pgs->chrom = rec->chrom;
@@ -816,7 +812,7 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    dyStringPrintf(dy, ",%.1f", qual);
 	break;
 	}
-pgs->alleleScores = cloneStringZ(dy->string, dy->stringSize+1);
+pgs->alleleScores = dyStringCannibalize(&dy);
 return pgs;
 }
 
