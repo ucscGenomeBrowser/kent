@@ -490,6 +490,8 @@ altColor 100,0,0
 type bed 12
 compositeTrack on
 release alpha
+nextExonText Next Match
+prevExonText Next Match
 
     track t2gPmc
     shortLabel PubmedCentral
