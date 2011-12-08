@@ -1,0 +1,305 @@
+
+track merckPolyA
+shortLabel MerckPolyA
+longLabel Merck Poly A Composite Tracks
+group map
+priority 29
+visibility hide
+type bedGraph 4
+minLimit 0
+maxLimit 100
+maxHeightPixels 128:25:11
+compositeTrack on
+
+
+
+track merckPolyA_brainFwd
+parent merckPolyA
+shortLabel merckPolyAbrainFwd
+longLabel Merck PolyA brain Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_kidneyFwd
+parent merckPolyA
+shortLabel merckPolyAkidneyFwd
+longLabel Merck PolyA kidney Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_liverFwd
+parent merckPolyA
+shortLabel merckPolyAliverFwd
+longLabel Merck PolyA liver Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_maqc_brain1Fwd
+parent merckPolyA
+shortLabel merckPolyAmaqc_brain1Fwd
+longLabel Merck PolyA maqc_brain1 Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_maqc_brain2Fwd
+parent merckPolyA
+shortLabel merckPolyAmaqc_brain2Fwd
+longLabel Merck PolyA maqc_brain2 Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_maqc_uhr1Fwd
+parent merckPolyA
+shortLabel merckPolyAmaqc_uhr1Fwd
+longLabel Merck PolyA maqc_uhr1 Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_maqc_uhr2Fwd
+parent merckPolyA
+shortLabel merckPolyAmaqc_uhr2Fwd
+longLabel Merck PolyA maqc_uhr2 Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_muscleFwd
+parent merckPolyA
+shortLabel merckPolyAmuscleFwd
+longLabel Merck PolyA muscle Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+track merckPolyA_testisFwd
+parent merckPolyA
+shortLabel merckPolyAtestisFwd
+longLabel Merck PolyA testis Fwd
+group map
+priority 29
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 255,123,0
+altColor 255,123,0
+
+
+
+
+
+track merckPolyA_brainRev
+parent merckPolyA
+shortLabel merckPolyAbrainRev
+longLabel Merck PolyA brain Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_kidneyRev
+parent merckPolyA
+shortLabel merckPolyAkidneyRev
+longLabel Merck PolyA kidney Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_liverRev
+parent merckPolyA
+shortLabel merckPolyAliverRev
+longLabel Merck PolyA liver Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_maqc_brain1Rev
+parent merckPolyA
+shortLabel merckPolyAmaqc_brain1Rev
+longLabel Merck PolyA maqc_brain1 Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_maqc_brain2Rev
+parent merckPolyA
+shortLabel merckPolyAmaqc_brain2Rev
+longLabel Merck PolyA maqc_brain2 Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_maqc_uhr1Rev
+parent merckPolyA
+shortLabel merckPolyAmaqc_uhr1Rev
+longLabel Merck PolyA maqc_uhr1 Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_maqc_uhr2Rev
+parent merckPolyA
+shortLabel merckPolyAmaqc_uhr2Rev
+longLabel Merck PolyA maqc_uhr2 Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_muscleRev
+parent merckPolyA
+shortLabel merckPolyAmuscleRev
+longLabel Merck PolyA muscle Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+
+
+track merckPolyA_testisRev
+parent merckPolyA
+shortLabel merckPolyAtestisRev
+longLabel Merck PolyA testis Rev
+group map
+priority 30
+type bedGraph 4
+minLimit 0
+maxLimit 100
+autoScale On
+yLineOnOff on
+visibility hide
+color 0,123,255
+altColor 0,123,255
+

@@ -8411,9 +8411,9 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 11/2/11 angie)
+# NHGRI GWAS CATALOG (DONE 12/7/11 angie)
 # NEXT TIME: use snp135 and squelch multiple-mappers
-# Updated 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
+# Updated 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
@@ -8434,11 +8434,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 7681 elements of size 22
-#Level Code Message
-#Warning 1265 Data truncated for column 'initSample' at row 1995
-#load of gwasCatalog did not go as planned: 7681 record(s), 0 row(s) skipped, 1 warning(s) loading bed.tab
-    # See hg18.txt for notes on that warning
+#Loaded 7934 elements of size 22
 
 
 ######################################################################## 
