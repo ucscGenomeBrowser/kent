@@ -184,17 +184,17 @@ static void vcfCfgHapClusterTreeAngle(struct cart *cart, struct trackDb *tdb, ch
 				   boolean compositeLevel)
 /* Let the user choose branch shape. */
 {
-printf("<B>Haplotype clustering tree branch shape:</B><BR>\n");
+printf("<B>Haplotype clustering tree leaf shape:</B><BR>\n");
 char *treeAngle = cartUsualStringClosestToHome(cart, tdb, compositeLevel,
 					     VCF_HAP_TREEANGLE_VAR, VCF_DEFAULT_HAP_TREEANGLE);
 char varName[1024];
 safef(varName, sizeof(varName), "%s." VCF_HAP_TREEANGLE_VAR, name);
 cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_TRIANGLE,
 		   sameString(treeAngle, VCF_HAP_TREEANGLE_TRIANGLE));
-printf("triangular<BR>\n");
+printf("draw leaf clusters as &lt;<BR>\n");
 cgiMakeRadioButton(varName, VCF_HAP_TREEANGLE_RECTANGLE,
 		   sameString(treeAngle, VCF_HAP_TREEANGLE_RECTANGLE));
-printf("rectangular<BR>\n");
+printf("draw leaf clusters as [<BR>\n");
 }
 
 static void vcfCfgHapClusterHeight(struct cart *cart, struct trackDb *tdb, struct vcfFile *vcff,
@@ -235,7 +235,7 @@ safef(cartVar, sizeof(cartVar), "%s." VCF_APPLY_MIN_QUAL_VAR, name);
 boolean applyFilter = cartUsualBooleanClosestToHome(cart, tdb, compositeLevel,
 					VCF_APPLY_MIN_QUAL_VAR, VCF_DEFAULT_APPLY_MIN_QUAL);
 cgiMakeCheckBox(cartVar, applyFilter);
-printf("<B>Exclude items with QUAL score less than</B>\n");
+printf("<B>Exclude variants with Quality/confidence score (QUAL) score less than</B>\n");
 double minQual = cartUsualDoubleClosestToHome(cart, tdb, compositeLevel, VCF_MIN_QUAL_VAR,
 					      VCF_DEFAULT_MIN_QUAL);
 safef(cartVar, sizeof(cartVar), "%s." VCF_MIN_QUAL_VAR, name);
@@ -251,7 +251,7 @@ static void vcfCfgFilterColumn(struct cart *cart, struct trackDb *tdb, struct vc
 int filterCount = slCount(vcff->filterDefs);
 if (filterCount < 1)
     return;
-printf("<B>Exclude items with these FILTER values:</B><BR>\n");
+printf("<B>Exclude variants with these FILTER values:</B><BR>\n");
 char cartVar[1024];
 safef(cartVar, sizeof(cartVar), "%s."VCF_EXCLUDE_FILTER_VAR, name);
 jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);

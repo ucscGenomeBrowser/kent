@@ -405,6 +405,28 @@ tableName wgEncodeHaibGenotypeGm12878RegionsRep1
 treatment None
 view CNV
 
+metaObject wgEncodeHaibGenotypeGm12878RegionsRep1V2
+objType table
+cell GM12878
+composite wgEncodeHaibGenotype
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-06
+dateUnrestricted 2012-09-06
+fileName wgEncodeHaibGenotypeGm12878RegionsRep1V2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labExpId  Illumina 1MDuo
+labVersion HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5128
+submittedDataVersion V2 - New data mapped to hg19
+tableName wgEncodeHaibGenotypeGm12878RegionsRep1V2
+treatment None
+view Regions
+
 metaObject wgEncodeHaibGenotypeGm12878RegionsRep2
 objType table
 cell GM12878
@@ -2205,4 +2227,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -280471135
+# MAGIC: 2116531504

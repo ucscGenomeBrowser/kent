@@ -87,7 +87,7 @@ required no
 #The spikeInPool associated for the bam file.
 field spikeInPool
 file ddf
-type int
+type string
 required no
 
 # This is replicate number as you would expect
@@ -283,7 +283,11 @@ required yes
 #type string
 #required no
 
-# optional DAF header fields
+# This is a list of other variables expected but not in the name 
+field extraVariables
+file dafHeader
+type string
+required no
 
 # This is a list of variables that will be used in the naming of the file
 # They need to be in the cv.ra???

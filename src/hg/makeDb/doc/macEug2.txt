@@ -169,7 +169,7 @@ taxId 9315
 
 
 ########################################################################
-# Create kluster run files (????  - 201???  - Chin)
+# Create kluster run files (DONE 2010-11-04  - Chin)
     # numerator is macEug2 gapless bases "real" as reported by: 
     featureBits -noRandom -noHap macEug2 gap
     #     1600136831 bases of 1184628269 (135.075%) in intersection
@@ -289,5 +289,49 @@ macEug2.genbank.est.native.loadDesc = yes
 
     doGenbankTests macEug2 genbankTest.out
     # no error
+
+##########################################################################
+## WINDOWMASKER (DONE - 2011-11-30 - Chin)
+    mkdir /hive/data/genomes/macEug2/bed/windowMasker
+    cd /hive/data/genomes/macEug2/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev macEug2 > do.log 2>&1 &
+    #   real    262m19.608s
+
+    # Masking statistics
+    twoBitToFa macEug2.wmsk.2bit stdout | faSize stdin
+    # 3075184024 bases (539107070 N's 2536076954 real 1634442088 upper 
+    # 901634866 lower) in 277711 sequences in 1 files
+    # %29.32 masked total, %35.55 masked real
+    hgLoadBed macEug2 windowmaskerSdust windowmasker.sdust.bed.gz
+    # Loaded 18037550 elements of size 3
+
+    featureBits -countGaps macEug2 windowmaskerSdust
+    # 1457250153 bases of 3075184024 (47.387%) in intersection
+
+    #   eliminate the gaps from the masking
+    featureBits macEug2 -not gap -bed=notGap.bed
+    #   2536076957 bases of 2536076957 (100.000%) in intersection
+    time nice -n +19 featureBits macEug2 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #   918147928 bases of 2536076957 (36.203%) in intersection
+    #   real    793m0.546s
+
+    #   reload track to get it clean
+    hgLoadBed macEug2 windowmaskerSdust cleanWMask.bed.gz
+    #   Loaded 17901097 elements of size 4
+    featureBits -countGaps macEug2 windowmaskerSdust
+    #   918147928 bases of 3075184024 (29.857%) in intersection
+    #   mask the sequence with this clean mask
+    zcat cleanWMask.bed.gz \
+        | twoBitMask ../../macEug2.unmasked.2bit stdin \
+            -type=.bed macEug2.cleanWMSdust.2bit
+
+    twoBitToFa macEug2.cleanWMSdust.2bit stdout | faSize stdin \
+        > macEug2.cleanWMSdust.faSize.txt
+    cat macEug2.cleanWMSdust.faSize.txt
+    #   3075184024 bases (539107070 N's 2536076954 real 1617929026 upper 
+    #   918147928 lower) in 277711 sequences in 1 files
+    #   %29.86 masked total, %36.20 masked real
 
 #########################################################################
