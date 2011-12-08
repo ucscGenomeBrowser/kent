@@ -565,6 +565,7 @@ insertLength 200
 lab Caltech
 labExpId 10515
 localization cell
+md5sum 2b1fa43fc632aa76b79a537c3779ea7d
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -644,6 +645,7 @@ insertLength 200
 lab Caltech
 labExpId 10515
 localization cell
+md5sum c35548c4408285c902df40d88b9c7c66
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1193,6 +1195,7 @@ insertLength 400
 lab Caltech
 labExpId 10516
 localization cell
+md5sum 75ac5763997761cd132e94ddb1ec9ac9
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1246,6 +1249,7 @@ insertLength 400
 lab Caltech
 labExpId 10516
 localization cell
+md5sum bc264a1e81607556a09f8f67d695da8a
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10504,6 +10508,7 @@ insertLength 200
 lab Caltech
 labExpId 10517
 localization cell
+md5sum 6b7cc3fc98dc309fdb19f683c1b69bd0
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10556,6 +10561,7 @@ insertLength 200
 lab Caltech
 labExpId 10567
 localization cell
+md5sum 54e02c414b50f504892f0b5a91fec9a7
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10609,6 +10615,7 @@ insertLength 200
 lab Caltech
 labExpId 10517
 localization cell
+md5sum ad86b8d81846db05297e3de979eab62b
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10661,6 +10668,7 @@ insertLength 200
 lab Caltech
 labExpId 10567
 localization cell
+md5sum ff8af94b32fcc6b974da5fc92a623fb8
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -14468,4 +14476,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 214129540
+# MAGIC: 1147364119
