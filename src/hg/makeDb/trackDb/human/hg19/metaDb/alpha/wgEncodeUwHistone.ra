@@ -24479,7 +24479,7 @@ grant Stam
 lab UW
 labExpId DS16208
 labVersion Bowtie 0.12.7
-md5sum 91ab42d3d35a9faaebe5b187a6e82998
+md5sum 91ab42d3d35a9faaebe5b187a6e82998,899a10c17815322e937481f99a5b7a0d
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -26788,4 +26788,4 @@ tableName wgEncodeUwHistoneWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: -1755259958
+# MAGIC: -803413319

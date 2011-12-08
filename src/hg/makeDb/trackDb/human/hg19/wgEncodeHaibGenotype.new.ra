@@ -28,6 +28,14 @@ html wgEncodeHaibGenotype.new
         type bed 9 +
         # subId=4057 dateSubmitted=2011-05-09
 
+        track wgEncodeHaibGenotypeGm12878RegionsRep1V2
+        parent wgEncodeHaibGenotype on
+        shortLabel GM12878 1
+        longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
+        subGroups cellType=1GM12878 treatment=None rep=rep1
+        type bed 9 +
+        # subId=5128 dateSubmitted=2011-12-06
+
         track wgEncodeHaibGenotypeA549RegionsRep1
         parent wgEncodeHaibGenotype off
         shortLabel A549 1

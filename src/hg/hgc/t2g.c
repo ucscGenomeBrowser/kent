@@ -36,7 +36,7 @@ char* printArticleInfo(struct sqlConnection *conn, char* item)
             }
         docId = cloneString(row[0]);
         printf("<P>%s</P>\n", row[3]);
-        printf("<A HREF=\"%s\"><B>%s</B></A>\n", row[1], row[2]);
+        printf("<A TARGET=\"_blank\" HREF=\"%s\"><B>%s</B></A>\n", row[1], row[2]);
         printf("<P style=\"width:800px; font-size:80%%\">%s</P>\n", row[4]);
         printf("<P style=\"width:800px; font-size:100%%\">%s</P>\n", abstract);
 	}
@@ -134,7 +134,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
 
         // only display this sequence if we're in the right section
         if (filterIdHash!=NULL && ((hashLookup(filterIdHash, annotId)==0) ^ !isClickedSection)) {
-            foundSkippedRows = FALSE;
+            foundSkippedRows = TRUE;
             continue;
         }
 
