@@ -416,8 +416,9 @@ dateUnrestricted 2012-09-06
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1V2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId  Illumina 1MDuo
+labExpId Illumina 1MDuo
 labVersion HudsonAlpha
+md5sum 2c9ee0b5e0abe5b9b41e797d1ebd2638
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2227,4 +2228,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 2116531504
+# MAGIC: 2043575378
