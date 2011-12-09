@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
 The UCSC Known Genes track shows known protein-coding genes based on 
-protein data from UniProt (SWISS-PROT and TrEMBL) and their
+protein data from SWISS-PROT, TrEMBL and TrEMBL-NEW and their
 corresponding mRNAs from 
 <A HREF="http://www.ncbi.nlm.nih.gov/genbank/index.html" 
 TARGET=_blank>GenBank</A>.</P>
@@ -13,7 +13,7 @@ This track follows the display conventions for
 tracks</A>. Black coloring indicates features that have corresponding entries
 in the Protein Databank (PDB). Blue indicates features associated with
 mRNAs from NCBI RefSeq or (dark blue) items having associated proteins in
-the UniProt database. The variation in blue shading of RefSeq items
+the SWISS-PROT database. The variation in blue shading of RefSeq items
 corresponds to the level of review the RefSeq record has undergone:
 predicted (light), provisional (medium), or reviewed (dark). </P>
 <P>
@@ -30,7 +30,7 @@ mRNA sequences were aligned against the $organism genome using blat. When a
 single mRNA aligned in multiple places, only alignments having at least 98% 
 base identity with the genomic sequence were kept. This set of mRNA 
 alignments was further reduced by keeping only those mRNAs referenced by a 
-protein in UniProt.</P>
+protein in SWISS-PROT, TrEMBL or TrEMBL-NEW.</P>
 <P>
 Among multiple mRNAs referenced by a single protein, the best mRNA was 
 selected, based on a quality score derived from its length, the level of the
@@ -41,14 +41,14 @@ short invalid entries and consolidating entries with identical CDS regions.
 <P>
 Finally, RefSeq entries derived from DNA sequences instead of 
 mRNA sequences were added to produce the final data set shown in this track. 
-Disease annotations were obtained from UniProt.</P>
+Disease annotations were obtained from SWISS-PROT.</P>
 
 <H2>Credits</H2>
 <P>
 The Known Genes track was produced at UCSC based primarily on cross-references
 between proteins from 
-<A HREF="http://www.uniprot.org/" TARGET=_blank>UniProt</A> 
-and mRNAs from 
+<A HREF="http://www.uniprot.org/" TARGET=_blank>SWISS-PROT</A> 
+(including TrEMBL and TrEMBL-NEW) and mRNAs from 
 <A HREF="http://www.ncbi.nlm.nih.gov/genbank/index.html"
 TARGET=_blank>GenBank</A>
 contributed by scientists worldwide.  
@@ -73,7 +73,7 @@ directory except the files
 </UL>
 may be copied and redistributed freely, without advance permission,
 provided that this copyright statement is reproduced with each copy.
-More information for commercial users can be found at the Uniprot
+More information for commercial users can be found at the UniProt
 <A HREF="http://www.uniprot.org/help/license"
 TARGET=_blank>License & disclaimer</A> page.
 <P>

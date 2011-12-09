@@ -1307,6 +1307,40 @@ sex U
 tier 3
 protocol Crawford:D54_Crawford_protocol.pdf
 
+term GM04503
+tag GM04503
+type Cell Line
+tier 3
+organism human
+description adult twin pair fibroblasts, monozygotic twin of GM04504
+karyotype normal
+sex F
+tissue skin
+vendorName Coriell
+vendorId GM04503D
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM04503&PgId=166
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
+lab Stam
+protocol Stam:GM04503D_Stam_protocol.pdf
+
+term GM04504
+tag GM04504
+type Cell Line
+tier 3
+organism human
+description adult twin pair fibroblasts, monozygotic twin of GM04503, 13% of the cells examined show random chromosome loss
+karyotype normal
+sex F
+tissue skin
+vendorName Coriell
+vendorId GM04504A
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM04504&PgId=166
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
+lab Stam
+protocol Stam:GM04504A_Stam_protocol.pdf
+
 term GM06990
 tag GM06990
 type Cell Line
@@ -2991,6 +3025,23 @@ orderUrl http://www.dsmz.de/index.htm
 termId BTO:0002104
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO%3A0002104
 protocol Bernstein:Loucy_Bernstein_protocol.pdf
+
+term M059J
+tag M059J
+type Cell Line
+tier 3
+organism human
+description malignant glioblastoma, glioma, lack DNA-dependent protein kinase activity, deficient in repair of DNA double strand breaks, the cells are negative for glial fibrillary acidic protein (GFAP), tumor specimen taken from a 33 year old
+karyotype cancer
+sex M
+tissue brain
+vendorName ATCC 
+vendorId CRL-2366
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2366&Template=cellBiology
+termId BTO:0000527
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527
+lab Stam
+protocol Stam:M059J_Stam_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -5805,7 +5856,7 @@ target GATA2
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal. Antibody Target: GATA2
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId   ;
+vendorId GATA-2
 orderUrl http://molpharm.wisc.edu/people/faculty/bresnick/bresnick.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
@@ -8226,7 +8277,7 @@ lots 060729QCS1
 targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274
 validation Human_-_ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
-label ZNF274 (AH00010782-A01)
+label ZNF274 (H00010782-A01)
 
 term ZNF274_(M01)
 tag ZNF274M01

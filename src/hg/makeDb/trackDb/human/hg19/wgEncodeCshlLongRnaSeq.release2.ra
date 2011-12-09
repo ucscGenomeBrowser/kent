@@ -6,7 +6,7 @@ shortLabel CSHL Long RNA-seq
 longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
 subGroup1 view Views Contigs=Contigs PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal Junctions=Splice_Junctions Alignments=Alignments
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLaS3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC HSMM=HSMM MCF7=MCF-7 NHEK=NHEK  NHLF=NHLF SKNSHRA=SK-N-SH_<i>retinoic_acid</i>
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLaS3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC HSMM=HSMM MCF7=MCF-7 NHEK=NHEK  NHLF=NHLF SKNSHRA=SK-N-SH_<i>retinoic_acid</i> IMR90=IMR90
 subGroup3 localization Localization CELL=Whole_Cell CYTOSOL=Cytosol NUCLEUS=Nucleus POLYSOME=Polysome NUCLEOPLASM=Nucleoplasm CHROMATIN=Chromatin NUCLEOLUS=Nucleolus
 subGroup4 rnaExtract RNA_Extract PAP=PolyA+ PAM=PolyA- TOTAL=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 Pooled=Pooled 
@@ -1198,6 +1198,14 @@ html wgEncodeCshlLongRna.new
 		color 189,0,157
 		# subId=3487 dateSubmitted=2011-01-21
 
+        track wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel IMR90 cell total PlusRaw 1
+        longLabel IMR90 whole cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL 
+        subGroups view=PlusRawSig cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
+        type bigWig 1.000000 5416102.000000
+        # subId=5120 dateSubmitted=2011-12-06
+
 
 
 
@@ -2374,6 +2382,14 @@ html wgEncodeCshlLongRna.new
 		color 189,0,157
 		# subId=3487 dateSubmitted=2011-01-21
 
+        track wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel IMR90 cell total MinusRaw 1
+        longLabel IMR90 cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL 
+        subGroups view=MinusRawSig cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
+        type bigWig 1.000000 1657789.000000
+        # subId=5120 dateSubmitted=2011-12-06
+
 	track wgEncodeCshlLongRnaSeqViewAlignments
     	shortLabel Alignments
     	view Alignments
@@ -3544,6 +3560,14 @@ html wgEncodeCshlLongRna.new
 		origAssembly hg19
 		color 189,0,157
 		# subId=3487 dateSubmitted=2011-01-21
+
+        track wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel IMR90 cell total Aln 1
+        longLabel IMR90 whole cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL 
+        subGroups view=Alignments cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
+        type bam
+        # subId=5120 dateSubmitted=2011-12-06
 
     track wgEncodeCshlLongRnaSeqViewContigs
     shortLabel Contigs 
