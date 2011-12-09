@@ -1203,3 +1203,959 @@ done >> multiz11way.maf
     rm multiz11way*.tab
 
 #######################################################################
+# GAP ANNOTATE MULTIZ11WAY MAF AND LOAD TABLES (DONE - 2011-12-06 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.
+    mkdir -p /hive/data/genomes/gorGor3/bed/multiz11way/anno/mafSplit
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/anno/mafSplit
+    time mafSplit -byTarget -useFullSequenceName \
+	/dev/null . ../../multiz11way.maf
+    #	real    11m32.688s
+
+    ls | wc
+    #	390     390    6073
+
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/anno
+    # a couple of these do not yet have an N.bed file
+    # you can tell by making the symlinks below and see which are missing
+    for DB in gorGor3 nomLeu1 panTro3
+do
+    cd /hive/data/genomes/${DB}
+    twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+done
+
+for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    ssh swarm
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/anno
+    mkdir result
+    cat << '_EOF_' > template
+#LOOP
+mafAddIRows -nBeds=nBeds $(path1) /hive/data/genomes/gorGor3/gorGor3.2bit {check out exists+ result/$(file1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls mafSplit/*.maf > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs to one per node with the ram=8g requirement
+    para -ram=8g create jobList
+    para try ... check ... push ...
+# Completed: 390 of 390 jobs
+# CPU time in finished jobs:       2331s      38.85m     0.65h    0.03d  0.000 y
+# IO & Wait Time:                  2261s      37.69m     0.63h    0.03d  0.000 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest finished job:             156s       2.60m     0.04h    0.00d
+# Submission to last job:          5234s      87.23m     1.45h    0.06d
+
+    # verify all result files have some content, look for 0 size files:
+    find . -type f -size 0
+    # should see none
+
+    # combine into one file
+    head -q -n 1 result/chr1.maf > gorGor3.11way.maf
+    for F in result/*.maf
+do
+    grep -h -v "^#" ${F}
+done >> gorGor3.11way.maf
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/GL172637.maf >> gorGor3.11way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> gorGor3.11way.maf
+
+# -rw-rw-r-- 1 30974842562 Dec  6 09:47 gorGor3.11way.maf
+
+    # Load into database
+    rm /gbdb/gorGor3/multiz11way/multiz11way.maf   # remove old symlink
+    ln -s `pwd`/gorGor3.11way.maf /gbdb/gorGor3/multiz11way/multiz11way.maf
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf gorGor3 multiz11way
+    #	Loaded 12899544 mafs in 1 files from /gbdb/gorGor3/multiz11way
+    #	real    15m10.964s
+
+    time nice -n +19 hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 gorGor3 multiz11waySummary \
+	/gbdb/gorGor3/multiz11way/multiz11way.maf
+    #	Created 1350677 summary blocks from 84367135 components
+    #	and 12899544 mafs from /gbdb/gorGor3/multiz11way/multiz11way.maf
+    #	real    17m1.129s
+
+    wc -l multiz11way*.tab
+    #	12899544 multiz11way.tab
+    #	1350677 multiz11waySummary.tab
+    #	14250221 total
+
+    rm multiz11way*.tab
+
+#########################################################################
+# MULTIZ9WAY MAF FRAMES (DONE - 2011-12-06 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/frames
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/frames
+    mkdir genes
+
+    #	ensGene produces more annotation on hg19 than using knownGene
+    #	So, using ensGene on all species possible.  papHam1 has only
+    #	xenoRefGene.  (see 46-way in hg19 for other gene table options)
+
+gorGor3	ensGene
+hg19	ensGene
+panTro3	ensGene
+ponAbe2	ensGene
+nomLeu1	ensGene
+rheMac2	ensGene
+papHam1	xenoRefGene
+calJac3	ensGene
+tarSyr1	ensGene
+micMur1	ensGene
+otoGar1	ensGene
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using ensGene for:
+for qDB in gorGor3 hg19 panTro3 ponAbe2 nomLeu1 rheMac2 calJac3 tarSyr1 micMur1 otoGar1
+do
+  echo hgsql -N -e \"'select * from 'ensGene\;\" ${qDB}
+      hgsql -N -e "select * from ensGene" ${qDB} | cut -f 2-11 \
+      | genePredSingleCover stdin stdout | gzip -2c > genes/$qDB.gp.gz
+done
+
+    # xenoRefGene for papHam1
+    for qDB in papHam1
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${qDB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${qDB}.tmp.gz
+    mv /scratch/tmp/${qDB}.tmp.gz genes/$qDB.gp.gz
+    echo "${qDB} done"
+done
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+
+# genes/calJac3.gp.gz: 20843
+# genes/gorGor3.gp.gz: 20759
+# genes/hg19.gp.gz: 20869
+# genes/micMur1.gp.gz: 16240
+# genes/nomLeu1.gp.gz: 18012
+# genes/otoGar1.gp.gz: 15388
+# genes/panTro3.gp.gz: 18414
+# genes/papHam1.gp.gz: 26648
+# genes/ponAbe2.gp.gz: 19895
+# genes/rheMac2.gp.gz: 21049
+# genes/tarSyr1.gp.gz: 13615
+
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/frames
+    time (cat ../anno/gorGor3.11way.maf \
+	| nice -n +19 genePredToMafFrames gorGor3 stdin stdout \
+	    `sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+		| gzip > multiz11way.mafFrames.gz)
+XXX - running - Tue Dec  6 10:40:25 PST 2011
+    #	real    14m22.770s
+
+    # verify there are frames on everything:
+    zcat multiz11way.mafFrames.gz | awk '{print $4}' | sort | uniq -c
+    #	207882 calJac3
+    #	181071 gorGor3
+    #	190188 hg19
+    #	121668 micMur1
+    #	187716 nomLeu1
+    #	77602 otoGar1
+    #	168287 panTro3
+    #	199624 papHam1
+    #	195263 ponAbe2
+    #	194473 rheMac2
+    #	46204 tarSyr1
+
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/frames
+    time hgLoadMafFrames gorGor3 multiz11wayFrames multiz11way.mafFrames.gz
+    #	real    0m21.425s
+
+############################################################################
+# creating upstream mafs (DONE - 2011-12-06 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/gorGor3/goldenPath/multiz11way
+    cd /hive/data/genomes/gorGor3/goldenPath/multiz11way
+    # run this bash script
+    cat << '_EOF_' > mkUpstream.sh
+DB=gorGor3
+GENE=ensGene
+NWAY=multiz11way
+export DB GENE
+
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.${GENE}.maf"
+    echo "featureBits ${DB} ${GENE}:upstream:${S} -fa=/dev/null -bed=stdout"
+    featureBits ${DB} ${GENE}:upstreamAll:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | mafFrags ${DB} ${NWAY} stdin stdout \
+                -orgs=/hive/data/genomes/${DB}/bed/${NWAY}/species.list \
+        | gzip -c > upstream${S}.${GENE}.maf.gz
+    echo "done upstream${S}.${GENE}.maf.gz"
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x mkUpstream.sh
+    time ./mkUpstream.sh
+    #	real    73m36.223s
+
+XXX - to be done vvv - Tue Dec  6 13:14:36 PST 2011
+    # FIXUP/VERIFY the genbank.conf file to indicate this gene choice for the
+    #	upstream automatic generation
+
+#########################################################################
+# Phylogenetic tree from 11-way (DONE - 2011-12-06 - Hiram)
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/4d
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/4d
+
+    # the split annotated maf's are in:
+    ../anno/result/*.maf
+
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/4d
+
+    # using ensGene for gorGor3, only transcribed genes and nothing
+    #	from the randoms and other misc.
+    hgsql gorGor3 -Ne \
+    "select * from ensGene WHERE cdsEnd > cdsStart;" | cut -f 2-20 \
+	| egrep -v "chrM" > ensGene.gp
+
+    cut -f2 ensGene.gp  | sort | uniq -c | sort -rn | sed -e "s/^/#/"
+#   2685 chr1
+#   2082 chr5
+#   1947 chr19
+#   1740 chr11
+#   1441 chr12
+#   1432 chr3
+#   1407 chr6
+#   1274 chr7
+#   1255 chr16
+#   1112 chr4
+#   1105 chrX
+#   1069 chr10
+#   1061 chr9
+#    998 chr8
+#    924 chr15
+#    879 chr14
+#    860 chr2b
+#    843 chr2a
+#    798 chr17
+#    728 chr20
+#    629 chr22
+#    451 chr13
+#    417 chr18
+#    291 chr21
+
+    genePredSingleCover ensGene.gp stdout | sort > ensGeneNR.gp
+
+    cut -f2 ensGeneNR.gp  | sort | uniq -c | sort -rn | sed -e "s/^/#/"
+#   2052 chr1
+#   1514 chr5
+#   1359 chr19
+#   1326 chr11
+#   1133 chr3
+#   1074 chr12
+#   1063 chr6
+#   1008 chr7
+#    906 chr16
+#    873 chrX
+#    834 chr4
+#    824 chr9
+#    805 chr10
+#    770 chr8
+#    686 chr14
+#    667 chr2a
+#    660 chr2b
+#    660 chr15
+#    602 chr17
+#    567 chr20
+#    477 chr22
+#    345 chr13
+#    310 chr18
+#    234 chr21
+
+    ssh encodek
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/4d/run
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    # An interesting discovery with this one, ensGene chrom names for
+    # chr2A and chr2B were actually chr2a and chr2b in the table.  Hence
+    # the new 'grep -i' and sed /i options to ignore case on the chrom names.
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set r = "/hive/data/genomes/gorGor3/bed/multiz11way"
+set c = $1
+set infile = $r/anno/result/$2
+set outfile = $3
+cd /scratch/tmp
+grep -i -w $c $r/4d/ensGeneNR.gp | sed -e "s/\t$c\t/\tgorGor3.$c\t/i" > $c.gp
+set NL=`wc -l $c.gp| gawk '{print $1}'`
+if ("$NL" != "0") then
+    # 'clean' maf
+    perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
+else
+    echo "" > $r/4d/run/$outfile
+endif
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls -1S /hive/data/genomes/gorGor3/bed/multiz11way/anno/result/*.maf \
+	| sed -e "s#.*multiz11way/anno/result/##" \
+	| grep "^chr" | grep -v "chrM" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    # the tac puts the quick jobs at the front
+    gensub2 maf.list single template stdout | tac > jobList
+    para create jobList
+    para try ... check
+    para -maxJob=5 push
+    para time
+# Completed: 24 of 24 jobs
+# CPU time in finished jobs:       1807s      30.11m     0.50h    0.02d  0.000 y
+# IO & Wait Time:                   143s       2.39m     0.04h    0.00d  0.000 y
+# Average job time:                  81s       1.35m     0.02h    0.00d
+# Longest finished job:             159s       2.65m     0.04h    0.00d
+# Submission to last job:           351s       5.85m     0.10h    0.00d
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/4d
+    # check for empty files, size 0 and size 1:
+    ls og mfa | sort -k3n | head
+    # if necessary, remove them to avoid garbage:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # most interesting, this did not identify files of size 1:
+#    find ./mfa -type f -size 1
+    ls -og mfa | awk '$3 == 1' > empty.list
+    sed -e "s#^#mfa/##" empty.list | xargs rm -f
+    #want comma-less species.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    #	>gorGor3
+    #	>hg19
+    #	>panTro3
+    #	>ponAbe2
+    #	>nomLeu1
+    #	>rheMac2
+    #	>papHam1
+    #	>calJac3
+    #	>tarSyr1
+    #	>micMur1
+    #	>otoGar1
+
+    # verify tree-commas.nh:
+    cat ../tree-commas.nh 
+# ((((((((hg19,panTro3),gorGor3),ponAbe2),nomLeu1),(rheMac2,papHam1)),calJac3),tarSyr1),(micMur1,otoGar1))
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time nice -n +19 \
+	/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree ../tree-commas.nh 4d.all.mfa
+    #	real    0m31.111s
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE: ((((((((hg19:0.00655096,panTro3:0.00683982):0.00221957,gorGor3:0.00896404):0.00969343,ponAbe2:0.0189386):0.00347097,nomLeu1:0.0222691):0.0120442,(rheMac2:0.00799147,papHam1:0.00804243):0.0296086):0.0218314,calJac3:0.0696516):0.0520857,tarSyr1:0.111445):0.0205225,(micMur1:0.0856019,otoGar1:0.119397):0.0205225);
+
+#########################################################################
+# phastCons 11-way (DONE - 2011-12-06 - Hiram)
+
+    # split 11way mafs into 10M chunks and generate sufficient statistics 
+    # files for # phastCons
+    ssh encodek
+    mkdir -p /hive/data/genomes/gorGor3/bed/multiz11way/cons/SS
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/cons/SS
+    mkdir result done
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/gorGor3/bed/multiz11way/anno/result/$c.maf
+set WINDOWS = /hive/data/genomes/gorGor3/bed/multiz11way/cons/SS/result/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(root1) {check out line+ done/$(root1)}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	do the easy ones first to see some immediate results
+    ls -1S -r ../../anno/result | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... etc
+# Completed: 390 of 390 jobs
+# CPU time in finished jobs:       1920s      31.99m     0.53h    0.02d  0.000 y
+# IO & Wait Time:                  3390s      56.51m     0.94h    0.04d  0.000 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest finished job:             268s       4.47m     0.07h    0.00d
+# Submission to last job:           457s       7.62m     0.13h    0.01d
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh encodek
+    mkdir -p /hive/data/genomes/gorGor3/bed/multiz11way/cons/run.cons
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/cons/run.cons
+
+    #	there are going to be only one phastCons run using
+    #	this same script.  It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  It is:
+    #	all 
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/gorGor3/bed/multiz11way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/SS/result/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS -type f | grep ".ss$" | sed -e 's/.ss$//' > ss.list
+    wc -l ss.list
+    #	670 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/cons/all
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/cons/all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para create jobList
+    para try ... check ...
+    para push
+# Completed: 670 of 670 jobs
+# CPU time in finished jobs:       6960s     115.99m     1.93h    0.08d  0.000 y
+# IO & Wait Time:                  4481s      74.69m     1.24h    0.05d  0.000 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest finished job:              34s       0.57m     0.01h    0.00d
+# Submission to last job:           625s      10.42m     0.17h    0.01d
+
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/cons/all
+
+    find ./bed -type f | grep ".bed$" | xargs cat | sort -k1,1 -k2,2n \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	    > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    time nice -n +19 hgLoadBed gorGor3 phastConsElements11way mostConserved.bed
+    #	Loaded 877501 elements of size 5
+    #	real    0m5.516s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov 
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    featureBits gorGor3 -enrichment ensGene:cds phastConsElements11way
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+# ensGene:cds 1.155%, phastConsElements11way 5.466%, both 0.703%, cover
+# 60.85%, enrich 11.13x
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/cons/all
+    mkdir downloads
+
+    find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phastCons11way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons11way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/gorGor3/chrom.sizes \
+	    phastCons11way.bw) > bigWig.log 2>&1 &
+    tail bigWig.log
+    #	pid=5590: VmPeak:     29110252 kB
+    #	real    32m38.228s
+
+    bigWigInfo phastCons11way.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 5,663,784,804
+# primaryIndexSize: 85,840,704
+# zoomLevels: 10
+# chromCount: 390
+# basesCovered: 2,583,634,871
+# mean: 0.202661
+# min: 0.000000
+# max: 0.999000
+# std: 0.256356
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons11way.wigFix.gz \
+	| wigEncode stdin phastCons11way.wig phastCons11way.wib)
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    13m19.014s
+
+    du -hsc *.wi?
+    #	2.5G    phastCons11way.wib
+    #	263M    phastCons11way.wig
+    #	2.7G    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons11way.wib /gbdb/gorGor3/multiz11way/phastCons11way.wib
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/gorGor3/multiz11way \
+	gorGor3 phastCons11way phastCons11way.wig
+    #	real    0m33.431s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh gorGor3 phastCons11way
+# db.table      min max mean count sumData stdDev viewLimits
+#gorGor3.phastCons11way    0 0.999 0.202661 2583634871 5.23603e+08 0.256356 viewLimits=0:0.999
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=gorGor3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons11way > histogram.data 2>&1
+    #	real    3m20.501s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Gorilla gorGor3 Histogram phastCons11way track"
+set xlabel " phastCons11way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# phyloP for 11-way (DONE - 2011-12-07 - Hiram)
+    # run phyloP with score=LRT 
+    ssh encodek
+    mkdir /cluster/data/gorGor3/bed/multiz11way/consPhyloP
+    cd /cluster/data/gorGor3/bed/multiz11way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.560
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../cons/all/all.mod 0.560 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod 
+    #	BACKGROUND: 0.220000 0.280000 0.280000 0.220000 
+
+    #	following the pattern from panTro3 with grp: "all" (no other grp)
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/gorGor3/bed/multiz11way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$file1.wigFix $out
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$cName
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	670 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/all
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    # the -ram=8g will allow only one job per node to slow this down since
+    #	it would run too fast otherwise.  Either run on one of the small
+    #	klusters or use the -ram=8g on the para create
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+    para time > run.time
+# Completed: 670 of 670 jobs
+# CPU time in finished jobs:      13286s     221.44m     3.69h    0.15d  0.000 y
+# IO & Wait Time:                  4513s      75.21m     1.25h    0.05d  0.000 y
+# Average job time:                  27s       0.44m     0.01h    0.00d
+# Longest finished job:              65s       1.08m     0.02h    0.00d
+# Submission to last job:          3612s      60.20m     1.00h    0.04d
+
+    # make downloads
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP11way.wigFix.gz) &
+    #	real    25m23.098s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP11way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/gorGor3/chrom.sizes \
+	phyloP11way.bw) > bigWig.log 2>&1 &
+    egrep "real|VmPeak" bigWig.log
+    #	pid=18030: VmPeak:    29110248 kB
+    #	real    34m13.586s
+
+    bigWigInfo phyloP11way.bw 
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 3,124,719,586
+# primaryIndexSize: 85,840,704
+# zoomLevels: 10
+# chromCount: 390
+# basesCovered: 2,583,634,871
+# mean: 0.091549
+# min: -9.604000
+# max: 0.649000
+# std: 0.507211
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP11way.wigFix.gz \
+	| wigEncode stdin phyloP11way.wig phyloP11way.wib) &
+    #	Converted stdin, upper limit 0.65, lower limit -9.60
+    #	real    13m30.224s
+
+    du -hsc *.wi?
+    #	2.5G    phyloP11way.wib
+    #	264M    phyloP11way.wig
+    #	2.7G    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP11way.wib /gbdb/gorGor3/multiz11way/phyloP11way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/gorGor3/multiz11way gorGor3 \
+	phyloP11way phyloP11way.wig
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh gorGor3 phyloP11way
+# db.table      min max mean count sumData stdDev viewLimits
+# gorGor3.phyloP11way      -9.604 0.649 0.0915485 2583634871 2.36528e+08
+# 0.507211 viewLimits=-2.44451:0.649
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=gorGor3 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phyloP11way > histogram.data 2>&1
+    #	real    4m48.739s
+
+    # find out the range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin
+# Q1 0.000216
+# median 0.000864
+# Q3 0.001834
+# average 0.001565
+# min 0.000000
+# max 0.065102
+# count 639
+# total 1.000000
+# standard deviation 0.003182
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Gorilla gorGor3 Histogram phyloP11way track"
+set xlabel " phyloP11way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.007]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+#############################################################################
+# download data for 11-way (DONE - 2011-12-08 - Hiram)
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/cons
+    cp -p /hive/data/genomes/xenTro3/bed/multiz9way/cons/README.txt .
+    # need to edit this to finish it off
+
+    md5sum phastCons11way.bw phastCons11way.wigFix.gz primate.mod > md5sum.txt
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phastCons11way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phastCons11way
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/cons/all/downloads/phastCons11way.wigFix.gz \
+	./phastCons11way.wigFix.gz
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/all/phastCons11way.bw \
+	./phastCons11way.bw
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/all/all.mod \
+	./primate.mod
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/README.txt .
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/md5sum.txt .
+
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP
+    cp /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/README.txt .
+    # need to edit this to finish it off
+
+    md5sum README.txt phastCons11way.bw phastCons11way.wigFix.gz primate.mod \
+	> md5sum.txt
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phyloP11way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phyloP11way
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/all/downloads/phyloP11way.wigFix.gz \
+	./phyloP11way.wigFix.gz
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/all/phyloP11way.bw \
+	./phyloP11way.bw
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/run.phyloP/all.mod \
+	./primate.mod
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/README.txt .
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/downloads
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/downloads
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cp -p /hive/data/genomes/xenTro3/bed/multiz9way/downloads/README.txt .
+    # need to edit this README.txt to finish it off
+    # you can find this common name translation above in the section that
+    # began the multiz11way work:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > gorGor3.11way.nh
+    /cluster/bin/phast/tree_doctor --rename \
+"gorGor3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; rheMac2->Rhesus; papHam1->Baboon; calJac3->Marmoset; tarSyr1->Tarsier; micMur1->Mouse_lemur; otoGar1->Bushbaby" \
+gorGor3.11way.nh > gorGor3.commonNames.11way.nh
+
+    time cp -p ../anno/gorGor3.11way.maf ./multiz11way.maf
+    #	real    13m33.422s
+# -rw-rw-r-- 1 30974842562 Dec  6 09:47 multiz11way.maf
+    time gzip multiz11way.maf
+    #	real    40m29.483s
+# -rw-rw-r-- 1 4187214672 Dec  6 09:47 multiz11way.maf.gz
+
+    md5sum *.nh *.gz *.txt > md5sum.txt
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/multiz11way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/multiz11way
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/downloads/gorGor3.11way.nh .
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/downloads/gorGor3.commonNames.11way.nh .
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/downloads/multiz11way.maf.gz .
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/downloads/README.txt .
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/downloads/md5sum.txt .
+
+#############################################################################
+# hgPal downloads (DONE - Hiram - 2011-12-08)
+#   FASTA from 11way for ensGene
+
+    ssh hgwdev
+    rm -rf /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+    #	real    115m38.599s
+
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+    # about 1h 10m
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc &
+
+    md5sum $gp.$mz.exonAA.fa.gz $gp.$mz.exonNuc.fa.gz > md5sum.txt
+
+    # we're only distributing exons at the moment
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    # obtain a copy of a most-recent README.txt file
+    cp /hive/data/genomes/hg19/bed/multiz46way/pal/README.txt .
+    # edit to bring up to date for gorGor3
+    ln -s `pwd`/README.txt $pd/
+
+#############################################################################

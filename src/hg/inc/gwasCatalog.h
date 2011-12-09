@@ -30,7 +30,7 @@ struct gwasCatalog
     char *replSample;	/* Replication sample size */
     char *region;	/* Chromosome band / region of SNP */
     char *genes;	/* Reported Gene(s) */
-    char *riskAllele;	/* Strongest SNP-RiskAllele */
+    char *riskAllele;	/* Strongest SNP-Risk Allele */
     char *riskAlFreq;	/* Risk Allele Frequency */
     char *pValue;	/* p-Value */
     char *pValueDesc;	/* p-Value Description */
