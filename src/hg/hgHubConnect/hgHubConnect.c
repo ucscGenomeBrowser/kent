@@ -430,6 +430,10 @@ if (cartVarExists(cart, hgHubDoDisconnect))
     {
     gotDisconnect = TRUE;
     doDisconnectHub(cart);
+
+    // now rebuild the cart variable ("trackHubs") that has which lists which
+    // hubs are on.
+    hubConnectHubsInCart(cart);
     }
 
 if (cartVarExists(cart, hgHubDoReset))
