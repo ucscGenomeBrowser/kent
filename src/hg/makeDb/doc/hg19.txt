@@ -13886,6 +13886,7 @@ mkdir hg19
 cat /hive/data/genomes/hg19/chrom.aliases \
  |awk '{ print("cat /hive/data/outside/Rfam/111130/genome_gff/" $1 ".gff3",  
                "|sed", sprintf("%c", 39) "s/" $1 "/" $2 "/" sprintf("%c", 39))}' |bash \
+ |grep -v -e "^#" \
  |awk '{ print($1 "\t" $4 - 1 "\t" $5 "\t" $9 "\t1\t" $7 "\t" 
                $4 - 1 "\t" $5 "\t0\t1\t" $5 - $4 + 1 "\t0"  }' \
 > hg19/Rfam.bed      
