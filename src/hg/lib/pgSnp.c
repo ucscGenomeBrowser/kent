@@ -700,12 +700,7 @@ static char *alleleCountsFromVcfRecord(struct vcfRecord *rec, int alDescCount)
 /* Build up comma-sep list of per-allele counts, if available, up to alDescCount
  * which may be less than rec->alleleCount: */
 {
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    dy = dyStringNew(0);
-else
-    dyStringClear(dy);
-dyStringClear(dy);
+struct dyString *dy = dyStringNew(0);
 int alCounts[VCF_MAX_ALLELE_LEN];
 boolean gotTotalCount = FALSE, gotAltCounts = FALSE;
 int i;
@@ -765,7 +760,7 @@ else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
     for (i = 1;  i < alDescCount;  i++)
 	dyStringPrintf(dy, ",%d", alCounts[i]);
     }
-return cloneStringZ(dy->string, dy->stringSize+1);
+return dyStringCannibalize(&dy);
 }
 
 struct pgSnp *pgSnpFromVcfRecord(struct vcfRecord *rec)
