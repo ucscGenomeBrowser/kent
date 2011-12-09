@@ -1276,8 +1276,10 @@ function tableSort(tbody,sortColumns)
     // Sort the array
     cols.sort(sortFieldCmp);
 
+    var topIndex = tbody.rows[0].rowIndex; // This could vary depending upon header rows
     for(var cIx=cols.length-1;cIx>=0;cIx--) {
-        $( cols[cIx].row ).insertBefore( tbody.rows[0]);
+        if (cols[cIx].row.rowIndex > topIndex) // Inserting before onesself will delete row
+            $( cols[cIx].row ).insertBefore( tbody.rows[0] );
     }
 
     gTbody=tbody;
