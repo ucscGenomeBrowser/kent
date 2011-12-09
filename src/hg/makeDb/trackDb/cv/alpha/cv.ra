@@ -5857,7 +5857,7 @@ target GATA2
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal. Antibody Target: GATA2
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId   ;
+vendorId GATA-2
 orderUrl http://molpharm.wisc.edu/people/faculty/bresnick/bresnick.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
@@ -8278,7 +8278,7 @@ lots 060729QCS1
 targetId GeneCard:ZNF274
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=ZNF274
 validation Human_-_ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
-label ZNF274 (AH00010782-A01)
+label ZNF274 (H00010782-A01)
 
 term ZNF274_(M01)
 tag ZNF274M01
