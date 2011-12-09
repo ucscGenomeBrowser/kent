@@ -113,6 +113,25 @@ significant peaks on the pooled data.  Only datasets containing at
 least 100 peaks passing the IDR threshold are considered valid and submitted
 for release. 
 </p>
+<p>
+Validation of ChIP-seq antibodies were determined by ChIP-seq. Target binding sites of several 
+transcription factors were also determined by ChIP-seq. The expression of the factors were knocked
+out by using cells lines which could be induced to generate specific short hairpin RNA (shRNA) strands.
+K562 cells (non-adherent, human erythromyeloblastoid leukemia cell line; ENCODE Tier 1) were 
+transduced with lentiviral vectors carrying an inducible shRNA to a specific transcription factor 
+as described in this 
+<a href=http://hudsonalpha.org/sites/default/files/pdf/shRNA%20K562%20protocol_0.pdf" TARGET="_BLANK">protocol</a>. 
+Expression of shRNA was induced with doxycycline in the growth media. 
+Only cell lines hat exhibited at least 70% reduction in expression of the targeted transcription factor 
+(determined by qPCR) were used. The cell lines is designated K562-shX, where X is the transcription 
+factor targeted by shRNA and K562 denotes the parent cell line.  For example, K562-shATF3 cells are 
+K562 cells selected for stable integration of shRNA targeting the transcription factor ATF3 gene and 
+showing at least a 70% reduction in the expression of ATF3 gene when measured by qPCR. Gene expression 
+in doxycycline induced and uninduced cells with RNA-seq was measured and profiled.  
+The RNA-seq data was submitted to GEO and is available 
+<a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE33816" TARGET="_BLANK">here</a>.
+</p>
+
 
 <a name="Credits"></a><h2> Credits </h2>
 <p>These data were provided by the <a href='http://myers.hudsonalpha.org/'
