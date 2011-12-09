@@ -466,6 +466,7 @@ encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 					'releaseOld': str(releaseOld),
 					'ignore' : 1,
 					'loose': 1,
+					'verbose': 1,
 					'summary': 0,
 					'specialMdb': specialMdb}
 	errors = []
@@ -501,7 +502,6 @@ encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 		return
 	
 	writeClaimMail(args, user, qaDir)
-	print "Making local mkChangeNotes"
 	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
 	if genNotes.errors:
 		print "NON-FATAL ERROR: Local mkChangeNotes found errors in the release"
