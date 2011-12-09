@@ -92,14 +92,6 @@ html wgEncodeHaibGenotype.new
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibGenotypeAstrocyRegionsRep1
-        parent wgEncodeHaibGenotype off
-        shortLabel Astrocy 1
-        longLabel Astrocy Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=Astrocy treatment=None rep=rep1
-        type bed 9 +
-        # subId=3432 dateSubmitted=2011-01-20
-
         track wgEncodeHaibGenotypeBjRegionsRep1
         parent wgEncodeHaibGenotype off
         shortLabel BJ 1
