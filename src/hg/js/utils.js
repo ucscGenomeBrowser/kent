@@ -1266,21 +1266,18 @@ function tableSort(tbody,sortColumns)
     var cols = new Array();
     var trs = tbody.rows;
     $(trs).each(function(ix) {
-        //cols.push(new sortRow(this,sortColumns,$(this).clone()));
         var th = this.cells[sortColumns.cellIxs[0]];
         if(sortColumns.useAbbr[0])
-            cols.push(new sortField(th.abbr,sortColumns.reverse[0],$(this).clone())); // When jQuery >= v1.4, use detach() insterad of clone()
+            cols.push(new sortField(th.abbr,sortColumns.reverse[0],this));
         else
-            cols.push(new sortField($(th).text(),sortColumns.reverse[0],$(this).clone()));
+            cols.push(new sortField($(th).text(),sortColumns.reverse[0],this));
     });
 
     // Sort the array
-    //cols.sort(sortRowCmp);
     cols.sort(sortFieldCmp);
 
-    // Now reorder the table
-    for(var cIx=0;cIx<cols.length;cIx++) {
-        $(tbody.rows[cIx]).replaceWith(cols[cIx].row);
+    for(var cIx=cols.length-1;cIx>=0;cIx--) {
+        $( cols[cIx].row ).insertBefore( tbody.rows[0]);
     }
 
     gTbody=tbody;

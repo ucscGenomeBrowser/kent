@@ -3840,6 +3840,14 @@ for(di=0;di<membersForAll->dimMax;di++) { if (membersForAll->members[di]) dimCou
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
+#ifdef SUBTRACK_CFG
+if (useDragAndDrop)  // IE9 fails on subVisDD when dragAndDrop !
+    {
+    char *browserVersion;
+    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion > '8')
+        useDragAndDrop = FALSE;
+    }
+#endif///def SUBTRACK_CFG
 char buffer[SMALLBUF];
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
