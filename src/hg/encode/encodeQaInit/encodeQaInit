@@ -432,8 +432,8 @@ def main():
         description='Initializes QA directory for claiming a release',
         epilog=
 """Example:
-qaInit hg19 wgEncodeSydhTfbs 1 69
-qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
+encodeQaInit hg19 wgEncodeSydhTfbs 1 69
+encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 """
         )
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
