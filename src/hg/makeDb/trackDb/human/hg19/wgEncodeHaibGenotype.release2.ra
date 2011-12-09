@@ -20,12 +20,12 @@ extraFields logR=[f]LogR_Value
 noScoreFilter .
 html wgEncodeHaibGenotype.new
 
-        track wgEncodeHaibGenotypeGm12878RegionsRep1
-        parent wgEncodeHaibGenotype on
-        shortLabel GM12878 1
-        longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=1GM12878 treatment=None rep=rep1
-        type bed 9 +
+        #track wgEncodeHaibGenotypeGm12878RegionsRep1
+        #parent wgEncodeHaibGenotype on
+        #shortLabel GM12878 1
+        #longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
+        #subGroups cellType=1GM12878 treatment=None rep=rep1
+        #type bed 9 +
         # subId=4057 dateSubmitted=2011-05-09
 
         track wgEncodeHaibGenotypeGm12878RegionsRep1V2
@@ -89,14 +89,6 @@ html wgEncodeHaibGenotype.new
         shortLabel AoSMC 1
         longLabel AoSMC Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=AOSMC treatment=None rep=rep1
-        type bed 9 +
-        # subId=3432 dateSubmitted=2011-01-20
-
-        track wgEncodeHaibGenotypeAstrocyRegionsRep1
-        parent wgEncodeHaibGenotype off
-        shortLabel Astrocy 1
-        longLabel Astrocy Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=Astrocy treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
