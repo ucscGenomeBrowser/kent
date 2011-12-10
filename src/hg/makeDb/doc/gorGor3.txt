@@ -2099,3 +2099,63 @@ gorGor3.11way.nh > gorGor3.commonNames.11way.nh
     ln -s /hive/data/genomes/gorGor3/bed/multiz11way/downloads/md5sum.txt .
 
 #############################################################################
+# hgPal downloads (DONE - Hiram - 2011-12-08)
+#   FASTA from 11way for ensGene
+
+    ssh hgwdev
+    rm -rf /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+    #	real    115m38.599s
+
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+    # about 1h 10m
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc &
+
+    md5sum $gp.$mz.exonAA.fa.gz $gp.$mz.exonNuc.fa.gz > md5sum.txt
+
+    # we're only distributing exons at the moment
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    # obtain a copy of a most-recent README.txt file
+    cp /hive/data/genomes/hg19/bed/multiz46way/pal/README.txt .
+    # edit to bring up to date for gorGor3
+    ln -s `pwd`/README.txt $pd/
+
+#############################################################################
