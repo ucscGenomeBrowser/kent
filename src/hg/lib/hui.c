@@ -3846,6 +3846,7 @@ if (useDragAndDrop)  // IE9 & Chrom fail on subVisDD when dragAndDrop !
     char *browserVersion;
     enum browserType browserType = cgiClientBrowser(&browserVersion, NULL, NULL);
     if ( browserType == btChrome
+    ||   browserType == btSafari
     ||  (browserType == btIE  && *browserVersion > '8'))
         useDragAndDrop = FALSE;
     }
