@@ -3841,10 +3841,12 @@ sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 #ifdef SUBTRACK_CFG
-if (useDragAndDrop)  // IE9 fails on subVisDD when dragAndDrop !
+if (useDragAndDrop)  // IE9 & Chrom fail on subVisDD when dragAndDrop !
     {
     char *browserVersion;
-    if (btIE == cgiClientBrowser(&browserVersion, NULL, NULL) && *browserVersion > '8')
+    enum browserType browserType = cgiClientBrowser(&browserVersion, NULL, NULL);
+    if ( browserType == btChrome
+    ||  (browserType == btIE  && *browserVersion > '8'))
         useDragAndDrop = FALSE;
     }
 #endif///def SUBTRACK_CFG
