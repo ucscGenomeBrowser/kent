@@ -35,7 +35,7 @@ include wgEncodeGisDnaPet.ra
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
 include wgEncodeHaibGenotype.ra beta,public
-include wgEncodeHaibGenotype.new.ra alpha
+include wgEncodeHaibGenotype.release2.ra alpha
 
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra

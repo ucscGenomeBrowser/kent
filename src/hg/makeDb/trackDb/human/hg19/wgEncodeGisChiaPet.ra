@@ -121,13 +121,13 @@ noInherit on
         type bigWig 1.000000 973.000000
         # subId=4843 dateSubmitted=2011-09-20
 
-        #track wgEncodeGisChiaPetK562CtcfSigRep1
-        #parent wgEncodeGisChiaPetSignal off
-        #shortLabel K562 CTCF Sig 1
-        #longLabel K562 CTCF ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
-        #subGroups view=Signal factor=CTCF cellType=1K562 rep=rep1
-        #type bigWig 1.000000 1007.000000
-        #color 46,0,184
+        track wgEncodeGisChiaPetK562CtcfSigRep1
+        parent wgEncodeGisChiaPetSignal off
+        shortLabel K562 CTCF Sig 1
+        longLabel K562 CTCF ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
+        subGroups view=Signal factor=CTCF cellType=1K562 rep=rep1
+        type bigWig 1.000000 1007.000000
+        color 46,0,184
         # subId=4307 dateSubmitted=2011-08-30
 
         track wgEncodeGisChiaPetHelas3Pol2SigRep1
