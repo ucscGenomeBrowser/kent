@@ -169,7 +169,7 @@ Thank you!
 	if not tablestr:
 		return ""
 
-	f = open(qaDir + "/tableList", "w")
+	f = open(qaDir + "/newTables", "w")
 	f.write(tablestr)
 	f.close
 	
@@ -397,14 +397,13 @@ Thanks!
 	f.close()
 	return
 
-def writeCheckFilesList(files, qaDir):
+def writeCheckList(files, filename, qaDir):
 	delim = "\n"
 	filelist = delim.join(list(files))
-	f = open(qaDir + "/checkPushFilesList", "w")
+	f = open(qaDir + "/%s" % filename, "w")
 	f.write(filelist)
 	f.close
 	return
-
 
 def changeStatus(subIds):
 	for i in subIds:
@@ -433,8 +432,8 @@ def main():
         description='Initializes QA directory for claiming a release',
         epilog=
 """Example:
-qaInit hg19 wgEncodeSydhTfbs 1 69
-qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
+encodeQaInit hg19 wgEncodeSydhTfbs 1 69
+encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 """
         )
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
@@ -465,8 +464,9 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 					'composite': args.composite,
 					'releaseNew': args.release,
 					'releaseOld': str(releaseOld),
-					'ignore' : 0,
+					'ignore' : 1,
 					'loose': 1,
+					'verbose': 1,
 					'summary': 0,
 					'specialMdb': specialMdb}
 	errors = []
@@ -502,7 +502,6 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 		return
 	
 	writeClaimMail(args, user, qaDir)
-	print "Making local mkChangeNotes"
 	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
 	if genNotes.errors:
 		print "NON-FATAL ERROR: Local mkChangeNotes found errors in the release"
@@ -534,7 +533,9 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	(short, long) = writeHtml(args, c, qaDir)
 	
 	writePushHtmlMail(args, user, qaDir)
-	writeCheckFilesList(genNotes.pushFiles, qaDir)
+	writeCheckList(genNotes.pushFiles, "checkPushFilesList", qaDir)
+	writeCheckList(genNotes.fullFiles, "fullFilesListNoRevoked", qaDir)
+        writeCheckList(genNotes.fullTables, "allTables", qaDir)
 
 	initDate = lastInitDate(qaDir + "/release.sql")
 	if not initDate:

@@ -9538,10 +9538,14 @@ char *nameCopy = cloneString(myItem->name);
 char *allFreqCopy = cloneString(myItem->alleleFreq);
 int cnt = chopByChar(nameCopy, '/', allele, myItem->alleleCount);
 if (cnt != myItem->alleleCount)
-    errAbort("Bad allele name %s", myItem->name);
+    errAbort("Bad allele name '%s' (%s:%d-%d): expected %d /-sep'd alleles", myItem->name,
+	     myItem->chrom, myItem->chromStart+1, myItem->chromEnd, myItem->alleleCount);
 int fcnt = chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
 if (fcnt != myItem->alleleCount && fcnt != 0)
-    errAbort("Bad freq for %s",  myItem->name);
+    errAbort("Bad freq '%s' for '%s' (%s:%d-%d): expected %d ,-sep'd numbers",
+	     myItem->alleleFreq, myItem->name,
+	     myItem->chrom, myItem->chromStart+1, myItem->chromEnd,
+	     myItem->alleleCount);
 int i = 0;
 for (i=0;i<fcnt;i++)
     allTot += atoi(freq[i]);

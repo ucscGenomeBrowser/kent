@@ -481,7 +481,7 @@ visibility pack
 type bed 4 +
 
 track sibTxGraph override
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm8&species=M.+musculus&tromer=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm8&species=M.+musculus&tromer=$$
 
 track broadChromatinChIPSeq
 compositeTrack on

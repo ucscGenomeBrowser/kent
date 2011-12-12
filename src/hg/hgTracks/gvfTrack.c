@@ -127,7 +127,7 @@ if (ix >= 0)
     if (sameWord(origin, "Not tested"))
 	dyStringPrintf(name, "%s_unk", gvf->name);
     else if (sameWord(origin, "De novo"))
-	dyStringPrintf(name, "%s_dn", gvf->name);
+	dyStringPrintf(name, "%s_dnovo", gvf->name);
     else if (sameWord(origin, "Maternal"))
 	dyStringPrintf(name, "%s_mat", gvf->name);
     else if (sameWord(origin, "Paternal"))

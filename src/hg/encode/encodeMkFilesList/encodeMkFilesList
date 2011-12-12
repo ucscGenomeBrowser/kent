@@ -683,7 +683,7 @@ close FILE;
 sub doMd5Threads {
     # takes in a list of files and md5sums them two at a time with threads
     my %md5sums = %{$_[0]};
-    my @md5files = @{$_[1]};
+    my @md5files = sort @{$_[1]};
     my %opt = %{$_[2]};
     my %threadContainer;
     # only 2 threads allowed, filesystem limitation, ~ 125 MB/s from disk only

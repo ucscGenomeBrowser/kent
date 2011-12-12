@@ -7095,7 +7095,7 @@ subId 3271
 view RawData
 
 metaObject wgEncodeOpenChromChipMonocd14InputSig
-objType file
+objType table
 antibody Input
 cell Monocytes-CD14+
 composite wgEncodeOpenChromChip
@@ -7117,6 +7117,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 3271
+tableName wgEncodeOpenChromChipMonocd14InputSig
 view Signal
 
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputAln
@@ -7694,4 +7695,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1666421634
+# MAGIC: 341113558

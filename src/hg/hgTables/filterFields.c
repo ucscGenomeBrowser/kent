@@ -1091,7 +1091,7 @@ else
 
 puts("</TABLE>");
 
-if (ct->wiggle)
+if (ct->wiggle || isBamTable(table) || isVcfTable(table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
