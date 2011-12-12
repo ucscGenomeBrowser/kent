@@ -4582,6 +4582,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
+dccAccession wgEncodeEH001149
+expId 1149
 fileName wgEncodeRikenCageHepg2CellPapTssHmmV2.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -4589,6 +4591,7 @@ labExpId K01,K02
 labProtocolId 013WC+cage,014WC+cage
 labVersion IDR
 localization cell
+md5sum 7f4369f9439d4874b8ca831ea97ca48e
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -5269,6 +5272,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
+dccAccession wgEncodeEH000344
+expId 344
 fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmmV2.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -5276,6 +5281,7 @@ labExpId I68
 labProtocolId gen0127NLtcage
 labVersion IDR
 localization nucleolus
+md5sum 5d61ca1dd5a3b97a1c349cfe5529b70c
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -7307,6 +7313,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
+dccAccession wgEncodeEH000334
+expId 334
 fileName wgEncodeRikenCageK562ChromatinTotalTssHmmV2.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -7314,6 +7322,7 @@ labExpId I35
 labProtocolId gen0134CHtcage
 labVersion IDR
 localization chromatin
+md5sum b2de7b3c8b8bcaa98996b53aa2f7684a
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -8156,6 +8165,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
+dccAccession wgEncodeEH000335
+expId 335
 fileName wgEncodeRikenCageK562NucleolusTotalTssHmmV2.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -8163,6 +8174,7 @@ labExpId I33
 labProtocolId gen0144NLtcage
 labVersion IDR
 localization nucleolus
+md5sum 099d7b5a919825942021cb1932b92d51
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -8368,6 +8380,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
+dccAccession wgEncodeEH000336
+expId 336
 fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmmV2.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -8375,6 +8389,7 @@ labExpId I34
 labProtocolId gen0147NPtcage
 labVersion IDR
 localization nucleoplasm
+md5sum 8ba003d8b609a42c5811d3bd3cdfb459
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -10514,6 +10529,8 @@ dataType Cage
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
+dccAccession wgEncodeEH001154
+expId 1154
 fileName wgEncodeRikenCageNhekNucleusPapTssHmmV2.bedRnaElements.gz
 grant Gingeras
 lab RIKEN
@@ -10521,6 +10538,7 @@ labExpId K09
 labProtocolId 027N+cage
 labVersion IDR
 localization nucleus
+md5sum c6bc27fcd20b5adbf1c3c5ff105b2cd9
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -10982,4 +11000,4 @@ rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: 482135850
+# MAGIC: -8302640
