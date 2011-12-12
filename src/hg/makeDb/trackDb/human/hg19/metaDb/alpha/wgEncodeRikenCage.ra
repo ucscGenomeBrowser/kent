@@ -4566,10 +4566,34 @@ labProtocolId 013WC+cage,014WC+cage
 labVersion IDR
 localization cell
 md5sum b4b91192506fd7d6b626f1518d4f197c
+objStatus replaced
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5060
+view TssHmm
+
+metaObject wgEncodeRikenCageHepg2CellPapTssHmmV2
+objType file
+bioRep 013WC,014WC
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-09
+dateUnrestricted 2012-09-09
+fileName wgEncodeRikenCageHepg2CellPapTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId K01,K02
+labProtocolId 013WC+cage,014WC+cage
+labVersion IDR
+localization cell
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 5147
+submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2CytosolPamAln
@@ -5229,10 +5253,34 @@ labProtocolId gen0127NLtcage
 labVersion IDR
 localization nucleolus
 md5sum baa3c52dcd332cd280df71b425357178
+objStatus replaced
 origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5069
+view TssHmm
+
+metaObject wgEncodeRikenCageHepg2NucleolusTotalTssHmmV2
+objType file
+bioRep gen0127NL
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-09
+dateUnrestricted 2012-09-09
+fileName wgEncodeRikenCageHepg2NucleolusTotalTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I68
+labProtocolId gen0127NLtcage
+labVersion IDR
+localization nucleolus
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5147
+submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
 
 metaObject wgEncodeRikenCageHepg2NucleusPamAln
@@ -7243,10 +7291,34 @@ labProtocolId gen0134CHtcage
 labVersion IDR
 localization chromatin
 md5sum eb338642e7ec879be9ec11fe43da98e0
+objStatus replaced
 origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5065
+view TssHmm
+
+metaObject wgEncodeRikenCageK562ChromatinTotalTssHmmV2
+objType file
+bioRep gen0134CH
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-09
+dateUnrestricted 2012-09-09
+fileName wgEncodeRikenCageK562ChromatinTotalTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I35
+labProtocolId gen0134CHtcage
+labVersion IDR
+localization chromatin
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5147
+submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
 
 metaObject wgEncodeRikenCageK562CytosolPamAln
@@ -8068,10 +8140,34 @@ labProtocolId gen0144NLtcage
 labVersion IDR
 localization nucleolus
 md5sum 25a8b99de440b531dd14432df0274159
+objStatus replaced
 origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5056
+view TssHmm
+
+metaObject wgEncodeRikenCageK562NucleolusTotalTssHmmV2
+objType file
+bioRep gen0144NL
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-09
+dateUnrestricted 2012-09-09
+fileName wgEncodeRikenCageK562NucleolusTotalTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I33
+labProtocolId gen0144NLtcage
+labVersion IDR
+localization nucleolus
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5147
+submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleoplasmTotalAln
@@ -8256,10 +8352,34 @@ labProtocolId gen0147NPtcage
 labVersion IDR
 localization nucleoplasm
 md5sum bd5cf0866d75661595d208f490df77a4
+objStatus replaced
 origAssembly hg19
 project wgEncode
 rnaExtract total
 subId 5076
+view TssHmm
+
+metaObject wgEncodeRikenCageK562NucleoplasmTotalTssHmmV2
+objType file
+bioRep gen0147NP
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-09
+dateUnrestricted 2012-09-09
+fileName wgEncodeRikenCageK562NucleoplasmTotalTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId I34
+labProtocolId gen0147NPtcage
+labVersion IDR
+localization nucleoplasm
+origAssembly hg19
+project wgEncode
+rnaExtract total
+subId 5147
+submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
 
 metaObject wgEncodeRikenCageK562NucleusPamAln
@@ -10378,10 +10498,34 @@ labProtocolId 027N+cage
 labVersion IDR
 localization nucleus
 md5sum 61b623a918f76f2b37d4c2dd36528213
+objStatus replaced
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
 subId 5078
+view TssHmm
+
+metaObject wgEncodeRikenCageNhekNucleusPapTssHmmV2
+objType file
+bioRep 027N
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-09
+dateUnrestricted 2012-09-09
+fileName wgEncodeRikenCageNhekNucleusPapTssHmmV2.bedRnaElements.gz
+grant Gingeras
+lab RIKEN
+labExpId K09
+labProtocolId 027N+cage
+labVersion IDR
+localization nucleus
+origAssembly hg19
+project wgEncode
+rnaExtract longPolyA
+subId 5147
+submittedDataVersion V2 - Filtered out the off end of chromosome reads
 view TssHmm
 
 metaObject wgEncodeRikenCageProstateCellPamAln
@@ -10838,4 +10982,4 @@ rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: -2111790137
+# MAGIC: 482135850
