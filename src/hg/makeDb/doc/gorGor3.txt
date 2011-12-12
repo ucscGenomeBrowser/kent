@@ -2019,3 +2019,143 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# download data for 11-way (DONE - 2011-12-08 - Hiram)
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/cons
+    cp -p /hive/data/genomes/xenTro3/bed/multiz9way/cons/README.txt .
+    # need to edit this to finish it off
+
+    md5sum phastCons11way.bw phastCons11way.wigFix.gz primate.mod > md5sum.txt
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phastCons11way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phastCons11way
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/cons/all/downloads/phastCons11way.wigFix.gz \
+	./phastCons11way.wigFix.gz
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/all/phastCons11way.bw \
+	./phastCons11way.bw
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/all/all.mod \
+	./primate.mod
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/README.txt .
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/cons/md5sum.txt .
+
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP
+    cp /hive/data/genomes/xenTro3/bed/multiz9way/consPhyloP/README.txt .
+    # need to edit this to finish it off
+
+    md5sum README.txt phastCons11way.bw phastCons11way.wigFix.gz primate.mod \
+	> md5sum.txt
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phyloP11way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/phyloP11way
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/all/downloads/phyloP11way.wigFix.gz \
+	./phyloP11way.wigFix.gz
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/all/phyloP11way.bw \
+	./phyloP11way.bw
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/run.phyloP/all.mod \
+	./primate.mod
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/README.txt .
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/consPhyloP/md5sum.txt .
+
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/downloads
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/downloads
+    # use a README from the most recent multiz like this
+    #	this one is from xenTro3
+    cp -p /hive/data/genomes/xenTro3/bed/multiz9way/downloads/README.txt .
+    # need to edit this README.txt to finish it off
+    # you can find this common name translation above in the section that
+    # began the multiz11way work:
+    grep TREE ../cons/all/all.mod | sed -e "s/TREE: //" > gorGor3.11way.nh
+    /cluster/bin/phast/tree_doctor --rename \
+"gorGor3->Gorilla; hg19->Human; panTro3->Chimp; ponAbe2->Orangutan; nomLeu1->Gibbon; rheMac2->Rhesus; papHam1->Baboon; calJac3->Marmoset; tarSyr1->Tarsier; micMur1->Mouse_lemur; otoGar1->Bushbaby" \
+gorGor3.11way.nh > gorGor3.commonNames.11way.nh
+
+    time cp -p ../anno/gorGor3.11way.maf ./multiz11way.maf
+    #	real    13m33.422s
+# -rw-rw-r-- 1 30974842562 Dec  6 09:47 multiz11way.maf
+    time gzip multiz11way.maf
+    #	real    40m29.483s
+# -rw-rw-r-- 1 4187214672 Dec  6 09:47 multiz11way.maf.gz
+
+    md5sum *.nh *.gz *.txt > md5sum.txt
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/multiz11way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/gorGor3/multiz11way
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/downloads/gorGor3.11way.nh .
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/downloads/gorGor3.commonNames.11way.nh .
+    ln -s \
+/hive/data/genomes/gorGor3/bed/multiz11way/downloads/multiz11way.maf.gz .
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/downloads/README.txt .
+
+    ln -s /hive/data/genomes/gorGor3/bed/multiz11way/downloads/md5sum.txt .
+
+#############################################################################
+# hgPal downloads (DONE - Hiram - 2011-12-08)
+#   FASTA from 11way for ensGene
+
+    ssh hgwdev
+    rm -rf /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    mkdir /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    cd /hive/data/genomes/gorGor3/bed/multiz11way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.jobs
+
+    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
+    sleep 1
+    tail -f $gp.jobs.log
+    #	real    115m38.599s
+
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+    # about 1h 10m
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc &
+
+    md5sum $gp.$mz.exonAA.fa.gz $gp.$mz.exonNuc.fa.gz > md5sum.txt
+
+    # we're only distributing exons at the moment
+    mz=multiz11way
+    gp=ensGene
+    db=gorGor3
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    # obtain a copy of a most-recent README.txt file
+    cp /hive/data/genomes/hg19/bed/multiz46way/pal/README.txt .
+    # edit to bring up to date for gorGor3
+    ln -s `pwd`/README.txt $pd/
+
+#############################################################################

@@ -4,7 +4,7 @@ from ucscgenomics.ordereddict import OrderedDict
 import collections
 
 class RaFile(OrderedDict):
-    """
+    '''
     Stores a Ra file in a set of entries, one for each stanza in the file.
 
     To make a RaFile, it is usually easiest to just pass it's path:
@@ -71,17 +71,17 @@ class RaFile(OrderedDict):
     possible before operating over them.
 
     Filtering allows you to eliminate a lot of code.
-    """
+    '''
 
     def __init__(self, filePath=None):
         OrderedDict.__init__(self)
         if filePath != None:
             self.read(filePath)
 
-    def read(self, filePath):
-        """
+    def read(self, filePath, key=None):
+        '''
         Reads an rafile stanza by stanza, and internalizes it.
-        """
+        '''
 
         file = open(filePath, 'r')
 
@@ -89,11 +89,16 @@ class RaFile(OrderedDict):
         stanza = list()
         keyValue = ''
 
-        for line in file:
-
+        reading = 1
+        
+        while reading:
+            line = file.readline()
+            if line == '':
+                reading = 0
+        
             line = line.strip()
 
-            if len(stanza) == 0 and (line.startswith('#') or line == ''):
+            if len(stanza) == 0 and (line.startswith('#') or (line == '' and reading)):
                 OrderedDict.append(self, line)
                 continue
 
@@ -101,38 +106,26 @@ class RaFile(OrderedDict):
                 stanza.append(line)
             elif len(stanza) > 0:
                 if keyValue == '':
-                    keyValue, name, entry = self.readStanza(stanza)
+                    keyValue, name, entry = self.readStanza(stanza, key)
                 else:
-                    testKey, name, entry = self.readStanza(stanza)
+                    testKey, name, entry = self.readStanza(stanza, key)
                     if entry != None and keyValue != testKey:
                         raise KeyError('Inconsistent Key ' + testKey)
 
                 if entry != None:
-                    if name in self:
-                        raise KeyError('Duplicate Key ' + name)
-                    self[name] = entry
+                    if name != None or key == None:
+                        if name in self:
+                            raise KeyError('Duplicate Key ' + name)
+                        self[name] = entry
 
                 stanza = list()
-
-        if len(stanza) > 0:
-            if keyValue == '':
-                keyValue, name, entry = self.readStanza(stanza)
-            else:
-                testKey, name, entry = self.readStanza(stanza)
-                if entry != None and keyValue != testKey:
-                    raise KeyError('Inconsistent Key ' + testKey)
-
-            if entry != None:
-                if name in self:
-                    raise KeyError('Duplicate Key ' + name)
-                self[name] = entry
 
         file.close()
 
 
-    def readStanza(self, stanza):
+    def readStanza(self, stanza, key=None):
         entry = RaStanza()
-        val1, val2 = entry.readStanza(stanza)
+        val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
 
@@ -165,7 +158,7 @@ class RaFile(OrderedDict):
 
 
     def filter(self, where, select):
-        """
+        '''
         select useful data from matching criteria
 
         where: the conditional function that must be met. Where takes one
@@ -176,7 +169,7 @@ class RaFile(OrderedDict):
         For each stanza, if where(stanza) holds, it will add select(stanza)
         to the list of returned entities. Also forces silent failure of key
         errors, so you don't have to check that a value is or is not in the stanza.
-        """
+        '''
 
         ret = list()
         for stanza in self.itervalues():
@@ -188,7 +181,7 @@ class RaFile(OrderedDict):
         return ret
 
     def filter2(self, where):
-        """
+        '''
         select useful data from matching criteria
         Filter2 returns a Ra dictionary. Easier to use but more memory intensive.
 
@@ -200,7 +193,7 @@ class RaFile(OrderedDict):
         For each stanza, if where(stanza) holds, it will add select(stanza)
         to the list of returned entities. Also forces silent failure of key
         errors, so you don't have to check that a value is or is not in the stanza.
-        """
+        '''
         ret = RaFile()
         for stanza in self.itervalues():
             try:
@@ -211,7 +204,7 @@ class RaFile(OrderedDict):
         return ret
 
     def summaryDiff(self,other):
-        """
+        '''
         Input:
             RaFile object being compared.
         Output: RaFile with differences.
@@ -226,7 +219,7 @@ class RaFile(OrderedDict):
         ra1 = this.summaryDiff(that)
         and
         ra2 = that.summaryDiff(this)
-        """
+        '''
         this = RaFile()
         RetThis = RaFile()
         for stanza in self.itervalues():
@@ -238,12 +231,12 @@ class RaFile(OrderedDict):
         return RetThis
 
     def changeSummary(self, otherRa):
-        """
+        '''
         Input:
             Two RaFile objects
         Output:
             Dictionary showing differences between stanzas, list of added and dropeed stanzas
-        """
+        '''
         retDict = collections.defaultdict(list)
         dropList = set(self.iterkeys()) - set(otherRa.iterkeys())
         addList = set(otherRa.iterkeys()) - set(self.iterkeys())
@@ -269,7 +262,7 @@ class RaFile(OrderedDict):
         return retDict, dropList, addList
 
     def diffFilter(self, select, other):
-        """
+        '''
         Input:
             Lambda function of desired comparison term
             RaFile object being compared.
@@ -286,7 +279,7 @@ class RaFile(OrderedDict):
         ra1 = this.diffFilter(select function, that)
         and
         ra2 = that.diffFilter(select function, this)
-        """
+        '''
         this = RaFile()
         RetThis = RaFile()
         thisSelectDict = dict()
@@ -315,7 +308,7 @@ class RaFile(OrderedDict):
         return RetThis
 
     def updateDiffFilter(self, term, other):
-        """
+        '''
         Replicates updateMetadata.
         Input:
             Term
@@ -326,7 +319,7 @@ class RaFile(OrderedDict):
                 Stanzas found in 'self' and 'other' that have the 'Term' in 'other'
                 are overwritten (or inserted if not found) into 'self'. Final merged
                 dictionary is returned.
-        """
+        '''
         ret = self
         common = set(self.iterkeys()) & set(self.iterkeys())
         for stanza in common:
@@ -371,16 +364,17 @@ class RaFile(OrderedDict):
                 str += item[0].__str__() + '\n'
             else:
                 str += item[1].__str__() + '\n'
-        return str
+        return str #.rsplit('\n', 1)[0]
 
 
 class RaStanza(OrderedDict):
-    """
+    '''
     Holds an individual entry in the RaFile.
-    """
+    '''
 
     def __init__(self):
         self._name = ''
+        self._nametype = ''
         OrderedDict.__init__(self)
 
     @property
@@ -388,34 +382,46 @@ class RaStanza(OrderedDict):
         return self._name
 
 
-    def readStanza(self, stanza):
-        """
+    def readStanza(self, stanza, key=None):
+        '''
         Populates this entry from a single stanza
-        """
+        '''
 
         for line in stanza:
             self.readLine(line)
 
-        return self.readName(stanza[0])
+        return self.readName(stanza, key)
 
 
-    def readName(self, line):
-        """
+    def readName(self, stanza, key=None):
+        '''
         Extracts the Stanza's name from the value of the first line of the
         stanza.
-        """
-
+        '''
+        
+        if key == None:
+            line = stanza[0]
+        else:
+            line = None
+            for s in stanza:
+                if s.split(' ', 1)[0] == key:
+                    line = s
+                    break
+            if line == None:
+                return None
+        
         if len(line.split(' ', 1)) != 2:
             raise ValueError()
 
         names = map(str.strip, line.split(' ', 1))
+        self._nametype = names[0]
         self._name = names[1]
         return names
 
     def readLine(self, line):
-        """
+        '''
         Reads a single line from the stanza, extracting the key-value pair
-        """
+        '''
 
         if line.startswith('#') or line == '':
             OrderedDict.append(self, line)
@@ -468,6 +474,7 @@ class RaStanza(OrderedDict):
     def iter(self):
         iterkeys(self)
 
+        
     def __str__(self):
         str = ''
         for key in self:
