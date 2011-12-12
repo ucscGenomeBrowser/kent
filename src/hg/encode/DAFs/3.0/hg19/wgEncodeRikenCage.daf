@@ -1,4 +1,4 @@
-# Data Agreement File for RIKEN CAGE project $Revision: 1.6 $
+# Data Agreement File for RIKEN CAGE project $Revision: 1.8 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -18,8 +18,6 @@
 #replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
 #
 #NOTE:  The optional columns do not have to be in the DDF for validation
-
-
 
 # Lab and general info
 dafVersion        2.0
@@ -43,28 +41,42 @@ validationSettings      validateFiles.bam:mismatches=8
 
 view             PlusRawSignal   
 type             bigWig    
-required         yes
+required         no 
 hasReplicates    yes
 
 view             MinusRawSignal  
 type             bigWig    
-required         yes
+required         no 
 hasReplicates    yes
 
 view             Alignments
 type             bam
-required         yes
+required         no 
 hasReplicates    yes
 
 view             RawData
 type             fastq
-hasReplicates    yes
+hasReplicates    no 
 required         yes 
 
 # Optional elements files can be submitted with data or with separate DAF
 # Pooled replicates
-view             TSS
+view             Clusters  
+longLabelPrefix  RIKEN CAGE Clusters 
+type             bedRnaElements
+sql		 bedRnaElements
+required         no
+hasReplicates    no
+
+view             TssHmm
+type             bedRnaElements
+sql		 bedRnaElements
+hasReplicates    no 
+required         no
+downloadOnly     yes
+
+view             TssGencV7
 type             gtf
 hasReplicates    no 
-required         yes
+required         no
 downloadOnly     yes

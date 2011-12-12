@@ -1,6 +1,6 @@
 mkChangeNotes v2
 hg19 wgEncodeRikenCage Release 2 vs Release 1
-2011-12-01
+2011-12-12
 
 QA Count Summaries for Release 2:
 Tables: 204
@@ -409,7 +409,7 @@ New Download Files (362):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CellPapPlusSignalRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CellPapPlusSignalRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CellPapTssGencV7.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CellPapTssHmm.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CellPapTssHmmV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CytosolPamAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CytosolPamAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2CytosolPamClusters.bed.gz
@@ -429,7 +429,7 @@ New Download Files (362):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleolusTotalMinusSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleolusTotalPlusSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleolusTotalTssGencV7.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleolusTotalTssHmm.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleolusTotalTssHmmV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleusPamAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleusPamAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageHepg2NucleusPamClusters.bed.gz
@@ -485,7 +485,7 @@ New Download Files (362):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562ChromatinTotalMinusSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562ChromatinTotalPlusSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562ChromatinTotalTssGencV7.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562ChromatinTotalTssHmm.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562ChromatinTotalTssHmmV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562CytosolPamAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562CytosolPamAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562CytosolPamClusters.bed.gz
@@ -512,12 +512,12 @@ New Download Files (362):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleolusTotalPlusSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleolusTotalRawData.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleolusTotalTssGencV7.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleolusTotalTssHmm.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleolusTotalTssHmmV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleoplasmTotalClusters.bed.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleoplasmTotalMinusSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleoplasmTotalPlusSignal.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleoplasmTotalTssGencV7.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleoplasmTotalTssHmm.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleoplasmTotalTssHmmV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleusPamAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleusPamAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageK562NucleusPamClusters.bed.gz
@@ -590,7 +590,7 @@ New Download Files (362):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageNhekNucleusPapMinusSignalRep3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageNhekNucleusPapPlusSignalRep3.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageNhekNucleusPapTssGencV7.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageNhekNucleusPapTssHmm.bedRnaElements.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageNhekNucleusPapTssHmmV2.bedRnaElements.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageProstateCellPamAln.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageProstateCellPamAln.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/wgEncodeRikenCageProstateCellPamClusters.bed.gz
