@@ -1078,7 +1078,7 @@ vendorId CD20+_RO01778
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol missing
+protocol Stam:CD20+_Stam_protocol.pdf
 
 term CD20+_RO01794
 tag CD20RO01794
@@ -1094,7 +1094,7 @@ vendorId CD20+_RO01794
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol missing
+protocol Stam:CD20+_Stam_protocol.pdf
 
 term CD20+_RO01746
 tag CD20RO01746
@@ -1110,7 +1110,7 @@ vendorId CD20+_RO01746
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol missing
+protocol Stam:CD20+_Stam_protocol.pdf
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
