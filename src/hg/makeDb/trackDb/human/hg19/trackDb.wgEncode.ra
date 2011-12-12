@@ -119,7 +119,7 @@ include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
-
+#include wgEncodeHaibRnaSeq.release2.ra
 
 
 
