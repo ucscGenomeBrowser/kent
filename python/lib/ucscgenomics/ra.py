@@ -4,7 +4,7 @@ from ucscgenomics.ordereddict import OrderedDict
 import collections
 
 class RaFile(OrderedDict):
-    """
+    '''
     Stores a Ra file in a set of entries, one for each stanza in the file.
 
     To make a RaFile, it is usually easiest to just pass it's path:
@@ -71,7 +71,7 @@ class RaFile(OrderedDict):
     possible before operating over them.
 
     Filtering allows you to eliminate a lot of code.
-    """
+    '''
 
     def __init__(self, filePath=None):
         OrderedDict.__init__(self)
@@ -79,9 +79,9 @@ class RaFile(OrderedDict):
             self.read(filePath)
 
     def read(self, filePath, key=None):
-        """
+        '''
         Reads an rafile stanza by stanza, and internalizes it.
-        """
+        '''
 
         file = open(filePath, 'r')
 
@@ -158,7 +158,7 @@ class RaFile(OrderedDict):
 
 
     def filter(self, where, select):
-        """
+        '''
         select useful data from matching criteria
 
         where: the conditional function that must be met. Where takes one
@@ -169,7 +169,7 @@ class RaFile(OrderedDict):
         For each stanza, if where(stanza) holds, it will add select(stanza)
         to the list of returned entities. Also forces silent failure of key
         errors, so you don't have to check that a value is or is not in the stanza.
-        """
+        '''
 
         ret = list()
         for stanza in self.itervalues():
@@ -181,7 +181,7 @@ class RaFile(OrderedDict):
         return ret
 
     def filter2(self, where):
-        """
+        '''
         select useful data from matching criteria
         Filter2 returns a Ra dictionary. Easier to use but more memory intensive.
 
@@ -193,7 +193,7 @@ class RaFile(OrderedDict):
         For each stanza, if where(stanza) holds, it will add select(stanza)
         to the list of returned entities. Also forces silent failure of key
         errors, so you don't have to check that a value is or is not in the stanza.
-        """
+        '''
         ret = RaFile()
         for stanza in self.itervalues():
             try:
@@ -204,7 +204,7 @@ class RaFile(OrderedDict):
         return ret
 
     def summaryDiff(self,other):
-        """
+        '''
         Input:
             RaFile object being compared.
         Output: RaFile with differences.
@@ -219,7 +219,7 @@ class RaFile(OrderedDict):
         ra1 = this.summaryDiff(that)
         and
         ra2 = that.summaryDiff(this)
-        """
+        '''
         this = RaFile()
         RetThis = RaFile()
         for stanza in self.itervalues():
@@ -231,12 +231,12 @@ class RaFile(OrderedDict):
         return RetThis
 
     def changeSummary(self, otherRa):
-        """
+        '''
         Input:
             Two RaFile objects
         Output:
             Dictionary showing differences between stanzas, list of added and dropeed stanzas
-        """
+        '''
         retDict = collections.defaultdict(list)
         dropList = set(self.iterkeys()) - set(otherRa.iterkeys())
         addList = set(otherRa.iterkeys()) - set(self.iterkeys())
@@ -262,7 +262,7 @@ class RaFile(OrderedDict):
         return retDict, dropList, addList
 
     def diffFilter(self, select, other):
-        """
+        '''
         Input:
             Lambda function of desired comparison term
             RaFile object being compared.
@@ -279,7 +279,7 @@ class RaFile(OrderedDict):
         ra1 = this.diffFilter(select function, that)
         and
         ra2 = that.diffFilter(select function, this)
-        """
+        '''
         this = RaFile()
         RetThis = RaFile()
         thisSelectDict = dict()
@@ -308,7 +308,7 @@ class RaFile(OrderedDict):
         return RetThis
 
     def updateDiffFilter(self, term, other):
-        """
+        '''
         Replicates updateMetadata.
         Input:
             Term
@@ -319,7 +319,7 @@ class RaFile(OrderedDict):
                 Stanzas found in 'self' and 'other' that have the 'Term' in 'other'
                 are overwritten (or inserted if not found) into 'self'. Final merged
                 dictionary is returned.
-        """
+        '''
         ret = self
         common = set(self.iterkeys()) & set(self.iterkeys())
         for stanza in common:
@@ -368,12 +368,13 @@ class RaFile(OrderedDict):
 
 
 class RaStanza(OrderedDict):
-    """
+    '''
     Holds an individual entry in the RaFile.
-    """
+    '''
 
     def __init__(self):
         self._name = ''
+        self._nametype = ''
         OrderedDict.__init__(self)
 
     @property
@@ -382,9 +383,9 @@ class RaStanza(OrderedDict):
 
 
     def readStanza(self, stanza, key=None):
-        """
+        '''
         Populates this entry from a single stanza
-        """
+        '''
 
         for line in stanza:
             self.readLine(line)
@@ -393,10 +394,10 @@ class RaStanza(OrderedDict):
 
 
     def readName(self, stanza, key=None):
-        """
+        '''
         Extracts the Stanza's name from the value of the first line of the
         stanza.
-        """
+        '''
         
         if key == None:
             line = stanza[0]
@@ -413,13 +414,14 @@ class RaStanza(OrderedDict):
             raise ValueError()
 
         names = map(str.strip, line.split(' ', 1))
+        self._nametype = names[0]
         self._name = names[1]
         return names
 
     def readLine(self, line):
-        """
+        '''
         Reads a single line from the stanza, extracting the key-value pair
-        """
+        '''
 
         if line.startswith('#') or line == '':
             OrderedDict.append(self, line)
@@ -472,6 +474,7 @@ class RaStanza(OrderedDict):
     def iter(self):
         iterkeys(self)
 
+        
     def __str__(self):
         str = ''
         for key in self:
