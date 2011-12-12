@@ -35,7 +35,7 @@ include wgEncodeGisDnaPet.ra
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
 include wgEncodeHaibGenotype.ra beta,public
-include wgEncodeHaibGenotype.new.ra alpha
+include wgEncodeHaibGenotype.release2.ra alpha
 
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra
@@ -111,7 +111,7 @@ include wgEncodeCaltechRnaSeq.new.ra alpha
 
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra beta,public
-include wgEncodeCshlLongRnaSeq.new.ra alpha
+include wgEncodeCshlLongRnaSeq.release2.ra alpha
 
 # SYDH  Rna Seq (wrangler: cricket)
 # used to be yale
@@ -168,7 +168,8 @@ include wgEncodeOpenChromChip.new.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra beta,public
+include wgEncodeHaibTfbs.ra public
+include wgEncodeHaibTfbs.patch.ra beta
 include wgEncodeHaibTfbs.release2.ra alpha
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public
@@ -196,6 +197,6 @@ include wgEncodeSunyRipSeq.ra
 # Other miscellany ------------------------------------
 
 # Mapability - a cross lab composite   (wrangler: Tim, assisted by Rachel and Cricket)
-include wgEncodeMapability.ra
-
+include wgEncodeMapability.ra beta,public
+include wgEncodeMapability.new.ra alpha
 

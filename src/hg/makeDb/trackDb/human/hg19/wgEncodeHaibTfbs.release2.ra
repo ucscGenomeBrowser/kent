@@ -27,6 +27,7 @@ type bed 3
 wgEncode 1
 nextItemButton on
 noInherit on
+html wgEncodeHaibTfbs.release2
 #dataVersion through the ENCODE Jan 2010 Freeze
 
 	#Peak Track HAIB TFBS#

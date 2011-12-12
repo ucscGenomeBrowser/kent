@@ -1054,6 +1054,7 @@ type Cell Line
 tier 3
 organism human
 description B cells from donors RO01778 and RO01794.
+deprecated Use donor-specific cell lines
 sex F
 tissue blood
 vendorName Heimfeld Lab, FHCRC
@@ -1354,6 +1355,42 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Stam:GM12801_Stam_protocol.pdf
+
+term GM12812
+tag GM12812
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
+lineage mesoderm
+karyotype normal
+sex M
+tissue blood
+vendorName Coriell
+vendorId GM12812
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12812&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12812_Stam_protocol.pdf
+
+term GM12813
+tag GM12813
+type Cell Line
+tier 3
+organism human
+description B-Lymphocyte, Lymphoblastoid, International HapMap Project, CEPH/Utah, Treatment: Epstein-Barr Virus transformed
+lineage mesoderm
+karyotype normal
+sex F
+tissue blood
+vendorName Coriell
+vendorId GM12813
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12813&PgId=166
+termId BTO:0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+lab Stam
+protocol Stam:GM12813_Stam_protocol.pdf
 
 term GM12864
 tag GM12864
@@ -2736,7 +2773,8 @@ termId BTO:0001282
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282
 sex M
 tier 3
-protocol SUNY(missing):HT1080_SUNY_protocol.pdf
+lab Tenenbaum
+protocol missing
 
 #This cell line has been superceded by SK-N-SH, HTB-11 was the venderId.
 #term HTB-11
@@ -3332,7 +3370,7 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets
+description pancreatic islets from 2 donors
 tissue pancreas
 lineage endoderm
 vendorName Refer to protocol documents for differing sources
@@ -3516,7 +3554,7 @@ vendorId CRL-11609
 karyotype normal
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-11609&Template=cellBiology
 termId BTO:0002397
-termUrl missing
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002397 
 sex M
 tier 3
 protocol Crawford:RWPE_Crawford_protocol.pdf
@@ -3711,7 +3749,6 @@ sex U
 tier 3
 protocol Stam:Th2_Stam_protocol.pdf
 
-
 term T-47D
 tag T47D
 type Cell Line
@@ -3726,7 +3763,7 @@ termId BTO:0001248
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
 sex F
 tier 3
-protocol Myers:T47D_Myers_protocol.pdf
+protocol Stam_and_Myers:T47D_StamandMyers_protocol.pdf
 
 term Urothelia
 tag UROTHEL
@@ -3794,7 +3831,7 @@ orderUrl http://www.chordomafoundation.org/research/
 termId BTO:0001768
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001768&termName=notochord
 lab Crawford
-protocol Crawford(Missing):UCH1_Crawford_protocol.pdf
+protocol Crawford:UCH1_Crawford_protocol.pdf
 
 term WERI-Rb-1
 tag WERIRB1
@@ -3926,7 +3963,7 @@ termId 7087
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
 color 189,0,157
 sex M
-protocol ENCODE:missing
+protocol missing
 
 term B-cell_(CD19+)
 tag BCELLCD19P
@@ -4833,6 +4870,7 @@ orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10756
 lab Snyder
+#The SMARCC1 genecard is for BAF155
 targetId GeneCard:SMARCC1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
 validation missing
@@ -8275,7 +8313,7 @@ lab Tenenbaum
 # lots
 targetId GeneCards:CELF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CELF2
-validation missing
+validation missing 
 label CELF2 (04-047)
 
 ##This does not appear in metaDb
@@ -8309,7 +8347,7 @@ lab Tenenbaum
 # lots
 targetId Gene:45525
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-validation missing
+validation 
 label EIF4E (04-1058)
 
 ##This does not appear in metaDb
@@ -8554,7 +8592,7 @@ tag SLBP
 type Antibody
 target SLBP
 targetDescription  Stem-loop binding protein (Homo sapiens)
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal. Antibody Target: SLBP
 vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
 vendorId 06-1376; 26522; MA156353
 orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
@@ -9260,29 +9298,6 @@ description Fragmented using micrococcal nuclease digestion
 type treatment
 label Micrococcal nuclease
 
-# DEAR CV MAVEN, we are retiring these for now.  The treatment is being applied to cells that do not differentiate.
-# Mouse and human are having different treatments.
-
-#term Myoblast
-#tag MYB
-#description Undifferentiated myoblast, used in time course of differentiation to myocytes (Wold)
-#type treatment
-
-#term Myocyte_24h
-#tag MYC24H
-#description Myocytes differentiated from myoblasts for 24 hours (Wold)
-#type treatment
-
-#term Myocyte_60h
-#tag MYC60H
-#description Myocytes differentiated from myoblasts for 60 hours (Wold)
-#type treatment
-
-#term Myocyte_5d
-#tag MYC5D
-#description Myocytes differentiated from myoblasts for 5 days (Wold)
-#type treatment
-
 term DIFF_7d
 tag DIFF7D
 description Myocytes differentiated from myoblasts for 7 days. See specific cell protocol for treatment details. (Wold)
@@ -9405,37 +9420,6 @@ term G1
 tag G1
 type phase
 description Flow sorted, G1 phase
-
-term G1b
-tag G1B
-type phase
-description Flow sorted, G1b phase (PROVISIONAL)
-
-term G2
-tag G2
-type phase
-description Flow sorted, G2 phase (PROVISIONAL)
-
-term S1
-tag S1
-type phase
-description Flow sorted, S1 phase (PROVISIONAL)
-
-term S2
-tag S2
-type phase
-description Flow sorted, S2 phase (PROVISIONAL)
-
-term S3
-tag S3
-type phase
-description Flow sorted, S3 phase (PROVISIONAL)
-
-term S4
-tag S4
-type phase
-description Flow sorted, S4 phase (PROVISIONAL)
-
 
 ### region
 # genomic regions used in experiments that are not whole-genome
@@ -9665,12 +9649,6 @@ type view
 label Peptide Mapping
 description PeptideMapping
 
-term PctSignal
-tag PCTSIG
-type view
-label Percentage-normalized Signal
-description Percentage-normalized Signal (PROVISIONAL)
-
 term PlusRawSignal
 tag PLUSRAWSIG
 type view
@@ -9793,12 +9771,6 @@ type view
 label SPP Optimal Peaks
 description Regions of conserved enriched signal in experiment performed by SPP
 
-term SumSignal
-tag SUMSIG
-type view
-label Summed Densities
-description Shows summed densities of all phases combined (PROVISIONAL)
-
 term TranscriptDeNovo
 tag TRANSDENOVO
 type view
@@ -9858,19 +9830,6 @@ tag VALIDATION
 type view
 label Validation
 description Documents used for the verification of experimental results
-
-term Valleys
-tag VALS
-type view
-label Valleys
-description Regions of enriched signal in experiment (PROVISIONAL)
-
-term WaveSignal
-tag WAVESIG
-type view
-label Wavelet Smoothed Signal
-description Shows smoothed wavelet over all phases (PROVISIONAL)
-
 
 ### dataType
 ### term:  Ideally this should be the term used by NHGRI for the data type
@@ -10045,13 +10004,6 @@ label Proteogenomics
 description Mass Spec Proteogenomic Mapping
 dataGroup Other
 
-term RepliSeq
-tag  REPLISEQ
-type dataType
-label Repli-Seq
-description Replication Timing (PROVISIONAL)
-dataGroup Other
-
 # tag not standard to match hg18
 term RnaPet
 tag PET
@@ -10080,7 +10032,7 @@ term RipGeneSt
 tag  GENEST
 type dataType
 label RIP-chip Gene ST
-description RIP-Chip on Affymetrix GeneChip® Human Gene 1.0 ST Arrays
+description RIP-Chip on Affymetrix GeneChip(R) Human Gene 1.0 ST Arrays
 dataGroup RNA Binding Proteins
 
 term RipTiling
@@ -10367,11 +10319,6 @@ term replaced
 tag REPLACED
 type objStatus
 description This file has been REPLACED by the submitting laboratory with an improved version.
-
-term renamed
-tag RENAMED
-type objStatus
-description This file has been RENAMED by the submitting laboratory for some reason. Please see updated file for newest metadata. (PROVISIONAL)
 
 ## Organisms
 term human
@@ -11253,7 +11200,7 @@ term bioRep
 tag BIOREP
 type typeOfTerm
 label  Cross Lab Bio-Replicate ID
-description Cross lab sample ID number used to track bio-replicates PROVISIONAL.
+description Cross lab sample ID number used to track bio-replicates.
 searchable no
 cvDefined no
 validate none
@@ -11903,6 +11850,7 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
+
 
 
 

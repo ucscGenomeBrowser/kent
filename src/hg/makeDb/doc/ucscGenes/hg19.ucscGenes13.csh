@@ -10,7 +10,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.13.3
+set dir = $genomes/hg19/bed/ucsc.13.4
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -76,7 +76,7 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/100514/download/14.0/data/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/100514/download/14.0/data/genes.col
-set rfam = /hive/data/outside/Rfam/111005
+set rfam = /hive/data/outside/Rfam/111130
 
 
 # Tracks
@@ -104,7 +104,6 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
-
 # move this endif statement past business that has successfully been completed
 endif # BRACKET		
 
@@ -158,18 +157,16 @@ netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
 netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
 
-# Get the Rfams that overlap with blocks that are syntenic to $Xdb.
-# Filter out anything not aligned uniquely, since the later stages of the 
-# pipeline will assume that each aligned sequence is aligned uniquely.  This
-# unique alignment assumption might not make sense in this instance, and 
-# probably should be revisited later, but affects only a few sequences 
-# at this time (10/09/11).
-mkdir -p rfam
-pslToBed ${rfam}/${db}/rfam.bed
-bedIntersect -aHitAny ${rfam}/${db}/Rfam.human.bestHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
+# Get the Rfams that overlap with blocks that are syntenic to $Xdb, and filter out
+# any duplicate Rfam blocks.  In some cases, where there are two related Rfam models,
+# the same genomic region can get two distinct hits.  For our purposes, we only
+# want one of those hits, because we're looking for regions that might be genes and
+# don't care as much about the subclass of gene.
+cat ${rfam}/${db}/Rfam.bed |sort -k1,1 -k2,2n > rfam.sorted.bed
+bedRemoveOverlap rfam.sorted.bed rfam.distinctHits.bed
+bedIntersect -aHitAny rfam.distinctHits.bed ${db}.${xdb}.syn.bed rfam.syntenic.bed
+
 bedToPsl $genomes/$db/chrom.sizes rfam.syntenic.bed rfam.syntenic.psl
-pslCDnaFilter -uniqueMapped rfam.syntenic.psl rfam.syntenic.uniq.psl
-pslToBed rfam.syntenic.uniq.psl rfam.syntenic.uniq.bed
  
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna 
@@ -595,10 +592,6 @@ pslCat -nohead protein/raw/uni*.psl | sort -k 10 | \
 	pslReps -noIntrons -nohead -nearTop=0.02  -minAli=0.85 stdin protein/uniProt.psl /dev/null
 rm -r protein/raw
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
 
 cd $dir
 
@@ -638,13 +631,20 @@ txCdsEvFromProtein uniProt.fa blat/protein/uniProt.psl txWalk.fa \
 txCdsEvFromBed ccds.bed ccds txWalk.bed ../../$db.2bit cdsEvidence/ccds.tce
 cat cdsEvidence/*.tce | sort  > unweighted.tce
 
-# Merge back in antibodies, and add the small, noncoding genes that are not well-represented
-# in GenBank (Rfam, tRNA)
-cat txWalk.bed antibody.bed trna.bed rfam.syntenic.uniq.bed > abWalk.bed
+# Merge back in antibodies, and add the small, noncoding genes that shouldn't go 
+# through txWalk because their gene boundaries should not change much.  Before
+# adding them, weed out anything that overlaps a txWalk transcript to avoid 
+# getting duplicate transcripts.
+bedWeedOverlapping txWalk.bed rfam.syntenic.bed rfam.weeded.bed
+bedWeedOverlapping txWalk.bed trna.bed trna.weeded.bed
+cat txWalk.bed antibody.bed trna.weeded.bed rfam.weeded.bed > abWalk.bed
 sequenceForBed -db=$db -bedIn=antibody.bed -fastaOut=stdout -upCase -keepName > antibody.fa
-sequenceForBed -db=$db -bedIn=trna.bed -fastaOut=stdout -upCase -keepName > trna.fa
-sequenceForBed -db=$db -bedIn=rfam.syntenic.uniq.bed -fastaOut=stdout -upCase -keepName > rfam.syntenic.uniq.fa
-cat txWalk.fa antibody.fa trna.fa rfam.syntenic.uniq.fa > abWalk.fa
+sequenceForBed -db=$db -bedIn=trna.weeded.bed -fastaOut=stdout -upCase -keepName \
+  > trna.weeded.fa
+sequenceForBed -db=$db -bedIn=rfam.weeded.bed -fastaOut=stdout -upCase -keepName \
+  > rfam.weeded.fa
+cat txWalk.fa antibody.fa trna.weeded.fa rfam.weeded.fa > abWalk.fa
+
 
 # Pick ORFs, make genes
 cat refToPep.tab refToCcds.tab | \
@@ -655,7 +655,7 @@ txCdsToGene abWalk.bed abWalk.fa pick.tce pick.gtf pick.fa \
 	-bedOut=pick.bed -exceptions=abWalk.exceptions
 # Create gene info table. Takes 8 seconds
 cat mrna/*.unusual refSeq/*.unusual | awk '$5=="flip" {print $6;}' > all.flip
-cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.uniq.psl \
+cat mrna/*.psl refSeq/*.psl trna.psl rfam.syntenic.psl \
       | txInfoAssemble pick.bed pick.tce cdsEvidence/txCdsPredict.tce \
 	altSplice.bed abWalk.exceptions sizePolyA.tab stdin all.flip prelim.info
 
@@ -672,9 +672,12 @@ txCdsToGene abWalk.bed abWalk.fa weededCds.tce weededCds.gtf weededCds.faa \
 	-bedOut=weededCds.bed -exceptions=abWalk.exceptions \
 	-tweaked=weededCds.tweaked
 
-# After txCdsToGene, the transcripts in weeded.bed might be slightly different from
-# those in abWalk.bed.  Make a new sequence file, weeded.fa, to replace abWalk.fa.
-sequenceForBed -db=$db -bedIn=weeded.bed -fastaOut=weeded.fa -upCase -keepName
+# After txCdsToGene, the transcripts in weededCds.bed might be
+# slightly different from those in abWalk.bed.  Make a new sequence
+# file, weeded.fa, to replace abWalk.fa.
+
+sequenceForBed -db=$db -bedIn=weededCds.bed -fastaOut=weeded.fa \
+    -upCase -keepName
 
 
 # Separate out transcripts into coding and 4 uncoding categories.
@@ -732,6 +735,9 @@ txGeneProtAndRna weeded.bed weeded.info weeded.fa weededCds.faa \
     refSeq.fa refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa \
     ucscGenesTx.fa ucscGenesTx.faa
 
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 
 # Generate ucscGene/uniprot blat run.
