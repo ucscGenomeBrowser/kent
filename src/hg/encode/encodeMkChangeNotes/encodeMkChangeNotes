@@ -28,6 +28,7 @@ def main():
     parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
     parser.add_argument('releaseNew', help='The new release to be released')
     parser.add_argument('releaseOld', nargs='?', default='-', help='The old release that is already released, if on release 1, or solo release mode, put anything here')
+    parser.add_argument('-v', '--verbose', default=1, help='Verbosity level')
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -49,7 +50,7 @@ def main():
     specialMdb = None
     if args.mdb:
         specialMdb = args.mdb
-    argsdict = {'database': args.database, 'composite': args.composite, 'releaseNew': args.releaseNew, 'releaseOld': args.releaseOld, 'loose': args.loose, 'ignore': args.ignore, 'summary': args.summary, 'specialMdb': specialMdb}
+    argsdict = {'database': args.database, 'composite': args.composite, 'releaseNew': args.releaseNew, 'releaseOld': args.releaseOld, 'loose': args.loose, 'ignore': args.ignore, 'verbose': args.verbose,  'summary': args.summary, 'specialMdb': specialMdb}
 
     notes = mkChangeNotes.makeNotes(argsdict)
 

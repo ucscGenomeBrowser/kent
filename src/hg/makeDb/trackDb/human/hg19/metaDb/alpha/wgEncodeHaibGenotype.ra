@@ -396,6 +396,7 @@ lab HudsonAlpha
 labExpId Illumina 1MDuo
 labVersion HudsonAlpha
 md5sum 02d0b2c753c7aef6eb1919fb56dc1c72
+objStatus replaced - now mapped to hg19 in wgEncodeHaibGenotypeGm12878RegionsRep1V2
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -416,8 +417,9 @@ dateUnrestricted 2012-09-06
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1V2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId  Illumina 1MDuo
+labExpId Illumina 1MDuo
 labVersion HudsonAlpha
+md5sum 2c9ee0b5e0abe5b9b41e797d1ebd2638
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2227,4 +2229,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 2116531504
+# MAGIC: 1044781277

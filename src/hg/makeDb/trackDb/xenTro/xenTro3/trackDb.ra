@@ -79,7 +79,7 @@ priority 103.29
 
         # PhyloP conservation
         track phyloP9way
-        subTrack cons9wayViewphyloP off
+        subTrack cons9wayViewphyloP on
         subGroups view=phyloP
         shortLabel PhyloP Cons
         longLabel Basewise Conservation by PhyloP (9 species)

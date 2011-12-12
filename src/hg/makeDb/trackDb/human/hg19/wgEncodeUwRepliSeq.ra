@@ -20,13 +20,13 @@ wgEncode 1
 	track wgEncodeUwRepliSeqViewPeaks
 	shortLabel Peaks
 	view 2Peaks
-	visibility dense
+	visibility hide
 	parent wgEncodeUwRepliSeq
 	itemRgb on
 	useScore 1
 
         track wgEncodeUwRepliSeqGm12878PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel GM12878 Pk 1
         longLabel GM12878 Repli-Seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=1GM12878 phase=zNONE rep=rep1
@@ -36,7 +36,7 @@ wgEncode 1
         # subId=4828 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqK562PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel K562 Pk 1
         longLabel K562 Repli-Seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=1K562 phase=zNONE rep=rep1
@@ -119,7 +119,7 @@ wgEncode 1
         # subId=4866 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHelas3PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel HeLa-S3 Pk 1
         longLabel HeLa-S3-Phase Repli-Seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=2HELAS3 phase=zNONE rep=rep1
@@ -129,7 +129,7 @@ wgEncode 1
         # subId=4869 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHepg2PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel HepG2 Pk 1
         longLabel HepG2-Phase Repli-Seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=2HEPG2 phase=zNONE rep=rep1
@@ -139,7 +139,7 @@ wgEncode 1
         # subId=4870 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHuvecPkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel HUVEC Pk 1
         longLabel HUVEC Repli-Seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=2HUVEC phase=zNONE rep=rep1
@@ -178,13 +178,13 @@ wgEncode 1
 	track wgEncodeUwRepliSeqViewValleys
 	shortLabel Valleys
 	view 3Valleys
-	visibility dense
+	visibility hide
 	parent wgEncodeUwRepliSeq
 	itemRgb on
 	useScore 1
 
         track wgEncodeUwRepliSeqGm12878ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel GM12878 Vly 1
         longLabel GM12878 Repli-Seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=1GM12878 phase=zNONE rep=rep1
@@ -194,7 +194,7 @@ wgEncode 1
         # subId=4828 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqK562ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel K562 Vly 1
         longLabel K562 Repli-Seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=1K562 phase=zNONE rep=rep1
@@ -277,7 +277,7 @@ wgEncode 1
         # subId=4866 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHelas3ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys 
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel HeLa-S3 Vly 1
         longLabel HeLa-S3-Phase Repli-Seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=2HELAS3 phase=zNONE rep=rep1
@@ -287,7 +287,7 @@ wgEncode 1
         # subId=4869 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHepg2ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel HepG2 Vly 1
         longLabel HepG2-Phase Repli-Seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=2HEPG2 phase=zNONE rep=rep1
@@ -297,7 +297,7 @@ wgEncode 1
         # subId=4870 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHuvecValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel HUVEC Vly 1
         longLabel HUVEC Repli-Seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=2HUVEC phase=zNONE rep=rep1
@@ -1244,13 +1244,13 @@ wgEncode 1
 	track wgEncodeUwRepliSeqViewSumSignal
 	shortLabel Summed Densities
 	view 5SumSignal
-	visibility full
+	visibility hide
 	parent wgEncodeUwRepliSeq
 	windowingFunction mean+whiskers
 	viewLimits 0:2500
 
         track wgEncodeUwRepliSeqGm12878SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off 
         shortLabel GM12878 Sd 1
         longLabel GM12878 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=1GM12878 phase=zNONE rep=rep1
@@ -1260,7 +1260,7 @@ wgEncode 1
         # subId=4828 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqK562SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel K562 Sd 1
         longLabel K562 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=1K562 phase=zNONE rep=rep1
@@ -1343,7 +1343,7 @@ wgEncode 1
         # subId=4866 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHelas3SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HeLa-S3 Sd 1
         longLabel HeLa-S3 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HELAS3 phase=zNONE rep=rep1
@@ -1353,7 +1353,7 @@ wgEncode 1
         # subId=4869 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHepg2SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HepG2 Sd 1
         longLabel HepG2 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HEPG2 phase=zNONE rep=rep1
@@ -1363,7 +1363,7 @@ wgEncode 1
         # subId=4870 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHuvecSumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HUVEC Sd 1
         longLabel HUVEC Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HUVEC phase=zNONE rep=rep1
