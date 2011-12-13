@@ -72,7 +72,7 @@ include wgEncodeOpenChromFaire.new.ra alpha
 include wgEncodeOpenChromFaire.ra beta,public
 
 #Open Chrom Synth (wrangler: Matt)
-include wgEncodeOpenChromSynth.new.ra alpha
+include wgEncodeOpenChromSynth.release2.ra alpha
 include wgEncodeOpenChromSynth.ra beta,public
 
 #Duke DNaseI HS (wrangler: Matt)
