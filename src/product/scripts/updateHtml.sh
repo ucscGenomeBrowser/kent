@@ -10,7 +10,7 @@ usage() {
     echo "  directory with these scripts."
     echo "This script will fetch the static HTML hierarchy from UCSC"
     echo "  into your specified DOCUMENTROOT from the browserEnvironment.txt file."
-    echo "It specifically ignores all encode directories and the trash directory."
+    echo "It specifically ignores the trash directory."
     exit 255
 }
 
@@ -44,15 +44,15 @@ export DS=`date "+%Y-%m-%d"`
 export FETCHLOG="${LOGDIR}/htdocs/update.${DS}"
 mkdir -p "${LOGDIR}/htdocs"
 
-echo "#    ${RSYNC} --stats --exclude=\"encode\" --exclude=\"trash\" --exclude=\"lost+found/\" --exclude=\"ENCODE/\" --exclude=\"encodeDCC/\" ${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/" > ${FETCHLOG}
-${RSYNC} --stats --exclude="encode" --exclude="trash" \
-	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
+echo "#    ${RSYNC} --stats --exclude=\"trash\" --exclude=\"lost+found/\" ${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/" > ${FETCHLOG}
+${RSYNC} --stats --exclude="trash" \
+	--exclude="lost+found/" \
 	${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/ >> ${FETCHLOG} 2>&1
-${RSYNC} --stats --delete --max-delete=20 --exclude="encode" --exclude="trash" \
-	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
+${RSYNC} --stats --delete --max-delete=20 --exclude="trash" \
+	--exclude="lost+found/" \
 	${HGDOWNLOAD}/htdocs/js/ ${DOCUMENTROOT}/js/ >> ${FETCHLOG} 2>&1
-${RSYNC} --stats --delete --max-delete=20 --exclude="encode" --exclude="trash" \
-	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
+${RSYNC} --stats --delete --max-delete=20 --exclude="trash" \
+	--exclude="lost+found/" \
 	${HGDOWNLOAD}/htdocs/style/ ${DOCUMENTROOT}/style/ >> ${FETCHLOG} 2>&1
 ${RSYNC} --stats \
         ${HGDOWNLOAD}/cgi-bin/encode/ ${CGI_BIN}/encode/ >> ${FETCHLOG} 2>&1

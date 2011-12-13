@@ -3,11 +3,11 @@ import sys
 import os
 import difflib
 import unittest
-import RaFile
+from ucscgenomics import ra
 
 def DiffExpected(outStr, expFileName, outFileName):
-    file = open(os.getcwd() + '/test_ra_input/' +  expFileName)
-    outfile = open(os.getcwd() + '/test_ra_output/' + outFileName, 'w')
+    file = open(os.getcwd() + '/input/' +  expFileName)
+    outfile = open(os.getcwd() + '/output/' + outFileName, 'w')
     expected = file.read()
 
     outfile.write('========Expected========\n')
@@ -28,28 +28,22 @@ def DiffExpected(outStr, expFileName, outFileName):
 class DiffCheck(unittest.TestCase):
 
     def testBasicDiff(self):                          
-        """diffs basic input for core ra functionality"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/BasicDiff.ra')
-        self.failIf(DiffExpected(ra.__str__(), 
-            'BasicDiff.ra',
-            'BasicDiff.out'))
+        """diffs basic input for core rafile functionality"""
+        rafile = ra.RaFile(os.getcwd() + '/input/BasicDiff.ra')
+        self.failIf(DiffExpected(rafile.__str__(), 'BasicDiff.ra', 'BasicDiff.out'))
 
 
     def testCommentsDiff(self):
         """diff to ensure that comments are preserved"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/CommentsDiff.ra')
-        self.failIf(DiffExpected(ra.__str__(),
-            'CommentsDiff.ra',
-            'CommentsDiff.out'))
+        rafile = ra.RaFile(os.getcwd() + '/input/CommentsDiff.ra')
+        self.failIf(DiffExpected(rafile.__str__(), 'CommentsDiff.ra', 'CommentsDiff.out'))
         
 
 #    def testInlineCommentsDiff(self):
 #        """diff to ensure that inline comments are preserved"""
-#        ra = RaFile.RaFile(RaFile.RaEntry)
-#        ra.read(os.getcwd() + '/tests/InlineCommentsDiff.ra')
-#        self.failIf(DiffExpected(ra.__str__(),
+#        rafile = ra.RaFile()
+#        rafile.read(os.getcwd() + '/input/InlineCommentsDiff.ra')
+#        self.failIf(DiffExpected(rafile.__str__(),
 #            'InlineCommentsDiff.ra',
 #            'InlineCommentsDiff.out'))
         
@@ -58,43 +52,42 @@ class InvalidFilesCheck(unittest.TestCase):
 
     def testDuplicateKeys(self):
         """makes sure that duplicate keys are caught"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        self.assertRaises(KeyError, ra.read, os.getcwd() + '/tests/DuplicateKeys.ra')
+        rafile = ra.RaFile()
+        self.assertRaises(KeyError, rafile.read, os.getcwd() + '/input/DuplicateKeys.ra')
 
 
     def testMisplacedKeys(self):
         """checks if keys in the incorrect place are caught"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        self.assertRaises(KeyError, ra.read, os.getcwd() + '/tests/MisplacedKeys.ra')
+        rafile = ra.RaFile()
+        self.assertRaises(KeyError, rafile.read, os.getcwd() + '/input/MisplacedKeys.ra')
 
 
     def testNonExistentFile(self):
         """checks if invalid files are caught"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        self.assertRaises(IOError, ra.read, os.getcwd() + '/tests/FileDoesNotExist.ra')
+        rafile = ra.RaFile()
+        self.assertRaises(IOError, rafile.read, os.getcwd() + '/input/FileDoesNotExist.ra')
 
 
-    def testNonNewlineFile(self):
-        """ensures file ends in newline"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        self.assertRaises(IOError, ra.read, os.getcwd() + '/tests/NonNewlineFile.ra')
+#    def testNonNewlineFile(self):
+#        """ensures file ends in newline"""
+#        rafile = ra.RaFile()
+#        self.assertRaises(IOError, rafile.read, os.getcwd() + '/input/NonNewlineFile.ra')
 
 
 #    def testInvalidComments(self):
 #        """ensures file doesn't have comments in the middle of stanzas"""
-#        ra = RaFile.RaFile(RaFile.RaEntry)
-#        self.assertRaises(KeyError, ra.read, os.getcwd() + '/tests/InvalidComments.ra')
+#        rafile = ra.RaFile()
+#        self.assertRaises(KeyError, rafile.read, os.getcwd() + '/input/InvalidComments.ra')
 
 
 class FunctionalityCheck(unittest.TestCase):
  
     def testIterKeys(self):
         """tests that iterkeys works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
        
         outstr = ''
-        for entry in ra.iterkeys():
+        for entry in rafile.iterkeys():
             outstr += str(entry) + '\n'
 
         self.failIf(DiffExpected(outstr,
@@ -104,11 +97,10 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterValues(self):
         """tests that itervalues works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
-        for entry in ra.itervalues():
+        for entry in rafile.itervalues():
             outstr += str(entry) + '\n'
 
         self.failIf(DiffExpected(outstr,
@@ -118,11 +110,10 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterItems(self):
         """tests that iteritems works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
-        for entry in ra.iteritems():
+        for entry in rafile.iteritems():
             outstr += str(entry) + '\n'
 
         self.failIf(DiffExpected(outstr,
@@ -132,11 +123,10 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterEntryKeys(self):
         """tests that iterkeys works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
-        for entry in ra.itervalues():
+        for entry in rafile.itervalues():
             for item in entry.iterkeys():
                 outstr += str(item) + '\n'
 
@@ -147,11 +137,10 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterEntryValues(self):
         """tests that iterkeys works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
-        for entry in ra.itervalues():
+        for entry in rafile.itervalues():
             for item in entry.itervalues():
                 outstr += str(item) + '\n'
 
@@ -162,45 +151,38 @@ class FunctionalityCheck(unittest.TestCase):
 
     def testIterEntryItems(self):
         """tests that iterkeys works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
-        for entry in ra.itervalues():
+        for entry in rafile.itervalues():
             for item in entry.iteritems():
                 outstr += str(item) + '\n'
 
-        self.failIf(DiffExpected(outstr,
-            'IterEntryItems.ra',
-            'IterEntryItems.out'))
+        self.failIf(DiffExpected(outstr, 'IterEntryItems.ra', 'IterEntryItems.out'))
 
 
     def testGetItem(self):
         """tests that getting stanzas works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
-        outstr += str(ra['valA']) + '\n'
+        outstr += str(rafile['valA']) + '\n'
 
-        self.failIf(DiffExpected(outstr,
-            'GetItem.ra',
-            'GetItem.out'))
+        self.failIf(DiffExpected(outstr, 'GetItem.ra', 'GetItem.out'))
 
 
     def testDeleteItem(self):
         """tests that removing items works"""
-        ra = RaFile.RaFile(RaFile.RaEntry)
-        ra.read(os.getcwd() + '/tests/FunctionalityCheck.ra')
+        rafile = ra.RaFile(os.getcwd() + '/input/FunctionalityCheck.ra')
 
         outstr = ''
-        del ra['valA']
-        outstr = str(ra)
+        del rafile['valA']
+        outstr = str(rafile)
 
-        self.failIf(DiffExpected(outstr,
-            'DeleteItem.ra',
-            'DeleteItem.out'))
+        self.failIf(DiffExpected(outstr, 'DeleteItem.ra', 'DeleteItem.out'))
 
 
 if __name__ == '__main__':
+    if not os.path.isdir(os.getcwd() + '/output'):
+        os.mkdir(os.getcwd() + '/output')
     unittest.main()

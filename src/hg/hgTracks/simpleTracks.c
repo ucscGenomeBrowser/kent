@@ -9536,10 +9536,14 @@ char *nameCopy = cloneString(myItem->name);
 char *allFreqCopy = cloneString(myItem->alleleFreq);
 int cnt = chopByChar(nameCopy, '/', allele, myItem->alleleCount);
 if (cnt != myItem->alleleCount)
-    errAbort("Bad allele name %s", myItem->name);
+    errAbort("Bad allele name '%s' (%s:%d-%d): expected %d /-sep'd alleles", myItem->name,
+	     myItem->chrom, myItem->chromStart+1, myItem->chromEnd, myItem->alleleCount);
 int fcnt = chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
 if (fcnt != myItem->alleleCount && fcnt != 0)
-    errAbort("Bad freq for %s",  myItem->name);
+    errAbort("Bad freq '%s' for '%s' (%s:%d-%d): expected %d ,-sep'd numbers",
+	     myItem->alleleFreq, myItem->name,
+	     myItem->chrom, myItem->chromStart+1, myItem->chromEnd,
+	     myItem->alleleCount);
 int i = 0;
 for (i=0;i<fcnt;i++)
     allTot += atoi(freq[i]);
@@ -12156,6 +12160,21 @@ for( ; kx != NULL; kx = kx->next)
     }
 }
 
+char* t2gArticleTable(struct track *tg)
+/* return the name of the t2g articleTable, either
+ * the value from the trackDb statement 'articleTable'
+ * or the default value: <trackName>Article */
+{
+char* articleTable = NULL;
+articleTable = trackDbSetting(tg->tdb, "articleTable");
+if (articleTable==NULL) {
+    char* buf = needMem(128);
+    sprintf(buf, "%sArticle", tg->track);
+    articleTable = buf;
+}
+return articleTable;
+}
+
 static void t2gLoadItems(struct track *tg)
 /* apply filter to t2g items */
 {
@@ -12163,9 +12182,10 @@ loadGappedBed(tg);
 struct linkedFeatures *lf, *next, *newList = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
-char *articleTable = trackDbSetting(tg->tdb, "articleTable");
+char *articleTable = t2gArticleTable(tg);
 char *keyWords = cartOptionalString(cart, "t2gKeywords");
-if(articleTable != NULL && isNotEmpty(keyWords))
+
+if(isNotEmpty(keyWords))
     {
     for( lf = tg->items; lf != NULL; lf = next)
         {
@@ -12215,7 +12235,7 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     {
     char query[1024], title[4096];
     char *label = NULL;
-    char *articleTable = trackDbSetting(tg->tdb, "articleTable");
+    char *articleTable = t2gArticleTable(tg);
     if(!isEmpty(articleTable))
         {
         struct sqlConnection *conn = hAllocConn(database);
