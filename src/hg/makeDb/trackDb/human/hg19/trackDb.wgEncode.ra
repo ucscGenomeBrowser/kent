@@ -153,8 +153,9 @@ include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
 include wgEncodeUwHistone.release2.ra public
+
 include wgEncodeUwHistone.patch.ra beta
-include wgEncodeUsHistone.release3.ra alpha
+include wgEncodeUwHistone.release3.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra 
@@ -162,7 +163,7 @@ include wgEncodeSydhHistone.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.new.ra alpha
+include wgEncodeUwTfbs.release2.ra alpha
 include wgEncodeUwTfbs.ra beta,public
 
 #UTA TFBS (wrangler: Matt)
