@@ -2684,6 +2684,27 @@ if(membersForAll->dimensions != NULL)
             }
         }
     }
+else // No 'dimensions" setting: treat any subGroups as abc dimensions
+    {
+    char letter = 'A';
+    // walk through numbered subgroups
+    for (ix=1;ix<SUBGROUP_MAX;ix++)  // how many to support?
+        {
+        char group[32];
+        safef(group, sizeof group,"subGroup%d",ix);
+        char *setting = subgroupSettingByTagOrName(parentTdb, group);
+        if (setting != NULL)
+            {
+            char *tag = cloneFirstWord(setting);
+            membersForAll->members[membersForAll->dimMax]=subgroupMembersGet(parentTdb, tag);
+            membersForAll->letters[membersForAll->dimMax]=letter;
+            if(cart != NULL)
+                membersForAll->checkedTags[membersForAll->dimMax] = abcMembersChecked(parentTdb,cart,membersForAll->members[membersForAll->dimMax],letter);
+            membersForAll->dimMax++;
+            letter++;
+            }
+        }
+    }
 membersForAll->abcCount = membersForAll->dimMax - dimA;
 
 membersForAll = membersForAllSubGroupsWeedOutEmpties(parentTdb, membersForAll, cart);
@@ -4096,13 +4117,24 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     // The checkbox has identifying classes including subCB and the tag for each dimension (e.g. class='subCB GM12878 CTCF Peak')
     dyStringClear(dyHtml);
     dyStringAppend(dyHtml, "subCB"); // always first
-    for(di=dimX;di<membersForAll->dimMax;di++)
+    if (membersForAll->dimensions)
         {
-        if (membersForAll->members[di] && -1 != (ix = stringArrayIx(membersForAll->members[di]->groupTag, membership->subgroups, membership->count)))
-            dyStringPrintf(dyHtml," %s",membership->membership[ix]);
+        for(di=dimX;di<membersForAll->dimMax;di++)
+            {
+            if (membersForAll->members[di] && -1 != (ix = stringArrayIx(membersForAll->members[di]->groupTag, membership->subgroups, membership->count)))
+                dyStringPrintf(dyHtml," %s",membership->membership[ix]);
+            }
+        if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
+            dyStringPrintf(dyHtml, " %s",membership->membership[ix]);  // Saved view for last
         }
-    if (membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
-        dyStringPrintf(dyHtml, " %s",membership->membership[ix]);  // Saved view for last
+     else if (membersForAll->abcCount) // "dimensions" don't exist but there may be subgroups anyway
+        {
+        for(di=dimA;di<membersForAll->dimMax;di++)
+            {
+            if (membersForAll->members[di] && -1 != (ix = stringArrayIx(membersForAll->members[di]->groupTag, membership->subgroups, membership->count)))
+                dyStringPrintf(dyHtml," %s",membership->membership[ix]);
+            }
+        }
 
     // And finally the checkBox is made!
     safef(buffer, sizeof(buffer), "%s_sel", subtrack->track);
@@ -4335,6 +4367,25 @@ if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
 }
 
+#ifdef SUBTRACK_CFG
+static void makeAddClearButtonPair(char *class,char *seperator)
+// Print an [Add][Clear] button pair that uses javascript to check subtracks
+{
+char buf[256];
+if (class)
+    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(true,'%s'); return false;", class);
+else
+    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(true); return false;");
+cgiMakeOnClickButton(buf, ADD_BUTTON_LABEL);
+if (seperator)
+    printf("%s",seperator);
+if (class)
+    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(false,'%s'); return false;", class);
+else
+    safef(buf, sizeof buf,"matSetMatrixCheckBoxes(false); return false;");
+cgiMakeOnClickButton(buf, CLEAR_BUTTON_LABEL);
+}
+#else///ifndef SUBTRACK_CFG
 static void makeAddClearSubmitTweak(char javascript[JBUFSIZE], char *formName,
 				    char *buttonVar, char *label)
 /* safef into javascript a sequence of commands that will force a refresh
@@ -4347,6 +4398,7 @@ safef(javascript, JBUFSIZE*sizeof(char),
       formName, cgiScriptName(), formName, buttonVar, label,
       formName);
 }
+#endif///ndef SUBTRACK_CFG
 
 #define MANY_SUBTRACKS  8
 
@@ -7063,7 +7115,9 @@ int i, j, k;
 char *words[SMALLBUF];
 char option[SMALLBUF];
 int wordCnt;
+#ifndef SUBTRACK_CFG
 char javascript[JBUFSIZE];
+#endif///ndef SUBTRACK_CFG
 char *primaryType = getPrimaryType(primarySubtrack, parentTdb);
 char *name, *value;
 char buttonVar[32];
@@ -7088,6 +7142,9 @@ else
 safef(buttonVar, sizeof buttonVar, "%s", "button_all");
 if (formName)
     {
+#ifdef SUBTRACK_CFG
+    makeAddClearButtonPair(NULL,"</TD><TD>"); // NULL means all
+#else///ifndef SUBTRACK_CFG
     cgiMakeHiddenVar(buttonVar, "");
     makeAddClearSubmitTweak(javascript, formName, buttonVar,
                 ADD_BUTTON_LABEL);
@@ -7096,6 +7153,7 @@ if (formName)
     makeAddClearSubmitTweak(javascript, formName, buttonVar,
                 CLEAR_BUTTON_LABEL);
     cgiMakeOnClickButton(javascript, CLEAR_BUTTON_LABEL);
+#endif///ndef SUBTRACK_CFG
     }
 else
     {
@@ -7151,6 +7209,9 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         safef(buttonVar, sizeof buttonVar, "%s_%s", subGroup, name);
         if (formName)
             {
+        #ifdef SUBTRACK_CFG
+            makeAddClearButtonPair(name,"</TD><TD>");
+        #else///ifndef SUBTRACK_CFG
             cgiMakeHiddenVar(buttonVar, "");
             makeAddClearSubmitTweak(javascript, formName, buttonVar,
                         ADD_BUTTON_LABEL);
@@ -7159,6 +7220,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
             makeAddClearSubmitTweak(javascript, formName, buttonVar,
                         CLEAR_BUTTON_LABEL);
             cgiMakeOnClickButton(javascript, CLEAR_BUTTON_LABEL);
+        #endif///ndef SUBTRACK_CFG
             }
         else
             {
