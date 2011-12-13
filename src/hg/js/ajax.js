@@ -261,7 +261,7 @@ function errorHandler(request, textStatus)
     showWarning(str);
     jQuery('body').css('cursor', '');
     if(this.disabledEle) {
-        this.disabledEle.attr('disabled', '');
+        this.disabledEle.removeAttr('disabled');
     }
     if(this.loadingId) {
 	hideLoadingImage(this.loadingId);
@@ -281,6 +281,8 @@ function showWarning(str)
 {
     $("#warningText").text(str);
     $("#warning").show();
+    // reset window to the top so the user sees this message.
+    $(window).scrollTop(0);
 }
 
 // Specific calls...
