@@ -119,7 +119,7 @@ include wgEncodeSydhRnaSeq.ra
 
 #HAIB RNA-seq (wrangler: Cricket)
 include wgEncodeHaibRnaSeq.ra alpha
-
+#include wgEncodeHaibRnaSeq.release2.ra
 
 
 
@@ -152,7 +152,10 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.ra 
+include wgEncodeUwHistone.release2.ra public
+
+include wgEncodeUwHistone.patch.ra beta
+include wgEncodeUwHistone.release3.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra 
@@ -160,7 +163,7 @@ include wgEncodeSydhHistone.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.new.ra alpha
+include wgEncodeUwTfbs.release2.ra alpha
 include wgEncodeUwTfbs.ra beta,public
 
 #UTA TFBS (wrangler: Matt)

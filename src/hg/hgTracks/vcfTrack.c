@@ -1132,6 +1132,10 @@ void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
 pgSnpMethods(track);
+// Disinherit next/prev flag and methods since we don't support next/prev:
+track->nextExonButtonable = FALSE;
+track->nextPrevExon = NULL;
+track->nextPrevItem = NULL;
 track->loadItems = vcfTabixLoadItems;
 track->canPack = TRUE;
 }
