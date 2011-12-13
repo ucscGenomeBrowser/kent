@@ -25,7 +25,7 @@ lab               UW
 dataType          ChipSeq
 compositeSuffix   UwHistone
 group             regulation
-variables         cell, antibody, control
+variables         cell, antibody, control, treatment
 assembly          hg19
 
 validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2

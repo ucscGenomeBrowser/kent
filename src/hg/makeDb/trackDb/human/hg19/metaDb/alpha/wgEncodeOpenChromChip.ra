@@ -3,6 +3,7 @@ objType composite
 composite wgEncodeOpenChromChip
 expVars lab,dataType,cell,treatment,antibody
 geoSeriesAccession GSE33213
+treatment None
 
 metaObject wgEncodeOpenChromChipA549CtcfAlnRep1
 objType file
@@ -26,6 +27,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4935
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549CtcfAlnRep2
@@ -50,6 +52,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4935
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
@@ -74,6 +77,7 @@ project wgEncode
 setType exp
 subId 4935
 tableName wgEncodeOpenChromChipA549CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipA549CtcfPkRep1
@@ -99,6 +103,7 @@ replicate 1
 setType exp
 subId 4935
 tableName wgEncodeOpenChromChipA549CtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipA549CtcfRawDataRep1
@@ -122,6 +127,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4935
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549CtcfRawDataRep2
@@ -145,6 +151,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4935
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549CtcfSig
@@ -169,6 +176,7 @@ project wgEncode
 setType exp
 subId 4935
 tableName wgEncodeOpenChromChipA549CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipA549InputAln
@@ -192,6 +200,7 @@ md5sum 0f17442a40250b0f831fffdd9dcf59d9,8c8481ce35c9d1fff458e52abe44bffc
 project wgEncode
 setType input
 subId 4906
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549InputRawData
@@ -214,6 +223,7 @@ md5sum 3738dc8b22cc0d554f73eee05d7c7cf6
 project wgEncode
 setType input
 subId 4906
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549InputSig
@@ -238,6 +248,7 @@ project wgEncode
 setType input
 subId 4906
 tableName wgEncodeOpenChromChipA549InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipA549Pol2AlnRep1
@@ -262,6 +273,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4934
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549Pol2AlnRep2
@@ -286,6 +298,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4934
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
@@ -310,6 +323,7 @@ project wgEncode
 setType exp
 subId 4934
 tableName wgEncodeOpenChromChipA549Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipA549Pol2PkRep1
@@ -335,6 +349,7 @@ replicate 1
 setType exp
 subId 4934
 tableName wgEncodeOpenChromChipA549Pol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipA549Pol2RawDataRep1
@@ -358,6 +373,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 4934
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549Pol2RawDataRep2
@@ -381,6 +397,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 4934
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipA549Pol2Sig
@@ -405,6 +422,7 @@ project wgEncode
 setType exp
 subId 4934
 tableName wgEncodeOpenChromChipA549Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep1
@@ -431,6 +449,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2480
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipFibroblCtcfAlnRep2
@@ -457,6 +476,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2480
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
@@ -483,6 +503,7 @@ project wgEncode
 setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipFibroblCtcfPkRep1
@@ -509,6 +530,7 @@ project wgEncode
 setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipFibroblCtcfSig
@@ -535,6 +557,7 @@ project wgEncode
 setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipFibroblInputAln
@@ -560,6 +583,7 @@ privacy noSequence
 project wgEncode
 setType input
 subId 2487
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipFibroblInputSig
@@ -586,6 +610,7 @@ project wgEncode
 setType input
 subId 2487
 tableName wgEncodeOpenChromChipFibroblInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfAlnRep1
@@ -611,6 +636,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfAlnRep2
@@ -636,6 +662,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal
@@ -661,6 +688,7 @@ project wgEncode
 setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfPkRep1
@@ -686,6 +714,7 @@ project wgEncode
 setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfRawDataRep1
@@ -710,6 +739,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2516
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfRawDataRep2
@@ -734,6 +764,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2516
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaCtcfSig
@@ -759,6 +790,7 @@ project wgEncode
 setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGlioblaInputAln
@@ -783,6 +815,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 2499
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaInputRawData
@@ -806,6 +839,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 2499
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaInputSig
@@ -831,6 +865,7 @@ project wgEncode
 setType input
 subId 2499
 tableName wgEncodeOpenChromChipGlioblaInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGlioblaPol2AlnRep1
@@ -856,6 +891,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 3272
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaPol2AlnRep2
@@ -881,6 +917,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 3272
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal
@@ -906,6 +943,7 @@ project wgEncode
 setType exp
 subId 3272
 tableName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGlioblaPol2PkRep1
@@ -931,6 +969,7 @@ project wgEncode
 setType exp
 subId 3272
 tableName wgEncodeOpenChromChipGlioblaPol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGlioblaPol2RawDataRep1
@@ -955,6 +994,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 3272
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaPol2RawDataRep2
@@ -979,6 +1019,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 3272
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGlioblaPol2Sig
@@ -1004,6 +1045,7 @@ project wgEncode
 setType exp
 subId 3272
 tableName wgEncodeOpenChromChipGlioblaPol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878CmycAlnRep1
@@ -1030,6 +1072,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1229
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CmycAlnRep2
@@ -1056,6 +1099,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1229
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
@@ -1082,6 +1126,7 @@ project wgEncode
 setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12878CmycPk
@@ -1108,6 +1153,7 @@ project wgEncode
 setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12878CmycRawDataRep1
@@ -1132,6 +1178,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 472
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CmycRawDataRep2
@@ -1156,6 +1203,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 472
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CmycSig
@@ -1182,6 +1230,7 @@ project wgEncode
 setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878CmycValidation
@@ -1206,6 +1255,7 @@ md5sum 764998ed632d7689fa67ef10536ce880
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipGm12878CtcfAlnRep1
@@ -1231,6 +1281,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2449
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CtcfAlnRep2
@@ -1256,6 +1307,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2449
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CtcfAlnRep3
@@ -1281,6 +1333,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 2449
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal
@@ -1306,6 +1359,7 @@ project wgEncode
 setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12878CtcfPkRep1
@@ -1331,6 +1385,7 @@ project wgEncode
 setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep1
@@ -1356,6 +1411,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 468
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep2
@@ -1380,6 +1436,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 468
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep3
@@ -1405,6 +1462,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 468
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CtcfSig
@@ -1430,6 +1488,7 @@ project wgEncode
 setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878CtcfValidation
@@ -1454,6 +1513,7 @@ md5sum 6ce33a140c328e68d52bd1124d610624
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipGm12878InputAln
@@ -1479,6 +1539,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1518
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878InputRawData
@@ -1502,6 +1563,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 34
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878InputSig
@@ -1528,6 +1590,7 @@ project wgEncode
 setType input
 subId 1518
 tableName wgEncodeOpenChromChipGm12878InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878Pol2AlnRep1
@@ -1554,6 +1617,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1478
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878Pol2AlnRep2
@@ -1580,6 +1644,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1478
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal
@@ -1606,6 +1671,7 @@ project wgEncode
 setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12878Pol2Pk
@@ -1632,6 +1698,7 @@ project wgEncode
 setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12878Pol2RawDataRep1
@@ -1656,6 +1723,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 868
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878Pol2RawDataRep2
@@ -1680,6 +1748,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 868
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12878Pol2Sig
@@ -1706,6 +1775,7 @@ project wgEncode
 setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12878Pol2Validation
@@ -1730,6 +1800,7 @@ md5sum 2be0fbf348e706ba4862cc72c5df2a13
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipGm12891CtcfAlnRep1
@@ -1756,6 +1827,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1490
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12891CtcfAlnRep2
@@ -1782,6 +1854,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1490
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal
@@ -1808,6 +1881,7 @@ project wgEncode
 setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12891CtcfPk
@@ -1834,6 +1908,7 @@ project wgEncode
 setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12891CtcfRawDataRep1
@@ -1858,6 +1933,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 644
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12891CtcfRawDataRep2
@@ -1882,6 +1958,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 644
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12891CtcfSig
@@ -1908,6 +1985,7 @@ project wgEncode
 setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm12892CtcfAlnRep1
@@ -1934,6 +2012,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1491
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12892CtcfAlnRep2
@@ -1960,6 +2039,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1491
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal
@@ -1986,6 +2066,7 @@ project wgEncode
 setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm12892CtcfPk
@@ -2012,6 +2093,7 @@ project wgEncode
 setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm12892CtcfRawDataRep1
@@ -2036,6 +2118,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 638
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12892CtcfRawDataRep2
@@ -2060,6 +2143,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 638
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm12892CtcfSig
@@ -2086,6 +2170,7 @@ project wgEncode
 setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm19238CtcfAlnRep1
@@ -2112,6 +2197,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19238CtcfAlnRep2
@@ -2138,6 +2224,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1516
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal
@@ -2164,6 +2251,7 @@ project wgEncode
 setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm19238CtcfPk
@@ -2190,6 +2278,7 @@ project wgEncode
 setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm19238CtcfRawDataRep1
@@ -2214,6 +2303,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 646
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19238CtcfRawDataRep2
@@ -2238,6 +2328,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 646
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19238CtcfSig
@@ -2264,6 +2355,7 @@ project wgEncode
 setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm19239CtcfAlnRep1
@@ -2290,6 +2382,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1525
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19239CtcfAlnRep2
@@ -2316,6 +2409,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1525
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal
@@ -2342,6 +2436,7 @@ project wgEncode
 setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm19239CtcfPk
@@ -2368,6 +2463,7 @@ project wgEncode
 setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm19239CtcfRawDataRep1
@@ -2392,6 +2488,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 648
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19239CtcfRawDataRep2
@@ -2416,6 +2513,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 648
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19239CtcfSig
@@ -2442,6 +2540,7 @@ project wgEncode
 setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipGm19240CtcfAlnRep1
@@ -2468,6 +2567,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1536
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19240CtcfAlnRep2
@@ -2494,6 +2594,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1536
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal
@@ -2520,6 +2621,7 @@ project wgEncode
 setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipGm19240CtcfPk
@@ -2546,6 +2648,7 @@ project wgEncode
 setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipGm19240CtcfRawDataRep1
@@ -2570,6 +2673,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 650
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19240CtcfRawDataRep2
@@ -2594,6 +2698,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 650
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipGm19240CtcfSig
@@ -2620,6 +2725,7 @@ project wgEncode
 setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipH1hescCmycAlnRep1
@@ -2646,6 +2752,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1504
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
@@ -2672,6 +2779,7 @@ project wgEncode
 setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipH1hescCmycPk
@@ -2698,6 +2806,7 @@ project wgEncode
 setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipH1hescCmycRawDataRep1
@@ -2721,6 +2830,7 @@ origAssembly hg18
 project wgEncode
 setType exp
 subId 882
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipH1hescCmycSig
@@ -2747,6 +2857,7 @@ project wgEncode
 setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipH1hescCtcfAlnRep1
@@ -2773,6 +2884,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1500
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal
@@ -2799,6 +2911,7 @@ project wgEncode
 setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipH1hescCtcfPk
@@ -2825,6 +2938,7 @@ project wgEncode
 setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipH1hescCtcfRawDataRep1
@@ -2848,6 +2962,7 @@ origAssembly hg18
 project wgEncode
 setType exp
 subId 636
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipH1hescCtcfSig
@@ -2874,6 +2989,7 @@ project wgEncode
 setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipH1hescPol2AlnRep1
@@ -2900,6 +3016,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1833
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal
@@ -2926,6 +3043,7 @@ project wgEncode
 setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipH1hescPol2Pk
@@ -2952,6 +3070,7 @@ project wgEncode
 setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipH1hescPol2RawDataRep1
@@ -2975,6 +3094,7 @@ origAssembly hg18
 project wgEncode
 setType exp
 subId 641
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipH1hescPol2Sig
@@ -3001,6 +3121,7 @@ project wgEncode
 setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3CmycAlnRep1
@@ -3027,6 +3148,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1501
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CmycAlnRep2
@@ -3053,6 +3175,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1501
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
@@ -3079,6 +3202,7 @@ project wgEncode
 setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHelas3CmycPk
@@ -3105,6 +3229,7 @@ project wgEncode
 setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHelas3CmycRawDataRep1
@@ -3130,6 +3255,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 642
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CmycRawDataRep2
@@ -3155,6 +3281,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 642
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CmycSig
@@ -3181,6 +3308,7 @@ project wgEncode
 setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3CmycValidation
@@ -3232,6 +3360,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1499
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CtcfAlnRep2
@@ -3258,6 +3387,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1499
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal
@@ -3284,6 +3414,7 @@ project wgEncode
 setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHelas3CtcfPk
@@ -3310,6 +3441,7 @@ project wgEncode
 setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHelas3CtcfRawDataRep1
@@ -3335,6 +3467,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 493
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CtcfRawDataRep2
@@ -3360,6 +3493,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 493
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CtcfSig
@@ -3386,6 +3520,7 @@ project wgEncode
 setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3CtcfValidation
@@ -3436,6 +3571,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1609
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3InputRawData
@@ -3460,6 +3596,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 275
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3InputSig
@@ -3486,6 +3623,7 @@ project wgEncode
 setType input
 subId 1609
 tableName wgEncodeOpenChromChipHelas3InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3Pol2AlnRep1
@@ -3512,6 +3650,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1505
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3Pol2AlnRep2
@@ -3538,6 +3677,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1505
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal
@@ -3564,6 +3704,7 @@ project wgEncode
 setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Pk
@@ -3590,6 +3731,7 @@ project wgEncode
 setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHelas3Pol2RawDataRep1
@@ -3614,6 +3756,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 885
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3Pol2RawDataRep2
@@ -3639,6 +3782,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Sig
@@ -3665,6 +3809,7 @@ project wgEncode
 setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Validation
@@ -3716,6 +3861,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1527
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CmycAlnRep2
@@ -3742,6 +3888,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1527
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CmycAlnRep3
@@ -3768,6 +3915,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1527
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
@@ -3794,6 +3942,7 @@ project wgEncode
 setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHepg2CmycPk
@@ -3820,6 +3969,7 @@ project wgEncode
 setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep1
@@ -3845,6 +3995,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 593
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep2
@@ -3870,6 +4021,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 593
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep3
@@ -3895,6 +4047,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 593
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CmycSig
@@ -3921,6 +4074,7 @@ project wgEncode
 setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2CmycValidation
@@ -3972,6 +4126,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1517
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CtcfAlnRep2
@@ -3998,6 +4153,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1517
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal
@@ -4024,6 +4180,7 @@ project wgEncode
 setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHepg2CtcfPk
@@ -4050,6 +4207,7 @@ project wgEncode
 setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHepg2CtcfRawDataRep1
@@ -4075,6 +4233,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 555
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CtcfRawDataRep2
@@ -4100,6 +4259,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 555
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CtcfSig
@@ -4126,6 +4286,7 @@ project wgEncode
 setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2CtcfValidation
@@ -4176,6 +4337,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1608
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2InputRawData
@@ -4200,6 +4362,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 274
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2InputSig
@@ -4226,6 +4389,7 @@ project wgEncode
 setType input
 subId 1608
 tableName wgEncodeOpenChromChipHepg2InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2Pol2AlnRep1
@@ -4252,6 +4416,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1526
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2Pol2AlnRep2
@@ -4278,6 +4443,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1526
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2Pol2AlnRep3
@@ -4304,6 +4470,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1526
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal
@@ -4330,6 +4497,7 @@ project wgEncode
 setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHepg2Pol2Pk
@@ -4356,6 +4524,7 @@ project wgEncode
 setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep1
@@ -4380,6 +4549,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep2
@@ -4404,6 +4574,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 589
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep3
@@ -4428,6 +4599,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 589
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2Sig
@@ -4454,6 +4626,7 @@ project wgEncode
 setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHepg2Pol2Validation
@@ -4505,6 +4678,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1542
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
@@ -4531,6 +4705,7 @@ project wgEncode
 setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHuvecCmycPk
@@ -4557,6 +4732,7 @@ project wgEncode
 setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHuvecCmycRawDataRep1
@@ -4581,6 +4757,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 635
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCmycSig
@@ -4607,6 +4784,7 @@ project wgEncode
 setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHuvecCtcfAlnRep1
@@ -4633,6 +4811,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1537
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecCtcfAlnRep2
@@ -4659,6 +4838,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1537
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal
@@ -4685,6 +4865,7 @@ project wgEncode
 setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHuvecCtcfPk
@@ -4711,6 +4892,7 @@ project wgEncode
 setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHuvecCtcfRawDataRep1
@@ -4735,6 +4917,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 548
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCtcfRawDataRep2
@@ -4759,6 +4942,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 548
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCtcfSig
@@ -4785,6 +4969,7 @@ project wgEncode
 setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHuvecCtcfValidation
@@ -4835,6 +5020,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1607
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecInputRawData
@@ -4858,6 +5044,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 544
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecInputSig
@@ -4884,6 +5071,7 @@ project wgEncode
 setType input
 subId 1607
 tableName wgEncodeOpenChromChipHuvecInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipHuvecPol2AlnRep1
@@ -4910,6 +5098,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1540
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecPol2AlnRep2
@@ -4936,6 +5125,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1540
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal
@@ -4962,6 +5152,7 @@ project wgEncode
 setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipHuvecPol2Pk
@@ -4988,6 +5179,7 @@ project wgEncode
 setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipHuvecPol2RawDataRep1
@@ -5012,6 +5204,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 552
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecPol2RawDataRep2
@@ -5036,6 +5229,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 552
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipHuvecPol2Sig
@@ -5062,6 +5256,7 @@ project wgEncode
 setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562CmycAlnRep1
@@ -5088,6 +5283,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1543
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CmycAlnRep2
@@ -5114,6 +5310,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1543
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CmycAlnRep3
@@ -5140,6 +5337,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1543
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CmycBaseOverlapSignal
@@ -5166,6 +5364,7 @@ project wgEncode
 setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipK562CmycPk
@@ -5192,6 +5391,7 @@ project wgEncode
 setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipK562CmycRawDataRep1
@@ -5217,6 +5417,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 482
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CmycRawDataRep2
@@ -5242,6 +5443,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 482
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CmycRawDataRep3
@@ -5267,6 +5469,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 482
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CmycSig
@@ -5293,6 +5496,7 @@ project wgEncode
 setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562CmycValidation
@@ -5317,6 +5521,7 @@ md5sum 1c69f30938898c91098f969c6bd46fa0
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipK562CtcfAlnRep1
@@ -5343,6 +5548,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1538
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CtcfAlnRep2
@@ -5369,6 +5575,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1538
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CtcfAlnRep3
@@ -5395,6 +5602,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 1538
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562CtcfBaseOverlapSignal
@@ -5421,6 +5629,7 @@ project wgEncode
 setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipK562CtcfPk
@@ -5447,6 +5656,7 @@ project wgEncode
 setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipK562CtcfRawDataRep1
@@ -5472,6 +5682,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 481
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CtcfRawDataRep2
@@ -5497,6 +5708,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 481
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CtcfRawDataRep3
@@ -5522,6 +5734,7 @@ project wgEncode
 replicate 3
 setType exp
 subId 481
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562CtcfSig
@@ -5548,6 +5761,7 @@ project wgEncode
 setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562CtcfValidation
@@ -5572,6 +5786,7 @@ md5sum 19a8516b14dad6f7216581b3e52c9e1e
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipK562InputAln
@@ -5597,6 +5812,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1606
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562InputRawData
@@ -5621,6 +5837,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 109
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562InputSig
@@ -5647,6 +5864,7 @@ project wgEncode
 setType input
 subId 1606
 tableName wgEncodeOpenChromChipK562InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562Pol2AlnRep1
@@ -5673,6 +5891,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1541
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562Pol2AlnRep2
@@ -5699,6 +5918,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1541
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipK562Pol2BaseOverlapSignal
@@ -5725,6 +5945,7 @@ project wgEncode
 setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipK562Pol2Pk
@@ -5751,6 +5972,7 @@ project wgEncode
 setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipK562Pol2RawDataRep1
@@ -5775,6 +5997,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 588
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562Pol2RawDataRep2
@@ -5799,6 +6022,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 588
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipK562Pol2Sig
@@ -5825,6 +6049,7 @@ project wgEncode
 setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipK562Pol2Validation
@@ -5849,6 +6074,7 @@ md5sum 1ed0e72b3eebdf93ffedec9ed945696b
 project wgEncode
 setType exp
 subId 3832
+treatment None
 view Validation
 
 metaObject wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
@@ -6054,6 +6280,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CmycRawDataRep2
@@ -6078,6 +6305,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 3141
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CmycVehAlnRep1
@@ -6284,6 +6512,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1580
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7CtcfAlnRep2
@@ -6310,6 +6539,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1580
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal
@@ -6336,6 +6566,7 @@ project wgEncode
 setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1
@@ -6542,6 +6773,7 @@ project wgEncode
 setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipMcf7CtcfRawDataRep1
@@ -6566,6 +6798,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 884
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CtcfRawDataRep2
@@ -6590,6 +6823,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 884
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CtcfSig
@@ -6616,6 +6850,7 @@ project wgEncode
 setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipMcf7CtcfVehAlnRep1
@@ -6821,6 +7056,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 1834
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7InputRawDataRep1
@@ -6844,6 +7080,7 @@ origAssembly hg18
 project wgEncode
 setType input
 subId 866
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7InputSig
@@ -6870,6 +7107,7 @@ project wgEncode
 setType input
 subId 1834
 tableName wgEncodeOpenChromChipMcf7InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipMcf7Pol2AlnRep1
@@ -6895,6 +7133,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2495
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7Pol2AlnRep2
@@ -6920,6 +7159,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2495
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal
@@ -6945,6 +7185,7 @@ project wgEncode
 setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipMcf7Pol2PkRep1
@@ -6970,6 +7211,7 @@ project wgEncode
 setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipMcf7Pol2RawDataRep1
@@ -6994,6 +7236,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 2495
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7Pol2RawDataRep2
@@ -7018,6 +7261,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 2495
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7Pol2Sig
@@ -7043,6 +7287,7 @@ project wgEncode
 setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2Sig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipMonocd14InputAln
@@ -7068,6 +7313,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 3271
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMonocd14InputRawData
@@ -7092,6 +7338,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 3271
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMonocd14InputSig
@@ -7118,6 +7365,7 @@ project wgEncode
 setType input
 subId 3271
 tableName wgEncodeOpenChromChipMonocd14InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputAln
@@ -7142,6 +7390,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 3271
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputRawData
@@ -7165,6 +7414,7 @@ origAssembly hg19
 project wgEncode
 setType input
 subId 3271
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipMonocd14ro1746InputSig
@@ -7190,6 +7440,7 @@ project wgEncode
 setType input
 subId 3271
 tableName wgEncodeOpenChromChipMonocd14ro1746InputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep1
@@ -7216,6 +7467,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1539
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep2
@@ -7242,6 +7494,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1539
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal
@@ -7268,6 +7521,7 @@ project wgEncode
 setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipNhekCtcfPk
@@ -7294,6 +7548,7 @@ project wgEncode
 setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipNhekCtcfRawDataRep1
@@ -7318,6 +7573,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 624
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipNhekCtcfRawDataRep2
@@ -7342,6 +7598,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 624
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromChipNhekCtcfSig
@@ -7368,6 +7625,7 @@ project wgEncode
 setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipProgfibCtcfAlnRep1
@@ -7395,6 +7653,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1657
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibCtcfAlnRep2
@@ -7422,6 +7681,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1657
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
@@ -7449,6 +7709,7 @@ project wgEncode
 setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipProgfibCtcfPkRep1
@@ -7477,6 +7738,7 @@ replicate 1
 setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfPkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipProgfibCtcfSig
@@ -7504,6 +7766,7 @@ project wgEncode
 setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipProgfibInputAln
@@ -7530,6 +7793,7 @@ privacy noSequence
 project wgEncode
 setType input
 subId 1832
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibInputSig
@@ -7557,6 +7821,7 @@ project wgEncode
 setType input
 subId 1832
 tableName wgEncodeOpenChromChipProgfibInputSig
+treatment None
 view Signal
 
 metaObject wgEncodeOpenChromChipProgfibPol2AlnRep1
@@ -7584,6 +7849,7 @@ project wgEncode
 replicate 1
 setType exp
 subId 1652
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibPol2AlnRep2
@@ -7611,6 +7877,7 @@ project wgEncode
 replicate 2
 setType exp
 subId 1652
+treatment None
 view Alignments
 
 metaObject wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
@@ -7638,6 +7905,7 @@ project wgEncode
 setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
+treatment None
 view Base_Overlap_Signal
 
 metaObject wgEncodeOpenChromChipProgfibPol2PkRep1
@@ -7666,6 +7934,7 @@ replicate 1
 setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2PkRep1
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromChipProgfibPol2Sig
@@ -7693,6 +7962,7 @@ project wgEncode
 setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
+treatment None
 view Signal
 
-# MAGIC: 341113558
+# MAGIC: -1245616308
