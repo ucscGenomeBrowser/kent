@@ -17,7 +17,7 @@ alignments for a given cDNA sequence.
     poly-A tail is not included in coverage calculation. 
     If decayMinCover is specified, the minimum coverage is calculated
     per alignment from the query size using the formula:
-       minCoverage = -0.4 * query_size + 100
+       minCoverage = 1.0 - qSize / 250.0
     and minCoverage is bounded between 0.25 and 0.9.
 
   o Keep only best overlapping alignment. This is the one with
