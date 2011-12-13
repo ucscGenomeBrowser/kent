@@ -109,7 +109,7 @@ struct pgCodon
 struct pgCodon *fetchCodons (char *db, struct bed *gene, unsigned chrStart, unsigned chrEnd);
 /* get codon sequence to compute aa changes */
 
-void printSeqCodDisplay (char *db, struct pgSnp *item);
+void printSeqCodDisplay (char *db, struct pgSnp *item, char *genePredTable);
 /* print the display of sequence changes for a coding variant */
 
 void printPgDbLink(char *db, struct trackDb *tdb, struct pgSnp *item);

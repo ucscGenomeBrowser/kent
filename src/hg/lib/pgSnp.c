@@ -382,7 +382,7 @@ return result;
 
 void aaProperties (char *aa1, char *aa2);
 
-void printSeqCodDisplay(char *db, struct pgSnp *item)
+void printSeqCodDisplay(char *db, struct pgSnp *item, char *genePredTable)
 /* print the display of sequence changes for a coding variant */
 {
 struct bed *list = NULL, *el, *th = NULL;
@@ -390,8 +390,15 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 struct sqlConnection *conn = hAllocConn(db);
-safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, 0, exonCount, exonEnds, exonStarts  from knownGene where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
-   item->chrom, item->chromStart, item->chromEnd);
+if (!sqlTableExists(conn, genePredTable))
+    {
+    hFreeConn(&conn);
+    return;
+    }
+safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, "
+      "0, exonCount, exonEnds, exonStarts  from %s "
+      "where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
+      genePredTable, item->chrom, item->chromStart, item->chromEnd);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

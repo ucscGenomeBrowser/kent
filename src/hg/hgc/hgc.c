@@ -22983,7 +22983,8 @@ if ((row = sqlNextRow(sr)) != NULL)
         printPgSiftPred(database, siftTab, el);
     if (polyTab != NULL)
         printPgPolyphenPred(database, polyTab, el);
-    printSeqCodDisplay(database, el);
+    char *genePredTable = "knownGene";
+    printSeqCodDisplay(database, el, genePredTable);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
