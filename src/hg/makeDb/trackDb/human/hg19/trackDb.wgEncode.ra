@@ -167,7 +167,7 @@ include wgEncodeUwTfbs.release2.ra alpha
 include wgEncodeUwTfbs.ra beta,public
 
 #UTA TFBS (wrangler: Matt)
-include wgEncodeOpenChromChip.new.ra alpha
+include wgEncodeOpenChromChip.release2.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
