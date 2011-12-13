@@ -2,6 +2,7 @@ metaObject wgEncodeOpenChromSynth
 objType composite
 composite wgEncodeOpenChromSynth
 expVars lab,dataType,cell,treatment,composite
+treatment None
 
 metaObject wgEncodeOpenChromSynthGlioblaPk
 objType table
@@ -42,6 +43,7 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthGm12878Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthGm12891Pk
@@ -143,6 +145,7 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthH1hescPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthHelas3Ifna4hPk
@@ -184,6 +187,7 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthHelas3Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthHepg2Pk
@@ -205,6 +209,7 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthHepg2Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthHtr8Pk
@@ -246,6 +251,7 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthHuvecPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthK562Pk
@@ -267,6 +273,7 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthK562Pk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthMedulloPk
@@ -308,6 +315,7 @@ origAssembly hg19
 project wgEncode
 subId 3273
 tableName wgEncodeOpenChromSynthNhekPk
+treatment None
 view Peaks
 
 metaObject wgEncodeOpenChromSynthPanisletsPk
@@ -350,4 +358,4 @@ tableName wgEncodeOpenChromSynthUrothelUt189Pk
 treatment UT189
 view Peaks
 
-# MAGIC: 617672087
+# MAGIC: -761700609
