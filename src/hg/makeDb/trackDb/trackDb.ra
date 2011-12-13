@@ -491,7 +491,7 @@ type bed 12
 compositeTrack on
 release alpha
 nextExonText Next Match
-prevExonText Next Match
+prevExonText Prev Match
 
     track t2gPmc
     shortLabel PubmedCentral
