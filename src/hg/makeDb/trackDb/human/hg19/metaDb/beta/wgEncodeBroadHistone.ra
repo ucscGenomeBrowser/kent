@@ -601,6 +601,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-05-05
+dccAccession wgEncodeEH000031
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -670,6 +671,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
+dccAccession wgEncodeEH000031
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -835,6 +837,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
+dccAccession wgEncodeEH000033
 fileIndex wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam
 grant Bernstein
@@ -884,6 +887,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-05-05
+dccAccession wgEncodeEH000033
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -906,6 +910,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
+dccAccession wgEncodeEH000033
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
@@ -952,6 +957,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
+dccAccession wgEncodeEH000033
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -1142,6 +1148,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
+dccAccession wgEncodeEH000028
 fileIndex wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam
 grant Bernstein
@@ -1166,6 +1173,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-05-05
+dccAccession wgEncodeEH000028
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdPk.broadPeak.gz
 grant Bernstein
 lab Broad
@@ -1210,6 +1218,7 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-05
+dccAccession wgEncodeEH000028
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
@@ -1233,6 +1242,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-11-05
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
+dccAccession wgEncodeEH000028
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig
 grant Bernstein
 lab Broad
@@ -22002,4 +22012,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -1086744543
+# MAGIC: 1053820450

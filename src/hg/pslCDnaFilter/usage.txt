@@ -47,7 +47,7 @@ Options:
 
    -decayMinCover  -  the minimum coverage is calculated
     per alignment from the query size using the formula:
-       minCoverage = -0.4 * query_size + 100
+       minCoverage = 1.0 - qSize / 250.0
     and minCoverage is bounded between 0.25 and 0.9.
 
    -minSpan=0.0 - keep only alignments whose target length are

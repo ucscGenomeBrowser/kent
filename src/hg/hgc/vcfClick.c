@@ -241,13 +241,14 @@ static void pgSnpCodingDetail(struct vcfRecord *rec)
 /* Translate rec into pgSnp (with proper chrom name) and call Belinda's
  * coding effect predictor from pgSnp details. */
 {
-if (hTableExists(database, "knownGene"))
+char *genePredTable = "knownGene";
+if (hTableExists(database, genePredTable))
     {
     struct pgSnp *pgs = pgSnpFromVcfRecord(rec);
     if (!sameString(rec->chrom, seqName))
 	// rec->chrom might be missing "chr" prefix:
 	pgs->chrom = seqName;
-    printSeqCodDisplay(database, pgs);
+    printSeqCodDisplay(database, pgs, genePredTable);
     }
 }
 

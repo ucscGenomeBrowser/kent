@@ -1,6 +1,6 @@
 table rgdPathway
-"RGD Pathway Descriptioin"
+"RGD Pathway Description"
     (
-    string pathwayI;	"RGD pathway ID"
+    string pathwayId;	"RGD pathway ID"
     string description; "Description of pathway"
     )
