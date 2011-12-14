@@ -1177,7 +1177,7 @@ dccAccession wgEncodeEH000338
 dccRep 1
 expId 338
 fileIndex wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam
+fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam,wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -2002,7 +2002,7 @@ dccAccession wgEncodeEH000339
 dccRep 1
 expId 339
 fileIndex wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
-fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam
+fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam,wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
 grant Gingeras
 lab RIKEN
 labExpId J59
@@ -2580,7 +2580,7 @@ dccAccession wgEncodeEH000341
 dccRep 1
 expId 341
 fileIndex wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam
+fileName wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam,wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 localization cell
@@ -4064,7 +4064,7 @@ dateUnrestricted 2011-07-29
 dccAccession wgEncodeEH001155
 dccRep 1
 expId 1155
-fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam
+fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam,wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labExpId J56
@@ -5831,7 +5831,7 @@ dccAccession wgEncodeEH000343
 dccRep 1
 expId 343
 fileIndex wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam
+fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam,wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -6797,7 +6797,7 @@ dccAccession wgEncodeEH000345
 dccRep 1
 expId 345
 fileIndex wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam
+fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam,wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -7899,7 +7899,7 @@ dccAccession wgEncodeEH000342
 dccRep 1
 expId 342
 fileIndex wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam
+fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam,wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -9674,7 +9674,7 @@ dccAccession wgEncodeEH000329
 dccRep 1
 expId 329
 fileIndex wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam,wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -11102,7 +11102,7 @@ dccAccession wgEncodeEH000330
 dccRep 1
 expId 330
 fileIndex wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam
+fileName wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam,wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 localization nucleus
@@ -11850,7 +11850,7 @@ dccAccession wgEncodeEH000337
 dccRep 1
 expId 337
 fileIndex wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam
+fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam,wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -12896,7 +12896,7 @@ dccAccession wgEncodeEH000346
 dccRep 1
 expId 346
 fileIndex wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam
+fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam,wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -13540,7 +13540,7 @@ dccAccession wgEncodeEH000347
 dccRep 1
 expId 347
 fileIndex wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam
+fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam,wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -14107,7 +14107,7 @@ dccAccession wgEncodeEH000331
 dccRep 1
 expId 331
 fileIndex wgEncodeRikenCageProstateCellLongnonpolyaAln.bam.bai
-fileName wgEncodeRikenCageProstateCellLongnonpolyaAln.bam
+fileName wgEncodeRikenCageProstateCellLongnonpolyaAln.bam,wgEncodeRikenCageProstateCellLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 localization cell
