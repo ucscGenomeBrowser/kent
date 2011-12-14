@@ -5784,7 +5784,7 @@ labProtocolId 013WC+cage,014WC+cage
 labVersion IDR
 localization cell
 md5sum b4b91192506fd7d6b626f1518d4f197c
-objStatus replaced
+objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
@@ -6750,7 +6750,7 @@ labProtocolId gen0127NLtcage
 labVersion IDR
 localization nucleolus
 md5sum baa3c52dcd332cd280df71b425357178
-objStatus replaced
+objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -9627,7 +9627,7 @@ labProtocolId gen0134CHtcage
 labVersion IDR
 localization chromatin
 md5sum eb338642e7ec879be9ec11fe43da98e0
-objStatus replaced
+objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -10784,7 +10784,7 @@ labProtocolId gen0144NLtcage
 labVersion IDR
 localization nucleolus
 md5sum 25a8b99de440b531dd14432df0274159
-objStatus replaced
+objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -11055,7 +11055,7 @@ labProtocolId gen0147NPtcage
 labVersion IDR
 localization nucleoplasm
 md5sum bd5cf0866d75661595d208f490df77a4
-objStatus replaced
+objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
 rnaExtract total
@@ -14060,7 +14060,7 @@ labProtocolId 027N+cage
 labVersion IDR
 localization nucleus
 md5sum 61b623a918f76f2b37d4c2dd36528213
-objStatus replaced
+objStatus replaced - this version has scores that exceed chromosome lengths
 origAssembly hg19
 project wgEncode
 rnaExtract longPolyA
