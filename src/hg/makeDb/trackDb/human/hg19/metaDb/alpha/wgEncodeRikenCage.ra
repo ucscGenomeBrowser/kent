@@ -100,6 +100,7 @@ lab RIKEN
 labExpId K16
 labProtocolId 021WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -124,6 +125,7 @@ lab RIKEN
 labExpId K17
 labProtocolId 022WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -202,6 +204,7 @@ lab RIKEN
 labExpId K16
 labProtocolId 021WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -226,6 +229,7 @@ lab RIKEN
 labExpId K17
 labProtocolId 022WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -486,6 +490,7 @@ lab RIKEN
 labExpId K12
 labProtocolId 017WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -510,6 +515,7 @@ lab RIKEN
 labExpId K13
 labProtocolId 018WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -588,6 +594,7 @@ lab RIKEN
 labExpId K12
 labProtocolId 017WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -612,6 +619,7 @@ lab RIKEN
 labExpId K13
 labProtocolId 018WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -872,6 +880,7 @@ lab RIKEN
 labExpId K18
 labProtocolId 037WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -896,6 +905,7 @@ lab RIKEN
 labExpId K19
 labProtocolId 038WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -974,6 +984,7 @@ lab RIKEN
 labExpId K18
 labProtocolId 037WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -998,6 +1009,7 @@ lab RIKEN
 labExpId K19
 labProtocolId 038WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1468,6 +1480,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -1492,6 +1505,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -1516,6 +1530,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -1538,6 +1553,7 @@ fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2093,6 +2109,7 @@ fileName wgEncodeRikenCageGm12878NucleolusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2143,6 +2160,7 @@ fileName wgEncodeRikenCageGm12878NucleolusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2269,6 +2287,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2291,6 +2310,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2313,6 +2333,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2335,6 +2356,7 @@ grant Gingeras
 lab RIKEN
 labExpId J59
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -2830,6 +2852,7 @@ fileName wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2854,6 +2877,7 @@ fileName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2878,6 +2902,7 @@ fileName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -2901,6 +2926,7 @@ fileName wgEncodeRikenCageH1hescCellLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -3193,6 +3219,7 @@ lab RIKEN
 labExpId J74
 labProtocolId 005WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3217,6 +3244,7 @@ lab RIKEN
 labExpId J75
 labProtocolId 006WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3295,6 +3323,7 @@ lab RIKEN
 labExpId J74
 labProtocolId 005WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3319,6 +3348,7 @@ lab RIKEN
 labExpId J75
 labProtocolId 006WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3554,6 +3584,7 @@ lab RIKEN
 labExpId J86
 labProtocolId 006C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3605,6 +3636,7 @@ lab RIKEN
 labExpId J86
 labProtocolId 006C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3738,6 +3770,7 @@ lab RIKEN
 labExpId J95
 labProtocolId 006N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3789,6 +3822,7 @@ lab RIKEN
 labExpId J95
 labProtocolId 006N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -3947,6 +3981,7 @@ lab RIKEN
 labExpId J80
 labProtocolId 011WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -3971,6 +4006,7 @@ lab RIKEN
 labExpId J81
 labProtocolId 012WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4049,6 +4085,7 @@ lab RIKEN
 labExpId J80
 labProtocolId 011WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4073,6 +4110,7 @@ lab RIKEN
 labExpId J81
 labProtocolId 012WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4252,6 +4290,7 @@ lab RIKEN
 labExpId J56
 labProtocolId 
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -4276,6 +4315,7 @@ lab RIKEN
 labExpId J56
 labProtocolId 
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -4300,6 +4340,7 @@ lab RIKEN
 labExpId J56
 labProtocolId 
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -4324,6 +4365,7 @@ lab RIKEN
 labExpId J56
 labProtocolId 
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 parentTable wgEncodeRikenCageHelas3CytosolLongnonpolyaRawSignal
 project wgEncode
@@ -4611,6 +4653,7 @@ lab RIKEN
 labExpId J87
 labProtocolId 011C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4635,6 +4678,7 @@ lab RIKEN
 labExpId J88
 labProtocolId 012C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4713,6 +4757,7 @@ lab RIKEN
 labExpId J87
 labProtocolId 011C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -4737,6 +4782,7 @@ lab RIKEN
 labExpId J88
 labProtocolId 012C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -4970,6 +5016,7 @@ lab RIKEN
 labExpId J58
 labProtocolId 
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5020,6 +5067,7 @@ lab RIKEN
 labExpId J58
 labProtocolId 
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5227,6 +5275,7 @@ lab RIKEN
 labExpId J96
 labProtocolId 011N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5251,6 +5300,7 @@ lab RIKEN
 labExpId J97
 labProtocolId 012N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5329,6 +5379,7 @@ lab RIKEN
 labExpId J96
 labProtocolId 011N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5353,6 +5404,7 @@ lab RIKEN
 labExpId J97
 labProtocolId 012N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5613,6 +5665,7 @@ lab RIKEN
 labExpId K01
 labProtocolId 013WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5637,6 +5690,7 @@ lab RIKEN
 labExpId K02
 labProtocolId 014WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5715,6 +5769,7 @@ lab RIKEN
 labExpId K01
 labProtocolId 013WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -5739,6 +5794,7 @@ lab RIKEN
 labExpId K02
 labProtocolId 014WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -5946,6 +6002,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5970,6 +6027,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -5994,6 +6052,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6016,6 +6075,7 @@ fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6308,6 +6368,7 @@ lab RIKEN
 labExpId J89
 labProtocolId 013C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6332,6 +6393,7 @@ lab RIKEN
 labExpId J90
 labProtocolId 014C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6410,6 +6472,7 @@ lab RIKEN
 labExpId J89
 labProtocolId 013C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -6434,6 +6497,7 @@ lab RIKEN
 labExpId J90
 labProtocolId 014C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -6667,6 +6731,7 @@ fileName wgEncodeRikenCageHepg2NucleolusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6717,6 +6782,7 @@ fileName wgEncodeRikenCageHepg2NucleolusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6872,6 +6938,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6896,6 +6963,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6920,6 +6988,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -6942,6 +7011,7 @@ fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7234,6 +7304,7 @@ lab RIKEN
 labExpId J98
 labProtocolId 013N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7258,6 +7329,7 @@ lab RIKEN
 labExpId J99
 labProtocolId 014N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7336,6 +7408,7 @@ lab RIKEN
 labExpId J98
 labProtocolId 013N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7360,6 +7433,7 @@ lab RIKEN
 labExpId J99
 labProtocolId 014N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7620,6 +7694,7 @@ lab RIKEN
 labExpId J78
 labProtocolId 009WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7644,6 +7719,7 @@ lab RIKEN
 labExpId J79
 labProtocolId 010WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7722,6 +7798,7 @@ lab RIKEN
 labExpId J78
 labProtocolId 009WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -7746,6 +7823,7 @@ lab RIKEN
 labExpId J79
 labProtocolId 010WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -7926,6 +8004,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7950,6 +8029,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7974,6 +8054,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -7996,6 +8077,7 @@ fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -8288,6 +8370,7 @@ lab RIKEN
 labExpId K03
 labProtocolId 029C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -8312,6 +8395,7 @@ lab RIKEN
 labExpId K04
 labProtocolId 030C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -8390,6 +8474,7 @@ lab RIKEN
 labExpId K03
 labProtocolId 029C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -8414,6 +8499,7 @@ lab RIKEN
 labExpId K04
 labProtocolId 030C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -8674,6 +8760,7 @@ lab RIKEN
 labExpId K05
 labProtocolId 029N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -8698,6 +8785,7 @@ lab RIKEN
 labExpId K06
 labProtocolId 030N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -8776,6 +8864,7 @@ lab RIKEN
 labExpId K05
 labProtocolId 029N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -8800,6 +8889,7 @@ lab RIKEN
 labExpId K06
 labProtocolId 030N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 4
@@ -9060,6 +9150,7 @@ lab RIKEN
 labExpId J70
 labProtocolId 001WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9084,6 +9175,7 @@ lab RIKEN
 labExpId J71
 labProtocolId 002WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9162,6 +9254,7 @@ lab RIKEN
 labExpId J70
 labProtocolId 001WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -9186,6 +9279,7 @@ lab RIKEN
 labExpId J71
 labProtocolId 002WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -9421,6 +9515,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization chromatin
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -9473,6 +9568,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization chromatin
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -9628,6 +9724,7 @@ fileName wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -9652,6 +9749,7 @@ fileName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -9676,6 +9774,7 @@ fileName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -9700,6 +9799,7 @@ fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData.csfasta.gz
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -9722,6 +9822,7 @@ fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData2.csqual.gz
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -10098,6 +10199,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -10122,6 +10224,7 @@ lab RIKEN
 labExpId J82
 labProtocolId 001C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10146,6 +10249,7 @@ lab RIKEN
 labExpId J83
 labProtocolId 002C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10253,6 +10357,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -10277,6 +10382,7 @@ lab RIKEN
 labExpId J82
 labProtocolId 001C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -10301,6 +10407,7 @@ lab RIKEN
 labExpId J83
 labProtocolId 002C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -10560,6 +10667,7 @@ lab RIKEN
 labExpId I33
 labProtocolId 
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 0
@@ -10612,6 +10720,7 @@ lab RIKEN
 labExpId I33
 labProtocolId 
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 0
@@ -10662,6 +10771,7 @@ lab RIKEN
 labExpId I33
 labProtocolId 
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 0
@@ -10737,6 +10847,7 @@ lab RIKEN
 labExpId I33
 labProtocolId 
 localization nucleolus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 0
@@ -10894,6 +11005,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleoplasm
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -10946,6 +11058,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleoplasm
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11101,6 +11214,7 @@ fileName wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11124,6 +11238,7 @@ fileName wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11147,6 +11262,7 @@ fileName wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11170,6 +11286,7 @@ fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData.csfasta.gz
 grant Gingeras
 lab RIKEN
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11192,6 +11309,7 @@ fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData2.csqual.gz
 grant Gingeras
 lab RIKEN
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11508,6 +11626,7 @@ lab RIKEN
 labExpId J91
 labProtocolId 001N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11532,6 +11651,7 @@ lab RIKEN
 labExpId J92
 labProtocolId 002N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11610,6 +11730,7 @@ lab RIKEN
 labExpId J91
 labProtocolId 001N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -11634,6 +11755,7 @@ lab RIKEN
 labExpId J92
 labProtocolId 002N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -11814,6 +11936,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization polysome
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11838,6 +11961,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization polysome
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11862,6 +11986,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization polysome
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -11884,6 +12009,7 @@ fileName wgEncodeRikenCageK562PolysomeLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization polysome
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -12176,6 +12302,7 @@ lab RIKEN
 labExpId K07
 labProtocolId 015WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12254,6 +12381,7 @@ lab RIKEN
 labExpId K07
 labProtocolId 015WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12514,6 +12642,7 @@ lab RIKEN
 labExpId J76
 labProtocolId 007WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12538,6 +12667,7 @@ lab RIKEN
 labExpId J77
 labProtocolId 008WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12616,6 +12746,7 @@ lab RIKEN
 labExpId J76
 labProtocolId 007WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -12640,6 +12771,7 @@ lab RIKEN
 labExpId J77
 labProtocolId 008WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -12820,6 +12952,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -12844,6 +12977,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -12868,6 +13002,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -12890,6 +13025,7 @@ fileName wgEncodeRikenCageNhekCytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13182,6 +13318,7 @@ lab RIKEN
 labExpId K08
 labProtocolId 027C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -13260,6 +13397,7 @@ lab RIKEN
 labExpId K08
 labProtocolId 027C+cage
 localization cytosol
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -13440,6 +13578,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13464,6 +13603,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13488,6 +13628,7 @@ grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13510,6 +13651,7 @@ fileName wgEncodeRikenCageNhekNucleusLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -13776,6 +13918,7 @@ lab RIKEN
 labExpId K09
 labProtocolId 027N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -13827,6 +13970,7 @@ lab RIKEN
 labExpId K09
 labProtocolId 027N+cage
 localization nucleus
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 3
@@ -13982,6 +14126,7 @@ fileName wgEncodeRikenCageProstateCellLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14006,6 +14151,7 @@ fileName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14030,6 +14176,7 @@ fileName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14054,6 +14201,7 @@ fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData.csfasta.gz
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14076,6 +14224,7 @@ fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData2.csqual.gz
 grant Gingeras
 lab RIKEN
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg18
 project wgEncode
 replicate 0
@@ -14344,6 +14493,7 @@ lab RIKEN
 labExpId K15-DA
 labProtocolId 020WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14422,6 +14572,7 @@ lab RIKEN
 labExpId K15-DA
 labProtocolId 020WC+cage
 localization cell
+objStatus revoked - bad data from old release
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -14585,4 +14736,4 @@ rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: -2145194254
+# MAGIC: 2007444305
