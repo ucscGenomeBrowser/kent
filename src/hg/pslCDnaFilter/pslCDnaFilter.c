@@ -162,7 +162,7 @@ static double calcDecayCoverage(int qSize)
 double needCoverage;
 
 /* magic formula from Jim */
-needCoverage = -0.4 * qSize + 100;
+needCoverage = 1.0 - qSize / 250.0;
 
 if (needCoverage < 0.25)
     needCoverage = 0.25;
