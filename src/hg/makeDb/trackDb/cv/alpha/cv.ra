@@ -7944,13 +7944,29 @@ target TCF7L2
 targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
 antibodyDescription Rabbit monoclonal. Antibody Target: TCF7L2
 vendorName Cell Signaling Tech
-vendorId H2569S
+vendorId 2569
 orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation Human_-_:missing
-label TCF7L2 (H2569S)
+validation Human_-_TCF7L2(Immunoprecipitation,ChIP):human_TCF7L2_validation_Farnham.pdf
+label TCF7L2 (2569)
+
+term TCF7L2_C9B9_(2565)
+tag TCF7L2C9B92565
+type Antibody
+antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic peptide corresponding to residues surrounding Glu81 of human TCF7L2.
+target TCF7L2
+targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
+vendorName CST
+vendorId 2565
+orderUrl http://www.cellsignal.com/products/2565.html
+lab Farnham
+lots 2
+targetId GeneCard:TCF7L2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
+validation Human_-_TCF7L2_C9B9_(2565)(Immunoprecipitation,ChIP):human_TCF7L2_C9B9_2565_validation_Farnham.pdf
+label TCF7L2 C9B9 (2565)
 
 term TEAD4_(SC-101184)
 tag TEAD4SC101184
@@ -7982,7 +7998,7 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
-validation 
+validation Human_-_:missing
 label TFIIB (sc-225)
 
 term TFIIIC-110
