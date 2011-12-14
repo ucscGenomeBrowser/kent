@@ -53,7 +53,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-html wgEncodeUwTfbs.new
+html wgEncodeUwTfbs.release2
 	
     track wgEncodeUwTfbsViewHot
     shortLabel Hotspots

@@ -43,7 +43,7 @@ set gorGor gorGor1,gorGor3
 set haeCon haeCon1
 set hg hg16,hg17,hg18,hg19
 set loxAfr loxAfr3
-set macEug macEug1
+set macEug macEug1,macEug2
 set melInc melInc1
 set melHap melHap1
 set micMur micMur1
@@ -86,7 +86,7 @@ set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$melGal,$myoLuc,
 set wgs $rn,$panTro,$galGal,$melGal,$myoLuc,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal,$choHof,$cioSav,$dasNov,$dipOrd,$echTel,$eriEur,$macEug,$micMur,$nomLeu,$ochPri,$otoGar,$proCap,$pteVam,$sorAra,$speTri,$tarSyr,$tupBel,$turTru,$vicPac
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$melGal,$myoLuc,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal
+set xrg $panTro,$galGal,$melGal,$myoLuc,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$oviAri,$loxAfr,$haeCon,$melInc,$melHap,$bruMal,$macEug,$gorGor
 
 # Ensembl gene track lists constructed from update procedure
 # set ensGeneDb ailMel1,anoCar2,bosTau6,calJac3,canFam2,cavPor3,ci2,cioSav2,danRer7,dm3,equCab2,fr2,galGal3,gasAcu1,gorGor3,hg19,loxAfr3,melGal1,mm9,monDom5,nomLeu1,ornAna1,oryCun2,oryLat2,panTro2,ponAbe2,rheMac2,rn4,sacCer3,susScr1,susScr2,taeGut1,tetNig2
@@ -2139,44 +2139,44 @@ identifier rgdGene2IdRaw external=RGD
 identifier rgdGene2Id external=RGD
 "RGD Genes ID"
     $rn.rgdGene2.name
-    $rn.rgdGenePathway.geneId minCheck=0.80
-    $rn.rgdGene2BlastTab.query minCheck=0.80
-    $rn.rgdGene2BlastTab.target minCheck=0.80
-    $rn.scBlastTab.query minCheck=0.80
-    $rn.mmBlastTab.query minCheck=0.80
-    $rn.hgBlastTab.query minCheck=0.80
-    $rn.dmBlastTab.query minCheck=0.80
-    $rn.drBlastTab.query minCheck=0.80
-    $rn.ceBlastTab.query minCheck=0.80
-    $rn.rgdGene2ToDisplayId.name minCheck=0.80
-    $rn.rgdGene2ToUniProt.name minCheck=0.80
-    $rn.rgdGene2ToPDB.name minCheck=0.80
-    $rn.rgdGene2ToPfam.name minCheck=0.80
-    $rn.rgdGene2Xref.rgdGeneId minCheck=0.80
-    $rn.rgdGene2Pep.name minCheck=0.80
-    $rn.rgdGene2ToDescription.name minCheck=0.70
-    $rn.rgdGene2Pep.name minCheck=0.80
-    $rn.rgdGene2ToSymbol.rgdId
-    $rn.rgdGene2ToU34A.name
-    $rn.rgdGene2ToSuper.name
-    $rn.rgdGene2ToRAE230.name
-    $rn.rgdGene2ToRefSeq.name
-    $rn.rgdGene2ToLocusLink.name
-    $rn.rgdGene2ToGnfAtlas2.name
-    $rn.rgdGene2ToKeggEntrez.name
-    $rn.rgdGene2ToGenbankAll.name
-    $rn.rgdGene2ToGenbank.name
-    $rn.rgdGene2ToEnsembl.name
-    $rn.rgdGene2ToCdsSnp.name
-    $rn.affyExonTissuesGsMedianDistRgdGene2.query
-    $rn.affyExonTissuesGsMedianDistRgdGene2.target
-    $rn.affyExonTissuesGsMedianRgdGene2.name
-    $rn.affyExonTissuesGsRgdGene2.name
-    $rn.gnfAtlas2RgdGene2Distance.query
-    $rn.gnfAtlas2RgdGene2Distance.target
-    $rn.rgdGene2Canonical.transcript
-    $rn.rgdGene2Isoforms.transcript
-    $rn.rgdGene2KeggPathway.rgdId
+    $rn.rgdGenePathway.geneId minCheck=0.75
+    $rn.rgdGene2BlastTab.query minCheck=0.75
+    $rn.rgdGene2BlastTab.target minCheck=0.75
+# disable for now    $rn.scBlastTab.query minCheck=0.75
+    $rn.mmBlastTab.query minCheck=0.75
+    $rn.hgBlastTab.query minCheck=0.75
+    $rn.dmBlastTab.query minCheck=0.75
+# disable for now    $rn.drBlastTab.query minCheck=0.75
+    $rn.ceBlastTab.query minCheck=0.75
+    $rn.rgdGene2ToDisplayId.name minCheck=0.75
+    $rn.rgdGene2ToUniProt.name minCheck=0.75
+    $rn.rgdGene2ToPDB.name minCheck=0.75
+    $rn.rgdGene2ToPfam.name minCheck=0.75
+    $rn.rgdGene2Xref.rgdGeneId minCheck=0.75
+    $rn.rgdGene2Pep.name minCheck=0.75
+    $rn.rgdGene2ToDescription.name minCheck=0.65
+    $rn.rgdGene2Pep.name minCheck=0.75
+    $rn.rgdGene2ToSymbol.rgdId minCheck=.75
+    $rn.rgdGene2ToU34A.name minCheck=.75
+    $rn.rgdGene2ToSuper.name minCheck=.75
+    $rn.rgdGene2ToRAE230.name minCheck=.75
+    $rn.rgdGene2ToRefSeq.name minCheck=.75
+    $rn.rgdGene2ToLocusLink.name minCheck=.75
+    $rn.rgdGene2ToGnfAtlas2.name minCheck=.75
+    $rn.rgdGene2ToKeggEntrez.name minCheck=.75
+    $rn.rgdGene2ToGenbankAll.name minCheck=.75
+    $rn.rgdGene2ToGenbank.name minCheck=.75
+    $rn.rgdGene2ToEnsembl.name minCheck=.75
+    $rn.rgdGene2ToCdsSnp.name minCheck=.75
+    $rn.affyExonTissuesGsMedianDistRgdGene2.query minCheck=.75
+    $rn.affyExonTissuesGsMedianDistRgdGene2.target minCheck=.75
+    $rn.affyExonTissuesGsMedianRgdGene2.name minCheck=.75
+    $rn.affyExonTissuesGsRgdGene2.name minCheck=.75
+    $rn.gnfAtlas2RgdGene2Distance.query minCheck=.75
+    $rn.gnfAtlas2RgdGene2Distance.target minCheck=.75
+    $rn.rgdGene2Canonical.transcript minCheck=.75
+    $rn.rgdGene2Isoforms.transcript minCheck=.75
+    $rn.rgdGene2KeggPathway.rgdId minCheck=.75
 
 identifier rgdPathwayId external=RGD
 "RGD Pathway ID"

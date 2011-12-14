@@ -76,7 +76,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
-            "hgt.contentType", "hgt.positionInput",
+            "hgt.contentType", "hgt.positionInput", "hgt.internal",
             NULL };
 
 // MERGE_GENE_SUGGEST is used for work on redmine #5933
@@ -4998,7 +4998,7 @@ if (!hideControls)
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 #ifdef MERGE_GENE_SUGGEST
-	hPrintf("<span class='positionDisplay' id='positionDisplay' style='font-weight:bold;'>%s</span>", addCommasToPos(database, position));
+	hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
@@ -5921,6 +5921,16 @@ hubCheckForNew(database, cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
+void ajaxWarnHandler(char *format, va_list args)
+{
+// When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
+char buf[4096];
+vsnprintf(buf, sizeof(buf), format, args);
+// We don't use jsonForClient for fear that it might now be corrupted.
+printf("<script type='text/javascript'>\n// START hgTracks\nvar hgTracks = {\"err\": \"%s\"};\n// END hgTracks\n</script>\n",
+       javaScriptLiteralEncode(buf));
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5974,6 +5984,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextItemArrows = FALSE;
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
+    pushWarnHandler(ajaxWarnHandler);
     }
 
 jsonForClient = newJsonHash(newHash(8));

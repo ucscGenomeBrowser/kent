@@ -432,8 +432,8 @@ def main():
         description='Initializes QA directory for claiming a release',
         epilog=
 """Example:
-qaInit hg19 wgEncodeSydhTfbs 1 69
-qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
+encodeQaInit hg19 wgEncodeSydhTfbs 1 69
+encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 """
         )
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
@@ -466,6 +466,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 					'releaseOld': str(releaseOld),
 					'ignore' : 1,
 					'loose': 1,
+					'verbose': 1,
 					'summary': 0,
 					'specialMdb': specialMdb}
 	errors = []
@@ -501,7 +502,6 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 		return
 	
 	writeClaimMail(args, user, qaDir)
-	print "Making local mkChangeNotes"
 	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
 	if genNotes.errors:
 		print "NON-FATAL ERROR: Local mkChangeNotes found errors in the release"

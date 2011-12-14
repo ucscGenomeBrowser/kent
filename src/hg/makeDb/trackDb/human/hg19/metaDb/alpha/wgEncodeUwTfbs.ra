@@ -9106,6 +9106,294 @@ tableName wgEncodeUwTfbsGm12878InputStdRawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwTfbsH7esInputStdAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdAlnRep1.bam,wgEncodeUwTfbsH7esInputStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14111
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5151
+treatment diffProtA_14d
+view Alignments
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa2dAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa2dAlnRep1.bam,wgEncodeUwTfbsH7esInputStdDiffa2dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS15392
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5180
+treatment diffProtA_2d
+view Alignments
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa2dRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa2dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS15392
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5180
+treatment diffProtA_2d
+view RawData
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa2dRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_2d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa2dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS15392
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5180
+tableName wgEncodeUwTfbsH7esInputStdDiffa2dRawRep1
+treatment diffProtA_2d
+view RawSignal
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa5dAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa5dAlnRep1.bam,wgEncodeUwTfbsH7esInputStdDiffa5dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS14110
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5179
+treatment diffProtA_5d
+view Alignments
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa5dRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa5dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14110
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5179
+treatment diffProtA_5d
+view RawData
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa5dRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_5d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa5dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14110
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5179
+tableName wgEncodeUwTfbsH7esInputStdDiffa5dRawRep1
+treatment diffProtA_5d
+view RawSignal
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa9dAlnRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa9dAlnRep1.bam,wgEncodeUwTfbsH7esInputStdDiffa9dAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS15393
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5181
+treatment diffProtA_9d
+view Alignments
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa9dRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa9dRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS15393
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5181
+treatment diffProtA_9d
+view RawData
+
+metaObject wgEncodeUwTfbsH7esInputStdDiffa9dRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_9d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdDiffa9dRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS15393
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5181
+tableName wgEncodeUwTfbsH7esInputStdDiffa9dRawRep1
+treatment diffProtA_9d
+view RawSignal
+
+metaObject wgEncodeUwTfbsH7esInputStdRawDataRep1
+objType file
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS14111
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5151
+treatment diffProtA_14d
+view RawData
+
+metaObject wgEncodeUwTfbsH7esInputStdRawRep1
+objType table
+antibody Input
+cell H7-hESC
+composite wgEncodeUwTfbs
+control std
+controlId H7-hESC/diffProtA_14d/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-12
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsH7esInputStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS14111
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 5151
+tableName wgEncodeUwTfbsH7esInputStdRawRep1
+treatment diffProtA_14d
+view RawSignal
+
 metaObject wgEncodeUwTfbsHacCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -12975,6 +13263,128 @@ replicate 1
 setType input
 subId 1435
 tableName wgEncodeUwTfbsHepg2InputStdRawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeUwTfbsHffCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HFF
+composite wgEncodeUwTfbs
+control std
+controlId HFF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsHffCtcfStdAlnRep1.bam,wgEncodeUwTfbsHffCtcfStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS18318
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5182
+treatment None
+view Alignments
+
+metaObject wgEncodeUwTfbsHffCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HFF
+composite wgEncodeUwTfbs
+control std
+controlId HFF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsHffCtcfStdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS18318
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5182
+tableName wgEncodeUwTfbsHffCtcfStdHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwTfbsHffCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HFF
+composite wgEncodeUwTfbs
+control std
+controlId HFF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsHffCtcfStdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS18318
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5182
+tableName wgEncodeUwTfbsHffCtcfStdPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwTfbsHffCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HFF
+composite wgEncodeUwTfbs
+control std
+controlId HFF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsHffCtcfStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS18318
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5182
+treatment None
+view RawData
+
+metaObject wgEncodeUwTfbsHffCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HFF
+composite wgEncodeUwTfbs
+control std
+controlId HFF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsHffCtcfStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS18318
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5182
+tableName wgEncodeUwTfbsHffCtcfStdRawRep1
 treatment None
 view RawSignal
 
@@ -18388,6 +18798,128 @@ tableName wgEncodeUwTfbsNhekInputStdRawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeUwTfbsNhlfCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell NHLF
+composite wgEncodeUwTfbs
+control std
+controlId NHLF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsNhlfCtcfStdAlnRep1.bam,wgEncodeUwTfbsNhlfCtcfStdAlnRep1.bam.bai
+grant Stam
+lab UW
+labExpId DS16349
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5183
+treatment None
+view Alignments
+
+metaObject wgEncodeUwTfbsNhlfCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell NHLF
+composite wgEncodeUwTfbs
+control std
+controlId NHLF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsNhlfCtcfStdHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS16349
+labVersion Hotspot-v5.2
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5183
+tableName wgEncodeUwTfbsNhlfCtcfStdHotspotsRep1
+treatment None
+view Hotspots
+
+metaObject wgEncodeUwTfbsNhlfCtcfStdPkRep1
+objType table
+antibody CTCF
+cell NHLF
+composite wgEncodeUwTfbs
+control std
+controlId NHLF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsNhlfCtcfStdPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS16349
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5183
+tableName wgEncodeUwTfbsNhlfCtcfStdPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeUwTfbsNhlfCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell NHLF
+composite wgEncodeUwTfbs
+control std
+controlId NHLF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsNhlfCtcfStdRawDataRep1.fastq.gz
+grant Stam
+lab UW
+labExpId DS16349
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5183
+treatment None
+view RawData
+
+metaObject wgEncodeUwTfbsNhlfCtcfStdRawRep1
+objType table
+antibody CTCF
+cell NHLF
+composite wgEncodeUwTfbs
+control std
+controlId NHLF/None/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-13
+dateUnrestricted 2012-09-12
+fileName wgEncodeUwTfbsNhlfCtcfStdRawRep1.bigWig
+grant Stam
+lab UW
+labExpId DS16349
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 5183
+tableName wgEncodeUwTfbsNhlfCtcfStdRawRep1
+treatment None
+view RawSignal
+
 metaObject wgEncodeUwTfbsNhlfInputStdAlnRep1
 objType file
 antibody Input
@@ -20578,4 +21110,4 @@ tableName wgEncodeUwTfbsWi38InputStdRawRep1
 treatment None
 view RawSignal
 
-# MAGIC: 849548149
+# MAGIC: -1888839418
