@@ -322,7 +322,7 @@ class RaFile(OrderedDict):
                 dictionary is returned.
         '''
         ret = self
-        common = set(self.iterkeys()) & set(self.iterkeys())
+        common = set(self.iterkeys()) & set(other.iterkeys())
         for stanza in common:
             if term not in self[stanza] and term not in other[stanza]:
                 continue
