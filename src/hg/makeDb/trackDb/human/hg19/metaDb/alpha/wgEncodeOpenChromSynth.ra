@@ -12,6 +12,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002257
+expId 2257
 fileName wgEncodeOpenChromSynthGlioblaPk.bed.gz
 grant Crawford
 lab Duke
@@ -52,6 +54,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002253
+expId 2253
 fileName wgEncodeOpenChromSynthGm12891Pk.bed.gz
 grant Crawford
 lab Duke
@@ -71,6 +75,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002254
+expId 2254
 fileName wgEncodeOpenChromSynthGm12892Pk.bed.gz
 grant Crawford
 lab Duke
@@ -90,6 +96,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002255
+expId 2255
 fileName wgEncodeOpenChromSynthGm18507Pk.bed.gz
 grant Crawford
 lab Duke
@@ -109,6 +117,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002256
+expId 2256
 fileName wgEncodeOpenChromSynthGm19239Pk.bed.gz
 grant Crawford
 lab Duke
@@ -149,6 +159,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002259
+expId 2259
 fileName wgEncodeOpenChromSynthHelas3Ifna4hPk.bed.gz
 grant Crawford
 lab Duke
@@ -210,6 +222,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002258
+expId 2258
 fileName wgEncodeOpenChromSynthHtr8Pk.bed.gz
 grant Crawford
 lab Duke
@@ -271,6 +285,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002260
+expId 2260
 fileName wgEncodeOpenChromSynthMedulloPk.bed.gz
 grant Crawford
 lab Duke
@@ -311,6 +327,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002261
+expId 2261
 fileName wgEncodeOpenChromSynthPanisletsPk.bed.gz
 grant Crawford
 lab Duke
@@ -330,6 +348,8 @@ dataType Combined
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
+dccAccession wgEncodeEH002262
+expId 2262
 fileName wgEncodeOpenChromSynthUrothelUt189Pk.bed.gz
 grant Crawford
 lab Duke
@@ -341,4 +361,4 @@ tableName wgEncodeOpenChromSynthUrothelUt189Pk
 treatment UT189
 view Peaks
 
-# MAGIC: -761700609
+# MAGIC: -305206629
