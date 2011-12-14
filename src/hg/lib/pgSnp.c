@@ -575,7 +575,8 @@ char *acid1 = aaAcidity(aa1);
 char *acid2 = aaAcidity(aa2);
 float hyd1 = aaHydropathy(aa1);
 float hyd2 = aaHydropathy(aa2);
-printf("<table border=\"1\"><caption>Amino acid properties</caption><tr><td>&nbsp;</td><td>%s</td><td>%s</td></tr>\n", aa1, aa2);
+printf("<table class=\"descTbl\"><caption>Amino acid properties</caption>"
+       "<tr><th>&nbsp;</th><th>%s</th><th>%s</th></tr>\n", aa1, aa2);
 /* take out highlights, not sure what is significant change for hydropathy */
 //if (differentString(pol1, pol2))
     //printf("<tr bgcolor=\"white\"><td>polarity</td><td>%s</td><td>%s</td></tr>\n", pol1, pol2);
