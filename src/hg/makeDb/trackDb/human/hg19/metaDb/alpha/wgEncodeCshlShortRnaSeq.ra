@@ -920,6 +920,26 @@ seqPlatform Illumina_GA2x
 subId 3293
 view RawData
 
+metaObject wgEncodeCshlShortRnaSeqCellShortRawData
+objType file
+cell prostate
+composite wgEncodeCshlShortRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Fall 2009 Freeze
+dateSubmitted 2009-09-23
+dateUnrestricted 2010-06-23
+fileName wgEncodeCshlShortRnaSeqCellShortRawData.fastq.gz
+geoSampleAccession GSM605626
+grant Gingeras
+lab CSHL
+localization cell
+objStatus renamed - missing cell line in name, renamed to wgEncodeCshlShortRnaSeqProstateCellTotalRawData
+origAssembly hg18
+project wgEncode
+rnaExtract shortTotal
+subId 535
+view RawData
+
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
 attic auxExp
@@ -9988,4 +10008,4 @@ seqPlatform Illumina_GA2x
 subId 3377
 view RawData
 
-# MAGIC: -533509238
+# MAGIC: 217500883
