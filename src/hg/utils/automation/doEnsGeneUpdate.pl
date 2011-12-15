@@ -271,7 +271,7 @@ _EOF_
       if (! $opt_vegaGene) {
       $bossScript->add(<<_EOF_
 zcat download/$ensPepFile \\
-	| sed -e 's/^>.* transcript:/>/; s/ CCDS.*\$//;' | gzip > ensPep.txt.gz
+	| sed -e 's/^>.* transcript:/>/; s/ CCDS.*\$//; s/ .*\$//' | gzip > ensPep.txt.gz
 zcat ensPep.txt.gz \\
     | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \\
 	 | sed -e '/^\$/d; s/\*\$//' | sort > ensPep.$db.fa.tab
