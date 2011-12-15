@@ -3405,13 +3405,13 @@ term PanIsletD
 tag PANISD
 type Cell Line
 organism human
-description dedifferentiated human pancreatic islets from one of the sources for PanIslets
+description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI) source for PanIslets PROVISIONAL
 tissue pancreas
 lineage endoderm
-vendorName National Disease Research Interchange (NDRI).
+vendorName National Disease Research Interchange 
 vendorId PanIsletD
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
-termId BTO:0000991 (non-specific)
+termId BTO:0000991 (non-specific) 
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex B
 tier 3
@@ -3421,13 +3421,13 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets from 2 donors
+description pancreatic islets from 2 donors, the sources of these primary cells  are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al. Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005) PROVISIONAL
 tissue pancreas
 lineage endoderm
-vendorName Refer to protocol documents for differing sources
+vendorName Refer to publication or NDRI
 vendorId PanIslets
-#orderUrl
-termId BTO:0000991 (non-specific)
+orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
+termId BTO:0000991 (non-specific) 
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
 tier 3
