@@ -484,20 +484,20 @@ sub doDownload {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
+wget --tries=2 --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensGtfUrl \\
 -O $ensGtfFile
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
+wget --tries=2 --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensPepUrl \\
 -O $ensPepFile
 _EOF_
   );
   if (defined $geneScaffolds) {
       $bossScript->add(<<_EOF_
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
+wget --tries=2 --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensMySqlUrl/seq_region.txt.gz \\
 -O seq_region.txt.gz
-wget --tries=2 --timestamping --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
+wget --tries=2 --user=anonymous --password=ucscGenomeBrowser\@ucsc.edu \\
 $ensMySqlUrl/assembly.txt.gz \\
 -O assembly.txt.gz
 _EOF_
