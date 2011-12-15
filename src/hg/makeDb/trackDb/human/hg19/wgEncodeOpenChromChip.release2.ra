@@ -7,11 +7,11 @@ shortLabel UTA TFBS
 longLabel Open Chromatin TFBS by ChIP-seq from ENCODE/Open Chrom(UT Austin)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Density_Signal SIGBO=Overlap_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLa-S3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MonoCD14=Monocytes-CD14+ MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1-hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLa-S3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP FIBROPROG=ProgFib Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MonoCD14=Monocytes-CD14+&nbsp;(RO&nbsp;01746) MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets 
 subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
 subGroup4 treatment Treatment AANONE=None ESTRO=Estradiol;(estrogen) VEH=vehicle
 sortOrder cellType=+ factor=+ treatment=+ view=+
-fileSortOrder cell=Cell_Line treatment=Treatment antibody=Antibody<BR>Target view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line treatment=Treatment antibody=Antibody<BR>Target replicate=Replicate controlId=Control_ID view=View dccAccession=UCSC_Accession GeoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimA=treatment dimensionY=cellType dimensionX=factor
 dimensionAchecked AANONE
 filterComposite dimA=multi
@@ -28,7 +28,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
     track wgEncodeOpenChromChipViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility dense
+    visibility pack
     parent wgEncodeOpenChromChip
     pValueFilter 0.0
     pValueFilterLimits 0:16
@@ -241,7 +241,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel ProgFib Pol2 Pk
         longLabel ProgFib Pol2 TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=PROG
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=FIBROPROG
         type narrowPeak
         # subId=1652 dateSubmitted=2010-06-19
 
@@ -249,7 +249,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel ProgFib CTCF Pk
         longLabel ProgFib CTCF TFBS ChIP-seq Peaks from ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=PROG
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=FIBROPROG
         type narrowPeak
         # subId=1657 dateSubmitted=2010-06-19
 
@@ -614,7 +614,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel ProgFib Pol2 DS
         longLabel ProgFib Pol2 TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIG factor=POL2 cellType=PROG
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=FIBROPROG
         type bigWig 0.000000 5.686900
         # subId=1652 dateSubmitted=2010-06-19
 
@@ -622,7 +622,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel ProgFib CTCF DS
         longLabel ProgFib CTCF TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIG factor=CTCF cellType=PROG
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=FIBROPROG
         type bigWig 0.000000 4.544500
         # subId=1657 dateSubmitted=2010-06-19
 
@@ -630,7 +630,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel ProgFib Input DS
         longLabel ProgFib Input TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=PROG
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=FIBROPROG
         type bigWig 0.000000 3.510000
         # subId=1832 dateSubmitted=2010-06-22
 
@@ -1000,7 +1000,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel ProgFib Pol2 OS
         longLabel ProgFib Pol2 TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=PROG
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=FIBROPROG
         type bigWig 0.000000 4358.000000
         # subId=1652 dateSubmitted=2010-06-19
 
@@ -1008,7 +1008,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel ProgFib CTCF OS
         longLabel ProgFib CTCF TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
-        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=PROG
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=FIBROPROG
         type bigWig 0.000000 1963.000000
         # subId=1657 dateSubmitted=2010-06-19
 
