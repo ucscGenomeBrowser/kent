@@ -161,7 +161,12 @@ static double calcDecayCoverage(int qSize)
 {
 double needCoverage;
 
-/* magic formula from Jim */
+/* Make it so that smaller RNAs had to align a larger fraction of themselves.
+ * RNAs larger than 250bp must align at least 25%, RNAs smaller than 25 bp
+ * must align 90%, for RNAs in between there's a linear interpolation between.
+ * This is backwards compatible with the hard 25% cut off we used to have on the
+ * large side, and should prevent noisy alignments we're now getting from a 
+ * bunch of small RNAs. */
 needCoverage = 1.0 - qSize / 250.0;
 
 if (needCoverage < 0.25)
