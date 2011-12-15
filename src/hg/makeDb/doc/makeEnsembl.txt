@@ -26,6 +26,22 @@
      hgsql -e \
 'update trackVersion set dateReference="current" where version="65";' hgFixed
 
+#   Found to be updated from v64:
+ ailMel1 anoCar2 danRer7 gasAcu1 hg19 loxAfr3 melGal1 oryCun2
+
+#   Found to be identical to v64, tables not reloaded:
+ bosTau6 calJac3 canFam2 cavPor3 ce10 choHof1 ci2 cioSav2 dasNov2
+ dipOrd1 echTel1 equCab2 eriEur1 felCat3 fr2 galGal3 gorGor3 macEug1
+ micMur1 mm9 monDom5 myoLuc2 nomLeu1 ochPri2 ornAna1 oryLat2 ponAbe2
+ proCap1 pteVam1 rheMac2 rn4 sacCer3 sorAra1 speTri1 susScr1 taeGut1
+ tarSyr1 tetNig2 tupBel1 turTru1 vicPac1 xenTro3
+
+#   No corresponding assembly here:
+ gadMor1 otoGar3 panTro4 petMar2 sarHar1
+
+#   Broken until further notice:
+ dm3
+
 ############################################################################
 #  ailMel1 - Panda - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
     ssh hgwdev
