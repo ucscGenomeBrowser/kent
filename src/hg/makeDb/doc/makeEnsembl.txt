@@ -13,7 +13,19 @@
 #  not before, required additional nameTranslation rules for those.
 #  dm3 GTF file appears to be broken, ensembl-dev email list notified.
 #  Otherwise, remarkable very little problem with this update.
-#
+
+    #	when complete, reset dateReferences, beware, verify these
+    # where clauses will only work on the 'ensGene' table:
+    # to verify:
+    hgsql -e "select db,name,dateReference from trackVersion where version=64;" hgFixed
+    hgsql -e "select db,name,dateReference from trackVersion where version=65;" hgFixed
+    # should only see name=ensGene in this output
+
+     hgsql -e \
+'update trackVersion set dateReference="sep2011" where version="64";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where version="65";' hgFixed
+
 ############################################################################
 #  ailMel1 - Panda - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)
     ssh hgwdev
