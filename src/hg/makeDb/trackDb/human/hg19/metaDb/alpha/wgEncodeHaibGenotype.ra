@@ -1721,6 +1721,7 @@ fileName wgEncodeHaibGenotypeNhaDukeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
+md5sum 0c76e996b3aaaae7410837639aaeea68
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -2255,4 +2256,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 1046414199
+# MAGIC: 1471321817
