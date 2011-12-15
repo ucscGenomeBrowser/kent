@@ -2194,11 +2194,10 @@ if (vis == tvHide)
     }
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
-//fourState = cartUsualInt(cart, objName, fourState);
 setting = cartOptionalString(cart, objName);
 if (setting != NULL)
     {
-    if (sameWord("on",setting)) // ouch! atoi was interpreting "on" as 0, which was a bad bug!
+    if (sameWord("on",setting)) // ouch! cartUsualInt was interpreting "on" as 0, which was a bad bug!
         fourState = 1;
     else
         fourState = atoi(setting);
@@ -2291,7 +2290,7 @@ if(dimensions && *dimensions)
 
 static char *firstCharNoDigit(char *name)
 // Turns out css classes cannot begin with a number.  So prepend 'A'
-// If this wee more widely used, could move to common.
+// If this were more widely used, could move to common.
 {
 if (!isdigit(*name))
      return name;
@@ -2362,7 +2361,7 @@ for (ancestor = parentTdb; ancestor != NULL; ancestor = ancestor->parent)
 	if(setting != NULL)
 	    return setting;
 	}
-    for(ix=1;ix<=SUBGROUP_MAX;ix++) // How many do we support?
+    for(ix=1;ix<=SUBGROUP_MAX;ix++)
 	{
 	char subGrp[16];
 	safef(subGrp, ArraySize(subGrp), "subGroup%d",ix);
@@ -2688,7 +2687,7 @@ else // No 'dimensions" setting: treat any subGroups as abc dimensions
     {
     char letter = 'A';
     // walk through numbered subgroups
-    for (ix=1;ix<SUBGROUP_MAX;ix++)  // how many to support?
+    for (ix=1;ix<SUBGROUP_MAX;ix++)  // how many do we support?
         {
         char group[32];
         safef(group, sizeof group,"subGroup%d",ix);
@@ -2696,6 +2695,8 @@ else // No 'dimensions" setting: treat any subGroups as abc dimensions
         if (setting != NULL)
             {
             char *tag = cloneFirstWord(setting);
+            if (membersForAll->members[dimV] && sameWord(tag,"view"))
+                continue; // View should have already been handled. NOTE: extremely unlikely case
             membersForAll->members[membersForAll->dimMax]=subgroupMembersGet(parentTdb, tag);
             membersForAll->letters[membersForAll->dimMax]=letter;
             if(cart != NULL)
@@ -2860,7 +2861,7 @@ for (ix = 0,membership->count=0; ix < cnt; ix++)
     if (parseAssignment(words[ix], &name, &value))
         {
         membership->subgroups[membership->count]  = name;
-        membership->membership[membership->count] = firstCharNoDigit(value);//strSwapChar(value,'_',' ');
+        membership->membership[membership->count] = firstCharNoDigit(value); // tags will be used as classes by js
         members_t* members = subgroupMembersGet(childTdb->parent, name);
         membership->titles[membership->count] = NULL; // default
         if(members != NULL)
@@ -4074,8 +4075,8 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         {
     #ifdef SUBTRACK_CFG
         // Turn off configuring for certain track type or if explicitly turned off
-        int cfgSubterack = configurableByAjax(subtrack,cType);
-        if (cfgSubterack <= cfgNone)
+        int cfgSubtrack = configurableByAjax(subtrack,cType);
+        if (cfgSubtrack <= cfgNone)
             cType = cfgNone;
         else if (membersForAll->members[dimV]) // subtrack only configurable if more than one subtrack in view
             {                                  // find "view" in subgroup membership: e.g. "signal"
@@ -4105,7 +4106,6 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
     // Start the TR which must have an id that is directly related to the checkBox id
     char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,membership); // view is known tag
-
     printf("<TR valign='top' class='%s%s'",colors[colorIx],(useDragAndDrop?" trDraggable":""));
     printf(" id=tr_%s%s>\n",id,(!visibleCB && !displayAll?" style='display:none'":""));
 
