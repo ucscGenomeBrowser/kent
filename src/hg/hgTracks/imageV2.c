@@ -232,7 +232,7 @@ if (kindOfChild != kocOrphan)
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
         jsonHashAddNumber(ele, "shouldPack", 0); // default vis is full, but pack is an option
-        track->canPack = parentTdb->canPack;
+        track->canPack = rTdbTreeCanPack(parentTdb);
         }
     }
 

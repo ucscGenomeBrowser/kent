@@ -584,6 +584,9 @@ void tdbExtrasMembershipSet(struct trackDb *tdb,struct _membership *membership);
 char *tdbBigFileName(struct sqlConnection *conn, struct trackDb *tdb);
 // Return file name associated with bigWig.  Do a freeMem on returned string when done.
 
+boolean rTdbTreeCanPack(struct trackDb *tdb);
+// Trees can pack as all or none, since they can share vis.
+
 void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
 // Set visibility in the cart. Handles all the complications necessary for subtracks.
 

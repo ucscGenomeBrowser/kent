@@ -2517,7 +2517,7 @@ else if (sameString(track, "vegaGeneComposite"))
     vegaGeneUI(tdb);
 else if (sameString(track, "rosetta"))
     rosettaUi(tdb);
-else if (startsWith("t2g", track)) 
+else if (startsWith("t2g", track))
         t2gUi(tdb);
 else if (startsWith("blastDm", track))
     blastFBUi(tdb);
@@ -2780,12 +2780,13 @@ if (!tdbIsDownloadsOnly(tdb))
             {
             /* normal visibility control dropdown */
             enum trackVisibility vis = tdb->visibility;
-            boolean canPack = tdb->canPack;
+            boolean canPack = rTdbTreeCanPack(tdb);
             if (ajax)
                 {
                 vis = tdbVisLimitedByAncestry(cart, tdb, TRUE);  // ajax popups should show currently inherited visability
-                if (tdbIsCompositeChild(tdb))
-                    canPack = TRUE;
+                // composite children may inherit squish/pack vis so allow it.
+                if (canPack == FALSE && tdbIsCompositeChild(tdb))
+                    canPack = rTdbTreeCanPack(tdbGetComposite(tdb));
                 }
             else
                 vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis

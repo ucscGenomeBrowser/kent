@@ -1324,6 +1324,40 @@ safef(query, sizeof(query), "select fileName from %s", tdb->table);
 return sqlQuickString(conn, query);
 }
 
+static void rTdbTreeAllowPack(struct trackDb *tdb)
+// Force this tdb and all children to allow pack/squish
+{
+tdb->canPack = TRUE;
+struct trackDb *childTdb = tdb->subtracks;
+for ( ;childTdb!=NULL;childTdb=childTdb->next)
+    rTdbTreeAllowPack(childTdb);
+}
+
+boolean rTdbTreeCanPack(struct trackDb *tdb)
+// Trees can pack as all or none, since they can share vis.
+{
+if (tdb->canPack == FALSE)
+    {
+    // If a single child of a composite can pack, then the entire composite can
+    if (tdbIsComposite(tdb) || tdbIsCompositeView(tdb))
+        {
+        struct trackDb *childTdb = tdb->subtracks;
+        for ( ;childTdb!=NULL;childTdb=childTdb->next)
+            {
+            if (rTdbTreeCanPack(childTdb))
+                {
+                tdb->canPack = TRUE;
+                break;
+                }
+            }
+        }
+    // At the composite level if one was found then set the whole tree.
+    if (tdb->canPack && tdbIsComposite(tdb))
+        rTdbTreeAllowPack(tdb);
+    }
+return tdb->canPack;
+}
+
 void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis)
 {
 // Set visibility in the cart. Handles all the complications necessary for subtracks.

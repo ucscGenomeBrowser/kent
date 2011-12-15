@@ -295,7 +295,7 @@ for (group = groupList; group != NULL; group = group->next)
                 {
                 /* check for option of limiting visibility to one mode */
                 hTvDropDownClassVisOnly(track->track, track->visibility,
-                            track->canPack, (track->visibility == tvHide) ?
+                            rTdbTreeCanPack(track->tdb), (track->visibility == tvHide) ?
                             "hiddenText" : "normalText",
                             trackDbSetting(track->tdb, "onlyVisibility"));
                 }
