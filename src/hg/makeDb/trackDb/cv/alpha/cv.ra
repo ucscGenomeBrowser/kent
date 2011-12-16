@@ -11460,6 +11460,7 @@ cvDefined yes
 validate cv
 priority 030
 
+# ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 term dataVersion
 tag DATAVERSION
 type typeOfTerm
@@ -11468,8 +11469,9 @@ description The ENCODE project declares specific data freezes for data to be use
 searchable multiSelect
 cvDefined no
 priority 310
-validate none # ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
+validate none
 
+# later than dateSubmitted
 term dateResubmitted
 tag DATERESUBMITTED
 type typeOfTerm
@@ -11478,8 +11480,9 @@ description Submitted data that was remapped to a new assembly, found to have er
 searchable date
 cvDefined no
 priority 320
-validate date # later than dateSubmitted
+validate date
 
+# nine months less than dateUnrestricted
 term dateSubmitted
 tag DATESUBMITTED
 type typeOfTerm
@@ -11488,8 +11491,9 @@ description Date that a particular file  was originally submitted to the UCSC Ge
 searchable date
 cvDefined no
 priority 315
-validate date # nine months less than dateUnrestricted
+validate date
 
+# nine months more than dateSubmitted
 term dateUnrestricted
 tag DATEUNRESTRICTED
 type typeOfTerm
@@ -11498,7 +11502,7 @@ description ENCODE data is made publicly available but with restrictions on use 
 searchable date
 cvDefined no
 priority 325
-validate date # nine months more than dateSubmitted
+validate date
 
 term dccAccession
 tag DCCACCESSION
@@ -11544,6 +11548,8 @@ hidden beta,public
 validate integer
 priority 100
 
+# Perhaps could add a validte option to restrict/require this var for objType=composite
+# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 term expVars
 tag EXPVARS
 type typeOfTerm
@@ -11553,8 +11559,7 @@ searchable no
 cvDefined no
 hidden yes
 priority 500
-validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
-# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
+validate none
 
 term fileName
 tag FILENAME
@@ -11727,13 +11732,14 @@ cvDefined no
 validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
 
+#(Defined by lab)
 term obtainedBy
 tag OBTAINEDBY
 type typeOfTerm
 label Obtained by
 description The production group that grew the cells and isolated genomic DNA.
 searchable multiSelect
-cvDefined no #(Defined by lab)
+cvDefined no
 validate none
 priority 500
 
@@ -11771,6 +11777,7 @@ validate list: noSequence,none
 priority 450
 # Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
+# Only one so far: all encode is under single project='wgEncode' (11/3/10)
 term project
 tag PROJECT
 type typeOfTerm
@@ -11778,7 +11785,7 @@ label Project funded by
 description Project that funded this and a related set of experiments.
 searchable no
 cvDefined no
-validate list: wgEncode   # Only one so far: all encode is under single project='wgEncode' (11/3/10)
+validate list: wgEncode
 priority 010
 
 term protocol
@@ -11945,6 +11952,7 @@ cvDefined no
 validate integer
 priority 335
 
+# Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
 term submittedDataVersion
 tag SUBMITTEDDATAVERSION
 type typeOfTerm
@@ -11952,7 +11960,7 @@ label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 searchable no
 cvDefined no
-validate regex: ^V[2-9]*.*$   # Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
+validate regex: ^V[2-9]+ - .*$
 priority 250
 
 term tableName
