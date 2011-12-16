@@ -2288,9 +2288,9 @@ if(dimensions && *dimensions)
     }
 }
 
-static char *firstCharNoDigit(char *name)
+static char *tagEncode(char *name)
 // Turns out css classes cannot begin with a number.  So prepend 'A'
-// If this were more widely used, could move to common.
+// If this were more widely used, could move to cheapcgi.c.
 {
 if (!isdigit(*name))
      return name;
@@ -2409,7 +2409,7 @@ for (ix = 2,members->count=0; ix < count; ix++)
     char *name,*value;
     if (parseAssignment(words[ix], &name, &value))
         {
-        members->tags[members->count]  = firstCharNoDigit(name);
+        members->tags[members->count]  = tagEncode(name);
         members->titles[members->count] = strSwapChar(value,'_',' ');
         members->count++;
         }
@@ -2861,7 +2861,7 @@ for (ix = 0,membership->count=0; ix < cnt; ix++)
     if (parseAssignment(words[ix], &name, &value))
         {
         membership->subgroups[membership->count]  = name;
-        membership->membership[membership->count] = firstCharNoDigit(value); // tags will be used as classes by js
+        membership->membership[membership->count] = tagEncode(value); // tags will be used as classes by js
         members_t* members = subgroupMembersGet(childTdb->parent, name);
         membership->titles[membership->count] = NULL; // default
         if(members != NULL)
@@ -6204,7 +6204,7 @@ struct trackDb *tdb;
 for (tdb = forest; tdb != NULL; tdb = tdb->next)
     {
     char *viewSetting = trackDbSetting(tdb, "view");
-    if (sameOk(viewSetting, view))
+    if (sameOk(viewSetting, view) || sameOk(tagEncode(viewSetting), view))
         return tdb;
     }
 for (tdb = forest; tdb != NULL; tdb = tdb->next)
