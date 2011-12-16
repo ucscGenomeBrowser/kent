@@ -1062,13 +1062,12 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
 dccRep 1
 expId 338
-fileIndex wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam,wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -1091,7 +1090,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
@@ -1119,7 +1118,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 dccAccession wgEncodeEH000338
@@ -1622,7 +1621,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
@@ -1676,7 +1675,7 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000340
@@ -1810,7 +1809,6 @@ dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH000339
 dccRep 1
 expId 339
-fileIndex wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
 fileName wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam,wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
 grant Gingeras
 lab RIKEN
@@ -2327,13 +2325,12 @@ cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
 dccRep 1
 expId 341
-fileIndex wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam,wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -2356,7 +2353,7 @@ cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
@@ -2384,7 +2381,7 @@ cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000341
@@ -3720,7 +3717,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
 objType table
@@ -3748,7 +3745,7 @@ replicate 0
 rnaExtract longNonPolyA
 subId 2784
 tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData
 objType file
@@ -3771,7 +3768,6 @@ localization cytosol
 md5sum d871d29397114870d82b1c19b0111519
 objStatus revoked - bad data from old release
 origAssembly hg18
-parentTable wgEncodeRikenCageHelas3CytosolLongnonpolyaRawSignal
 project wgEncode
 replicate 0
 rnaExtract longNonPolyA
@@ -4359,7 +4355,7 @@ replicate 0
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
-view MinusClusters
+view MinusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalMinusSignal
 objType table
@@ -4413,7 +4409,7 @@ replicate 0
 rnaExtract total
 subId 2783
 tableName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
-view PlusClusters
+view PlusRawSignal
 
 metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusSignal
 objType table
@@ -5301,13 +5297,12 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
 dccRep 1
 expId 343
-fileIndex wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam,wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -5330,7 +5325,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
@@ -5358,7 +5353,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000343
@@ -5973,7 +5968,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
@@ -6027,7 +6022,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-23
+dateResubmitted 2010-08-23
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000344
@@ -6184,13 +6179,12 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
 dccRep 1
 expId 345
-fileIndex wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam,wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -6213,7 +6207,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
@@ -6241,7 +6235,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000345
@@ -7204,13 +7198,12 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
 dccRep 1
 expId 342
-fileIndex wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam,wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -7233,7 +7226,7 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
@@ -7261,7 +7254,7 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000342
@@ -8627,7 +8620,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
@@ -8683,7 +8676,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000334
@@ -8842,13 +8835,12 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
 dccRep 1
 expId 329
-fileIndex wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam,wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -8871,7 +8863,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
@@ -8899,7 +8891,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000329
@@ -9249,7 +9241,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
@@ -9415,7 +9407,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-09
 dccAccession wgEncodeEH000332
@@ -9917,7 +9909,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
@@ -9973,7 +9965,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000336
@@ -10132,13 +10124,12 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-26
+dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
 dccRep 1
 expId 330
-fileIndex wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam,wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -10160,7 +10151,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-26
+dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
@@ -10187,7 +10178,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-08-26
+dateResubmitted 2010-08-26
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000330
@@ -10825,13 +10816,12 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
 dccRep 1
 expId 337
-fileIndex wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam,wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -10854,7 +10844,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
@@ -10882,7 +10872,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 dccAccession wgEncodeEH000337
@@ -11789,13 +11779,12 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
 dccRep 1
 expId 346
-fileIndex wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam,wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -11818,7 +11807,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
@@ -11846,7 +11835,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000346
@@ -12378,13 +12367,12 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
 dccRep 1
 expId 347
-fileIndex wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam,wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -12407,7 +12395,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
@@ -12435,7 +12423,7 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
+dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 dccAccession wgEncodeEH000347
@@ -12889,13 +12877,12 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
 dccRep 1
 expId 331
-fileIndex wgEncodeRikenCageProstateCellLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageProstateCellLongnonpolyaAln.bam,wgEncodeRikenCageProstateCellLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
@@ -12918,7 +12905,7 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
@@ -12946,7 +12933,7 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE Jan 2011 Freeze
-dateReSubmitted 2010-09-22
+dateResubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 dccAccession wgEncodeEH000331
