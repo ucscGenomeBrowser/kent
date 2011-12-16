@@ -194,7 +194,7 @@ grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
 md5sum bcc5e51c79a12a026aea4607b25e837c
-objStatus renamed - cell name changed renamed this to wgEncodeHaibGenotypeNhaRegionsRep1
+objStatus renamed - cell name changed renamed this to wgEncodeHaibGenotypeNhaDukeRegionsRep1
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -410,10 +410,12 @@ metaObject wgEncodeHaibGenotypeGm12878RegionsRep1V2
 objType table
 cell GM12878
 composite wgEncodeHaibGenotype
-dataType Cnv
+dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-06
 dateUnrestricted 2012-09-06
+dccAccession wgEncodeEH000273
+expId 273
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1V2.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -1704,6 +1706,31 @@ tableName wgEncodeHaibGenotypeNb4RegionsRep2
 treatment None
 view CNV
 
+metaObject wgEncodeHaibGenotypeNhaDukeRegionsRep1
+objType table
+cell NH-A
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-14
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001272
+expId 1272
+fileName wgEncodeHaibGenotypeNhaDukeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 0c76e996b3aaaae7410837639aaeea68
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5231
+tableName wgEncodeHaibGenotypeNhaDukeRegionsRep1
+treatment None
+view Regions
+
 metaObject wgEncodeHaibGenotypeNhaRegionsRep1
 objType table
 cell NH-A
@@ -2229,4 +2256,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: 1044781277
+# MAGIC: 1471321817
