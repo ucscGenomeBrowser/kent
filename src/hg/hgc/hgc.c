@@ -22957,7 +22957,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     int i = 0;
     printPos(el->chrom, el->chromStart, el->chromEnd, "+", TRUE, el->name);
     printf("Alleles are relative to forward strand of reference genome:<br>\n");
-    printf("<table border=1 cellpadding=3><tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
+    printf("<table class=\"descTbl\">"
+	   "<tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
     chopByChar(name, '/', all, el->alleleCount);
     if (differentString(el->alleleFreq, ""))
         {

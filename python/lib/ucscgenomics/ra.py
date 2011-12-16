@@ -252,7 +252,7 @@ class RaFile(OrderedDict):
                     continue
                 if key in otherRa[stanza]:
                     if self[stanza][key] != otherRa[stanza][key]:
-                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, self[stanza][key], otherRa[stanza][key]))
+                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, otherRa[stanza][key], self[stanza][key]))
                 else:
                     retDict[stanza].append("Added %s -> %s" %(key, self[stanza][key]))
             for key in otherRa[stanza]:
@@ -322,7 +322,7 @@ class RaFile(OrderedDict):
                 dictionary is returned.
         '''
         ret = self
-        common = set(self.iterkeys()) & set(self.iterkeys())
+        common = set(self.iterkeys()) & set(other.iterkeys())
         for stanza in common:
             if term not in self[stanza] and term not in other[stanza]:
                 continue
