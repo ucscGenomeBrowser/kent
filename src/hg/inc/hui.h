@@ -1100,9 +1100,9 @@ boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefLis
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
 /* returns the default track visibility of particular view within a composite track */
 
-boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name);
-/* cfgUi controls are passed a prefix name that may be at the composite or at the subtrack level
-   returns TRUE for composite level name */
+boolean isNameAtParentLevel(struct trackDb *tdb,char *name);
+// cfgUi controls are passed a prefix name that may be at the composite, view or subtrack level
+// returns TRUE if name at view or composite level
 
 boolean hSameTrackDbType(char *type1, char *type2);
 /* Compare type strings: require same string unless both are wig tracks. */

@@ -1129,7 +1129,7 @@ static boolean tdbOrCartBoolean(struct cart *cart, struct trackDb *tdb,
 {
 boolean alreadySet;
 alreadySet = !sameString("off",trackDbSettingOrDefault(tdb, settingName, defaultOnOff));
-alreadySet = cartUsualBooleanClosestToHome(cart, tdb, FALSE, settingName, alreadySet); // NOTE: viewLevel=FALSE because tdb param already is at appropriate level
+alreadySet = cartUsualBooleanClosestToHome(cart, tdb, FALSE, settingName, alreadySet); // NOTE: parentLevel=FALSE because tdb param already is at appropriate level
 return alreadySet;
 }
 
@@ -3361,8 +3361,8 @@ for(ix=0;ix<filterCount;ix++)
         {
         char suffix[256];
         safef(suffix, sizeof(suffix), "filterBy.%s", filterBy->column);
-        boolean viewLevel = isNameAtCompositeLevel(tdb,name);
-        if(cartLookUpVariableClosestToHome(cart,tdb,viewLevel,suffix,&(filterBy->htmlName)))
+        boolean parentLevel = isNameAtParentLevel(tdb,name);
+        if(cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&(filterBy->htmlName)))
             filterBy->slChoices = cartOptionalSlNameList(cart,filterBy->htmlName);
         }
     if(filterBy->htmlName == NULL)
@@ -4589,8 +4589,8 @@ void oneMrnaFilterUi(struct controlGrid *cg, struct trackDb *tdb, char *text, ch
 {
 controlGridStartCell(cg);
 printf("%s:<BR>", text);
-boolean viewLevel = isNameAtCompositeLevel(tdb,var);
-cgiMakeTextVar(var, cartUsualStringClosestToHome(cart, tdb, viewLevel,suffix, ""), 19);
+boolean parentLevel = isNameAtParentLevel(tdb,var);
+cgiMakeTextVar(var, cartUsualStringClosestToHome(cart, tdb, parentLevel,suffix, ""), 19);
 controlGridEndCell(cg);
 }
 
@@ -4600,8 +4600,8 @@ void bedFiltCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *ti
 struct mrnaUiData *mud = newBedUiData(prefix);
 struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
-boolean viewLevel = isNameAtCompositeLevel(tdb,prefix);
-char *filterTypeVal = cartUsualStringClosestToHome(cart, tdb, viewLevel, mud->filterTypeSuffix, "red");
+boolean parentLevel = isNameAtParentLevel(tdb,prefix);
+char *filterTypeVal = cartUsualStringClosestToHome(cart, tdb, parentLevel, mud->filterTypeSuffix, "red");
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 /* Define type of filter. */
 printf("<table width=400><tr><td align='left'>\n");
@@ -4627,9 +4627,9 @@ boolean isXeno = (sameString(tdb->track, "xenoMrna") ||  sameString(tdb->track, 
 struct mrnaUiData *mud = newMrnaUiData(prefix, isXeno);
 struct mrnaFilter *fil;
 struct controlGrid *cg = NULL;
-boolean viewLevel = isNameAtCompositeLevel(tdb,prefix);
-char *filterTypeVal = cartUsualStringClosestToHome(cart, tdb, viewLevel, mud->filterTypeSuffix,"red");
-char *logicTypeVal  = cartUsualStringClosestToHome(cart, tdb, viewLevel, mud->logicTypeSuffix, "and");
+boolean parentLevel = isNameAtParentLevel(tdb,prefix);
+char *filterTypeVal = cartUsualStringClosestToHome(cart, tdb, parentLevel, mud->filterTypeSuffix,"red");
+char *logicTypeVal  = cartUsualStringClosestToHome(cart, tdb, parentLevel, mud->logicTypeSuffix, "and");
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 /* Define type of filter. */
@@ -4661,7 +4661,7 @@ void scoreGrayLevelCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, i
 /* If scoreMin has been set, let user select the shade of gray for that score, in case
  * the default is too light to see or darker than necessary. */
 {
-boolean viewLevel = isNameAtCompositeLevel(tdb,prefix);
+boolean parentLevel = isNameAtParentLevel(tdb,prefix);
 char *scoreMinStr = trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN);
 if (scoreMinStr != NULL)
     {
@@ -4672,7 +4672,7 @@ if (scoreMinStr != NULL)
     int scoreMinGrayLevel = scoreMin * maxShade/scoreMax;
     if (scoreMinGrayLevel <= 0) scoreMinGrayLevel = 1;
     char *setting = trackDbSettingClosestToHome(tdb, MIN_GRAY_LEVEL);
-    int minGrayLevel = cartUsualIntClosestToHome(cart, tdb, viewLevel, MIN_GRAY_LEVEL,
+    int minGrayLevel = cartUsualIntClosestToHome(cart, tdb, parentLevel, MIN_GRAY_LEVEL,
                         setting ? atoi(setting) : scoreMinGrayLevel);
     if (minGrayLevel <= 0) minGrayLevel = 1;
     if (minGrayLevel > maxShade) minGrayLevel = maxShade;
@@ -4782,7 +4782,7 @@ if(defaults != NULL && ((min && *min == NULL) || (max && *max == NULL)))
 return FALSE;
 }
 
-static void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean viewLimit,
+static void getScoreIntRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                                  char *scoreName, int *limitMin, int *limitMax,int *min,int *max)
 /* gets an integer score range from the cart, but the limits from trackDb
    for any of the pointers provided, will return a value found, if found, else it's contents
@@ -4811,14 +4811,14 @@ if((min || max) && getScoreDefaultsFromTdb(tdb,scoreName,NULL,&deMin,&deMax))
 if(max)
     {
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MAX);
-    deMax = cartOptionalStringClosestToHome(cart, tdb,viewLimit,scoreLimitName);
+    deMax = cartOptionalStringClosestToHome(cart, tdb,parentLevel,scoreLimitName);
     if(deMax != NULL)
         *max = atoi(deMax);
     }
 if(min)
     {
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, (max && deMax? _MIN:"")); // Warning: name changes if max!
-    deMin = cartOptionalStringClosestToHome(cart, tdb,viewLimit,scoreLimitName);
+    deMin = cartOptionalStringClosestToHome(cart, tdb,parentLevel,scoreLimitName);
     if(deMin != NULL)
         *min = atoi(deMin);
     }
@@ -4829,7 +4829,7 @@ if (max && limitMax && *limitMax != NO_VALUE && (*max == NO_VALUE || *max > *lim
 if (max && limitMin && *limitMin != NO_VALUE &&                      *max < *limitMin)  *max = *limitMin;
 }
 
-static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean viewLevel,
+static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, boolean parentLevel,
                          char *scoreName, double *limitMin,double *limitMax,double*min,double*max)
 /* gets an double score range from the cart, but the limits from trackDb
    for any of the pointers provided, will return a value found, if found, else it's contents
@@ -4858,14 +4858,14 @@ if((min || max) && getScoreDefaultsFromTdb(tdb,scoreName,NULL,&deMin,&deMax))
 if(max)
     {
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MAX);
-    deMax = cartOptionalStringClosestToHome(cart, tdb,viewLevel,scoreLimitName);
+    deMax = cartOptionalStringClosestToHome(cart, tdb,parentLevel,scoreLimitName);
     if(deMax != NULL)
         *max = strtod(deMax,NULL);
     }
 if(min)
     {
     safef(scoreLimitName, sizeof(scoreLimitName), "%s%s", scoreName, _MIN); // name is always {filterName}Min
-    deMin = cartOptionalStringClosestToHome(cart, tdb,viewLevel,scoreLimitName);
+    deMin = cartOptionalStringClosestToHome(cart, tdb,parentLevel,scoreLimitName);
     if(deMin != NULL)
         *min = strtod(deMin,NULL);
     }
@@ -4877,7 +4877,7 @@ if (max && limitMin && (int)(*limitMin) != NO_VALUE &&                          
 }
 
 static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
-                               boolean viewLevel,char *name, char *title, char *label,
+                               boolean parentLevel,char *name, char *title, char *label,
                                char *scoreName, boolean isFloat)
 /* Shows a score filter control with minimum value and optional range */
 {
@@ -4901,7 +4901,7 @@ if(setting)
         double minLimit=NO_VALUE,maxLimit=NO_VALUE;
         double minVal=minLimit,maxVal=maxLimit;
         colonPairToDoubles(setting,&minVal,&maxVal);
-        getScoreFloatRangeFromCart(cart,tdb,viewLevel,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
+        getScoreFloatRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
         safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
         safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), htmlEncodeText(htmlTextStripTags(label),FALSE));
         cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
@@ -4927,7 +4927,7 @@ if(setting)
         int minLimit=NO_VALUE,maxLimit=NO_VALUE;
         int minVal=minLimit,maxVal=maxLimit;
         colonPairToInts(setting,&minVal,&maxVal);
-        getScoreIntRangeFromCart(cart,tdb,viewLevel,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
+        getScoreIntRangeFromCart(cart,tdb,parentLevel,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
         safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
         safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
         cgiMakeIntVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
@@ -4956,7 +4956,7 @@ return FALSE;
 
 
 static int numericFiltersShowAll(char *db, struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
-                               boolean viewLevel,char *name, char *title)
+                               boolean parentLevel,char *name, char *title)
 // Shows all *Filter style filters.  Note that these are in random order and have no graceful title
 {
 int count = 0;
@@ -5012,7 +5012,7 @@ if (filterSettings)
         #endif///ndef EXTRA_FIELDS_SUPPORT
             char label[128];
             safef(label,sizeof(label),"Minimum %s",field);
-            showScoreFilter(cart,tdb,opened,boxed,viewLevel,name,title,label,scoreName,isFloat);
+            showScoreFilter(cart,tdb,opened,boxed,parentLevel,name,title,label,scoreName,isFloat);
             freeMem(scoreName);
             count++;
             }
@@ -5074,7 +5074,7 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
-boolean viewLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 boolean skipScoreFilter = FALSE;
 boolean bigBed = startsWith("bigBed",tdb->type);
 
@@ -5082,7 +5082,7 @@ if (!bigBed)  // bigBed filters are limited!
     {
     // Numeric filters are first
     boolean isBoxOpened = FALSE;
-    if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, viewLevel, name, title) > 0)
+    if (numericFiltersShowAll(db, cart, tdb, &isBoxOpened, boxed, parentLevel, name, title) > 0)
         skipScoreFilter = TRUE;
 
     // Add any multi-selects next
@@ -5119,7 +5119,7 @@ boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 if (scoreFilterOk)
     {
     int minLimit=0,maxLimit=maxScore,minVal=0,maxVal=maxScore;
-    getScoreIntRangeFromCart(cart,tdb,viewLevel,SCORE_FILTER,&minLimit,&maxLimit,&minVal,&maxVal);
+    getScoreIntRangeFromCart(cart,tdb,parentLevel,SCORE_FILTER,&minLimit,&maxLimit,&minVal,&maxVal);
 
     boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, SCORE_FILTER _BY_RANGE);
     if (!bigBed && filterByRange)
@@ -5161,16 +5161,16 @@ if (!bigBed)
         chopLine(cloneString(scoreCtString), words);
         safef(option, sizeof(option), "%s.filterTopScorersOn", name);
         bool doScoreCtFilter =
-            cartUsualBooleanClosestToHome(cart, tdb, viewLevel, "filterTopScorersOn", sameString(words[0], "on"));
+            cartUsualBooleanClosestToHome(cart, tdb, parentLevel, "filterTopScorersOn", sameString(words[0], "on"));
         puts("<P>");
         cgiMakeCheckBox(option, doScoreCtFilter);
         safef(option, sizeof(option), "%s.filterTopScorersCt", name);
-        scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, viewLevel, "filterTopScorersCt", words[1]);
+        scoreFilterCt = cartUsualStringClosestToHome(cart, tdb, parentLevel, "filterTopScorersCt", words[1]);
 
         puts("&nbsp; <B> Show only items in top-scoring </B>");
         cgiMakeIntVarWithLimits(option,atoi(scoreFilterCt),"Top-scoring count",0,1,100000);
         /* Only check size of table if track does not have subtracks */
-        if ( !viewLevel && hTableExists(db, tdb->table))
+        if ( !parentLevel && hTableExists(db, tdb->table))
             printf("&nbsp; (range: 1 to 100,000 total items: %d)\n",getTableSize(db, tdb->table));
         else
             printf("&nbsp; (range: 1 to 100,000)\n");
@@ -5234,9 +5234,9 @@ void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefi
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
-boolean viewLevel = isNameAtCompositeLevel(tdb,prefix);
+boolean parentLevel = isNameAtParentLevel(tdb,prefix);
 
-enum netColorEnum netColor = netFetchColorOption(cart, tdb, viewLevel);
+enum netColorEnum netColor = netFetchColorOption(cart, tdb, parentLevel);
 
 char optString[256];	/*	our option strings here	*/
 safef(optString, ArraySize(optString), "%s.%s", prefix, NET_COLOR );
@@ -5244,7 +5244,7 @@ printf("<p><b>Color nets by:&nbsp;</b>");
 netColorDropDown(optString, netColorEnumToString(netColor));
 
 #ifdef NOT_YET
-enum netLevelEnum netLevel = netFetchLevelOption(cart, tdb, viewLevel);
+enum netLevelEnum netLevel = netFetchLevelOption(cart, tdb, parentLevel);
 
 safef( optString, ArraySize(optString), "%s.%s", prefix, NET_LEVEL );
 printf("<p><b>Limit display of nets to:&nbsp;</b>");
@@ -5259,10 +5259,10 @@ void chainCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, 
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
-boolean viewLevel = isNameAtCompositeLevel(tdb,prefix);
+boolean parentLevel = isNameAtParentLevel(tdb,prefix);
 
 enum chainColorEnum chainColor =
-	chainFetchColorOption(cart, tdb, viewLevel);
+	chainFetchColorOption(cart, tdb, parentLevel);
 
 /* check if we have normalized scores available */
 boolean normScoreAvailable = chainDbNormScoreAvailable(tdb);
@@ -5286,7 +5286,7 @@ else
     /* allow cart to override trackDb setting */
     safef(optString, sizeof(optString), "%s.color", prefix);
     char * colorSetting = cartUsualStringClosestToHome(cart, tdb,
-	viewLevel, "color", binaryColorDefault);
+	parentLevel, "color", binaryColorDefault);
     cgiMakeRadioButton(optString, "on", sameString(colorSetting, "on"));
     printf(" on ");
     cgiMakeRadioButton(optString, "off", sameString(colorSetting, "off"));
@@ -5297,7 +5297,7 @@ else
 printf("<p><b>Filter by chromosome (e.g. chr10):</b> ");
 safef(optString, ArraySize(optString), "%s.%s", prefix, OPT_CHROM_FILTER);
 cgiMakeTextVar(optString,
-    cartUsualStringClosestToHome(cart, tdb, viewLevel,
+    cartUsualStringClosestToHome(cart, tdb, parentLevel,
 	OPT_CHROM_FILTER, ""), 15);
 
 if (normScoreAvailable)
@@ -5535,11 +5535,11 @@ if (sameWord("narrowPeak",tdb->type)
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 {
-boolean viewLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 boolean opened = FALSE;
-showScoreFilter(cart,tdb,&opened,boxed,viewLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,TRUE);
-showScoreFilter(cart,tdb,&opened,boxed,viewLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
-showScoreFilter(cart,tdb,&opened,boxed,viewLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,parentLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
 if(setting)
@@ -5553,7 +5553,7 @@ if(setting)
     char varName[256];
     int minLimit=0,maxLimit=1000,minVal=0,maxVal=NO_VALUE;
     colonPairToInts(setting,&minVal,&maxVal);
-    getScoreIntRangeFromCart(cart,tdb,viewLevel,SCORE_FILTER,&minLimit,&maxLimit,&minVal,&maxVal);
+    getScoreIntRangeFromCart(cart,tdb,parentLevel,SCORE_FILTER,&minLimit,&maxLimit,&minVal,&maxVal);
     if(maxVal != NO_VALUE)
         puts("<TR><TD align='right'><B>Score range: min:</B><TD align='left'>");
     else
@@ -5589,13 +5589,13 @@ void genePredCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *tit
 /* Put up gencode-specific controls */
 {
 char varName[64];
-boolean viewLevel = isNameAtCompositeLevel(tdb,name);
-char *geneLabel = cartUsualStringClosestToHome(cart, tdb,viewLevel, "label", "gene");
+boolean parentLevel = isNameAtParentLevel(tdb,name);
+char *geneLabel = cartUsualStringClosestToHome(cart, tdb,parentLevel, "label", "gene");
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
 if (sameString(name, "acembly"))
     {
-    char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,viewLevel,"type", acemblyEnumToString(0));
+    char *acemblyClass = cartUsualStringClosestToHome(cart,tdb,parentLevel,"type", acemblyEnumToString(0));
     printf("<p><b>Gene Class: </b>");
     acemblyDropDown("acembly.type", acemblyClass);
     printf("  ");
@@ -5644,7 +5644,7 @@ cfgEndBox(boxed);
 static boolean isSpeciesOn(struct cart *cart, struct trackDb *tdb, char *species, char *option, int optionSize, boolean defaultState)
 /* check the cart to see if species is turned off or on (default is defaultState) */
 {
-boolean viewLevel = isNameAtCompositeLevel(tdb,option);
+boolean parentLevel = isNameAtParentLevel(tdb,option);
 if (*option == '\0')
     safef(option, optionSize, "%s.%s", tdb->track, species);
 else
@@ -5653,7 +5653,7 @@ else
     int suffixSize = optionSize - strlen(option);
     safef(suffix,suffixSize,".%s",species);
     }
-return cartUsualBooleanClosestToHome(cart,tdb, viewLevel, species,defaultState);
+return cartUsualBooleanClosestToHome(cart,tdb, parentLevel, species,defaultState);
 }
 
 char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *prefix, char *db, struct wigMafSpecies **list, int *groupCt)
@@ -5726,7 +5726,7 @@ int groupCt;
 char option[MAX_SP_SIZE];
 int group, prevGroup;
 int i,j;
-boolean viewLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 
 bool lowerFirstChar = TRUE;
 
@@ -5897,7 +5897,7 @@ for (wmSpecies = wmSpeciesList, i = 0, j = 0; wmSpecies != NULL;
                 {
                 puts("<TD>");
                cgiMakeCheckBoxWithId(option,cartUsualBooleanClosestToHome(
-                                     cart, tdb, viewLevel,wmSpecies->name, checked),id);
+                                     cart, tdb, parentLevel,wmSpecies->name, checked),id);
                 printf ("%s", label);
                 puts("</TD>");
                 fflush(stdout);
@@ -5939,7 +5939,7 @@ void wigMafCfgUi(struct cart *cart, struct trackDb *tdb,char *name, char *title,
 bool lowerFirstChar = TRUE;
 int i;
 char option[MAX_SP_SIZE];
-boolean viewLevel = isNameAtCompositeLevel(tdb,name);
+boolean parentLevel = isNameAtParentLevel(tdb,name);
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 
@@ -5970,7 +5970,7 @@ if (consWiggles && consWiggles->next)
         char *wigVarSuffix = NULL;
         char *wigVar = wigMafWiggleVar(name, consWig, &wigVarSuffix);
         cgiMakeCheckBox(wigVar,
-                        cartUsualBooleanClosestToHome(cart, tdb, viewLevel, wigVarSuffix, first));
+                        cartUsualBooleanClosestToHome(cart, tdb, parentLevel, wigVarSuffix, first));
         freeMem(wigVar);
         first = FALSE;
         subChar(consWig->uiLabel, '_', ' ');
@@ -5987,7 +5987,7 @@ else
     puts("<B>Multiple alignment base-level:</B><BR>" );
 
 safef(option, sizeof option, "%s.%s", name, MAF_DOT_VAR);
-cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, viewLevel,MAF_DOT_VAR, FALSE));
+cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, parentLevel,MAF_DOT_VAR, FALSE));
 
 if (isWigMafProt)
     puts("Display amino acids identical to reference as dots<BR>" );
@@ -5995,7 +5995,7 @@ else
     puts("Display bases identical to reference as dots<BR>" );
 
 safef(option, sizeof option, "%s.%s", name, MAF_CHAIN_VAR);
-cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, viewLevel, MAF_CHAIN_VAR, TRUE));
+cgiMakeCheckBox(option, cartUsualBooleanClosestToHome(cart, tdb, parentLevel, MAF_CHAIN_VAR, TRUE));
 
 char *irowStr = trackDbSetting(tdb, "irows");
 boolean doIrows = (irowStr == NULL) || !sameString(irowStr, "off");
@@ -6026,7 +6026,7 @@ if (framesTable)
     cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,
 	cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies)); // tdb independent var
     puts("<br>");
-    char *cartVal = cartUsualStringClosestToHome(cart, tdb, viewLevel, "codons","codonDefault");
+    char *cartVal = cartUsualStringClosestToHome(cart, tdb, parentLevel, "codons","codonDefault");
     safef(buffer, sizeof(buffer), "%s.codons",name);
     cgiMakeRadioButton(buffer,"codonNone",     sameWord(cartVal,"codonNone"));
     printf("No codon translation<BR>");
@@ -7515,9 +7515,9 @@ if(name && *name)
     freez(name);
 }
 
-boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name)
-/* cfgUi controls are passed a prefix name that may be at the composite or at the subtrack level
-   returns TRUE for composite level name */
+boolean isNameAtParentLevel(struct trackDb *tdb,char *name)
+// cfgUi controls are passed a prefix name that may be at the composite, view or subtrack level
+// returns TRUE if name at view or composite level
 {
 struct trackDb *parent;
 for (parent = tdb->parent; parent != NULL; parent = parent->parent)
