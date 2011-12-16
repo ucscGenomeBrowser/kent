@@ -57,7 +57,7 @@ endif
 
 # autodetect local installation of samtools:
 ifeq (${SAMDIR},)
-  SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
+  SAMDIR = /hive/data/outside/samtools/samtools-0.1.18/x86_64
   ifneq ($(wildcard ${SAMDIR}),)
      KNETFILE_HOOKS=1
   endif
@@ -86,7 +86,7 @@ endif
 
 # As we do for bam/samtools, so do for tabix.  autodetect local installation:
 ifeq (${TABIXDIR},)
-  TABIXDIR = /hive/data/outside/tabix/tabix-0.2.3/${MACHTYPE}
+  TABIXDIR = /hive/data/outside/tabix/tabix-0.2.5/${MACHTYPE}
   ifneq ($(wildcard ${TABIXDIR}),)
      KNETFILE_HOOKS=1
   endif

@@ -10,7 +10,6 @@ minLimit 0
 maxLimit 100
 maxHeightPixels 128:25:11
 compositeTrack on
-release alpha
 
 
 

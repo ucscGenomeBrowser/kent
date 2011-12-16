@@ -87,14 +87,14 @@ if (thub != NULL)
 static void hgHubConnectUnlisted(struct hubConnectStatus *hubList, 
     struct hash *publicHash)
 /* Put up the list of unlisted hubs and other controls for the page. */
-/* adds hubUrls to publicHash */
+/* uses publicHash to distingusih public hubs from unlisted ones */
 /* NOTE: Destroys hubList */
 {
 // put out the top of our page
 printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
     "<table id=\"unlistedHubsTable\"> "
     "<thead><tr> "
-	"<th colspan=\"5\" id=\"addHubBar\"><label for \"hubUrl\">URL:</label> "
+	"<th colspan=\"5\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> "
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
 	    "type=\"text\" size=\"65\"> "
 	"<input name=\"hubAddButton\""
@@ -430,6 +430,10 @@ if (cartVarExists(cart, hgHubDoDisconnect))
     {
     gotDisconnect = TRUE;
     doDisconnectHub(cart);
+
+    // now rebuild the cart variable ("trackHubs") that has which lists which
+    // hubs are on.
+    hubConnectHubsInCart(cart);
     }
 
 if (cartVarExists(cart, hgHubDoReset))
