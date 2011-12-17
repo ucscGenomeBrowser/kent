@@ -9362,18 +9362,21 @@ term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
 description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
+description 24 h with 1% p02 and 10mM Lactate, pH 6.7
 type treatment
 
+#missing concentration
 term IFNa30
 tag IFNA30
-description Interferon alpha treatment - 30 minutes (Snyder)
+description 30 m of Interferon alpha (Snyder)
 type treatment
 
 term IFNa4h
 tag IFNA4H
-description Interferon alpha treatment - 4 hours with 500 U/ml (Crawford)
+description 4 hours of 500 U/ml Interferon alpha (Crawford)
 type treatment
 
+#missing concentration
 term IFNa6h
 tag IFNA6H
 description Interferon alpha treatment - 6 hours (Snyder)
