@@ -257,6 +257,31 @@ subId 4809
 tableName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig
 view Signal
 
+metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuTfbs
+control Input
+controlId CH12/Input/Input
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-15
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5125
+view Alignments
+
 metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep2
 objType file
 age immortalized
@@ -267,7 +292,7 @@ control Input
 controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep2.bam,wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep2.bam.bai
@@ -292,7 +317,7 @@ control Input
 controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep1.fastq.gz
@@ -317,7 +342,7 @@ control Input
 controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep2.fastq.gz
@@ -326,31 +351,6 @@ lab PSU-m
 md5sum 063e1387eda0386748b1e9bd117f012d
 project wgEncode
 replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex F
-strain B10.H-2aH-4bp/Wts
-subId 5125
-view RawData
-
-metaObject wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep3
-objType file
-age immortalized
-antibody Input
-cell CH12
-composite wgEncodePsuTfbs
-control Input
-controlId CH12/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
-dateSubmitted 2011-09-23
-dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep3.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 3
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex F
@@ -368,7 +368,7 @@ control Input
 controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRepSignalRep1.bigWig
@@ -393,7 +393,7 @@ control Input
 controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRepSignalRep2.bigWig
@@ -418,7 +418,7 @@ control Input
 controlId CH12/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputSig.bigWig
@@ -1043,7 +1043,7 @@ control Input
 controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam.bai
@@ -1069,7 +1069,7 @@ control Input
 controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam.bai
@@ -1095,7 +1095,7 @@ control Input
 controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
@@ -1121,7 +1121,7 @@ control Input
 controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
@@ -1147,7 +1147,7 @@ control Input
 controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep1.bigWig
@@ -1172,7 +1172,7 @@ control Input
 controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep2.bigWig
@@ -1197,7 +1197,7 @@ control Input
 controlId Erythrobl/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputSig.bigWig
@@ -2334,7 +2334,7 @@ control Input
 controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam.bai
@@ -2360,7 +2360,7 @@ control Input
 controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam.bai
@@ -2376,31 +2376,6 @@ strain 129
 subId 5123
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eInputME0S129InputAlnRep3
-objType file
-age E0
-antibody Input
-cell G1E
-composite wgEncodePsuTfbs
-control Input
-controlId G1E/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
-fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep3.bam
-grant Hardison
-lab PSU-m
-md5sum d456d8f2e9f810b9ccc78eebfa9d15e5
-project wgEncode
-replicate 3
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-strain 129
-subId 5028
-view Alignments
-
 metaObject wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1
 objType file
 age E0
@@ -2411,7 +2386,7 @@ control Input
 controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1.fastq.gz
@@ -2437,7 +2412,7 @@ control Input
 controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep2.fastq.gz
@@ -2446,32 +2421,6 @@ lab PSU-m
 md5sum fa9ed13a9154e21f1a40164150a73c4a
 project wgEncode
 replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-strain 129
-subId 5123
-view RawData
-
-metaObject wgEncodePsuTfbsG1eInputME0S129InputRawDataRep3
-objType file
-age E0
-antibody Input
-cell G1E
-composite wgEncodePsuTfbs
-control Input
-controlId G1E/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
-dateSubmitted 2010-11-19
-dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep3.fastq.gz
-grant Hardison
-lab PSU-m
-md5sum 1aacae6ebfac1c54621f530a289b2376
-project wgEncode
-replicate 3
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
@@ -2489,7 +2438,7 @@ control Input
 controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep1.bigWig
@@ -2514,7 +2463,7 @@ control Input
 controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep2.bigWig
@@ -2539,7 +2488,7 @@ control Input
 controlId G1E/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputSig.bigWig
@@ -3948,7 +3897,7 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam.bai
@@ -3975,7 +3924,7 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam.bai
@@ -4001,7 +3950,7 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
@@ -4028,7 +3977,7 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
@@ -4037,31 +3986,6 @@ lab PSU-m
 md5sum 341e968a3d4f087136ab2a181442a241
 project wgEncode
 replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-strain 129
-subId 5145
-view RawData
-
-metaObject wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep3
-objType file
-age E0
-antibody Input
-cell G1E-ER4+E2
-composite wgEncodePsuTfbs
-control Input
-controlId G1E-ER4+E2/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
-dateSubmitted 2010-11-28
-dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep3.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 3
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex M
@@ -4079,7 +4003,7 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep1.bigWig
@@ -4104,7 +4028,7 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep2.bigWig
@@ -4129,7 +4053,7 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputSig.bigWig
@@ -5004,7 +4928,7 @@ control Input
 controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1.bam.bai
@@ -5030,7 +4954,7 @@ control Input
 controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2.bam.bai
@@ -5056,7 +4980,7 @@ control Input
 controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep1.fastq.gz
@@ -5082,7 +5006,7 @@ control Input
 controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep2.fastq.gz
@@ -5091,31 +5015,6 @@ lab PSU-m
 md5sum 93594c6b192fbcb6a15e341f60e6587e
 project wgEncode
 replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex B
-strain CD-1
-subId 5124
-view RawData
-
-metaObject wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep3
-objType file
-age E14.5
-antibody Input
-cell Megakaryo
-composite wgEncodePsuTfbs
-control Input
-controlId Megakaryo/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
-dateSubmitted 2011-08-18
-dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep3.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 3
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex B
@@ -5133,7 +5032,7 @@ control Input
 controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRepSignalRep1.bigWig
@@ -5158,7 +5057,7 @@ control Input
 controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRepSignalRep2.bigWig
@@ -5183,7 +5082,7 @@ control Input
 controlId Megakaryo/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputSig.bigWig
@@ -5462,7 +5361,7 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep1.bam.bai
@@ -5487,7 +5386,7 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep2.bam.bai
@@ -5512,7 +5411,7 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep1.fastq.gz
@@ -5537,7 +5436,7 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep2.fastq.gz
@@ -5545,31 +5444,6 @@ grant Hardison
 lab PSU-m
 project wgEncode
 replicate 2
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex U
-strain C57BL/6
-subId 5144
-view RawData
-
-metaObject wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep3
-objType file
-age immortalized
-antibody Input
-cell MEL
-composite wgEncodePsuTfbs
-control Input
-controlId MEL/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
-dateSubmitted 2010-12-01
-dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep3.fastq.gz
-grant Hardison
-lab PSU-m
-project wgEncode
-replicate 3
 seqPlatform Illumina_HiSeq_2000
 setType input
 sex U
@@ -5587,7 +5461,7 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRepSignalRep1.bigWig
@@ -5612,7 +5486,7 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRepSignalRep2.bigWig
@@ -5637,7 +5511,7 @@ control Input
 controlId MEL/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-12-09
+dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputSig.bigWig
@@ -6132,4 +6006,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 726676626
+# MAGIC: 1778167262
