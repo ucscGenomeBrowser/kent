@@ -10385,6 +10385,18 @@ type age
 stage Embryonic
 description Embryonic day 18.5
 
+term newborn-1days
+tag NEW1DAYS
+type age
+stage newborn
+description Newborn 1 day PROVISIONAL
+
+term adult-1wks
+tag ADULT1WKS
+type age
+stage Adult
+description Adult 1 week PROVISIONAL
+
 term adult-4wks
 tag ADULT4WKS
 type age
