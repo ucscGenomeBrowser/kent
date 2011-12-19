@@ -4410,6 +4410,24 @@ color 204,121,16
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
 
+term LgIntestine
+tag LGINTESTINE
+type Cell Line
+organism mouse
+tissue large intestine
+category Tissue
+age ageUnknown
+strain Unknown
+description Large Intestine PROVISIONAL
+vendorName UW lab
+vendorId Large Intestine
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6982
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6982
+color 230,159,0
+sex U
+protocol Stam:LargeIntestine_Stam_protocol.pdf
+
 term Limb
 tag LIMB
 type Cell Line
@@ -4659,6 +4677,42 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
 protocol Ren:Placenta_Ren_protocol.pdf
+
+term Retina
+tag RETINA
+type Cell Line
+organism mouse
+tissue brain
+category Tissue
+age ageUnknown
+strain Unknown
+description Retina PROVISIONAL
+vendorName UW lab
+vendorId Retina
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6944
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6944
+color 105,105,105
+sex U
+protocol Stam:Retina_Stam_protocol.pdf
+
+term SkMuscle
+tag SKMUSCLE
+type Cell Line
+organism mouse
+tissue skeletal muscle
+category Tissue
+age ageUnknown
+strain Unknown
+description Skeletal Muscle PROVISIONAL
+vendorName UW lab
+vendorId Skeletal Muscle
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7125
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
+color 139,69,19
+sex U
+protocol Stam:SkeletalMuscle_Stam_protocol.pdf
 
 #Shortened term
 term SmIntestine
