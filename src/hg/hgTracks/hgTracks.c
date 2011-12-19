@@ -1779,6 +1779,11 @@ if (baseShowScaleBar)
 	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
     hvGfxLine(hvg, scaleBarEndX, y+scaleBarPad, scaleBarEndX,
 	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+    if(cartUsualBoolean(cart, BASE_SHOWASM_SCALEBAR, TRUE))
+        {
+        int fHeight = vgGetFontPixelHeight(hvg->vg, font);
+        hvGfxText(hvg, scaleBarEndX + 10, y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0), MG_BLACK, font, database);
+        }
     y += scaleBarTotalHeight;
     }
 if (baseShowRuler)
@@ -2555,13 +2560,29 @@ if(sameString(type, "jsonp"))
     printf(")\n");
     return;
     }
-else if(sameString(type, "png"))
+else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "eps"))
     {
-    // following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
-    printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+    // following code bypasses html and return png's directly - see redmine 4888
+    char *file;
+    if(sameString(type, "pdf"))
+        {
+        printf("Content-Disposition: filename=hgTracks.pdf\nContent-Type: application/pdf\n\n");
+        file = convertEpsToPdf(psOutput);
+        unlink(psOutput);
+        }
+    else if(sameString(type, "eps"))
+        {
+        printf("Content-Disposition: filename=hgTracks.eps\nContent-Type: application/eps\n\n");
+        file = psOutput;
+        }
+    else
+        {
+        printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+        file = gifTn.forCgi;
+        }
 
     char buf[4096];
-    FILE *fd = fopen(gifTn.forCgi, "r");
+    FILE *fd = fopen(file, "r");
     if(fd == NULL)
         // fail some other way (e.g. HTTP 500)?
         errAbort("Couldn't open png for reading");
@@ -2574,7 +2595,7 @@ else if(sameString(type, "png"))
             break;
         }
     fclose(fd);
-    unlink(gifTn.forCgi);
+    unlink(file);
     return;
     }
 #endif
@@ -5493,11 +5514,14 @@ char *pdfFile = NULL, *ideoPdfFile = NULL;
 ZeroVar(&ideoPsTn);
 trashDirFile(&psTn, "hgt", "hgt", ".eps");
 
-hotLinks();
-printf("<H1>PostScript/PDF Output</H1>\n");
-printf("PostScript images can be printed at high resolution "
-       "and edited by many drawing programs such as Adobe "
-       "Illustrator.");
+if(!trackImgOnly)
+    {
+    hotLinks();
+    printf("<H1>PostScript/PDF Output</H1>\n");
+    printf("PostScript images can be printed at high resolution "
+           "and edited by many drawing programs such as Adobe "
+           "Illustrator.");
+    }
 doTrackForm(psTn.forCgi, &ideoPsTn);
 
 // postscript
@@ -5714,7 +5738,7 @@ sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "org", organism);
 cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
-if (cgiVarExists("hgt.psOutput"))
+if (cartUsualBoolean(cart, "hgt.psOutput", FALSE))
     handlePostscript();
 else
     doTrackForm(NULL, NULL);

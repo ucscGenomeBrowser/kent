@@ -102,6 +102,7 @@ char *hBackgroundImage();
 #define BASE_SHOWRULER  "hgt.baseShowRuler"
 #define BASE_SHOWPOS	"hgt.baseShowPos"
 #define BASE_SHOWASM	"hgt.baseShowAsm"
+#define BASE_SHOWASM_SCALEBAR	"hgt.baseShowAsmScaleBar"
 #define BASE_TITLE	"hgt.baseTitle"
 #define REV_CMPL_DISP   "hgt.revCmplDisp"
 
