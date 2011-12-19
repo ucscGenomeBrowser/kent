@@ -358,6 +358,7 @@ our %formatCheckers = (
     psl  => \&validatePsl,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
+    bigBed => \&validatebigBed,
     bam => \&validateBam,
     shortFrags => \&validateBed,
     bedLogR => \&validateBed,
@@ -916,6 +917,23 @@ sub validateBam
     doTime("done validateBam") if $opt_timing;
     return ();
 }
+
+sub validateBigBed
+{
+    my ($path, $file, $type) = @_;
+    doTime("Beginning validateBigBed") if $opt_timing;
+    HgAutomate::verbose(2, "validateBigBed($path,$file,$type)\n");
+    my $safe = SafePipe->new(CMDS => ["bigBedToBed $file"]);
+    if(my $err = $safe->exec()) {
+        print STDERR  "ERROR: failed validateBigBed : " . $safe->stderr() . "\n";
+        return("failed validateBigBed for '$file'");
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed validateBigBed\n");
+    doTime("done validateBigBed") if $opt_timing;
+    return ();
+}
+
+
 
 sub validateBigWig
 {
