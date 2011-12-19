@@ -125,6 +125,11 @@ Options:
     on output.  Useful for debugging, as they are include in the verbose
     tracing as [#1], etc.  Will make a mess of normal production usage.
 
+   -blackList=file.txt - adds a list of accession ranges to a black list.
+    Any accession on this list is dropped. Black list file is two columns
+    where the first column is the beginning of the range, and the second
+    column is the end of the range, inclusive.
+
 
 The default options don't do any filtering. If no filtering
 criteria are specified, all PSLs will be passed though, except
