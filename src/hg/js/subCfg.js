@@ -860,10 +860,11 @@ var subCfg = { // subtrack config module.
 
             // Names will be removed for all controls that have not changed
             $('select,input').filter("[name]").not(".allOrOnly").not('.changed').each( function (i) {
-                if (this.type != 'hidden' || $(this).hasClass('trPos') || $(this).hasClass('cbShadow') || $(this).hasClass('sortOrder')) {
+                if (this.type != 'hidden' || $(this).hasClass('trPos')
+                || $(this).hasClass('cbShadow') || $(this).hasClass('sortOrder')) {
                     // hiddens except priority and boolshad are all sent to the cart
-                    //this.disabled = true;   // QESTION: which is better: name or disabled ?
-                    this.name = "";           // Unname goes straight to the point: doesn't send in the form
+                    // disable instead of unname because unname fills cart with a lot of garbage (Linux/FF)!
+                    this.disabled = true;
                 }
             });
             // to do: other hiddens?
