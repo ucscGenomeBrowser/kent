@@ -38,7 +38,7 @@ longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/PSU
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line CH12=CH12 ERYTHROBL=Erythroblast G1E=G1E G1E_ER4_E2=G1E-ER4+E2 MEGAKARYO=Megakaryocyte MEL=MEL
-subGroup3 factor Factor zINPUT=Input CTCF=CTCF POL24H8=Pol2-4H8 GATA1a=GATA1_(SC-265) GATA2SC9008=GATA2_(SC-9008) PAX5c=PAX5_(N-15) TAL1=TAL1_(SC-12984) TAL1SC12984=TAL1_(SC-12984)
+subGroup3 factor Factor CTCF=CTCF POL24H8=Pol2-4H8 GATA1a=GATA1_(SC-265) GATA2SC9008=GATA2_(SC-9008) PAX5c=PAX5_(N-15) TAL1=TAL1_(SC-12984) TAL1SC12984=TAL1_(SC-12984) zINPUT=Input 
 subGroup4 sex Sex F=F M=M B=B U=U
 subGroup5 age Age IMMORTAL=immortalized E0=E0 E14HALF=E14.5
 subGroup6 strain Strain 2A4B=B10.H-2aH-4bp/Wts S129=129 C57BL6=C57BL/6 CD1=CD-1 UKN=Unknown
