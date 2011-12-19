@@ -53,7 +53,7 @@ shortLabel UW DNaseI HS
 longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2_C BJ=BJ CACO2=Caco-2 MONOCD14=CD14+_Monocytes CD20=CD20+ CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD34MOBILIZED=CD34+_Mobilized CMK=CMK GM04503=GM04503 GM04504=GM04504 GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7ES=H7-hESC HAh=HA-h HA-sp=HA-sp HAc=HAc HAE=HAEpiC HBMEC=HBMEC HBVP=HBVP HBVSMC=HBVSCM HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HRGEC=HRGEC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP M059J=M059J MCF7=MCF-7 NB4=NB4 NHBERA=NHBE_RA NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA T47D=T-47D Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38 WI38O=WI-38_<i>hydroxytamoxifen<\i>
+subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2_C BJ=BJ CACO2=Caco-2 MONOCD14=CD14+_Monocytes CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD34MOBILIZED=CD34+_Mobilized CMK=CMK GM04503=GM04503 GM04504=GM04504 GM06990=GM06990 GM12864=GM12864 GM12865=GM12865 H7ES=H7-hESC HAh=HA-h HA-sp=HA-sp HAc=HAc HAE=HAEpiC HBMEC=HBMEC HBVP=HBVP HBVSMC=HBVSCM HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HFF=HFF HFFMyc=HFF-Myc HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECDAD=HMVEC-dAd HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy HNPCE=HNPCEpiC HPAEC=HPAEC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HRGEC=HRGEC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp;(G1_phase) LNCaP=LNCaP M059J=M059J MCF7=MCF-7 NB4=NB4 NHBERA=NHBE_RA NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF NT2D1=NT2-D1 PANC1=PANC-1 PREC=PReC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA T47D=T-47D Th1=Th1 Th2=Th2 WERIRb1=WERI-Rb-1 WI38=WI-38 WI38O=WI-38_<i>hydroxytamoxifen<\i>
 subGroup3 rep Replicate 1=1 2=2
 subGroup4 treatment Treatment None=None DIFFA2D=diffProtA_2d DIFFA5D=diffProtA_5d DIFFA14D=diffProtA_14d OHTAM=4-OHTAM_20nM_72hr
 dimensions dimensionY=cellType dimensionX=rep
@@ -1336,7 +1336,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel CD20+ Hspt 2
         longLabel CD20+ DNaseI HS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot cellType=CD20 rep=2 treatment=None
+        subGroups view=Hot cellType=CD20RO01778 rep=2 treatment=None
         type broadPeak
         # subId=4400 dateSubmitted=2011-06-25
         # was wgEncodeUwDnaseCd20PosHotspotsRep2 wong Tue Oct  4 16:34:48 2011
@@ -2833,7 +2833,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CD20+ Pk 2
         longLabel CD20+ DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=CD20 rep=2 treatment=None
+        subGroups view=Peaks cellType=CD20RO01778 rep=2 treatment=None
         type narrowPeak
         # subId=4400 dateSubmitted=2011-06-25
         # was wgEncodeUwDnaseCd20PosPkRep2 wong Tue Oct  4 16:34:48 2011
@@ -4332,7 +4332,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CD20+ Sig 2
         longLabel CD20+ DNaseI HS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig cellType=CD20 rep=2 treatment=None
+        subGroups view=zRSig cellType=CD20RO01778 rep=2 treatment=None
         type bigWig 1.000000 31470.000000
         # subId=4400 dateSubmitted=2011-06-25
         # was wgEncodeUwDnaseCd20PosRawRep2 wong Tue Oct  4 16:34:48 2011
