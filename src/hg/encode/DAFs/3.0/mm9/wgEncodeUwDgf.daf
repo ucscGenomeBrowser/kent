@@ -33,7 +33,7 @@ group             regulation
 variables         cell,strain,sex,age
 assembly          mm9
 
-validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:mmCheckOneInN=1000
+validationSettings validateFiles.bam:mismatches=2
 
 
 # Track/view definition
