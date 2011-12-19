@@ -2263,6 +2263,59 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 ############################################################################
+# multiz7Way MAF FRAMES (DONE - 2011-12-19 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/ce10/bed/multiz7way/frames
+    cd /hive/data/genomes/ce10/bed/multiz7way/frames
+    mkdir genes
+    # The following is adapted from the ce6 6-way sequence
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # using ensGene for ce10
+    # using xenoRefGene for cb4, caeRem4, caePb3, caeJap4
+    # there are no genes on caeSp111 or caeAng1
+    hgsql -N -e "select * from ensGene" ce10 | cut -f 2-12 \
+	| genePredSingleCover stdin stdout | gzip -2c \
+	    > genes/ce10.gp.gz
+
+    for qDB in cb4 caeRem4 caePb3 caeJap4
+    do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${qDB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+		> genes/$qDB.gp.gz
+    done
+
+    ls -ogrt genes
+# -rw-rw-r-- 1 1273808 Dec 19 11:57 ce10.gp.gz
+# -rw-rw-r-- 1  907761 Dec 19 11:59 cb4.gp.gz
+# -rw-rw-r-- 1  987565 Dec 19 11:59 caeRem4.gp.gz
+# -rw-rw-r-- 1 1258275 Dec 19 11:59 caePb3.gp.gz
+# -rw-rw-r-- 1  854239 Dec 19 11:59 caeJap4.gp.gz
+
+
+    cd /hive/data/genomes/ce10/bed/multiz7way/frames
+    cat ../maf/*.maf | nice -n +19 genePredToMafFrames ce10 \
+    cat ../anno/maf/*.maf | nice -n +19 genePredToMafFrames ce10 \
+	stdin stdout \
+	ce10 genes/ce10.gp.gz cb4 genes/cb4.gp.gz caeRem4 genes/caeRem4.gp.gz caePb3 genes/caePb3.gp.gz caeJap4 genes/caeJap4.gp.gz \
+	| gzip > multiz7way.mafFrames.gz
+
+    #	the sed trick with ../species.list did not work here:
+	`sed -e "s#caeSp111 ##; s#caeAng1##; s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g" ../species.list` \
+    #	list:
+# ce10 genes/ce10.gp.gz cb3 genes/cb3.gp.gz caeRem3 genes/caeRem3.gp.gz \
+# caePb2 genes/caePb2.gp.gz caeJap3 genes/caeJap3.gp.gz \
+# haeCon1 genes/haeCon1.gp.gz priPac2 genes/priPac2.gp.gz \
+# melHap1 genes/melHap1.gp.gz melInc1 genes/melInc1.gp.gz \
+# bruMal1 genes/bruMal1.gp.gz
+
+    ssh hgwdev
+    cd /hive/data/genomes/ce10/bed/multiz7way/frames
+    nice -n +19 hgLoadMafFrames ce10 multiz7wayFrames multiz7way.mafFrames.gz
+
+
+############################################################################
 # Constructing Downloads for 7way (DONE - 2011-12-16 - Hiram)
     cd /hive/data/genomes/ce10/goldenPath
 
