@@ -2376,31 +2376,6 @@ strain 129
 subId 5123
 view Alignments
 
-metaObject wgEncodePsuTfbsG1eInputME0S129InputAlnRep3
-objType file
-age E0
-antibody Input
-cell G1E
-composite wgEncodePsuTfbs
-control Input
-controlId G1E/Input/Input
-dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-10-27
-dateUnrestricted 2012-07-27
-fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep3.bam
-grant Hardison
-lab PSU-m
-md5sum d456d8f2e9f810b9ccc78eebfa9d15e5
-project wgEncode
-replicate 3
-seqPlatform Illumina_HiSeq_2000
-setType input
-sex M
-strain 129
-subId 5028
-view Alignments
-
 metaObject wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1
 objType file
 age E0
@@ -6031,4 +6006,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 2037805111
+# MAGIC: 1778167262
