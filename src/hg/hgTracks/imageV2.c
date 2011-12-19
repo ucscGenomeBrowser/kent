@@ -993,7 +993,7 @@ int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topL
 struct imgSlice *slice;
 char *imgFile = NULL;               // name of file that hold the image
 char *neededId = NULL; // id is only added it it is NOT the trackId.
-if (imgTrack->tdb == NULL || differentString(id,imgTrack->tdb->track))
+if (imgTrack->tdb == NULL || differentStringNullOk(id, imgTrack->tdb->track))
     neededId = id;
 
 int count = 0;
