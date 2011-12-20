@@ -19,6 +19,7 @@ var browser;              // browser ("msie", "safari" etc.) // move to utils.js
  * int imgBox*            // various drag-scroll values
  * boolean measureTiming  // true if measureTiming is on
  * Object trackDb         // hash of trackDb entries for tracks which are visible on current page
+ * string err             // error message (present only when hgTracks has hit a fatal berror).
  */
 function initVars()
 {  // There are various entry points, so we call initVars in several places to make sure all is well
@@ -357,17 +358,44 @@ var posting = {
 
     mapClk: function ()
     {
-        // Use in-place update if the map item just modifies the current position (this is nice because it
-        // preserves the users current relative position).
-        var str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)$";
-        var reg = new RegExp(str);
-        var a = reg.exec(this.href);
-        if(a && a[1] && a[1] == hgTracks.chromName && imageV2.inPlaceUpdate) {
-            imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]), null, true);
-            return false;
-        } else {
-            return posting.saveSettings(this);
+        var done = false;
+        if(false && imageV2.inPlaceUpdate) {
+            // XXXX experimental and only turned on in larrym's tree.
+            // Use in-place update if the map item just modifies the current position (this is nice because it's faster
+            // and it preserves the users current relative position in the track image).
+            //
+            // First test handles next/prev item.
+            var str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)&(hgt\.(next|prev)Item=[^&]+)";
+            var reg = new RegExp(str);
+            var a = reg.exec(this.href);
+            if(a && a[1] && a[1] == hgTracks.chromName) {
+                imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]) + "&" + a[4], null, true);
+                done = true;
+            } else {
+                // handle next/prev exon
+                str = "/cgi-bin/hgTracks\\?position=([^:]+):(.+)&hgsid=(\\d+)$";
+                reg = new RegExp(str);
+                a = reg.exec(this.href);
+                if(a && a[1]) {
+                    imageV2.navigateInPlace("position=" + encodeURIComponent(a[1] + ":" + a[2]), null, true);
+                    done = true;
+                } else {
+                    // handle toggle visibility. Request may include a track set, so we cannot use requestImgUpdate.
+                    str = "/cgi-bin/hgTracks\\?(position=[^:]+:.+&hgsid=\\d+&([^=]+)=([^&]+))$";
+                    reg = new RegExp(str);
+                    a = reg.exec(this.href);
+                    if(a && a[1]) {
+                        imageV2.navigateInPlace(a[1], null, true);
+                        // imageV2.requestImgUpdate(a[1], a[1] + "=" + a[2], "", a[2]);
+                        done = true;
+                    }
+                }
+            }
         }
+        if(done)
+            return false;
+        else
+            return posting.saveSettings(this);
     },
 
     saveSettings: function (obj)
