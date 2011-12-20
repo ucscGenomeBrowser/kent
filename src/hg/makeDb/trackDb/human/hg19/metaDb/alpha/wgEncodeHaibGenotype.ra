@@ -412,8 +412,9 @@ cell GM12878
 composite wgEncodeHaibGenotype
 dataType Genotype
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-06
-dateUnrestricted 2012-09-06
+dateResubmitted 2011-12-06
+dateSubmitted 2011-05-09
+dateUnrestricted 2012-02-09
 dccAccession wgEncodeEH000273
 dccRep 1
 expId 273
