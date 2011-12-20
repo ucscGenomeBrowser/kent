@@ -695,7 +695,7 @@ function showOrHideSelectedSubtracks(inp)
 
     var tbody = $("tbody.sortable")
     $(tbody).each(function (i) {
-        sortedTableAlternateColors(this);
+        sortTable.alternateColors(this);
     });
 }
 
@@ -1078,7 +1078,7 @@ function tableSortAtButtonPress(anchor,tagId)
     var table = $( anchor ).parents("table.sortable");
     if (table) {
         subtrackCfgHideAll(table);
-        waitOnFunction( _tableSortOnButtonPressEncapsulated, anchor, tagId);
+        waitOnFunction( sortTable._sortOnButtonPress, anchor, tagId);
     }
     return false;  // called by link so return false means don't try to go anywhere
 }
@@ -1316,7 +1316,7 @@ $(document).ready(function()
 
     // Initialize sortable tables
     $('table.sortable').each(function (ix) {
-        sortTableInitialize(this,true,true);
+        sortTable.initialize(this,true,true);
     });
 
     // Register tables with drag and drop

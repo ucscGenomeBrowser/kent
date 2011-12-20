@@ -550,7 +550,7 @@ if (sortOrder != NULL)
                 slPairValSortCase(&tagLabelPairs);
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
-            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable(this);' style='font-size:.9em;'");
+            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable.filter(this);' style='font-size:.9em;'");
             // Note filterBox has classes: filterBy & {var}
             if (dropDownHtml)
                 {
@@ -825,7 +825,7 @@ printf("</TD></TR>\n");
 printf("</TFOOT></TABLE>\n");
 
 if (parentTdb == NULL)
-    printf("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>\n");
+    printf("<script type='text/javascript'>{$(document).ready(function() {sortTable.initialize($('table.sortable')[0],true,true);});}</script>\n");
 
 if (timeIt)
     uglyTime("Finished table");
