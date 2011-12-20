@@ -59,8 +59,8 @@ include wgEncodeUw5C.new.ra alpha
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.ra beta,public
-include wgEncodeUwAffyExonArray.new.ra alpha
+include wgEncodeUwAffyExonArray.ra public
+include wgEncodeUwAffyExonArray.new.ra alpha,beta
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.ra beta,public
@@ -72,7 +72,7 @@ include wgEncodeOpenChromFaire.new.ra alpha
 include wgEncodeOpenChromFaire.ra beta,public
 
 #Open Chrom Synth (wrangler: Matt)
-include wgEncodeOpenChromSynth.new.ra alpha
+include wgEncodeOpenChromSynth.release2.ra alpha
 include wgEncodeOpenChromSynth.ra beta,public
 
 #Duke DNaseI HS (wrangler: Matt)
@@ -80,8 +80,8 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.ra 
-
+include wgEncodeUwDnase.ra beta,public 
+include wgEncodeUwDnase.release4.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.new.ra alpha
@@ -152,7 +152,10 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.ra 
+include wgEncodeUwHistone.release2.ra public
+
+include wgEncodeUwHistone.patch.ra beta
+include wgEncodeUwHistone.release3.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
 include wgEncodeSydhHistone.ra 
@@ -160,16 +163,16 @@ include wgEncodeSydhHistone.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.new.ra alpha
+include wgEncodeUwTfbs.release2.ra alpha
 include wgEncodeUwTfbs.ra beta,public
 
 #UTA TFBS (wrangler: Matt)
-include wgEncodeOpenChromChip.new.ra alpha
+include wgEncodeOpenChromChip.release2.ra alpha
 include wgEncodeOpenChromChip.ra beta,public
 
 # HAIB TFBS (wrangler: Venkat)
-include wgEncodeHaibTfbs.ra public
-include wgEncodeHaibTfbs.patch.ra beta
+include wgEncodeHaibTfbs.ra beta,public
+#include wgEncodeHaibTfbs.patch.ra beta
 include wgEncodeHaibTfbs.release2.ra alpha
 # SYDH TFBS (wrangler: Venkat)
 include wgEncodeSydhTfbs.ra beta,public

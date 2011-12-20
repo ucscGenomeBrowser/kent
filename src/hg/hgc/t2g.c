@@ -92,8 +92,12 @@ void printSeqHeaders(bool showDesc, bool isClickedSection)
     puts("</TR>\n");
 }
 
-bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* filterIdHash, bool isClickedSection, bool fasta)
+bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta)
 /* print a table of sequences, show only sequences with IDs in hash,
+ * There are two sections, respective sequences are shown depending on isClickedSection and clickedSeqs 
+ *   - seqs that were clicked on (isClickedSection=True) -> show only seqs in clickedSeqs
+ *   - other seqs (isClickedSection=False) -> show all other seqs
+ * 
  * */
 {
     // get data from mysql
@@ -133,7 +137,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
 
         // only display this sequence if we're in the right section
-        if (filterIdHash!=NULL && ((hashLookup(filterIdHash, annotId)==0) ^ !isClickedSection)) {
+        if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=0) != isClickedSection)) {
             foundSkippedRows = TRUE;
             continue;
         }

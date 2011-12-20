@@ -20,8 +20,8 @@ def main():
 
     c = track.CompositeTrack(args.database, args.composite)
     newMdb = c.alphaMetaDb
-    oldMdb = c.betaMetaDb
-    temp = track.CompositeTrack(args.database, args.composite).betaMetaDb
+    oldMdb = c.publicMetaDb
+    temp = track.CompositeTrack(args.database, args.composite).publicMetaDb
 
     for i in vars:
         oldMdb = oldMdb.updateDiffFilter(i, newMdb)

@@ -7,7 +7,7 @@ track gap override
 html gap
 
 # Unsplit mRNA track for scaffold-based assembly.
-track all_mrna
+track all_mrna override
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank
 group rna
@@ -24,7 +24,7 @@ indelQueryInsert on
 indelPolyA on
 
 # Unsplit EST track for scaffold-based assembly.
-track all_est
+track all_est override
 shortLabel $Organism ESTs
 longLabel $Organism ESTs Including Unspliced
 group rna

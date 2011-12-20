@@ -76,7 +76,7 @@ char *excludeVars[] = { "submit", "Submit", "dirty", "hgt.reset",
 	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
             "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1", "hgt.suggestTrack", "hgt.setWidth",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
-            "hgt.contentType", "hgt.positionInput",
+            "hgt.contentType", "hgt.positionInput", "hgt.internal",
             NULL };
 
 // MERGE_GENE_SUGGEST is used for work on redmine #5933
@@ -1779,6 +1779,11 @@ if (baseShowScaleBar)
 	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
     hvGfxLine(hvg, scaleBarEndX, y+scaleBarPad, scaleBarEndX,
 	    y+scaleBarTotalHeight-scaleBarPad, MG_BLACK);
+    if(cartUsualBoolean(cart, BASE_SHOWASM_SCALEBAR, TRUE))
+        {
+        int fHeight = vgGetFontPixelHeight(hvg->vg, font);
+        hvGfxText(hvg, scaleBarEndX + 10, y + (scaleBarTotalHeight - fHeight)/2 + ((font == mgSmallFont()) ?  1 : 0), MG_BLACK, font, database);
+        }
     y += scaleBarTotalHeight;
     }
 if (baseShowRuler)
@@ -2555,13 +2560,29 @@ if(sameString(type, "jsonp"))
     printf(")\n");
     return;
     }
-else if(sameString(type, "png"))
+else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "eps"))
     {
-    // following is (currently dead) experimental code to bypass hgml and return png's directly - see redmine 4888
-    printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+    // following code bypasses html and return png's directly - see redmine 4888
+    char *file;
+    if(sameString(type, "pdf"))
+        {
+        printf("Content-Disposition: filename=hgTracks.pdf\nContent-Type: application/pdf\n\n");
+        file = convertEpsToPdf(psOutput);
+        unlink(psOutput);
+        }
+    else if(sameString(type, "eps"))
+        {
+        printf("Content-Disposition: filename=hgTracks.eps\nContent-Type: application/eps\n\n");
+        file = psOutput;
+        }
+    else
+        {
+        printf("Content-Disposition: filename=hgTracks.png\nContent-Type: image/png\n\n");
+        file = gifTn.forCgi;
+        }
 
     char buf[4096];
-    FILE *fd = fopen(gifTn.forCgi, "r");
+    FILE *fd = fopen(file, "r");
     if(fd == NULL)
         // fail some other way (e.g. HTTP 500)?
         errAbort("Couldn't open png for reading");
@@ -2574,7 +2595,7 @@ else if(sameString(type, "png"))
             break;
         }
     fclose(fd);
-    unlink(gifTn.forCgi);
+    unlink(file);
     return;
     }
 #endif
@@ -4998,7 +5019,7 @@ if (!hideControls)
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
 #ifdef MERGE_GENE_SUGGEST
-	hPrintf("<span class='positionDisplay' id='positionDisplay' style='font-weight:bold;'>%s</span>", addCommasToPos(database, position));
+	hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(database, position));
 	hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", buf);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hPrintf(" <span id='size'>%s</span> bp. ", buf);
@@ -5494,11 +5515,14 @@ char *pdfFile = NULL, *ideoPdfFile = NULL;
 ZeroVar(&ideoPsTn);
 trashDirFile(&psTn, "hgt", "hgt", ".eps");
 
-hotLinks();
-printf("<H1>PostScript/PDF Output</H1>\n");
-printf("PostScript images can be printed at high resolution "
-       "and edited by many drawing programs such as Adobe "
-       "Illustrator.");
+if(!trackImgOnly)
+    {
+    hotLinks();
+    printf("<H1>PostScript/PDF Output</H1>\n");
+    printf("PostScript images can be printed at high resolution "
+           "and edited by many drawing programs such as Adobe "
+           "Illustrator.");
+    }
 doTrackForm(psTn.forCgi, &ideoPsTn);
 
 // postscript
@@ -5715,7 +5739,7 @@ sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "org", organism);
 cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
-if (cgiVarExists("hgt.psOutput"))
+if (cartUsualBoolean(cart, "hgt.psOutput", FALSE))
     handlePostscript();
 else
     doTrackForm(NULL, NULL);
@@ -5921,6 +5945,16 @@ hubCheckForNew(database, cart);
 cartSetString(cart, hgHubConnectRemakeTrackHub, "on");
 }
 
+void ajaxWarnHandler(char *format, va_list args)
+{
+// When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
+char buf[4096];
+vsnprintf(buf, sizeof(buf), format, args);
+// We don't use jsonForClient for fear that it might now be corrupted.
+printf("<script type='text/javascript'>\n// START hgTracks\nvar hgTracks = {\"err\": \"%s\"};\n// END hgTracks\n</script>\n",
+       javaScriptLiteralEncode(buf));
+}
+
 void doMiddle(struct cart *theCart)
 /* Print the body of an html file.   */
 {
@@ -5974,6 +6008,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextItemArrows = FALSE;
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
+    pushWarnHandler(ajaxWarnHandler);
     }
 
 jsonForClient = newJsonHash(newHash(8));

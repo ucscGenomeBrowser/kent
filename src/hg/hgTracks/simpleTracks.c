@@ -7578,8 +7578,8 @@ char *chromPrefixes[] = { "chr", "Group",
 			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold",
-			     "Contig", "SuperCont", "super_", "scaffold", "Zv7_",
-			     NULL };
+    "Contig", "SuperCont", "super_", "scaffold", "Zv7_", "Scfld02_",
+	 NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
 /* Return a pointer into name just past the first matching string from
@@ -12165,13 +12165,13 @@ char* t2gArticleTable(struct track *tg)
  * the value from the trackDb statement 'articleTable'
  * or the default value: <trackName>Article */
 {
-char* articleTable = NULL;
-articleTable = trackDbSetting(tg->tdb, "articleTable");
-if (articleTable==NULL) {
-    char* buf = needMem(128);
-    sprintf(buf, "%sArticle", tg->track);
-    articleTable = buf;
-}
+char *articleTable = trackDbSetting(tg->tdb, "articleTable");
+if (articleTable == NULL)
+    {
+    char buf[256];
+    safef(buf, sizeof(buf), "%sArticle", tg->track);
+    articleTable = cloneString(buf);
+    }
 return articleTable;
 }
 

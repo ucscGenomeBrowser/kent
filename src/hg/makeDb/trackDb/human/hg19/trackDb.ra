@@ -52,11 +52,6 @@ track HInvGeneMrna override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
-track sibTxGraph override 
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
-
-
 track gwasCatalog override
 snpTable snp132
 snpVersion 132
@@ -1589,7 +1584,7 @@ priority 103.29
 track snp135Common override
 snpSeqFile /gbdb/hg19/snp/snp135.fa
 chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro2
+chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
@@ -1600,7 +1595,7 @@ codingAnnotations snp135CodingDbSnp,
 track snp135Flagged override
 snpSeqFile /gbdb/hg19/snp/snp135.fa
 chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro2
+chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
@@ -1611,7 +1606,7 @@ codingAnnotations snp135CodingDbSnp,
 track snp135Mult override
 snpSeqFile /gbdb/hg19/snp/snp135.fa
 chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro2
+chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
@@ -1621,7 +1616,7 @@ codingAnnotations snp135CodingDbSnp,
 
 track snp135 override
 chimpOrangMacOrthoTable snp135OrthoPt3Pa2Rm2
-chimpDb panTro2
+chimpDb panTro3
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
