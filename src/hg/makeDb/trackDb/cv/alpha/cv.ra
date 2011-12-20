@@ -3405,13 +3405,13 @@ term PanIsletD
 tag PANISD
 type Cell Line
 organism human
-description dedifferentiated human pancreatic islets from one of the sources for PanIslets
+description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI) source for PanIslets PROVISIONAL
 tissue pancreas
 lineage endoderm
-vendorName National Disease Research Interchange (NDRI).
+vendorName National Disease Research Interchange 
 vendorId PanIsletD
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
-termId BTO:0000991 (non-specific)
+termId BTO:0000991 (non-specific) 
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex B
 tier 3
@@ -3421,13 +3421,13 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets from 2 donors
+description pancreatic islets from 2 donors, the sources of these primary cells  are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al. Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005) PROVISIONAL
 tissue pancreas
 lineage endoderm
-vendorName Refer to protocol documents for differing sources
+vendorName Refer to publication or NDRI
 vendorId PanIslets
-#orderUrl
-termId BTO:0000991 (non-specific)
+orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
+termId BTO:0000991 (non-specific) 
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
 tier 3
@@ -4410,6 +4410,24 @@ color 204,121,16
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
 
+term LgIntestine
+tag LGINTESTINE
+type Cell Line
+organism mouse
+tissue large intestine
+category Tissue
+age ageUnknown
+strain Unknown
+description Large Intestine PROVISIONAL
+vendorName UW lab
+vendorId Large Intestine
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6982
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6982
+color 230,159,0
+sex U
+protocol Stam:LargeIntestine_Stam_protocol.pdf
+
 term Limb
 tag LIMB
 type Cell Line
@@ -4659,6 +4677,42 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
 protocol Ren:Placenta_Ren_protocol.pdf
+
+term Retina
+tag RETINA
+type Cell Line
+organism mouse
+tissue brain
+category Tissue
+age ageUnknown
+strain Unknown
+description Retina PROVISIONAL
+vendorName UW lab
+vendorId Retina
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6944
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6944
+color 105,105,105
+sex U
+protocol Stam:Retina_Stam_protocol.pdf
+
+term SkMuscle
+tag SKMUSCLE
+type Cell Line
+organism mouse
+tissue skeletal muscle
+category Tissue
+age ageUnknown
+strain Unknown
+description Skeletal Muscle PROVISIONAL
+vendorName UW lab
+vendorId Skeletal Muscle
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7125
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
+color 139,69,19
+sex U
+protocol Stam:SkeletalMuscle_Stam_protocol.pdf
 
 #Shortened term
 term SmIntestine
@@ -7943,14 +7997,30 @@ type Antibody
 target TCF7L2
 targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
 antibodyDescription Rabbit monoclonal. Antibody Target: TCF7L2
-vendorName Cell Signaling Tech
-vendorId H2569S
+vendorName Cell Signaling Technology
+vendorId 2569
 orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation Human_-_:missing
-label TCF7L2 (H2569S)
+validation Human_-_TCF7L2(Immunoprecipitation,ChIP):human_TCF7L2_validation_Farnham.pdf
+label TCF7L2 (2569)
+
+term TCF7L2_C9B9_(2565)
+tag TCF7L2C9B92565
+type Antibody
+antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic peptide corresponding to residues surrounding Glu81 of human TCF7L2.
+target TCF7L2
+targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
+vendorName Cell Signaling Technology
+vendorId 2565
+orderUrl http://www.cellsignal.com/products/2565.html
+lab Farnham
+lots 2
+targetId GeneCard:TCF7L2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
+validation Human_-_TCF7L2_C9B9_(2565)(Immunoprecipitation,ChIP):human_TCF7L2_C9B9_2565_validation_Farnham.pdf
+label TCF7L2 C9B9 (2565)
 
 term TEAD4_(SC-101184)
 tag TEAD4SC101184
@@ -7982,7 +8052,7 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
-validation 
+validation Human_-_:missing
 label TFIIB (sc-225)
 
 term TFIIIC-110
@@ -8745,57 +8815,57 @@ description TopHat v1.3.1
 term 1x25
 tag R1X25
 type readType
-description Single 25 n.t. reads
+description Single 25 nt reads
 
 term 1x32
 tag R1X32
 type readType
-description Single 32 n.t. reads
+description Single 32 nt reads
 
 term 1x36
 tag R1X36
 type readType
-description Single 36 n.t. reads
+description Single 36 nt reads
 
 term 1x50
 tag R1X50
 type readType
-description Single 50 n.t. reads
+description Single 50 nt reads
 
 term 1x75
 tag R1X75
 type readType
-description Single 75 n.t. reads
+description Single 75 nt reads
 
 term 1x75D
 tag R1X75D
 type readType
-description Single 75 n.t. directed reads
+description Single 75 nt directed reads
 
 term 1x101
 tag R1X101
 type readType
-description Single 101 n.t. reads Provisional
+description Single 101 nt reads
 
 term 2x75
 tag R2X75
 type readType
-description Paired 75 n.t. reads
+description Paired 75 nt reads
 
 term 2x76D
 tag R2X76D
 type readType
-description Paired 76 n.t. directed reads
+description Paired 76 nt directed reads
 
 term 2x100
 tag R2X100
 type readType
-description Paired 100 n.t. reads
+description Paired 100 nt reads
 
 term 2x101D
 tag R2X101D
 type readType
-description Paired 101 n.t. directed reads
+description Paired 101 nt directed reads
 
 #### insertLength
 #### This is being used by the Wold lab as a variable.
@@ -9346,18 +9416,21 @@ term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
 description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
+description 24 h with 1% p02 and 10mM Lactate, pH 6.7
 type treatment
 
+#missing concentration
 term IFNa30
 tag IFNA30
-description Interferon alpha treatment - 30 minutes (Snyder)
+description 30 m of Interferon alpha (Snyder)
 type treatment
 
 term IFNa4h
 tag IFNA4H
-description Interferon alpha treatment - 4 hours with 500 U/ml (Crawford)
+description 4 hours of 500 U/ml Interferon alpha (Crawford)
 type treatment
 
+#missing concentration
 term IFNa6h
 tag IFNA6H
 description Interferon alpha treatment - 6 hours (Snyder)
@@ -9508,13 +9581,12 @@ type protocol
 
 term TAP-Only
 tag TAP
-description Provisional This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
+description This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
-#Should we consider using html tags?  What other programs use the CV?
 
 term CIP-TAP
 tag CIPTAP
-description Provisional This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
+description This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
 
 ### phase
@@ -10366,6 +10438,18 @@ tag E18HALF
 type age
 stage Embryonic
 description Embryonic day 18.5
+
+term newborn-1days
+tag NEW1DAYS
+type age
+stage newborn
+description Newborn 1 day PROVISIONAL
+
+term adult-1wks
+tag ADULT1WKS
+type age
+stage Adult
+description Adult 1 week PROVISIONAL
 
 term adult-4wks
 tag ADULT4WKS
@@ -11445,6 +11529,7 @@ cvDefined yes
 validate cv
 priority 030
 
+# ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 term dataVersion
 tag DATAVERSION
 type typeOfTerm
@@ -11453,8 +11538,9 @@ description The ENCODE project declares specific data freezes for data to be use
 searchable multiSelect
 cvDefined no
 priority 310
-validate none # ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
+validate none
 
+# later than dateSubmitted
 term dateResubmitted
 tag DATERESUBMITTED
 type typeOfTerm
@@ -11463,8 +11549,9 @@ description Submitted data that was remapped to a new assembly, found to have er
 searchable date
 cvDefined no
 priority 320
-validate date # later than dateSubmitted
+validate date
 
+# nine months less than dateUnrestricted
 term dateSubmitted
 tag DATESUBMITTED
 type typeOfTerm
@@ -11473,8 +11560,9 @@ description Date that a particular file  was originally submitted to the UCSC Ge
 searchable date
 cvDefined no
 priority 315
-validate date # nine months less than dateUnrestricted
+validate date
 
+# nine months more than dateSubmitted
 term dateUnrestricted
 tag DATEUNRESTRICTED
 type typeOfTerm
@@ -11483,7 +11571,7 @@ description ENCODE data is made publicly available but with restrictions on use 
 searchable date
 cvDefined no
 priority 325
-validate date # nine months more than dateSubmitted
+validate date
 
 term dccAccession
 tag DCCACCESSION
@@ -11529,6 +11617,8 @@ hidden beta,public
 validate integer
 priority 100
 
+# Perhaps could add a validte option to restrict/require this var for objType=composite
+# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 term expVars
 tag EXPVARS
 type typeOfTerm
@@ -11538,8 +11628,7 @@ searchable no
 cvDefined no
 hidden yes
 priority 500
-validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
-# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
+validate none
 
 term fileName
 tag FILENAME
@@ -11712,13 +11801,14 @@ cvDefined no
 validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
 
+#(Defined by lab)
 term obtainedBy
 tag OBTAINEDBY
 type typeOfTerm
 label Obtained by
 description The production group that grew the cells and isolated genomic DNA.
 searchable multiSelect
-cvDefined no #(Defined by lab)
+cvDefined no
 validate none
 priority 500
 
@@ -11756,6 +11846,7 @@ validate list: noSequence,none
 priority 450
 # Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
+# Only one so far: all encode is under single project='wgEncode' (11/3/10)
 term project
 tag PROJECT
 type typeOfTerm
@@ -11763,7 +11854,7 @@ label Project funded by
 description Project that funded this and a related set of experiments.
 searchable no
 cvDefined no
-validate list: wgEncode   # Only one so far: all encode is under single project='wgEncode' (11/3/10)
+validate list: wgEncode
 priority 010
 
 term protocol
@@ -11930,6 +12021,7 @@ cvDefined no
 validate integer
 priority 335
 
+# Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
 term submittedDataVersion
 tag SUBMITTEDDATAVERSION
 type typeOfTerm
@@ -11937,7 +12029,7 @@ label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 searchable no
 cvDefined no
-validate regex: ^V[2-9]*.*$   # Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
+validate regex: ^V[2-9]\+ \- .*$
 priority 250
 
 term tableName

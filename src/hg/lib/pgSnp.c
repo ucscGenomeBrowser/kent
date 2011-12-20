@@ -382,7 +382,7 @@ return result;
 
 void aaProperties (char *aa1, char *aa2);
 
-void printSeqCodDisplay(char *db, struct pgSnp *item)
+void printSeqCodDisplay(char *db, struct pgSnp *item, char *genePredTable)
 /* print the display of sequence changes for a coding variant */
 {
 struct bed *list = NULL, *el, *th = NULL;
@@ -390,8 +390,15 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 struct sqlConnection *conn = hAllocConn(db);
-safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, 0, exonCount, exonEnds, exonStarts  from knownGene where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
-   item->chrom, item->chromStart, item->chromEnd);
+if (!sqlTableExists(conn, genePredTable))
+    {
+    hFreeConn(&conn);
+    return;
+    }
+safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, "
+      "0, exonCount, exonEnds, exonStarts  from %s "
+      "where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
+      genePredTable, item->chrom, item->chromStart, item->chromEnd);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -568,7 +575,8 @@ char *acid1 = aaAcidity(aa1);
 char *acid2 = aaAcidity(aa2);
 float hyd1 = aaHydropathy(aa1);
 float hyd2 = aaHydropathy(aa2);
-printf("<table border=\"1\"><caption>Amino acid properties</caption><tr><td>&nbsp;</td><td>%s</td><td>%s</td></tr>\n", aa1, aa2);
+printf("<table class=\"descTbl\"><caption>Amino acid properties</caption>"
+       "<tr><th>&nbsp;</th><th>%s</th><th>%s</th></tr>\n", aa1, aa2);
 /* take out highlights, not sure what is significant change for hydropathy */
 //if (differentString(pol1, pol2))
     //printf("<tr bgcolor=\"white\"><td>polarity</td><td>%s</td><td>%s</td></tr>\n", pol1, pol2);

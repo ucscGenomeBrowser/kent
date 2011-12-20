@@ -73,10 +73,10 @@ class RaFile(OrderedDict):
     Filtering allows you to eliminate a lot of code.
     '''
 
-    def __init__(self, filePath=None):
+    def __init__(self, filePath=None, key=None):
         OrderedDict.__init__(self)
         if filePath != None:
-            self.read(filePath)
+            self.read(filePath, key)
 
     def read(self, filePath, key=None):
         '''
@@ -97,7 +97,6 @@ class RaFile(OrderedDict):
                 reading = 0
         
             line = line.strip()
-
             if len(stanza) == 0 and (line.startswith('#') or (line == '' and reading)):
                 OrderedDict.append(self, line)
                 continue
@@ -125,6 +124,8 @@ class RaFile(OrderedDict):
 
     def readStanza(self, stanza, key=None):
         entry = RaStanza()
+        if entry.readStanza(stanza, key) == None:
+            return None, None, None
         val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
@@ -251,7 +252,7 @@ class RaFile(OrderedDict):
                     continue
                 if key in otherRa[stanza]:
                     if self[stanza][key] != otherRa[stanza][key]:
-                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, self[stanza][key], otherRa[stanza][key]))
+                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, otherRa[stanza][key], self[stanza][key]))
                 else:
                     retDict[stanza].append("Added %s -> %s" %(key, self[stanza][key]))
             for key in otherRa[stanza]:
@@ -321,7 +322,7 @@ class RaFile(OrderedDict):
                 dictionary is returned.
         '''
         ret = self
-        common = set(self.iterkeys()) & set(self.iterkeys())
+        common = set(self.iterkeys()) & set(other.iterkeys())
         for stanza in common:
             if term not in self[stanza] and term not in other[stanza]:
                 continue

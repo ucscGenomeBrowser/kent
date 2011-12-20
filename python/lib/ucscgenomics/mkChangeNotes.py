@@ -528,7 +528,7 @@ class makeNotes(object):
             self.trackDb = None
             errors.append("track: There is no entry in trackDb.wgEncode.ra for %s with the alpha tag" % self.composite)
         else:
-            self.trackDb = ra.RaFile(self.trackDbFile)
+            self.trackDb = ra.RaFile(self.trackDbFile, "track")
             
         if int(self.releaseNew) > 1 and str(self.releaseOld) != 'solo':
             if self.verbose >= 2:

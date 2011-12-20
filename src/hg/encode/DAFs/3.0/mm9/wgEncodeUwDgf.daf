@@ -1,6 +1,6 @@
 # Data Agreement File for UW DNase DGF experiments for mm9
 
-#$Revision: 1.1 $
+#$Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -26,51 +26,51 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Stam
-lab               UW-M
+lab               UW-m
 dataType          DnaseDgf 
 compositeSuffix   UwDgf
 group             regulation
 variables         cell,strain,sex,age
 assembly          mm9
 
-validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:mmCheckOneInN=1000
+validationSettings validateFiles.bam:mismatches=2
 
 
 # Track/view definition
 view             Footprints
 type             bed 6 +
 required         no
-hasReplicates    no
+hasReplicates    yes
 
 view             Hotspots
 type             broadPeak
 required         no
-hasReplicates    no
+hasReplicates    yes
 
 view             Peaks
 type             narrowPeak
 required         no
-hasReplicates    no
+hasReplicates    yes
 
 view             Signal
 type             bigWig
 required         yes
-hasReplicates    no
+hasReplicates    yes
 
 view             RawSignal
 type             bigWig
 required         no
-hasReplicates    no
+hasReplicates    yes
 
 view             Alignments
 type             bam
 required         yes
-hasReplicates    no
+hasReplicates    yes
 downloadOnly     yes
 
 view             RawData
 type             fastq
 required         no
-hasReplicates    no
+hasReplicates    yes
 downloadOnly     yes
 

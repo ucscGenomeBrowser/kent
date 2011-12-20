@@ -1,7 +1,21 @@
-metaObject wgEncodeCshlShortRnaSeq
-objType composite
+metaObject wgEncodeCshlShortRnaSeqCellShortRawData
+objType file
+cell prostate
 composite wgEncodeCshlShortRnaSeq
-geoSeriesAccession GSE24565
+dataType RnaSeq
+dataVersion ENCODE Fall 2009 Freeze
+dateSubmitted 2009-09-23
+dateUnrestricted 2010-06-23
+fileName wgEncodeCshlShortRnaSeqCellShortRawData.fastq.gz
+geoSampleAccession GSM605626
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+rnaExtract shortTotal
+subId 535
+view RawData
 
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
@@ -100,13 +114,12 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags.shortFrags.gz
-geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract shortTotal
+rnaExtract short
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags
 view Transfrags
@@ -1181,24 +1194,4 @@ subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
 view PlusRawSignal
 
-metaObject wgEncodeCshlShortRnaSeqProstateCellTotalRawData
-objType file
-cell prostate
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Fall 2009 Freeze
-dateSubmitted 2009-09-23
-dateUnrestricted 2010-06-23
-dccAccession wgEncodeEH000211
-fileName wgEncodeCshlShortRnaSeqProstateCellTotalRawData.fastq.gz
-geoSampleAccession GSM605626
-grant Gingeras
-lab CSHL
-localization cell
-origAssembly hg18
-project wgEncode
-rnaExtract shortTotal
-subId 535
-view RawData
-
-# MAGIC: 586072770
+# MAGIC: 607224324
