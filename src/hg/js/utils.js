@@ -1362,10 +1362,8 @@ var sortTable = {
         // Sort the array
         cols.sort(sortTable.fieldCmp);
 
-        var topIndex = tbody.rows[0].rowIndex; // This could vary depending upon header rows
-        for(var cIx=cols.length-1;cIx>=0;cIx--) {
-            if (cols[cIx].row.rowIndex > topIndex) // Inserting before onesself will delete row
-                $( cols[cIx].row ).insertBefore( tbody.rows[0] );
+        for(var cIx=0;cIx<cols.length;cIx++) {
+            tbody.appendChild(cols[cIx].row);
         }
 
         sortTable.tbody=tbody;
