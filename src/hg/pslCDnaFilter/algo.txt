@@ -3,6 +3,8 @@ Filtering algorithm:
   The filters are applied in the following order to each set of
 alignments for a given cDNA sequence.
 
+  o PSLs with accessions on an optional black list are dropped
+
   o PSLs that are not internally consistent, such has having
     overlapping blocks, are dropped.  Use pslCheck program to
     get the details.
