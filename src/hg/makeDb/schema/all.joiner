@@ -3823,6 +3823,8 @@ tablesIgnored $hg
     promoterStanford
     pseudoYale
     recombRate
+    sibGene
+    sibTxGraph
     slamMouse
     slamNonCodingMouse
     slamRat
@@ -3851,7 +3853,9 @@ tablesIgnored $hg
     wgEncode%
 
 tablesIgnored $mm
-	ncbiIncidentDb
+    ncbiIncidentDb
+    sibGene
+    sibTxGraph
     syntenyRat
     syntenyHuman
     rikenCageCtssMinus
