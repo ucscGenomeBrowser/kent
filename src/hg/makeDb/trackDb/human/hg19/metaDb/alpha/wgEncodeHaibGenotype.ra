@@ -1718,9 +1718,9 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-14
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-20
-dccAccession wgEncodeEH001272
+dccAccession wgEncodeEH001289
 dccRep 1
-expId 1272
+expId 1289
 fileName wgEncodeHaibGenotypeNhaDukeRegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
@@ -2260,4 +2260,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -1168223271
+# MAGIC: -1168223233
