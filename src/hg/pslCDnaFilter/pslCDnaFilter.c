@@ -8,6 +8,9 @@
 #include "hapRegions.h"
 #include "psl.h"
 #include "options.h"
+#include "blackList.h"
+
+struct blackListRange *gBlackListRanges = NULL;
 
 static void usage(char *msg)
 /* usage msg and exit */
@@ -61,6 +64,7 @@ static struct optionSpec optionSpecs[] =
     {"alnIdQNameMode", OPTION_BOOLEAN},
     {"uniqueMapped", OPTION_BOOLEAN},
     {"decayMinCover", OPTION_BOOLEAN},
+    {"blackList", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -119,6 +123,17 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if (!validPsl(aln->psl))
         cDnaAlignVerb(2, aln, "invalid PSL");
+    }
+}
+
+static void blackListFilter(struct cDnaQuery *cdna)
+/* filter for black list */
+{
+struct cDnaAlign *aln;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    if (!aln->drop && blackListFail(aln->psl->qName, gBlackListRanges))
+        cDnaAlignDrop(aln, FALSE, &cdna->stats->blackListCnts, "black listed");
     }
 }
 
@@ -343,6 +358,8 @@ static void filterNonComparative(struct cDnaQuery *cdna)
 /* apply non-comparative filters */
 {
 /* n.b. order must agree with doc in algo.txt */
+if (gBlackListRanges)
+    blackListFilter(cdna);
 if (gValidate)
     invalidPslFilter(cdna);
 if (gMinQSize > 0)
@@ -487,6 +504,10 @@ if (optionExists("ignoreNs"))
     gCDnaOpts |= cDnaIgnoreNs;
 gUniqueMapped = optionExists("uniqueMapped");
 gDecayMinCover = optionExists("decayMinCover");
+char *blackList = optionVal("blackList", NULL);
+
+if (blackList != NULL)
+    gBlackListRanges = blackListParse(blackList);
 
 if ( gDecayMinCover && (gMinCover > 0.0))
     errAbort("can only specify one of -minCoverage and -decayMinCoverage");
