@@ -166,6 +166,21 @@ file ddf
 type string
 required no 
 
+field localization
+file ddf
+type string
+required no
+
+field rnaExtract
+file ddf
+type string
+required no
+
+field strain
+file ddf
+type string
+require no
+
 #The bioRep information for the transcriptome lab
 field bioRep
 file ddf

@@ -1,4 +1,4 @@
-# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.1 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -72,5 +72,5 @@ longLabelPrefix  CSHL Long RNA-seq Spike-ins
 type             spikes
 hasReplicates    yes
 required         yes
-downloadsOnly    yes
+downloadOnly    yes
 
