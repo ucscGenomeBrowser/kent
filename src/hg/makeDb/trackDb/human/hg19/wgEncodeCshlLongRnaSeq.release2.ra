@@ -21,7 +21,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-html wgEncodeCshlLongRna.release2
+html wgEncodeCshlLongRnaSeq.release2
 
 
 	track wgEncodeCshlLongRnaSeqViewPlusRawSig
