@@ -3988,3 +3988,8 @@ priority 500.4
 visibility hide
 type bedDetail 6
 color 128,0,128
+
+track sibGene override
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg18&query_str=$$
+urlLabel SIB link:
+
