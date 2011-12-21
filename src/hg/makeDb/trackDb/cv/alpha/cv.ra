@@ -3405,7 +3405,7 @@ term PanIsletD
 tag PANISD
 type Cell Line
 organism human
-description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI) source for PanIslets PROVISIONAL
+description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI), same source as PanIslets
 tissue pancreas
 lineage endoderm
 vendorName National Disease Research Interchange 
@@ -3421,7 +3421,7 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets from 2 donors, the sources of these primary cells  are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al. Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005) PROVISIONAL
+description pancreatic islets from 2 donors, the sources of these primary cells are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al., Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005)
 tissue pancreas
 lineage endoderm
 vendorName Refer to publication or NDRI
@@ -9524,12 +9524,12 @@ type protocol
 
 term TAP-Only
 tag TAP
-description This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
+description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
 
 term CIP-TAP
 tag CIPTAP
-description This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
+description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
 
 ### phase
