@@ -48,7 +48,7 @@ char prefix[20];  // way too big, prefixes are only 2 chars now.
 int count = 0;
 char *ptr = accession;
 
-while(isalpha(*ptr))
+while((*ptr) && !isdigit(*ptr))
     {
     prefix[count++] = *ptr++;
     if (count > sizeof(prefix) - 1)
@@ -56,6 +56,9 @@ while(isalpha(*ptr))
             sizeof(prefix) - 1);
     }
 prefix[count] = 0;
+
+if (*ptr == 0)
+    errAbort("accession not in proper format (%s)", accession);
 
 unsigned number = atoi(ptr);	// ignores version number if present
 
