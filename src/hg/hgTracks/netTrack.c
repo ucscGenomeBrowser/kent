@@ -104,8 +104,8 @@ if (netCart->netColor == netColorGrayScale)
 static Color color;
 if (!sameString(chrom, netColorLastChrom))
     color = getSeqColor(chrom, rHvg);
-if (0 == color)
-    color = 1;	/*	don't display in white	*/
+if (0 == color)		/* color 0 is actually an error condition, see */
+    color = MG_BLACK;	/* makeChromosomeShades() in simpleTracks.c	*/
 netColorLastChrom = chrom;
 return color;
 }
@@ -197,6 +197,7 @@ int orientation;
 
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
+
     color = netColor(tg, fill->qName, level);
     invColor = hvGfxContrastingColor(rHvg, color);
     orientation = orientFromChar(fill->qStrand);

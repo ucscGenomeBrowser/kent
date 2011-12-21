@@ -968,7 +968,7 @@ term BE2_C
 tag BE2C
 type Cell Line
 organism human
-description neuroblastoma
+description PROVISIONAL neuroblastoma. BE-C is a clone of the SK-N-BE neuroblastoma cell line (see ATCC CRL-2271) that was established in November of 1972 from a bone marrow biopsy taken from a 2-year-old individual with disseminated neuroblastoma after repeated courses of chemotherapy and radiotherapy.
 tissue brain
 lineage ectoderm
 karyotype cancer
@@ -3388,7 +3388,7 @@ term PANC-1
 tag PANC1
 type Cell Line
 organism human
-description pancreatic carcinoma, (PMID: 1140870)
+description pancreatic carcinoma, (PMID: 1140870) PANC-1 was established from a pancreatic carcinoma, which was extracted via pancreatico-duodenectomy specimen from a 56-year-old Caucasian individual. Malignancy of this cell line was verified via in vitro and in vivo assays. PROVISIONAL
 tissue pancreas
 vendorName ATCC
 vendorId CRL-1469
@@ -3666,7 +3666,7 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description neuroblastoma, newly promoted to tier 2: not in 2011 analysis
+description neuroblastoma, newly promoted to tier 2: not in 2011 analysis PROVISONAL The SK-N-SH line was established from a neuroblastoma in a 4 year old individual.
 tissue brain
 lineage ectoderm
 vendorName ATCC
@@ -4410,6 +4410,24 @@ color 204,121,16
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
 
+term LgIntestine
+tag LGINTESTINE
+type Cell Line
+organism mouse
+tissue large intestine
+category Tissue
+age ageUnknown
+strain Unknown
+description Large Intestine PROVISIONAL
+vendorName UW lab
+vendorId Large Intestine
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6982
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6982
+color 230,159,0
+sex U
+protocol Stam:LargeIntestine_Stam_protocol.pdf
+
 term Limb
 tag LIMB
 type Cell Line
@@ -4659,6 +4677,42 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
 protocol Ren:Placenta_Ren_protocol.pdf
+
+term Retina
+tag RETINA
+type Cell Line
+organism mouse
+tissue brain
+category Tissue
+age ageUnknown
+strain Unknown
+description Retina PROVISIONAL
+vendorName UW lab
+vendorId Retina
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6944
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6944
+color 105,105,105
+sex U
+protocol Stam:Retina_Stam_protocol.pdf
+
+term SkMuscle
+tag SKMUSCLE
+type Cell Line
+organism mouse
+tissue skeletal muscle
+category Tissue
+age ageUnknown
+strain Unknown
+description Skeletal Muscle PROVISIONAL
+vendorName UW lab
+vendorId Skeletal Muscle
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7125
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
+color 139,69,19
+sex U
+protocol Stam:SkeletalMuscle_Stam_protocol.pdf
 
 #Shortened term
 term SmIntestine
@@ -9191,32 +9245,32 @@ type treatment
 
 term DEX_100nM
 tag DEX100NM
-description 1 h with 100 nM DEX (Myers)
+description 1 h with 100 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_100pM
 tag DEX100PM
-description 1 h with 100 pM DEX (Myers)
+description 1 h with 100 pM Dexmathasone (Myers)
 type treatment
 
 term DEX_1nM
 tag DEX1NM
-description 1 h with 1 nM DEX (Myers)
+description 1 h with 1 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50NM
-description 1 h with 50 nM DEX (Myers)
+description 1 h with 50 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_5nM
 tag DEX5NM
-description 1 h with 5 nM DEX (Myers)
+description 1 h with 5 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500PM
-description 1 h with 500 pM DEX (Myers)
+description 1 h with 500 pM Dexmathasone (Myers)
 type treatment
 
 term diffProtA_2d
@@ -9246,31 +9300,31 @@ label 14 day diffProtA
 term DMSO_0.02pct
 #tag DMSO2
 tag DM002P1H
-description 1 h with 0.02% DMSO (Myers)
+description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_0.02pct_24hr
 #tag DMSO224H
 tag DM002P24H
-description 24 h with 0.02% DMSO (Myers)
+description 24 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_0.02pct_7d
 tag DM002P7D
-description 7 d with 0.02% DMSO (Myers)
+description 7 d with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_2.0pct
 #tag DMSO20
 tag DM2P5D
-description 5 d with 2% DMSO (Weissman)
+description 5 d with 2% Dimethyl sufloxide (DMSO) (Weissman)
 type treatment
 
 term DMSO_4hr
 #term DMSO_0.02pct_4hr  would like to change
 #tag DMSO4hr
 tag DM002P4H
-description 4 hr with 0.02% DMSO (Myers)
+description 4 hr with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term EqS_2.0pct_24hr
@@ -9325,22 +9379,22 @@ type treatment
 
 term EtOH_0.01pct
 tag ETOH01
-description 36 h with 0.01% EtOH (Snyder)
+description 36 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01B
-description 4 h with 0.01% EtOH (Snyder)
+description 4 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01C
-description 12 h with 0.01% EtOH (Snyder)
+description 12 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.02pct
 tag ETOH02
-description 1 h with 0.02% EtOH (Myers)
+description 1 h with 0.02% Ethanol (Myers)
 type treatment
 
 term forskolin
@@ -9362,18 +9416,21 @@ term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
 description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
+description 24 h with 1% p02 and 10mM Lactate, pH 6.7
 type treatment
 
+#missing concentration
 term IFNa30
 tag IFNA30
-description Interferon alpha treatment - 30 minutes (Snyder)
+description 30 m of Interferon alpha (Snyder)
 type treatment
 
 term IFNa4h
 tag IFNA4H
-description Interferon alpha treatment - 4 hours with 500 U/ml (Crawford)
+description 4 hours of 500 U/ml Interferon alpha (Crawford)
 type treatment
 
+#missing concentration
 term IFNa6h
 tag IFNA6H
 description Interferon alpha treatment - 6 hours (Snyder)
@@ -10381,6 +10438,18 @@ tag E18HALF
 type age
 stage Embryonic
 description Embryonic day 18.5
+
+term newborn-1days
+tag NEW1DAYS
+type age
+stage newborn
+description Newborn 1 day PROVISIONAL
+
+term adult-1wks
+tag ADULT1WKS
+type age
+stage Adult
+description Adult 1 week PROVISIONAL
 
 term adult-4wks
 tag ADULT4WKS
@@ -11960,7 +12029,7 @@ label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 searchable no
 cvDefined no
-validate regex: ^V[2-9]*.*$
+validate regex: ^V[2-9]\+ \- .*$
 priority 250
 
 term tableName

@@ -1,22 +1,22 @@
-track wgEncodeHaibGenotype  
+track wgEncodeHaibGenotype
 compositeTrack on
 shortLabel HAIB Genotype
 longLabel Genotype (CNV and SNP) by Illumina 1MDuo and CBS from ENCODE/HudsonAlpha
 group varRep
-subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM HSMMt=HSMM_tube GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MCF10AESTAM=MCF10A-Er-Src_(<i>Tamoxifen<\i>) MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N 
-subGroup2 treatment Treatment None=None TAM=Tamoxifen
-subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
+subGroup1 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HeLaS3=HeLa-S3&nbsp;(Tier_2) 2HepG2=HepG2&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM HSMMt=HSMM_tube GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MCF10AESTAM=MCF10A-Er-Src_(<i>Tamoxifen<\i>) MYOMETR=Myometr NB4=NB4 NHA=NH-A_(UW) NHAd=NH-A_(Duke) NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
+subGroup2 obtainedBy ObtainedBy Duke=Duke HudsonAlpha=HudsonAlpha Stanford=Stanford UW=UW
+subGroup3 treatment Treatment None=None TAM=Tamoxifen
+subGroup4 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
 dimensions dimY=cellType dimX=rep
 fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By dccRep=UCSC<BR>Rep replicate=Lab<BR>Rep dccAccession=UCSC_Accession fileSize=Size
-sortOrder cellType=+ rep=+
+sortOrder cellType=+ rep=+ obtainedBy=+
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
 priority 0
 wgEncode 1
-type bed 9 + 
+type bed 9 +
 itemRgb on
-visibility hide 
-extraFields logR=[f]LogR_Value
+visibility hide
 noScoreFilter .
 html wgEncodeHaibGenotype.release2
 
@@ -32,7 +32,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype on
         shortLabel GM12878 1
         longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=1GM12878 treatment=None rep=rep1
+        subGroups cellType=1GM12878 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=5128 dateSubmitted=2011-12-06
 
@@ -40,7 +40,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel A549 1
         longLabel A549 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=A549 treatment=None rep=rep1
+        subGroups cellType=A549 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -48,7 +48,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel AG04449 1
         longLabel AG04449 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=AG04449 treatment=None rep=rep1
+        subGroups cellType=AG04449 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -56,7 +56,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel AG04450 1
         longLabel AG04450 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=AG04450 treatment=None rep=rep1
+        subGroups cellType=AG04450 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -64,7 +64,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel AG09309 1
         longLabel AG09309 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=AG09309 treatment=None rep=rep1
+        subGroups cellType=AG09309 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -72,7 +72,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel AG09319 1
         longLabel AG09319 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=AG09319 treatment=None rep=rep1
+        subGroups cellType=AG09319 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -80,7 +80,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel AG10803 1
         longLabel AG10803 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=AG10803 treatment=None rep=rep1
+        subGroups cellType=AG10803 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -88,23 +88,23 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel AoSMC 1
         longLabel AoSMC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=AOSMC treatment=None rep=rep1
+        subGroups cellType=AOSMC obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
-         track wgEncodeHaibGenotypeAstrocyRegionsRep1
-         parent wgEncodeHaibGenotype off
-         shortLabel Astrocy 1
-         longLabel Astrocy Copy number variants Replicate 1 from ENCODE/HAIB
-         subGroups cellType=Astrocy treatment=None rep=rep1
-         type bed 9 +
-         # subId=3432 dateSubmitted=2011-01-20
+        #track wgEncodeHaibGenotypeAstrocyRegionsRep1
+        #parent wgEncodeHaibGenotype off
+        #shortLabel Astrocy 1
+        #longLabel Astrocy Copy number variants Replicate 1 from ENCODE/HAIB
+        #subGroups cellType=Astrocy treatment=None rep=rep1
+        #type bed 9 +
+        # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeBjRegionsRep1
         parent wgEncodeHaibGenotype off
         shortLabel BJ 1
         longLabel BJ Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=BJ treatment=None rep=rep1
+        subGroups cellType=BJ obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -112,7 +112,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Caco-2 1
         longLabel Caco-2 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=Caco2 treatment=None rep=rep1
+        subGroups cellType=Caco2 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -120,7 +120,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Chorion 1
         longLabel Chorion Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=Chorion treatment=None rep=rep1
+        subGroups cellType=Chorion obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -128,7 +128,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HSMM 1
         longLabel HSMM Copy number variants Replicate 1 (Lab Rep 3) from ENCODE/HAIB
-        subGroups cellType=HSMM treatment=None rep=rep1
+        subGroups cellType=HSMM obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -136,7 +136,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HSMMtube 1
         longLabel HSMM tube Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=HSMMt treatment=None rep=rep1
+        subGroups cellType=HSMMt obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-03-21
 
@@ -144,7 +144,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel CMK 1
         longLabel CMK Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=CMK treatment=None rep=rep1
+        subGroups cellType=CMK obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -160,7 +160,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel GM06990 1
         longLabel GM06990 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=GM06990 treatment=None rep=rep1
+        subGroups cellType=GM06990 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -168,7 +168,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel GM12891 1
         longLabel GM12891 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=GM12891 treatment=None rep=rep1
+        subGroups cellType=GM12891 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -176,7 +176,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel GM12892 1
         longLabel GM12892 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=GM12892 treatment=None rep=rep1
+        subGroups cellType=GM12892 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -184,15 +184,15 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel GM19239 1
         longLabel GM19239 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=GM19239 treatment=None rep=rep1
+        subGroups cellType=GM19239 obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeH1hescRegionsRep2
-        parent wgEncodeHaibGenotype on 
+        parent wgEncodeHaibGenotype on
         shortLabel H1-hESC 1
         longLabel H1-hESC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=1H1hESC treatment=None rep=rep1
+        subGroups cellType=1H1hESC obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -200,7 +200,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HAEpiC 1
         longLabel HAEpiC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HAE treatment=None rep=rep1
+        subGroups cellType=HAE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -208,7 +208,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HAEpiC 2
         longLabel HAEpiC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HAE treatment=None rep=rep2
+        subGroups cellType=HAE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -216,7 +216,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HCF 1
         longLabel HCF Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HCF treatment=None rep=rep1
+        subGroups cellType=HCF obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -224,7 +224,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HCF 2
         longLabel HCF Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HCF treatment=None rep=rep2
+        subGroups cellType=HCF obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -232,7 +232,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HCM 1
         longLabel HCM Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HCM treatment=None rep=rep1
+        subGroups cellType=HCM obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -240,7 +240,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HCM 2
         longLabel HCM Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HCM treatment=None rep=rep2
+        subGroups cellType=HCM obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -248,7 +248,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HCPEpiC 1
         longLabel HCPEpiC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HCPE treatment=None rep=rep1
+        subGroups cellType=HCPE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -256,7 +256,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HCPEpiC 2
         longLabel HCPEpiC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HCPE treatment=None rep=rep2
+        subGroups cellType=HCPE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -264,7 +264,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HEEpiC 1
         longLabel HEEpiC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=HEE treatment=None rep=rep1
+        subGroups cellType=HEE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -272,15 +272,15 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HEK293 1
         longLabel HEK293 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=HEK293 treatment=None rep=rep1
+        subGroups cellType=HEK293 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHelas3RegionsRep2
-        parent wgEncodeHaibGenotype on  
+        parent wgEncodeHaibGenotype on
         shortLabel HeLa-S3 1
         longLabel HeLa-S3 Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=2HeLaS3 treatment=None rep=rep1
+        subGroups cellType=2HeLaS3 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -288,7 +288,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HIPEpiC 1
         longLabel HIPEpiC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HIPE treatment=None rep=rep1
+        subGroups cellType=HIPE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -296,7 +296,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HIPEpiC 2
         longLabel HIPEpiC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HIPE treatment=None rep=rep2
+        subGroups cellType=HIPE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -304,7 +304,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HL-60 1
         longLabel HL-60 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HL60 treatment=None rep=rep1
+        subGroups cellType=HL60 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -312,7 +312,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HMEC 1
         longLabel HMEC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=HMEC treatment=None rep=rep1
+        subGroups cellType=HMEC obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -320,7 +320,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HNPCEpiC 1
         longLabel HNPCEpiC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HNPCE treatment=None rep=rep1
+        subGroups cellType=HNPCE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -328,7 +328,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HPAEpiC 1
         longLabel HPAEpiC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HPAE treatment=None rep=rep1
+        subGroups cellType=HPAE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -336,7 +336,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HPAEpiC 2
         longLabel HPAEpiC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HPAE treatment=None rep=rep2
+        subGroups cellType=HPAE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -344,7 +344,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HUVEC 1
         longLabel HUVEC Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=HUVEC treatment=None rep=rep1
+        subGroups cellType=HUVEC obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -352,7 +352,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Melano 2
         longLabel Melano Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=MELANO treatment=None rep=rep2
+        subGroups cellType=MELANO obtainedBy=Duke treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -360,7 +360,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Myometr 1
         longLabel Myometr Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=MYOMETR treatment=None rep=rep1
+        subGroups cellType=MYOMETR obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -368,7 +368,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Melano 1
         longLabel Melano Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=MELANO treatment=None rep=rep1
+        subGroups cellType=MELANO obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -376,7 +376,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Ovcar-3 1
         longLabel Ovcar-3 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=OVCAR3 treatment=None rep=rep1
+        subGroups cellType=OVCAR3 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -384,7 +384,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel PANC-1 2
         longLabel PANC-1 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=PANC1 treatment=None rep=rep2
+        subGroups cellType=PANC1 obtainedBy=HudsonAlpha treatment=None rep=rep2
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -392,7 +392,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel PFSK-1 1
         longLabel PFSK-1 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=PFSK1 treatment=None rep=rep1
+        subGroups cellType=PFSK1 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -400,7 +400,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel BC Sm Intest 1
         longLabel BC_Small_Intestine_01-11002 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=BCSmallIntestine0111002 treatment=None rep=rep1
+        subGroups cellType=BCSmallIntestine0111002 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -408,7 +408,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel BC Jejunum 1
         longLabel BC_Jejunum_H12817N Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=BCJejunumH12817N treatment=None rep=rep1
+        subGroups cellType=BCJejunumH12817N obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -416,7 +416,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel T-47D 1
         longLabel T-47D Copy number variants Replicate 1 (Lab Rep 2) from ENCODE/HAIB
-        subGroups cellType=T47D treatment=None rep=rep1
+        subGroups cellType=T47D obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -424,7 +424,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HTR8svn 1
         longLabel HTR8svn Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HTR8 treatment=None rep=rep1
+        subGroups cellType=HTR8 obtainedBy=Duke treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -432,7 +432,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel U87 1
         longLabel U87 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=U87 treatment=None rep=rep1
+        subGroups cellType=U87 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -440,7 +440,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HRCEpiC 2
         longLabel HRCEpiC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HRCE treatment=None rep=rep2
+        subGroups cellType=HRCE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -448,7 +448,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HRCEpiC 1
         longLabel HRCEpiC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HRCE treatment=None rep=rep1
+        subGroups cellType=HRCE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -456,7 +456,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HRE 1
         longLabel HRE Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HRE treatment=None rep=rep1
+        subGroups cellType=HRE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -464,7 +464,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HRE 2
         longLabel HRE Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HRE treatment=None rep=rep2
+        subGroups cellType=HRE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -472,7 +472,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HRPEpiC 2
         longLabel HRPEpiC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=HRPE treatment=None rep=rep2
+        subGroups cellType=HRPE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -480,7 +480,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel HRPEpiC 1
         longLabel HRPEpiC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=HRPE treatment=None rep=rep1
+        subGroups cellType=HRPE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -488,7 +488,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel IMR90 2
         longLabel IMR90 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=IMR90 treatment=None rep=rep2
+        subGroups cellType=IMR90 obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -496,7 +496,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel IMR90 1
         longLabel IMR90 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=IMR90 treatment=None rep=rep1
+        subGroups cellType=IMR90 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -504,7 +504,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Jurkat 2
         longLabel Jurkat Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=Jurkat treatment=None rep=rep2
+        subGroups cellType=Jurkat obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -512,7 +512,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel LNCaP 1
         longLabel LNCaP Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=LNCaP treatment=None rep=rep1
+        subGroups cellType=LNCaP obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -520,7 +520,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel Jurkat 1
         longLabel Jurkat Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=Jurkat treatment=None rep=rep1
+        subGroups cellType=Jurkat obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -528,7 +528,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel MCF10A-Er-Src 2
         longLabel MCF10A-Er-Src Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=MCF10AES treatment=None rep=rep2
+        subGroups cellType=MCF10AES obtainedBy=Stanford treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -536,7 +536,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel MCF10A-Er-Src 1
         longLabel MCF10A-Er-Src Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=MCF10AES treatment=None rep=rep1
+        subGroups cellType=MCF10AES obtainedBy=Stanford treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -544,7 +544,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel MCF10A-Er-Src 3
         longLabel MCF10A-Er-Src Copy number variants Replicate 3 from ENCODE/HAIB
-        subGroups cellType=MCF10AES treatment=None rep=rep3
+        subGroups cellType=MCF10AES obtainedBy=Stanford treatment=None rep=rep3
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -552,7 +552,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel MCF-7 1
         longLabel MCF-7 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=MCF7 treatment=None rep=rep1
+        subGroups cellType=MCF7 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -560,7 +560,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel MCF-7 2
         longLabel MCF-7 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=MCF7 treatment=None rep=rep2
+        subGroups cellType=MCF7 obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -568,7 +568,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel NB4 2
         longLabel NB4 Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=NB4 treatment=None rep=rep2
+        subGroups cellType=NB4 obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -576,23 +576,23 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel NB4 1
         longLabel NB4 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=NB4 treatment=None rep=rep1
+        subGroups cellType=NB4 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNhaRegionsRep2
         parent wgEncodeHaibGenotype off
-        shortLabel NH-A 2
-        longLabel NH-A Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=NHA treatment=None rep=rep2
+        shortLabel NH-A UW 2
+        longLabel NH-A (UW) Copy number variants Replicate 2 from ENCODE/HAIB
+        subGroups cellType=NHA obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNhaRegionsRep1
         parent wgEncodeHaibGenotype off
-        shortLabel NH-A 1
-        longLabel NH-A Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=NHA treatment=None rep=rep1
+        shortLabel NH-A UW 1
+        longLabel NH-A (UW) Copy number variants Replicate 1 from ENCODE/HAIB
+        subGroups cellType=NHA obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -600,7 +600,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel NHBE 1
         longLabel NHBE Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=NHBE treatment=None rep=rep1
+        subGroups cellType=NHBE obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -608,7 +608,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel NHBE 2
         longLabel NHBE Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=NHBE treatment=None rep=rep2
+        subGroups cellType=NHBE obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -616,7 +616,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel NHDF-neo 1
         longLabel NHDF-neo Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=NHDF-neo treatment=None rep=rep1
+        subGroups cellType=NHDF-neo obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -624,7 +624,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel NT2-D1 1
         longLabel NT2-D1 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=NT2D1 treatment=None rep=rep1
+        subGroups cellType=NT2D1 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -632,7 +632,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel PANC-1 1
         longLabel PANC-1 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=PANC1 treatment=None rep=rep1
+        subGroups cellType=PANC1 obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -640,7 +640,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel PrEC 1
         longLabel PrEC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=PrEC treatment=None rep=rep1
+        subGroups cellType=PrEC obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -648,7 +648,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel RPTEC 1
         longLabel RPTEC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=RPTEC treatment=None rep=rep1
+        subGroups cellType=RPTEC obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -656,7 +656,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel RPTEC 2
         longLabel RPTEC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=RPTEC treatment=None rep=rep2
+        subGroups cellType=RPTEC obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -664,7 +664,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel SAEC 2
         longLabel SAEC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=SAEC treatment=None rep=rep2
+        subGroups cellType=SAEC obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -672,7 +672,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel SAEC 1
         longLabel SAEC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=SAEC treatment=None rep=rep1
+        subGroups cellType=SAEC obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -680,7 +680,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel SKMC 2
         longLabel SKMC Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=SKMC treatment=None rep=rep2
+        subGroups cellType=SKMC obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -688,7 +688,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel SKMC 1
         longLabel SKMC Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=SKMC treatment=None rep=rep1
+        subGroups cellType=SKMC obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -696,7 +696,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel SK-N-SH_RA 1
         longLabel SK-N-SH_RA Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=SKNSHRA treatment=None rep=rep1
+        subGroups cellType=SKNSHRA obtainedBy=UW treatment=None rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -704,7 +704,7 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel SK-N-SH_RA 2
         longLabel SK-N-SH_RA Copy number variants Replicate 2 from ENCODE/HAIB
-        subGroups cellType=SKNSHRA treatment=None rep=rep2
+        subGroups cellType=SKNSHRA obtainedBy=UW treatment=None rep=rep2
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -712,23 +712,23 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype off
         shortLabel MCF10A Tam 1
         longLabel MCF10A-Er-Src Tamoxifen Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=MCF10AESTAM treatment=TAM rep=rep1
+        subGroups cellType=MCF10AESTAM obtainedBy=Stanford treatment=TAM rep=rep1
         type bed 9 +
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeGm12878RegionsRep2
         parent wgEncodeHaibGenotype off
         shortLabel GM12878 2
-        longLabel GM12878 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=1GM12878 treatment=None rep=rep2
+        longLabel GM12878 Copy number variants Replicate 2 from ENCODE/HAIB
+        subGroups cellType=1GM12878 obtainedBy=HudsonAlpha treatment=None rep=rep2
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 
         track wgEncodeHaibGenotypeHepg2RegionsRep1
-        parent wgEncodeHaibGenotype on 
+        parent wgEncodeHaibGenotype on
         shortLabel HepG2 1
         longLabel HepG2 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=2HepG2 treatment=None rep=rep1
+        subGroups cellType=2HepG2 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
 
@@ -736,8 +736,16 @@ html wgEncodeHaibGenotype.release2
         parent wgEncodeHaibGenotype on
         shortLabel K562 1
         longLabel K562 Copy number variants Replicate 1 from ENCODE/HAIB
-        subGroups cellType=1K562 treatment=None rep=rep1
+        subGroups cellType=1K562 obtainedBy=HudsonAlpha treatment=None rep=rep1
         type bed 9 +
         # subId=3536 dateSubmitted=2011-02-17
+
+        track wgEncodeHaibGenotypeNhaDukeRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel NH-A Duke 1
+        longLabel NH-A (Duke) Copy number variants Replicate 1 from ENCODE/HAIB
+        subGroups cellType=NHAd obtainedBy=Duke treatment=None rep=rep1
+        type bed 9 +
+        # subId=5231 dateSubmitted=2011-12-14
 
 
