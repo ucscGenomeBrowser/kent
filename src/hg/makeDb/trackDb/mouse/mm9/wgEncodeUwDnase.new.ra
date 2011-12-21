@@ -59,7 +59,7 @@ dimensionAchecked rep1
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
 fileSortOrder cell=Cell_Line strain=Strain sex=Sex age=Age replicate=Replicate view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
-dragAndDrop subTracksi
+dragAndDrop subTracks
 noInherit on
 priority 0
 type bed 3
@@ -648,7 +648,8 @@ html wgEncodeUwDnase.new
         #subGroups view=Hotspots age=ADULT8WKS cellType=BCELLCD43N sex=M strain=C57BL6 rep=rep4
         #type broadPeak
         #color 86,180,233
-        # subId=5212 dateSubmitted=2011-12-15
+        #display no
+		# subId=5212 dateSubmitted=2011-12-15
 
         #track wgEncodeUwDnaseCbellumC57bl6MAdult8wksHotspotsRep3
         #parent wgEncodeUwDnaseViewHotspots off
@@ -657,6 +658,7 @@ html wgEncodeUwDnase.new
         #subGroups view=Hotspots age=ADULT8WKS cellType=CBELLUM sex=M strain=C57BL6 rep=rep3
         #type broadPeak
         #color 105,105,105
+		#display no
         # subId=5213 dateSubmitted=2011-12-15
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksHotspotsRep2
@@ -684,7 +686,8 @@ html wgEncodeUwDnase.new
         #subGroups view=Hotspots age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep11
         #type broadPeak
         #color 230,159,0
-        # subId=5216 dateSubmitted=2011-12-15
+        #display no
+		# subId=5216 dateSubmitted=2011-12-15
 
         #track wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep12
         #parent wgEncodeUwDnaseViewHotspots off
@@ -693,6 +696,7 @@ html wgEncodeUwDnase.new
         #subGroups view=Hotspots age=ADULT8WKS cellType=LIVER sex=M strain=C57BL6 rep=rep12
         #type broadPeak
         #color 230,159,0
+		#display no
         # subId=5217 dateSubmitted=2011-12-15
 
         track wgEncodeUwDnaseNih3t3NihsMAdult8wksHotspotsRep1
@@ -774,6 +778,7 @@ html wgEncodeUwDnase.new
         #subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 rep=rep3
         #type broadPeak
         #color 86,180,233
+		#display no
         # subId=5227 dateSubmitted=2011-12-15
 
         #track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep4
@@ -783,6 +788,7 @@ html wgEncodeUwDnase.new
         #subGroups view=Hotspots age=ADULT8WKS cellType=TNAIVE sex=M strain=C57BL6 rep=rep4
         #type broadPeak
         #color 86,180,233
+		#display no
         # subId=5228 dateSubmitted=2011-12-15
 
         #track wgEncodeUwDnaseTregC57bl6MAdult8wksHotspotsRep3
@@ -792,6 +798,7 @@ html wgEncodeUwDnase.new
         #subGroups view=Hotspots age=ADULT8WKS cellType=TREG sex=M strain=C57BL6 rep=rep3
         #type broadPeak
         #color 86,180,233
+		#display no
         # subId=5229 dateSubmitted=2011-12-15
 
         track wgEncodeUwDnaseWholebrainC57bl6ME18halfHotspotsRep1
@@ -1464,6 +1471,7 @@ html wgEncodeUwDnase.new
         #type narrowPeak
         #color 86,180,233
         # subId=5212 dateSubmitted=2011-12-15
+		#display no
 
         #track wgEncodeUwDnaseCbellumC57bl6MAdult8wksPkRep3
         #parent wgEncodeUwDnaseViewPeaks off
@@ -1473,6 +1481,7 @@ html wgEncodeUwDnase.new
         #type narrowPeak
         #color 105,105,105
         # subId=5213 dateSubmitted=2011-12-15
+		#display no
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksPkRep2
         parent wgEncodeUwDnaseViewPeaks off
@@ -1500,6 +1509,7 @@ html wgEncodeUwDnase.new
         #type narrowPeak
         #color 230,159,0
         # subId=5216 dateSubmitted=2011-12-15
+		#display no
 
         #track wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep12
         #parent wgEncodeUwDnaseViewPeaks off
@@ -1509,6 +1519,7 @@ html wgEncodeUwDnase.new
         #type narrowPeak
         #color 230,159,0
         # subId=5217 dateSubmitted=2011-12-15
+		#display no
 
         track wgEncodeUwDnaseNih3t3NihsMAdult8wksPkRep1
         parent wgEncodeUwDnaseViewPeaks off
@@ -1590,6 +1601,7 @@ html wgEncodeUwDnase.new
         #type narrowPeak
         #color 86,180,233
         # subId=5227 dateSubmitted=2011-12-15
+		#display no
 
         #track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep4
         #parent wgEncodeUwDnaseViewPeaks off
@@ -1599,6 +1611,7 @@ html wgEncodeUwDnase.new
         #type narrowPeak
         #color 86,180,233
         # subId=5228 dateSubmitted=2011-12-15
+		#display no
 
         #track wgEncodeUwDnaseTregC57bl6MAdult8wksPkRep3
         #parent wgEncodeUwDnaseViewPeaks off
@@ -1608,6 +1621,7 @@ html wgEncodeUwDnase.new
         #type narrowPeak
         #color 86,180,233
         # subId=5229 dateSubmitted=2011-12-15
+		#display no
 
         track wgEncodeUwDnaseWholebrainC57bl6ME18halfPkRep1
         parent wgEncodeUwDnaseViewPeaks off
@@ -2332,6 +2346,7 @@ html wgEncodeUwDnase.new
         #color 86,180,233
         # subId=5212 dateSubmitted=2011-12-15
         # was wgEncodeUwDnaseBcellcd43nC57bl6MAdult8wksRawRep4 vsmalladi Wed Dec 21 11:02:40 2011
+		#display no
 
         #track wgEncodeUwDnaseCbellumC57bl6MAdult8wksSigRep3
         #parent wgEncodeUwDnaseViewRawSignal off
@@ -2342,6 +2357,7 @@ html wgEncodeUwDnase.new
         #color 105,105,105
         # subId=5213 dateSubmitted=2011-12-15
         # was wgEncodeUwDnaseCbellumC57bl6MAdult8wksRawRep3 vsmalladi Wed Dec 21 11:02:47 2011
+		#display no
 
         track wgEncodeUwDnaseHeartC57bl6MAdult8wksSigRep2
         parent wgEncodeUwDnaseViewRawSignal off
@@ -2372,6 +2388,7 @@ html wgEncodeUwDnase.new
         #color 230,159,0
         # subId=5216 dateSubmitted=2011-12-15
         # was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep11 vsmalladi Wed Dec 21 11:03:24 2011
+		#display no
 
         #track wgEncodeUwDnaseLiverC57bl6MAdult8wksSigRep12
         #parent wgEncodeUwDnaseViewRawSignal off
@@ -2382,6 +2399,7 @@ html wgEncodeUwDnase.new
         #color 230,159,0
         # subId=5217 dateSubmitted=2011-12-15
         # was wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep12 vsmalladi Wed Dec 21 11:03:24 2011
+		#display no
 
         track wgEncodeUwDnaseNih3t3NihsMAdult8wksSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
@@ -2472,6 +2490,7 @@ html wgEncodeUwDnase.new
         #color 86,180,233
         # subId=5227 dateSubmitted=2011-12-15
         # was wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep3 vsmalladi Wed Dec 21 11:03:25 2011
+		#display no
 
         #track wgEncodeUwDnaseTnaiveC57bl6MAdult8wksSigRep4
         #parent wgEncodeUwDnaseViewRawSignal off
@@ -2482,6 +2501,7 @@ html wgEncodeUwDnase.new
         #color 86,180,233
         # subId=5228 dateSubmitted=2011-12-15
         # was wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep4 vsmalladi Wed Dec 21 11:03:25 2011
+		#display no
 
         #track wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep3
         #parent wgEncodeUwDnaseViewRawSignal off
@@ -2492,6 +2512,7 @@ html wgEncodeUwDnase.new
         #color 86,180,233
         # subId=5229 dateSubmitted=2011-12-15
         # was wgEncodeUwDnaseTregC57bl6MAdult8wksRawRep3 vsmalladi Wed Dec 21 11:03:25 2011
+		#display no
 
         track wgEncodeUwDnaseWholebrainC57bl6ME18halfSigRep1
         parent wgEncodeUwDnaseViewRawSignal off
