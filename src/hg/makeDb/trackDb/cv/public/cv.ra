@@ -16,7 +16,7 @@
 # --------------------------
 # term (human-readable cell type name. required)
 # tag (machine-readable cell type name, no special characters. required.
-#      uppercase except for possibly a brief lowercase suffix
+#      upnercase except for possibly a brief lowercase suffix
 #      closely-related cell types)
 # type (informs pipeline code of stanza type.  Should always be Cell Line. Required)
 # organism (used in many ways.  Should correspond to a "type organism" stanza. required)
@@ -1078,7 +1078,7 @@ vendorId CD20+_RO01778
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol missing
+protocol Stam:CD20+_Stam_protocol.pdf
 
 term CD20+_RO01794
 tag CD20RO01794
@@ -1094,7 +1094,7 @@ vendorId CD20+_RO01794
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol missing
+protocol Stam:CD20+_Stam_protocol.pdf
 
 term CD20+_RO01746
 tag CD20RO01746
@@ -1110,7 +1110,7 @@ vendorId CD20+_RO01746
 orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
-protocol missing
+protocol Stam:CD20+_Stam_protocol.pdf
 
 term CD34+_Mobilized
 tag CD34MOBILIZED
@@ -1307,41 +1307,40 @@ sex U
 tier 3
 protocol Crawford:D54_Crawford_protocol.pdf
 
-#Checking if this cell line is GM04503B or GM04503D
-#term GM04503B
-#tag GM04503B
-#type Cell Line
-#tier 3
-#organism human
-#description adult twin pair fibroblasts, monozygotic twin of GM04504A
-#karyotype normal
-#sex F
-#tissue skin
-#vendorName Coriell
-#vendorId GM04503
-#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM04503&PgId=166
-#termId BTO:0001253
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
-#lab Stam
-#protocol Stam:GM04503D_Stam_protocol.pdf
-#
-#term GM04504A
-#tag GM04504A
-#type Cell Line
-#tier 3
-#organism human
-#description normal adult twin pair fibroblasts, monozygotic twin of GM04503B, 13% of the cells examined show random chromosome loss
-#lineage missing
-#karyotype normal
-#sex F
-#tissue skin
-#vendorName Coriell
-#vendorId GM04504
-#orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM04504&PgId=166
-#termId BTO:0001253
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
-#lab Stam
-#protocol Stam:GM04504A_Stam_protocol.pdf
+term GM04503
+tag GM04503
+type Cell Line
+tier 3
+organism human
+description adult twin pair fibroblasts, monozygotic twin of GM04504
+karyotype normal
+sex F
+tissue skin
+vendorName Coriell
+vendorId GM04503D
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM04503&PgId=166
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
+lab Stam
+protocol Stam:GM04503D_Stam_protocol.pdf
+
+term GM04504
+tag GM04504
+type Cell Line
+tier 3
+organism human
+description adult twin pair fibroblasts, monozygotic twin of GM04503, 13% of the cells examined show random chromosome loss
+karyotype normal
+sex F
+tissue skin
+vendorName Coriell
+vendorId GM04504A
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM04504&PgId=166
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001253
+lab Stam
+protocol Stam:GM04504A_Stam_protocol.pdf
+
 term GM06990
 tag GM06990
 type Cell Line
@@ -8746,52 +8745,57 @@ description TopHat v1.3.1
 term 1x25
 tag R1X25
 type readType
-description Single 25 n.t. reads
+description Single 25 nt reads
 
 term 1x32
 tag R1X32
 type readType
-description Single 32 n.t. reads
+description Single 32 nt reads
 
 term 1x36
 tag R1X36
 type readType
-description Single 36 n.t. reads
+description Single 36 nt reads
 
 term 1x50
 tag R1X50
 type readType
-description Single 50 n.t. reads
+description Single 50 nt reads
 
 term 1x75
 tag R1X75
 type readType
-description Single 75 n.t. reads
+description Single 75 nt reads
 
 term 1x75D
 tag R1X75D
 type readType
-description Single 75 n.t. directed reads
+description Single 75 nt directed reads
+
+term 1x101
+tag R1X101
+type readType
+description Single 101 nt reads
 
 term 2x75
 tag R2X75
 type readType
-description Paired 75 n.t. reads
+description Paired 75 nt reads
 
 term 2x76D
 tag R2X76D
 type readType
-description Paired 76 n.t. directed reads
+description Paired 76 nt directed reads
 
 term 2x100
 tag R2X100
 type readType
-description Paired 100 n.t. reads
+description Paired 100 nt reads
 
 term 2x101D
 tag R2X101D
 type readType
-description Paired 101 n.t. directed reads
+description Paired 101 nt directed reads
 
 #### insertLength
 #### This is being used by the Wold lab as a variable.
@@ -9502,41 +9506,51 @@ tag V0422112
 description Faster ChIP protocol & gel size selection for ChIP-seq (Myers)
 type protocol
 
+term TAP-Only
+tag TAP
+description This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
+type protocol
+
+term CIP-TAP
+tag CIPTAP
+description This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
+type protocol
+
 ### phase
 term G1
 tag G1
 type phase
-description Flow sorted, G1 phase
+description Flow sorted, G1 phase corresponds to the first DNA content window
 
 term G1b
 tag G1B
 type phase
-description Flow sorted, G1b phase
+description Flow sorted, G1b phase corresponds to the second half of the first DNA content window
 
 term G2
 tag G2
 type phase
-description Flow sorted, G2 phase
+description Flow sorted, G2 phase corresponds to the second DNA content window
 
 term S1
 tag S1
 type phase
-description Flow sorted, S1 phase
+description Flow sorted, S1 phase corresponds to the third DNA content window
 
 term S2
 tag S2
 type phase
-description Flow sorted, S2 phase
+description Flow sorted, S2 phase corresponds to the fourth DNA content window
 
 term S3
 tag S3
 type phase
-description Flow sorted, S3 phase
+description Flow sorted, S3 phase corresponds to the fifth DNA content window
 
 term S4
 tag S4
 type phase
-description Flow sorted, S4 phase
+description Flow sorted, S4 phase corresponds to the sixth DNA content window
 
 
 ### region
@@ -9770,7 +9784,7 @@ term PctSignal
 tag PCTSIG
 type view
 label Percentage-normalized Signal
-description Percentage-normalized Signal
+description Signal over an interval as a percentage of normalized tag densities over all phases
 
 term PlusRawSignal
 tag PLUSRAWSIG
@@ -11722,7 +11736,7 @@ term phase
 tag PHASE
 type typeOfTerm
 label Cell phase
-description The phase in a cell cycle.  Some experiments attempt to isolate DNA from a single phase.
+description The phase in a cell cycle that corresponds to a defined DNA content range determined by flow cytometry measurements that includes G1 (gap phase 1), S phase (the DNA synthesis phase), and G2/M (the gap 2 and mitosis phases; here abbreviated G2). Different portions of S phase are obtained by dividing the cell cycle into seven DNA content windows based on the relative peak positions corresponding to the G1 and G2 cell cycle fractions. The G1 peak position is routinely set at "60" relative UV fluorescence, thus producing G2 peak values in the 116-120 range
 searchable no
 cvDefined yes
 validate cv or None

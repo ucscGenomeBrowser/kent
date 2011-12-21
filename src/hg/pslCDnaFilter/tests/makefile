@@ -9,7 +9,8 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
 	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest \
 	weirdOverlappedFilterTest noIgnoreIntronsTest ignoreIntronsTest \
-	uniqueMappedTest uniqueMappedHapTest
+	uniqueMappedTest uniqueMappedHapTest blackListTest \
+	decayMinCoverTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -103,6 +104,11 @@ uniqueMappedTest:
 uniqueMappedHapTest:
 	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-uniqueMapped -localNearBest=0.005 -hapRegions=input/hapMappings.psl'
 
+decayMinCoverTest:
+	${MAKE} doFilter name=$@ inPsl=decayMinCover.psl filtArgs='-decayMinCover'
+
+blackListTest:
+	${MAKE} doFilter name=$@ inPsl=blackList.psl filtArgs='-blackList=input/blackList.txt'
 
 ####
 # Recursive targets.  Results are sorted to allow consistent comparisons, as
