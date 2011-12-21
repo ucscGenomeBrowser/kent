@@ -12,7 +12,7 @@ dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dim
 dimensionCchecked pAP,pAM
 dimensionBchecked rep0,rep1,Pooled
 filterComposite dimC=multi dimB=multi
-sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
+sortOrder  cellType=+ localization=+ rnaExtract=+ rep=+ view=-
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
