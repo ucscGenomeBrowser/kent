@@ -105,7 +105,7 @@ uniqueMappedHapTest:
 	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-uniqueMapped -localNearBest=0.005 -hapRegions=input/hapMappings.psl'
 
 decayMinCoverTest:
-	${MAKE} doFilter name=$@ inPsl=many.psl filtArgs='-decayMinCover'
+	${MAKE} doFilter name=$@ inPsl=decayMinCover.psl filtArgs='-decayMinCover'
 
 blackListTest:
 	${MAKE} doFilter name=$@ inPsl=blackList.psl filtArgs='-blackList=input/blackList.txt'
