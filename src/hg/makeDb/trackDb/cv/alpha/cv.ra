@@ -968,7 +968,7 @@ term BE2_C
 tag BE2C
 type Cell Line
 organism human
-description neuroblastoma
+description neuroblastoma, BE-C is a clone of the SK-N-BE neuroblastoma cell line (see ATCC CRL-2271) that was established in November of 1972 from a bone marrow biopsy taken from a 2-year-old individual with disseminated neuroblastoma after repeated courses of chemotherapy and radiotherapy.
 tissue brain
 lineage ectoderm
 karyotype cancer
@@ -3388,7 +3388,7 @@ term PANC-1
 tag PANC1
 type Cell Line
 organism human
-description pancreatic carcinoma, (PMID: 1140870)
+description pancreatic carcinoma, (PMID: 1140870) PANC-1 was established from a pancreatic carcinoma, which was extracted via pancreatico-duodenectomy specimen from a 56-year-old Caucasian individual. Malignancy of this cell line was verified via in vitro and in vivo assays. 
 tissue pancreas
 vendorName ATCC
 vendorId CRL-1469
@@ -3405,7 +3405,7 @@ term PanIsletD
 tag PANISD
 type Cell Line
 organism human
-description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI) source for PanIslets PROVISIONAL
+description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI), same source as PanIslets
 tissue pancreas
 lineage endoderm
 vendorName National Disease Research Interchange 
@@ -3421,7 +3421,7 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets from 2 donors, the sources of these primary cells  are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al. Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005) PROVISIONAL
+description pancreatic islets from 2 donors, the sources of these primary cells are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al., Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005)
 tissue pancreas
 lineage endoderm
 vendorName Refer to publication or NDRI
@@ -3666,7 +3666,7 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description neuroblastoma, newly promoted to tier 2: not in 2011 analysis
+description neuroblastoma, newly promoted to tier 2: not in 2011 analysis PROVISONAL The SK-N-SH line was established from a neuroblastoma in a 4 year old individual.
 tissue brain
 lineage ectoderm
 vendorName ATCC
@@ -4418,7 +4418,7 @@ tissue large intestine
 category Tissue
 age ageUnknown
 strain Unknown
-description Large Intestine PROVISIONAL
+description Large Intestine
 vendorName UW lab
 vendorId Large Intestine
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -4686,7 +4686,7 @@ tissue brain
 category Tissue
 age ageUnknown
 strain Unknown
-description Retina PROVISIONAL
+description Retina 
 vendorName UW lab
 vendorId Retina
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -4704,7 +4704,7 @@ tissue skeletal muscle
 category Tissue
 age ageUnknown
 strain Unknown
-description Skeletal Muscle PROVISIONAL
+description Skeletal Muscle 
 vendorName UW lab
 vendorId Skeletal Muscle
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -9245,32 +9245,32 @@ type treatment
 
 term DEX_100nM
 tag DEX100NM
-description 1 h with 100 nM DEX (Myers)
+description 1 h with 100 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_100pM
 tag DEX100PM
-description 1 h with 100 pM DEX (Myers)
+description 1 h with 100 pM Dexmathasone (Myers)
 type treatment
 
 term DEX_1nM
 tag DEX1NM
-description 1 h with 1 nM DEX (Myers)
+description 1 h with 1 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50NM
-description 1 h with 50 nM DEX (Myers)
+description 1 h with 50 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_5nM
 tag DEX5NM
-description 1 h with 5 nM DEX (Myers)
+description 1 h with 5 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500PM
-description 1 h with 500 pM DEX (Myers)
+description 1 h with 500 pM Dexmathasone (Myers)
 type treatment
 
 term diffProtA_2d
@@ -9300,31 +9300,31 @@ label 14 day diffProtA
 term DMSO_0.02pct
 #tag DMSO2
 tag DM002P1H
-description 1 h with 0.02% DMSO (Myers)
+description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_0.02pct_24hr
 #tag DMSO224H
 tag DM002P24H
-description 24 h with 0.02% DMSO (Myers)
+description 24 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_0.02pct_7d
 tag DM002P7D
-description 7 d with 0.02% DMSO (Myers)
+description 7 d with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_2.0pct
 #tag DMSO20
 tag DM2P5D
-description 5 d with 2% DMSO (Weissman)
+description 5 d with 2% Dimethyl sufloxide (DMSO) (Weissman)
 type treatment
 
 term DMSO_4hr
 #term DMSO_0.02pct_4hr  would like to change
 #tag DMSO4hr
 tag DM002P4H
-description 4 hr with 0.02% DMSO (Myers)
+description 4 hr with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term EqS_2.0pct_24hr
@@ -9379,22 +9379,22 @@ type treatment
 
 term EtOH_0.01pct
 tag ETOH01
-description 36 h with 0.01% EtOH (Snyder)
+description 36 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01B
-description 4 h with 0.01% EtOH (Snyder)
+description 4 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01C
-description 12 h with 0.01% EtOH (Snyder)
+description 12 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.02pct
 tag ETOH02
-description 1 h with 0.02% EtOH (Myers)
+description 1 h with 0.02% Ethanol (Myers)
 type treatment
 
 term forskolin
@@ -9581,12 +9581,12 @@ type protocol
 
 term TAP-Only
 tag TAP
-description This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
+description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
 
 term CIP-TAP
 tag CIPTAP
-description This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
+description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
 
 ### phase
@@ -10443,13 +10443,13 @@ term newborn-1days
 tag NEW1DAYS
 type age
 stage newborn
-description Newborn 1 day PROVISIONAL
+description Newborn 1 day 
 
 term adult-1wks
 tag ADULT1WKS
 type age
 stage Adult
-description Adult 1 week PROVISIONAL
+description Adult 1 week 
 
 term adult-4wks
 tag ADULT4WKS

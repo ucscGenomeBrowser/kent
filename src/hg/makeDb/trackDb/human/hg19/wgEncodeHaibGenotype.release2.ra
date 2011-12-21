@@ -741,7 +741,7 @@ html wgEncodeHaibGenotype.release2
         # subId=3536 dateSubmitted=2011-02-17
 
         track wgEncodeHaibGenotypeNhaDukeRegionsRep1
-        parent wgEncodeHaibGenotype
+        parent wgEncodeHaibGenotype off
         shortLabel NH-A Duke 1
         longLabel NH-A (Duke) Copy number variants Replicate 1 from ENCODE/HAIB
         subGroups cellType=NHAd obtainedBy=Duke treatment=None rep=rep1
