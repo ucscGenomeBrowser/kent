@@ -2657,3 +2657,6 @@ searchPriority 3.53
 
 include lincRNAs.ra
 
+track sibGene override
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg19&query_str=$$
+urlLabel SIB link:

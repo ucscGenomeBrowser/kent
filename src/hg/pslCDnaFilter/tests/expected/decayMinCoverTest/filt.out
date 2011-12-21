@@ -1,6 +1,6 @@
                    	seqs	aligns
-             total:	31	473
+             total:	82	573
         weird over:	5	17
-     drop minCover:	28	389
+     drop minCover:	50	439
         kept weird:	3	11
-              kept:	11	84
+              kept:	40	134
