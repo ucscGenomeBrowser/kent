@@ -4607,7 +4607,7 @@ protocol Stam:NIH-3T3_Stam_protocol.pdf
 
 # shortened term
 term OlfactBulb
-tag OLFACTORY
+tag OLFACT
 type Cell Line
 organism mouse
 tissue Olfactory Bulb
