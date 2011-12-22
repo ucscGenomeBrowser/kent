@@ -150,9 +150,9 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         {
             printf("<TR style=\"background-color: #%s\">\n", HG_COL_LOCAL_TABLE);
             if (showDesc)
-                printf("<TD style=\"word-break: normal\">%s\n", fileDesc);
+                printf("<TD style=\"word-break: break-all\">%s\n", fileDesc);
             //printf("<TD><I>%s</I></TD>\n", snippet); 
-            printf("<TD style=\"word-break: normal\"><I>%s</I></TD>\n", snippet); 
+            printf("<TD style=\"word-break: break-all\"><I>%s</I></TD>\n", snippet); 
             if (t2gDebug) 
             {
                 printf("<TD>article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);
