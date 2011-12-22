@@ -1433,7 +1433,7 @@ sub makeDownloadTargetFileName {
     }
 
     my $target;
-    if (($type eq "bam") || ($type eq "bigWig"))  {
+    if (($type eq "bam") || ($type eq "bigWig") || ($type eq "bigBed"))  {
         $target = "$tablename.$type";
 
     } else {
