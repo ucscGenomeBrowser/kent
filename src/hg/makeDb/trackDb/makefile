@@ -74,6 +74,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	cioSav1 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 \
 	gasAcu1 \
+	gadMor1 \
 	dm1 dm2 dm3 \
 	dp2 dp3 \
 	droYak1 droYak2 \
