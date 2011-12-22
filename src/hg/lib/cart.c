@@ -23,10 +23,6 @@
 #include "hgMaf.h"
 #include "hui.h"
 
-// NOTE: using '.' as delimiter in trackName.var cart vars is too pervasive to
-//       to support '_' so don't bother!
-//////// #define SUPPORT_UNDERBAR_DELIMIT
-
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
 
@@ -290,13 +286,10 @@ if (oldVars == NULL)
     return;
 struct hashEl *hel = hashLookup(cart->hash, var);
 
-#define CART_DIFFS_INCLUDE_EMPTIES
-#ifdef CART_DIFFS_INCLUDE_EMPTIES
 // NOTE: New cgi vars not in old cart cannot be distinguished from vars not newly set by cgi.
 //       Solution: Add 'empty' var to old vars for cgi vars not already in cart
 if (hel == NULL)
     hashAdd(oldVars, var, cloneString(CART_VAR_EMPTY));
-#endif///def CART_DIFFS_INCLUDE_EMPTIES
 
 while (hel != NULL)
     {
@@ -1981,17 +1974,12 @@ boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *sett
 {
 char *oldValue = hashFindVal(oldVars,setting);
 if (oldValue == NULL)
-#ifdef CART_DIFFS_INCLUDE_EMPTIES
     return FALSE;  // All vars changed by cgi will be found in old vars
-#else///ifndef CART_DIFFS_INCLUDE_EMPTIES
-    return (!ignoreCreated);
-#endif///ndef CART_DIFFS_INCLUDE_EMPTIES
 
 char *newValue = cartOptionalString(newCart,setting);
 if (newValue == NULL)
     return (!ignoreRemoved);
 
-#ifdef CART_DIFFS_INCLUDE_EMPTIES
 if (sameString(oldValue,CART_VAR_EMPTY))
     {
     if (sameString(newValue,"hide")
@@ -1999,7 +1987,6 @@ if (sameString(oldValue,CART_VAR_EMPTY))
     ||  sameString(newValue,"0"))   // Special cases DANGER!
         return FALSE;
     }
-#endif///def CART_DIFFS_INCLUDE_EMPTIES
 
 return (differentString(newValue,oldValue));
 }
@@ -2043,15 +2030,6 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         safef(setting,sizeof(setting),"%s",descendentTdb->track);
     else
         safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
-#ifdef SUPPORT_UNDERBAR_DELIMIT
-    int count = cartRemoveAndCount(cart,setting);
-    if (count > 0 || vis)
-        {
-        removed += count;
-        continue;
-        }
-    *(setting + strlen(descendentTdb->track)) = '_'; // Try '_'
-#endif///def SUPPORT_UNDERBAR_DELIMIT
     removed += cartRemoveAndCount(cart,setting);
     }
 return removed;
@@ -2073,13 +2051,6 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     else
         safef(setting,sizeof(setting),"%s.%s",descendentTdb->track,suffix);
     char *newVal = cartOptionalString(newCart,setting);
-#ifdef SUPPORT_UNDERBAR_DELIMIT
-    if (newVal == NULL && !vis)                          // NOTE: assumed '.' not '_'
-        {
-        *(setting + strlen(descendentTdb->track)) = '_'; // Try '_'
-        newVal = cartOptionalString(newCart,setting);
-        }
-#endif///def SUPPORT_UNDERBAR_DELIMIT
     if (    newVal    != NULL
     && (   (parentVal != NULL && sameString(newVal,parentVal))
         || (FALSE == cartValueHasChanged(newCart,oldVars,setting,TRUE,FALSE))))
@@ -2389,11 +2360,6 @@ for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
     safef(setting,sizeof(setting),"%s.",tdbView->track);
     struct slPair *changeViewSettings = cartVarsWithPrefixLm(newCart, setting, lm);
     changedSettings = slCat(changedSettings, changeViewSettings);
-#ifdef SUPPORT_UNDERBAR_DELIMIT
-    safef(setting,sizeof(setting),"%s_",tdbView->track);
-    changeViewSettings = cartVarsWithPrefixLm(newCart, setting, lm);
-    changedSettings = slCat(changedSettings, changeViewSettings);
-#endif///ndef SUPPORT_UNDERBAR_DELIMIT
     }
 if (changedSettings == NULL && !containerVisChanged)
     return anythingChanged;
@@ -2427,11 +2393,7 @@ if (hasViews)
             if(startsWith(tdbView->track,oneName->name))
                 {
                 suffix = oneName->name + strlen(tdbView->track);
-            #ifdef SUPPORT_UNDERBAR_DELIMIT
-                if (*suffix == '.' || *suffix == '_')
-            #else///ifndef SUPPORT_UNDERBAR_DELIMIT
                 if (*suffix == '.') // NOTE: standardize on '.' since its is so pervasive
-            #endif///ndef SUPPORT_UNDERBAR_DELIMIT
                     suffix++;
                 else if (isalnum(*suffix)) // viewTrackName is subset of another track!
                     suffix = NULL;         // add back to list for next round
