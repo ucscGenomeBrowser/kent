@@ -486,13 +486,8 @@ if (sortOrder != NULL)
         {
         char *var = sortOrder->column[sIx];
         enum cvSearchable searchBy = cvSearchMethod(var);
-    //#define FILTERBY_ALL_SEARCHABLE
-    #ifdef FILTERBY_ALL_SEARCHABLE
-        if (searchBy == cvNotSearchable)
-    #else///ifndef FILTERBY_ALL_SEARCHABLE
         if (searchBy == cvNotSearchable || searchBy == cvSearchByFreeText)
-    #endif///ndef FILTERBY_ALL_SEARCHABLE
-            continue; // Only single selects and multi-select make good candidates for filtering
+            continue; // Free text is not good candidate for filters.  Best is single word/date/int.
 
         // get all vals for var, then convert to tag/label pairs for filterBys
         struct slName *vals = mdbObjsFindAllVals(mdbObjs, var, CV_LABEL_EMPTY_IS_NONE);
@@ -645,15 +640,6 @@ if (filesCount > 5)
 printf("</TD>\n");
 columnCount++;
 
-/*#define SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
-#ifdef SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
-if (parentTdb == NULL)
-    {
-    printf("<TD align='center' valign='center'>&nbsp;</TD>");
-    columnCount++;
-    }
-#endif///def SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
-*/
 // Now the columns
 int curOrder = 0,ix=0;
 if (sortOrder)
