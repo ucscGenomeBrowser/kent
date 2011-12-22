@@ -193,8 +193,8 @@ for (el = elList; el != NULL; el = el->next)
     {
     bed = el->val;
     /* Only consider cases where the bed and gene pred share a splice site,
-     * or neither one is spliced */
-    if (shareSpliceSiteOrBothUnspliced(gp, bed)) {
+     * or neither one is spliced, and both are on the same strand */
+    if (gp->strand == bed->strand && shareSpliceSiteOrBothUnspliced(gp, bed)) {
 	overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
 	/* If the gene prediction is a compatible extension of the bed (meaning that
 	 * the bed and the gene prediction have a compatible transcript structure for
