@@ -159,20 +159,23 @@ else
      * end of the last one are not splice sites. */
     int gpIx, bedIx;
     boolean foundSharedSpliceSite = FALSE;
-    for (gpIx = 1; gpIx < gp->exonCount && !foundSharedSpliceSite; gpIx++)
+    if (strcmp(gp->strand, bed->strand) == 0) 
 	{
-	int gpIntronStart = gp->exonEnds[gpIx - 1];
-	int gpIntronEnd = gp->exonStarts[gpIx];
-	int bedIntronStart = 0;
-	int bedIntronEnd = 0;
-	for (bedIx = 1; bedIx < bed->blockCount && bedIntronEnd <= gpIntronEnd; bedIx++) 
+	for (gpIx = 1; gpIx < gp->exonCount && !foundSharedSpliceSite; gpIx++)
 	    {
-	    bedIntronStart = bed->chromStart + bed->chromStarts[bedIx - 1] 
-                             + bed->blockSizes[bedIx - 1];
-	    bedIntronEnd = bed->chromStart + bed->chromStarts[bedIx];
-	    if (gpIntronStart == bedIntronStart || gpIntronEnd == bedIntronEnd)
+	    int gpIntronStart = gp->exonEnds[gpIx - 1];
+	    int gpIntronEnd = gp->exonStarts[gpIx];
+	    int bedIntronStart = 0;
+	    int bedIntronEnd = 0;
+	    for (bedIx = 1; bedIx < bed->blockCount && bedIntronEnd <= gpIntronEnd; bedIx++) 
 		{
-		foundSharedSpliceSite = TRUE;
+		bedIntronStart = bed->chromStart + bed->chromStarts[bedIx - 1] 
+		    + bed->blockSizes[bedIx - 1];
+		bedIntronEnd = bed->chromStart + bed->chromStarts[bedIx];
+		if (gpIntronStart == bedIntronStart || gpIntronEnd == bedIntronEnd)
+		    {
+		    foundSharedSpliceSite = TRUE;
+		    }
 		}
 	    }
 	}
@@ -193,8 +196,8 @@ for (el = elList; el != NULL; el = el->next)
     {
     bed = el->val;
     /* Only consider cases where the bed and gene pred share a splice site,
-     * or neither one is spliced, and both are on the same strand */
-    if (gp->strand == bed->strand && shareSpliceSiteOrBothUnspliced(gp, bed)) {
+     * or neither one is spliced */
+    if (shareSpliceSiteOrBothUnspliced(gp, bed)) {
 	overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
 	/* If the gene prediction is a compatible extension of the bed (meaning that
 	 * the bed and the gene prediction have a compatible transcript structure for
