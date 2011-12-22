@@ -1,4 +1,4 @@
-# Data Agreement File $Revision: 1.7 $
+# Data Agreement File $Revision: 1.8 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -56,6 +56,7 @@ type             fastq
 hasReplicates    yes
 required         no
 downloadOnly     yes
+
 view             Signal
 type             bigWig
 hasReplicates    yes
@@ -139,7 +140,7 @@ required         no
 downloadOnly     yes
 
 view             Junctions
-type             junction
+type             bigBed
 hasReplicates    yes
 required         no
 downloadOnly     yes

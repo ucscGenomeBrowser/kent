@@ -7578,8 +7578,8 @@ char *chromPrefixes[] = { "chr", "Group",
 			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold",
-			     "Contig", "SuperCont", "super_", "scaffold", "Zv7_",
-			     NULL };
+    "Contig", "SuperCont", "super_", "scaffold", "Zv7_", "Scfld02_",
+	 NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
 /* Return a pointer into name just past the first matching string from

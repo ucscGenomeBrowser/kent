@@ -52,11 +52,6 @@ track HInvGeneMrna override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
-track sibTxGraph override 
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
-
-
 track gwasCatalog override
 snpTable snp132
 snpVersion 132
@@ -2661,4 +2656,12 @@ query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
 searchPriority 3.53
 
 include lincRNAs.ra
+
+track sibGene override
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?db=hg19&query_str=$$
+urlLabel SIB link:
+
+track sibTxGraph override
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg19&species=H.+sapiens&tromer=$$
+
 

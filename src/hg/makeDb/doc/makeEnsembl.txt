@@ -440,15 +440,54 @@ nameTranslation "s/^\([0-9EWXYZ][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 db gasAcu1
 # optional nameTranslation, the sed command that will transform
 #       Ensemble names to UCSC names.  With quotes just to make sure.
-nameTranslation "s/^group\([IUVX]\)/chr\1/; s/^MT/chrM/; /^scaffold_.*/d;"
+nameTranslation "s/^group\([IUVX]\)/chr\1/; s/^MT/chrM/;"
 '_EOF_'
 #  << happy emacs
 
     doEnsGeneUpdate.pl  -ensVersion=65 gasAcu1.ensGene.ra
-    ssh hgwdev
-    cd /hive/data/genomes/gasAcu1/bed/ensGene.65
+
+    # requires extra attention after the all database for loop attempt
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.65/process
+    mv gasAcu1.allGenes.gp.gz gasAcu1.allGenes.gp.beforeLift.gz
+    zcat gasAcu1.allGenes.gp.beforeLift.gz \
+	| liftUp -extGenePred -type=.gp gasAcu1.scaffolds.gp \
+	    ../../../jkStuff/contigsToScaffolds.lft carry stdin
+    liftUp -extGenePred gasAcu1.allGenes.gp \
+	../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft carry \
+	    gasAcu1.scaffolds.gp
+    gzip gasAcu1.scaffolds.gp
+    gzip gasAcu1.allGenes.gp
+    #	verify OK
+    genePredCheck -db=gasAcu1 gasAcu1.allGenes.gp.gz
+    #	checked: 29245 failed: 0
+
+    #	then continue with the load
+    cd /hive/data/genomes/gasAcu1
+    doEnsGeneUpdate.pl -continue=load -ensVersion=65 gasAcu1.ensGene.ra \
+	> ens.65.load 2>&1
+
     featureBits gasAcu1 ensGene
-    # 32885500 bases of 446627861 (7.363%) in intersection
+    # 36792090 bases of 446627861 (8.238%) in intersection
+
+    # if you ever need to remove peptides that have no matching genes
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.65
+    # from the doLoad.csh:
+    zcat download/Gasterosteus_aculeatus.BROADS1.65.pep.all.fa.gz \
+        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*$//; s/ .*$//' \
+	| gzip > ensPep.txt.gz
+    zcat ensPep.txt.gz \
+    | ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+         | sed -e '/^$/d; s/*$//' | sort > ensPep.gasAcu1.fa.tab
+    hgsql -N -e "select name from ensPep;" gasAcu1 | sort > ensPep.name
+    hgsql -N -e "select name from ensGene;" gasAcu1 | sort > ensGene.name
+    comm -12 ensPep.name ensGene.name > pepAndGene.name
+    # select only the peptides with matching gene names
+    join pepAndGene.name ensPep.gasAcu1.fa.tab | tr '[ ]' '[\t]' \
+	> clean.ensPep.gasAcu1.fa.tab
+    wc -l *.tab
+    #	24437 clean.ensPep.gasAcu1.fa.tab
+    #	27576 ensPep.gasAcu1.fa.tab
+    hgPepPred gasAcu1 tab ensPep clean.ensPep.gasAcu1.fa.tab
 
 ############################################################################
 #  gorGor3 - Gorilla - Ensembl Genes version 65  (DONE - 2011-12-15 - hiram)

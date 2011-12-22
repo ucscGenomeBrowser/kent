@@ -10,7 +10,7 @@
 
 # Directories
 set genomes = /hive/data/genomes
-set dir = $genomes/hg19/bed/ucsc.13.4
+set dir = $genomes/hg19/bed/ucsc.13.6
 set scratchDir = /hive/scratch
 set testingDir = $scratchDir/ucscGenes
 
@@ -104,8 +104,7 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
+
 
 
 # Get Genbank info
@@ -113,6 +112,13 @@ txGenbankData $db
 # creates the files:
 #	mgcStatus.tab  mrna.psl  refPep.fa  refSeq.psl
 #	mrna.fa        mrna.ra   refSeq.fa  refSeq.ra
+
+# Filter out blacklisted RNA.  In the future, this filtering may be done
+# in an earlier step in the pipeine, so it might not be necessary to do
+# this here.  Check with whoever's in charge of GenBank (12/19/11)
+#mv mrna.psl mrna.unfiltered.psl
+#pslCDnaFilter -blackList=/cluster/data/genbank/etc/blackList.txt \
+#    mrna.unfiltered.psl mrna.psl
 
 # process RA Files
 txReadRa mrna.ra refSeq.ra .
@@ -314,6 +320,8 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
         echo -n > $c.net
     endif
 end
+
+
 
 # Make txOrtho directory and a para spec file
 cd $dir
@@ -532,6 +540,7 @@ ssh $cpuFarm "cd $dir/blat/rna; para time > run.time"
 
 
 # Set up blat jobs for proteins vs. translated txWalk transcripts
+cd $dir
 mkdir -p blat/protein/raw
 echo '#LOOP' > blat/protein/template
 echo './runTxBlats $(path1) '"$db"' $(root1) {check out line+ raw/ref_$(root1).psl}' >> blat/protein/template
@@ -735,11 +744,6 @@ txGeneProtAndRna weeded.bed weeded.info weeded.fa weededCds.faa \
     refSeq.fa refToPep.tab refPep.fa txToAcc.tab ucscGenes.fa ucscGenes.faa \
     ucscGenesTx.fa ucscGenesTx.faa
 
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
-
 # Generate ucscGene/uniprot blat run.
 mkdir -p $dir/blat/uniprotVsUcsc
 cd $dir/blat/uniprotVsUcsc
@@ -810,6 +814,7 @@ txGeneCanonical coding.cluster ucscGenes.info senseAnti.txg ucscGenes.bed ucscNe
 txBedToGraph ucscGenes.bed ucscGenes ucscGenes.txg
 txgAnalyze ucscGenes.txg $genomes/$db/$db.2bit stdout | sort | uniq > ucscSplice.bed
 
+
 #####################################################################################
 # Now the gene set is built.  Time to start loading it into the database,
 # and generating all the many tables that go on top of known Genes.
@@ -839,6 +844,9 @@ else
     exit 255
 endif
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+
 
 # Make up knownGenes table, adding uniProt ID. Load into database.
 #	Takes 3 seconds.
@@ -854,9 +862,24 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
 
+# Create a bunch of knownToXxx tables according to alignment overlap.  
+# Takes about 3 minutes:
+cd $dir
+hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
+hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
+hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
+
 # Make up kgXref table.  Takes about 3 minutes.
-txGeneXref $db $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
+txGeneXref $db $tempDb $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
 hgLoadSqlTab $tempDb kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
+
+# Update knownToRefSeq to make it consistent with ucscGenes.xref.  Prior to
+# this update, knownToRefSeq contains links to the RefSeq transcript that it
+# most overlaps.  This is a preliminary mapping.  txGeneXref generates
+# more reliable RefSeq associations, mostly from the CDS picks 
+hgsql $tempDb -e "update knownToRefSeq kr, kgXref kx set kr.value = kx.refseq where kr.name = kx.kgID and length(kx.refseq) > 0"
+
 
 # add NR_... RefSeq IDs into kgXref table.
 hgsql $tempDb \
@@ -881,16 +904,6 @@ hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.pro
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
-cd $dir
-hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
-hgsql --skip-column-names \
-  -e "select kgID, refseq from kgXref where length(refseq) > 0" $tempDb \
-  > kgToRefseq.txt
-hgMapToGene $db -tempDb=$tempDb -override=kgToRefseq.txt refGene knownGene knownToRefSeq
-hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
-hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
-
-# Create a bunch of knownToXxx tables.  Takes about 3 minutes:
 hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
 
 hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
@@ -902,9 +915,9 @@ hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 
 cd $dir
 hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl -noLoad
 ~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
-
-grep -v ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
+grep -v -e ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
+
 
 if ($db =~ hg*) then
     hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
@@ -1105,8 +1118,8 @@ ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
 # Did this with
 #   wget ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam_fs.gz
 set pfamScratch = $scratchDir/pfam
-ssh $cpufarm mkdir -p $pfamScratch
-ssh $cpufarm cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
+ssh $cpuFarm mkdir -p $pfamScratch
+ssh $cpuFarm cp /hive/data/outside/pfam/current/Pfam_fs $pfamScratch
 mkdir -p $dir/pfam
 cd $dir/pfam
 mkdir -p splitProt
@@ -1324,6 +1337,8 @@ hgsql hgcentraltest -e \
          "hg19", "kgTargetAli", "", "", \                                       
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 		
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
@@ -1360,6 +1375,8 @@ ixIxx knownGene.text knownGene.ix knownGene.ixx
 rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
+
+# move this exit statement to the end of the section to be done next           exit $status # BRACKET                                                          
 
 
 # move this exit statement to the end of the section to be done next

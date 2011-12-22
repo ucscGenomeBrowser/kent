@@ -287,13 +287,13 @@ noInherit on
         type broadPeak
     # subId=1224 dateSubmitted=2010-06-01
 
-        track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep2
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 HEY1 PCR1 2
-        longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep2
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 HEY1 PCR1 2
+        #longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
+        #type broadPeak
+        #color 46,0,184
     # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsK562Six5Pcr1xPkRep2
@@ -306,13 +306,13 @@ noInherit on
     # subId=1240 dateSubmitted=2010-06-07
 
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
-        track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep1
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 HEY1 PCR1 1
-        longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xPkRep1
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 HEY1 PCR1 1
+        #longLabel K562 HEY1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
+        #type broadPeak
+        #color 46,0,184
     # subId=1240 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsK562Pu1Pcr1xPkRep2
@@ -822,13 +822,13 @@ noInherit on
     # subId=1261 dateSubmitted=2010-06-08
         # was wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep1 cricket Tue Apr 19 11:11:45 2011
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep2
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HepG2 HEY1 v101 2
-        longLabel HepG2 HEY1 V0416101 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep2
-        type broadPeak
-        color 189,0,157
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep2
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel HepG2 HEY1 v101 2
+        #longLabel HepG2 HEY1 V0416101 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep2
+        #type broadPeak
+        #color 189,0,157
     # subId=1452 dateSubmitted=2010-06-16
 
         track wgEncodeHaibTfbsA549GrPcr1xDex5nmPkRep2
@@ -1184,13 +1184,13 @@ noInherit on
         color 189,0,157
     # subId=1227 dateSubmitted=2010-06-07
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1
-        subTrack wgEncodeHaibTfbsViewPeaks off
-        shortLabel HepG2 HEY1 v101 1
-        longLabel HepG2 HEY1 V0416101 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep1
-        type broadPeak
-        color 189,0,157
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1
+        #subTrack wgEncodeHaibTfbsViewPeaks off
+        #shortLabel HepG2 HEY1 v101 1
+        #longLabel HepG2 HEY1 V0416101 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep1
+        #type broadPeak
+        #color 189,0,157
     # subId=1227 dateSubmitted=2010-06-07
 
         track wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep2
@@ -1420,23 +1420,23 @@ noInherit on
         # subId=2214 dateSubmitted=2010-09-16
 
         #revoked
-	track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 BCL3 PCR1 2
-        longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
-        type broadPeak
-        color 46,0,184
+	#track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 BCL3 PCR1 2
+        #longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
+        #type broadPeak
+        #color 46,0,184
         # subId=2213 dateSubmitted=2010-09-21
 
 	#revoked
-        track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel K562 BCL3 PCR1 1
-        longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
-        type broadPeak
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel K562 BCL3 PCR1 1
+        #longLabel K562 BCL3 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
+        #type broadPeak
+        #color 46,0,184
         # subId=2213 dateSubmitted=2010-09-21
 
         track wgEncodeHaibTfbsEcc1Pol2V0416102Dm002p1hPkRep2
@@ -3185,13 +3185,13 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
 
         #revoked
-	track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 BCL3 PCR1 1
-        longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
-        type bigWig 0.304919 197.054001
-        color 46,0,184
+	#track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 BCL3 PCR1 1
+        #longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
+        #type bigWig 0.304919 197.054001
+        #color 46,0,184
         # subId=3021 dateSubmitted=2010-11-29
 
         track wgEncodeHaibTfbsK562Bclaf101388Pcr1xRawRep1
@@ -3396,13 +3396,13 @@ noInherit on
         # subId=3021 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep2 wong Tue Jun  7 11:54:00 2011
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HepG2 HEY1 v101 1
-        longLabel HepG2 HEY1 V0416101 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep1
-        type bigWig 0.192479 445.683990
-        color 189,0,157
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel HepG2 HEY1 v101 1
+        #longLabel HepG2 HEY1 V0416101 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep1
+        #type bigWig 0.192479 445.683990
+        #color 189,0,157
         # subId=3021 dateSubmitted=2010-11-29
 
 
@@ -3729,13 +3729,13 @@ noInherit on
         # subId=3026 dateSubmitted=2011-01-21
 
 	#revoked        
-	track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 BCL3 PCR1 2
-        longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
-        type bigWig 0.279744 115.044998
-        color 46,0,184
+	#track wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 BCL3 PCR1 2
+        #longLabel K562 BCL3 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=BCL3 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
+        #type bigWig 0.279744 115.044998
+        #color 46,0,184
         # subId=3026 dateSubmitted=2011-01-21
 
 
@@ -3893,13 +3893,13 @@ noInherit on
         # subId=3035 dateSubmitted=2011-01-20
         # was wgEncodeHaibTfbsGm12878ControlPcr1xRawRep2 vsmalladi Wed Jul  6 14:19:02 2011
 
-        track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HepG2 HEY1 v101 2
-        longLabel HepG2 HEY1 V0416101 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep2
-        type bigWig 0.118831 808.763000
-        color 189,0,157
+        #track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel HepG2 HEY1 v101 2
+        #longLabel HepG2 HEY1 V0416101 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=2HEPG2 protocol=V0416101 treatment=None rep=rep2
+        #type bigWig 0.118831 808.763000
+        #color 189,0,157
         # subId=3026 dateSubmitted=2011-01-21
 
         track wgEncodeHaibTfbsGm12878RxlchV0416101RawRep1
@@ -4626,13 +4626,13 @@ noInherit on
         color 153,38,0
         # subId=3037 dateSubmitted=2010-12-01
 
-        track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep1
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 HEY1 PCR1 1
-        longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
-        type bigWig 0.181844 506.480011
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep1
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 HEY1 PCR1 1
+        #longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep1
+        #type bigWig 0.181844 506.480011
+        #color 46,0,184
         # subId=3037 dateSubmitted=2010-12-01
 
         track wgEncodeHaibTfbsK562Six5Pcr1xRawRep1
@@ -4753,13 +4753,13 @@ noInherit on
         # subId=3038 dateSubmitted=2010-11-30
         # was wgEncodeHaibTfbsGm12878Ebf1c8Pcr1xRawRep2 cricket Tue Apr 19 10:32:39 2011
 
-        track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel K562 HEY1 PCR1 2
-        longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
-        subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
-        type bigWig 0.086332 751.171021
-        color 46,0,184
+        #track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2
+        #parent wgEncodeHaibTfbsViewRawSignal off
+        #shortLabel K562 HEY1 PCR1 2
+        #longLabel K562 HEY1 PCR1x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
+        #subGroups view=RawSignal factor=HEY1 cellType=1K562 protocol=PCR1x treatment=None rep=rep2
+        #type bigWig 0.086332 751.171021
+        #color 46,0,184
         # subId=3038 dateSubmitted=2010-11-30
 
         track wgEncodeHaibTfbsK562Six5Pcr1xRawRep2
