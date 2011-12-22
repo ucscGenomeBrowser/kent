@@ -201,10 +201,6 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     && trackDbSettingClosestToHome(tdb,MDB_VAL_ENCODE_PROJECT) != NULL)
         {
         dyStringPrintf(dyTable,"<tr valign='top'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
-//#define NO_FILENAME_LISTS
-#ifdef NO_FILENAME_LISTS
-        dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
-#else///ifndef NO_FILENAME_LISTS
 
         struct slName *fileSet = slNameListFromComma(mdbVar->val);
         while (fileSet != NULL)
@@ -215,7 +211,6 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                 dyStringAppend(dyTable,"<BR>");
             slNameFree(&file);
             }
-#endif///ndef NO_FILENAME_LISTS
         dyStringAppend(dyTable,"</td></tr>");
         }
     else
@@ -2303,18 +2298,14 @@ return newName;
 
 #define SUBGROUP_MAX 9
 
-#define FILTER_COMPOSITE_ONLYONE
-#ifdef FILTER_COMPOSITE_ONLYONE
-// FIXME: do we even support anything but multi???  If not, this is a boolean
 enum filterCompositeType
-/* How to look at a track. */
+// Filter composites are drop-down checkbix-lists for selecting subtracks (eg hg19::HAIB TFBS)
     {
     fctNone=0,      // do not offer filter for this dimension
     fctOne=1,       // filter composite by one or all
     fctOneOnly=2,   // filter composite by only one
     fctMulti=3,     // filter composite by multiselect: all, one or many
     };
-#endif///def FILTER_COMPOSITE_ONLYONE
 
 typedef struct _members {
     int count;
@@ -2327,9 +2318,7 @@ typedef struct _members {
     int *subtrackCount;              // count of subtracks
     int *currentlyVisible;           // count of visible subtracks
     struct slRef **subtrackList;     // set of subtracks belonging to each subgroup member
-#ifdef FILTER_COMPOSITE_ONLYONE
     enum filterCompositeType fcType; // fctNone,fctOne,fctMulti
-#endif///def FILTER_COMPOSITE_ONLYONE
 } members_t;
 
 int subgroupCount(struct trackDb *parentTdb)
@@ -2718,7 +2707,6 @@ if(filtering && !sameWord(filtering,"off"))
         errAbort("If 'filterComposite' defined, must define 'dimensions' also.");
 
     membersForAll->filters = TRUE;
-#ifdef FILTER_COMPOSITE_ONLYONE
     // Default all to multi
     for(ix=dimA;ix<membersForAll->dimMax;ix++)
         {
@@ -2745,7 +2733,6 @@ if(filtering && !sameWord(filtering,"off"))
                 membersForAll->members[abcIx]->fcType = fctOneOnly;
             }
         }
-#endif///def FILTER_COMPOSITE_ONLYONE
     }
 
 if(cart != NULL) // Only save this if it is fully populated!
@@ -5372,17 +5359,6 @@ if(setting || sameWord(filter,NO_SCORE_FILTER))
         safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
         cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
         }
-//#define FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
-#ifdef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
-    else if((min != 0 && (int)min != NO_VALUE) || (int)max != NO_VALUE) // Assumes min==0 is no filter!
-        {
-        if((min != 0 && min != NO_VALUE) && max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max); // both min and max
-        else if(min != 0 && min != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s >= %d)", (*and?" and ":""),field,min);  // min only
-        else //if(max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s <= %d)", (*and?" and ":""),field,max);  // max only
-#else//ifndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
     else if((min != NO_VALUE && (minLimit == NO_VALUE || minLimit != min))  // Assumes min==NO_VALUE or min==minLimit is no filter
          || (max != NO_VALUE && (maxLimit == NO_VALUE || maxLimit != max))) // Assumes max==NO_VALUE or max==maxLimit is no filter!
         {
@@ -5392,7 +5368,6 @@ if(setting || sameWord(filter,NO_SCORE_FILTER))
             dyStringPrintf(extraWhere, "%s(%s <= %d)", (*and?" and ":""),field,max);  // max only
         else
             dyStringPrintf(extraWhere, "%s(%s BETWEEN %d and %d)", (*and?" and ":""),field,min,max); // both min and max
-#endif//ndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
         *and=TRUE;
         }
     }
@@ -5452,16 +5427,6 @@ if(setting)
         safef(filterLimitName, sizeof(filterLimitName), "%s%s", filter, _MAX);
         cartRemoveVariableClosestToHome(cart,tdb,FALSE,filterLimitName);
         }
-#ifdef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
-    else if((min != 0 && (int)min != NO_VALUE) || (int)max != NO_VALUE) // Assumes min==0 is no filter!
-        {
-        if((min != 0 && (int)min != NO_VALUE) && (int)max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s BETWEEN %g and %g)", (*and?" and ":""),field,min,max); // both min and max
-        else if(min != 0 && (int)min != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s >= %g)", (*and?" and ":""),field,min);  // min only
-        else //if((int)max != NO_VALUE)
-            dyStringPrintf(extraWhere, "%s(%s <= %g)", (*and?" and ":""),field,max);  // max only
-#else//ifndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
     else if(((int)min != NO_VALUE && ((int)minLimit == NO_VALUE || minLimit != min))  // Assumes min==NO_VALUE or min==minLimit is no filter
          || ((int)max != NO_VALUE && ((int)maxLimit == NO_VALUE || maxLimit != max))) // Assumes max==NO_VALUE or max==maxLimit is no filter!
         {
@@ -5471,7 +5436,6 @@ if(setting)
             dyStringPrintf(extraWhere, "%s(%s <= %g)", (*and?" and ":""),field,max);  // max only
         else
             dyStringPrintf(extraWhere, "%s(%s BETWEEN %g and %g)", (*and?" and ":""),field,min,max); // both min and max
-#endif//ndef FILTER_ASSUMES_RANGE_AT_LIMITS_IS_VALID_FILTER
         *and=TRUE;
         }
     }
@@ -6438,7 +6402,6 @@ printf(PM_BUTTON_UC, "false", ",'", class, "'", "", "", name, "remove_sm.gif");
 }
 
 #define MATRIX_SQUEEZE 10
-#ifdef MATRIX_SQUEEZE
 static boolean matrixSqueeze(membersForAll_t* membersForAll)
 // Returns non-zero if the matrix will be squeezed.  Non-zero is actually squeezedLabelHeight
 {
@@ -6464,9 +6427,6 @@ if(dimensionX && dimensionY)
     }
 return FALSE;
 }
-#else///ifndef MATRIX_SQUEEZE
-#define matrixSqueeze(membersForAll) FALSE
-#endif///ndef MATRIX_SQUEEZE
 
 static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb,boolean squeeze, membersForAll_t* membersForAll,boolean top)
 /* prints the top row of a matrix: 'All' buttons; X titles; buttons 'All' */
@@ -6474,11 +6434,7 @@ static void matrixXheadingsRow1(char *db,struct trackDb *parentTdb,boolean squee
 members_t *dimensionX = membersForAll->members[dimX];
 members_t *dimensionY = membersForAll->members[dimY];
 
-#ifdef MATRIX_SQUEEZE
 printf("<TR ALIGN=CENTER valign=%s>\n",top?"BOTTOM":"TOP");
-#else///ifndef MATRIX_SQUEEZE
-printf("<TR ALIGN=CENTER BGCOLOR='%s' valign=%s>\n",COLOR_BG_ALTDEFAULT,top?"BOTTOM":"TOP");
-#endif///ndef MATRIX_SQUEEZE
 if(dimensionX && dimensionY)
     {
     printf("<TH ALIGN=LEFT valign=%s>",top?"TOP":"BOTTOM");
@@ -6493,12 +6449,10 @@ if(dimensionX)
     int ixX,cntX=0;
     if(dimensionY)
         {
-        #ifdef MATRIX_SQUEEZE
         if(squeeze)
             printf("<TH align=RIGHT><div class='%s'><B><EM>%s</EM></B></div></TH>",
                    (top?"up45":"dn45"), dimensionX->groupTitle);
         else
-        #endif///def MATRIX_SQUEEZE
             printf("<TH align=RIGHT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
         }
     else
@@ -6508,7 +6462,6 @@ if(dimensionX)
         {
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
             {
-        #ifdef MATRIX_SQUEEZE
             if(dimensionY && squeeze)
                 {
                 strSwapStrs(dimensionX->titles[ixX],strlen(dimensionX->titles[ixX]),"<BR>"," "); // Breaks must be removed!
@@ -6516,14 +6469,9 @@ if(dimensionX)
                        compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,dimensionX->titles[ixX]));
                 }
             else
-        #endif///def MATRIX_SQUEEZE
                 {
                 char *label =replaceChars(dimensionX->titles[ixX]," (","<BR>(");
-        #ifdef MATRIX_SQUEEZE
                 printf("<TH WIDTH='60' class='matCell %s all'>&nbsp;%s&nbsp;</TH>",dimensionX->tags[ixX],
-        #else///ifndef MATRIX_SQUEEZE
-                printf("<TH WIDTH='60'>&nbsp;%s&nbsp;</TH>",
-        #endif///ndef MATRIX_SQUEEZE
                        compositeLabelWithVocabLink(db,parentTdb,dimensionX->subtrackList[ixX]->val,dimensionX->groupTag,label));
                 freeMem(label);
                 }
@@ -6535,12 +6483,10 @@ if(dimensionX)
         {
         if(dimensionY)
             {
-            #ifdef MATRIX_SQUEEZE
             if(squeeze)
                 printf("<TH align=LEFT><div class='%s'><B><EM>%s</EM></B></div></TH>",
                     (top?"up45":"dn45"), dimensionX->groupTitle);
             else
-            #endif///def MATRIX_SQUEEZE
                 printf("<TH align=LEFT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
             printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
             //printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",(top == squeeze)?"BOTTOM":"TOP");//"TOP":"BOTTOM");
@@ -6572,21 +6518,13 @@ members_t *dimensionY = membersForAll->members[dimY];
 if(dimensionX && dimensionY)
     {
     int ixX,cntX=0;
-    #ifdef MATRIX_SQUEEZE
     printf("<TR ALIGN=CENTER><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",dimensionY->groupTitle);
-    #else///ifndef MATRIX_SQUEEZE
-    printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->groupTitle);
-    #endif///ndef MATRIX_SQUEEZE
     for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
         {
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
             {
             char objName[SMALLBUF];
-            #ifdef MATRIX_SQUEEZE
             printf("<TD nowrap class='matCell %s all'>\n",dimensionX->tags[ixX]);
-            #else///ifndef MATRIX_SQUEEZE
-            puts("<TD>");
-            #endif///ndef MATRIX_SQUEEZE
             safef(objName, sizeof(objName), "plus_%s_all", dimensionX->tags[ixX]);
             buttonsForOne( objName, dimensionX->tags[ixX], squeeze );
             puts("</TD>");
@@ -6629,11 +6567,7 @@ if(dimensionY && dimensionY->subtrackList && dimensionY->subtrackList[ixY] && di
 if(dimensionX && dimensionY && childTdb != NULL) // Both X and Y, then column of buttons
     {
     char objName[SMALLBUF];
-    #ifdef MATRIX_SQUEEZE
     printf("<TH class='matCell all %s' ALIGN=%s nowrap colspan=2>",dimensionY->tags[ixY],left?"RIGHT":"LEFT");
-    #else///ifndef MATRIX_SQUEEZE
-    printf("<TH ALIGN=%s nowrap colspan=2>",left?"RIGHT":"LEFT");
-    #endif///ndef MATRIX_SQUEEZE
     if(left)
         printf("%s&nbsp;",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
     safef(objName, sizeof(objName), "plus_all_%s", dimensionY->tags[ixY]);
@@ -6649,12 +6583,8 @@ else if (dimensionX)
     puts("</TH>");
     }
 else if (left && dimensionY && childTdb != NULL)
-    #ifdef MATRIX_SQUEEZE
     printf("<TH class='matCell all %s' ALIGN=RIGHT nowrap>%s</TH>\n",dimensionY->tags[ixY],
            compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
-    #else///ifndef MATRIX_SQUEEZE
-    printf("<TH ALIGN=RIGHT nowrap>%s</TH>\n",compositeLabelWithVocabLink(db,parentTdb,childTdb,dimensionY->groupTag,dimensionY->titles[ixY]));
-    #endif///ndef MATRIX_SQUEEZE
 }
 
 static int displayABCdimensions(char *db,struct cart *cart, struct trackDb *parentTdb, struct slRef *subtrackRefList, membersForAll_t* membersForAll)
@@ -6821,21 +6751,11 @@ for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
   //printf("<TD align='right'><B>%s:</B></TD><TD align='left'>\n",labelWithVocabLinkForMultiples(db,parentTdb,membersForAll->members[dimIx]));
     printf("<TD align='left'><B>%s:</B><BR>\n",labelWithVocabLinkForMultiples(db,parentTdb,membersForAll->members[dimIx]));
 
-    #ifdef FILTER_COMPOSITE_OPEN_SIZE
-    int fullSize = membersForAll->members[dimIx]->count;
-    #ifdef FILTER_COMPOSITE_ONLYONE
-    if(membersForAll->members[dimIx]->fcType != fctOneOnly)
-    #endif///def FILTER_COMPOSITE_ONLYONE
-        fullSize++; // Room for "All"
-    #endif///def FILTER_COMPOSITE_OPEN_SIZE
-
     #define FILTER_COMPOSITE_FORMAT "<SELECT id='fc%d' name='%s.filterComp.%s' %s onchange='filterCompositeSelectionChanged(this);' style='display: none; font-size:.8em;' class='filterComp'><BR>\n"
     printf(FILTER_COMPOSITE_FORMAT,dimIx,parentTdb->track,membersForAll->members[dimIx]->groupTag,"multiple");
 
-    #ifdef FILTER_COMPOSITE_ONLYONE
     // DO we support anything besides multi? (membersForAll->members[dimIx]->fcType == fctMulti?"multiple ":""));
     if(membersForAll->members[dimIx]->fcType != fctOneOnly)
-    #endif///def FILTER_COMPOSITE_ONLYONE
         printf("<OPTION%s>All</OPTION>\n",(sameWord("All",membersForAll->checkedTags[dimIx])?" SELECTED":"") );
 
     int ix=0;
@@ -6847,10 +6767,8 @@ for(dimIx=dimA;dimIx<membersForAll->dimMax;dimIx++)
         }
     printf("</SELECT>");
 
-    #ifdef FILTER_COMPOSITE_ONLYONE
     if(membersForAll->members[dimIx]->fcType == fctOneOnly)
         printf(" (select only one)");
-    #endif///def FILTER_COMPOSITE_ONLYONE
 
     printf("</TD><TD width='20'></TD>\n");
     }
@@ -6957,11 +6875,7 @@ if(membersForAll->abcCount > 0 && membersForAll->filters == FALSE)
 if(dimensionX == NULL && dimensionY == NULL) // Could have been just filterComposite. Must be an X or Y dimension
     return FALSE;
 
-#ifdef MATRIX_SQUEEZE
 printf("<TABLE class='greenBox matrix' cellspacing=0 style='background-color:%s;'>\n",COLOR_BG_ALTDEFAULT);
-#else///ifndef MATRIX_SQUEEZE
-printf("<TABLE class='greenBox' style='background-color:%s;'>\n",COLOR_BG_DEFAULT);
-#endif///ndef MATRIX_SQUEEZE
 
 (void)matrixXheadings(db,parentTdb,membersForAll,TRUE);
 
@@ -6973,11 +6887,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
         {
         cntY++;
         assert(!dimensionY || ixY < dimensionY->count);
-    #ifdef MATRIX_SQUEEZE
         printf("<TR ALIGN=CENTER>");
-    #else///ifndef MATRIX_SQUEEZE
-        printf("<TR ALIGN=CENTER BGCOLOR='%s'>",COLOR_BG_ALTDEFAULT);
-    #endif///ndef MATRIX_SQUEEZE
 
         matrixYheadings(db,parentTdb, membersForAll,ixY,TRUE);
 
@@ -7021,18 +6931,10 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                         {
                         safef(objName, sizeof(objName), "mat_%s_cb", (dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
                         }
-                    //printf("<TD title='subCBs:%d  checked:%d enabled:%d'>\n",cells[ixX][ixY],chked[ixX][ixY],enabd[ixX][ixY]);
-                #ifdef MATRIX_SQUEEZE
                     if(ttlX && ttlY)
                         printf("<TD class='matCell %s %s'>\n",dimensionX->tags[ixX],dimensionY->tags[ixY]);
                     else
                         printf("<TD class='matCell %s'>\n", (dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
-                #else///ifndef MATRIX_SQUEEZE
-                    if(ttlX && ttlY)
-                        printf("<TD title='%s and %s'>\n",ttlX,ttlY);
-                    else
-                        printf("<TD title='%s'>\n",(ttlX ? ttlX : ttlY));
-                #endif///ndef MATRIX_SQUEEZE
                     dyStringPrintf(dyJS, " class=\"matCB");
                     if(halfChecked)
                         dyStringPrintf(dyJS, " disabled");  // appears disabled but still clickable!
@@ -7051,18 +6953,10 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     }
                 else
                     {
-                #ifdef MATRIX_SQUEEZE
                     if(ttlX && ttlY)
                         printf("<TD class='matCell %s %s'></TD>\n",dimensionX->tags[ixX],dimensionY->tags[ixY]);
                     else
                         printf("<TD class='matCell %s'></TD>\n", (dimensionX ? dimensionX->tags[ixX] : dimensionY->tags[ixY]));
-                #else///ifndef MATRIX_SQUEEZE
-                    if(ttlX && ttlY)
-                        printf("<TD title='%s and %s'></TD>\n",ttlX,ttlY);
-                    else
-                        printf("<TD title='%s'></TD>\n",(ttlX ? ttlX : ttlY));
-                #endif///ndef MATRIX_SQUEEZE
-                    //puts("<TD>&nbsp;</TD>");
                     }
                 }
             }
@@ -7286,9 +7180,6 @@ if (primarySubtrack == NULL && !cartVarExists(cart, "ajax"))
     if(trackDbSetting(tdb, "dragAndDrop") != NULL)
         jsIncludeFile("jquery.tablednd.js", NULL);
     jsIncludeFile("ajax.js",NULL);
-    #ifdef TABLE_SCROLL
-    jsIncludeFile("jquery.fixedtable.js",NULL);
-    #endif//def TABLE_SCROLL
     jsIncludeFile("hui.js",NULL);
 #ifdef SUBTRACK_CFG
     jsIncludeFile("subCfg.js",NULL);
