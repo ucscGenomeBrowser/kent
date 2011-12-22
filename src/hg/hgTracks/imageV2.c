@@ -1235,11 +1235,7 @@ boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,i
    returns TRUE if successfully defined as having a portal */
 {
 if( (int)imageMultiple == 0)
-#ifdef IMAGEv2_DRAG_SCROLL_SZ
     imageMultiple = IMAGEv2_DRAG_SCROLL_SZ;
-#else//ifndef IMAGEv2_DRAG_SCROLL_SZ
-    imageMultiple = 1;
-#endif//ndef IMAGEv2_DRAG_SCROLL_SZ
 
 imgBox->portalStart = imgBox->chromStart;
 imgBox->portalEnd   = imgBox->chromEnd;
@@ -1756,10 +1752,8 @@ if(slice->parentImg)
         hPrintf(" display:none;");
     hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
 
-    #ifdef IMAGEv2_DRAG_SCROLL
     if(imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
-    #endif //def IMAGEv2_DRAG_SCROLL
     hPrintf("'>\n");
     }
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
@@ -1836,7 +1830,6 @@ if(imgBox->bgImg)
     hPrintf("</style>\n");
     }
 
-#ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
     {
     // Let js code know what's up
@@ -1853,7 +1846,6 @@ if(imgBox->showPortal)
     jsonHashAddDouble( jsonForClient,"imgBoxBasesPerPixel",imgBox->basesPerPixel);
     }
 else
-#endif//def IMAGEv2_DRAG_SCROLL
     jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       FALSE);
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
@@ -1895,11 +1887,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
 
     // Main/Data image region
-#ifdef IMAGEv2_DRAG_SCROLL
     hPrintf(" <TD id='td_data_%s' title='click & drag to scroll; shift+click & drag to zoom' width=%d class='tdData'>\n", trackName, imgBox->width);
-#else///ifndef IMAGEv2_DRAG_SCROLL
-    hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
-#endif//ndef IMAGEv2_DRAG_SCROLL
     // centerLabel
     if(imgTrack->hasCenterLabel)
         {

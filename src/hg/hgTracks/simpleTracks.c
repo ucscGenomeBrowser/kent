@@ -501,8 +501,6 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
 struct dyString *dy = newDyString(512);
 
 dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
-#define TOGGLE_SUBTRACKS
-#ifdef TOGGLE_SUBTRACKS
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
@@ -546,7 +544,6 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     freeMem(encodedTableName);
     }
 else
-#endif//def TOGGLE_SUBTRACKS
     {
     if (toggleGroup != NULL)
         {
@@ -917,7 +914,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* We may want to use this, or add a config setting for it */
         if (*text == '=' || *text == '-' || *text == '.' || *text == 'N')
             clr = noMatchColor;
-#endif
+#endif///def FADE_IN_DOT_MODE
         }
     else
         {
