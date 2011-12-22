@@ -34,7 +34,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	gorGor1 gorGor2 gorGor3 \
         nomLeu1 \
 	ponAbe2 \
-	rheMac2 \
+	rheMac2,rheMac3 \
 	papHam1 \
 	macEug1 macEug2 \
 	calJac1 calJac3 \
