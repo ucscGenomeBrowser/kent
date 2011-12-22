@@ -941,8 +941,8 @@ function waitMaskSetup(timeOutInMs)
     }
     $(waitMask).css({opacity:0.0,display:'block',top: '0px', height: $(document).height().toString() + 'px' });
     // Special for IE, since it takes so long, make mask obvious
-    if ($.browser.msie)
-        $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
+    //if ($.browser.msie)
+    //    $(waitMask).css({opacity:0.4,backgroundColor:'gray'});
 
     // Things could fail, so always have a timeout.
     if(timeOutInMs == undefined || timeOutInMs ==0)
@@ -1298,6 +1298,7 @@ var sortTable = {
     // and javascript timeout on slow (IE) browsers is less likely
     columns: null,
     tbody: null,
+    loadingId: null,
 
     row: function (tr,sortColumns,row)  // UNUSED: sortTable.fieldCmp works fine
     {
@@ -1362,9 +1363,9 @@ var sortTable = {
         // Sort the array
         cols.sort(sortTable.fieldCmp);
 
-        for(var cIx=0;cIx<cols.length;cIx++) {
-            tbody.appendChild(cols[cIx].row);
-        }
+        // most efficient reload of sorted rows I have found
+        var sortedRows = jQuery.map(cols, function(col, i) { return col.row; });
+        $(tbody).append( sortedRows );
 
         sortTable.tbody=tbody;
         sortTable.columns=sortColumns;
@@ -1380,15 +1381,22 @@ var sortTable = {
         $(tbody).parents("table.tableWithDragAndDrop").each(function (ix) {
             tableDragAndDropRegister(this);
         });
-        //$(tbody).show();
-        $(tbody).removeClass('sorting');
+        if (sortTable.loadingId != null)
+            hideLoadingImage(sortTable.loadingId);
     },
 
     sortByColumns: function (tbody,sortColumns)
     {// Will sort the table based on the abbr values on a set of <TH> colIds
     // Expects tbody to not sort thead, but could take table
-        //$(tbody).hide();
-        $(tbody).addClass('sorting');
+
+        // Used to use 'sorting' class, but showLoadingImage results in much less screen redrawing
+        // For IE especially this was the difference between dead/timedout scripts and working sorts!
+        var id = $(tbody).attr('id');
+        if (id == undefined || id.length == 0) {
+            $(tbody).attr('id',"tbodySort"); // Must have some id!
+            id = $(tbody).attr('id');
+        }
+        sortTable.loadingId = showLoadingImage(id);
         sortTable.tbody=tbody;
         sortTable.columns=sortColumns;
         setTimeout('sortTable.sort(sortTable.tbody,sortTable.columns)',50); // This allows hiding the rows while sorting!
