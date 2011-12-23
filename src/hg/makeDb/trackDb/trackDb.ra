@@ -512,6 +512,7 @@ prevExonText Prev Match
     sequenceTable t2gElsevierSequence
     type bed 12
     release alpha
+    maxItems 300
 
 searchTable mgcFullMrna
 searchType psl
