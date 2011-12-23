@@ -318,7 +318,7 @@ close (FH);
     # before porceed to genbank step
 
 ########################################################################
-# GENBANK AUTO UPDATE (working - 2011-12-12 - Chin)
+# GENBANK AUTO UPDATE (DONE - 2011-12-12 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -389,7 +389,7 @@ hetGla1.genbank.est.native.loadDesc = yes
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad hetGla1 &
     #   logFile: var/dbload/hgwdev/logs/2011.12.16-08:48:35.dbload.log
     #   real    193m46.127s
-XXXX 2011-12-16 4:15 PM
+
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
@@ -398,68 +398,20 @@ XXXX 2011-12-16 4:15 PM
         etc/hgwdev.dbs
     git add  etc/align.dbs
     git add  etc/hgwdev.dbs
-    git commit  -m "Added hetGla1 - Turkey" etc/align.dbs etc/hgwdev.dbs
+    git commit  -m "Added hetGla1 - moleRat" etc/align.dbs etc/hgwdev.dbs
     git pull
     git push
     make etc-update
 
 #########################################################################
-# reset default position as galGal3 Chicken (working 2011-03-08  - Chin)
+# reset default position as galGal3 Chicken (???? working 2011-03-08  - Chin)
 #
     hgsql -e \
 'update dbDb set defaultPos="chr5:57710001-57780000" where name="hetGla1";' \
 	hgcentraltest
 
 ############################################################################
-# ctgPos2 track - showing clone sequence locations on chromosomes
-#	(working 2011-03-08 - Chin)
-# NOTE - create hetGla1 entry in all.joiner since this is a new species
-    mkdir /hive/data/genomes/hetGla1/bed/ctgPos2
-    cd /hive/data/genomes/hetGla1/bed/ctgPos2
-    cat << '_EOF_' > agpToCtgPos2.pl
-#!/usr/bin/env perl
-
-use warnings;
-use strict;
-
-my $argc = scalar(@ARGV);
-
-if ($argc != 1) {
-    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl /dev/stdin > ctgPos2.tab\n";
-    exit 255;
-}
-
-my $agpFile = shift;
-
-open (FH, "<$agpFile") or die "can not read $agpFile";
-while (my $line = <FH>) {
-    next if ($line =~ m/^#/);
-    chomp $line;
-    my @a = split('\s+', $line);
-    next if ($a[4] =~ m/^N$/);
-    next if ($a[4] =~ m/^U$/);
-    my $chrSize = $a[2]-$a[1]+1;
-    my $ctgSize = $a[7]-$a[6]+1;
-    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
-    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1, $a[2], $a[4];
-}
-close (FH);
-'_EOF_'
-    # << happy emacs
-    chmod +x agpToCtgPos2.pl
-
-export S=../../genbank/Primary_Assembly/assembled_chromosomes
-cut -f2 ${S}/chr2acc | while read ACC
-do
-    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
-    zcat ${S}/AGP/chr${C}.agp.gz \
-        | sed -e "s/^${ACC}/chr${C}/"
-done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
-
-    hgLoadSqlTab hetGla1 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
-
-############################################################################
-# running cpgIsland business (working -2011-03-08 - Chin)
+# running cpgIsland business (DONE -2011-12-17 - Chin)
     mkdir /hive/data/genomes/hetGla1/bed/cpgIsland
     cd /hive/data/genomes/hetGla1/bed/cpgIsland
     cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
@@ -499,7 +451,7 @@ done
     #	N's - it gets stuck
     cat << '_EOF_' > runOne
 #!/bin/csh -fe
-set C = `faCount hardMaskedFa/$1.fa | grep ^chr | awk '{print  $2 - $7 }'`
+set C = `faCount hardMaskedFa/$1.fa | grep "^JH\|^chr" | awk '{print  $2 - $7 }'`
 if ( $C > 200 ) then
     ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
     mv /scratch/tmp/$1.$$ $2
@@ -521,15 +473,15 @@ endif
     # check it with plb
     # when all are done, para time shows:
     # para time
-    # 5891 jobs in batch
-    # 130198 jobs (including everybody's) in Parasol queue or running.
+    # 39267 jobs in batch
+    # 18 jobs (including everybody's) in Parasol queue or running.
     # Checking finished jobs
-    # Completed: 5891 of 5891 jobs
-    # CPU time in finished jobs:   86s       1.44m     0.02h    0.00d  0.000 y
-    # IO & Wait Time:           19261s     321.01m     5.35h    0.22d  0.001 y
-    # Average job time:             3s       0.05m     0.00h    0.00d
-    # Longest finished job:        26s       0.43m     0.01h    0.00d
-    # Submission to last job:     369s       6.15m     0.10h    0.00d
+    # Completed: 39267 of 39267 jobs
+    # CPU time in finished jobs:    190s       3.17m     0.05h    0.00d  0.000 y
+    # IO & Wait Time:            100994s    1683.23m    28.05h    1.17d  0.003 y
+    # Average job time:               3s       0.04m     0.00h    0.00d
+    # Longest finished job:           6s       0.10m     0.00h    0.00d
+    # Submission to last job:       123s       2.05m     0.03h    0.00d
 
 
     # Transform cpglh output to bed +
@@ -545,7 +497,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /hive/data/genomes/hetGla1/bed/cpgIsland
     hgLoadBed hetGla1 cpgIslandExt -tab \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
-    # Loaded 13372 elements of size 10
+    # Loaded 31524 elements of size 10
     # Sorted
     # Creating table definition for cpgIslandExt
     # Saving bed.tab
