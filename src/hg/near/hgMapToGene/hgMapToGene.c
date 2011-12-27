@@ -159,20 +159,23 @@ else
      * end of the last one are not splice sites. */
     int gpIx, bedIx;
     boolean foundSharedSpliceSite = FALSE;
-    for (gpIx = 1; gpIx < gp->exonCount && !foundSharedSpliceSite; gpIx++)
+    if (strcmp(gp->strand, bed->strand) == 0) 
 	{
-	int gpIntronStart = gp->exonEnds[gpIx - 1];
-	int gpIntronEnd = gp->exonStarts[gpIx];
-	int bedIntronStart = 0;
-	int bedIntronEnd = 0;
-	for (bedIx = 1; bedIx < bed->blockCount && bedIntronEnd <= gpIntronEnd; bedIx++) 
+	for (gpIx = 1; gpIx < gp->exonCount && !foundSharedSpliceSite; gpIx++)
 	    {
-	    bedIntronStart = bed->chromStart + bed->chromStarts[bedIx - 1] 
-                             + bed->blockSizes[bedIx - 1];
-	    bedIntronEnd = bed->chromStart + bed->chromStarts[bedIx];
-	    if (gpIntronStart == bedIntronStart || gpIntronEnd == bedIntronEnd)
+	    int gpIntronStart = gp->exonEnds[gpIx - 1];
+	    int gpIntronEnd = gp->exonStarts[gpIx];
+	    int bedIntronStart = 0;
+	    int bedIntronEnd = 0;
+	    for (bedIx = 1; bedIx < bed->blockCount && bedIntronEnd <= gpIntronEnd; bedIx++) 
 		{
-		foundSharedSpliceSite = TRUE;
+		bedIntronStart = bed->chromStart + bed->chromStarts[bedIx - 1] 
+		    + bed->blockSizes[bedIx - 1];
+		bedIntronEnd = bed->chromStart + bed->chromStarts[bedIx];
+		if (gpIntronStart == bedIntronStart || gpIntronEnd == bedIntronEnd)
+		    {
+		    foundSharedSpliceSite = TRUE;
+		    }
 		}
 	    }
 	}

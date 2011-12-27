@@ -386,6 +386,56 @@ else if (dbIsFound)
 
 #endif
 
+#ifdef SUPPORT_EURONODE
+
+if (endsWith(scriptName, "hgGateway"))  // DEBUG
+    {
+    char *source = cgiOptionalString("source");
+    if (source)
+	{
+	char *domain = cgiServerName();
+	char *port = cgiServerPort();
+	char *uri = cgiRequestUri();
+	    //   /cgi-bin/test.cgi?x=15&y=youdog
+	int newUriSize = strlen(uri)+1024;
+	char *newUri = needMem(newUriSize);
+	// TODO what about https?
+	safef(newUri, newUriSize, "http://%s:%s%s", source, port, uri);
+	char *zTerm = rStringIn("&source=", newUri);
+	if (zTerm)
+	    *zTerm = 0;
+
+	//empty TD disappears
+	/*
+	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
+	    "<center>"
+	    "You've been redirected to your nearest mirror - %s<br>"
+	    "<a href=\"%s\">Take me back to %s</a>"
+	    "</center>"
+	    "</TD></TR>\n"
+	    , domain, newUri, source );
+	    "<h3 style=\"background-color: #2636d1; text-align: center; color:#E0F0F0; margin-top:0px;\">"
+	*/
+
+	printf("<TR><TD COLSPAN=3 id='redirectTd' onclick=\"javascript:document.getElementById('redirectTd').innerHTML='';\">"
+	    "<div style=\"margin: 10px 25%%; border-style:solid; border-width:thin; border-color:#97D897;\">"
+	    "<h3 style=\"background-color: #97D897; text-align: left; margin-top:0px; margin-bottom:0px;\">"
+	    "<img style=\"float:left; margin-top:4px; margin-left:3px; margin-right:4px;\" src=\"http://uswest.ensembl.org/i/info_blue_13.png\">"
+	    "You've been redirected to your nearest mirror - %s"
+	    "<img title=\"Hide hint panel\" alt=\"Hide hint panel\" style=\"float:right; margin-top:3px; margin-right:3px\" src=\"http://uswest.ensembl.org/i/close.gif\">"
+	    "</h3> "
+	    "<ul style=\"margin:5px;\">"
+	    "<li>Take me back to <a href=\"%s\">%s</a>"
+	    "</li>"
+	    "</ul>"
+	    "</div>"
+	    "</TD></TR>\n"
+	    , domain, newUri, source );
+	}
+    }
+
+#endif
+
 if(!skipSectionHeader)
 /* this HTML must be in calling code if skipSectionHeader is TRUE */
     {

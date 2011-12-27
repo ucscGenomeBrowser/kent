@@ -13,13 +13,19 @@
 # FTP-RELEASE DATE: 03-Nov-2011
 
 
-# Bos taurus (NCBI Project ID: 10709, Accession: GCA_000003205.4) 
-#   by Bovine Genome Sequencing Consortium
+# Bos taurus (NCBI Project ID: 12555, Accession: GCA_000003205.4) 
+#   by Bovine Genome Sequencing and Analysis Consortiumn
 #    assembly] sequence: 
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Bos_taurus/Btau_4.6.1/
+# Project 12555
+# url:
+# http://www.ncbi.nlm.nih.gov/nuccore/AAFC00000000
+# chrM: AY526085 
+http://www.ncbi.nlm.nih.gov/nuccore/AY526085.1
+
 
 ##########################################################################
-# Download sequence (working - 2011-05-02 Chin)
+# Download sequence (DONE - 2011-05-02 Chin)
     mkdir /hive/data/genomes/bosTau7
     cd /hive/data/genomes/bosTau7
     mkdir genbank
@@ -36,7 +42,7 @@
     #   fixup the accession names to become UCSC chrom names
 
 export S=Primary_Assembly/assembled_chromosomes
-cut -f2 ${S}/chr2acc  | while read ACC
+cat  ${S}/chr2acc | grep -v "^#Chromosome" | cut -f2 | while read ACC
 do
     C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
     echo "${ACC} -> chr${C}"
@@ -47,6 +53,7 @@ done
 
 export S=Primary_Assembly/assembled_chromosomes
 cut -f2 ${S}/chr2acc  | while read ACC
+cat  ${S}/chr2acc | grep -v "^#Chromosome" | cut -f2 | while read ACC
 do
     C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
     echo "${ACC} -> chr${C}"
@@ -56,16 +63,16 @@ do
 done
    # Check them with faSize 
     faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
-    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper 
-    #  0 lower) in 30 sequences in 30 files
+    # 2673141463 bases (159233025 N's 2513908438 real 2513908438 upper 
+    # 0 lower) in 31 sequences in 31 files
 
     faSize ucscChr/chr*.fa.gz
     #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper 
     #  0 lower) in 30 sequences in 30 files
 
     # For unplaced scalfolds, named them as chrUn_xxxxxxxx
-    #   where xxxxxx is the original access id as: chrUn_GL340781.1  
-    #   The ".1" at the end need to be filter out since
+    #   where xxxxxx is the original access id as: chrUn_JH121286  
+    #   The ".1" at the end (if any) need to be filter out since
     #   MySQL does not allow "." as part of the table name and 
     #   will casue problems in genbank task step later
 
@@ -79,18 +86,18 @@ gzip ucscChr/chrUn.agp &
 zcat ${S}/FASTA/unplaced.scaf.fa.gz \
         | sed -e "s#^>.*|tpg|#>chrUn_#; s#|.*##"  -e "s/\.1//"  \
         | gzip > ucscChr/chrUn.fa.gz
-   # about 3286 sequences in the unplaced
+   # about 11660 sequences in the unplaced
 zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
-   #     3286    3286   13144
+   #     11660   11660   46640
 
    # Check them with faSize 
    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-   #   9499556 bases (40 N's 9499516 real 9499516 upper 0 
-   #   lower) in 3286 sequences in 1 files
+   # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
+   # 0 lower) in 11660 sequences in 1 files
 
    faSize ucscChr/chrUn.fa.gz
-   #   9499556 bases (40 N's 9499516 real 9499516 upper 0 
-   #   lower) in 3286 sequences in 1 files
+   # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
+   # 0 lower) in 11660 sequences in 1 files
 
 #########################################################################
 # Initial  database build (working - 2011-05-09 - Chin)
@@ -102,11 +109,11 @@ clade mammal
 genomeCladePriority 31
 scientificName Bos taurus
 commonName Cow
-assemblyDate Nov. 2009
-assemblyLabel UMD_3.1 (NCBI project 10708, accession GCA_000003055.3)
-assemblyShortLabel Bos_taurus_UMD_3.1
+assemblyDate OCt. 2011
+assemblyLabel Btau_4.6.1 (NCBI project 12555, accession GCA_000003205.4)
+assemblyShortLabel Btau_4.6.1
 orderKey 236
-mitoAcc NC_006853
+mitoAcc AY526085
 fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
 agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
 # qualFiles none
