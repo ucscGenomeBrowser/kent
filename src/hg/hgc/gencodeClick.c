@@ -121,6 +121,19 @@ else
     return "automatic";
 }
 
+static char *getLevelDesc(int level)
+/* return english description for level */
+{
+if (level == 1)
+    return "validated";
+else if (level == 2)
+    return "manual";
+else if (level == 3)
+    return "automatic";
+else
+    return "unknown";
+}
+
 static char *mkExtIdUrl(struct trackDb *tdb,  char *id, char *settingName, char *urlBuf)
 /* generate a url to a external database given an id and the name of a setting
  * containing the sprintf URL template.*/
@@ -143,6 +156,7 @@ static void prTdExtIdAnchor(struct trackDb *tdb,  char *id, char *settingName)
 printf("<td>");
 prExtIdAnchor(tdb, id, settingName);
 }
+
 
 static void writePosLink(char *chrom, int chromStart, int chromEnd)
 /* write link to a genomic position */
@@ -192,7 +206,8 @@ printf("<tr><th>Strand<td>%s<td></tr>\n", transAnno->strand);
 printf("<tr><th><a href=\"http://www.gencodegenes.org/gencode_biotypes.html\">Biotype</a><td>%s<td>%s</tr>\n", transAttrs->transcriptType, transAttrs->geneType);
 /* FIXME: add href o */
 printf("<tr><th>Status<td>%s<td>%s</tr>\n", transAttrs->transcriptStatus, transAttrs->geneStatus);
-printf("<tr><th>Method<td>%s<td>%s</tr>\n", getMethodDesc(transcriptSource->source), getMethodDesc(geneSource->source));
+printf("<tr><th>Annotation Level<td>%s (%d)<td></tr>\n", getLevelDesc(transAttrs->level), transAttrs->level);
+printf("<tr><th>Annotation Method<td>%s<td>%s</tr>\n", getMethodDesc(transcriptSource->source), getMethodDesc(geneSource->source));
 printf("<tr><th>HUGO gene<td colspan=2>%s</tr>\n", transAttrs->geneName);
 printf("<tr><th>CCDS<td>%s<td></tr>\n", transAttrs->ccdsId);
 // FIXME: add sequence here??
@@ -299,7 +314,7 @@ while ((pubMed != NULL) || (rowCnt == 0))
     printf("</tr>\n");
     rowCnt++;
     }
-printf("</thead></table>\n");
+printf("</tbody></table>\n");
 }
 
 static void writeRefSeqEntry(struct wgEncodeGencodeRefSeq *refSeq)
