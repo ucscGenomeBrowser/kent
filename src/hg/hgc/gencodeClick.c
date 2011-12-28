@@ -641,6 +641,7 @@ else
 
 htmlHorizontalLine();
 printTrackHtml(tdb);
+cartWebEnd();
 
 genePredFreeList(&anno);
 hFreeConn(&conn);
