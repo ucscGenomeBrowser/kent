@@ -12,7 +12,7 @@ dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dim
 dimensionCchecked pAP,pAM
 dimensionBchecked rep0,rep1,Pooled
 filterComposite dimC=multi dimB=multi
-sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
+sortOrder  cellType=+ localization=+ rnaExtract=+ rep=+ view=-
 fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract view=View dccRep=UCSC<BR>Replicate replicate=Lab<BR>Replicate bioRep=Cross_Lab<BR>BioReplicate labProtocolId=<i>Protocol<BR>ID</i> labExpId=Lab<BR>Exp_ID dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession origAssembly=Original<BR>Assembly fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until md5sum=md5sum 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
@@ -49,7 +49,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878CytosolPamPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal on
-        shortLabel GM12 cyto pA- + 0
+        shortLabel GM78 cyto pA- + 0
         longLabel GM12878 cytosol polyA- CAGE Plus start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
@@ -431,7 +431,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleusPamPlusSignalRep1
         subTrack wgEncodeRikenCageViewPlusSignal on
-        shortLabel GM12 nucl pA- + 1
+        shortLabel GM78 nucl pA- + 1
         longLabel GM12878 nucleus polyA- CAGE Plus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.710000 17480.259766
@@ -565,7 +565,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleolusTotalPlusSignal
         subTrack wgEncodeRikenCageViewPlusSignal off
-        shortLabel GM12 nlus tot + 0
+        shortLabel GM78 nlus tot + 0
         longLabel GM12878 nucleolus total CAGE Plus start sites Generation 0 from ENCODE/RIKEN
         subGroups view=PlusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
@@ -791,7 +791,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878CytosolPamMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal on
-        shortLabel GM12 cyto pA- - 0
+        shortLabel GM78 cyto pA- - 0
         longLabel GM12878 cytosol polyA- CAGE Minus start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
         type bigWig 0.040000 4464.319824
@@ -903,7 +903,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleolusTotalMinusSignal
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel GM12 nlus tot - 0
+        shortLabel GM78 nlus tot - 0
         longLabel GM12878 nucleolus total CAGE Minus start sites Generation 0 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 0.040000 4464.319824
@@ -1254,7 +1254,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleusPamMinusSignalRep1
         subTrack wgEncodeRikenCageViewMinusSignal on
-        shortLabel GM12 nucl pA- - 1
+        shortLabel GM78 nucl pA- - 1
         longLabel GM12878 nucleus polyA- CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=1GM12878 localization=nucleus rnaExtract=pAM rep=rep1
         type bigWig 0.710000 8817.570312
@@ -1537,7 +1537,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878CytosolPamAln
         subTrack wgEncodeRikenCageViewAlignments off
-        shortLabel GM12 cyto pA- A 0
+        shortLabel GM78 cyto pA- A 0
         longLabel GM12878 cytosol polyA- CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=cytosol rnaExtract=pAM rep=rep1
         type bam
@@ -1649,7 +1649,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleolusTotalAln
         subTrack wgEncodeRikenCageViewAlignments off
-        shortLabel GM12 nlus tot A 0
+        shortLabel GM78 nlus tot A 0
         longLabel GM12878 nucleolus total CAGE Alignments Generation 0 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=nucleolus rnaExtract=total rep=rep1
         type bam
@@ -1968,7 +1968,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageGm12878NucleusPamAlnRep1
         subTrack wgEncodeRikenCageViewAlignments off
-        shortLabel GM12 nucl pA- A 1
+        shortLabel GM78 nucl pA- A 1
         longLabel GM12878 nucleus polyA- CAGE Alignments Rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=1GM12878 localization=nucleus rnaExtract=pAM rep=rep1
         type bam

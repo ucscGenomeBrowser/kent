@@ -26,6 +26,7 @@ use strict;
 #use DataBrowser qw(browse);
 use File::stat;
 use File::Basename;
+use File::Temp qw/ tempfile tempdir /;
 use Getopt::Long;
 use English;
 use Carp qw(cluck);
@@ -358,6 +359,7 @@ our %formatCheckers = (
     psl  => \&validatePsl,
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
+    bigBed => \&validateBigBed,
     bam => \&validateBam,
     shortFrags => \&validateBed,
     bedLogR => \&validateBed,
@@ -917,6 +919,34 @@ sub validateBam
     return ();
 }
 
+sub validateBigBed
+{
+    my ($path, $file, $type) = @_;
+    doTime("Beginning validateBigBed") if $opt_timing;
+    HgAutomate::verbose(2, "validateBigBed($path,$file,$type)\n");
+    my $fh = File::Temp->new(UNLINK => 1);
+    $fh->unlink_on_destroy( 1 );
+    my $tempfilename = $fh->filename;
+    #print STDERR "tempfilename = $tempfilename\n";
+    my $safe = SafePipe->new(CMDS => ["bigBedToBed $file $tempfilename"]);
+    if(my $err = $safe->exec()) {
+        print STDERR  "ERROR: failed validateBigBed : " . $safe->stderr() . "\n";
+        return("failed validateBigBed for '$file'");
+    }
+    my ($tmpfile, $basedir, $bar) = fileparse($tempfilename);
+    my $bedError = &validateBed($basedir, $tmpfile, "bed");
+    if ($bedError) {
+        $bedError =~ s/$tmpfile/$file/g;
+        print STDERR "ERROR: failed validateBigBed : " . $bedError . "\n";
+        return("failed validateBigBed for '$file'");
+    }
+    HgAutomate::verbose(2, "File \'$file\' passed validateBigBed\n");
+    doTime("done validateBigBed") if $opt_timing;
+    return ();
+}
+
+
+
 sub validateBigWig
 {
     my ($path, $file, $type) = @_;
@@ -1403,7 +1433,7 @@ sub makeDownloadTargetFileName {
     }
 
     my $target;
-    if (($type eq "bam") || ($type eq "bigWig"))  {
+    if (($type eq "bam") || ($type eq "bigWig") || ($type eq "bigBed"))  {
         $target = "$tablename.$type";
 
     } else {

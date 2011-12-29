@@ -94,7 +94,7 @@ priority 103.29
         color 0, 10, 100
         altColor 0,90,10
         type wigMaf 0.0 1.0
-        speciesCodonDefault calJac3
+        speciesCodonDefault felCat4
         speciesGroups Vertebrate
         sGroup_Vertebrate canFam2 ailMel1 hg19 mm9 monDom5 
         #speciesDefaultOff canFam2 ailMel1 monDom5

@@ -2140,7 +2140,7 @@ chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr2
 visibility hide
 dataVersion ENCODE June 2005 Freeze
 origAssembly hg16
-type bed .
+type bed
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite
     parent encodeYaleChIPSTAT1Sites

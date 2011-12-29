@@ -22,7 +22,17 @@ boxedCfg on
 pValueFilter 0.0
 pValueFilterLimits 0:16
 noScoreFilter .
-dataVersion through the ENCODE Jan 2011 Freeze
+filterBy color:Validation_Level=\
+            0|Validated_(OC_1){#000000},\
+            255|Open_Chromatin_(OC_2-3){#0000FF},\
+            39168|DNase_low_(OC_2){#009900},\
+            10027008|FAIRE_low_(OC_3){#990000},\
+            16711935|ChIP-seq_(OC_4){#FF00FF} \
+         ocCode:OC_Code=+\
+            1&#58;_Validated_(all),\
+            2&#58;_DNase_(all),\
+            3&#58;_FAIRE_(all),\
+            4&#58;_ChIP_(all)
 html wgEncodeOpenChromSynth.release2
 
 	track wgEncodeOpenChromSynthK562Pk
@@ -163,12 +173,13 @@ html wgEncodeOpenChromSynth.release2
         origAssembly hg19
         # subId=4630 dateSubmitted=2011-07-28
 
-        track wgEncodeOpenChromSynthUrothelUt189Pk
-        parent wgEncodeOpenChromSynth off
-        shortLabel Urothelia Pk
-        longLabel Urothelia UT189 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=UROTHEL treatment=UT189
-        type bed 9 +
-        origAssembly hg19
+        #hold off for release 3, lab isn't confident in results
+        #track wgEncodeOpenChromSynthUrothelUt189Pk
+        #parent wgEncodeOpenChromSynth off
+        #shortLabel Urothelia Pk
+        #longLabel Urothelia UT189 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        #subGroups cellType=UROTHEL treatment=UT189
+        #type bed 9 +
+        #origAssembly hg19
         # subId=4630 dateSubmitted=2011-07-28
 
