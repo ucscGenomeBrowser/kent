@@ -27,7 +27,7 @@ set RatDb = Rn4
 set fishDb = danRer7
 set flyDb = dm3
 set wormDb = ce6
-set yeastDb = sacCer3
+set yeastDb = sacCer2
 
 # The net alignment for the closely-related species indicated in $xdb
 set xdbNetDir = $genomes/$db/bed/lastz.${xdb}/axtChain
@@ -68,7 +68,7 @@ set xdbFa = $genomes/$xdb/bed/ucsc.12/ucscGenes.faa
 set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
-set wormFa = $genomes/$wormDb/bed/blastp/wormPep210.faa
+set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
 
 # Other files needed
@@ -93,6 +93,9 @@ set oldGeneBed = $oldGeneDir/ucscGenes.bed
 set dbHost = hgwdev
 set ramFarm = memk
 set cpuFarm = swarm
+
+# Code base
+set kent = ~/kent
 
 # Create initial dir
 set scriptDir = `pwd`
@@ -844,35 +847,37 @@ else
     exit 255
 endif
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
 
 # Make up knownGenes table, adding uniProt ID. Load into database.
 #	Takes 3 seconds.
 txGeneFromBed ucscGenes.bed ucscGenes.picks ucscGenes.faa uniProt.fa refPep.fa ucscGenes.gp
-hgLoadSqlTab $tempDb knownGene ~/kent/src/hg/lib/knownGene.sql ucscGenes.gp
+hgLoadSqlTab $tempDb knownGene $kent/src/hg/lib/knownGene.sql ucscGenes.gp
 hgLoadBed $tempDb knownAlt ucscSplice.bed
 
 # Load in isoforms, canonical, and gene sequence tables
-hgLoadSqlTab $tempDb knownIsoforms ~/kent/src/hg/lib/knownIsoforms.sql isoforms.tab
-hgLoadSqlTab $tempDb knownCanonical ~/kent/src/hg/lib/knownCanonical.sql canonical.tab
+hgLoadSqlTab $tempDb knownIsoforms $kent/src/hg/lib/knownIsoforms.sql isoforms.tab
+hgLoadSqlTab $tempDb knownCanonical $kent/src/hg/lib/knownCanonical.sql canonical.tab
 hgPepPred $tempDb generic knownGenePep ucscGenes.faa
 hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+
 # Create a bunch of knownToXxx tables according to alignment overlap.  
 # Takes about 3 minutes:
 cd $dir
-hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
-hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+bedIntersect -minCoverage=1 ucscGenes.bed antibody.bed abGenes.bed
+cat abGenes.bed |awk '{ print $4}' > abGenes.txt
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db ensGene knownGene knownToEnsembl
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToRefSeq
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
-hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $tempDb $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
-hgLoadSqlTab $tempDb kgXref ~/kent/src/hg/lib/kgXref.sql ucscGenes.xref
+hgLoadSqlTab $tempDb kgXref $kent/src/hg/lib/kgXref.sql ucscGenes.xref
 
 # Update knownToRefSeq to make it consistent with ucscGenes.xref.  Prior to
 # this update, knownToRefSeq contains links to the RefSeq transcript that it
@@ -887,43 +892,43 @@ hgsql $tempDb \
 
 # Make up and load kgColor table. Takes about a minute.
 txGeneColor $spDb ucscGenes.info ucscGenes.picks ucscGenes.color
-hgLoadSqlTab $tempDb kgColor ~/kent/src/hg/lib/kgColor.sql ucscGenes.color
+hgLoadSqlTab $tempDb kgColor $kent/src/hg/lib/kgColor.sql ucscGenes.color
 
 # Load up kgTxInfo table. Takes 0.3 second
-hgLoadSqlTab $tempDb kgTxInfo ~/kent/src/hg/lib/txInfo.sql ucscGenes.info
+hgLoadSqlTab $tempDb kgTxInfo $kent/src/hg/lib/txInfo.sql ucscGenes.info
 
 # Make up alias tables and load them. Takes a minute or so.
 txGeneAlias $db $spDb ucscGenes.xref ucscGenes.ev oldToNew.tab foo.alias foo.protAlias
 sort foo.alias | uniq > ucscGenes.alias
 sort foo.protAlias | uniq > ucscGenes.protAlias
 rm foo.alias foo.protAlias
-hgLoadSqlTab $tempDb kgAlias ~/kent/src/hg/lib/kgAlias.sql ucscGenes.alias
-hgLoadSqlTab $tempDb kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql ucscGenes.protAlias
+hgLoadSqlTab $tempDb kgAlias $kent/src/hg/lib/kgAlias.sql ucscGenes.alias
+hgLoadSqlTab $tempDb kgProtAlias $kent/src/hg/lib/kgProtAlias.sql ucscGenes.protAlias
 
 # Load up kgProtMap2 table that says where exons are in terms of CDS
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
-hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db allenBrainAli -type=psl knownGene knownToAllenBrain
 
-hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
 
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
 cd $dir
-hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl -noLoad
-~/kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db ensGene knownGene knownToEnsembl -noLoad
+$kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
 grep -v -e ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
-hgLoadSqlTab $tempDb knownToTreefam ~/kent/src/hg/lib/knownTo.sql knownToTreefam.tab
+hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
 
 if ($db =~ hg*) then
-    hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
-    hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
-    hgMapToGene $db -tempDb=$tempDb affyU133 knownGene knownToU133
-    hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db HInvGeneMrna knownGene knownToHInv
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133Plus2 knownGene knownToU133Plus2
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133 knownGene knownToU133
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU95 knownGene knownToU95
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
 
@@ -936,17 +941,21 @@ if ($db =~ hg*) then
 endif
 
 if ($db =~ mm*) then
-    hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
-    hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
-    hgMapToGene $db -tempDb=$tempDb affyU74  knownGene knownToU74
-    hgMapToGene $db -tempDb=$tempDb affyMOE430 knownGene knownToMOE430
-    hgMapToGene $db -tempDb=$tempDb affyMOE430 -prefix=A: knownGene knownToMOE430A
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyGnf1m knownGene knownToGnf1m
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU74  knownGene knownToU74
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyMOE430 knownGene knownToMOE430
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyMOE430 -prefix=A: knownGene knownToMOE430A
     hgExpDistance $tempDb $db.affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
     hgExpDistance $tempDb $db.affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
     hgExpDistance $tempDb $db.affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
@@ -1068,6 +1077,7 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
 
+
 # MAKE FOLDUTR TABLES 
 # First set up directory structure and extract UTR sequence on hgwdev
 cd $dir
@@ -1098,6 +1108,7 @@ gensub2 in.lst single template jobList
 # Do cluster runs for UTRs
 ssh $cpuFarm "cd $dir/rnaStruct/utr3; para make jobList"
 ssh $cpuFarm "cd $dir/rnaStruct/utr5; para make jobList"
+
 
 # Load database
     cd $dir/rnaStruct/utr5
@@ -1171,8 +1182,9 @@ awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
 	pfam/pfamDesc.tab > sub.tab
 cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
 rm -f sub.tab
-hgLoadSqlTab $tempDb knownToPfam ~/kent/src/hg/lib/knownTo.sql knownToPfam.tab
-hgLoadSqlTab $tempDb pfamDesc ~/kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
+hgLoadSqlTab $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
+hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
+
 
 # Do scop run. Takes about 6 hours
 # First get pfam global HMMs into /san/sanvol1/scop somehow.
@@ -1210,19 +1222,19 @@ catDir scop/result | \
 	hmmPfamToTab -eValCol -scoreCol stdin scopPlusScore.tab
 scopCollapse scopPlusScore.tab /hive/data/outside/scop/model.tab ucscScop.tab \
 	scopDesc.tab knownToSuper.tab
-hgLoadSqlTab $tempDb knownToSuper ~/kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
-hgLoadSqlTab $tempDb scopDesc ~/kent/src/hg/lib/scopDesc.sql scopDesc.tab
-hgLoadSqlTab $tempDb ucscScop ~/kent/src/hg/lib/ucscScop.sql ucscScop.tab
+hgLoadSqlTab $tempDb knownToSuper $kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
+hgLoadSqlTab $tempDb scopDesc $kent/src/hg/lib/scopDesc.sql scopDesc.tab
+hgLoadSqlTab $tempDb ucscScop $kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
 # Regenerate ccdsKgMap table
-~/kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
+$kent/src/hg/makeDb/genbank/bin/x86_64/mkCcdsGeneMap  -db=$tempDb -loadDb $db.ccdsGene knownGene ccdsKgMap
 
 # Map old to new mapping
 # XXX TODO - haven't figured out how to do this when old genes were on old assembly
 hgsql $db -N -e 'select * from knownGene' > knownGeneOld.gp
 genePredToBed knownGeneOld.gp >knownGeneOld.bed
 txGeneExplainUpdate2 knownGeneOld.bed ucscGenes.bed kgOldToNew.tab
-hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} ~/kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
+hgLoadSqlTab $tempDb kg${lastVer}ToKg${curVer} $kent/src/hg/lib/kg1ToKg2.sql kgOldToNew.tab
 
 # Build kgSpAlias table, which combines content of both kgAlias and kgProtAlias tables.
 
@@ -1235,7 +1247,7 @@ hgsql $tempDb -N -e \
 cat kgSpAlias_0.tmp|sort -u  > kgSpAlias.tab
 rm kgSpAlias_0.tmp
 
-hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
+hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
 
 
 # Do BioCyc Pathways build
@@ -1243,9 +1255,9 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
-    kgBioCyc1 genes.tab pathways.tab $tempDb bioCycPathway.tab bioCycMapDesc.tab
-    hgLoadSqlTab $tempDb bioCycPathway ~/kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
-    hgLoadSqlTab $tempDb bioCycMapDesc ~/kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
+    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    hgLoadSqlTab $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
+    hgLoadSqlTab $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
 
 # Do KEGG Pathways build (borrowing Fan Hus's strategy from hg19.txt)
@@ -1280,13 +1292,13 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
    # Finally, update the knownToKeggEntrez table from the keggPathway table.
    hgsql $tempDb -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' \
         |sort -u| sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
-   hgLoadSqlTab $tempDb knownToKeggEntrez ~/kent/src/hg/lib/knownToKeggEntrez.sql \
+   hgLoadSqlTab $tempDb knownToKeggEntrez $kent/src/hg/lib/knownToKeggEntrez.sql \
         knownToKeggEntrez.tab
 
 # Make spMrna table (useful still?)
    cd $dir
    hgsql $db -N -e "select spDisplayID,kgID from kgXref where spDisplayID != ''" > spMrna.tab;
-   hgLoadSqlTab $tempDb spMrna ~/kent/src/hg/lib/spMrna.sql spMrna.tab
+   hgLoadSqlTab $tempDb spMrna $kent/src/hg/lib/spMrna.sql spMrna.tab
 
 
 # Do CGAP tables 
@@ -1298,20 +1310,22 @@ hgLoadSqlTab $tempDb kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     hgCGAP Hs_GeneData.dat
         
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
-    hgLoadSqlTab $tempDb cgapAlias ~/kent/src/hg/lib/cgapAlias.sql ./cgapAlias.tab
+    hgLoadSqlTab $tempDb cgapAlias $kent/src/hg/lib/cgapAlias.sql ./cgapAlias.tab
 
-    hgLoadSqlTab $tempDb cgapBiocPathway ~/kent/src/hg/lib/cgapBiocPathway.sql ./cgapBIOCARTA.tab
+    hgLoadSqlTab $tempDb cgapBiocPathway $kent/src/hg/lib/cgapBiocPathway.sql ./cgapBIOCARTA.tab
 
     cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
-    hgLoadSqlTab $tempDb cgapBiocDesc ~/kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+    hgLoadSqlTab $tempDb cgapBiocDesc $kent/src/hg/lib/cgapBiocDesc.sql cgapBIOCARTAdescSorted.tab
+
 
 
 # Make PCR target for UCSC Genes, Part 1.
 # 1. Get a set of IDs that consist of the UCSC Gene accession concatenated with the
 #    gene symbol, e.g. uc010nxr.1__DDX11L1
-hgsql $tempDb -NBe 'select kgId,geneSymbol from kgXref' \                            
+hgsql $tempDb -N -e 'select kgId,geneSymbol from kgXref' \                            
     | perl -wpe 's/^(\S+)\t(\S+)/$1\t${1}__$2/ || die;' \                             
       > idSub.txt
+
 # 2. Get a file of per-transcript fasta sequences that contain the sequences of each 
 #    UCSC Genes transcript, with this new ID in the place of the UCSC Genes accession.
 #    Convert that file to TwoBit format and soft-link it into /gbdb/hg19/targetDb/
@@ -1322,30 +1336,19 @@ mkdir -p /gbdb/hg19/targetDb/
 rm -f /gbdb/hg19/targetDb/kgTargetSeq.2bit
 ln -s $dir/kgTargetSeq.2bit /gbdb/hg19/targetDb/
 # Load the table kgTargetAli, which shows where in the genome these targets are.
-cut -f 1-10 ucscGenes.gp \                        
-    | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
+cut -f 1-10 ucscGenes.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl $tempDb kgTargetAli.psl
 
-# 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
-# /gbdb/hg19/targetDb/kgTargetSeq.2bit .          
-# On hgwdev, insert new records into blatServers and targetDb, using the 
-# host (field 2) and port (field 3) specified by cluster-admin.
-hgsql hgcentraltest -e \                                                    
-      'INSERT into blatServers values ("hg19Kg", "blat5", 17783, 0, 1);'
-hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg19Kg", "UCSC Genes", \                    
-         "hg19", "kgTargetAli", "", "", \                                       
-         "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+cd $dir
 		
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
 # Save old known genes and kgXref tables
-sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
-sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
+#sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
+#sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 
 # Create backup database
 hgsqladmin create ${db}Backup
@@ -1376,11 +1379,24 @@ rm -f /gbdb/$db/knownGene.ix /gbdb/$db/knownGene.ixx
 ln -s $dir/index/knownGene.ix  /gbdb/$db/knownGene.ix
 ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 
-# move this exit statement to the end of the section to be done next           exit $status # BRACKET                                                          
 
+# 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
+# /gbdb/hg19/targetDb/kgTargetSeq.2bit .          
 
 # move this exit statement to the end of the section to be done next
-#exit $status # BRACKET
+exit $status # BRACKET
+
+# 4. On hgwdev, insert new records into blatServers and targetDb, using the 
+# host (field 2) and port (field 3) specified by cluster-admin.
+hgsql hgcentraltest -e \                                                
+      'INSERT into blatServers values ("hg19Kg", "blat5", 17783, 0, 1);'
+hgsql hgcentraltest -e \                                                    
+      'INSERT into targetDb values("hg19Kg", "UCSC Genes", \                    
+         "hg19", "kgTargetAli", "", "", \                                       
+         "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
+
+
+
 
 #
 # Finally, need to wait until after testing, but update databases in other organisms
