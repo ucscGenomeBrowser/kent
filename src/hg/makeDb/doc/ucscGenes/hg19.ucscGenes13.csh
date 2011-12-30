@@ -862,13 +862,18 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+
 # Create a bunch of knownToXxx tables according to alignment overlap.  
 # Takes about 3 minutes:
 cd $dir
-hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl
-hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToRefSeq
+bedIntersect -minCoverage=1 ucscGenes.bed antibody.bed abGenes.bed
+cat abGenes.bed |awk '{ print $4}' > abGenes.txt
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db ensGene knownGene knownToEnsembl
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToRefSeq
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" $db > refToLl.txt
-hgMapToGene $db -tempDb=$tempDb refGene knownGene knownToLocusLink -lookup=refToLl.txt
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db refGene knownGene knownToLocusLink -lookup=refToLl.txt
 
 # Make up kgXref table.  Takes about 3 minutes.
 txGeneXref $db $tempDb $spDb ucscGenes.gp ucscGenes.info ucscGenes.picks ucscGenes.ev ucscGenes.xref
@@ -904,26 +909,26 @@ hgLoadSqlTab $tempDb kgProtAlias $kent/src/hg/lib/kgProtAlias.sql ucscGenes.prot
 hgLoadPsl $tempDb ucscProtMap.psl -table=kgProtMap2
 
 # Create a bunch of knownToXxx tables.  Takes about 3 minutes:
-hgMapToGene $db -tempDb=$tempDb allenBrainAli -type=psl knownGene knownToAllenBrain
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db allenBrainAli -type=psl knownGene knownToAllenBrain
 
-hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
 
 # Create knownToTreefam table.  This is via a slow perl script that does remote queries of
 # the treefam database..  Takes ~5 hours.  Can and should run it in the background really.
 # Nothing else depends on the result.
 cd $dir
-hgMapToGene $db -tempDb=$tempDb ensGene knownGene knownToEnsembl -noLoad
+hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db ensGene knownGene knownToEnsembl -noLoad
 $kent/src/hg/protein/ensembl2treefam.pl < knownToEnsembl.tab > knownToTreefam.temp
 grep -v -e ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
 
 if ($db =~ hg*) then
-    hgMapToGene $db -tempDb=$tempDb HInvGeneMrna knownGene knownToHInv
-    hgMapToGene $db -tempDb=$tempDb affyU133Plus2 knownGene knownToU133Plus2
-    hgMapToGene $db -tempDb=$tempDb affyU133 knownGene knownToU133
-    hgMapToGene $db -tempDb=$tempDb affyU95 knownGene knownToU95
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db HInvGeneMrna knownGene knownToHInv
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133Plus2 knownGene knownToU133Plus2
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133 knownGene knownToU133
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU95 knownGene knownToU95
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
 endif
 
@@ -936,17 +941,21 @@ if ($db =~ hg*) then
 endif
 
 if ($db =~ mm*) then
-    hgMapToGene $db -tempDb=$tempDb affyGnf1m knownGene knownToGnf1m
-    hgMapToGene $db -tempDb=$tempDb gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
-    hgMapToGene $db -tempDb=$tempDb affyU74  knownGene knownToU74
-    hgMapToGene $db -tempDb=$tempDb affyMOE430 knownGene knownToMOE430
-    hgMapToGene $db -tempDb=$tempDb affyMOE430 -prefix=A: knownGene knownToMOE430A
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyGnf1m knownGene knownToGnf1m
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU74  knownGene knownToU74
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyMOE430 knownGene knownToMOE430
+    hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyMOE430 -prefix=A: knownGene knownToMOE430A
     hgExpDistance $tempDb $db.affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
     hgExpDistance $tempDb $db.affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
     hgExpDistance $tempDb $db.affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
