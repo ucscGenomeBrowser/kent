@@ -1,0 +1,20 @@
+
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the galGal4
+#	Atlantic Cod Gadus morhua genome: May 2010
+
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CAEA00
+#	WGS, est. size: 830 Mbp
+
+#############################################################################
+# Fetch sequence from genbank (DONE - 2011-12-22 - Hiram)
+
+    mkdir -p /hive/data/genomes/galGal4/genbank
+    cd /hive/data/genomes/galGal4/genbank
+
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Gallus_gallus/Gallus_gallus-4.0/*"
+real    11m57.658s
+
