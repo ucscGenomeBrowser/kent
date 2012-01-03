@@ -173,12 +173,13 @@ html wgEncodeOpenChromSynth.release2
         origAssembly hg19
         # subId=4630 dateSubmitted=2011-07-28
 
-        track wgEncodeOpenChromSynthUrothelUt189Pk
-        parent wgEncodeOpenChromSynth off
-        shortLabel Urothelia Pk
-        longLabel Urothelia UT189 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
-        subGroups cellType=UROTHEL treatment=UT189
-        type bed 9 +
-        origAssembly hg19
+        #hold off for release 3, lab isn't confident in results
+        #track wgEncodeOpenChromSynthUrothelUt189Pk
+        #parent wgEncodeOpenChromSynth off
+        #shortLabel Urothelia Pk
+        #longLabel Urothelia UT189 DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom
+        #subGroups cellType=UROTHEL treatment=UT189
+        #type bed 9 +
+        #origAssembly hg19
         # subId=4630 dateSubmitted=2011-07-28
 

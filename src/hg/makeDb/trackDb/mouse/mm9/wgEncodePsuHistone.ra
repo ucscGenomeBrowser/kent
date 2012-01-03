@@ -303,6 +303,7 @@ wgEncode 1
 	subTrack wgEncodePsuHistone
 	viewLimits 2:15
 	autoScale off
+	configurable on
 	maxHeightPixels 100:16:16
 	windowingFunction maximum
 

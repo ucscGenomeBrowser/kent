@@ -2249,7 +2249,7 @@ identifier ensemblGeneScaffold external=Ensembl dependency
 #pulled this line into its own rule to reflect lack of dependency
 identifier ensemblTranscriptId2 external=Ensembl
 "Ensembl Transcript ID"
-    $gbd,!ce6,!ce9,!felCat3.ensGene.name chopAfter=.
+    $gbd,!ce6,!ce9,!ce10,!felCat3.ensGene.name chopAfter=.
     $ccdsDb.ccdsInfo.mrnaAcc minCheck=0.30 
 
 identifier ensemblTranscriptIdCe external=Ensembl dependency
@@ -3823,6 +3823,8 @@ tablesIgnored $hg
     promoterStanford
     pseudoYale
     recombRate
+    sibGene
+    sibTxGraph
     slamMouse
     slamNonCodingMouse
     slamRat
@@ -3851,7 +3853,9 @@ tablesIgnored $hg
     wgEncode%
 
 tablesIgnored $mm
-	ncbiIncidentDb
+    ncbiIncidentDb
+    sibGene
+    sibTxGraph
     syntenyRat
     syntenyHuman
     rikenCageCtssMinus
