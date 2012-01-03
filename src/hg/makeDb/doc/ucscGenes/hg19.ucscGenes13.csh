@@ -1341,8 +1341,8 @@ cd $dir
 # You'll need superuser powers for this step.....
 
 # Save old known genes and kgXref tables
-#sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
-#sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 
 # Create backup database
 hgsqladmin create ${db}Backup
