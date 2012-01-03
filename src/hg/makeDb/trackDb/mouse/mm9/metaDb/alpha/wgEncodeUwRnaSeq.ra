@@ -2071,7 +2071,7 @@ tableName wgEncodeUwRnaSeqKidneyCellPolyaMAdult8wksC57bl6SigRep1
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep1
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep1
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2080,7 +2080,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep1.bam,wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep1.bam.bai
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep1.bam,wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep1.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -2091,11 +2091,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5335
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep1
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep1
 tissueSourceType Pooled
 view Alignments
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep2
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep2
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2104,7 +2104,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep2.bam,wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep2.bam.bai
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep2.bam,wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep2.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -2115,11 +2115,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5336
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6AlnRep2
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6AlnRep2
 tissueSourceType Pooled
 view Alignments
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep1
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep1
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2128,7 +2128,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2139,11 +2139,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5335
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep1
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep1
 tissueSourceType Pooled
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep2
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep2
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2152,7 +2152,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2163,11 +2163,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5336
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6MinusRawRep2
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6MinusRawRep2
 tissueSourceType Pooled
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep1
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep1
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2176,7 +2176,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2187,11 +2187,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5335
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep1
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep1
 tissueSourceType Pooled
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep2
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep2
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2200,7 +2200,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2211,11 +2211,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5336
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6PlusRawRep2
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6PlusRawRep2
 tissueSourceType Pooled
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6RawDataRep1
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6RawDataRep1
 objType file
 age adult-8wks
 cell LgIntestine
@@ -2224,7 +2224,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6RawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -2238,7 +2238,7 @@ subId 5335
 tissueSourceType Pooled
 view RawData
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6RawDataRep2
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6RawDataRep2
 objType file
 age adult-8wks
 cell LgIntestine
@@ -2247,7 +2247,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6RawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -2261,7 +2261,7 @@ subId 5336
 tissueSourceType Pooled
 view RawData
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep1
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep1
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2270,7 +2270,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep1.bigWig
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2281,11 +2281,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5335
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep1
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep1
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep2
+metaObject wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep2
 objType table
 age adult-8wks
 cell LgIntestine
@@ -2294,7 +2294,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
-fileName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep2.bigWig
+fileName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -2305,7 +2305,7 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 5336
-tableName wgEncodeUwRnaSeqLgintestineCellPolyaMAdult8wksC57bl6SigRep2
+tableName wgEncodeUwRnaSeqLgintCellPolyaMAdult8wksC57bl6SigRep2
 tissueSourceType Pooled
 view Signal
 
@@ -4997,4 +4997,4 @@ tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 1911344879
+# MAGIC: 1911325439
