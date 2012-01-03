@@ -239,14 +239,15 @@ noInherit on
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6SigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel Patski cell polyA Sig 1
         longLabel ENCODE UW RNA-seq Signal Replicate 1 (polyA in Patski cell)
-        subGroups view=Signal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=Signal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bigWig 1.000000 471388.000000
         color 204,121,167
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6SigRep1 vsmalladi Tue Jan  3 09:20:59 2012
 
         track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
@@ -619,14 +620,15 @@ noInherit on
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawSigRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel Patski cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in Patski cell)
-        subGroups view=PlusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=PlusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bigWig 1.000000 471388.000000
         color 204,121,167
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1 vsmalladi Tue Jan  3 09:20:31 2012
 
         track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
@@ -999,14 +1001,15 @@ noInherit on
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawSigRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel Patski cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in Patski cell)
-        subGroups view=MinusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=MinusRawSignal age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bigWig 1.000000 223741.000000
         color 204,121,167
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawSigRep1 vsmalladi Tue Jan  3 09:19:48 2012
 
         track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
@@ -1391,14 +1394,15 @@ noInherit on
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6AlnRep1
+        track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel Patski cell polyA Aln 1
         longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in Patski cell)
-        subGroups view=Alignments age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=M strain=SPBL6 rep=rep1
+        subGroups view=Alignments age=ADULT8WKS cellType=PATSKI localization=CELL rnaExtract=POLYA sex=F strain=SPBL6 rep=rep1
         type bam
         color 204,121,167
         # subId=4437 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6AlnRep1 vsmalladi Tue Jan  3 09:19:34 2012
 
         track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
