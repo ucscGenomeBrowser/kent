@@ -19,7 +19,7 @@
 #include "hPrint.h"
 #include "suggest.h"
 #include "search.h"
-
+#include "internet.h"
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -314,6 +314,94 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
+
+#ifdef SUPPORT_EURONODE
+boolean onWeb = cgiIsOnWeb();
+if (onWeb)
+    {
+    // check IP for redirection
+    char *thisNodeStr = cfgOption("browser.node");
+    if (thisNodeStr)
+	{
+	char *redirect = cgiOptionalString("redirect");
+	char *source = cgiOptionalString("source");
+	// check for the cookie called redirect (which suppress redirection)
+	char *redirectCookie = findCookieData("redirect");
+
+	fprintf(stderr, "GALT redirectCookie=%s redirect=%s source=%s\n", 
+		redirectCookie, redirect, source); fflush(stderr); // DEBUG REMOVE
+
+	if (!(
+              (redirect && !source) ||   // we are on main site after user has actively choose to leave mirror and come back to the main site
+              redirectCookie             // main site after above has happened (XXXX I think)
+              ))
+	    {
+	    int thisNode = sqlUnsigned(thisNodeStr);
+	    struct sqlConnection *centralConn = hConnectCentral();
+	    char query[1024];
+	    char *ipStr = cgiRemoteAddr();
+	    bits32 ip = 0;
+	    internetDottedQuadToIp(ipStr, &ip);
+            // we assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient.
+	    safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart order by ipStart desc limit 1", ip);
+	    char **row;
+	    struct sqlResult *sr = sqlGetResult(centralConn, query);
+	    int defaultNode = 1;
+	    if ((row = sqlNextRow(sr)) != NULL)
+		{
+		uint ipStart = sqlUnsigned(row[0]);
+		uint ipEnd = sqlUnsigned(row[1]);
+		if (ipStart <= ip && ipEnd >= ip)
+		    {
+		    defaultNode = sqlSigned(row[2]);
+		    }
+		}
+	    sqlFreeResult(&sr);
+
+	    fprintf(stderr, "GALT thisNodeStr=%s thisNode=%d ipStr=%s ip=%u defaultNode (for user) %d\n", 
+		thisNodeStr, thisNode,
+		ipStr, ip, defaultNode); fflush(stderr); // DEBUG REMOVE
+
+	    // get location of redirect node
+	    if (thisNode != defaultNode)
+		{
+		safef(query, sizeof query, "select domain from gbNode where node = %d", defaultNode);
+		char *newDomain = sqlQuickString(centralConn, query);
+		fprintf(stderr, "GALT newDomain=%s\n", newDomain); fflush(stderr); // DEBUG REMOVE
+		char *oldDomain = cgiServerName();
+		char *port = cgiServerPort();
+		char *uri = cgiRequestUri();
+		    //   /cgi-bin/test.cgi?x=15&y=youdog
+		char *sep = "?";
+		if (strchr(uri,'?') != 0)
+		    sep = "&";
+
+		int newUriSize = strlen(uri)+1024;
+		char *newUri = needMem(newUriSize);
+		// TODO what about https?
+		safef(newUri, newUriSize, "http://%s:%s%s%sredirect=mirror&source=%s", newDomain, port, uri, sep, oldDomain);
+
+		 //   "set-cookie: redirect=; path=/; expires=Mon, 18-Apr-2011 21:45:28 GMT"  
+                 //     the time of the set-cookie expire was immediately now()
+		struct dyString *dy = dyStringNew(256);		
+		dyStringPrintf(dy,
+		    "HTTP/1.1 302 found: \n"
+		    "Content-Type: text/html; charset=iso-8859-1\n"
+		    "Connection: close\n"
+		    "Location: %s\n"
+		    "\n"
+		    "<html><head><title>Redirecting to closer site</title></head>\n"
+		    "<body><a href=\"%s\">%s</a></body>\n"
+		    , newUri , newUri, newUri);
+		fprintf(stderr, "GALT redirect response:\n%s", dy->string); fflush(stderr); // DEBUG REMOVE
+		puts(dyStringContents(dy));
+		exit(0);
+		}
+	    hDisconnectCentral(&centralConn);
+	    }
+	}
+    }
+#endif
 
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;

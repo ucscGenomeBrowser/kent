@@ -1349,6 +1349,18 @@ void cartWriteCookie(struct cart *cart, char *cookieName)
 {
 printf("Set-Cookie: %s=%u; path=/; domain=%s; expires=%s\r\n",
 	cookieName, cart->userInfo->id, cfgVal("central.domain"), cookieDate());
+#ifdef SUPPORT_EURONODE
+char *redirect = cgiOptionalString("redirect");
+char *source = cgiOptionalString("source");
+if (redirect && !source)
+    {
+    printf("Set-Cookie: redirect=mirror; path=/; domain=%s; expires=%s\r\n", cgiServerName(), cookieDate());
+    // DEBUG REMOVE:
+    fprintf(stderr, "GALT Set-Cookie: redirect=mirror; path=/; domain=%s; expires=%s\r\n",
+	cfgVal("central.domain"), cookieDate());
+    fflush(stderr);
+    }
+#endif
 }
 
 struct cart *cartForSession(char *cookieName, char **exclude,
