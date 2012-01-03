@@ -4411,7 +4411,7 @@ sex U
 protocol Stam:Tissue_Stam_protocol.pdf
 
 term LgIntestine
-tag LGINTESTINE
+tag LGINT
 type Cell Line
 organism mouse
 tissue large intestine
@@ -4607,7 +4607,7 @@ protocol Stam:NIH-3T3_Stam_protocol.pdf
 
 # shortened term
 term OlfactBulb
-tag OLFACTORY
+tag OLFACT
 type Cell Line
 organism mouse
 tissue Olfactory Bulb
@@ -4716,7 +4716,7 @@ protocol Stam:SkeletalMuscle_Stam_protocol.pdf
 
 #Shortened term
 term SmIntestine
-tag SMINTESTINE
+tag SMINT
 type Cell Line
 organism mouse
 tissue small intestine

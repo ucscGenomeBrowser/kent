@@ -1418,7 +1418,10 @@ if (word && (sameWord(word,"bed") || sameWord(word,"bigBed")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
-    #ifdef EXTRA_FIELDS_SUPPORT
+    #ifndef EXTRA_FIELDS_SUPPORT
+    else // custom beds and bigBeds may not have full type "begBed 9 +"
+        start = max(0,slCount(as->columnList) - fieldCount); 
+    #else///ifdef EXTRA_FIELDS_SUPPORT
     // extraFields do not have to define all fields
     if (fieldCount > slCount(extras))
         start = 0;
@@ -1469,13 +1472,19 @@ for(;col != NULL && count < fieldCount;col=col->next)
         }
     else if (asTypesIsInt(col->lowType->type))
         {
-        long long valInt = sqlLongLong(fields[ix]);
-        printf("<td>%lld</td></tr>\n", valInt);
+        long valInt = strtol(fields[ix],NULL,10);
+        if (errno == 0 && valInt != 0)
+            printf("<td>%ld</td></tr>\n", valInt);
+        else
+            printf("<td>%s</td></tr>\n", fields[ix]);// decided not to print error
         }
     else if (asTypesIsFloating(col->lowType->type))
         {
-        double valDouble = sqlDouble(fields[ix]);
-        printf("<td>%g</td></tr>\n", valDouble);
+        double valDouble = strtod(fields[ix],NULL);
+        if (errno == 0 && valDouble != 0)
+            printf("<td>%g</td></tr>\n", valDouble);
+        else
+            printf("<td>%s</td></tr>\n", fields[ix]);// decided not to print error
         }
     #endif///ndef EXTRA_FIELDS_SUPPORT
     else
@@ -20102,7 +20111,9 @@ else
     }
 printTrackUiLink(ct->tdb);
 printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
-printTrackHtml(ct->tdb);
+/* already done in doBedDetail */
+if (differentWord(type, "bedDetail"))
+    printTrackHtml(ct->tdb);
 }
 
 void blastProtein(struct trackDb *tdb, char *itemName)
