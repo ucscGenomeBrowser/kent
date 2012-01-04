@@ -47,7 +47,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	speTri1 cavPor3 \
         hetGla1 \
 	oryCun1 oryCun2 \
-	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 \
+	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 \
 	equCab1 \
 	equCab2 \
 	oviAri1 \
