@@ -1318,6 +1318,136 @@ tableName wgEncodeLicrHistoneCbellumInputMAdult8wksC57bl6StdSig
 tissueSourceType Pooled
 view Signal
 
+metaObject wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-24
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/8/11 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5376
+view Alignments
+
+metaObject wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-24
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/8/11 7
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5376
+view Alignments
+
+metaObject wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-24
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/8/11 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5376
+view RawData
+
+metaObject wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-24
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/8/11 7
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5376
+view RawData
+
+metaObject wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Cortex
+composite wgEncodeLicrHistone
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-24
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5376
+tableName wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -9056,4 +9186,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 301765059
+# MAGIC: 429568632
