@@ -174,7 +174,7 @@ end
 # Due to the large chunk size, .lft files can have thousands of lines.
 # Even though the liftUp code does &lineFileClose, somehow we still
 # run out of filehandles.  So limit the size of liftSpecs:
-split -l 500 \$inLft SplitLft.
+split -a 3 -d -l 500 \$inLft SplitLft.
 
 # Lift up:
 foreach splitLft (SplitLft.*)
