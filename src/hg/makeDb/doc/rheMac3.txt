@@ -175,3 +175,196 @@ taxId 9544
     #	to the trackDb/makefile
 
 #############################################################################
+# running repeat masker (DONE - 2011-12-29,30 - Hiram)
+    mkdir /hive/data/genomes/rheMac3/bed/repeatMasker
+    cd /hive/data/genomes/rheMac3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk rheMac3 > do.log 2>&1 &
+    #	real    682m32.394s
+    cat faSize.rmsk.txt
+    #	2969988180 bases (330842350 N's 2639145830 real 1359180091 upper
+    #	1279965739 lower) in 34103 sequences in 1 files
+    #	%43.10 masked total, %48.50 masked real
+
+    grep -i versi do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
+#    April 26 2011 (open-3-3-0) version of RepeatMasker
+
+    featureBits -countGaps rheMac3 rmsk
+    #	1290741445 bases of 2969988180 (43.459%) in intersection
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #	separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE - 2011-12-29,2012-01-04 - Hiram)
+    mkdir /hive/data/genomes/rheMac3/bed/simpleRepeat
+    cd /hive/data/genomes/rheMac3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	rheMac3 > do.log 2>&1 &
+    #	real    113m25.254s
+
+    cat fb.simpleRepeat 
+    #	61072049 bases of 2792623296 (2.187%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/rheMac3
+    twoBitMask rheMac3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed rheMac3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa rheMac3.2bit stdout | faSize stdin > faSize.rheMac3.2bit.txt
+    cat faSize.rheMac3.2bit.txt
+    #	2969988180 bases (330842350 N's 2639145830 real 1358178889 upper
+    #	1280966941 lower) in 34103 sequences in 1 files
+    #	%43.13 masked total, %48.54 masked real
+
+    rm /gbdb/rheMac3/rheMac3.2bit
+    ln -s `pwd`/rheMac3.2bit /gbdb/rheMac3/rheMac3.2bit
+
+#########################################################################
+# Verify all gaps are marked, add any N's not in gap as type 'other'
+#	(DONE - 2011-12-29 - Hiram)
+    mkdir /hive/data/genomes/rheMac3/bed/gap
+    cd /hive/data/genomes/rheMac3/bed/gap
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../rheMac3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    0m31.596s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    time featureBits rheMac3 -not gap -bed=notGap.bed
+    #	real    0m31.496s
+
+    #	2792623296 bases of 2792623296 (100.000%) in intersection
+    featureBits rheMac3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	about 30 minutes
+    #	153477466 bases of 2969988180 (5.168%) in intersection
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" rheMac3 | sort -n | tail -1
+    #	658
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" rheMac3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    wc -l other.bed
+    #	395439
+    featureBits -countGaps rheMac3 other.bed
+    #	153477466 bases of 2969988180 (5.168%) in intersection
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad rheMac3 otherGap other.bed
+    # verify no overlap:
+    time featureBits -countGaps rheMac3 gap other.bed
+    #	real    36m1.614s
+    0 bases of 2969988180 (0.000%) in intersection
+    # verify no errors:
+    time gapToLift -minGap=1 rheMac3 nonBridged.lift \
+	-bedFile=nonBridged.bed > before.gapToLift.txt 2>&1 &
+    #	real    0m29.947s
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" rheMac3
+    #	19148
+    hgsql rheMac3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" rheMac3
+    #	414587
+    # == 395439 + 19148
+    # verify we aren't adding gaps where gaps already exist
+    # this would output errors if that were true:
+    gapToLift -minGap=1 rheMac3 nonBridged.lift -bedFile=nonBridged.bed
+    # see example in danRer7.txt if there are errors
+    hgsql -N -e "select bridge from gap;" rheMac3 | sort | uniq -c
+    #	4122 no
+    #	410465 yes
+
+##########################################################################
+## WINDOWMASKER (DONE - 2011-09-08 - Hiram)
+    mkdir /hive/data/genomes/rheMac3/bed/windowMasker
+    cd /hive/data/genomes/rheMac3/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-dbHost=hgwdev rheMac3 > do.log 2>&1 &
+    #	real    221m45.041s
+
+    # Masking statistics
+    twoBitToFa rheMac3.wmsk.2bit stdout | faSize stdin
+    #	2969988180 bases (330842350 N's 2639145830 real 1746831363 upper
+    #	892314467 lower) in 34103 sequences in 1 files
+    #	%30.04 masked total, %33.81 masked real
+
+    twoBitToFa rheMac3.wmsk.sdust.2bit stdout | faSize stdin
+    #	2969988180 bases (330842350 N's 2639145830 real 1732647656 upper
+    #	906498174 lower) in 34103 sequences in 1 files
+    #	%30.52 masked total, %34.35 masked real
+
+    hgLoadBed rheMac3 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 15866314 elements of size 3
+
+    featureBits -countGaps rheMac3 windowmaskerSdust
+    #	1237340524 bases of 2969988180 (41.661%) in intersection
+
+    #	eliminate the gaps from the masking
+    featureBits rheMac3 -not gap -bed=notGap.bed
+    #	2969988180 bases of 2969988180 (100.000%) in intersection
+    time nice -n +19 featureBits rheMac3 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	real    7m34.303s
+    #	1059975640 bases of 2792623296 (37.956%) in intersection
+    #	reload track to get it clean
+    hgLoadBed rheMac3 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 15874168 elements of size 4
+    time featureBits -countGaps rheMac3 windowmaskerSdust
+    #	real    2m1.415s
+    #	1059975640 bases of 2969988180 (35.690%) in intersection
+
+    #	do *not* need to mask the sequence with this clean mask
+    #	since RepeatMasker matched well enough
+    zcat cleanWMask.bed.gz \
+	| twoBitMask ../../rheMac3.unmasked.2bit stdin \
+	    -type=.bed rheMac3.cleanWMSdust.2bit
+    twoBitToFa rheMac3.cleanWMSdust.2bit stdout | faSize stdin \
+        > rheMac3.cleanWMSdust.faSize.txt
+    cat rheMac3.cleanWMSdust.faSize.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
+    #	714075485 lower) in 6457 sequences in 1 files
+    #	%39.69 masked total, %41.97 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps rheMac3 rmsk windowmaskerSdust
+    #	280229203 bases of 1511735326 (18.537%) in intersection
+
+#########################################################################
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-09-09 - Hiram)
+    cd /hive/data/genomes/rheMac3
+    twoBitMask -add bed/windowMasker/rheMac3.cleanWMSdust.2bit \
+	bed/simpleRepeat/trfMask.bed rheMac3.2bit
+    #	safe to ignore the warnings about BED file with >=13 fields
+    twoBitToFa rheMac3.2bit stdout | faSize stdin > faSize.rheMac3.txt
+    cat faSize.rheMac3.txt
+    #	1799143587 bases (97789820 N's 1701353767 real 987044085 upper
+    #	714309682 lower) in 6457 sequences in 1 files
+    #	%39.70 masked total, %41.98 masked real
+
+    #	create symlink to gbdb
+    ssh hgwdev
+    rm /gbdb/rheMac3/rheMac3.2bit
+    ln -s `pwd`/rheMac3.2bit /gbdb/rheMac3/rheMac3.2bit
+
+########################################################################
