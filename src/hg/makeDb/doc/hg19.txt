@@ -17474,7 +17474,7 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
-# LINCRNAS FROM ISCA FROM BROAD (DONE 2011-10-10 Chin)
+# LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
 # Human lincRNA Catalog
 
     # unzip data from Board to /hive/data/outside/lincRnaFromCabili
