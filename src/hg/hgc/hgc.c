@@ -20111,7 +20111,9 @@ else
     }
 printTrackUiLink(ct->tdb);
 printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
-printTrackHtml(ct->tdb);
+/* already done in doBedDetail */
+if (differentWord(type, "bedDetail"))
+    printTrackHtml(ct->tdb);
 }
 
 void blastProtein(struct trackDb *tdb, char *itemName)

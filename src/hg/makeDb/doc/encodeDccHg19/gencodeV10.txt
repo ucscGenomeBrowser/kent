@@ -43,6 +43,10 @@
     (time nice make -j 10) >&build.out&
     # took ~45 minutes, log below
 
+    ### IMPORTANT: make sure that hgTracks/simpleTracks.c registers
+    ### track handler for this version of gencode:
+    registerTrackHandlerOnFamily("wgEncodeGencodeV10", gencodeGeneMethods);
+
 ------------------------------------------------------------------------------
 cat release/gencode_release_10/gencode.v10.annotation.level_1_2.gtf release/gencode_release_10/gencode.v10.annotation.level_3.gtf | gencodeGtfToGenePred /dev/stdin data/gencodeManAuto.gp.hgwdev.22170.tmp
 cat release/gencode_release_10/gencode.v10.annotation.level_1_2.gtf release/gencode_release_10/gencode.v10.annotation.level_3.gtf | gencodeGtfToAttrs /dev/stdin data/gencodeManAuto.tsv.hgwdev.22170.tmp
