@@ -249,8 +249,8 @@ close (FH);
     chmod +x ./mkGap.pl
     ./mkGap.pl > other.bed
     featureBits -countGaps gadMor1 other.bed
-XXX - running - Wed Jan  4 15:18:57 PST 2012
-    #	12062 bases of 1511735326 (0.001%) in intersection
+    #	real    8m36.778s
+    #	7969 bases of 824327835 (0.001%) in intersection
     wc -l other.bed
     #	7853
     hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
