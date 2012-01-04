@@ -53,7 +53,7 @@ while((*ptr) && !isdigit(*ptr))
     prefix[count++] = *ptr++;
     if (count > sizeof(prefix) - 1)
         errAbort("overflowed prefix buffer. Accession prefix > %lu chars\n",
-            sizeof(prefix) - 1);
+            (unsigned long)sizeof(prefix) - 1);
     }
 prefix[count] = 0;
 
