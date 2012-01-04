@@ -42,18 +42,11 @@ The UCSC Genes are built using a multi-step pipeline:
 <OL>
 <LI>RefSeq and GenBank RNAs are aligned to the genome with BLAT, keeping 
 only the best 
-alignments for each RNA and discarding alignments of less than 98% identity.
+alignments for each RNA.  Alignments are discarded if they do not meet certain
+sequence identity and coverage filters.  All sequences must align with high (98%) identity.  The sequence coverage must be at least 90% for shorter sequences (those with 2500 or fewer bases), with the coverage threshold progressively 
+relaxed for longer sequences.
 <LI>Alignments are broken up at non-intronic gaps, with small isolated 
 fragments thrown out.
-<LI>Alignments are merged in from the hg19
-<A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=213859263&g=tRNAs">tRNA</A>
-track
-<LI>Alignments are also merged in for perfect alignments of sequences predicted
-as human noncoding genes by 
-<A HREF="http://rfam.sanger.ac.uk/" TARGET=_blank>Rfam</A>, 
-in regions that are syntenic with the mm9 mouse 
-genome.  Perfect alignments to regions that are not syntenic with mm9 are 
-excluded because these regions are enriched for pseudogenes.
 <LI>A splicing graph is created for each set of overlapping alignments. This 
 graph 
 has an edge for each exon or intron, and a vertex for each splice site, start, 
@@ -73,6 +66,8 @@ splicing. All refSeq transcripts are output. For other multi-exon transcripts
 to be output, an edge supported by at least one additional line of evidence 
 beyond the RNA is required.  Single-exon genes require either two RNAs or two 
 additional lines of evidence beyond the single RNA. 
+<LI>Alignments are merged in from the hg19
+<A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=213859263&g=tRNAs">tRNA</A>, and from Rfam in regions that are syntenic with the mm9 mouse genome.  
 <LI>Protein predictions are generated. For non-RefSeq transcripts we use the 
 txCdsPredict program to determine if the transcript is protein-coding and if so,
 the locations of the start and stop codons. 
