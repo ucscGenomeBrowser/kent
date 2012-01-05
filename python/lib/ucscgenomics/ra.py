@@ -1,6 +1,7 @@
-import sys
+import sys, string
 import re
 from ucscgenomics.ordereddict import OrderedDict
+from ucscgenomics import ucscUtils
 import collections
 
 class RaFile(OrderedDict):
@@ -204,7 +205,55 @@ class RaFile(OrderedDict):
                 continue
         return ret
 
-    def summaryDiff(self,other):
+    def mergeRa(self, other):
+        '''
+        Input:
+            Two RaFile objects
+        Output:
+            A merged RaFile
+
+        Common stanzas and key-val pairs are collapsed into
+        one with identical values being preserved,
+        differences are marked with a >>> and <<<
+        '''
+
+        mergedKeys = ucscUtils.mergeList(list(self), list(other))
+        selfKeys = set(self)
+        otherKeys = set(other)
+        newCommon = RaFile()
+        p = re.compile('^\s*#')
+        p2 = re.compile('^\s*$')
+        for i in mergedKeys:
+            if p.match(i) or p2.match(i):
+                newCommon.append(i)
+                continue
+            if i not in selfKeys:
+                newCommon.append(other[i])
+            if i not in otherKeys:
+                newCommon.append(self[i])
+            if i in otherKeys and i in selfKeys:
+                newStanza = RaStanza()
+                selfStanzaKeys = set(self[i].iterkeys())
+                otherStanzaKeys = set(other[i].iterkeys())
+                stanzaKeys = ucscUtils.mergeList(list(self[i].iterkeys()), list(other[i].iterkeys()))
+                for j in stanzaKeys:
+                    if j not in selfStanzaKeys:
+                        newStanza[j] = other[i][j]
+                    if j not in otherStanzaKeys:
+                        newStanza[j] = self[i][j]
+                    if j in selfStanzaKeys and j in otherStanzaKeys:
+                        if self[i][j] == other[i][j]:
+                            newStanza[j] = self[i][j]
+                        else:
+                            in_j = '>>>>>%s' % j
+                            out_j = '<<<<<%s' % j
+                            newStanza[out_j] = self[i][j]
+                            newStanza[in_j] = other[i][j]
+            newCommon.append(newStanza)
+        return newCommon
+
+
+    def summaryDiff(self, other):
         '''
         Input:
             RaFile object being compared.

@@ -2652,6 +2652,276 @@ tableName wgEncodeLicrHistoneEsb4InputME0C57bl6StdSig
 tissueSourceType Individual
 view Signal
 
+metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K4me1
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 2/23/11 3
+md5sum 31ac7b20f3d0da348996713d315e54d5,a0234e0e896fc842d944ffdbcfd3e121
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5415
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K4me1
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/30/11 4
+md5sum f6e93fb5047723c63c59fb2342a5e2eb,a1e303eb1414c88b9c3b46d541e48e6c
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5415
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K4me1
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 2/23/11 3
+md5sum 4587b81100c026975ea3efcc6c130cfb
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5415
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K4me1
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/30/11 4
+md5sum 00120797281b63b32e982bd95d9cea9f
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5415
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K4me1
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum 8049a51a900f37cd67dda69547ab4bb1
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5415
+tableName wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 2/7/11 5
+md5sum e7db0c887e7f4734c3d5d50bc181ee15,b0f13c123932e7b30aaf5225c1209c7f
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5414
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/20/11 4
+md5sum df9fe8f2752797e7648a6c73c8ac2c7c,a0646a764f7b0468df0ce4842b8451ae
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5414
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 2/7/11 5
+md5sum 413e641cc021e5e02ea009e4809b3b5a
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5414
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/20/11 4
+md5sum ba3be214346933e44743391ace108a8c
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5414
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K4me3
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum bbec8ad6982027b66ba66a3159680793
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5414
+tableName wgEncodeLicrHistoneHeartH3k04me3UE14halfC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -2785,6 +3055,141 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 5377
 tableName wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K27ac
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/28/11 3
+md5sum 745cfc44b2f61c8955623eb1ad90eabe,983da412e52615d1ef40cde2d40df61c
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5416
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K27ac
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/11/11 2
+md5sum ff19e38bc3161116fb7e1794332cc1da,3876bc4fc8495e57c8e6722a9803a9e5
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5416
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K27ac
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/28/11 3
+md5sum 20b516aa9a25983f5da413d511187c00
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5416
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K27ac
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/11/11 2
+md5sum 2c06d926ba216f90a9c81dc34ec5a6ea
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5416
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K27ac
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-04
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum c1744de88b527fd1bd617620f47bbb39
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5416
+tableName wgEncodeLicrHistoneHeartH3k27acUE14halfC57bl6StdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep1
@@ -3318,6 +3723,141 @@ strain C57BL/6
 subId 3931
 tableName wgEncodeLicrHistoneHeartInputMAdult8wksC57bl6StdSig
 tissueSourceType Pooled
+view Signal
+
+metaObject wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody Input
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 9/8/10 3
+md5sum 01590075cc54e922611412c277c2e9b1,4799348470110773a4e41c45ff396479
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5417
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody Input
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 6/8/11 4
+md5sum 0e990adaecdfb1d26b3b4510b2ec876c,b3348f8b5f2012f3fabd232a5e6832c6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5417
+view Alignments
+
+metaObject wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody Input
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 9/8/10 3
+md5sum 558f3aff0887bd6fabed83fb61aa685c
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5417
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody Input
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 6/8/11 4
+md5sum 30864fac2b7aef0c97943fa375ad0249
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5417
+view RawData
+
+metaObject wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody Input
+cell Heart
+composite wgEncodeLicrHistone
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum 1378baf570b746881cb1bb58c144e8b4
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5417
+tableName wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdAlnRep1
@@ -9336,4 +9876,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 922595620
+# MAGIC: -25236107
