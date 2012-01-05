@@ -565,7 +565,7 @@ insertLength 200
 lab Caltech
 labExpId 10515
 localization cell
-md5sum 2b1fa43fc632aa76b79a537c3779ea7d
+md5sum b11a0a209e53451f0d87d1d20452f5d2
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -645,7 +645,7 @@ insertLength 200
 lab Caltech
 labExpId 10515
 localization cell
-md5sum c35548c4408285c902df40d88b9c7c66
+md5sum 05d64cdda6e6eb64a903850ec3d0f947
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -769,24 +769,25 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10565
 localization cell
 mapAlgorithm TH1014
-md5sum d7ea38f0edb3836eec679986728d73ad
+md5sum 2a180edda48905e95310ea9851f65610
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3572
+subId 5279
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -796,24 +797,25 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000122
 expId 122
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10515
 localization cell
 mapAlgorithm TH1014
-md5sum 03aa6a0b3f599a3ef164bcdc27399d98
+md5sum d4a6ca943cfdaaf36a2cc03c6f27255a
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3575
+subId 5234
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -1195,7 +1197,7 @@ insertLength 400
 lab Caltech
 labExpId 10516
 localization cell
-md5sum 75ac5763997761cd132e94ddb1ec9ac9
+md5sum d9924f66294e141bfd8a4e24ba8f5812
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1249,7 +1251,7 @@ insertLength 400
 lab Caltech
 labExpId 10516
 localization cell
-md5sum bc264a1e81607556a09f8f67d695da8a
+md5sum 9b03b3105b8ddf21a183a231c099f86c
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -1319,24 +1321,25 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-17
 dccAccession wgEncodeEH000137
 expId 137
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Il400JunctionsRep2V3.bigBed
 grant Myers
 insertLength 400
 lab Caltech
 labExpId 10516
 localization cell
 mapAlgorithm TH1014
-md5sum c3e1dc7ee52b9aa843676ca4c9156a2a
+md5sum b52b17e9aa4fc6634c694931a4a73870
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3532
+subId 5278
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -1889,24 +1892,25 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-03-30
 dateUnrestricted 2011-12-29
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11038
 localization cell
 mapAlgorithm TH1014
-md5sum be254f0939d4fc3d7509f74fa13884e8
+md5sum e3647a3f628e18ccfb79db6a94bbb38f
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3576
+subId 5281
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -1916,24 +1920,25 @@ cell GM12891
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001423
 expId 1423
-fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12891R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId SL2971
 localization cell
 mapAlgorithm TH1014
-md5sum 052503d142b3513e8345ebdfa6534786
+md5sum b9b99d291907f4cc40d887a9f3577c34
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3665
+subId 5280
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -2698,24 +2703,25 @@ cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11039
 localization cell
 mapAlgorithm TH1014
-md5sum c7cec7be729e2f47ba38b63973adb0fa
+md5sum ece996243adc23bc7ed5b9e849ddd406
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3577
+subId 5284
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -2725,24 +2731,25 @@ cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-03-17
 dateUnrestricted 2011-12-17
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId SL2970
 localization cell
 mapAlgorithm TH1014
-md5sum 1ee3c32b7ba1de19ccad5f537aaeb39a
+md5sum 32822e771a2f1f6cc654ee67d81fdd5f
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3666
+subId 5282
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -2752,24 +2759,25 @@ cell GM12892
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001424
 expId 1424
-fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bed.gz
+fileName wgEncodeCaltechRnaSeqGm12892R2x75Il200JunctionsRep3V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId SL2973
 localization cell
 mapAlgorithm TH1014
-md5sum 421d265ceb7e4a98f896166d6e97c471
+md5sum 0868d79025e6cd8879fa42cd760bc316
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3744
+subId 5283
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4219,24 +4227,25 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11286
 localization cell
 mapAlgorithm TH1014
-md5sum bd5eb97320c3039ba2c3e085938d1ebd
+md5sum c7f639ebcc758267d8b9715ca735001c
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3578
+subId 5287
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4246,24 +4255,25 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11288
 localization cell
 mapAlgorithm TH1014
-md5sum 29981f71e290b87aaaf1a17a12604b9a
+md5sum 708422662919413bc6eb3c96d46cb948
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3579
+subId 5288
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4273,24 +4283,25 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep3V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11289
 localization cell
 mapAlgorithm TH1014
-md5sum f8de9fce6cf00481983188c3519cb3a3
+md5sum 4e9b0ec625c97977ab13ca59b716930c
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3580
+subId 5289
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -4300,24 +4311,25 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000128
 expId 128
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il200JunctionsRep4V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10874
 localization cell
 mapAlgorithm TH1014
-md5sum 22c197364264abf74864625d1c8bbbf3
+md5sum fef6bda7c28bf0cd7b96c8088f1ff4b3
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 4
 rnaExtract longPolyA
-subId 3581
+subId 5285
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -5045,24 +5057,25 @@ cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000138
 expId 138
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Il400JunctionsRep1V3.bigBed
 grant Myers
 insertLength 400
 lab Caltech
 labExpId 10876
 localization cell
 mapAlgorithm TH1014
-md5sum 319f3480f0d353d937ed3ebb31997ee3
+md5sum 420514f14d4c47dc00c75832d348f446
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3571
+subId 5286
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -5669,24 +5682,25 @@ cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 12096
 localization cell
 mapAlgorithm TH1014
-md5sum 2e0a504cdc9fe65e52701809da06ca45
+md5sum ef081675a442b1c18580858672069fd5
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3582
+subId 5290
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -5696,24 +5710,25 @@ cell HCT-116
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001425
 expId 1425
-fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 12097
 localization cell
 mapAlgorithm TH1014
-md5sum ac9dd47b0f645c14e89921e2c424ec12
+md5sum 0a1bd930f6423e5f800e308a2bee937a
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3583
+subId 5291
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -6703,24 +6718,25 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10881
 localization cell
 mapAlgorithm TH1014
-md5sum 7927edfd881c30483ef04c2c42e8b5aa
+md5sum 46635f52b56ee3e113009afa5bb881b9
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3588
+subId 5296
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -6730,24 +6746,25 @@ cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000130
 expId 130
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10882
 localization cell
 mapAlgorithm TH1014
-md5sum fd9eb5152fbc43e43a5f5a6485726a7a
+md5sum be38198756c8f9294e2bd38fe461e206
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3589
+subId 5297
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -7795,24 +7812,25 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10878
 localization cell
 mapAlgorithm TH1014
-md5sum 177db254d4cfb29af3c65d39c9f5ed36
+md5sum 675a65b6ff090bf54b91b9340ad89b64
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3590
+subId 5298
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -7822,24 +7840,25 @@ cell HepG2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000127
 expId 127
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10879
 localization cell
 mapAlgorithm TH1014
-md5sum ac98954ca1e10557c96c713de00e6add
+md5sum bb25f5a4aaebe2731d9ee43a2d4acff5
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3591
+subId 5299
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -8501,24 +8520,25 @@ cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11584
 localization cell
 mapAlgorithm TH1014
-md5sum 558f889dbcb14c4a0633c40d302f9844
+md5sum 4a09c2dd8c9f93cffce7a04a87c93562
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3584
+subId 5292
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -8528,24 +8548,25 @@ cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001420
 expId 1420
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11585
 localization cell
 mapAlgorithm TH1014
-md5sum 39e2a9032a81717a6a4b6c79fe85edef
+md5sum 1d9b9bec86c99583b0f57ae381c401f5
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3585
+subId 5293
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -9589,24 +9610,25 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10883
 localization cell
 mapAlgorithm TH1014
-md5sum 18bbfa1947926eef1f7b93eb3fbe7b50
+md5sum 28bcbc4c4602a24eca0207c92e41933f
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3586
+subId 5294
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -9616,24 +9638,25 @@ cell HUVEC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000129
 expId 129
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10885
 localization cell
 mapAlgorithm TH1014
-md5sum 8e105876a5bdb7b3dcf1f44ca85d363a
+md5sum ba22607c402be8c94de1bd3bbeffc4bf
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3587
+subId 5295
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -10508,7 +10531,7 @@ insertLength 200
 lab Caltech
 labExpId 10517
 localization cell
-md5sum 6b7cc3fc98dc309fdb19f683c1b69bd0
+md5sum 20cccfb09a7812a639eec2373caf8ebb
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10561,7 +10584,7 @@ insertLength 200
 lab Caltech
 labExpId 10567
 localization cell
-md5sum 54e02c414b50f504892f0b5a91fec9a7
+md5sum 9f3c1e8dcd37526ca5fd5ee4ab0400ee
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10615,7 +10638,7 @@ insertLength 200
 lab Caltech
 labExpId 10517
 localization cell
-md5sum ad86b8d81846db05297e3de979eab62b
+md5sum e7dd0e01e1629109531f632f212bf368
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10668,7 +10691,7 @@ insertLength 200
 lab Caltech
 labExpId 10567
 localization cell
-md5sum ff8af94b32fcc6b974da5fc92a623fb8
+md5sum 424e8c066108ca9e5c76f30dbeec8090
 origAssembly hg18
 project wgEncode
 readType 2x75
@@ -10792,24 +10815,25 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10517
 localization cell
 mapAlgorithm TH1014
-md5sum c951e0c947093b24310474ce08b3b577
+md5sum 32f5439476fc6aa72051f07efa51f382
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3592
+subId 5300
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -10819,24 +10843,25 @@ cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000124
 expId 124
-fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10567
 localization cell
 mapAlgorithm TH1014
-md5sum 9d3258dc90ab54fa5e95deb11fc4ae6a
+md5sum 133430d8219a7764da0b30815da1f5fc
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3593
+subId 5301
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -11345,11 +11370,12 @@ cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001669
 expId 1669
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
@@ -11357,13 +11383,13 @@ labExpId 11621
 labVersion myoblast
 localization cell
 mapAlgorithm TH1014
-md5sum 52b5a280954b2500af6699105aac897b
+md5sum 33d0e97c21e1cf0fbf084f365dce1f62
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3594
+subId 5302
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -11543,11 +11569,12 @@ cell LHCN-M2
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-05-11
 dateUnrestricted 2012-02-11
 dccAccession wgEncodeEH001670
 expId 1670
-fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqLhcnm2R2x75Il200Myc7dJunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
@@ -11555,13 +11582,13 @@ labExpId 11622
 labVersion myocyte
 localization cell
 mapAlgorithm TH1014
-md5sum e2365edb5167c3b4713dcd7e350fd02c
+md5sum 13f6754d928fcdb1f659a70bbc72bd0a
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3595
+subId 5303
 submittedDataVersion V3 - New Elements Formats
 treatment DIFF_7d
 view Junctions
@@ -12337,24 +12364,25 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11581
 localization cell
 mapAlgorithm TH1014
-md5sum 18381cc2452c0193f1ad2ac0121d52fe
+md5sum d33b46f5840cb2d2d6878ffc0662773e
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3596
+subId 5304
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -12364,24 +12392,25 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11582
 localization cell
 mapAlgorithm TH1014
-md5sum 7d38a1e20a05f678c72daf23bdd18bc3
+md5sum 743c6c5f06a65b0a0cddb6b1ec9058ff
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3597
+subId 5305
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -12391,24 +12420,25 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-19
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001421
 expId 1421
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bed.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Il200JunctionsRep3V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 12098
 localization cell
 mapAlgorithm TH1014
-md5sum 52dc523ccda1fea00a686f8f0ebeb497
+md5sum 589a5a97f52aca270a29d1fb21f122b4
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 3
 rnaExtract longPolyA
-subId 3598
+subId 5306
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -13397,24 +13427,25 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 10884
 localization cell
 mapAlgorithm TH1014
-md5sum 9b3c9c2bb63aa1cbe64c5298e267961c
+md5sum 802aa5292721eabbea4ca9546809aeab
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3599
+subId 5307
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -13424,24 +13455,25 @@ cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000131
 expId 131
-fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11586
 localization cell
 mapAlgorithm TH1014
-md5sum 83b38b160a8514b27e37771bdb908e72
+md5sum 02403bb5416a0dfe63316e135eb1cb3d
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3600
+subId 5308
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -14100,24 +14132,25 @@ cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep1V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11587
 localization cell
 mapAlgorithm TH1014
-md5sum a909aaa63ead3dae77a3fda9a677af36
+md5sum 8a8dfa5a844d17c8539cf42c10e4a5e2
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3573
+subId 5309
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -14127,24 +14160,25 @@ cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-22
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH001422
 expId 1422
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bed.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Il200JunctionsRep2V3.bigBed
 grant Myers
 insertLength 200
 lab Caltech
 labExpId 11588
 localization cell
 mapAlgorithm TH1014
-md5sum 7497570de03e63c902e21293885398e6
+md5sum ffbd43fb174e9481ed382d9f1923843e
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 3574
+subId 5310
 submittedDataVersion V3 - New Elements Formats
 view Junctions
 
@@ -14476,4 +14510,4 @@ subId 1905
 tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 view Signal
 
-# MAGIC: 1147364119
+# MAGIC: -1033077789
