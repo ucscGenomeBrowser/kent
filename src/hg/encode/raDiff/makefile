@@ -3,7 +3,7 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	qaRaDiff
+	raDiff
 
 SCRIPT_INSTALL = "/cluster/bin/scripts"
 
@@ -24,4 +24,4 @@ ${SCRIPTS}/%: %
 	mv -f $@.tmp $@
 
 clean::
-	echo nothing to clean in hg/encode/encodeMkFilesList/
+	echo nothing to clean in hg/encode/raDiff/
