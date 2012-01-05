@@ -16,10 +16,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
-fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam
+fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 754bc2adc51fec6a7228d683c8f6cfbe
+md5sum 754bc2adc51fec6a7228d683c8f6cfbe,3876dcf5c67eb089f54d27c725ca795a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -42,10 +42,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
-fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam
+fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam,wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum a61dddd59b2e8daa7f7b160c492bb689
+md5sum a61dddd59b2e8daa7f7b160c492bb689,011ebc11c14b34eba36b4698fd5a9046
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -71,6 +71,7 @@ dateUnrestricted 2011-08-12
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum b660915c9181423a917523b5b503bbb7
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -148,6 +149,7 @@ dateUnrestricted 2011-08-12
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 507e3ea67e41cf2f31f49dd86dc33fd6
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -173,6 +175,7 @@ dateUnrestricted 2011-08-12
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum e9256686dfab3c9b4969b2969c866915
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -198,6 +201,7 @@ dateUnrestricted 2011-08-12
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 677d897c5951a513e79af200b3c4dbb9
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -223,6 +227,7 @@ dateUnrestricted 2011-08-12
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum af9c3b2482eee936cb314cf7ff0317ac
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -248,6 +253,7 @@ dateUnrestricted 2011-08-12
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum f8ab794394be26e8a5a6c8ef656110d4
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -273,6 +279,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum e2b2b0486d847d87ec1f21a5df543249,2606a1d901cf869fbfb0cc109ec6db97
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -298,6 +305,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep2.bam,wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 66f0fd9f67b84f4e94ce2c550807b796,fc1da78bf260fbbda928243258911e49
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -323,6 +331,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 4b6252f55ac1a7b6bbe2dbc27e087480
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -348,7 +357,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum 063e1387eda0386748b1e9bd117f012d
+md5sum 1dc3103f90630dfc1403294238976bb7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -374,6 +383,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum a02c9860c09456e200ec00fbed66b503
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -399,6 +409,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum f3da921afc1b1c1261153355a9d4fa57
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -424,6 +435,7 @@ dateUnrestricted 2012-06-23
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum fe9c00a1e26cda9b6f62815981c71d52
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -445,10 +457,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep1.bam
+fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum de5d4629c0ec07d258c596f8da39ddb2
+md5sum de5d4629c0ec07d258c596f8da39ddb2,cbcc4aea8ea44f3ce7a29911575f9738
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -470,10 +482,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep2.bam
+fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep2.bam,wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 798e9c9341b47f11414c669e194c786e
+md5sum 798e9c9341b47f11414c669e194c786e,577928ecbe4f0a2f6edf5a3de0582c55
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -695,7 +707,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-13
 dateUnrestricted 2011-08-12
-fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam
+fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/dan/h/18mar2010ln2-polii-ch12-groomed-reads
@@ -795,10 +807,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum d710b0fecfee7bc8d6d1c60a7f4a4a9f
+md5sum d710b0fecfee7bc8d6d1c60a7f4a4a9f,08863ff5d133012e436388e82444da44
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -820,10 +832,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
-fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam
+fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum b8d44593ae622ef4af732b5cd2787337
+md5sum b8d44593ae622ef4af732b5cd2787337,f57cde24ca106a331f065fe2f703abc1
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1049,7 +1061,7 @@ dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum faebb817130e576844cedcbb1fdb9a49
+md5sum faebb817130e576844cedcbb1fdb9a49,e47f8215cd457394454726b2caf65eae
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1075,7 +1087,7 @@ dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum b3c7f2a773b231ebe3fd64c252d0dbff
+md5sum 4e84f274271f3bd548890106b711431d,a33fb50f5d4aac6c0f1e1ffa828755d5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1101,7 +1113,7 @@ dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum d2ee05d7b1d9e18ff1c6c7b1a20bc66f
+md5sum 4e4885d2a4513db75d25557045e70255
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1127,7 +1139,7 @@ dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum 0d328ce731aae7216cbbd494742fc666
+md5sum 9c3eb16d28b9f531b1de4826ff934048
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1153,6 +1165,7 @@ dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 05ae0dcd489fec1ece7ea27d7db66bd6
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1178,6 +1191,7 @@ dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum f7455a125f32ed94a555168758881eff
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1203,6 +1217,7 @@ dateUnrestricted 2012-05-17
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 0a2245f686dac1de5f325953d7a6383c
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -1575,10 +1590,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 1acdd455b9275d5efb04c9d9bf4659cd
+md5sum 1acdd455b9275d5efb04c9d9bf4659cd,8f817bc7ef0c6028f0e88e0f4673c1e7
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1601,10 +1616,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
-fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 2bf8b94d738e90dd51cdce3a6506a0ca
+md5sum 2bf8b94d738e90dd51cdce3a6506a0ca,484ced9349dad9f9b3b770f427cedf6b
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -1836,10 +1851,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum e3553169cfb849ece1cead4962da2eae
+md5sum e3553169cfb849ece1cead4962da2eae,3ca1747277c150e4ef2df6de7884d5e9
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -1861,10 +1876,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 8ea9db71f247b72fa9f46efc2d928170
+md5sum 8ea9db71f247b72fa9f46efc2d928170,ac8bca325dad006cb2acb009f9391b73
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2086,10 +2101,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 7d0c91e460584cf4aab282839cbde458
+md5sum 7d0c91e460584cf4aab282839cbde458,8cab0b9da6d5b8046c7052125620510c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2111,10 +2126,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 31e6c4a4c7fc57ecb66db13a5a3d0363
+md5sum 31e6c4a4c7fc57ecb66db13a5a3d0363,6e48d53b7b6201d2c3f94e17dda1686f
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -2340,7 +2355,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 838449db7c5ec7dcba984b8004db81c6
+md5sum 431d25bc470bee23b740fab6c7c5257a,d0fceb04f84f3f1f8f314bb5be5ba192
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2366,7 +2381,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 48d0d98edf01ee67944d54588b2762e6
+md5sum 5afc0b6ac724f7d6bcc2bc7480bc9634,4d774ae14c080af9b350ea732222017a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2392,7 +2407,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum 88da556cde39f4db41c25d00cb511956
+md5sum 774c94cba75902ce6e32027f4a736dcf
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2418,7 +2433,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum fa9ed13a9154e21f1a40164150a73c4a
+md5sum 688d0a30fffd60d319b2c4e8e21d1035
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2444,6 +2459,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 56355774e5520eacfb730acfa100445e
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2469,6 +2485,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum dfdcb2450a49535e7c6df018b3d85dd6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2494,6 +2511,7 @@ dateUnrestricted 2011-08-19
 fileName wgEncodePsuTfbsG1eInputME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum e3f604047f4fec7ceed6f865235a7610
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -2515,10 +2533,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 58040ef0e8ffe759853a9c12d65079c4
+md5sum 58040ef0e8ffe759853a9c12d65079c4,8ae8fcff618f56962b2b262279b95a7a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2540,10 +2558,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 2d13c2efc363be94c686c560c7d93178
+md5sum 2d13c2efc363be94c686c560c7d93178,d7b157684a8baef8a68316dd274458d9
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -2766,10 +2784,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
-fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum b508ec2542bce708b5c853c316bb463f
+md5sum b508ec2542bce708b5c853c316bb463f,bbaed3c7ec3dc91aeaf755e80d19e8af
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2792,10 +2810,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
-fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum cf78ef6afb127a363aa393a74f26fe12
+md5sum cf78ef6afb127a363aa393a74f26fe12,f155101b8b72d270c8329968cd6dd4e4
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -3030,7 +3048,7 @@ fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
-md5sum 7c3767a82699dc32136171179c48805a
+md5sum 7c3767a82699dc32136171179c48805a,484a55223ff89bb1becdcd9ee3faafe2
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3053,10 +3071,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
-fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum b8648516ae1667a01c8ab1d4886816fd
+md5sum b8648516ae1667a01c8ab1d4886816fd,dcdcfe8cd8f4c5be2d8b4e3855fe6d87
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -3290,10 +3308,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 6e3f825bf353d320b5a22abd87bacf4e
+md5sum 6e3f825bf353d320b5a22abd87bacf4e,a6326d5db333e7178640c687a42c6346
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
@@ -3316,10 +3334,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 5f384e3ae61ced211f2f8eb02ac667de
+md5sum 5f384e3ae61ced211f2f8eb02ac667de,3aaf0253a2884e450e224208406e1591
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3549,7 +3567,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
-fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12may2009ln415jun2009ln4ln8-gata1-g1e-er4e2-combined-groomed-canonical
@@ -3649,10 +3667,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 94d5cb3600298b460a27061ef222c300
+md5sum 94d5cb3600298b460a27061ef222c300,738b9768eddc42a65fd48df9b738606e
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3674,10 +3692,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
-fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 09b582042b7e999c0813dc43b2059301
+md5sum 09b582042b7e999c0813dc43b2059301,c4a237ea76f17ab6a5b86d618fa0ac66
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -3904,7 +3922,7 @@ fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1ee
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
-md5sum 9417fc24c48d74e3b2f76a0efd1652fc
+md5sum 1ad8e395ae74d1e6e0d2aba9d9879298,29d7c350efeab80f474b5a3b88fe53ec
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3930,7 +3948,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 1e4e8e0ef2c253295cae7179b576d1bd
+md5sum d547ae54e89c38bbfe6e12b88ac83b29,33427cc54ebab1142b55c26ba9380555
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3957,7 +3975,7 @@ fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
 labVersion http://main.g2.bx.psu.edu/u/kanwei/h/12nov2009ln3-ctcf-g1e-er4e2-groomed-canonical
-md5sum a9097dbeab192152be6077694966db9d
+md5sum d2a5e2371f4dbe7aa4441f811c491da8
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3983,7 +4001,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum 341e968a3d4f087136ab2a181442a241
+md5sum 17b1a82c966438e13ee5b05c84b44d44
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4009,6 +4027,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum a647363fc3c7a526395f2fd078e0925f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4034,6 +4053,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 41ee6e553da1b76f869a2227e5350e13
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4059,6 +4079,7 @@ dateUnrestricted 2011-08-26
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum bab3b99c521c19487b65a4e850ee2546
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -4080,10 +4101,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 88db0a4233d4152742a90d42dfb7c900
+md5sum 88db0a4233d4152742a90d42dfb7c900,d8bf49fc031ebb2b020ea520e3521951
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4105,10 +4126,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum b416e831c3f55da5f8323f64b42647cd
+md5sum b416e831c3f55da5f8323f64b42647cd,1447997e44565e56313d3535cfe85b92
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -4130,10 +4151,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
-fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3.bam
+fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3.bam,wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3.bam.bai
 grant Hardison
 lab PSU-m
-md5sum e96ca67fc1416395167882e9741c39eb
+md5sum e96ca67fc1416395167882e9741c39eb,01b56e626d74eb8689ca440fcd74fa3d
 project wgEncode
 replicate 3
 seqPlatform Illumina_GA2x
@@ -4430,10 +4451,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
-fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam
+fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 7ef13178b86436e9b83b7176b4eef420
+md5sum 7ef13178b86436e9b83b7176b4eef420,33c85d8883d7b3c56ac92aa4f5b486fd
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4455,10 +4476,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
-fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam
+fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum cd15944bc03e23408a58cbdecae01d94
+md5sum cd15944bc03e23408a58cbdecae01d94,b27378e87c32d9c66d689565b5025737
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -4680,10 +4701,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1.bam
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 167d1a00b98d9b8e6cb09bca8ac08256
+md5sum 167d1a00b98d9b8e6cb09bca8ac08256,7c2e492b9abbac8ade7dc07f6c7e827d
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4705,10 +4726,10 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
-fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep2.bam
+fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 943093266d20b8e64f0e74a41a8f09fd
+md5sum 943093266d20b8e64f0e74a41a8f09fd,4441b8ff3762bb428d5c49156510a043
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4934,7 +4955,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 1f597fa1055753484263dc9fff39fce4
+md5sum 1f597fa1055753484263dc9fff39fce4,967eaf37086010b5b73d6be1c78adddf
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4960,7 +4981,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum b77634e4ce55f89a02680cd9b89978fb
+md5sum 164e2dac031e12d0a4134e8048789385,a3364aee8655a44df8d3f39505eb7f11
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4986,7 +5007,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum c20687ed67142d8e65d9351706363546
+md5sum 86a25a8980dfafd542c3bdd241c3d30a
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5012,7 +5033,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
-md5sum 93594c6b192fbcb6a15e341f60e6587e
+md5sum 52b4587919fc6c58420410528f462f00
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5038,6 +5059,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 782b3673b4f75b9597a64e4ff899a92f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5063,6 +5085,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 3160224d283ca3efbd13a8c72b92c497
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5088,6 +5111,7 @@ dateUnrestricted 2012-05-18
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 74a96128dbf01ef416d1ae4ce193ea13
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -5110,10 +5134,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum f16d4c620c344bbc6daa9c62eb94ce1c
+md5sum f16d4c620c344bbc6daa9c62eb94ce1c,c464fbf9a4ac304fa638b50c5d88e612
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5136,10 +5160,10 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2.bam
+fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 765b7128388284be505fbb216e91d50e
+md5sum 765b7128388284be505fbb216e91d50e,c6b15f97801788cb4dc69d7ffa9abb1e
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5165,6 +5189,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 7dbe7b05386947016b3e5458f0328c26
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -5242,6 +5267,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum dc8173ec0ccb439bfd0e41fcdf2e434b
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5267,6 +5293,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 9467e6481229a123230e235fcec693f4
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5292,6 +5319,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 779498b46e896bdfa8229a79f65cc9b4
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5317,6 +5345,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum f9aa2cd0a025aa72e41f156d40e6a6f2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5342,6 +5371,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum beb22db3bac3720b79433ff98bdffd25
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -5367,6 +5397,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 793fcd334f2f550ff3e708cf73b0378a,d02a7fe73853c7b96b9c55db937a3787
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5392,6 +5423,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum fcec7eef6d8170bd6f87c4b3db28b565,c1601d01ef7a358cd6bac3f9abaa93c5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5417,6 +5449,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum eb11a3bed9bd0a27335511756b1f0ae4
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5442,6 +5475,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 0b903105a848c33fc360eb2efca81eaf
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5467,6 +5501,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum b0e6e13af5f44865c3e2dcbf59800d53
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5492,6 +5527,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 8b87fe200d2f725e150180c71ca8d091
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5517,6 +5553,7 @@ dateUnrestricted 2011-08-30
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum a920b3ea13270fb08a1ac15e1c1afab0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType input
@@ -5541,6 +5578,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 8f46bfea7c3c4e3d23734c9bee9faf5a,7fc89f330d8d1bf905edd5ded450960d
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5565,6 +5603,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum ccb83366557c69d9834c4ba84127ab54,914ab109275e2e72a5767e5bcb86f409
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5589,6 +5628,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum b413fbb66114ec48fe04306e83a1f1dd
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -5613,6 +5653,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum ce9652a5847c3b0e1e66ee7aa1299d8c
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5637,6 +5678,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 5153ac365af5150ebaaea40493684128
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5661,6 +5703,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5d1495ec1ab1793142b60f4d7675f546
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5685,6 +5728,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 592d2188ad853ff2f0eb4b8d083f9c2c
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5709,6 +5753,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 2618fbffa78e80b37721d73104400395
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5733,6 +5778,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 2fef2654d27f219ef06ba3d6ebfb5fd3
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -5757,6 +5803,7 @@ dateUnrestricted 2012-08-09
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 7cc7fa5e0b35960e12a3d98bf682cdce
 project wgEncode
 seqPlatform Illumina_GA2x
 setType exp
@@ -5781,6 +5828,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 845ab09dfa1adf51a9ba375acf8803a0,4352e44dc52e7c1251211216d63404d3
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5805,6 +5853,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 07eea3a18d0db3e8cb104ce73cf0577d,8e8f972ae8460e1a183738510133a15a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5829,6 +5878,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum e8ad33333522132c47c3cdf97430be0a
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5853,6 +5903,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 957ac3da3ba301bc7e1ee194b32cf332
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5877,6 +5928,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 3b37889a8625303f5c7eb651ed7b50b3
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5901,6 +5953,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 049d2b05c4e52f47e059071fd0b527a8
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5925,6 +5978,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 89f3e9bdabb736018deadd1b9253b013
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5949,6 +6003,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 4bc72555f623a06b8e05f44ae0a64b12
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -5973,6 +6028,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum edf23a6abc1380da628969ce7bf72adf
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5997,6 +6053,7 @@ dateUnrestricted 2012-08-05
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 2ba6a08bf2ae353781a47168f6d6d2b3
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6006,4 +6063,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 1778167262
+# MAGIC: -1261314590

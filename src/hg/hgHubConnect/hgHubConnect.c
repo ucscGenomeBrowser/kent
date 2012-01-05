@@ -94,7 +94,7 @@ static void hgHubConnectUnlisted(struct hubConnectStatus *hubList,
 printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
     "<table id=\"unlistedHubsTable\"> "
     "<thead><tr> "
-	"<th colspan=\"5\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> "
+	"<th colspan=\"6\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> "
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
 	    "type=\"text\" size=\"65\"> "
 	"<input name=\"hubAddButton\""
