@@ -226,7 +226,7 @@ taxId 9544
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
-#	(DONE - 2011-12-29 - Hiram)
+#	(DONE - 2012-01-03 - Hiram)
     mkdir /hive/data/genomes/rheMac3/bed/gap
     cd /hive/data/genomes/rheMac3/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
@@ -296,7 +296,7 @@ close (FH);
     #	410465 yes
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2011-09-08 - Hiram)
+## WINDOWMASKER (DONE - 2012-01-03 - Hiram)
     mkdir /hive/data/genomes/rheMac3/bed/windowMasker
     cd /hive/data/genomes/rheMac3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
@@ -351,7 +351,7 @@ close (FH);
     #	280229203 bases of 1511735326 (18.537%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-09-09 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-01-04 - Hiram)
     cd /hive/data/genomes/rheMac3
     twoBitMask -add bed/windowMasker/rheMac3.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed rheMac3.2bit
