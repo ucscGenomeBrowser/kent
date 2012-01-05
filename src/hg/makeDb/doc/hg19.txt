@@ -13724,6 +13724,17 @@ hgLoadBed hg19 darned allChroms.bed
 # added darned.html
 # added trackDb.ra entry
 
+# Bug #6417 duplicate records (6) in Human RNA editing (DARNED) track
+# (DONE 2012-12-22 Chin)
+    cat allChroms.bed | sort  > allSort.bed
+    cat allChroms.bed | sort -u > allSort.bed
+    wc -l *.bed
+    #  42045 allChroms.bed
+    #  42045 allSort.bed
+    #  42039 allUniq.bed
+    hgLoadBed hg19 darned allUniq.bed
+    # Loaded 42039 elements of size 9
+
 #############################################################################
 # lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
     # down load from JHU
@@ -17463,7 +17474,7 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
-# LINCRNAS FROM ISCA FROM BROAD (DONE 2011-10-10 Chin)
+# LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
 # Human lincRNA Catalog
 
     # unzip data from Board to /hive/data/outside/lincRnaFromCabili

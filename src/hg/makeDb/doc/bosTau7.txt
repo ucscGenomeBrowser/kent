@@ -13,13 +13,19 @@
 # FTP-RELEASE DATE: 03-Nov-2011
 
 
-# Bos taurus (NCBI Project ID: 10709, Accession: GCA_000003205.4) 
-#   by Bovine Genome Sequencing Consortium
+# Bos taurus (NCBI Project ID: 12555, Accession: GCA_000003205.4) 
+#   by Bovine Genome Sequencing and Analysis Consortiumn
 #    assembly] sequence: 
 # ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Bos_taurus/Btau_4.6.1/
+# Project 12555
+# url:
+# http://www.ncbi.nlm.nih.gov/nuccore/AAFC00000000
+# chrM: AY526085 
+http://www.ncbi.nlm.nih.gov/nuccore/AY526085.1
+
 
 ##########################################################################
-# Download sequence (working - 2011-05-02 Chin)
+# Download sequence (DONE - 2011-05-02 Chin)
     mkdir /hive/data/genomes/bosTau7
     cd /hive/data/genomes/bosTau7
     mkdir genbank
@@ -36,7 +42,7 @@
     #   fixup the accession names to become UCSC chrom names
 
 export S=Primary_Assembly/assembled_chromosomes
-cut -f2 ${S}/chr2acc  | while read ACC
+cat  ${S}/chr2acc | grep -v "^#Chromosome" | cut -f2 | while read ACC
 do
     C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
     echo "${ACC} -> chr${C}"
@@ -47,6 +53,7 @@ done
 
 export S=Primary_Assembly/assembled_chromosomes
 cut -f2 ${S}/chr2acc  | while read ACC
+cat  ${S}/chr2acc | grep -v "^#Chromosome" | cut -f2 | while read ACC
 do
     C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
     echo "${ACC} -> chr${C}"
@@ -56,16 +63,16 @@ do
 done
    # Check them with faSize 
     faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
-    #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper 
-    #  0 lower) in 30 sequences in 30 files
+    # 2673141463 bases (159233025 N's 2513908438 real 2513908438 upper 
+    # 0 lower) in 31 sequences in 31 files
 
     faSize ucscChr/chr*.fa.gz
     #  2660906405 bases (20740230 N's 2640166175 real 2640166175 upper 
     #  0 lower) in 30 sequences in 30 files
 
     # For unplaced scalfolds, named them as chrUn_xxxxxxxx
-    #   where xxxxxx is the original access id as: chrUn_GL340781.1  
-    #   The ".1" at the end need to be filter out since
+    #   where xxxxxx is the original access id as: chrUn_JH121286  
+    #   The ".1" at the end (if any) need to be filter out since
     #   MySQL does not allow "." as part of the table name and 
     #   will casue problems in genbank task step later
 
@@ -77,23 +84,23 @@ zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
 gzip ucscChr/chrUn.agp &
 
 zcat ${S}/FASTA/unplaced.scaf.fa.gz \
-        | sed -e "s#^>.*|tpg|#>chrUn_#; s#|.*##"  -e "s/\.1//"  \
+        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##"  -e "s/\.1//"  \
         | gzip > ucscChr/chrUn.fa.gz
-   # about 3286 sequences in the unplaced
+   # about 11660 sequences in the unplaced
 zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
-   #     3286    3286   13144
+   #     11660   11660   46640
 
    # Check them with faSize 
    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
-   #   9499556 bases (40 N's 9499516 real 9499516 upper 0 
-   #   lower) in 3286 sequences in 1 files
+   # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
+   # 0 lower) in 11660 sequences in 1 files
 
    faSize ucscChr/chrUn.fa.gz
-   #   9499556 bases (40 N's 9499516 real 9499516 upper 0 
-   #   lower) in 3286 sequences in 1 files
+   # 307961778 bases (17213380 N's 290748398 real 290748398 upper 
+   # 0 lower) in 11660 sequences in 1 files
 
 #########################################################################
-# Initial  database build (working - 2011-05-09 - Chin)
+# Initial  database build (DONE - 201201-03 - Chin)
     cd /hive/data/genomes/bosTau7
     cat << '_EOF_' > bosTau7.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -102,11 +109,11 @@ clade mammal
 genomeCladePriority 31
 scientificName Bos taurus
 commonName Cow
-assemblyDate Nov. 2009
-assemblyLabel UMD_3.1 (NCBI project 10708, accession GCA_000003055.3)
-assemblyShortLabel Bos_taurus_UMD_3.1
+assemblyDate OCt. 2011
+assemblyLabel Btau_4.6.1 (NCBI project 12555, accession GCA_000003205.4)
+assemblyShortLabel Btau_4.6.1
 orderKey 236
-mitoAcc NC_006853
+mitoAcc AY526085
 fastaFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.fa.gz
 agpFiles /hive/data/genomes/bosTau7/genbank/ucscChr/chr*.agp.gz
 # qualFiles none
@@ -116,13 +123,13 @@ taxId 9913
     # << happy emacs
     time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev bosTau7.config.ra \
 	> makeGenomeDb.log 2>&1 &
-    # real    21m31.993s
+    # real    23m34.828s
 
-    # real    real    12m42.419s
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/bosTau7.unmasked.2bit /gbdb/bosTau7/bosTau7.2bit
 
     #  Per instructions in makeGenomeDb.log:
+XXXX TODO - replace *** use actual url for project etc.. in all html files
 #Search for '***' notes in each file in and make corrections (sometimes the
 #files used for a previous assembly might make a better template):
 #  description.html /cluster/data/bosTau7/html/{trackDb.ra,gap.html,gold.html}
@@ -140,55 +147,29 @@ taxId 9913
 
 
 #########################################################################
-# RepeatMasker (working 2011-05-09 - Chin)
+# RepeatMasker (DONE 2012-01-04 - Chin)
     mkdir /hive/data/genomes/bosTau7/bed/repeatMasker
     cd /hive/data/genomes/bosTau7/bed/repeatMasker
     time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit bosTau7 > do.log 2>&1 &
-    #   real    355m43.294s
+    #   real    472m4.476s
     cat faSize.rmsk.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370807360 upper 
-    # 1278874669 lower) in 3317 sequences in 1 files
-    # %47.89 masked total, %48.27 masked real
+    # 2981119579 bases (176446405 N's 2804673174 real 1415188620 upper 
+    # 1389484554 lower) in 11692 sequences in 1 files
+    # %46.61 masked total, %49.54 masked real
 
 #########################################################################
-# simpleRepeats (working - 2011-05-09 - Chin)
+# simpleRepeats (DONE - 2012-01-05 - Chin)
     mkdir /hive/data/genomes/bosTau7/bed/simpleRepeat
     cd /hive/data/genomes/bosTau7/bed/simpleRepeat
 
     time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev -bigClusterHub=swarm -smallClusterHub=memk \
         bosTau7 > do.log 2>&1 &
-    #   real    13m47.346s
-
-    # Batch failed after 4 tries on 
-    #   ./TrfRun.csh /hive/data/genomes/bosTau7/TrfPart/071/071.lst.bed
-    # Command failed:
-    # ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' memk 
-    #  nice /hive/data/genomes/bosTau7/bed/simpleRepeat/run.cluster/doTrf.csh
-    # 071 failed due to no input TrfPart/071/071.lst.bed
-    #  which is chrM and can be ignored.
-    # to continue, create an empty TrfPart/071/071.lst.bed by:
-    touch /hive/data/genomes/bosTau7/TrfPart/071/071.lst.bed 
-    # run a para time > run.time on memk to get that file to exist:
-    # Checking finished jobs
-    # Completed: 71 of 72 jobs
-    # Crashed: 1 jobs
-    # CPU time in finished jobs: 12340s     205.67m     3.43h    0.14d  0.000 y
-    # IO & Wait Time:              236s       3.93m     0.07h    0.00d  0.000 y
-    # Average job time:            177s       2.95m     0.05h    0.00d
-    # Longest finished job:        606s      10.10m     0.17h    0.01d
-    # Submission to last job:      984s      16.40m     0.27h    0.01d
-
-
-    #   continue
-    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
-        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
-        -continue=filter bosTau7 > filter.log 2>&1 &
-    # real	0m20.430s
+    #   real    39m2.413s
 
     cat fb.simpleRepeat 
-    # 32390355 bases of 2649685036 (1.222%) in intersection
+    # 40432561 bases of 2804801325 (1.442%) in intersection
 
     #	add to the repeatMasker
     cd /hive/data/genomes/bosTau7
@@ -196,13 +177,13 @@ taxId 9913
     #	safe to ignore warnings about >=13 fields
     twoBitToFa bosTau7.2bit stdout | faSize stdin > bosTau7.2bit.faSize.txt
     cat bosTau7.2bit.faSize.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370313596 upper 
-    #    1279368433 lower) in 3317 sequences in 1 files
-    # %47.91 masked total, %48.28 masked real
+    # 2981119579 bases (176446405 N's 2804673174 real 1414674956 upper 
+    # 1389998218 lower) in 11692 sequences in 1 files
+    # %46.63 masked total, %49.56 masked real
 
     # double check with featureBits
     featureBits -countGaps bosTau7 gap
-    # 20740270 bases of 2670422299 (0.777%) in intersection
+    # 176318254 bases of 2981119579 (5.914%) in intersection
 
     rm /gbdb/bosTau7/bosTau7.2bit
     ln -s `pwd`/bosTau7.2bit /gbdb/bosTau7/bosTau7.2bit
