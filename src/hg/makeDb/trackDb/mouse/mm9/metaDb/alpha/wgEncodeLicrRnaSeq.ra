@@ -863,6 +863,166 @@ tableName wgEncodeLicrRnaSeqHeartCellPapMAdult8wksC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
+metaObject wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep1
+objType table
+age E14.5
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 4/29/11 Lane 1
+localization cell
+md5sum e9bc5abbe2ec6f48df29d8241b2593e8,56f6d50f61079b44ae62f4b86f50ad30
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5422
+tableName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep2
+objType table
+age E14.5
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 4/29/11 Lane 1
+localization cell
+md5sum b05dd27a39b8e845f29bd8c52cf41aa9,5fd829d00fad2dcac46d3c2d65ed0a3c
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5422
+tableName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6RawDataRep1
+objType file
+age E14.5
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 4/29/11 Lane 1
+localization cell
+md5sum 4d5ff150bf4e3cb2ca47c8e50b5da75f
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5422
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6RawDataRep2
+objType file
+age E14.5
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 4/29/11 Lane 1
+localization cell
+md5sum 32ed42035e400ce4f19aeda63bda869b
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5422
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep1
+objType table
+age E14.5
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 4/29/11 Lane 1
+localization cell
+md5sum b57b18b2cae5b693b8f1d20b3d362816
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5422
+tableName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep2
+objType table
+age E14.5
+cell Heart
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 4/29/11 Lane 1
+localization cell
+md5sum 48450e8d2ef623134405f506738e00a0
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5422
+tableName wgEncodeLicrRnaSeqHeartCellPapUE14halfC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
 metaObject wgEncodeLicrRnaSeqKidneyCellPapMAdult8wksC57bl6AlnRep1
 objType table
 age adult-8wks
@@ -1364,6 +1524,166 @@ softwareVersion TopHat
 strain C57BL/6
 subId 4099
 tableName wgEncodeLicrRnaSeqLiverCellPapMAdult8wksC57bl6SigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 11/10/10 Lane 5
+localization cell
+md5sum dc5f293b35ae8d3ef4d0ee7c378f180c,9410629fd1ad68574325b5cad9cd97e1
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5423
+tableName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep1
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep2
+objType table
+age E14.5
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 11/10/10 Lane 5
+localization cell
+md5sum e28e14cd8c5989dee7d0305b7b63fbc8,2b1d0b933dfa43fdb22b8007ffda9e23
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5423
+tableName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6AlnRep2
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6RawDataRep1
+objType file
+age E14.5
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6RawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 11/10/10 Lane 5
+localization cell
+md5sum 038d8bdb835256918ab2282385634f39
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5423
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6RawDataRep2
+objType file
+age E14.5
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6RawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 11/10/10 Lane 5
+localization cell
+md5sum ed3df0ffd0a983a43192a185f9c303dc
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5423
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep1
+objType table
+age E14.5
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep1.bigWig
+grant Ren
+lab LICR-m
+labVersion 11/10/10 Lane 5
+localization cell
+md5sum 0860733c1c1d1708a5739ad48901cc88
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5423
+tableName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep2
+objType table
+age E14.5
+cell Liver
+composite wgEncodeLicrRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-04
+fileName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep2.bigWig
+grant Ren
+lab LICR-m
+labVersion 11/10/10 Lane 5
+localization cell
+md5sum bc28240925ec7cdc56ecab2b6568a107
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+seqPlatform Illumina_HiSeq_2000
+sex U
+softwareVersion TopHat
+strain C57BL/6
+subId 5423
+tableName wgEncodeLicrRnaSeqLiverCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
@@ -2683,4 +3003,4 @@ tableName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: -779324796
+# MAGIC: 1189078053
