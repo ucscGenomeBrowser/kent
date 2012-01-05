@@ -266,19 +266,18 @@ taxId   9031
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=memk galGal4 > do.log 2>&1 &
-XXX - running - Wed Jan  4 14:58:37 PST 2012
-    #	real    682m32.394s
+    #	real    115m21.264s
     cat faSize.rmsk.txt
-    #	2969988180 bases (330842350 N's 2639145830 real 1359180091 upper
-    #	1279965739 lower) in 34103 sequences in 1 files
-    #	%43.10 masked total, %48.50 masked real
+    #	1046932099 bases (14077289 N's 1032854810 real 921370201 upper
+    #	111484609 lower) in 15932 sequences in 1 files
+    #	%10.65 masked total, %10.79 masked real
 
     grep -i versi do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
     featureBits -countGaps galGal4 rmsk
-    #	1290741445 bases of 2969988180 (43.459%) in intersection
+    #	111540299 bases of 1046932099 (10.654%) in intersection
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
@@ -290,13 +289,14 @@ XXX - running - Wed Jan  4 14:58:37 PST 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
 	galGal4 > do.log 2>&1 &
-XXX - running - Wed Jan  4 14:59:06 PST 2012
-    #	real    113m25.254s
+    #	about 1 hour
 
     cat fb.simpleRepeat 
-    #	61072049 bases of 2792623296 (2.187%) in intersection
+    #	10508414 bases of 1032854810 (1.017%) in intersection
 
-    # add to rmsk after it is done:
+XXX - ready for this when rmsk is done
+    # not going to add to rmsk here, using the window masker instead since
+    #	it masks more sequence
     cd /hive/data/genomes/galGal4
     twoBitMask galGal4.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed galGal4.2bit
@@ -391,71 +391,78 @@ close (FH);
     cd /hive/data/genomes/galGal4/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev galGal4 > do.log 2>&1 &
-XXX - running - Wed Jan  4 15:01:45 PST 2012
-    #	real    221m45.041s
+    #	about 45 minutes
 
     # Masking statistics
     twoBitToFa galGal4.wmsk.2bit stdout | faSize stdin
-    #	2969988180 bases (330842350 N's 2639145830 real 1746831363 upper
-    #	892314467 lower) in 34103 sequences in 1 files
-    #	%30.04 masked total, %33.81 masked real
+    #	1046932099 bases (14077289 N's 1032854810 real 828377808 upper
+    #	204477002 lower) in 15932 sequences in 1 files
+    #	%19.53 masked total, %19.80 masked real
 
     twoBitToFa galGal4.wmsk.sdust.2bit stdout | faSize stdin
-    #	2969988180 bases (330842350 N's 2639145830 real 1732647656 upper
-    #	906498174 lower) in 34103 sequences in 1 files
-    #	%30.52 masked total, %34.35 masked real
+    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
+    #	210446947 lower) in 15932 sequences in 1 files
+    #	%20.10 masked total, %20.38 masked real
 
     hgLoadBed galGal4 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 15866314 elements of size 3
+    #	Loaded 5996190 elements of size 3
 
     featureBits -countGaps galGal4 windowmaskerSdust
-    #	1237340524 bases of 2969988180 (41.661%) in intersection
+    #	224522674 bases of 1046932099 (21.446%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits galGal4 -not gap -bed=notGap.bed
-    #	2969988180 bases of 2969988180 (100.000%) in intersection
+    #	1032854810 bases of 1032854810 (100.000%) in intersection
     time nice -n +19 featureBits galGal4 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	real    7m34.303s
-    #	1059975640 bases of 2792623296 (37.956%) in intersection
+    #	210446947 bases of 1032854810 (20.375%) in intersection
+    #	real    2m3.610s
     #	reload track to get it clean
     hgLoadBed galGal4 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 15874168 elements of size 4
+    #	Loaded 5994965 elements of size 4
     time featureBits -countGaps galGal4 windowmaskerSdust
-    #	real    2m1.415s
-    #	1059975640 bases of 2969988180 (35.690%) in intersection
+    #	real    0m40.505s
+    #	210446947 bases of 1046932099 (20.101%) in intersection
 
-    #	do *not* need to mask the sequence with this clean mask
-    #	since RepeatMasker matched well enough
+    #	mask with this clean result
     zcat cleanWMask.bed.gz \
 	| twoBitMask ../../galGal4.unmasked.2bit stdin \
 	    -type=.bed galGal4.cleanWMSdust.2bit
     twoBitToFa galGal4.cleanWMSdust.2bit stdout | faSize stdin \
         > galGal4.cleanWMSdust.faSize.txt
     cat galGal4.cleanWMSdust.faSize.txt
-    #	1799143587 bases (97789820 N's 1701353767 real 987278282 upper
-    #	714075485 lower) in 6457 sequences in 1 files
-    #	%39.69 masked total, %41.97 masked real
+    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
+    #	210446947 lower) in 15932 sequences in 1 files
+    #	%20.10 masked total, %20.38 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps galGal4 rmsk windowmaskerSdust
-    #	280229203 bases of 1511735326 (18.537%) in intersection
+    #	71066487 bases of 1046932099 (6.788%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-09-09 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2012-01-05 - Hiram)
     cd /hive/data/genomes/galGal4
     twoBitMask -add bed/windowMasker/galGal4.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed galGal4.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa galGal4.2bit stdout | faSize stdin > faSize.galGal4.txt
     cat faSize.galGal4.txt
-    #	1799143587 bases (97789820 N's 1701353767 real 987044085 upper
-    #	714309682 lower) in 6457 sequences in 1 files
-    #	%39.70 masked total, %41.98 masked real
+    #	1046932099 bases (14077289 N's 1032854810 real 822061190 upper
+    #	210793620 lower) in 15932 sequences in 1 files
+    #	%20.13 masked total, %20.41 masked real
 
     #	create symlink to gbdb
     ssh hgwdev
     rm /gbdb/galGal4/galGal4.2bit
     ln -s `pwd`/galGal4.2bit /gbdb/galGal4/galGal4.2bit
+
+    #	what happens with all masks:
+    twoBitMask -add galGal4.2bit bed/repeatMasker/galGal4.sorted.fa.out \
+	galGal4.wm.trf.rmsk.2bit
+    twoBitToFa galGal4.wm.trf.rmsk.2bit stdout | faSize stdin
+    #	1046932099 bases (14077289 N's 1032854810 real 781762152 upper
+    #	251092658 lower) in 15932 sequences in 1 files
+    #	%23.98 masked total, %24.31 masked real
+    # rmsk covers another 40 million bases 251092658-210793620 = 40299038
 
 ########################################################################
