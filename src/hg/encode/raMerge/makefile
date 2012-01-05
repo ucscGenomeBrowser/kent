@@ -3,7 +3,7 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	raDiff
+	raMerge
 
 SCRIPT_INSTALL = "/cluster/bin/scripts"
 
@@ -24,4 +24,4 @@ ${SCRIPTS}/%: %
 	mv -f $@.tmp $@
 
 clean::
-	echo nothing to clean in hg/encode/raDiff/
+	echo nothing to clean in hg/encode/raMerge/
