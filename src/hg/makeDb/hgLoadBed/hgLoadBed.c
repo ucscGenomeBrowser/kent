@@ -592,7 +592,7 @@ for (i=0; i<bedCount; ++i)
     lineFileClose(&lf);
     }
 loadedElementCount = slCount(bedList);
-verbose(1, "Read %d elements of size %d from %s\n", loadedElementCount, bedSize, bedFiles[i]);
+verbose(1, "Read %d elements of size %d from %s\n", loadedElementCount, bedSize, bedFiles[0]);
 if (!noSort)
     {
     slSort(&bedList, bedStubCmp);
