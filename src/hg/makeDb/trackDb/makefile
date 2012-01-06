@@ -30,7 +30,7 @@ include ../../../inc/common.mk
 
 DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	venter1 \
-	panTro1 panTro2 panTro3 \
+	panTro1 panTro2 panTro3 panTro4 \
 	gorGor1 gorGor2 gorGor3 \
         nomLeu1 \
 	ponAbe2 \
