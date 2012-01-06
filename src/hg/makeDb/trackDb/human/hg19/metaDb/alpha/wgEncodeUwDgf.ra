@@ -981,6 +981,122 @@ subId 4895
 tableName wgEncodeUwDgfHahSig
 view Signal
 
+metaObject wgEncodeUwDgfHaspAln
+objType file
+accession hg19
+cell HA-sp
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHaspAln.bam,wgEncodeUwDgfHaspAln.bam.bai
+grant Stam
+lab UW
+labExpId DS14790
+labVersion Bowtie 0.12.7
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5232
+view Alignments
+
+metaObject wgEncodeUwDgfHaspHotspots
+objType table
+accession hg19
+cell HA-sp
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHaspHotspots.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS14790
+labVersion Hotspot-v5.2
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5232
+tableName wgEncodeUwDgfHaspHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfHaspPk
+objType table
+accession hg19
+cell HA-sp
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHaspPk.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS14790
+labVersion lmax-v1.0
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5232
+tableName wgEncodeUwDgfHaspPk
+view Peaks
+
+metaObject wgEncodeUwDgfHaspRaw
+objType table
+accession hg19
+cell HA-sp
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHaspRaw.bigWig
+grant Stam
+lab UW
+labExpId DS14790
+labVersion WindowDensity-bin20-win+/-75
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5232
+tableName wgEncodeUwDgfHaspRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfHaspRawData
+objType file
+accession hg19
+cell HA-sp
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHaspRawData.fastq.tgz
+grant Stam
+lab UW
+labExpId DS14790
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5232
+view RawData
+
+metaObject wgEncodeUwDgfHaspSig
+objType table
+accession hg19
+cell HA-sp
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHaspSig.bigWig
+grant Stam
+lab UW
+labExpId DS14790
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5232
+tableName wgEncodeUwDgfHaspSig
+view Signal
+
 metaObject wgEncodeUwDgfHcfAln
 objType file
 cell HCF
@@ -3033,6 +3149,122 @@ subId 4894
 tableName wgEncodeUwDgfHsmmSig
 view Signal
 
+metaObject wgEncodeUwDgfHuvecAln
+objType file
+accession hg19
+cell HUVEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHuvecAln.bam,wgEncodeUwDgfHuvecAln.bam.bai
+grant Stam
+lab UW
+labExpId DS10060
+labVersion Bowtie 0.12.7
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5233
+view Alignments
+
+metaObject wgEncodeUwDgfHuvecHotspots
+objType table
+accession hg19
+cell HUVEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHuvecHotspots.broadPeak.gz
+grant Stam
+lab UW
+labExpId DS10060
+labVersion Hotspot-v5.2
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5233
+tableName wgEncodeUwDgfHuvecHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfHuvecPk
+objType table
+accession hg19
+cell HUVEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHuvecPk.narrowPeak.gz
+grant Stam
+lab UW
+labExpId DS10060
+labVersion lmax-v1.0
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5233
+tableName wgEncodeUwDgfHuvecPk
+view Peaks
+
+metaObject wgEncodeUwDgfHuvecRaw
+objType table
+accession hg19
+cell HUVEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHuvecRaw.bigWig
+grant Stam
+lab UW
+labExpId DS10060
+labVersion WindowDensity-bin20-win+/-75
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5233
+tableName wgEncodeUwDgfHuvecRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfHuvecRawData
+objType file
+accession hg19
+cell HUVEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHuvecRawData.fastq.tgz
+grant Stam
+lab UW
+labExpId DS10060
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5233
+view RawData
+
+metaObject wgEncodeUwDgfHuvecSig
+objType table
+accession hg19
+cell HUVEC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDgfHuvecSig.bigWig
+grant Stam
+lab UW
+labExpId DS10060
+origAssembly Illumina_HiSeq_2000
+project wgEncode
+subId 5233
+tableName wgEncodeUwDgfHuvecSig
+view Signal
+
 metaObject wgEncodeUwDgfHvmfAln
 objType file
 cell HVMF
@@ -4520,4 +4752,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 652253841
+# MAGIC: 997268826
