@@ -1,4 +1,3 @@
-##Example 5 from Custom Annotation Tracks User's Guide
 browser position chr7:127471196-127495720
 browser hide all
 track name="ItemRGBDemo" description="Item RGB demonstration" visibility=2 itemRgb="On"
