@@ -67,6 +67,13 @@ samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
 char *bamFileName = fileOrUrl;
 if (retBamFileName != NULL)
     *retBamFileName = bamFileName;
+
+#ifdef BAM_VERSION
+// suppress too verbose messages in samtools >= 0.1.18; see redmine #6491
+// This variable didn't exist in older versions of samtools (where BAM_VERSION wasn't defined).
+bam_verbose = 1;
+#endif
+
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh == NULL)
     {
