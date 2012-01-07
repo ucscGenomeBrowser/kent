@@ -169,19 +169,18 @@ taxId   9615
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=memk canFam3 > do.log 2>&1 &
-XXX - running - Thu Jan  5 16:16:31 PST 2012
-    #	real    115m21.264s
+    #	real    366m34.586s
     cat faSize.rmsk.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 921370201 upper
-    #	111484609 lower) in 15932 sequences in 1 files
-    #	%10.65 masked total, %10.79 masked real
+    #	2410976875 bases (18261639 N's 2392715236 real 1364929603 upper
+    #	1027785633 lower) in 3268 sequences in 1 files
+    #	%42.63 masked total, %42.95 masked real
 
     grep -i versi do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
     featureBits -countGaps canFam3 rmsk
-    #	111540299 bases of 1046932099 (10.654%) in intersection
+    #	1027963174 bases of 2410976875 (42.637%) in intersection
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
@@ -193,14 +192,12 @@ XXX - running - Thu Jan  5 16:16:31 PST 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
 	canFam3 > do.log 2>&1 &
-XXX - running - Thu Jan  5 16:16:51 PST 2012
-    #	about 1 hour
+    #	real    98m15.932s
 
     cat fb.simpleRepeat 
-    #	10508414 bases of 1032854810 (1.017%) in intersection
+    #	65887025 bases of 2402709449 (2.742%) in intersection
 
-    # not going to add to rmsk here, using the window masker instead since
-    #	it masks more sequence
+    # adding RepeatMasker to get completed masked sequence
     cd /hive/data/genomes/canFam3
     twoBitMask canFam3.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed canFam3.2bit
@@ -208,12 +205,22 @@ XXX - running - Thu Jan  5 16:16:51 PST 2012
 
     twoBitToFa canFam3.2bit stdout | faSize stdin > faSize.canFam3.2bit.txt
     cat faSize.canFam3.2bit.txt
-    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
-    #	333510395 lower) in 19550 sequences in 1 files
-    #	%22.06 masked total, %24.55 masked real
+    #	2410976875 bases (18261639 N's 2392715236 real 1363595724 upper
+    #	1029119512 lower) in 3268 sequences in 1 files
+    #	%42.68 masked total, %43.01 masked real
 
+    #	reset the symlink:
     rm /gbdb/canFam3/canFam3.2bit
     ln -s `pwd`/canFam3.2bit /gbdb/canFam3/canFam3.2bit
+
+    #	what would it be like to include WindowMasker:
+    zcat bed/windowMasker/cleanWMask.bed.gz \
+	| twoBitMask -type=.bed -add canFam3.2bit stdin canFam3.wm.trf.rmsk.2bit
+    twoBitToFa canFam3.wm.trf.rmsk.2bit stdout | faSize stdin
+    #	2410976875 bases (18261639 N's 2392715236 real 1119889172 upper
+    #	1272826064 lower) in 3268 sequences in 1 files
+    #	%52.79 masked total, %53.20 masked real
+    # WM would add 243 million bases masked: 1272826064-1029119512 = 243706552
 
 #########################################################################
 # Verify all gaps are marked, add any N's not in gap as type 'other'
@@ -225,17 +232,16 @@ XXX - running - Thu Jan  5 16:16:51 PST 2012
     #	real    0m35.232s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits canFam3 -not gap -bed=notGap.bed
-XXX - running - Thu Jan  5 16:24:53 PST 2012
-    #	1043113087 bases of 1043113087 (100.000%) in intersection
-    #	real    0m8.581s
+    #	2402709449 bases of 2402709449 (100.000%) in intersection
+    #	real    0m18.120s
 
     time featureBits canFam3 allGaps.bed notGap.bed -bed=new.gaps.bed
-    #	10258277 bases of 1043113087 (0.983%) in intersection
-    #	real    1m29.109s
+    #	9994213 bases of 2402709449 (0.416%) in intersection
+    #	real    0m32.175s
 
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" canFam3 | sort -n | tail -1
-    #	446
+    #	94
     cat << '_EOF_' > mkGap.pl
 #!/bin/env perl
 
@@ -258,37 +264,37 @@ close (FH);
     chmod +x ./mkGap.pl
     ./mkGap.pl > other.bed
     wc -l other.bed
-    #	11035
+    #	19473
     featureBits -countGaps canFam3 other.bed
-    #	10258277 bases of 1046932099 (0.980%) in intersection
-    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
-	-noLoad canFam3 otherGap other.bed
+    #	9994213 bases of 2410976875 (0.415%) in intersection
     # verify no overlap:
     time featureBits -countGaps canFam3 gap other.bed
-    #	0 bases of 1046932099 (0.000%) in intersection
+    #	0 bases of 2410976875 (0.000%) in intersection
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad canFam3 otherGap other.bed
+    #	Loaded 19473 elements of size 8
     #	real    0m29.669s
 
     # verify no errors before adding to the table:
-    time gapToLift -minGap=1 canFam3 nonBridged.before.lift \
-	-bedFile=nonBridged.before.bed > before.gapToLift.txt 2>&1 &
-    #	real    0m7.205s
+    gapToLift -minGap=1 canFam3 nonBridged.before.lift \
+	-bedFile=nonBridged.before.bed > before.gapToLift.txt 2>&1
     # check for warnings in before.gapToLift.txt, should be empty:
-    #	-rw-rw-r-- 1       0 Jan  4 15:13 before.gapToLift.txt
+    #	-rw-rw-r-- 1       0 Jan  6 08:17 before.gapToLift.txt
     #	starting with this many:
     hgsql -e "select count(*) from gap;" canFam3
-    #	2863
+    #	4403
     hgsql canFam3 -e 'load data local infile "bed.tab" into table gap;'
     #	result count:
     hgsql -e "select count(*) from gap;" canFam3
-    #	13898
-    # == 2863 + 11035
+    #	23876
+    # == 4403 + 19473
     # verify we aren't adding gaps where gaps already exist
     # this would output errors if that were true:
     gapToLift -minGap=1 canFam3 nonBridged.lift -bedFile=nonBridged.bed
     # there should be no errors or other output, checked bridged gaps:
     hgsql -N -e "select bridge from gap;" canFam3 | sort | uniq -c
-    #	915 no
-    #	12983 yes
+    #	80 no
+    #	23796 yes
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2011-09-08 - Hiram)
@@ -296,66 +302,64 @@ close (FH);
     cd /hive/data/genomes/canFam3/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev canFam3 > do.log 2>&1 &
-XXX - running - Thu Jan  5 16:17:12 PST 2012
-    #	about 45 minutes
+    #	real    135m51.510s
 
     # Masking statistics
     twoBitToFa canFam3.wmsk.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 828377808 upper
-    #	204477002 lower) in 15932 sequences in 1 files
-    #	%19.53 masked total, %19.80 masked real
+    #	2410976875 bases (18261639 N's 2392715236 real 1597393388 upper
+    #	795321848 lower) in 3268 sequences in 1 files
+    #	%32.99 masked total, %33.24 masked real
 
     twoBitToFa canFam3.wmsk.sdust.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
-    #	210446947 lower) in 15932 sequences in 1 files
-    #	%20.10 masked total, %20.38 masked real
+    #	2410976875 bases (18261639 N's 2392715236 real 1582594665 upper
+    #	810120571 lower) in 3268 sequences in 1 files
+    #	%33.60 masked total, %33.86 masked real
 
     hgLoadBed canFam3 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 5996190 elements of size 3
+    #	Loaded 13647111 elements of size 3
 
     featureBits -countGaps canFam3 windowmaskerSdust
-    #	224522674 bases of 1046932099 (21.446%) in intersection
+    #	828382210 bases of 2410976875 (34.359%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits canFam3 -not gap -bed=notGap.bed
-    #	1032854810 bases of 1032854810 (100.000%) in intersection
+    #	2392715236 bases of 2392715236 (100.000%) in intersection
     time nice -n +19 featureBits canFam3 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	210446947 bases of 1032854810 (20.375%) in intersection
-    #	real    2m3.610s
+    #	810120571 bases of 2392715236 (33.858%) in intersection
+    #	real    2m1.844s
     #	reload track to get it clean
     hgLoadBed canFam3 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 5994965 elements of size 4
+    #	Loaded 13644959 elements of size 4
     time featureBits -countGaps canFam3 windowmaskerSdust
-    #	real    0m40.505s
-    #	210446947 bases of 1046932099 (20.101%) in intersection
+    #	810120571 bases of 2410976875 (33.601%) in intersection
+    #	real    1m19.909s
 
-    #	mask with this clean result
+    # how much overlap with repeat masker:
+    featureBits -countGaps canFam3 rmsk windowmaskerSdust
+    #	565424408 bases of 2410976875 (23.452%) in intersection
+
+    #	mask sequence with this clean result
     zcat cleanWMask.bed.gz \
 	| twoBitMask ../../canFam3.unmasked.2bit stdin \
 	    -type=.bed canFam3.cleanWMSdust.2bit
     twoBitToFa canFam3.cleanWMSdust.2bit stdout | faSize stdin \
         > canFam3.cleanWMSdust.faSize.txt
     cat canFam3.cleanWMSdust.faSize.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
-    #	210446947 lower) in 15932 sequences in 1 files
-    #	%20.10 masked total, %20.38 masked real
-
-    # how much does this window masker and repeat masker overlap:
-    featureBits -countGaps canFam3 rmsk windowmaskerSdust
-    #	71066487 bases of 1046932099 (6.788%) in intersection
+    #	2410976875 bases (18261639 N's 2392715236 real 1582594665 upper
+    #	810120571 lower) in 3268 sequences in 1 files
+    #	%33.60 masked total, %33.86 masked real
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2012-01-05 - Hiram)
+# NOT - MASK SEQUENCE WITH WM+TRF (NOT - 2012-01-06 - Hiram)
+    #	not masking this genome with WM+TRF since RepeatMasker has
+    #	masked enough
     cd /hive/data/genomes/canFam3
     twoBitMask -add bed/windowMasker/canFam3.cleanWMSdust.2bit \
 	bed/simpleRepeat/trfMask.bed canFam3.2bit
     #	safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa canFam3.2bit stdout | faSize stdin > faSize.canFam3.txt
     cat faSize.canFam3.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 822061190 upper
-    #	210793620 lower) in 15932 sequences in 1 files
-    #	%20.13 masked total, %20.41 masked real
 
     #	create symlink to gbdb
     ssh hgwdev
@@ -366,10 +370,6 @@ XXX - running - Thu Jan  5 16:17:12 PST 2012
     twoBitMask -add canFam3.2bit bed/repeatMasker/canFam3.sorted.fa.out \
 	canFam3.wm.trf.rmsk.2bit
     twoBitToFa canFam3.wm.trf.rmsk.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 781762152 upper
-    #	251092658 lower) in 15932 sequences in 1 files
-    #	%23.98 masked total, %24.31 masked real
-    # rmsk covers another 40 million bases 251092658-210793620 = 40299038
 
 ########################################################################
 
