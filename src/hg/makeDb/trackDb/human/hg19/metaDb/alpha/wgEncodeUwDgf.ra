@@ -983,7 +983,6 @@ view Signal
 
 metaObject wgEncodeUwDgfHaspAln
 objType file
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -995,14 +994,14 @@ grant Stam
 lab UW
 labExpId DS14790
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5232
 view Alignments
 
 metaObject wgEncodeUwDgfHaspHotspots
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1014,15 +1013,15 @@ grant Stam
 lab UW
 labExpId DS14790
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5232
 tableName wgEncodeUwDgfHaspHotspots
 view Hotspots
 
 metaObject wgEncodeUwDgfHaspPk
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1034,15 +1033,15 @@ grant Stam
 lab UW
 labExpId DS14790
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5232
 tableName wgEncodeUwDgfHaspPk
 view Peaks
 
 metaObject wgEncodeUwDgfHaspRaw
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1054,15 +1053,15 @@ grant Stam
 lab UW
 labExpId DS14790
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5232
 tableName wgEncodeUwDgfHaspRaw
 view RawSignal
 
 metaObject wgEncodeUwDgfHaspRawData
 objType file
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1073,14 +1072,14 @@ fileName wgEncodeUwDgfHaspRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS14790
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5232
 view RawData
 
 metaObject wgEncodeUwDgfHaspSig
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1091,8 +1090,9 @@ fileName wgEncodeUwDgfHaspSig.bigWig
 grant Stam
 lab UW
 labExpId DS14790
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5232
 tableName wgEncodeUwDgfHaspSig
 view Signal
@@ -3151,7 +3151,6 @@ view Signal
 
 metaObject wgEncodeUwDgfHuvecAln
 objType file
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3163,14 +3162,14 @@ grant Stam
 lab UW
 labExpId DS10060
 labVersion Bowtie 0.12.7
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5233
 view Alignments
 
 metaObject wgEncodeUwDgfHuvecHotspots
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3182,15 +3181,15 @@ grant Stam
 lab UW
 labExpId DS10060
 labVersion Hotspot-v5.2
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5233
 tableName wgEncodeUwDgfHuvecHotspots
 view Hotspots
 
 metaObject wgEncodeUwDgfHuvecPk
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3202,15 +3201,15 @@ grant Stam
 lab UW
 labExpId DS10060
 labVersion lmax-v1.0
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5233
 tableName wgEncodeUwDgfHuvecPk
 view Peaks
 
 metaObject wgEncodeUwDgfHuvecRaw
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3222,15 +3221,15 @@ grant Stam
 lab UW
 labExpId DS10060
 labVersion WindowDensity-bin20-win+/-75
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5233
 tableName wgEncodeUwDgfHuvecRaw
 view RawSignal
 
 metaObject wgEncodeUwDgfHuvecRawData
 objType file
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3241,14 +3240,14 @@ fileName wgEncodeUwDgfHuvecRawData.fastq.tgz
 grant Stam
 lab UW
 labExpId DS10060
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5233
 view RawData
 
 metaObject wgEncodeUwDgfHuvecSig
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3259,8 +3258,9 @@ fileName wgEncodeUwDgfHuvecSig.bigWig
 grant Stam
 lab UW
 labExpId DS10060
-origAssembly Illumina_HiSeq_2000
+origAssembly hg19
 project wgEncode
+seqPlatform Illumina_HiSeq_2000
 subId 5233
 tableName wgEncodeUwDgfHuvecSig
 view Signal
@@ -4752,4 +4752,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 997268826
+# MAGIC: -1523707546

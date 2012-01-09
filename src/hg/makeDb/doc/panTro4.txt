@@ -258,11 +258,30 @@ taxId   9598
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=memk panTro4 > do.log 2>&1 &
-XXX - running - Fri Jan  6 13:45:46 PST 2012
-    #	real    115m21.264s
+    #	real    761m6.538s
+    # missing IDs:
+# 313  12.3  3.5  1.8  chr14     102404757 102404806 (4140132) +  AluSz6         SINE/Alu                85  135  (177)       
+# 315  16.5  0.0  0.5  chr14     102405794 102405850 (4139088) +  AluJb          SINE/Alu                 1   42  (270)       
+# 1558  14.1  1.2  2.3  chr14     102406616 102406871 (4138067) +  AluJb          SINE/Alu                53  305    (7)       
+# 411  17.2  0.0  0.0  chr22     20433770 20433795 (29304189) +  AluJb          SINE/Alu                44   69  (243)       
+# 1093  15.4  0.0  8.5  chr22     20434607 20434807 (29303177) +  AluJb          SINE/Alu               120  303    (9)       
+
+    # slight problem, 5 entries without IDs, removed them:
+    egrep -v "102404757 102404806|102405794 102405850|102406616 102406871|20433770 20433795|20434607 20434807" panTro4.fa.out > panTro4.clean.fa.out
+    # finish the doCat.csh script:
+    /cluster/bin/scripts/extractNestedRepeats.pl panTro4.clean.fa.out \
+	| sort -k1,1 -k2,2n > panTro4.nestedRepeats.bed
+    # continuing with masking
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-continue=mask -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk panTro4 > mask.log 2>&1 &
+    #	real    43m48.192s
+
     cat faSize.rmsk.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 921370201 upper
-    #	111484609 lower) in 15932 sequences in 1 files
+    #	3309577922 bases (407238955 N's 2902338967 real 1415372307 upper
+    #	1486966660 lower) in 24129 sequences in 1 files
+    #	Total size: mean 137161.8 sd 4455791.7
+    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
     #	%10.65 masked total, %10.79 masked real
 
     grep -i versi do.log
@@ -270,7 +289,7 @@ XXX - running - Fri Jan  6 13:45:46 PST 2012
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
     featureBits -countGaps panTro4 rmsk
-    #	111540299 bases of 1046932099 (10.654%) in intersection
+    #	1490804137 bases of 3309577922 (45.045%) in intersection
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
@@ -297,7 +316,6 @@ XXX - running - Fri Jan  6 13:45:46 PST 2012
     cat fb.simpleRepeat 
     #	95896404 bases of 2902338967 (3.304%) in intersection
 
-XXX - mask with RM sequence
     cd /hive/data/genomes/panTro4
     twoBitMask panTro4.rmsk.2bit \
 	-add bed/simpleRepeat/trfMask.bed panTro4.2bit
@@ -305,9 +323,10 @@ XXX - mask with RM sequence
 
     twoBitToFa panTro4.2bit stdout | faSize stdin > faSize.panTro4.2bit.txt
     cat faSize.panTro4.2bit.txt
-    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
-    #	333510395 lower) in 19550 sequences in 1 files
-    #	%22.06 masked total, %24.55 masked real
+    #	3309577922 bases (407238955 N's 2902338967 real 1413870150 upper
+    #	1488468817 lower) in 24129 sequences in 1 files
+    #	Total size: mean 137161.8 sd 4455791.7
+    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
 
     rm /gbdb/panTro4/panTro4.2bit
     ln -s `pwd`/panTro4.2bit /gbdb/panTro4/panTro4.2bit
@@ -395,39 +414,47 @@ close (FH);
     cd /hive/data/genomes/panTro4/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev panTro4 > do.log 2>&1 &
-XXX - running - Fri Jan  6 13:47:07 PST 2012
+    # this failed the first time with some kind of network error
+    # it was restarted completely and finished normally
+    #	real    268m21.572s
+
     #	about 45 minutes
 
     # Masking statistics
     twoBitToFa panTro4.wmsk.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 828377808 upper
-    #	204477002 lower) in 15932 sequences in 1 files
-    #	%19.53 masked total, %19.80 masked real
+    #	3309577922 bases (407238955 N's 2902338967 real 1830845011 upper
+    #	1071493956 lower) in 24129 sequences in 1 files
+    #	Total size: mean 137161.8 sd 4455791.7
+    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
+    #	%32.38 masked total, %36.92 masked real
 
     twoBitToFa panTro4.wmsk.sdust.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
-    #	210446947 lower) in 15932 sequences in 1 files
-    #	%20.10 masked total, %20.38 masked real
+    #	3309577922 bases (407238955 N's 2902338967 real 1814008749 upper
+    #	1088330218 lower) in 24129 sequences in 1 files
+    #	Total size: mean 137161.8 sd 4455791.7
+    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
+    #	%32.88 masked total, %37.50 masked real
 
     hgLoadBed panTro4 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 5996190 elements of size 3
+    #	Loaded 16464562 elements of size 3
 
     featureBits -countGaps panTro4 windowmaskerSdust
-    #	224522674 bases of 1046932099 (21.446%) in intersection
+    #	1495546550 bases of 3309577922 (45.188%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits panTro4 -not gap -bed=notGap.bed
-    #	1032854810 bases of 1032854810 (100.000%) in intersection
+    #	2902338967 bases of 2902338967 (100.000%) in intersection
     time nice -n +19 featureBits panTro4 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	210446947 bases of 1032854810 (20.375%) in intersection
-    #	real    2m3.610s
+    #	1088330218 bases of 2902338967 (37.498%) in intersection
+    #	real    49m22.981s
+
     #	reload track to get it clean
     hgLoadBed panTro4 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 5994965 elements of size 4
+    #	Loaded 16467228  elements of size 4
     time featureBits -countGaps panTro4 windowmaskerSdust
-    #	real    0m40.505s
-    #	210446947 bases of 1046932099 (20.101%) in intersection
+    #	1088330218 bases of 3309577922 (32.884%) in intersection
+    #	real    1m45.898s
 
     #	mask with this clean result
     zcat cleanWMask.bed.gz \
@@ -436,39 +463,14 @@ XXX - running - Fri Jan  6 13:47:07 PST 2012
     twoBitToFa panTro4.cleanWMSdust.2bit stdout | faSize stdin \
         > panTro4.cleanWMSdust.faSize.txt
     cat panTro4.cleanWMSdust.faSize.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
-    #	210446947 lower) in 15932 sequences in 1 files
-    #	%20.10 masked total, %20.38 masked real
+    #	3309577922 bases (407238955 N's 2902338967 real 1814008749 upper
+    #	1088330218 lower) in 24129 sequences in 1 files
+    #	Total size: mean 137161.8 sd 4455791.7
+    #	min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
+    #	%32.88 masked total, %37.50 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps panTro4 rmsk windowmaskerSdust
-    #	71066487 bases of 1046932099 (6.788%) in intersection
+    #	854923909 bases of 3309577922 (25.832%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2012-01-05 - Hiram)
-    cd /hive/data/genomes/panTro4
-    twoBitMask -add bed/windowMasker/panTro4.cleanWMSdust.2bit \
-	bed/simpleRepeat/trfMask.bed panTro4.2bit
-    #	safe to ignore the warnings about BED file with >=13 fields
-    twoBitToFa panTro4.2bit stdout | faSize stdin > faSize.panTro4.txt
-    cat faSize.panTro4.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 822061190 upper
-    #	210793620 lower) in 15932 sequences in 1 files
-    #	%20.13 masked total, %20.41 masked real
-
-    #	create symlink to gbdb
-    ssh hgwdev
-    rm /gbdb/panTro4/panTro4.2bit
-    ln -s `pwd`/panTro4.2bit /gbdb/panTro4/panTro4.2bit
-
-    #	what happens with all masks:
-    twoBitMask -add panTro4.2bit bed/repeatMasker/panTro4.sorted.fa.out \
-	panTro4.wm.trf.rmsk.2bit
-    twoBitToFa panTro4.wm.trf.rmsk.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 781762152 upper
-    #	251092658 lower) in 15932 sequences in 1 files
-    #	%23.98 masked total, %24.31 masked real
-    # rmsk covers another 40 million bases 251092658-210793620 = 40299038
-
-########################################################################
-
