@@ -7054,6 +7054,141 @@ subId 5314
 tableName wgEncodeLicrHistoneOlfactH3k04me1MAdult8wksC57bl6StdSig
 view Signal
 
+metaObject wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K4me3
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-07
+dateUnrestricted 2012-10-06
+fileName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 2/7/11 Lane 5
+md5sum 8b04c65bd86a6c5687184e0a441b0177,9f3f26610c24b7a5ef378f5d2685755d
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5446
+view Alignments
+
+metaObject wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-07
+dateUnrestricted 2012-10-06
+fileName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 2/7/11 Lane 5
+md5sum b3b6cc25d2c89cd0d70cde4203736d09,c212e7f17402a55fbf7061901c4408ab
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5446
+view Alignments
+
+metaObject wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K4me3
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-07
+dateUnrestricted 2012-10-06
+fileName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 2/7/11 Lane 5
+md5sum 482c3b72e95d5cb2d0fadbb8e094d8ca
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5446
+view RawData
+
+metaObject wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-07
+dateUnrestricted 2012-10-06
+fileName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 2/7/11 Lane 5
+md5sum 9711fc275f3ce2cc752e926c775b5a51
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Bowtie
+strain C57BL/6
+subId 5446
+view RawData
+
+metaObject wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me3
+cell OlfactBulb
+composite wgEncodeLicrHistone
+control std
+controlId OlfactBulb/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-07
+dateUnrestricted 2012-10-06
+fileName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum 00b1836245d11a319299b79ad2435f62
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5446
+tableName wgEncodeLicrHistoneOlfactH3k04me3MAdult8wksC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrHistoneOlfactH3k27acMAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -7322,6 +7457,546 @@ softwareVersion Custom Scripts
 strain C57BL/6
 subId 5344
 tableName wgEncodeLicrHistoneOlfactInputMAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 2/23/11 Lane 4
+md5sum 06ae5a606a191c22ae90b432ea94b915,eff60198b588ef2a06e8edf4a9c9afbd
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5442
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 3/18/11 Lane 6
+md5sum 3cc9eea8bc8924c2ff368c85d9d5a15a,b01514b2938ae82829e54aa7e7d9edcf
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5442
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 2/23/11 Lane 4
+md5sum 437f79ed808b1f59d739a1a8c33108b7
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5442
+view RawData
+
+metaObject wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 3/18/11 Lane 6
+md5sum 57eff013e0100fda768e62b639cebb50
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5442
+view RawData
+
+metaObject wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me1
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum 6c4ab7d608296d9ae8bdda184dac5e55
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5442
+tableName wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K4me3
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 2/7/11 Lane 7
+md5sum e794922fd6319a6c0faab646ccbf722a,83f52b98bbe7fd0c67cfc149449a4861
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5443
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 3/14/11 Lane 1
+md5sum 2afc823e5d0ddfec085326f8d2eb50fe,52872e3aec3095ce495c9115f8ece621
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5443
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K4me3
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 2/7/11 Lane 7
+md5sum 3d9b2c3939751762460888133550ca71
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5443
+view RawData
+
+metaObject wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 3/14/11 Lane 1
+md5sum 70f16fb5d978684934299995d8091870
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5443
+view RawData
+
+metaObject wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K4me3
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum 103b8cbaff3a5878a512a9ba9827db47
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5443
+tableName wgEncodeLicrHistonePlacH3k04me3FAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/26/11 Lane 2
+md5sum c3bd61014442b88207a86149dcaef624,3b514b3745656f485315ab9cf7160f3f
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5441
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 7/26/11 Lane 2
+md5sum 66fb33c4831f90c4afae61f1809926dd,bc08474b8a8e6d6f12c8208326a535e9
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5441
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/26/11 Lane 2
+md5sum c1a9547002d6214604e3ec82960eb4ba
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5441
+view RawData
+
+metaObject wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K27ac
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 7/26/11 Lane 2
+md5sum 74a4c4383ea34b84dcfa21ae64b3bc29
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5441
+view RawData
+
+metaObject wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody H3K27ac
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum bfb233c839d7de23c8a9f6b73ace92d0
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5441
+tableName wgEncodeLicrHistonePlacH3k27acFAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody Input
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 1/18/11 Lane 1
+md5sum f231ffb8c9dc1ec2e222bb93041097ed,6264d991b8ebdf0ebd0427773e8a2e14
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5444
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody Input
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 1/18/11 Lane 2
+md5sum 42edbb82dc96a37ef2571d24767d1958,87321416ccf0aec973cb3444393a47c1
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5444
+view Alignments
+
+metaObject wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody Input
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 1/18/11 Lane 1
+md5sum 176f8640b25410359ff87dda00cac4ab
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5444
+view RawData
+
+metaObject wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody Input
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 1/18/11 Lane 2
+md5sum b0fbce764a723e7190b7a09952f1d469
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Bowtie
+strain C57BL/6
+subId 5444
+view RawData
+
+metaObject wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Input
+cell Placenta
+composite wgEncodeLicrHistone
+control std
+controlId Placenta/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2012-01-05
+dateUnrestricted 2012-10-05
+fileName wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+md5sum 0ceca399c1aaf77cb69661bf34df4d69
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5444
+tableName wgEncodeLicrHistonePlacInputFAdult8wksC57bl6StdSig
 view Signal
 
 metaObject wgEncodeLicrHistoneSmintH3k04me1MAdult8wksC57bl6StdAlnRep1
@@ -9876,4 +10551,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -25236107
+# MAGIC: 1481117635

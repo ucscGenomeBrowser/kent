@@ -330,7 +330,7 @@ track={
 %s
 }
 releaseLog={
-%s
+%s (Release %s)
 }
 priority={
 L
@@ -367,7 +367,7 @@ releaseLogUrl={
 }
 pushState={
 D
-}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(initDate), str(d), short, long, args.database, newYN, args.redmine, notes, args.database, args.composite) 
+}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(initDate), str(d), short, long, args.release, args.database, newYN, args.redmine, notes, args.database, args.composite) 
 	f = open(qaDir + "/release.sql", "w")
 	f.write(sql)
 	f.close()

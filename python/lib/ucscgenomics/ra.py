@@ -288,8 +288,8 @@ class RaFile(OrderedDict):
             Dictionary showing differences between stanzas, list of added and dropeed stanzas
         '''
         retDict = collections.defaultdict(list)
-        dropList = set(self.iterkeys()) - set(otherRa.iterkeys())
-        addList = set(otherRa.iterkeys()) - set(self.iterkeys())
+        addList = set(self.iterkeys()) - set(otherRa.iterkeys())
+        dropList = set(otherRa.iterkeys()) - set(self.iterkeys())
         common = set(self.iterkeys()) & set(otherRa.iterkeys())
 
         p = re.compile('^\s*#')
@@ -309,7 +309,7 @@ class RaFile(OrderedDict):
                     continue
                 if key not in self[stanza]:
                     retDict[stanza].append("Dropped %s -> %s" %(key, otherRa[stanza][key]))
-        return retDict, dropList, addList
+        return retDict, addList, dropList
 
     def diffFilter(self, select, other):
         '''
