@@ -1862,7 +1862,7 @@ vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
 tier 3
-protocol Stam:H7-hESC_Stam_protocol.pdf
+protocol StamAndCrawford:H7-hESC_StamAndCrawford_protocol.pdf
 
 term H9ES
 tag H9ES
