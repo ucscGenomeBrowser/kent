@@ -983,7 +983,6 @@ view Signal
 
 metaObject wgEncodeUwDgfHaspAln
 objType file
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1003,7 +1002,6 @@ view Alignments
 
 metaObject wgEncodeUwDgfHaspHotspots
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1024,7 +1022,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfHaspPk
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1045,7 +1042,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfHaspRaw
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1066,7 +1062,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfHaspRawData
 objType file
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -1085,7 +1080,6 @@ view RawData
 
 metaObject wgEncodeUwDgfHaspSig
 objType table
-accession hg19
 cell HA-sp
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3157,7 +3151,6 @@ view Signal
 
 metaObject wgEncodeUwDgfHuvecAln
 objType file
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3177,7 +3170,6 @@ view Alignments
 
 metaObject wgEncodeUwDgfHuvecHotspots
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3198,7 +3190,6 @@ view Hotspots
 
 metaObject wgEncodeUwDgfHuvecPk
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3219,7 +3210,6 @@ view Peaks
 
 metaObject wgEncodeUwDgfHuvecRaw
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3240,7 +3230,6 @@ view RawSignal
 
 metaObject wgEncodeUwDgfHuvecRawData
 objType file
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -3259,7 +3248,6 @@ view RawData
 
 metaObject wgEncodeUwDgfHuvecSig
 objType table
-accession hg19
 cell HUVEC
 composite wgEncodeUwDgf
 dataType DnaseDgf
@@ -4764,4 +4752,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -1421266042
+# MAGIC: -1523707546
