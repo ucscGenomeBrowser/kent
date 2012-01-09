@@ -2213,7 +2213,7 @@ term HEK293T
 tag HEK293T
 type Cell Line
 organism human
-description embryonic kidney that expresses SV40 large T antigen
+description embryonic kidney that expresses SV40 large T antigen, HEK293 (ATCC number CRL-1573) is the parental cell line
 tissue kidney
 vendorName Thermo Scientific Open Biosystems
 vendorId HCL4517
