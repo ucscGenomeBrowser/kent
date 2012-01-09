@@ -2209,6 +2209,24 @@ sex U
 tier 3
 protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HEK293b_Snyder_protocol.pdf
 
+term HEK293T
+tag HEK293T
+type Cell Line
+organism human
+description embryonic kidney that expresses SV40 large T antigen
+tissue kidney
+vendorName Thermo Scientific Open Biosystems
+vendorId HCL4517
+orderUrl https://www.openbiosystems.com/
+lineage mesoderm
+karyotype cancer
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
+lab Crawford
+sex F
+tier 3
+protocol Crawford:HEK293T_Crawford_protocol.pdf
+
 term HEK293(b)
 tag HEK293b
 type Cell Line
@@ -2228,7 +2246,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Snyder:HEK293b_Snyder_protocol.pdf
 
 term HEK293-T-REx
-tag HEK293T
+tag HEK293TREx
 type Cell Line
 tier 3
 organism human
