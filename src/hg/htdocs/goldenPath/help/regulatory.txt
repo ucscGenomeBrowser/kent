@@ -1,4 +1,4 @@
-browser position chr22:10000000-10020000
+browser position chr22:10000000-10025000
 browser hide all
 track name=regulatory	description="TeleGene(tm) Regulatory Regions" visibility=2
 chr22	TeleGene	enhancer	10000000	10001000	500	+	.	touch1
