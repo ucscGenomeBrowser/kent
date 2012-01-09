@@ -4661,7 +4661,7 @@ sex F
 protocol Stam:Patski_Stam_protocol.pdf
 
 term Placenta
-tag PLACENTA
+tag PLAC
 type Cell Line
 organism mouse
 tissue placenta
