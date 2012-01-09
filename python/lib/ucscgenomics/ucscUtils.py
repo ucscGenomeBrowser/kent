@@ -123,7 +123,11 @@ def mergeList(list1,list2):
         consensus.extend(list2[after_j:])
     before.extend(consensus)
     setcon = list()
+    p = re.compile('^#')
     for i in before:
+        if p.match(i):
+            setcon.append(i)
+            continue
         if i in setcon:
             continue
         else:
