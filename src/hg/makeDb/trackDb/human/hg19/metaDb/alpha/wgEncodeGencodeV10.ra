@@ -250,7 +250,7 @@ project wgEncode
 subId 5127
 tableName wgEncodeGencodeTranscriptSourceV10
 
-metaObject wgEncodeGencodeTranscriptSupportLevelV10
+metaObject wgEncodeGencodeTranscriptionSupportLevelV10
 objType table
 composite wgEncodeGencodeV10
 dataType Gencode
@@ -262,11 +262,11 @@ fileName wgEncodeGencodeTranscriptionSupportLevelV10.tab.gz
 grant Hubbard
 lab Sanger
 labExpId V10
-labVersion Transcript Support Level
+labVersion Transcription Support Level
 md5sum a024d0902b8a83e0175b6222d5e04108
 project wgEncode
 subId 5127
-tableName wgEncodeGencodeTranscriptSupportLevelV10
+tableName wgEncodeGencodeTranscriptionSupportLevelV10
 
 metaObject wgEncodeGencodeTranscriptSupportV10
 objType table
