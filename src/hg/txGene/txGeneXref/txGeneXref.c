@@ -224,12 +224,16 @@ for (info = infoList; info != NULL; info = info->next)
 	assert(accessionTokens != NULL);
 	rfamAcc = cloneString(accessionTokens->name);
 	assert(accessionTokens->next != NULL);
-	geneSymbol = replaceChars(accessionTokens->next->name, "-", "_");
+	char *accession = replaceChars(accessionTokens->next->name, "-", "_");
+	geneSymbol = replaceChars(accession, "Alias=", "");
+	freeMem(accession);
 	if (isalpha(*geneSymbol))
 	    *geneSymbol = toupper(*geneSymbol);
 	assert(accessionTokens->next->next != NULL);
-	char *contigCoordinates = accessionTokens->next->next->name;
+	char *contigCoordinates = replaceChars(accessionTokens->next->next->name,
+					       "Note=", "");
 	description =  needMem(strlen(rfamAcc) + strlen(contigCoordinates) + 45);
+	freeMem(contigCoordinates);
 	(void) sprintf(description,  "Rfam model %s hit found at contig region %s", 
 		       rfamAcc, contigCoordinates);
 	slFreeList(&accessionTokens);
