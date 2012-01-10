@@ -124,8 +124,7 @@ taxId   39432
     # check the end of agp.log to verify it is OK
     time makeGenomeDb.pl -workhorse=hgwdev -fileServer=hgwdev \
 	-continue=db saiBol1.config.ra > db.log 2>&1 
-XXX - running - Fri Jan  6 16:43:15 PST 2012
-    #	about 27 minutes
+    #	real    21m32.613s
 
 #############################################################################
 # running repeat masker (DONE - 2012-01-06 - Hiram)
@@ -134,19 +133,20 @@ XXX - running - Fri Jan  6 16:43:15 PST 2012
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-smallClusterHub=memk saiBol1 > do.log 2>&1 &
-XXX - running - Fri Jan  6 13:45:46 PST 2012
-    #	real    115m21.264s
+    #	real    751m55.197s
     cat faSize.rmsk.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 921370201 upper
-    #	111484609 lower) in 15932 sequences in 1 files
-    #	%10.65 masked total, %10.79 masked real
+    #	2608572064 bases (131440969 N's 2477131095 real 1321507940 upper
+    #	1155623155 lower) in 2685 sequences in 1 files
+    #	Total size: mean 971535.2 sd 4827933.6 min 1003 (AGCE01151413)
+    #	max 72162052 (JH378105) median 1553
+    #	%44.30 masked total, %46.65 masked real
 
     grep -i versi do.log
 # RepeatMasker version development-$Id: RepeatMasker,v 1.26 2011/09/26 16:19:44 angie Exp $
 #    April 26 2011 (open-3-3-0) version of RepeatMasker
 
     featureBits -countGaps saiBol1 rmsk
-    #	111540299 bases of 1046932099 (10.654%) in intersection
+    #	1157555619 bases of 2608572064 (44.375%) in intersection
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #	separates out the N's from the bases, it doesn't show lower case N's
@@ -158,13 +158,11 @@ XXX - running - Fri Jan  6 13:45:46 PST 2012
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
 	saiBol1 > do.log 2>&1 &
-XXX - running - Fri Jan  6 13:46:15 PST 2012
-    #	about 1 hour
+    #	real    20m15.294s
 
     cat fb.simpleRepeat 
-    #	10508414 bases of 1032854810 (1.017%) in intersection
+    #	38276602 bases of 2477131095 (1.545%) in intersection
 
-XXX - ready for this when rmsk is done
     # not going to add to rmsk here, using the window masker instead since
     #	it masks more sequence
     cd /hive/data/genomes/saiBol1
@@ -174,9 +172,10 @@ XXX - ready for this when rmsk is done
 
     twoBitToFa saiBol1.2bit stdout | faSize stdin > faSize.saiBol1.2bit.txt
     cat faSize.saiBol1.2bit.txt
-    #	1511735326 bases (153400444 N's 1358334882 real 1024824487 upper
-    #	333510395 lower) in 19550 sequences in 1 files
-    #	%22.06 masked total, %24.55 masked real
+    #	2608572064 bases (131440969 N's 2477131095 real 1320629270 upper
+    #	1156501825 lower) in 2685 sequences in 1 files
+    #	Total size: mean 971535.2 sd 4827933.6 min 1003 (AGCE01151413)
+    #	max 72162052 (JH378105) median 1553
 
     rm /gbdb/saiBol1/saiBol1.2bit
     ln -s `pwd`/saiBol1.2bit /gbdb/saiBol1/saiBol1.2bit
@@ -188,73 +187,17 @@ XXX - ready for this when rmsk is done
     cd /hive/data/genomes/saiBol1/bed/gap
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../saiBol1.unmasked.2bit > findMotif.txt 2>&1
-    #	real    0m17.839s
+    #	real    0m46.931s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     time featureBits -countGaps saiBol1 -not gap -bed=notGap.bed
     #	2969184009 bases of 3309577922 (89.715%) in intersection
     #	real    0m26.597s
 
     time featureBits -countGaps saiBol1 allGaps.bed notGap.bed -bed=new.gaps.bed
-XXX - running - Fri Jan  6 14:02:08 PST 2012
-    #	10258277 bases of 1043113087 (0.983%) in intersection
-    #	real    1m29.109s
+    #	0 bases of 2608572064 (0.000%) in intersection
+    #	real    8m30.686s
 
-    #	what is the highest index in the existing gap table:
-    hgsql -N -e "select ix from gap;" saiBol1 | sort -n | tail -1
-    #	446
-    cat << '_EOF_' > mkGap.pl
-#!/bin/env perl
-
-use strict;
-use warnings;
-
-my $ix=`hgsql -N -e "select ix from gap;" saiBol1 | sort -n | tail -1`;
-chomp $ix;
-
-open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
-while (my $line = <FH>) {
-    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
-    ++$ix;
-    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
-        $chromEnd, $ix, $chromEnd-$chromStart;
-}
-close (FH);
-'_EOF_'
-    # << happy emacs
-    chmod +x ./mkGap.pl
-    ./mkGap.pl > other.bed
-    wc -l other.bed
-    #	11035
-    featureBits -countGaps saiBol1 other.bed
-    #	10258277 bases of 1046932099 (0.980%) in intersection
-    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
-	-noLoad saiBol1 otherGap other.bed
-    # verify no overlap:
-    time featureBits -countGaps saiBol1 gap other.bed
-    #	0 bases of 1046932099 (0.000%) in intersection
-    #	real    0m29.669s
-
-    # verify no errors before adding to the table:
-    time gapToLift -minGap=1 saiBol1 nonBridged.before.lift \
-	-bedFile=nonBridged.before.bed > before.gapToLift.txt 2>&1 &
-    #	real    0m7.205s
-    # check for warnings in before.gapToLift.txt, should be empty:
-    #	-rw-rw-r-- 1       0 Jan  4 15:13 before.gapToLift.txt
-    #	starting with this many:
-    hgsql -e "select count(*) from gap;" saiBol1
-    #	2863
-    hgsql saiBol1 -e 'load data local infile "bed.tab" into table gap;'
-    #	result count:
-    hgsql -e "select count(*) from gap;" saiBol1
-    #	13898
-    # == 2863 + 11035
-    # verify we aren't adding gaps where gaps already exist
-    # this would output errors if that were true:
-    gapToLift -minGap=1 saiBol1 nonBridged.lift -bedFile=nonBridged.bed
-    # there should be no errors or other output, checked bridged gaps:
-    hgsql -N -e "select bridge from gap;" saiBol1 | sort | uniq -c
-    #	915 no
-    #	12983 yes
+    # no unannotated gaps, no more to run here
 
 ##########################################################################
 ## WINDOWMASKER (DONE - 2012-01-06 - Hiram)
@@ -262,39 +205,43 @@ close (FH);
     cd /hive/data/genomes/saiBol1/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev saiBol1 > do.log 2>&1 &
-XXX - running - Fri Jan  6 13:47:07 PST 2012
-    #	about 45 minutes
+    #	about 3 hours
 
     # Masking statistics
     twoBitToFa saiBol1.wmsk.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 828377808 upper
-    #	204477002 lower) in 15932 sequences in 1 files
-    #	%19.53 masked total, %19.80 masked real
+    #	2608572064 bases (131440969 N's 2477131095 real 1630475943 upper
+    #	846655152 lower) in 2685 sequences in 1 files
+    #	Total size: mean 971535.2 sd 4827933.6
+    #	min 1003 (AGCE01151413) max 72162052 (JH378105) median 1553
+    #	%32.46 masked total, %34.18 masked real
 
     twoBitToFa saiBol1.wmsk.sdust.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
-    #	210446947 lower) in 15932 sequences in 1 files
-    #	%20.10 masked total, %20.38 masked real
+    #	2608572064 bases (131440969 N's 2477131095 real 1617331205 upper
+    #	859799890 lower) in 2685 sequences in 1 files
+    #	Total size: mean 971535.2 sd 4827933.6
+    #	min 1003 (AGCE01151413) max 72162052 (JH378105) median 1553
+    #	%32.96 masked total, %34.71 masked real
 
     hgLoadBed saiBol1 windowmaskerSdust windowmasker.sdust.bed.gz
-    #	Loaded 5996190 elements of size 3
+    #	Loaded 14414165 elements of size 3
 
     featureBits -countGaps saiBol1 windowmaskerSdust
-    #	224522674 bases of 1046932099 (21.446%) in intersection
+    #	991240859 bases of 2608572064 (37.999%) in intersection
 
     #	eliminate the gaps from the masking
     featureBits saiBol1 -not gap -bed=notGap.bed
-    #	1032854810 bases of 1032854810 (100.000%) in intersection
+    #	2477131095 bases of 2477131095 (100.000%) in intersection
     time nice -n +19 featureBits saiBol1 windowmaskerSdust notGap.bed \
         -bed=stdout | gzip -c > cleanWMask.bed.gz
-    #	210446947 bases of 1032854810 (20.375%) in intersection
-    #	real    2m3.610s
+    #	859799890 bases of 2477131095 (34.710%) in intersection
+    #	real    5m21.813s
+
     #	reload track to get it clean
     hgLoadBed saiBol1 windowmaskerSdust cleanWMask.bed.gz
-    #	Loaded 5994965 elements of size 4
+    #	Loaded 14489638 elements of size 4
     time featureBits -countGaps saiBol1 windowmaskerSdust
-    #	real    0m40.505s
-    #	210446947 bases of 1046932099 (20.101%) in intersection
+    #	859799890 bases of 2608572064 (32.961%) in intersection
+    #	real    1m24.055s
 
     #	mask with this clean result
     zcat cleanWMask.bed.gz \
@@ -303,39 +250,14 @@ XXX - running - Fri Jan  6 13:47:07 PST 2012
     twoBitToFa saiBol1.cleanWMSdust.2bit stdout | faSize stdin \
         > saiBol1.cleanWMSdust.faSize.txt
     cat saiBol1.cleanWMSdust.faSize.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 822407863 upper
-    #	210446947 lower) in 15932 sequences in 1 files
-    #	%20.10 masked total, %20.38 masked real
+    #	2608572064 bases (131440969 N's 2477131095 real 1617331205 upper
+    #	859799890 lower) in 2685 sequences in 1 files
+    #	Total size: mean 971535.2 sd 4827933.6
+    #	min 1003 (AGCE01151413) max 72162052 (JH378105) median 1553
+    #	%32.96 masked total, %34.71 masked real
 
     # how much does this window masker and repeat masker overlap:
     featureBits -countGaps saiBol1 rmsk windowmaskerSdust
-    #	71066487 bases of 1046932099 (6.788%) in intersection
+    #	627944117 bases of 2608572064 (24.072%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2012-01-05 - Hiram)
-    cd /hive/data/genomes/saiBol1
-    twoBitMask -add bed/windowMasker/saiBol1.cleanWMSdust.2bit \
-	bed/simpleRepeat/trfMask.bed saiBol1.2bit
-    #	safe to ignore the warnings about BED file with >=13 fields
-    twoBitToFa saiBol1.2bit stdout | faSize stdin > faSize.saiBol1.txt
-    cat faSize.saiBol1.txt
-    #	1046932099 bases (14077289 N's 1032854810 real 822061190 upper
-    #	210793620 lower) in 15932 sequences in 1 files
-    #	%20.13 masked total, %20.41 masked real
-
-    #	create symlink to gbdb
-    ssh hgwdev
-    rm /gbdb/saiBol1/saiBol1.2bit
-    ln -s `pwd`/saiBol1.2bit /gbdb/saiBol1/saiBol1.2bit
-
-    #	what happens with all masks:
-    twoBitMask -add saiBol1.2bit bed/repeatMasker/saiBol1.sorted.fa.out \
-	saiBol1.wm.trf.rmsk.2bit
-    twoBitToFa saiBol1.wm.trf.rmsk.2bit stdout | faSize stdin
-    #	1046932099 bases (14077289 N's 1032854810 real 781762152 upper
-    #	251092658 lower) in 15932 sequences in 1 files
-    #	%23.98 masked total, %24.31 masked real
-    # rmsk covers another 40 million bases 251092658-210793620 = 40299038
-
-########################################################################
-
