@@ -127,6 +127,7 @@ class RaFile(OrderedDict):
         entry = RaStanza()
         if entry.readStanza(stanza, key) == None:
             return None, None, None
+        entry = RaStanza()
         val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
@@ -235,8 +236,11 @@ class RaFile(OrderedDict):
                 newStanza = RaStanza()
                 selfStanzaKeys = set(self[i].iterkeys())
                 otherStanzaKeys = set(other[i].iterkeys())
-                stanzaKeys = ucscUtils.mergeList(list(self[i].iterkeys()), list(other[i].iterkeys()))
+                stanzaKeys = ucscUtils.mergeList(list(self[i]), list(other[i]))
                 for j in stanzaKeys:
+                    if p.match(j):
+                        newStanza.append(j)
+                        continue
                     if j not in selfStanzaKeys:
                         newStanza[j] = other[i][j]
                     if j not in otherStanzaKeys:
