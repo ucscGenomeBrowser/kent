@@ -2255,9 +2255,10 @@ obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
+sex F
 subId 3432
 tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -1168223233
+# MAGIC: -1168220393
