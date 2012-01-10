@@ -4238,6 +4238,7 @@ project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
+sex F
 subId 3838
 tableName wgEncodeHaibRnaSeqU87AlnRep1
 treatment None
@@ -4265,6 +4266,7 @@ project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
+sex F
 subId 3838
 tableName wgEncodeHaibRnaSeqU87AlnRep2
 treatment None
@@ -4292,6 +4294,7 @@ project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
+sex F
 subId 3838
 treatment None
 view RawData
@@ -4318,6 +4321,7 @@ project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
+sex F
 subId 3838
 treatment None
 view RawData
@@ -4344,6 +4348,7 @@ project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
+sex F
 subId 3838
 tableName wgEncodeHaibRnaSeqU87RawRep1
 treatment None
@@ -4371,6 +4376,7 @@ project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
+sex F
 subId 3838
 tableName wgEncodeHaibRnaSeqU87RawRep2
 treatment None
@@ -4398,6 +4404,7 @@ project wgEncode
 readType 1x36
 replicate 1
 rnaExtract longPolyA
+sex F
 subId 4811
 treatment None
 view TranscriptGencV7
@@ -4424,8 +4431,9 @@ project wgEncode
 readType 1x36
 replicate 2
 rnaExtract longPolyA
+sex F
 subId 4811
 treatment None
 view TranscriptGencV7
 
-# MAGIC: 219319806
+# MAGIC: 219342526

@@ -53,14 +53,15 @@ while((*ptr) && !isdigit(*ptr))
     prefix[count++] = *ptr++;
     if (count > sizeof(prefix) - 1)
         errAbort("overflowed prefix buffer. Accession prefix > %lu chars\n",
-            sizeof(prefix) - 1);
+            (unsigned long)sizeof(prefix) - 1);
     }
 prefix[count] = 0;
 
 if (*ptr == 0)
     errAbort("accession not in proper format (%s)", accession);
 
-unsigned number = atoi(ptr);	// ignores version number if present
+// get number of accession up till optional version number
+unsigned number = atoi(ptr);	// returns number up to '.' or null
 
 struct blackListRange *range = ranges;
 for(; range ; range = range->next)

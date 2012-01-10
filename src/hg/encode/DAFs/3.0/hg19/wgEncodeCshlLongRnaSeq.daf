@@ -1,4 +1,4 @@
-# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.6 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.9 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -16,6 +16,7 @@
 #labExpId       optional lab internal identifiers, can be comma sepated list for pooled
 #origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)
 #replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
+#techRep	technical replicate
 #
 #NOTE:  The optional columns do not have to be in the DDF for validation
 
@@ -29,34 +30,40 @@ compositeSuffix   CshlLongRnaSeq
 group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
-validationSettings validateFiles.bam:mismatches=7,nMatch,allowOther
+validationSettings validateFiles.bam:mismatches=10,nMatch,allowOther
 
 # Track/view definition
-view             PlusRawSig
+view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
-view             MinusRawSig
+view             MinusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no
 
 # Solexa paired sequence
 view             FastqRd1
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly     yes
 
 view             FastqRd2
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly     yes
 
+view             Spikeins
+longLabelPrefix  CSHL Long RNA-seq Spike-ins
+type             doc
+hasReplicates    yes
+required         no
+downloadOnly     yes

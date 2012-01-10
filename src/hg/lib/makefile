@@ -34,7 +34,8 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/wgEncodeGencodeTag.o  \
     encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubMed.o \
     encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeGeneSource.o encode/wgEncodeGencodeTranscriptSource.o \
-    encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeUniProt.o \
+    encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeTranscriptionSupportLevel.o \
+    encode/wgEncodeGencodeUniProt.o \
     encode/wgEncodeGencodePolyAFeature.o encode/wgEncodeGencodeAnnotationRemark.o \
     encode/encodeExp.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \

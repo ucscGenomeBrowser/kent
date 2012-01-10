@@ -286,7 +286,7 @@ char *snp125FuncDefault[] = {
 static char *locusSyn[] =
     {"locus",		"gene-segment", "near-gene-3", "near-gene-5", NULL};
 static char *nonsynonSyn[] =
-    {"coding-nonsynon",	"nonsense", "missense", "frameshift", "cds-indel",
+    {"coding-nonsynon",	"nonsense", "missense", "frameshift", "stop-loss", "cds-indel",
      "coding-synonymy-unknown", NULL};
 static char *untranslatedSyn[] =
     {"untranslated",	"untranslated-3", "untranslated-5", NULL};

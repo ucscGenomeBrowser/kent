@@ -481,7 +481,7 @@ showItemRgb=bedItemRgb(ct->tdb);	/* should we expect itemRgb */
 hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
 hPrintf("For formatting information see: ");
-hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#BED\">BED</A> ");
+hPrintf("<A HREF=\"../FAQ/FAQformat.html#format1\">BED</A> ");
 hPrintf("format.");
 
 if (ct->dbTrack)
@@ -519,7 +519,7 @@ int count = 0;
 hPrintf("<B>Custom Track ID:</B> %s ", table);
 hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
 hPrintf("For formatting information see: ");
-hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#microarray\">Microarray</A> ");
+hPrintf("<A HREF=\"../FAQ/FAQformat.html#format6.5\">Microarray</A> ");
 hPrintf("format.");
 
 if (ct->dbTrack)

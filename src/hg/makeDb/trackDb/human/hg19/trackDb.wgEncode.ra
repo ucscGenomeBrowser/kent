@@ -60,8 +60,7 @@ include wgEncodeUw5C.new.ra alpha
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.ra public
-include wgEncodeUwAffyExonArray.new.ra alpha,beta
+include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.ra beta,public
@@ -100,14 +99,14 @@ include wgEncodeRikenCage.ra
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public
-include wgEncodeCshlShortRnaSeq.new.ra alpha
+include wgEncodeCshlShortRnaSeq.release2.ra alpha
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
-include wgEncodeCaltechRnaSeq.ra beta,public
-include wgEncodeCaltechRnaSeq.new.ra alpha
+include wgEncodeCaltechRnaSeq.ra public
+include wgEncodeCaltechRnaSeq.new.ra alpha,beta
 
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra beta,public
