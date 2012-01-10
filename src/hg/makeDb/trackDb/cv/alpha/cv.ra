@@ -9509,7 +9509,17 @@ type treatment
 
 term serum_free_media
 tag SERUMFREE
-description grown in serum free media (Crawford)
+description Grown with growth factors, then switched to media that contains no FBS for 36 hours (Crawford)
+type treatment
+
+term serum_starved_media
+tag SERUMSTARVED
+description Grown with normal serum levels (10%), then switched to media containing low level of FBS (0.05%) for 72 hours
+type treatment
+
+term serum_stimulated_media
+tag SERUMSTIM
+description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
 type treatment
 
 term 4OHTAM_1uM_36hr
