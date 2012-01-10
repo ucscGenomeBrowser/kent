@@ -14689,6 +14689,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001475
+expId 1475
 fileName wgEncodeHaibTfbsGm12878Pou2f2Pcr1xAlnRep3.bam,wgEncodeHaibTfbsGm12878Pou2f2Pcr1xAlnRep3.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -14772,6 +14774,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001475
+expId 1475
 fileName wgEncodeHaibTfbsGm12878Pou2f2Pcr1xPkRep3.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -14854,6 +14858,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001475
+expId 1475
 fileName wgEncodeHaibTfbsGm12878Pou2f2Pcr1xRawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -14931,6 +14937,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001475
+expId 1475
 fileName wgEncodeHaibTfbsGm12878Pou2f2Pcr1xRawRep3.bigWig
 grant Myers
 lab HudsonAlpha
@@ -15011,6 +15019,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001476
+expId 1476
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep3.bam,wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep3.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -15094,6 +15104,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001476
+expId 1476
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xPkRep3.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -15173,6 +15185,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001476
+expId 1476
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xRawDataRep3.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -15250,6 +15264,8 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
+dccAccession wgEncodeEH001476
+expId 1476
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xRawRep3.bigWig
 grant Myers
 lab HudsonAlpha
@@ -16980,6 +16996,8 @@ dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-02
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-04-20
+dccAccession wgEncodeEH001496
+expId 1496
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -56023,7 +56041,6 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
-sex F
 subId 1848
 treatment None
 view Alignments
@@ -56050,7 +56067,6 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
-sex F
 subId 1585
 treatment None
 view Alignments
@@ -56077,7 +56093,6 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
-sex F
 softwareVersion MACS
 subId 1848
 tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1
@@ -56106,7 +56121,6 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
-sex F
 softwareVersion MACS
 subId 1585
 tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
@@ -56136,7 +56150,6 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
-sex F
 subId 3877
 treatment None
 view RawData
@@ -56163,7 +56176,6 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
-sex F
 subId 3017
 treatment None
 view RawData
@@ -56190,7 +56202,6 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
-sex F
 subId 3037
 tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep1
 treatment None
@@ -56218,7 +56229,6 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
-sex F
 subId 3035
 tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
@@ -56246,7 +56256,6 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
-sex F
 subId 4159
 treatment None
 view Alignments
@@ -56273,7 +56282,6 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
-sex F
 subId 4159
 treatment None
 view Alignments
@@ -56300,7 +56308,6 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
-sex F
 softwareVersion MACS
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1
@@ -56329,7 +56336,6 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
-sex F
 softwareVersion MACS
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2
@@ -56358,7 +56364,6 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
-sex F
 subId 4159
 treatment None
 view RawData
@@ -56385,7 +56390,6 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
-sex F
 subId 4159
 treatment None
 view RawData
@@ -56412,7 +56416,6 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
-sex F
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1
 treatment None
@@ -56440,7 +56443,6 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
-sex F
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
 treatment None
@@ -56468,7 +56470,6 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType input
-sex F
 subId 1848
 treatment None
 view Alignments
@@ -56495,7 +56496,6 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType input
-sex F
 subId 3091
 treatment None
 view Alignments
@@ -56522,7 +56522,6 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType input
-sex F
 subId 3019
 treatment None
 view RawData
@@ -56549,7 +56548,6 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType input
-sex F
 subId 3019
 treatment None
 view RawData
@@ -56576,7 +56574,6 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType input
-sex F
 subId 3810
 tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep1
 treatment None
@@ -56604,7 +56601,6 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType input
-sex F
 subId 3035
 tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep2
 treatment None
@@ -56632,7 +56628,6 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
-sex F
 subId 4160
 treatment None
 view Alignments
@@ -56659,7 +56654,6 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType input
-sex F
 subId 4160
 treatment None
 view Alignments
@@ -56686,7 +56680,6 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
-sex F
 subId 4160
 treatment None
 view RawData
@@ -56713,7 +56706,6 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType input
-sex F
 subId 4160
 treatment None
 view RawData
@@ -56740,7 +56732,6 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
-sex F
 subId 4160
 tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep1
 treatment None
@@ -56768,10 +56759,9 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType input
-sex F
 subId 4160
 tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -579091798
+# MAGIC: 2032746149
