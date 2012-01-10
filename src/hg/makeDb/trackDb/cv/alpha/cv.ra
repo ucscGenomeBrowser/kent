@@ -3863,9 +3863,11 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
-sex F
+sex U
 tier 3
 protocol Myers:U-87_Myers_protocol.pdf
+# There is considerable confusion about the gender of this cell line.  It was at first described by the vendor as female and that 
+#is how it is mapped in most cases.  However, the vendor is now saying the further testing has proven it to be male.
 
 term U2OS
 tag U2OS
