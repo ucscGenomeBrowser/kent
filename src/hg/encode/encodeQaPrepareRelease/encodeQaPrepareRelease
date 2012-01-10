@@ -1,0 +1,151 @@
+#!/hive/groups/encode/dcc/bin/python
+import sys, os, re, argparse, shutil 
+from ucscgenomics import track 
+
+def addInclude(composite, makefile, stage):
+    f = open(makefile, "r")
+    lines = f.readlines()
+    f.close()
+    match = 0
+    p = re.compile("%s\.ra" % composite)
+    for i in lines:
+        if p.search(i):
+            match = 1
+    if match == 1:
+        print "%s metaDb makefile already includes %s.ra" % (stage, composite)
+        return
+    else:
+        f = open(makefile, "w")
+        p = re.compile("LIST")
+        for i in lines:
+            f.write(str(i))
+            if p.search(i):
+                f.write("%s.ra \\\n" % composite)
+    return
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog='encodeQaPrepareRelease',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description='Stages a track either to beta or to public',
+        epilog=
+        '''Examples:
+           encodeQaPrepareRelease hg19 wgEncodeSydhTfbs beta
+           encodeQaPrepareRelease hg19 wgEncodeHaibTfbs public
+        '''
+        )
+    parser.add_argument('database', help='The database you\'re using')
+    parser.add_argument('composite', help='The composite you\'re using')
+    parser.add_argument('stage', help='The stage you are staging to')
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+        return
+    args = parser.parse_args(sys.argv[1:])
+  
+    if not (args.stage == "beta" or args.stage == "public"):
+       print "Stage must be either 'beta' or 'public'"
+       return
+
+    c = track.CompositeTrack(args.database, args.composite)
+    if not c.currentTrackDb:
+        print "There is no include statement in trackDb.wgEncode.ra for %s with an alpha tag" % args.composite
+        return
+    m = re.search("%s\.(\S+)\.ra" % args.composite, c.currentTrackDb)
+    if m.group():
+        m2 = re.match('release(\d+)', m.group(1))
+        if not m2:
+            print "TrackDb to be staged on %s: %s" % (args.stage, m.group())
+        else:
+            print "Release to be staged on %s: %s" % (args.stage, m2.group(1)) 
+
+    trackDbInclude = c._trackDbDir + "trackDb.wgEncode.ra"
+    f = open(trackDbInclude, "r")
+    includeLines = f.readlines()
+    f.close()
+    p = re.compile("include (%s.*)" % args.composite)
+    compositeLines = list()
+
+
+    for i in includeLines:
+        m3 = p.search(i)
+        if m3:
+            compositeLines.append(m3.group(1))
+
+
+    if len(compositeLines) > 2:
+        print "There are 3 include lines for composite %s, this must currently be resolved manually"
+        return
+    compare = dict()
+
+
+    for i in compositeLines:
+        compare[i.partition(" ")[0]] = i.partition(" ")[2]
+    if args.stage == "beta":
+        betaMetaDbInclude = "%s/makefile" % c._betaMdbDir 
+        addInclude(args.composite, betaMetaDbInclude, args.stage)
+        for i in compare.keys():
+            if re.search("alpha", compare[i]):
+                compare[i] = "alpha,beta"
+                continue
+            if re.search("public", compare[i]):
+                compare[i] = "public"
+                continue
+    if args.stage == "public":
+        publicMetaDbInclude = "%s/makefile" % c._publicMdbDir
+        addInclude(args.composite, publicMetaDbInclude, args.stage)
+        for i in compare.keys():
+            if re.search("beta", compare[i]):
+                compare[i] = "public"
+                continue
+            if re.search("public", compare[i]):
+                compare[i] = "delete"
+                continue
+
+    p = re.compile("include (\S+\.ra)")
+    f = open(trackDbInclude, "w")
+    for i in includeLines:
+        m = p.match(i)
+        if not m:
+            f.write(i)
+            continue
+        if m.group(1) in compare:
+            if compare[m.group(1)] != "delete":
+                f.write("include %s %s\n" % (m.group(1), compare[m.group(1)]))
+            continue
+        f.write(i)
+    f.close()
+    alphaMetaDb = c.alphaMetaDb
+    betaMetaDb = c.betaMetaDb
+    (retList, addList, dropList) = alphaMetaDb.changeSummary(betaMetaDb)
+    if args.stage == "beta":
+        f = open("%s.metaDb.beta.diff" % args.composite, "w")
+        f.write("Dropped Stanzas (%s):\n" % len(dropList))
+        for i in sorted(dropList):
+            f.write("\t%s\n" % i)
+        f.write("\nNew Stanzas (%s):\n" % len(addList))    
+        for i in sorted(addList):
+            f.write("\t%s\n" % i)
+        f.write("\nChanged Stanzas (%s):\n" % len(retList.keys()))
+        for i in sorted(retList.keys()):
+            f.write("\t%s:\n" % i)
+            for j in retList[i]:
+                f.write("\t\t%s\n" % j)
+        f.close
+        print "Moving alpha metaDb to beta metaDb, please make on hgwbeta"
+        shutil.copy(c._alphaMdbPath, c._betaMdbPath) 
+    if args.stage == "public":
+        if retList:
+            print """
+Alpha metaDb has changed, and it now differs from beta metaDb"
+Please run:
+raDiff %s %s
+and resolve the differences
+""" % (c._alphaMdbPath, c._betaMdbPath)
+
+        else:
+            print "Moving beta metaDb to public metaDb"
+            shutil.copy(c._betaMdbPath, c._publicMdbPath)
+
+if __name__ == "__main__":
+    main()
