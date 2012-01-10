@@ -24,7 +24,7 @@ and they create the proper indexes on the table to allow
 efficient display by the genome browser.
 
 By far the most common format of track data is the BED format.
-See also: http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED
+See also: http://genome.ucsc.edu/FAQ/FAQformat.html#format1
 for a description of BED file formats.
 
 A typical BED file format is loaded into a database table with

@@ -862,9 +862,6 @@ hgPepPred $tempDb generic knownGeneMrna ucscGenes.fa
 hgPepPred $tempDb generic knownGeneTxPep ucscGenesTx.faa
 hgPepPred $tempDb generic knownGeneTxMrna ucscGenesTx.fa
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-
 # Create a bunch of knownToXxx tables according to alignment overlap.  
 # Takes about 3 minutes:
 cd $dir
@@ -952,9 +949,6 @@ if ($db =~ mm*) then
     hgExpDistance $tempDb hgFixed.gnfMouseAtlas2MedianRatio \
 	    hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
 endif
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # Update visiGene stuff
@@ -1347,8 +1341,8 @@ cd $dir
 # You'll need superuser powers for this step.....
 
 # Save old known genes and kgXref tables
-#sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
-#sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 
 # Create backup database
 hgsqladmin create ${db}Backup
