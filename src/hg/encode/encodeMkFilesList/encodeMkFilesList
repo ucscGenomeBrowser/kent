@@ -21,6 +21,7 @@ use Digest::MD5;
 use threads;
 use threads::shared;
 use Time::HiRes qw(usleep nanosleep);
+use POSIX;
 
 # for debug only, you'll need to find the package on your own
 # use DataBrowser qw(browse);
@@ -319,6 +320,11 @@ sub metaDbUpdate {
 ############
 
 my $user = "$ENV{'USER'}";
+my $nice = POSIX::nice(19);
+
+unless ($nice) {
+    print STDERR "Can't set nice to 19\n";
+}
 my %opt;
 my $goodopts = GetOptions(\%opt,
                     "md5",

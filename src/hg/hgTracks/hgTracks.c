@@ -3169,7 +3169,7 @@ else if (sameString(type, "bigBed"))
     /* Finish wrapping track around tdb. */
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = bbi;
-    tg->nextItemButtonable = FALSE;
+    tg->nextItemButtonable = TRUE;
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
@@ -3295,8 +3295,6 @@ else
     {
     errAbort("Unrecognized custom track type %s", type);
     }
-if (!ct->dbTrack)
-    tg->nextItemButtonable = FALSE;
 tg->hasUi = TRUE;
 tg->customTrack = TRUE;// Explicitly declare this a custom track for flatTrack ordering
 
