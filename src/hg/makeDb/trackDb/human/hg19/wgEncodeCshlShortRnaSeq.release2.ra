@@ -452,46 +452,6 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HUVEC cyto sm A 2
-        longLabel HUVEC cytosol small RNA-seq Alignments Rep 2 (Lab Rep 4) from ENCODE/CSHL
-        subGroups view=Alignments cellType=2Huvec localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
-        type bam
-        origAssembly hg19
-        color 224,75,0
-        # subId=3361 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HUVEC cyto sm A 1
-        longLabel HUVEC cytosol small RNA-seq Alignments Rep 1 (Lab Rep 3) from ENCODE/CSHL
-        subGroups view=Alignments cellType=2Huvec localization=cytosol rnaExtract=SHORTTOTAL rep=rep1
-        type bam
-        origAssembly hg19
-        color 224,75,0
-        # subId=3360 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HUVE cell sm A 2
-        longLabel HUVEC whole cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2Huvec localization=cell rnaExtract=SHORTTOTAL rep=rep2
-        type bam
-        origAssembly hg19
-        color 224,75,0
-        # subId=3359 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1
-        parent wgEncodeCshlShortRnaSeqViewAlignments off
-        shortLabel HUVE cell sm A 1
-        longLabel HUVEC whole cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
-        subGroups view=Alignments cellType=2Huvec localization=cell rnaExtract=SHORTTOTAL rep=rep1
-        type bam
-        origAssembly hg19
-        color 224,75,0
-        # subId=3358 dateSubmitted=2011-01-19
-
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa nucl sm A 2
@@ -1105,46 +1065,6 @@ html wgEncodeCshlShortRnaSeq.release2
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep4
-        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel HUVEC cyto sm - 2
-        longLabel HUVEC cytosol small RNA-seq Minus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=2Huvec localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
-        type bigWig 1.000000 2161085.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3361 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep3
-        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel HUVEC cyto sm - 1
-        longLabel HUVEC cytosol small RNA-seq Minus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=2Huvec localization=cytosol rnaExtract=SHORTTOTAL rep=rep1
-        type bigWig 1.000000 656964.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3360 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep2
-        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel HUVE cell sm - 2
-        longLabel HUVEC whole cell small RNA-seq Minus signal Rep 2 from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=2Huvec localization=cell rnaExtract=SHORTTOTAL rep=rep2
-        type bigWig 1.000000 3671413.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3359 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep1
-        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-        shortLabel HUVE cell sm - 1
-        longLabel HUVEC whole cell small RNA-seq Minus signal Rep 1 from ENCODE/CSHL
-        subGroups view=MinusRawSignal cellType=2Huvec localization=cell rnaExtract=SHORTTOTAL rep=rep1
-        type bigWig 1.000000 9282113.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3358 dateSubmitted=2011-01-19
-
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa nucl sm - 2
@@ -1757,46 +1677,6 @@ html wgEncodeCshlShortRnaSeq.release2
         origAssembly hg19
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep4
-        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel HUVEC cyto sm + 2
-        longLabel HUVEC cytosol small RNA-seq Plus signal Rep 2 (Lab Rep 4) from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=2Huvec localization=cytosol rnaExtract=SHORTTOTAL rep=rep2
-        type bigWig 1.000000 2933030.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3361 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep3
-        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel HUVEC cyto sm + 1
-        longLabel HUVEC cytosol small RNA-seq Plus signal Rep 1 (Lab Rep 3) from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=2Huvec localization=cytosol rnaExtract=SHORTTOTAL rep=rep1
-        type bigWig 1.000000 3443574.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3360 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep2
-        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel HUVE cell sm + 2
-        longLabel HUVEC whole cell small RNA-seq Plus signal Rep 2 from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=2Huvec localization=cell rnaExtract=SHORTTOTAL rep=rep2
-        type bigWig 1.000000 3823736.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3359 dateSubmitted=2011-01-19
-
-        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep1
-        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel HUVE cell sm + 1
-        longLabel HUVEC whole cell small RNA-seq Plus signal Rep 1 from ENCODE/CSHL
-        subGroups view=PlusRawSignal cellType=2Huvec localization=cell rnaExtract=SHORTTOTAL rep=rep1
-        type bigWig 1.000000 1171450.000000
-        origAssembly hg19
-        color 224,75,0
-        # subId=3358 dateSubmitted=2011-01-19
 
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off

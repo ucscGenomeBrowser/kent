@@ -10281,7 +10281,7 @@ subId 5320
 tableName wgEncodeLicrHistoneThymusInputMAdult8wksC57bl6StdSig
 view Signal
 
-metaObject wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdAlnRep1
+metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdAlnRep1
 objType file
 age E14.5
 antibody H3K27ac
@@ -10293,7 +10293,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdAlnRep1.bam.bai
+fileName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 6/8/11 Lane 6
@@ -10308,7 +10308,7 @@ strain C57BL/6
 subId 5366
 view Alignments
 
-metaObject wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdAlnRep2
+metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdAlnRep2
 objType file
 age E14.5
 antibody H3K27ac
@@ -10320,7 +10320,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdAlnRep2.bam.bai
+fileName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 6/28/11 Lane 3
@@ -10335,7 +10335,7 @@ strain C57BL/6
 subId 5366
 view Alignments
 
-metaObject wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdRawDataRep1
+metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
 antibody H3K27ac
@@ -10347,7 +10347,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdRawDataRep1.fastq.gz
+fileName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/8/11 Lane 6
@@ -10362,7 +10362,7 @@ strain C57BL/6
 subId 5366
 view RawData
 
-metaObject wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdRawDataRep2
+metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdRawDataRep2
 objType file
 age E14.5
 antibody H3K27ac
@@ -10374,7 +10374,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdRawDataRep2.fastq.gz
+fileName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 6/28/11 Lane 3
@@ -10389,7 +10389,7 @@ strain C57BL/6
 subId 5366
 view RawData
 
-metaObject wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdSig
+metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdSig
 objType table
 age E14.5
 antibody H3K27ac
@@ -10401,7 +10401,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdSig.bigWig
+fileName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
@@ -10413,10 +10413,10 @@ sex U
 softwareVersion Custom Scripts
 strain C57BL/6
 subId 5366
-tableName wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdSig
+tableName wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdSig
 view Signal
 
-metaObject wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdAlnRep1
+metaObject wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdAlnRep1
 objType file
 age E14.5
 antibody Input
@@ -10428,7 +10428,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdAlnRep1.bam.bai
+fileName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 7/28/10 Lane 4
@@ -10443,7 +10443,7 @@ strain C57BL/6
 subId 5367
 view Alignments
 
-metaObject wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdAlnRep2
+metaObject wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdAlnRep2
 objType file
 age E14.5
 antibody Input
@@ -10455,7 +10455,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdAlnRep2.bam.bai
+fileName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 4
@@ -10470,7 +10470,7 @@ strain C57BL/6
 subId 5367
 view Alignments
 
-metaObject wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdRawDataRep1
+metaObject wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
 antibody Input
@@ -10482,7 +10482,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdRawDataRep1.fastq.gz
+fileName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 7/28/10 Lane 4
@@ -10497,7 +10497,7 @@ strain C57BL/6
 subId 5367
 view RawData
 
-metaObject wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdRawDataRep2
+metaObject wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdRawDataRep2
 objType file
 age E14.5
 antibody Input
@@ -10509,7 +10509,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdRawDataRep2.fastq.gz
+fileName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 4
@@ -10524,7 +10524,7 @@ strain C57BL/6
 subId 5367
 view RawData
 
-metaObject wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdSig
+metaObject wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 objType table
 age E14.5
 antibody Input
@@ -10536,7 +10536,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
-fileName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdSig.bigWig
+fileName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
@@ -10548,7 +10548,7 @@ sex U
 softwareVersion Custom Scripts
 strain C57BL/6
 subId 5367
-tableName wgEncodeLicrHistoneWholebrainInputUE14halfC57bl6StdSig
+tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 1481117635
+# MAGIC: 1481106611
