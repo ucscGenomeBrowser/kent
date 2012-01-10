@@ -498,7 +498,8 @@ while (s < bam->data + bam->data_len)
 
 struct bamChromInfo *bamChromList(samfile_t *fh)
 {
-/* Return list of chromosomes from bam header. We normalize chromosome names to UCSC format. */
+/* Return list of chromosomes from bam header. We make no attempty to normalize chromosome names to UCSC format,
+   so list may contain things like "1" for "chr1", "I" for "chrI", "MT" for "chrM" etc. */
 int i;
 struct bamChromInfo *list = NULL;
 bam_header_t *bamHeader = fh->header;
@@ -507,34 +508,9 @@ if(bamHeader == NULL)
 for(i = 0; i < bamHeader->n_targets; i++)
     {
     struct bamChromInfo *info = NULL;
-    char chrom[512];
-    uint32_t size = bamHeader->target_len[i];
-    safecpy(chrom, sizeof(chrom), bamHeader->target_name[i]);
-
-    // normalize to UCSC chrom naming conventions
-    if(sameString(chrom, "MT"))
-        strcpy(chrom, "chrM");
-    else if(sameString(chrom, "X"))
-        strcpy(chrom, "chrX");
-    else if(sameString(chrom, "Y"))
-        strcpy(chrom, "chrY");
-    else
-        {
-        // convert "1" => "chr1"
-        boolean allDigits = TRUE;
-        int j;
-        for(j = 0; chrom[j] && allDigits; j++)
-            allDigits = isdigit(chrom[j]);
-        if(allDigits)
-            {
-            char *copy = cloneString(chrom);
-            safef(chrom, sizeof(chrom), "chr%s", copy);
-            freeMem(copy);
-            }
-        }
     AllocVar(info);
-    info->name = cloneString(chrom);
-    info->size = size;
+    info->name = cloneString(bamHeader->target_name[i]);
+    info->size = bamHeader->target_len[i];
     slAddHead(&list, info);
     }
 slReverse(&list);
