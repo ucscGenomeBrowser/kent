@@ -260,7 +260,7 @@ class CvStanza(ra.RaStanza):
 						ra.handler(InvalidProtocolError(self, protocol))
 				
 class CvError(Exception):
-	'''base error class for the cv."""
+	'''base error class for the cv.'''
 	def __init__(self, stanza):
 		self.stanza = stanza
 		self.msg = ''
