@@ -56023,6 +56023,7 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
+sex F
 subId 1848
 treatment None
 view Alignments
@@ -56049,6 +56050,7 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
+sex F
 subId 1585
 treatment None
 view Alignments
@@ -56075,6 +56077,7 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
+sex F
 softwareVersion MACS
 subId 1848
 tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1
@@ -56103,6 +56106,7 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
+sex F
 softwareVersion MACS
 subId 1585
 tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
@@ -56132,6 +56136,7 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
+sex F
 subId 3877
 treatment None
 view RawData
@@ -56158,6 +56163,7 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
+sex F
 subId 3017
 treatment None
 view RawData
@@ -56184,6 +56190,7 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType exp
+sex F
 subId 3037
 tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep1
 treatment None
@@ -56211,6 +56218,7 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType exp
+sex F
 subId 3035
 tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
@@ -56238,6 +56246,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
+sex F
 subId 4159
 treatment None
 view Alignments
@@ -56264,6 +56273,7 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
+sex F
 subId 4159
 treatment None
 view Alignments
@@ -56290,6 +56300,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
+sex F
 softwareVersion MACS
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1
@@ -56318,6 +56329,7 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
+sex F
 softwareVersion MACS
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2
@@ -56346,6 +56358,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
+sex F
 subId 4159
 treatment None
 view RawData
@@ -56372,6 +56385,7 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
+sex F
 subId 4159
 treatment None
 view RawData
@@ -56398,6 +56412,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType exp
+sex F
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1
 treatment None
@@ -56425,6 +56440,7 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType exp
+sex F
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
 treatment None
@@ -56452,6 +56468,7 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType input
+sex F
 subId 1848
 treatment None
 view Alignments
@@ -56478,6 +56495,7 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType input
+sex F
 subId 3091
 treatment None
 view Alignments
@@ -56504,6 +56522,7 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType input
+sex F
 subId 3019
 treatment None
 view RawData
@@ -56530,6 +56549,7 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType input
+sex F
 subId 3019
 treatment None
 view RawData
@@ -56556,6 +56576,7 @@ project wgEncode
 protocol PCR2x
 replicate 1
 setType input
+sex F
 subId 3810
 tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep1
 treatment None
@@ -56583,6 +56604,7 @@ project wgEncode
 protocol PCR2x
 replicate 2
 setType input
+sex F
 subId 3035
 tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep2
 treatment None
@@ -56610,6 +56632,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
+sex F
 subId 4160
 treatment None
 view Alignments
@@ -56636,6 +56659,7 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType input
+sex F
 subId 4160
 treatment None
 view Alignments
@@ -56662,6 +56686,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
+sex F
 subId 4160
 treatment None
 view RawData
@@ -56688,6 +56713,7 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType input
+sex F
 subId 4160
 treatment None
 view RawData
@@ -56714,6 +56740,7 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
+sex F
 subId 4160
 tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep1
 treatment None
@@ -56741,9 +56768,10 @@ project wgEncode
 protocol v041610.1
 replicate 2
 setType input
+sex F
 subId 4160
 tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -579171318
+# MAGIC: -579091798
