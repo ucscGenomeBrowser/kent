@@ -17200,7 +17200,7 @@ CREATE TABLE geneReviewsBB (
 
 
 ##############################################################################
-# hgPal downloads redone for new knownGene (re-DONE 2011-10-18 braney)
+# hgPal downloads redone for new knownGene (re-DONE 2012-01-06 braney)
 #   FASTA from 46way for  knownGene, knownCanonical 
 
     ssh hgwdev
@@ -17232,9 +17232,9 @@ CREATE TABLE geneReviewsBB (
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    258m41.548s
-# user    37m23.511s
-# sys     6m47.978s
+# real    205m16.105s
+# user    36m32.438s
+# sys     6m12.046s
 
     mz=multiz46way
     gp=knownGene
@@ -17283,9 +17283,9 @@ CREATE TABLE geneReviewsBB (
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    255m47.897s
-# user    14m38.822s
-# sys     5m32.823s
+# real    166m1.220s
+# user    13m35.246s
+# sys     2m50.683s
 
     rm *.known.bed
     mz=multiz46way
@@ -17474,7 +17474,7 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
-# LINCRNAS FROM ISCA FROM BROAD (DONE 2011-10-10 Chin)
+# LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
 # Human lincRNA Catalog
 
     # unzip data from Board to /hive/data/outside/lincRnaFromCabili

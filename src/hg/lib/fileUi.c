@@ -693,7 +693,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
         field = parentTdb->track;
     else
         {
-        field = mdbObjFindValue(oneFile->mdb,MDB_VAR_COMPOSITE);
+        field = cloneString(mdbObjFindValue(oneFile->mdb,MDB_VAR_COMPOSITE));
         mdbObjRemoveOneVar(oneFile->mdb,MDB_VAR_COMPOSITE,NULL);
         }
     assert(field != NULL);

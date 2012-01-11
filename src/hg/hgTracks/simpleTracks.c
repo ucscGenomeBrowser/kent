@@ -13046,9 +13046,18 @@ registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
+// one per gencode version, after V7 when it was substantially changed
+// FIXME: this is hacky, need a way to register based on pattern
 registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV10", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV11", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV12", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV13", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV14", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV15", gencodeGeneMethods);
+
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);

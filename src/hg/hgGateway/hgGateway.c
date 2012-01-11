@@ -320,9 +320,12 @@ if (onWeb)
 	fprintf(stderr, "GALT redirectCookie=%s redirect=%s source=%s\n", 
 		redirectCookie, redirect, source); fflush(stderr); // DEBUG REMOVE
 
-	if (!(redirectCookie || (redirect && !source)))
+	if (!(
+              (redirect && !source) ||   // we are on main site after user has actively choose to leave mirror and come back to the main site
+              redirectCookie             // main site after above has happened (XXXX I think)
+              ))
 	    {
-	    int thisNode = atoi(thisNodeStr);
+	    int thisNode = sqlUnsigned(thisNodeStr);
 	    struct sqlConnection *centralConn = hConnectCentral();
 	    char query[1024];
 	    char *ipStr = cgiRemoteAddr();
@@ -331,8 +334,7 @@ if (onWeb)
             // we assume no overlaps in geoIpNode table, so we can use limit 1 to make query very efficient.
 	    safef(query, sizeof query, "select ipStart, ipEnd, node from geoIpNode where %u >= ipStart order by ipStart desc limit 1", ip);
 	    char **row;
-	    struct sqlResult *sr = NULL;
-	    sr = sqlGetResult(centralConn, query);
+	    struct sqlResult *sr = sqlGetResult(centralConn, query);
 	    int defaultNode = 1;
 	    if ((row = sqlNextRow(sr)) != NULL)
 		{

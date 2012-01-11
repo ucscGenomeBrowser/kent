@@ -1,6 +1,7 @@
-import sys
+import sys, string
 import re
 from ucscgenomics.ordereddict import OrderedDict
+from ucscgenomics import ucscUtils
 import collections
 
 class RaFile(OrderedDict):
@@ -126,6 +127,7 @@ class RaFile(OrderedDict):
         entry = RaStanza()
         if entry.readStanza(stanza, key) == None:
             return None, None, None
+        entry = RaStanza()
         val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
@@ -204,7 +206,58 @@ class RaFile(OrderedDict):
                 continue
         return ret
 
-    def summaryDiff(self,other):
+    def mergeRa(self, other):
+        '''
+        Input:
+            Two RaFile objects
+        Output:
+            A merged RaFile
+
+        Common stanzas and key-val pairs are collapsed into
+        one with identical values being preserved,
+        differences are marked with a >>> and <<<
+        '''
+
+        mergedKeys = ucscUtils.mergeList(list(self), list(other))
+        selfKeys = set(self)
+        otherKeys = set(other)
+        newCommon = RaFile()
+        p = re.compile('^\s*#')
+        p2 = re.compile('^\s*$')
+        for i in mergedKeys:
+            if p.match(i) or p2.match(i):
+                newCommon.append(i)
+                continue
+            if i not in selfKeys:
+                newCommon.append(other[i])
+            if i not in otherKeys:
+                newCommon.append(self[i])
+            if i in otherKeys and i in selfKeys:
+                newStanza = RaStanza()
+                selfStanzaKeys = set(self[i].iterkeys())
+                otherStanzaKeys = set(other[i].iterkeys())
+                stanzaKeys = ucscUtils.mergeList(list(self[i]), list(other[i]))
+                for j in stanzaKeys:
+                    if p.match(j):
+                        newStanza.append(j)
+                        continue
+                    if j not in selfStanzaKeys:
+                        newStanza[j] = other[i][j]
+                    if j not in otherStanzaKeys:
+                        newStanza[j] = self[i][j]
+                    if j in selfStanzaKeys and j in otherStanzaKeys:
+                        if self[i][j] == other[i][j]:
+                            newStanza[j] = self[i][j]
+                        else:
+                            in_j = '>>>>>%s' % j
+                            out_j = '<<<<<%s' % j
+                            newStanza[out_j] = self[i][j]
+                            newStanza[in_j] = other[i][j]
+            newCommon.append(newStanza)
+        return newCommon
+
+
+    def summaryDiff(self, other):
         '''
         Input:
             RaFile object being compared.
@@ -239,8 +292,8 @@ class RaFile(OrderedDict):
             Dictionary showing differences between stanzas, list of added and dropeed stanzas
         '''
         retDict = collections.defaultdict(list)
-        dropList = set(self.iterkeys()) - set(otherRa.iterkeys())
-        addList = set(otherRa.iterkeys()) - set(self.iterkeys())
+        addList = set(self.iterkeys()) - set(otherRa.iterkeys())
+        dropList = set(otherRa.iterkeys()) - set(self.iterkeys())
         common = set(self.iterkeys()) & set(otherRa.iterkeys())
 
         p = re.compile('^\s*#')
@@ -260,7 +313,7 @@ class RaFile(OrderedDict):
                     continue
                 if key not in self[stanza]:
                     retDict[stanza].append("Dropped %s -> %s" %(key, otherRa[stanza][key]))
-        return retDict, dropList, addList
+        return retDict, addList, dropList
 
     def diffFilter(self, select, other):
         '''
