@@ -1590,7 +1590,6 @@ var rightClick = {
                 return rightClick.makeMapItem(id);
             }
         }
-        warn("ASSERT: findMapItem failed.");// Should not ever get to this point
         return null;
     },
 
@@ -1975,6 +1974,8 @@ var rightClick = {
         rightClick.menu = img.contextMenu(
             function() {
                 popUp.cleanup();   // Popup box is not getting closed properly so must do it here
+                if (rightClick.selectedMenuItem == null)  // This is literally an edge case so ignore
+                    return;
 
                 var menu = [];
                 var selectedImg = rightClick.makeImgTag("greenChecksm.png");

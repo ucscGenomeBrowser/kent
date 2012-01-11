@@ -5046,6 +5046,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
 validation Human_-_:missing
 label BCL11A (ab19489)
 
+term BCL11A_(SC-56011)
+tag BCL11ASC56011SC56011
+type Antibody
+target BCL11A
+targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. The corresponding mouse gene is a common site of retroviral integration in myeloid leukemia, and may function as a leukemia disease gene, in part, through its interaction with BCL6. During hematopoietic cell differentiation, this gene is down-regulated. It is possibly involved in lymphoma pathogenesis since translocations associated with B-cell malignancies also deregulates its expression. Multiple transcript variants encoding several different isoforms have been found for this gene. (provided by RefSeq)
+antibodyDescription Mouse monoclonal IgG, raised against BCL11A of human origin.
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-56011
+orderUrl http://www.scbt.com/datasheet-56011-bcl-11a-14b5-antibody.html
+lab Myers
+lots B2811
+targetId GeneCard:BCL11A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
+validation BCL11A_(SC-56011)_(sc-56011)(missing):human_BCL11A_SC-56011_sc-56011_validation_Myers.pdf
+label BCL11A (sc-56011)
+
 term BCL3
 tag BCL3
 type Antibody
@@ -7145,6 +7161,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation Human_-_:missing Mouse_-_:missing
 label NRSF
 
+term NR2F2_(SC-271940)
+tag NR2F2SC271940SC271940
+type Antibody
+target NR2F2
+targetDescription This gene encodes a member of the steroid thyroid hormone superfamily of nuclear receptors. The encoded protein is a ligand inducible transcription factor that is involved in the regulation of many different genes. Alternate splicing results in multiple transcript variants. (provided by RefSeq)
+antibodyDescription Mouse monoclonal IgG, specific for an epitope mapping between amino acids 13-44 at the N-terminus of NR2F2 of human origin.
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-271940
+orderUrl http://www.scbt.com/datasheet-271940-arp-1-e-11-antibody.html
+lab Myers
+lots I1410
+targetId GeneCard:NR2F2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR2F2
+validation NR2F2_(SC-271940)_(sc-271940)(missing):human_NR2F2_SC-271940_sc-271940_validation_Myers.pdf
+label NR2F2 (sc-271940)
 
 term p300
 tag P300
@@ -8407,6 +8438,22 @@ label ZZZ3
 
 
 ##This does not appear in metaDb
+term CBX3_(SC-101004)
+tag CBX3SC101004SC101004
+type Antibody
+target CBX3
+targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane protein found in the inner nuclear membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
+antibodyDescription Mouse monoclonal IgG, raised against recombinant CBX3 of human origin.
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-101004
+orderUrl http://www.scbt.com/datasheet-101004-hp1gamma-s-19-antibody.html
+lab Myers
+lots G1410
+targetId GeneCard:CBX3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
+validation CBX3_(SC-101004)_(sc-101004)(missing):human_CBX3_SC-101004_sc-101004_validation_Myers.pdf
+label CBX3 (sc-101004)
+
 term CBX5
 tag CBX5
 type Antibody

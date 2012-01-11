@@ -54,11 +54,6 @@
 #define MAXPIXELS 14000
 #endif
 
-// imageV2 dragReorder supercedes 'priority' based reordering which used to be allowed
-// on the cfg controls page.  While the priority order is still supported as default,
-// you can re-allow setting those priorities by defining PRIORITY_CHANGES_IN_CONFIG_UI
-//#define PRIORITY_CHANGES_IN_CONFIG_UI
-
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
