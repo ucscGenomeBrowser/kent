@@ -10297,6 +10297,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep1.bam,wgEncodeL
 grant Ren
 lab LICR-m
 labVersion 9/8/10 Lane 2
+md5sum 6adc44a2bb742faed61ed95f044ca6db,f69e2f1a8fe60eca24292994039100ee
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -10323,6 +10324,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep2.bam,wgEncodeL
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3
+md5sum 659c5a964f621063b051937ad57f1bce,e1f8145e5f671f29f214967bc098d7e2
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -10349,6 +10351,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 9/8/10 Lane 2
+md5sum 0a246bcc99684bf9433b252188bccdf6
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -10375,6 +10378,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3
+md5sum 43a8a13774d2a1dccccec088f5a41c77
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -10401,6 +10405,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum 3ba3656a22faefc6d6fdd2d59902bd96
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -10427,6 +10432,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep1.bam,wgEncodeL
 grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 6
+md5sum 0c0b087d792fffa78c915bab2f5061d3,174b1040550298cb90f79284f7511a03
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -10453,6 +10459,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep2.bam,wgEncodeL
 grant Ren
 lab LICR-m
 labVersion 4/6/11 Lane 4
+md5sum db867f57609e6cb95b50590350add156,ee8172e5e525b8954b31c6ebe44d475d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -10479,6 +10486,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 6
+md5sum 070a0f300bdaba30a575c56c2c666344
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -10505,6 +10513,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 4/6/11 Lane 4
+md5sum d6a791152de14028e88fb5a093bb15c5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -10531,6 +10540,7 @@ fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
+md5sum d056ba98d80319f25602ded92a891fc6
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -10811,4 +10821,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 735637195
+# MAGIC: -2116652212
