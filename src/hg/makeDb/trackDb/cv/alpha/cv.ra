@@ -4844,7 +4844,7 @@ sex U
 protocol Stam:TReg_Stam_protocol.pdf
 
 term WholeBrain
-tag WHOLEBRAIN
+tag WBRAIN
 type Cell Line
 organism mouse
 tissue brain
