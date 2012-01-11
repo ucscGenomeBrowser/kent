@@ -6978,7 +6978,7 @@ subId 5317
 tableName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdSig
 view Signal
 
-metaObject wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdAlnRep1
+metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1
 objType file
 age E14.5
 antibody CTCF
@@ -6990,7 +6990,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdAlnRep1.bam.bai
+fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 6
@@ -7005,7 +7005,7 @@ strain C57BL/6
 subId 5362
 view Alignments
 
-metaObject wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdAlnRep2
+metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2
 objType file
 age E14.5
 antibody CTCF
@@ -7017,7 +7017,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdAlnRep2.bam.bai
+fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 4
@@ -7032,7 +7032,7 @@ strain C57BL/6
 subId 5362
 view Alignments
 
-metaObject wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdRawDataRep1
+metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
 antibody CTCF
@@ -7044,7 +7044,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdRawDataRep1.fastq.gz
+fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/30/10 Lane 6
@@ -7059,7 +7059,7 @@ strain C57BL/6
 subId 5362
 view RawData
 
-metaObject wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdRawDataRep2
+metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2
 objType file
 age E14.5
 antibody CTCF
@@ -7071,7 +7071,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdRawDataRep2.fastq.gz
+fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/4/10 Lane 4
@@ -7086,7 +7086,7 @@ strain C57BL/6
 subId 5362
 view RawData
 
-metaObject wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdSig
+metaObject wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig
 objType table
 age E14.5
 antibody CTCF
@@ -7098,7 +7098,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdSig.bigWig
+fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
@@ -7110,10 +7110,10 @@ sex U
 softwareVersion Custom Scripts
 strain C57BL/6
 subId 5362
-tableName wgEncodeLicrTfbsWholebrainCtcfUE14halfC57bl6StdSig
+tableName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig
 view Signal
 
-metaObject wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdAlnRep1
+metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1
 objType file
 age E14.5
 antibody Pol2
@@ -7125,7 +7125,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdAlnRep1.bam.bai
+fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 11/5/10 Lane 2
@@ -7140,7 +7140,7 @@ strain C57BL/6
 subId 5363
 view Alignments
 
-metaObject wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdAlnRep2
+metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2
 objType file
 age E14.5
 antibody Pol2
@@ -7152,7 +7152,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdAlnRep2.bam.bai
+fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3
@@ -7167,7 +7167,7 @@ strain C57BL/6
 subId 5363
 view Alignments
 
-metaObject wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdRawDataRep1
+metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1
 objType file
 age E14.5
 antibody Pol2
@@ -7179,7 +7179,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdRawDataRep1.fastq.gz
+fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/5/10 Lane 2
@@ -7194,7 +7194,7 @@ strain C57BL/6
 subId 5363
 view RawData
 
-metaObject wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdRawDataRep2
+metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2
 objType file
 age E14.5
 antibody Pol2
@@ -7206,7 +7206,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdRawDataRep2.fastq.gz
+fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 10/28/10 Lane 3
@@ -7221,7 +7221,7 @@ strain C57BL/6
 subId 5363
 view RawData
 
-metaObject wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdSig
+metaObject wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 objType table
 age E14.5
 antibody Pol2
@@ -7233,7 +7233,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
-fileName wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdSig.bigWig
+fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig.bigWig
 grant Ren
 lab LICR-m
 labVersion Pooled & filtered
@@ -7245,7 +7245,7 @@ sex U
 softwareVersion Custom Scripts
 strain C57BL/6
 subId 5363
-tableName wgEncodeLicrTfbsWholebrainPol2UE14halfC57bl6StdSig
+tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -766235284
+# MAGIC: -766246308

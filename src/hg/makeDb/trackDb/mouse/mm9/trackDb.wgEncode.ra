@@ -46,3 +46,6 @@ include wgEncodeCaltechHist.ra
 
 # UW DNaseI DGF (wrangler: Venkat)
 include wgEncodeUwDgf.ra alpha
+
+# CSHL Long RNA-Seq (wrangler: Venkat)
+include wgEncodeCshlLongRnaSeq.ra alpha

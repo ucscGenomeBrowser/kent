@@ -9181,6 +9181,1256 @@ tableName wgEncodeUwDnaseTregC57bl6MAdult8wksSigRep3
 tissueSourceType Pooled
 view Signal
 
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep1
+objType file
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep1.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum 25b8c1bd41ecffa5695e7cb582da6cdc,f1808c4b2049145fed8cbfac0e3e1c72
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2026
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep2
+objType file
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep2.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum 3f26f1f31b9e7b0de9e28b28ac5bbfc3,2ba6cb6f499e74a1c3f137f594b2d34a
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2021
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep3
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep3.bam,wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep3.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum af97f23436a84e8ac092ba72ccc7bc50,a0a04774135e299f1682862a699f33b9
+project wgEncode
+replicate 3
+sex M
+strain C57BL/6
+subId 2025
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep4
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep4.bam,wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep4.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum 2828698f0dead79ff713254d106eee66,b934cb1a291900aa31f77fc102d3b337
+project wgEncode
+replicate 4
+sex M
+strain C57BL/6
+subId 2022
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep5
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep5.bam,wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep5.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum b1537812ee1666d1a1db904fdcb3c80c,5c7ac7622f86c7527fa0918d7eab94ef
+project wgEncode
+replicate 5
+sex M
+strain C57BL/6
+subId 2024
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep6
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep6.bam,wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep6.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum 3cfd4d448f996d7250a0aa5a083ca1ee,f6ae48a6ff2df3810fe47d8a7f55461f
+project wgEncode
+replicate 6
+sex M
+strain C57BL/6
+subId 2023
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep7
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-19
+dateUnrestricted 2012-01-19
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep7.bam,wgEncodeUwDnaseWbrainC57bl6MAdult8wksAlnRep7.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum 72da111a70f8b270ecf235c63fbc7c8a,127ea50247c5f8506d44f247716017bc
+project wgEncode
+replicate 7
+sex M
+strain C57BL/6
+subId 3901
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep1
+objType table
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 659ebf98638d5b74fc99a6d031eb9077
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2026
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep1
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep2
+objType table
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 87e7e1c64fc6eb2814153607aa8d5bfa
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2021
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep2
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep3
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 7afccfdba6e275ef696cb44c892a031f
+project wgEncode
+replicate 3
+sex M
+strain C57BL/6
+subId 2025
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep3
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep4
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep4.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 86f7739720168c7c76707f3c8bdf3447
+project wgEncode
+replicate 4
+sex M
+strain C57BL/6
+subId 2022
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep4
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep5
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep5.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 260e7b8839bbc38807969ba956887603
+project wgEncode
+replicate 5
+sex M
+strain C57BL/6
+subId 2024
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep5
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep6
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep6.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 2e9e22496667aabc09ff65034ac5d471
+project wgEncode
+replicate 6
+sex M
+strain C57BL/6
+subId 2023
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep6
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep7
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-19
+dateUnrestricted 2012-01-19
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep7.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum a9b71564fd13509fe9e39da9397c4472
+project wgEncode
+replicate 7
+sex M
+strain C57BL/6
+subId 3901
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksHotspotsRep7
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep1
+objType table
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum 9373c8a7905ad58e72e933b566181000
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2026
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep1
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep2
+objType table
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep2.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum 8a22a45c8f18facf731fdae22854ee5e
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2021
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep2
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep3
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep3.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum 5c9f12d9387403ac10345d38873042b2
+project wgEncode
+replicate 3
+sex M
+strain C57BL/6
+subId 2025
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep3
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep4
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep4.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum 26bd6f034ca2f952edb78252612f093f
+project wgEncode
+replicate 4
+sex M
+strain C57BL/6
+subId 2022
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep4
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep5
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep5.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum bacd9233df74594a4ecef47cbbc5925b
+project wgEncode
+replicate 5
+sex M
+strain C57BL/6
+subId 2024
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep5
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep6
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep6.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum 5918d3d3c2ed8bae8bd3e46b0343dc53
+project wgEncode
+replicate 6
+sex M
+strain C57BL/6
+subId 2023
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep6
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep7
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-19
+dateUnrestricted 2012-01-19
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep7.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.1
+md5sum 8bf039c7898696eedd3f48777efbc157
+project wgEncode
+replicate 7
+sex M
+strain C57BL/6
+subId 3901
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksPkRep7
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep1
+objType file
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep1.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum f993f586830c726d7122ed2dec3dd486
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2026
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep2
+objType file
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep2.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum ec60c5092dbdb2858ec674573f70f474
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2021
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep3
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep3.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum 5e5f19de4b786d4c1f9fc6fcbfbcaaaf
+project wgEncode
+replicate 3
+sex M
+strain C57BL/6
+subId 2025
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep4
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep4.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum 782f322c1fc4efb671a735430d05d9d4
+project wgEncode
+replicate 4
+sex M
+strain C57BL/6
+subId 2022
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep5
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep5.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum bcc497b3a16cdf60de620f4bf6a89df9
+project wgEncode
+replicate 5
+sex M
+strain C57BL/6
+subId 2024
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep6
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep6.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum 79708a8faaab8852d30029e879bfeed1
+project wgEncode
+replicate 6
+sex M
+strain C57BL/6
+subId 2023
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep7
+objType file
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-19
+dateUnrestricted 2012-01-19
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksRawDataRep7.fastq.tgz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum c44906d55bc506b3af866d78fda67562
+project wgEncode
+replicate 7
+sex M
+strain C57BL/6
+subId 3901
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep1
+objType table
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep1.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum b90dd990ad10cf9d69b6dd695cc44eab
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2026
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep2
+objType table
+age adult-8wks
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep2.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum ba9701894135e0c1ec605aac7915585b
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2021
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep3
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep3.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum 4cd010b7e6af6e7196aac3a9b0fbbba2
+project wgEncode
+replicate 3
+sex M
+strain C57BL/6
+subId 2025
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep3
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep4
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep4.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum 66346446d7e5e32810008154badab5e2
+project wgEncode
+replicate 4
+sex M
+strain C57BL/6
+subId 2022
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep4
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep5
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep5.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum 088250e1e616b5993d5fb02f61817316
+project wgEncode
+replicate 5
+sex M
+strain C57BL/6
+subId 2024
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep5
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep6
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep6.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum c5321f02b70545ed117fb792ccfd18ed
+project wgEncode
+replicate 6
+sex M
+strain C57BL/6
+subId 2023
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep6
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep7
+objType table
+age adult-8wks
+attic auxExp
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-04-19
+dateUnrestricted 2012-01-19
+dccAccession wgEncodeEM001729
+expId 1729
+fileName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep7.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum 39088aa3b1db8de23147a8ccd82d6b83
+project wgEncode
+replicate 7
+sex M
+strain C57BL/6
+subId 3901
+tableName wgEncodeUwDnaseWbrainC57bl6MAdult8wksSigRep7
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfAlnRep1
+objType file
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfAlnRep1.bam,wgEncodeUwDnaseWbrainC57bl6ME14halfAlnRep1.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum 50d6978ab0afe22fcc791d50b4acf246,73541a48d589ff1a7b2d57cc2da40d22
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2027
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfAlnRep2
+objType file
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-27
+dateUnrestricted 2011-04-26
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfAlnRep2.bam,wgEncodeUwDnaseWbrainC57bl6ME14halfAlnRep2.bam.bai
+grant Stam
+lab UW-m
+labVersion Bowtie 0.12.5
+md5sum dadef3619815c853f537c930806800fb,497fa60e8f429debf85ed637556ca6be
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2028
+tissueSourceType Individual
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfHotspotsRep1
+objType table
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 1b5f066991f58a35eda941f9fd111b5c
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2027
+tableName wgEncodeUwDnaseWbrainC57bl6ME14halfHotspotsRep1
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfHotspotsRep2
+objType table
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-27
+dateUnrestricted 2011-04-26
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW-m
+labVersion Hotspot-v5.1
+md5sum 12c91f0170e66cde76b1a4885eb3611c
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2028
+tableName wgEncodeUwDnaseWbrainC57bl6ME14halfHotspotsRep2
+tissueSourceType Individual
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfPkRep1
+objType table
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum 672b27248b366fa7cd57a0761cf132cf
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2027
+tableName wgEncodeUwDnaseWbrainC57bl6ME14halfPkRep1
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfPkRep2
+objType table
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-27
+dateUnrestricted 2011-04-26
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfPkRep2.narrowPeak.gz
+grant Stam
+lab UW-m
+labVersion lmax-v1.0
+md5sum fb458981ba7de58ce19e87b0d0975a59
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2028
+tableName wgEncodeUwDnaseWbrainC57bl6ME14halfPkRep2
+tissueSourceType Individual
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfRawDataRep1
+objType file
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfRawDataRep1.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum 66d47694f35964087d8670db5afbcf29
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2027
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfRawDataRep2
+objType file
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-27
+dateUnrestricted 2011-04-26
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfRawDataRep2.fastq.gz
+grant Stam
+lab UW-m
+labVersion 1
+md5sum 2887870e3d8ae59dcc51a7f080755bdc
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2028
+tissueSourceType Individual
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfSigRep1
+objType table
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-28
+dateUnrestricted 2011-04-28
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfSigRep1.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum 88815d996668530de3632897e0e47838
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 2027
+tableName wgEncodeUwDnaseWbrainC57bl6ME14halfSigRep1
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME14halfSigRep2
+objType table
+age E14.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-27
+dateUnrestricted 2011-04-26
+dccAccession wgEncodeEM001726
+expId 1726
+fileName wgEncodeUwDnaseWbrainC57bl6ME14halfSigRep2.bigWig
+grant Stam
+lab UW-m
+labVersion WindowDensity-bin20-win+/-75
+md5sum a2c9894a8b9c097ae83da5dd5032b548
+project wgEncode
+replicate 2
+sex M
+strain C57BL/6
+subId 2028
+tableName wgEncodeUwDnaseWbrainC57bl6ME14halfSigRep2
+tissueSourceType Individual
+view Signal
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfAlnRep1
+objType file
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfAlnRep1.bam,wgEncodeUwDnaseWbrainC57bl6ME18halfAlnRep1.bam.bai
+grant Stam
+lab UW-m
+labExpId DS19690
+labVersion Bowtie 0.12.5
+md5sum d3e1e776d3e1a9529b185e3f9229f9ee,4e565e76d8b9f576a1cfb95099bfc6eb
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5230
+tissueSourceType Pooled
+view Alignments
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep1
+objType table
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19690
+labVersion Hotspot-v5.2
+md5sum 7b9feb962e269f42a3feea544536e2c2
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5230
+tableName wgEncodeUwDnaseWbrainC57bl6ME18halfHotspotsRep1
+tissueSourceType Pooled
+view Hotspots
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep1
+objType table
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep1.narrowPeak.gz
+grant Stam
+lab UW-m
+labExpId DS19690
+labVersion lmax-v1.1
+md5sum 501bbc68f014bee8c45a136cfce15cd1
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5230
+tableName wgEncodeUwDnaseWbrainC57bl6ME18halfPkRep1
+tissueSourceType Pooled
+view Peaks
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfRawDataRep1
+objType file
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfRawDataRep1.fastq.tgz
+grant Stam
+lab UW-m
+labExpId DS19690
+labVersion 1
+md5sum 32bdc8e992d305aff81f5c2edacd8cd9
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5230
+tissueSourceType Pooled
+view RawData
+
+metaObject wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep1
+objType table
+age E18.5
+cell WholeBrain
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+fileName wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep1.bigWig
+grant Stam
+lab UW-m
+labExpId DS19690
+labVersion WindowDensity-bin20-win+/-75
+md5sum 132bf134b019442ca4bd986d89fa32c8
+project wgEncode
+replicate 1
+sex M
+strain C57BL/6
+subId 5230
+tableName wgEncodeUwDnaseWbrainC57bl6ME18halfSigRep1
+tissueSourceType Pooled
+view Signal
+
 metaObject wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep1
 objType file
 age adult-8wks
@@ -9197,6 +10447,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum 25b8c1bd41ecffa5695e7cb582da6cdc,f1808c4b2049145fed8cbfac0e3e1c72
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -9221,6 +10472,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum 3f26f1f31b9e7b0de9e28b28ac5bbfc3,2ba6cb6f499e74a1c3f137f594b2d34a
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -9246,6 +10498,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum af97f23436a84e8ac092ba72ccc7bc50,a0a04774135e299f1682862a699f33b9
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 3
 sex M
@@ -9271,6 +10524,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum 2828698f0dead79ff713254d106eee66,b934cb1a291900aa31f77fc102d3b337
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 4
 sex M
@@ -9296,6 +10550,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum b1537812ee1666d1a1db904fdcb3c80c,5c7ac7622f86c7527fa0918d7eab94ef
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 5
 sex M
@@ -9321,6 +10576,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum 3cfd4d448f996d7250a0aa5a083ca1ee,f6ae48a6ff2df3810fe47d8a7f55461f
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 6
 sex M
@@ -9345,6 +10601,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum 72da111a70f8b270ecf235c63fbc7c8a,127ea50247c5f8506d44f247716017bc
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 7
 sex M
@@ -9369,6 +10626,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 659ebf98638d5b74fc99a6d031eb9077
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -9394,6 +10652,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 87e7e1c64fc6eb2814153607aa8d5bfa
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -9420,6 +10679,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 7afccfdba6e275ef696cb44c892a031f
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 3
 sex M
@@ -9446,6 +10706,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 86f7739720168c7c76707f3c8bdf3447
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 4
 sex M
@@ -9472,6 +10733,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 260e7b8839bbc38807969ba956887603
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 5
 sex M
@@ -9498,6 +10760,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 2e9e22496667aabc09ff65034ac5d471
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 6
 sex M
@@ -9523,6 +10786,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum a9b71564fd13509fe9e39da9397c4472
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 7
 sex M
@@ -9548,6 +10812,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum 9373c8a7905ad58e72e933b566181000
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -9573,6 +10838,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum 8a22a45c8f18facf731fdae22854ee5e
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -9599,6 +10865,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum 5c9f12d9387403ac10345d38873042b2
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 3
 sex M
@@ -9625,6 +10892,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum 26bd6f034ca2f952edb78252612f093f
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 4
 sex M
@@ -9651,6 +10919,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum bacd9233df74594a4ecef47cbbc5925b
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 5
 sex M
@@ -9677,6 +10946,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum 5918d3d3c2ed8bae8bd3e46b0343dc53
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 6
 sex M
@@ -9702,6 +10972,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.1
 md5sum 8bf039c7898696eedd3f48777efbc157
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 7
 sex M
@@ -9727,6 +10998,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum f993f586830c726d7122ed2dec3dd486
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -9751,6 +11023,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum ec60c5092dbdb2858ec674573f70f474
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -9776,6 +11049,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum 5e5f19de4b786d4c1f9fc6fcbfbcaaaf
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 3
 sex M
@@ -9801,6 +11075,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum 782f322c1fc4efb671a735430d05d9d4
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 4
 sex M
@@ -9826,6 +11101,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum bcc497b3a16cdf60de620f4bf6a89df9
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 5
 sex M
@@ -9851,6 +11127,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum 79708a8faaab8852d30029e879bfeed1
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 6
 sex M
@@ -9875,6 +11152,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum c44906d55bc506b3af866d78fda67562
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 7
 sex M
@@ -9899,6 +11177,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum b90dd990ad10cf9d69b6dd695cc44eab
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -9924,6 +11203,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum ba9701894135e0c1ec605aac7915585b
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -9950,6 +11230,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum 4cd010b7e6af6e7196aac3a9b0fbbba2
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 3
 sex M
@@ -9976,6 +11257,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum 66346446d7e5e32810008154badab5e2
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 4
 sex M
@@ -10002,6 +11284,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum 088250e1e616b5993d5fb02f61817316
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 5
 sex M
@@ -10028,6 +11311,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum c5321f02b70545ed117fb792ccfd18ed
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 6
 sex M
@@ -10053,6 +11337,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum 39088aa3b1db8de23147a8ccd82d6b83
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 7
 sex M
@@ -10078,6 +11363,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum 50d6978ab0afe22fcc791d50b4acf246,73541a48d589ff1a7b2d57cc2da40d22
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -10102,6 +11388,7 @@ grant Stam
 lab UW-m
 labVersion Bowtie 0.12.5
 md5sum dadef3619815c853f537c930806800fb,497fa60e8f429debf85ed637556ca6be
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -10126,6 +11413,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 1b5f066991f58a35eda941f9fd111b5c
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -10151,6 +11439,7 @@ grant Stam
 lab UW-m
 labVersion Hotspot-v5.1
 md5sum 12c91f0170e66cde76b1a4885eb3611c
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -10176,6 +11465,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum 672b27248b366fa7cd57a0761cf132cf
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -10201,6 +11491,7 @@ grant Stam
 lab UW-m
 labVersion lmax-v1.0
 md5sum fb458981ba7de58ce19e87b0d0975a59
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -10226,6 +11517,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum 66d47694f35964087d8670db5afbcf29
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -10250,6 +11542,7 @@ grant Stam
 lab UW-m
 labVersion 1
 md5sum 2887870e3d8ae59dcc51a7f080755bdc
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -10274,6 +11567,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum 88815d996668530de3632897e0e47838
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 1
 sex M
@@ -10299,6 +11593,7 @@ grant Stam
 lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 md5sum a2c9894a8b9c097ae83da5dd5032b548
+objStatus rename - file was renamed to shortened term Wholebrain - > Wbrain to accomadate longer file names
 project wgEncode
 replicate 2
 sex M
@@ -10306,124 +11601,6 @@ strain C57BL/6
 subId 2028
 tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfSigRep2
 tissueSourceType Individual
-view Signal
-
-metaObject wgEncodeUwDnaseWholebrainC57bl6ME18halfAlnRep1
-objType file
-age E18.5
-cell WholeBrain
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseWholebrainC57bl6ME18halfAlnRep1.bam,wgEncodeUwDnaseWholebrainC57bl6ME18halfAlnRep1.bam.bai
-grant Stam
-lab UW-m
-labExpId DS19690
-labVersion Bowtie 0.12.5
-md5sum d3e1e776d3e1a9529b185e3f9229f9ee,4e565e76d8b9f576a1cfb95099bfc6eb
-project wgEncode
-replicate 1
-sex M
-strain C57BL/6
-subId 5230
-tissueSourceType Pooled
-view Alignments
-
-metaObject wgEncodeUwDnaseWholebrainC57bl6ME18halfHotspotsRep1
-objType table
-age E18.5
-cell WholeBrain
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseWholebrainC57bl6ME18halfHotspotsRep1.broadPeak.gz
-grant Stam
-lab UW-m
-labExpId DS19690
-labVersion Hotspot-v5.2
-md5sum 7b9feb962e269f42a3feea544536e2c2
-project wgEncode
-replicate 1
-sex M
-strain C57BL/6
-subId 5230
-tableName wgEncodeUwDnaseWholebrainC57bl6ME18halfHotspotsRep1
-tissueSourceType Pooled
-view Hotspots
-
-metaObject wgEncodeUwDnaseWholebrainC57bl6ME18halfPkRep1
-objType table
-age E18.5
-cell WholeBrain
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseWholebrainC57bl6ME18halfPkRep1.narrowPeak.gz
-grant Stam
-lab UW-m
-labExpId DS19690
-labVersion lmax-v1.1
-md5sum 501bbc68f014bee8c45a136cfce15cd1
-project wgEncode
-replicate 1
-sex M
-strain C57BL/6
-subId 5230
-tableName wgEncodeUwDnaseWholebrainC57bl6ME18halfPkRep1
-tissueSourceType Pooled
-view Peaks
-
-metaObject wgEncodeUwDnaseWholebrainC57bl6ME18halfRawDataRep1
-objType file
-age E18.5
-cell WholeBrain
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseWholebrainC57bl6ME18halfRawDataRep1.fastq.tgz
-grant Stam
-lab UW-m
-labExpId DS19690
-labVersion 1
-md5sum 32bdc8e992d305aff81f5c2edacd8cd9
-project wgEncode
-replicate 1
-sex M
-strain C57BL/6
-subId 5230
-tissueSourceType Pooled
-view RawData
-
-metaObject wgEncodeUwDnaseWholebrainC57bl6ME18halfSigRep1
-objType table
-age E18.5
-cell WholeBrain
-composite wgEncodeUwDnase
-dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-15
-dateUnrestricted 2012-09-15
-fileName wgEncodeUwDnaseWholebrainC57bl6ME18halfSigRep1.bigWig
-grant Stam
-lab UW-m
-labExpId DS19690
-labVersion WindowDensity-bin20-win+/-75
-md5sum 132bf134b019442ca4bd986d89fa32c8
-project wgEncode
-replicate 1
-sex M
-strain C57BL/6
-subId 5230
-tableName wgEncodeUwDnaseWholebrainC57bl6ME18halfSigRep1
-tissueSourceType Pooled
 view Signal
 
 metaObject wgEncodeUwDnaseZhbtc4129olaME0AlnRep1
@@ -10672,4 +11849,4 @@ tableName wgEncodeUwDnaseZhbtc4129olaME0SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 1316760104
+# MAGIC: -1109083797
