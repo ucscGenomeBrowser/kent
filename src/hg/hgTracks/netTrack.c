@@ -267,10 +267,6 @@ if (net != NULL)
     rNetDraw(tg, hvg, net->fillList, 1, yOff);
     chainNetFree(&net);
     }
-#ifndef IMAGEv2_DRAG_SCROLL
-if (vis == tvDense)
-    mapBoxToggleVis(hvg, xOff, yOff, width, tg->heightPer, tg);
-#endif///ndef IMAGEv2_DRAG_SCROLL
 }
 
 static int netTotalHeight(struct track *tg, enum trackVisibility vis)
