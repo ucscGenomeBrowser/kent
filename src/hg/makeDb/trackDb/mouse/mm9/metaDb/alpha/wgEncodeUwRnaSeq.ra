@@ -4591,7 +4591,7 @@ tableName wgEncodeUwRnaSeqTnaiveCellPolyaMAdult8wksC57bl6SigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -4600,7 +4600,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1.bam,wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1.bam.bai
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep1.bam,wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep1.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -4612,11 +4612,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4440
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep1
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep2
 objType table
 age E14.5
 cell WholeBrain
@@ -4625,7 +4625,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2.bam,wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2.bam.bai
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep2.bam,wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep2.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -4637,11 +4637,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4442
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep2
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -4650,7 +4650,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4662,11 +4662,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4440
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep1
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep2
 objType table
 age E14.5
 cell WholeBrain
@@ -4675,7 +4675,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4687,11 +4687,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4442
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep2
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -4700,7 +4700,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4712,11 +4712,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4440
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep1
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep2
 objType table
 age E14.5
 cell WholeBrain
@@ -4725,7 +4725,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4737,11 +4737,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4442
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep2
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6RawDataRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6RawDataRep1
 objType file
 age E14.5
 cell WholeBrain
@@ -4750,7 +4750,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6RawDataRep1.fastq.tgz
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6RawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -4765,7 +4765,7 @@ subId 4440
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6RawDataRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6RawDataRep2
 objType file
 age E14.5
 cell WholeBrain
@@ -4774,7 +4774,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6RawDataRep2.fastq.tgz
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6RawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -4789,7 +4789,7 @@ subId 4442
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -4798,7 +4798,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep1.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4810,11 +4810,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4440
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep2
 objType table
 age E14.5
 cell WholeBrain
@@ -4823,7 +4823,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-28
 dateUnrestricted 2012-03-28
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep2.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4835,11 +4835,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4442
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep1
 objType table
 age E18.5
 cell WholeBrain
@@ -4848,7 +4848,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1.bam,wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1.bam.bai
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep1.bam,wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep1.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -4860,11 +4860,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4443
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep1
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep2
 objType table
 age E18.5
 cell WholeBrain
@@ -4873,7 +4873,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2.bam,wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2.bam.bai
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep2.bam,wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep2.bam.bai
 grant Stam
 lab UW-m
 labVersion ABI BioScope v1.2.1
@@ -4885,11 +4885,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4441
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep2
 tissueSourceType None
 view Alignments
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep1
 objType table
 age E18.5
 cell WholeBrain
@@ -4898,7 +4898,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4910,11 +4910,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4443
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep1
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep2
 objType table
 age E18.5
 cell WholeBrain
@@ -4923,7 +4923,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4935,11 +4935,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4441
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep2
 tissueSourceType None
 view MinusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep1
 objType table
 age E18.5
 cell WholeBrain
@@ -4948,7 +4948,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4960,11 +4960,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4443
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep1
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep2
 objType table
 age E18.5
 cell WholeBrain
@@ -4973,7 +4973,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -4985,11 +4985,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4441
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep2
 tissueSourceType None
 view PlusRawSignal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6RawDataRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6RawDataRep1
 objType file
 age E18.5
 cell WholeBrain
@@ -4998,7 +4998,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6RawDataRep1.fastq.tgz
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6RawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -5013,7 +5013,7 @@ subId 4443
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6RawDataRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6RawDataRep2
 objType file
 age E18.5
 cell WholeBrain
@@ -5022,7 +5022,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6RawDataRep2.fastq.tgz
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6RawDataRep2.fastq.tgz
 grant Stam
 lab UW-m
 labVersion 1
@@ -5037,7 +5037,7 @@ subId 4441
 tissueSourceType None
 view RawData
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep1
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep1
 objType table
 age E18.5
 cell WholeBrain
@@ -5046,7 +5046,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep1.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep1.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5058,11 +5058,11 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4443
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep1
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep1
 tissueSourceType None
 view Signal
 
-metaObject wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
+metaObject wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 objType table
 age E18.5
 cell WholeBrain
@@ -5071,7 +5071,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-06-30
 dateUnrestricted 2012-03-29
-fileName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2.bigWig
+fileName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2.bigWig
 grant Stam
 lab UW-m
 labVersion coverage
@@ -5083,8 +5083,8 @@ rnaExtract polyA
 sex M
 strain C57BL/6
 subId 4441
-tableName wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
+tableName wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
 tissueSourceType None
 view Signal
 
-# MAGIC: 1441440322
+# MAGIC: 1441414882
