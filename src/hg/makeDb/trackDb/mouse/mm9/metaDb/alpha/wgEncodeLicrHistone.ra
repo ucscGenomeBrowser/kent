@@ -10281,6 +10281,266 @@ subId 5320
 tableName wgEncodeLicrHistoneThymusInputMAdult8wksC57bl6StdSig
 view Signal
 
+metaObject wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K4me1
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 9/8/10 Lane 2
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5364
+view Alignments
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K4me1
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 10/28/10 Lane 3
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5364
+view Alignments
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K4me1
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 9/8/10 Lane 2
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5364
+view RawData
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K4me1
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 10/28/10 Lane 3
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5364
+view RawData
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K4me1
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5364
+tableName wgEncodeLicrHistoneWbrainH3k04me1UE14halfC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep1.bam.bai
+grant Ren
+lab LICR-m
+labVersion 11/4/10 Lane 6
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5365
+view Alignments
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdAlnRep2.bam.bai
+grant Ren
+lab LICR-m
+labVersion 4/6/11 Lane 4
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5365
+view Alignments
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdRawDataRep1
+objType file
+age E14.5
+antibody H3K4me3
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 11/4/10 Lane 6
+project wgEncode
+replicate 1
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5365
+view RawData
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdRawDataRep2
+objType file
+age E14.5
+antibody H3K4me3
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 4/6/11 Lane 4
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Bowtie
+strain C57BL/6
+subId 5365
+view RawData
+
+metaObject wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdSig
+objType table
+age E14.5
+antibody H3K4me3
+cell WholeBrain
+composite wgEncodeLicrHistone
+control std
+controlId WholeBrain/Input/std
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-23
+dateUnrestricted 2012-09-23
+fileName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType exp
+sex U
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 5365
+tableName wgEncodeLicrHistoneWbrainH3k04me3UE14halfC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrHistoneWbrainH3k27acUE14halfC57bl6StdAlnRep1
 objType file
 age E14.5
@@ -10551,4 +10811,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: 1481106611
+# MAGIC: 735637195
