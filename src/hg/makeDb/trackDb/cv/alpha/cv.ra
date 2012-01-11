@@ -6045,8 +6045,8 @@ vendorId sc-1004
 orderUrl http://www.scbt.com/product.php?datasheet=1004
 lab Myers
 lots A2508, E1908
-targetId GeneCard:NR3C2
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
+targetId GeneCard:NR3C1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation Human_-_GR(Immunoblot):human_GR_M-20_validation_Myers.pdf
 label GR (sc-1004)
 
