@@ -2706,6 +2706,138 @@ tableName wgEncodeSydhTfbsGm12878JundStdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsGm12878MaxIggmusAlnRep1
+objType file
+antibody Max
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-18
+dateUnrestricted 2012-09-18
+fileName wgEncodeSydhTfbsGm12878MaxIggmusAlnRep1.bam,wgEncodeSydhTfbsGm12878MaxIggmusAlnRep1.bam.bai
+grant Snyder
+lab Stanford
+labVersion This replaces a previous dataset for the cell line/antibody which was under sequenced due to technical limits at the time.
+project wgEncode
+replicate 1
+setType exp
+subId 5259
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878MaxIggmusAlnRep2
+objType file
+antibody Max
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-18
+dateUnrestricted 2012-09-18
+fileName wgEncodeSydhTfbsGm12878MaxIggmusAlnRep2.bam,wgEncodeSydhTfbsGm12878MaxIggmusAlnRep2.bam.bai
+grant Snyder
+lab Stanford
+labVersion This replaces a previous dataset for the cell line/antibody which was under sequenced due to technical limits at the time.
+project wgEncode
+replicate 2
+setType exp
+subId 5259
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878MaxIggmusPk
+objType table
+antibody Max
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-18
+dateUnrestricted 2012-09-18
+fileName wgEncodeSydhTfbsGm12878MaxIggmusPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 5259
+tableName wgEncodeSydhTfbsGm12878MaxIggmusPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsGm12878MaxIggmusRawDataRep1
+objType file
+antibody Max
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-18
+dateUnrestricted 2012-09-18
+fileName wgEncodeSydhTfbsGm12878MaxIggmusRawDataRep1.fastq.tgz
+grant Snyder
+lab Stanford
+labVersion This replaces a previous dataset for the cell line/antibody which was under sequenced due to technical limits at the time.
+project wgEncode
+replicate 1
+setType exp
+subId 5259
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878MaxIggmusRawDataRep2
+objType file
+antibody Max
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-18
+dateUnrestricted 2012-09-18
+fileName wgEncodeSydhTfbsGm12878MaxIggmusRawDataRep2.fastq.tgz
+grant Snyder
+lab Stanford
+labVersion This replaces a previous dataset for the cell line/antibody which was under sequenced due to technical limits at the time.
+project wgEncode
+replicate 2
+setType exp
+subId 5259
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878MaxIggmusSig
+objType table
+antibody Max
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-12-18
+dateUnrestricted 2012-09-18
+fileName wgEncodeSydhTfbsGm12878MaxIggmusSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 5259
+tableName wgEncodeSydhTfbsGm12878MaxIggmusSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsGm12878MaxRawDataRep1
 objType file
 antibody Max
@@ -2723,6 +2855,7 @@ fileName wgEncodeSydhTfbsGm12878MaxRawDataRep1.fastq.gz
 grant Snyder
 lab Yale
 md5sum 1da565d7521fad1e3e0679b8b6d85f07
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2748,6 +2881,7 @@ fileName wgEncodeSydhTfbsGm12878MaxRawDataRep2.fastq.gz
 grant Snyder
 lab Yale
 md5sum 7bc754df60ceb2cc789fa8c5dbab394f
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2775,6 +2909,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum e969ffc6adc509b8bf98c9a2a9291410,1eb1e0b5f1121749a45c43118b8a8dbd
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2802,6 +2937,7 @@ grant Snyder
 lab Yale
 labVersion remapped from hg18
 md5sum 5629e8abd7d38ac7cd356323c2307e21,2816f7f26fa5a05a300f0fe8589985cd
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2827,6 +2963,7 @@ fileName wgEncodeSydhTfbsGm12878MaxStdPk.narrowPeak.gz
 grant Snyder
 lab Yale
 md5sum c30d1e5638afe51c89669c77ed0d15cf
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
 origAssembly hg18
 project wgEncode
 setType exp
@@ -2852,6 +2989,7 @@ fileName wgEncodeSydhTfbsGm12878MaxStdSig.bigWig
 grant Snyder
 lab Yale
 md5sum a142b13812fa13cc5b5409f5b855c499
+objStatus replaced - Replaced by wgEncodeXXXX, since this experiment which was relatively undersequenced due to technological limitations at the time it was completed.  Comparison of the datasets using PeakSeq (.01 FDR) and standard ENCODE parameters shows that xx% of the peaks found in the initial dataset are present in the replacement set.
 origAssembly hg18
 project wgEncode
 setType exp
@@ -51349,4 +51487,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -254188301
+# MAGIC: -2099130542

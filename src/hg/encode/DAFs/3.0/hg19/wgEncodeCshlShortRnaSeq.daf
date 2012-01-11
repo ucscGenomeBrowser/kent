@@ -1,4 +1,4 @@
-# Data Agreement File  $Revision: 1.8 $
+# Data Agreement File  $Revision: 1.10$
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -17,7 +17,7 @@
 #labExpId       optional lab internal identifiers, can be comma sepated list for pooled
 #origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)
 #replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
-#
+#protocol       TAP, None etc
 #NOTE:  The optional columns do not have to be in the DDF for validation
 
 
@@ -29,26 +29,33 @@ lab               CSHL
 dataType          RnaSeq
 compositeSuffix   CshlShortRnaSeq
 group             expression
-variables         cell, localization, rnaExtract
+variables         cell, localization, rnaExtract, protocol
 assembly          hg19
 noAutoCreate      yes
 
-validationSettings validateFiles.bam:mismatches=7,nMatch
+validationSettings validateFiles.bam:mismatches=10,nMatch
 
 # Track/view definition
 
 #Pooled replicates
 view             Contigs
+longLabelPrefix  CSHL RNA-seq Contigs   
 type             bedRnaElements
-sql              bedRnaElements
+sql		 bedRnaElements
 hasReplicates    no
 required         no
 
-view             ExonGencV3c
+view             ExonsGencV7
 type             gtf
 hasReplicates    no
 required         no
 downloadOnly     yes 
+
+view             TSS
+type             gtf
+hasReplicates    no   
+required         no 
+downloadOnly     yes
 
 view             PlusRawSignal
 type             bigWig
@@ -71,11 +78,9 @@ hasReplicates    yes
 required         no 
 downloadOnly     yes
 
-# Optional elements files can be submitted with data or with separate DAF
-# Pooled relicates
-view             TSS
-type             gtf
-hasReplicates    no   
+view             Protocol
+type             pdf
+hasReplicates    yes 
 required         no 
 downloadOnly     yes
 

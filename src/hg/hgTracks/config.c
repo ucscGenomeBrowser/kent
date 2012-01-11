@@ -15,11 +15,7 @@
 #include "imageV2.h"
 #include "search.h"
 #include "hubConnect.h"
-
-#define DOWNLOADS_ONLY_TRACKS_INCLUDED
-#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
 #include "fileUi.h"
-#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
 
 static void textSizeDropDown()
 /* Create drop down for font size. */
@@ -27,33 +23,6 @@ static void textSizeDropDown()
 static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
-
-#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
-static void printGroupListHtml(char *groupCgiName, struct group *groupList, char *defaultGroup)
-/* Make an HTML select input listing the groups. */
-{
-char *groups[128];
-char *labels[128];
-char *defaultLabel = NULL;
-int numGroups = 0;
-struct group *group = NULL;
-
-for (group = groupList; group != NULL; group = group->next)
-    {
-    groups[numGroups] = group->name;
-    labels[numGroups] = group->name;
-    if (sameWord(defaultGroup, groups[numGroups]))
-	defaultLabel = groups[numGroups];
-    numGroups++;
-    if (numGroups >= ArraySize(groups))
-	internalErr();
-    }
-
-cgiMakeDropListFull(groupCgiName, labels, groups, numGroups,
-		    defaultLabel, NULL);
-}
-#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
-
 
 static void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
@@ -63,10 +32,6 @@ static void trackConfig(struct track *trackList, struct group *groupList,
  * unchanged.  If -1 then set visibility to default, otherwise it should
  * be tvHide, tvDense, etc. */
 {
-#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
-char pname[512];
-char gname[512];
-#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 struct group *group;
 boolean showedRuler = FALSE;
 
@@ -143,29 +108,8 @@ for (group = groupList; group != NULL; group = group->next)
     char submitName[256];
     safef(submitName, sizeof(submitName), "%sSubmit", group->name);
     cgiMakeButtonWithMsg(submitName, "submit","Submit your selections and view them in the browser");
-#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
-    if (withPriorityOverride)
-        {
-        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-        hPrintf("%s", wrapWhiteFont("Group Order: "));
-        }
-#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
     hPrintf("</td></tr></table>\n");
     hPrintf("</TH>\n");
-#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
-    if (withPriorityOverride)
-        {
-        hPrintf("<TH>\n");
-        safef(pname, sizeof(pname), "%s.priority",group->name);
-        hDoubleVar(pname, (double)group->priority, 4);
-        hPrintf("</TH>\n");
-        if (isOpen)
-            hPrintf("<TH align=CENTER BGCOLOR='#536ED3'><B>&nbsp;%s</B></TH> ", wrapWhiteFont("Group"));
-        hPrintf("\n");
-        }
-#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
     hPrintf("</TR>\n");
 
     /* First non-CT, non-hub group gets ruler. */
@@ -186,15 +130,6 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("<TD>");
 	hPrintf("Chromosome position in bases.  (Clicks here zoom in 3x)");
 	hPrintf("</TD>");
-#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
-        if (withPriorityOverride)
-            {
-            hPrintf("<TD>");
-            hPrintf("</TD>");
-            hPrintf("<TD>");
-            hPrintf("</TD>");
-            }
-#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 	hPrintf("</TR>\n");
 	}
     /* Scan track list to determine which supertracks have visible member
@@ -223,7 +158,6 @@ for (group = groupList; group != NULL; group = group->next)
                     {
                     struct trackDb *childTdb = child->val;
                     struct track *childTrack = hashFindVal(trackHash, childTdb->track);
-#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
                     // Try adding downloadsOnly track
                     if (childTrack == NULL && tdbIsDownloadsOnly(childTdb))
                         {
@@ -231,7 +165,6 @@ for (group = groupList; group != NULL; group = group->next)
                         childTrack->tdb = childTdb;
                         childTrack->hasUi = FALSE;
                         }
-#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
                     if (childTrack != NULL)
                         {
                         AllocVar(ref);
@@ -278,12 +211,10 @@ for (group = groupList; group != NULL; group = group->next)
 
 	/* If track is not on this chrom print an informational
 	   message for the user. */
-#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
         if (tdbIsDownloadsOnly(tdb))
             hPrintf("<A TITLE='Downloadable files...' HREF='%s?%s=%u&g=%s'>Downloads</A>", // No vis display for downloadsOnly
                 hgFileUiName(),cartSessionVarName(), cartSessionId(cart), tdb->track);
         else
-#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
         if (hTrackOnChrom(track->tdb, chromName))
 	    {
             if (tdbIsSuper(track->tdb))
@@ -295,7 +226,7 @@ for (group = groupList; group != NULL; group = group->next)
                 {
                 /* check for option of limiting visibility to one mode */
                 hTvDropDownClassVisOnly(track->track, track->visibility,
-                            track->canPack, (track->visibility == tvHide) ?
+                            rTdbTreeCanPack(track->tdb), (track->visibility == tvHide) ?
                             "hiddenText" : "normalText",
                             trackDbSetting(track->tdb, "onlyVisibility"));
                 }
@@ -306,32 +237,6 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("<TD NOWRAP>");
 	hPrintf("%s", tdb->longLabel);
 	hPrintf("</TD>");
-#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
-        if (withPriorityOverride)
-            {
-            hPrintf("<TD>");
-#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
-            if (tdbIsDownloadsOnly(tdb))
-                hPrintf("&nbsp</TD><TD>\n&nbsp");
-            else
-#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
-                {
-                safef(pname, sizeof(pname), "%s.priority",track->track);
-                hDoubleVar(pname, (double)track->priority, 4);
-                hPrintf("</TD>");
-                hPrintf("<TD>\n");
-                /* suppress group pull-down for supertrack members */
-                if (tdbIsSuperTrackChild(track->tdb))
-                    hPrintf("&nbsp");
-                else
-                    {
-                    safef(gname, sizeof(gname), "%s.group",track->track);
-                    printGroupListHtml(gname, groupList, track->groupName);
-                    }
-                }
-            hPrintf("</TD>");
-            }
-#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 	hPrintf("</TR>\n");
 	}
     hPrintf("</TABLE>\n");
@@ -339,7 +244,6 @@ for (group = groupList; group != NULL; group = group->next)
     }
 }
 
-#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
 static int addDownloadOnlyTracks(char *db,struct group **pGroupList,struct track **pTrackList)
 // Download only tracks are not normaly incorporated into the grou and track lists
 {
@@ -398,7 +302,6 @@ if (count > 0)
     }
 return count;
 }
-#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
 
 void configPageSetTrackVis(int vis)
 /* Do config page after setting track visibility. If vis is -2, then visibility
@@ -421,10 +324,7 @@ if (trackHash == NULL)
     trackHash = makeGlobalTrackHash(trackList);
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 
-
-#ifdef DOWNLOADS_ONLY_TRACKS_INCLUDED
 addDownloadOnlyTracks(database,&groupList,&trackList);
-#endif///def DOWNLOADS_ONLY_TRACKS_INCLUDED
 
 /* The ideogram for some reason is considered a track.
  * We don't really want to process it as one though, so
@@ -523,16 +423,6 @@ hCheckBox("nextExonArrows", cartUsualBoolean(cart, "nextExonArrows", TRUE));
 hPrintf("</TD><TD>");
 hPrintf("Next/previous exon navigation");
 hPrintf("</TD></TR>\n");
-
-#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
-hPrintf("<TR><TD>");
-char *javascript="onClick=\"document.mainForm.hgTracksConfigPage.value='configure';document.mainForm.submit();\"";
-hCheckBoxJS(configPriorityOverride,
-	cartUsualBoolean(cart, configPriorityOverride , FALSE), javascript);
-hPrintf("</TD><TD>");
-hPrintf("Enable track re-ordering");
-hPrintf("</TD></TR>\n");
-#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 
 hTableEnd();
 cgiDown(0.9);

@@ -35,7 +35,7 @@
 #define VCF_DEFAULT_MIN_ALLELE_FREQ 0.0
 
 void vcfCfgHaplotypeCenter(struct cart *cart, struct trackDb *tdb, char *track,
-			   boolean compositeLevel, struct vcfFile *vcff,
+			   boolean parentLevel, struct vcfFile *vcff,
 			   char *thisName, char *thisChrom, int thisPos, char *formName);
 /* If vcff has genotype data, show status and controls for choosing the center variant
  * for haplotype clustering/sorting in hgTracks. */

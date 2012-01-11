@@ -3294,3 +3294,23 @@ type bigBed 4 +
 url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
 urlLabel NCBI Incident:
 nonBedFieldsLabel Summary information from incident database:
+
+track tRNAs
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
+noScoreFilter .
+
+searchName tRNA-name
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
+

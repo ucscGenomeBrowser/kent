@@ -44,17 +44,6 @@ sGroup_vertebrate galGal2 xenTro1 danRer3
 speciesDefaultOff bosTau2 danRer3
 treeImage phylo/rn4_9way.gif
 
-track tRNAs
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
-
 track phastConsElements9way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
@@ -120,14 +109,6 @@ query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 shortCircuit 1
 termRegex [AB][A-Z]+[0-9]+(\.[0-9]+)?|chr(M|Un|[0-9UnXY]+_random)_[0-9]+
 searchPriority 8
-
-searchName tRNA-name
-searchTable tRNAs
-searchType bed
-searchMethod fuzzy
-query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
-searchDescription tRNAscan-SE tRNA Name
-searchPriority 63
 
 searchName snp125Short
 searchTable snp125
