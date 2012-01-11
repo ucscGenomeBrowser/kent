@@ -3003,7 +3003,7 @@ tableName wgEncodeLicrRnaSeqThymusCellPapMAdult8wksC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-metaObject wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep1
+metaObject wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -3012,7 +3012,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
-fileName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep1.bam.bai
+fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep1.bam,wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep1.bam.bai
 grant Ren
 lab LICR-m
 labVersion 11/10/10 Lane 5
@@ -3026,11 +3026,11 @@ sex U
 softwareVersion TopHat
 strain C57BL/6
 subId 5397
-tableName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep1
+tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep1
 tissueSourceType Individual
 view Alignments
 
-metaObject wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep2
+metaObject wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep2
 objType table
 age E14.5
 cell WholeBrain
@@ -3039,7 +3039,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
-fileName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep2.bam.bai
+fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep2.bam,wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep2.bam.bai
 grant Ren
 lab LICR-m
 labVersion 11/10/10 Lane 5
@@ -3053,11 +3053,11 @@ sex U
 softwareVersion TopHat
 strain C57BL/6
 subId 5397
-tableName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6AlnRep2
+tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6AlnRep2
 tissueSourceType Individual
 view Alignments
 
-metaObject wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6RawDataRep1
+metaObject wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6RawDataRep1
 objType file
 age E14.5
 cell WholeBrain
@@ -3066,7 +3066,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
-fileName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6RawDataRep1.fastq.gz
+fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6RawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/10/10 Lane 5
@@ -3083,7 +3083,7 @@ subId 5397
 tissueSourceType Individual
 view RawData
 
-metaObject wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6RawDataRep2
+metaObject wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6RawDataRep2
 objType file
 age E14.5
 cell WholeBrain
@@ -3092,7 +3092,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
-fileName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6RawDataRep2.fastq.gz
+fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6RawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
 labVersion 11/10/10 Lane 5
@@ -3109,7 +3109,7 @@ subId 5397
 tissueSourceType Individual
 view RawData
 
-metaObject wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep1
+metaObject wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -3118,7 +3118,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
-fileName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep1.bigWig
+fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep1.bigWig
 grant Ren
 lab LICR-m
 labVersion 11/10/10 Lane 5
@@ -3132,11 +3132,11 @@ sex U
 softwareVersion TopHat
 strain C57BL/6
 subId 5397
-tableName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep1
+tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep1
 tissueSourceType Individual
 view Signal
 
-metaObject wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep2
+metaObject wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 objType table
 age E14.5
 cell WholeBrain
@@ -3145,7 +3145,7 @@ dataType RnaSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2012-01-04
 dateUnrestricted 2012-10-03
-fileName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep2.bigWig
+fileName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2.bigWig
 grant Ren
 lab LICR-m
 labVersion 11/10/10 Lane 5
@@ -3159,8 +3159,8 @@ sex U
 softwareVersion TopHat
 strain C57BL/6
 subId 5397
-tableName wgEncodeLicrRnaSeqWholebrainCellPapUE14halfC57bl6SigRep2
+tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 587869543
+# MAGIC: 587861911

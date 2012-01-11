@@ -4312,118 +4312,6 @@ seqPlatform Illumina_GA2x
 subId 4113
 view RawData
 
-metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep1
-objType file
-bioRep 009WC
-cell HUVEC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccAccession wgEncodeEH001085
-dccRep 1
-expId 1085
-fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep1.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21054
-labProtocolId 009WCs
-localization cell
-md5sum 1c3c4f5b1ed2fef64902193e9081026b
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 1
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 3358
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep2
-objType file
-bioRep 010WC
-cell HUVEC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccAccession wgEncodeEH001085
-dccRep 2
-expId 1085
-fileName wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep2.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21055
-labProtocolId 010WCs
-localization cell
-md5sum 235592f6ea54d9885f1999a02a2fbe15
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 2
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 3359
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep3
-objType file
-bioRep 029C
-cell HUVEC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccAccession wgEncodeEH001086
-dccRep 1
-expId 1086
-fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep3.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21057
-labProtocolId 029Cs
-localization cytosol
-md5sum 41248dab1ab21c0a43c92d260bc1ba0c
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 3
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 3360
-view RawData
-
-metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep4
-objType file
-bioRep 030C
-cell HUVEC
-composite wgEncodeCshlShortRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-dccAccession wgEncodeEH001086
-dccRep 2
-expId 1086
-fileName wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep4.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID21059
-labProtocolId 030Cs
-localization cytosol
-md5sum 13f6accfbf5b74802c7ce72f33e4d550
-origAssembly hg19
-project wgEncode
-readType 1x36
-replicate 4
-rnaExtract shortTotal
-seqPlatform Illumina_GA2x
-subId 3361
-view RawData
-
 metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3
 objType table
 bioRep 029N
@@ -7396,7 +7284,7 @@ subId 535
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
-objType table
+objType file 
 bioRep gen0154P
 cell K562
 composite wgEncodeCshlShortRnaSeq
@@ -8549,7 +8437,7 @@ subId 3375
 view RawData
 
 metaObject wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
-objType table
+objType file 
 bioRep gen0161WC
 cell prostate
 composite wgEncodeCshlShortRnaSeq
