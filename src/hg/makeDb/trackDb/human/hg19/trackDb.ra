@@ -108,17 +108,6 @@ xrefTable kgXref, ucscRetroInfo1
 xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
-track tRNAs
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE 
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
-
 track illuminaProbes override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
@@ -1896,14 +1885,6 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?
 searchPriority 50
-
-searchName tRNA-name
-searchTable tRNAs
-searchType bed
-searchMethod fuzzy
-query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
-searchDescription tRNAscan-SE tRNA Name
-searchPriority 63
 
 searchTable ctgPos
 searchMethod exact

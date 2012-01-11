@@ -456,7 +456,7 @@ static void showSchemaCtMaf(char *table, struct customTrack *ct)
 {
 hPrintf("<B>MAF Custom Track ID:</B> %s<BR>\n", table);
 hPrintf("For formatting information see: ");
-hPrintf("<A HREF=\"../goldenPath/help/customTrack.html#MAF\">MAF</A> ");
+hPrintf("<A HREF=\"../FAQ/FAQformat.html#format5\">MAF</A> ");
 hPrintf("format.");
 
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
