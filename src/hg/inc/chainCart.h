@@ -17,7 +17,7 @@
 #define NO_COLORS "Black"
 
 extern enum chainColorEnum chainFetchColorOption(struct cart *cart,
-    struct trackDb *tdb, boolean compositeLevel);
+    struct trackDb *tdb, boolean parentLevel);
 /******	ColorOption - Chrom colors by default **************************/
 
 #endif /* CHAINCART_H */
