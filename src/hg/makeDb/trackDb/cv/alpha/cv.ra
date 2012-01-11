@@ -6041,14 +6041,14 @@ target GR
 targetDescription Glucocorticoid Receptor
 antibodyDescription Rabbit Polyclonal. Antibody Target: GR
 vendorName Santa Cruz Biotech
-vendorId sc-1004
-orderUrl http://www.scbt.com/product.php?datasheet=1004
+vendorId sc-1003
+orderUrl http://www.scbt.com/product.php?datasheet=1003
 lab Myers
 lots A2508, E1908
 targetId GeneCard:NR3C1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation Human_-_GR(Immunoblot):human_GR_M-20_validation_Myers.pdf
-label GR (sc-1004)
+label GR (sc-1003)
 
 term GRp20
 tag GRP20
