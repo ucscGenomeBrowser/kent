@@ -2085,12 +2085,25 @@ if (doExtraChecking)
             for (chrom=chromList; chrom != NULL; chrom = chrom->next)
                 {
                 struct chromInfo *ci = hGetChromInfo(db, chrom->name);
+                if(ci == NULL)
+                    {
+                    // Deal with (some) non-UCSC chromosome naming conventions
+                    if(sameString(chrom->name, "MT"))
+                        ci = hGetChromInfo(db, "chrM");
+                    else
+                        {
+                        // Allow 1 == chr1, X == chrX, IV == chrIV etc.
+                        char buf[512];
+                        safef(buf, sizeof(buf), "chr%s", chrom->name);
+                        ci = hGetChromInfo(db, buf);
+                        }
+                    }
                 if(ci)
                     {
                     if (ci->size == chrom->size)
                         count++;
                     else
-                        errAbort("%s data does not match assembly (%s) - chromSize for %s in %s (%d) does not match assembly chromSize (%d)",
+                        errAbort("%s data does not match assembly (%s) - chromSize for chrom '%s' in %s (%d) does not match assembly chromSize (%d)",
                                  track->tdb->type, db, chrom->name, track->tdb->type, chrom->size, ci->size);
                     }
                 }
