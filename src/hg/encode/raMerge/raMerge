@@ -24,8 +24,7 @@ def main():
 
 
     merged = ra1.mergeRa(ra2)
-    for i in merged:
-        print i
+    print merged
 
 if __name__ == '__main__':
     main()

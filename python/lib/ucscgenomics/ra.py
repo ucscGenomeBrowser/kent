@@ -229,9 +229,11 @@ class RaFile(OrderedDict):
                 newCommon.append(i)
                 continue
             if i not in selfKeys:
-                newCommon.append(other[i])
+                newCommon[i] = other[i]
+                continue
             if i not in otherKeys:
-                newCommon.append(self[i])
+                newCommon[i] = self[i]
+                continue
             if i in otherKeys and i in selfKeys:
                 newStanza = RaStanza()
                 selfStanzaKeys = set(self[i].iterkeys())
@@ -243,8 +245,10 @@ class RaFile(OrderedDict):
                         continue
                     if j not in selfStanzaKeys:
                         newStanza[j] = other[i][j]
+                        continue
                     if j not in otherStanzaKeys:
                         newStanza[j] = self[i][j]
+                        continue
                     if j in selfStanzaKeys and j in otherStanzaKeys:
                         if self[i][j] == other[i][j]:
                             newStanza[j] = self[i][j]
@@ -253,7 +257,7 @@ class RaFile(OrderedDict):
                             out_j = '<<<<<%s' % j
                             newStanza[out_j] = self[i][j]
                             newStanza[in_j] = other[i][j]
-            newCommon.append(newStanza)
+                newCommon[i] = newStanza
         return newCommon
 
 
