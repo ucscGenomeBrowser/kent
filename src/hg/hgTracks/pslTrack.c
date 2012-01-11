@@ -64,21 +64,21 @@ if (*pLfList == NULL || mud == NULL)
  * to do the filter. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
-    fil->pattern = cartUsualString(cart, fil->key, "");
+    fil->pattern = cartUsualStringClosestToHome(cart, tg->tdb,FALSE,fil->suffix, "");
     if (fil->pattern[0] != 0)
         anyFilter = TRUE;
     }
 if (!anyFilter)
     return;
 
-type = cartUsualString(cart, mud->filterTypeVar, "red");
+type = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, mud->filterTypeSuffix, "red");
 if (sameString(type, "exclude"))
     isExclude = TRUE;
 else if (sameString(type, "include"))
     isExclude = FALSE;
 else
     colorIx = getFilterColor(type, MG_BLACK);
-type = cartUsualString(cart, mud->logicTypeVar, "and");
+type = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, mud->logicTypeSuffix, "and");
 andLogic = sameString(type, "and");
 
 /* Make a pass though each filter, and start setting up search for
@@ -86,8 +86,7 @@ andLogic = sameString(type, "and");
 conn = hAllocConn(database);
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
-    fil->pattern = cartUsualString(cart, fil->key, "");
-    if (fil->pattern[0] != 0)
+    if (fil->pattern[0] != 0)   // Filled above
 	{
 	fil->hash = newHash(10);
 	if ((fil->mrnaTableIx = sqlFieldIndex(conn, "gbCdnaInfo", fil->table)) < 0)
@@ -110,7 +109,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 	for (wordIx=0; wordIx <wordCount; ++wordIx)
 	    {
 	    char *pattern = cloneString(words[wordIx]);
-	    /* Special case for accessions as gbCdnaInfo is very large to 
+	    /* Special case for accessions as gbCdnaInfo is very large to
 	       read into memory. */
 	    if(sameString(fil->table, "acc"))
 		{
@@ -151,7 +150,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 	}
     }
 
-/* Scan through linked features coloring and or including/excluding ones that 
+/* Scan through linked features coloring and or including/excluding ones that
  * match filter. */
 for (lf = *pLfList; lf != NULL; lf = next)
     {
@@ -167,7 +166,7 @@ for (lf = *pLfList; lf != NULL; lf = next)
 		{
 		if (hashLookup(fil->hash, row[fil->mrnaTableIx]) == NULL)
 		    {
-		    if (andLogic)    
+		    if (andLogic)
 			passed = FALSE;
 		    }
 		else
@@ -248,9 +247,9 @@ struct simpleFeature *sfFromPslX(struct psl *psl,int grayIx, int sizeMul)
         return(sfList);
 }
 
-struct linkedFeatures *lfFromPslx(struct psl *psl, 
+struct linkedFeatures *lfFromPslx(struct psl *psl,
 	int sizeMul, boolean isXeno, boolean nameGetsPos, struct track *tg)
-/* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA, 
+/* Create a linked feature item from pslx.  Pass in sizeMul=1 for DNA,
  * sizeMul=3 for protein.
  * Don't free psl afterwards! */
 {
@@ -356,10 +355,10 @@ else
     }
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL) 
+if (row != NULL)
     {
     subjId = row[0];
-    
+
     /* scan thru subj ID list */
     subj = gsidSelectedSubjList;
     while (subj != NULL)
@@ -368,27 +367,27 @@ if (row != NULL)
 	if (sameWord(subjId, testSubjId))
 	    {
 	    sqlFreeResult(&sr);
-	    hFreeConn(&conn); 
+	    hFreeConn(&conn);
 	    return(TRUE);
 	    }
     	subj = subj->next;
     	}
     }
 sqlFreeResult(&sr);
-hFreeConn(&conn); 
+hFreeConn(&conn);
 return(FALSE);
 }
 
 boolean gsidCheckSelected(struct track *tg)
 {
-char *setting; 
+char *setting;
 char *subjListFileName;
 
 /* check subject only if the selectSubject is set to on in trackDb for this track */
 setting = trackDbSetting(tg->tdb, SELECT_SUBJ);
 if (isNotEmpty(setting))
     {
-    if (sameString(setting, "on")) 
+    if (sameString(setting, "on"))
 	{
 	/* return TRUE only if the user has selected the subjects */
 	if (hIsGisaidServer())
@@ -425,7 +424,7 @@ char extraWhere[128];
 
 safef( optionChr, sizeof(optionChr), "%s.chromFilter", tg->track);
 optionChrStr = cartUsualString(cart, optionChr, "All");
-if (startsWith("chr",optionChrStr)) 
+if (startsWith("chr",optionChrStr))
     {
     safef(extraWhere, sizeof(extraWhere), "qName = \"%s\"",optionChrStr);
     sr = hRangeQuery(conn, tg->table, chromName, start, end, extraWhere, &rowOffset);
@@ -465,12 +464,12 @@ tg->items = lfList;
 sqlFreeResult(&sr);
 }
 
-static void lfFromPslsInRange(struct track *tg, int start, int end, 
+static void lfFromPslsInRange(struct track *tg, int start, int end,
 	char *chromName, boolean isXeno, boolean nameGetsPos, int sizeMul)
 /* Return linked features from range of table. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-connectedLfFromPslsInRange(conn, tg, start, end, chromName, 
+connectedLfFromPslsInRange(conn, tg, start, end, chromName,
 	isXeno, nameGetsPos, sizeMul);
 hFreeConn(&conn);
 }
@@ -514,7 +513,7 @@ void loadXenoPsl(struct track *tg)
 lfFromPslsInRange(tg, winStart,winEnd, chromName, TRUE, FALSE, 1);
 }
 
-void pslMethods(struct track *track, struct trackDb *tdb, 
+void pslMethods(struct track *track, struct trackDb *tdb,
 	int argc, char *argv[])
 /* Load up psl type methods. */
 {
@@ -535,7 +534,7 @@ else if (sameString(subType, "xeno"))
     track->loadItems = loadXenoPsl;
     if (argc >= 3)
 	{
-	pslChromMethods(track, 
+	pslChromMethods(track,
                     trackDbSettingOrDefault(tdb, "colorChromDefault", "on"));
 	}
     }
