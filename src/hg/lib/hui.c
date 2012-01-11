@@ -3849,17 +3849,6 @@ for(di=0;di<membersForAll->dimMax;di++) { if (membersForAll->members[di]) dimCou
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
-#ifdef SUBTRACK_CFG
-if (useDragAndDrop)  // IE9 & Chrom fail on subVisDD when dragAndDrop !
-    {
-    char *browserVersion;
-    enum browserType browserType = cgiClientBrowser(&browserVersion, NULL, NULL);
-    if ( browserType == btChrome
-    ||   browserType == btSafari
-    ||  (browserType == btIE  && *browserVersion > '8'))
-        useDragAndDrop = FALSE;
-    }
-#endif///def SUBTRACK_CFG
 char buffer[SMALLBUF];
 char *displaySubs = NULL;
 int subCount = slCount(subtrackRefList);
@@ -3943,6 +3932,10 @@ boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 int colspan = 3;
 if (sortOrder != NULL)
     colspan = sortOrder->count+2;
+#ifdef SUBTRACK_CFG
+else if (!tdbIsMultiTrack(parentTdb)) // An extra column for subVis/wrench so dragAndDrop works
+    colspan++;
+#endif///def SUBTRACK_CFG
 if (doColorPatch)
     colspan += 1;
 int columnCount = 0;
@@ -3977,6 +3970,13 @@ if (sortOrder != NULL)
     {
     printf("<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE='%s'></TH>\n", sortOrder->htmlId, sortOrder->sortOrder); // keeing track of sortOrder
     columnCount++;
+#ifdef SUBTRACK_CFG
+    if (!tdbIsMultiTrack(parentTdb))  // An extra column for subVis/wrench so dragAndDrop works
+        {
+        printf("<TH></TH>\n");
+        columnCount++;
+        }
+#endif///def SUBTRACK_CFG
     // Columns in tdb order (unchanging), sort in cart order (changed by user action)
     int sIx=0;
     for(sIx=0;sIx<sortOrder->count;sIx++)
@@ -4140,6 +4140,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #ifdef SUBTRACK_CFG
     if (!tdbIsMultiTrack(parentTdb))  // MultiTracks never have independent vis
         {
+        printf("<TD>"); // An extra column for subVis/wrench so dragAndDrop works
         enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
         char *view = NULL;
         if (membersForAll->members[dimV]
@@ -4157,6 +4158,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return subCfg.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
             printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" disabled"),subtrack->track);
             }
+        printf("</TD>");
         }
 #endif///def SUBTRACK_CFG
 
@@ -4275,16 +4277,20 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 puts("</TBODY>");
 if (slCount(subtrackRefList) > 5 || (restrictions && sortOrder != NULL))
     {
-    printf("<TFOOT style='background-color:%s;'><TR valign='top'><TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",
-           COLOR_BG_DEFAULT_DARKER,columnCount-1);
+    printf("<TFOOT style='background-color:%s;'><TR valign='top'>", COLOR_BG_DEFAULT_DARKER);
+    if (restrictions && sortOrder != NULL)
+        printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount-1);
+    else
+        printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount);
 
     // Count of subtracks is filled in by javascript.
     if (slCount(subtrackRefList) > 5)
         printf("<span class='subCBcount'></span>\n");
 
-    // Restruction policy needs a link
+    // Restriction policy needs a link
     if (restrictions && sortOrder != NULL)
-        printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", ENCODE_DATA_RELEASE_POLICY);
+        printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>",
+               ENCODE_DATA_RELEASE_POLICY);
 
     printf("</TD></TR></TFOOT>\n");
     }

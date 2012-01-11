@@ -3349,7 +3349,7 @@ html wgEncodeUwTfbs.release2
 
         track wgEncodeUwTfbsWi38InputOhtamStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel WI38 In TAM Sg 1
+        shortLabel WI-38 In TAM Sg 1
         longLabel WI-38 Input OH-tamoxifen 20nM TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=WI38 treatment=OHTAM rep=1
         type bigWig 1.000000 18598.000000
@@ -3493,7 +3493,7 @@ html wgEncodeUwTfbs.release2
 
         track wgEncodeUwTfbsSkmcInputStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKMC Input Raw 1
+        shortLabel SKMC In Sg 1
         longLabel SKMC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SKMC rep=1 treatment=aNone
         type bigWig 1.000000 16362.000000
