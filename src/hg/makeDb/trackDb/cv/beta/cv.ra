@@ -968,7 +968,7 @@ term BE2_C
 tag BE2C
 type Cell Line
 organism human
-description neuroblastoma
+description neuroblastoma, BE-C is a clone of the SK-N-BE neuroblastoma cell line (see ATCC CRL-2271) that was established in November of 1972 from a bone marrow biopsy taken from a 2-year-old individual with disseminated neuroblastoma after repeated courses of chemotherapy and radiotherapy.
 tissue brain
 lineage ectoderm
 karyotype cancer
@@ -1862,7 +1862,7 @@ vendorId WA07 (H7)
 orderUrl http://www.wicell.org/index.php
 sex U
 tier 3
-protocol Stam:H7-hESC_Stam_protocol.pdf
+protocol StamAndCrawford:H7-hESC_StamAndCrawford_protocol.pdf
 
 term H9ES
 tag H9ES
@@ -2209,6 +2209,24 @@ sex U
 tier 3
 protocol Stam:Stam_15_protocols.pdf Snyder:HEK293b_Snyder_protocol.pdf Snyder:HEK293b_Snyder_protocol.pdf
 
+term HEK293T
+tag HEK293T
+type Cell Line
+organism human
+description embryonic kidney that expresses SV40 large T antigen, HEK293 (ATCC number CRL-1573) is the parental cell line
+tissue kidney
+vendorName Thermo Scientific Open Biosystems
+vendorId HCL4517
+orderUrl https://www.openbiosystems.com/
+lineage mesoderm
+karyotype cancer
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
+lab Crawford
+sex F
+tier 3
+protocol Crawford:HEK293T_Crawford_protocol.pdf
+
 term HEK293(b)
 tag HEK293b
 type Cell Line
@@ -2228,7 +2246,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 protocol Snyder:HEK293b_Snyder_protocol.pdf
 
 term HEK293-T-REx
-tag HEK293T
+tag HEK293TREx
 type Cell Line
 tier 3
 organism human
@@ -3388,7 +3406,7 @@ term PANC-1
 tag PANC1
 type Cell Line
 organism human
-description pancreatic carcinoma, (PMID: 1140870)
+description pancreatic carcinoma, (PMID: 1140870) PANC-1 was established from a pancreatic carcinoma, which was extracted via pancreatico-duodenectomy specimen from a 56-year-old Caucasian individual. Malignancy of this cell line was verified via in vitro and in vivo assays. 
 tissue pancreas
 vendorName ATCC
 vendorId CRL-1469
@@ -3405,13 +3423,13 @@ term PanIsletD
 tag PANISD
 type Cell Line
 organism human
-description dedifferentiated human pancreatic islets from one of the sources for PanIslets
+description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI), same source as PanIslets
 tissue pancreas
 lineage endoderm
-vendorName National Disease Research Interchange (NDRI).
+vendorName National Disease Research Interchange 
 vendorId PanIsletD
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
-termId BTO:0000991 (non-specific)
+termId BTO:0000991 (non-specific) 
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex B
 tier 3
@@ -3421,13 +3439,13 @@ term PanIslets
 tag PANISLETS
 type Cell Line
 organism human
-description pancreatic islets from 2 donors
+description pancreatic islets from 2 donors, the sources of these primary cells are cadavers from National Disease Research Interchange (NDRI) and another sample isolated as in Bucher, P. et al., Assessment of a novel two-component enzyme preparation for human islet isolation and transplantation. Transplantation 79, 917 (2005)
 tissue pancreas
 lineage endoderm
-vendorName Refer to protocol documents for differing sources
+vendorName Refer to publication or NDRI
 vendorId PanIslets
-#orderUrl
-termId BTO:0000991 (non-specific)
+orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
+termId BTO:0000991 (non-specific) 
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
 tier 3
@@ -3666,7 +3684,7 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description neuroblastoma, newly promoted to tier 2: not in 2011 analysis
+description neuroblastoma, newly promoted to tier 2: not in 2011 analysis PROVISONAL The SK-N-SH line was established from a neuroblastoma in a 4 year old individual.
 tissue brain
 lineage ectoderm
 vendorName ATCC
@@ -3845,9 +3863,11 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 termId BTO:0002036
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036
-sex F
+sex U
 tier 3
 protocol Myers:U-87_Myers_protocol.pdf
+# There is considerable confusion about the gender of this cell line.  It was at first described by the vendor as female and that 
+#is how it is mapped in most cases.  However, the vendor is now saying the further testing has proven it to be male.
 
 term U2OS
 tag U2OS
@@ -4410,6 +4430,24 @@ color 204,121,16
 sex U
 protocol Stam:Tissue_Stam_protocol.pdf
 
+term LgIntestine
+tag LGINT
+type Cell Line
+organism mouse
+tissue large intestine
+category Tissue
+age ageUnknown
+strain Unknown
+description Large Intestine
+vendorName UW lab
+vendorId Large Intestine
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6982
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6982
+color 230,159,0
+sex U
+protocol Stam:LargeIntestine_Stam_protocol.pdf
+
 term Limb
 tag LIMB
 type Cell Line
@@ -4589,7 +4627,7 @@ protocol Stam:NIH-3T3_Stam_protocol.pdf
 
 # shortened term
 term OlfactBulb
-tag OLFACTORY
+tag OLFACT
 type Cell Line
 organism mouse
 tissue Olfactory Bulb
@@ -4643,7 +4681,7 @@ sex F
 protocol Stam:Patski_Stam_protocol.pdf
 
 term Placenta
-tag PLACENTA
+tag PLAC
 type Cell Line
 organism mouse
 tissue placenta
@@ -4660,9 +4698,45 @@ color 153,38,0
 sex U
 protocol Ren:Placenta_Ren_protocol.pdf
 
+term Retina
+tag RETINA
+type Cell Line
+organism mouse
+tissue brain
+category Tissue
+age ageUnknown
+strain Unknown
+description Retina 
+vendorName UW lab
+vendorId Retina
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 6944
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6944
+color 105,105,105
+sex U
+protocol Stam:Retina_Stam_protocol.pdf
+
+term SkMuscle
+tag SKMUSCLE
+type Cell Line
+organism mouse
+tissue skeletal muscle
+category Tissue
+age ageUnknown
+strain Unknown
+description Skeletal Muscle 
+vendorName UW lab
+vendorId Skeletal Muscle
+orderUrl http://www.gs.washington.edu/faculty/stamj.htm
+termId 7125
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7125
+color 139,69,19
+sex U
+protocol Stam:SkeletalMuscle_Stam_protocol.pdf
+
 #Shortened term
 term SmIntestine
-tag SMINTESTINE
+tag SMINT
 type Cell Line
 organism mouse
 tissue small intestine
@@ -4770,7 +4844,7 @@ sex U
 protocol Stam:TReg_Stam_protocol.pdf
 
 term WholeBrain
-tag WHOLEBRAIN
+tag WBRAIN
 type Cell Line
 organism mouse
 tissue brain
@@ -4971,6 +5045,22 @@ targetId GeneCard:BCL11A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
 validation Human_-_:missing
 label BCL11A (ab19489)
+
+term BCL11A_(SC-56011)
+tag BCL11ASC56011
+type Antibody
+target BCL11A
+targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. The corresponding mouse gene is a common site of retroviral integration in myeloid leukemia, and may function as a leukemia disease gene, in part, through its interaction with BCL6. During hematopoietic cell differentiation, this gene is down-regulated. It is possibly involved in lymphoma pathogenesis since translocations associated with B-cell malignancies also deregulates its expression. Multiple transcript variants encoding several different isoforms have been found for this gene. (provided by RefSeq)
+antibodyDescription Mouse monoclonal IgG, raised against BCL11A of human origin.
+vendorName Santa Cruz Biotech
+vendorId sc-56011
+orderUrl http://www.scbt.com/datasheet-56011-bcl-11a-14b5-antibody.html
+lab Myers
+lots B2811
+targetId GeneCard:BCL11A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
+validation BCL11A_(SC-56011)(Western_blot,IP-Mass_Spec):human_BCL11A_SC-56011_validation_Myers.pdf
+label BCL11A (sc-56011)
 
 term BCL3
 tag BCL3
@@ -5951,14 +6041,14 @@ target GR
 targetDescription Glucocorticoid Receptor
 antibodyDescription Rabbit Polyclonal. Antibody Target: GR
 vendorName Santa Cruz Biotech
-vendorId sc-1004
-orderUrl http://www.scbt.com/product.php?datasheet=1004
+vendorId sc-1003
+orderUrl http://www.scbt.com/product.php?datasheet=1003
 lab Myers
 lots A2508, E1908
-targetId GeneCard:NR3C2
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
+targetId GeneCard:NR3C1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C1
 validation Human_-_GR(Immunoblot):human_GR_M-20_validation_Myers.pdf
-label GR (sc-1004)
+label GR (sc-1003)
 
 term GRp20
 tag GRP20
@@ -7071,6 +7161,21 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=REST
 validation Human_-_:missing Mouse_-_:missing
 label NRSF
 
+term NR2F2_(SC-271940)
+tag NR2F2SC271940
+type Antibody
+target NR2F2
+targetDescription This gene encodes a member of the steroid thyroid hormone superfamily of nuclear receptors. The encoded protein is a ligand inducible transcription factor that is involved in the regulation of many different genes. Alternate splicing results in multiple transcript variants. (provided by RefSeq)
+antibodyDescription Mouse monoclonal IgG, specific for an epitope mapping between amino acids 13-44 at the N-terminus of NR2F2 of human origin.
+vendorName Santa Cruz Biotech
+vendorId sc-271940
+orderUrl http://www.scbt.com/datasheet-271940-arp-1-e-11-antibody.html
+lab Myers
+lots I1410
+targetId GeneCard:NR2F2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR2F2
+validation NR2F2_(sc-271940)(Western_blot,IP-Mass_spec):human_NR2F2_SC-271940_validation_Myers.pdf
+label NR2F2 (sc-271940)
 
 term p300
 tag P300
@@ -7943,14 +8048,30 @@ type Antibody
 target TCF7L2
 targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
 antibodyDescription Rabbit monoclonal. Antibody Target: TCF7L2
-vendorName Cell Signaling Tech
-vendorId H2569S
+vendorName Cell Signaling Technology
+vendorId 2569
 orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
 targetId GeneCard:TCF7L2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
-validation Human_-_:missing
-label TCF7L2 (H2569S)
+validation Human_-_TCF7L2(Immunoprecipitation,ChIP):human_TCF7L2_validation_Farnham.pdf
+label TCF7L2 (2569)
+
+term TCF7L2_C9B9_(2565)
+tag TCF7L2C9B92565
+type Antibody
+antibodyDescription Rabbit monoclonal antibody is produced by immunizing animals with a synthetic peptide corresponding to residues surrounding Glu81 of human TCF7L2.
+target TCF7L2
+targetDescription TCF7L2 (formerly known as TCF4) is a member of the high mobility group (HMG) DNA binding protein family of transcription factors which consists of the following: Lymphoid enhancer factor 1 (LEF1), T Cell Factor 1 (TCF1), TCF3 and TCF4. Note: there is an official TCF-4 http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4&search=TCF4
+vendorName Cell Signaling Technology
+vendorId 2565
+orderUrl http://www.cellsignal.com/products/2565.html
+lab Farnham
+lots 2
+targetId GeneCard:TCF7L2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
+validation Human_-_TCF7L2_C9B9_(2565)(Immunoprecipitation,ChIP):human_TCF7L2_C9B9_2565_validation_Farnham.pdf
+label TCF7L2 C9B9 (2565)
 
 term TEAD4_(SC-101184)
 tag TEAD4SC101184
@@ -7982,7 +8103,7 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
-validation 
+validation Human_-_:missing
 label TFIIB (sc-225)
 
 term TFIIIC-110
@@ -8037,7 +8158,7 @@ type Antibody
 target TRIM37
 antibodyDescription Goat polyclonal IgG raised against  a peptide mapping at the C-terminus of TRIM37 of human origin. Antibody Target: TRIM37
 targetDescription This gene encodes a member of the tripartite motif (TRIM) family, whose members are involved in diverse cellular functions such as developmental patterning and oncogenesis.  The TRIM motif includes zinc-binding domains, a RING finger region, a B-box motif and a coiled-coil domain.  The RING finger and B-box domains chelate zinc and might be involved in protein-protein and/or protein-nucleic acid interactions.  The gene mutations are associated with mulibrey (muscle-liver-brain-eye) nanism, an autosomal recessive disorder that involves several tissues of mesodermal origin.  Alternatively spliced transcript variants encoding the same protein have been identified. (provided by RefSeq)
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech
 vendorId sc-49548
 orderUrl http://www.scbt.com/datasheet-49548-trim37-c-15-antibody.html
 lab Myers
@@ -8317,6 +8438,22 @@ label ZZZ3
 
 
 ##This does not appear in metaDb
+term CBX3_(SC-101004)
+tag CBX3SC101004
+type Antibody
+target CBX3
+targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane protein found in the inner nuclear membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
+antibodyDescription Mouse monoclonal IgG, raised against recombinant CBX3 of human origin.
+vendorName Santa Cruz Biotech
+vendorId sc-101004
+orderUrl http://www.scbt.com/datasheet-101004-hp1gamma-s-19-antibody.html
+lab Myers
+lots G1410
+targetId GeneCard:CBX3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
+validation CBX3_(SC-101004)(Western_blot,IP-Mass_spec):human_CBX3_SC-101004_validation_Myers.pdf
+label CBX3 (sc-101004)
+
 term CBX5
 tag CBX5
 type Antibody
@@ -9175,32 +9312,32 @@ type treatment
 
 term DEX_100nM
 tag DEX100NM
-description 1 h with 100 nM DEX (Myers)
+description 1 h with 100 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_100pM
 tag DEX100PM
-description 1 h with 100 pM DEX (Myers)
+description 1 h with 100 pM Dexmathasone (Myers)
 type treatment
 
 term DEX_1nM
 tag DEX1NM
-description 1 h with 1 nM DEX (Myers)
+description 1 h with 1 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_50nM
 tag DEX50NM
-description 1 h with 50 nM DEX (Myers)
+description 1 h with 50 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_5nM
 tag DEX5NM
-description 1 h with 5 nM DEX (Myers)
+description 1 h with 5 nM Dexmathasone (Myers)
 type treatment
 
 term DEX_500pM
 tag DEX500PM
-description 1 h with 500 pM DEX (Myers)
+description 1 h with 500 pM Dexmathasone (Myers)
 type treatment
 
 term diffProtA_2d
@@ -9230,31 +9367,31 @@ label 14 day diffProtA
 term DMSO_0.02pct
 #tag DMSO2
 tag DM002P1H
-description 1 h with 0.02% DMSO (Myers)
+description 1 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_0.02pct_24hr
 #tag DMSO224H
 tag DM002P24H
-description 24 h with 0.02% DMSO (Myers)
+description 24 h with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_0.02pct_7d
 tag DM002P7D
-description 7 d with 0.02% DMSO (Myers)
+description 7 d with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term DMSO_2.0pct
 #tag DMSO20
 tag DM2P5D
-description 5 d with 2% DMSO (Weissman)
+description 5 d with 2% Dimethyl sufloxide (DMSO) (Weissman)
 type treatment
 
 term DMSO_4hr
 #term DMSO_0.02pct_4hr  would like to change
 #tag DMSO4hr
 tag DM002P4H
-description 4 hr with 0.02% DMSO (Myers)
+description 4 hr with 0.02% Dimethyl sufloxide (DMSO) (Myers)
 type treatment
 
 term EqS_2.0pct_24hr
@@ -9309,22 +9446,22 @@ type treatment
 
 term EtOH_0.01pct
 tag ETOH01
-description 36 h with 0.01% EtOH (Snyder)
+description 36 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01B
-description 4 h with 0.01% EtOH (Snyder)
+description 4 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01C
-description 12 h with 0.01% EtOH (Snyder)
+description 12 h with 0.01% Ethanol (Snyder)
 type treatment
 
 term EtOH_0.02pct
 tag ETOH02
-description 1 h with 0.02% EtOH (Myers)
+description 1 h with 0.02% Ethanol (Myers)
 type treatment
 
 term forskolin
@@ -9346,18 +9483,21 @@ term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
 description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
+description 24 h with 1% p02 and 10mM Lactate, pH 6.7
 type treatment
 
+#missing concentration
 term IFNa30
 tag IFNA30
-description Interferon alpha treatment - 30 minutes (Snyder)
+description 30 m of Interferon alpha (Snyder)
 type treatment
 
 term IFNa4h
 tag IFNA4H
-description Interferon alpha treatment - 4 hours with 500 U/ml (Crawford)
+description 4 hours of 500 U/ml Interferon alpha (Crawford)
 type treatment
 
+#missing concentration
 term IFNa6h
 tag IFNA6H
 description Interferon alpha treatment - 6 hours (Snyder)
@@ -9418,8 +9558,21 @@ type treatment
 
 term serum_free_media
 tag SERUMFREE
-description grown in serum free media (Crawford)
+description Grown with growth factors, then switched to media that contains no FBS for 36 hours (Crawford)
 type treatment
+label serum-free media
+
+term serum_starved_media
+tag SERUMSTVD
+description Grown with normal serum levels (10%), then switched to media containing low level of FBS (0.05%) for 72 hours
+type treatment
+label serum-starved media
+
+term serum_stimulated_media
+tag SERUMSTIM
+description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
+type treatment
+label serum-stimulated media
 
 term 4OHTAM_1uM_36hr
 # Changed tag from OHTAM1: 6/9/11
@@ -9508,12 +9661,12 @@ type protocol
 
 term TAP-Only
 tag TAP
-description This kind of library was made form RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
+description This kind of library was made from RNA < 200 nucleotides that were pre-treated with Tobacco Acid Pyrophosphatase to remove any 5' caps that would preclude cloning. Hence, both capped and 5' monophosphate RNAs will be cloned.
 type protocol
 
 term CIP-TAP
 tag CIPTAP
-description This kind of library was made form RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
+description This kind of library was made from RNA < 200 nucleotides that was pre-treated sequentially with Calf Intestinal Alkaline Phosphatase followed by Tobacco Acid Pyrophosphatase. Hence, it will be enriched for capped RNAs.
 type protocol
 
 ### phase
@@ -10097,583 +10250,10 @@ dataGroup Other
 term ChiaPet
 tag CHIAPET
 type dataType
-label ChIA-pet
-description ChIA-pet
-dataGroup Other
-
-term Orchid
-tag ORCHID
-type dataType
-label ORChID
-description ORChID
-dataGroup Other
-
-term Mapability
-tag MAPABILITY
-type dataType
-label Mapability
-description Uniqueness of n-mer sequence fragments across the genome
-dataGroup Other
-
-term MethylArray
-tag METHYLARRAY
-type dataType
-label Methyl Array
-description Methyl Bead Array
-dataGroup DNA Methylation
-
-term MethylSeq
-tag METHYLSEQ
-type dataType
-label Methyl-Seq
-description MethylSeq
-dataGroup DNA Methylation
-
-term MethylRrbs
-tag METHYLRRBS
-type dataType
-label Methyl RRBS
-description Methyl RRBS
-dataGroup DNA Methylation
-
-# tag not standard to match hg18
-term NRE
-tag NRE
-type dataType
-label Neg Regulatory
-description Negative Regulatory Elements
-dataGroup Other
-
-term Nucleosome
-tag NUCLEOSOME
-type dataType
-label Nucleosome
-description Nucleosome positioning data
-dataGroup Other
-
-term Proteogenomics
-tag PROTGENO
-type dataType
-label Proteogenomics
-description Mass Spec Proteogenomic Mapping
-dataGroup Other
-
-term RepliSeq
-tag  REPLISEQ
-type dataType
-label Repli-Seq
-description Replication Timing 
-dataGroup Other
-
-# tag not standard to match hg18
-term RnaPet
-tag PET
-type dataType
-label RNA-PET
-description RNA Paired-End Tag
-dataGroup RNA Profiling
-
-term RnaChip
-tag RNACHIP
-type dataType
-label RNA-chip
-description microarray analysis of RNA expression
-dataGroup RNA Profiling
-
-term RnaSeq
-tag RNASEQ
-type dataType
-label RNA-seq
-description Sequencing analysis of RNA expression
-dataGroup RNA Profiling
-
-#GeneST and Tiling are flavors of the RIP-chip.
-#They need separate dataTypes for the experiment table to work
-term RipGeneSt
-tag  GENEST
-type dataType
-label RIP-chip Gene ST
-description RIP-Chip on Affymetrix GeneChip (R) Human Gene 1.0 ST Arrays
-dataGroup RNA Binding Proteins
-
-term RipTiling
-tag  TILING
-type dataType
-label RIP-chip Tiling Array
-description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
-dataGroup RNA Binding Proteins
-
-term RipChip
-tag  RIPCHIP
-type dataType
-label RIP-chip
-description Rna IP measured on microarray
-dataGroup RNA Binding Proteins
-
-term RipSeq
-tag  RIPSEQ
-type dataType
-label RIP-seq
-description RNA-seq on RIP-chip data
-dataGroup RNA Binding Proteins
-
-term Switchgear
-tag SWITCHGEAR
-type dataType
-label SwitchGear
-description SwitchGear Genomics 3' UTR reporter assay
-dataGroup RNA Binding Proteins
-
-#This is not in the metaDB currently
-term TfbsValid
-tag TFBSVALID
-type dataType
-label TFBS-Valid
-description TFBS-Valid
-dataGroup Other
-
-### version
-
-term V2
-tag V2
-type version
-description version
-
-### Strain
-# Used in conjunction with mouse submissions
-# Expected fields:
-# ----------------
-# term (human-readable name)
-# tag (machine-readable name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be strain)
-# description (human-readable description.  Can't say where/how it's used)
-
-term B10.H-2aH-4bp/Wts
-tag 2A4B
-type strain
-description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
-# Used for the CH12 Cell Line
-
-term B6D2F1/J
-tag B6D2F1J
-type strain
-description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
-
-term BALB/cAnN
-tag BALBCANN
-type strain
-description ccMyeloma high incidence H2d
-
-term C3H
-tag C3H
-type strain
-description Strain C3H, Very related to C57BL/6
-
-term C57BL/6
-tag C57BL6
-type strain
-description C57 black 6, the most common inbred strain of laboratory mouse
-
-term C57BL/6J
-tag C57BL6J
-type strain
-description C57 black 6, the most common inbred strain of laboratory mouse
-
-term CD-1
-tag CD1
-type strain
-description Multipurpose mouse used for safety testing, aging studies, surgical models and pseudopregnancy.
-
-term NIH/Swiss
-tag NIHS
-type strain
-description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.
-
-term RIII
-tag RIII
-type strain
-description High mammary tumor incidence in unfostered substrains.
-
-term 129
-tag S129
-type strain
-description Strain 129, has widely available embryonic stem cells
-
-term 129/Ola
-tag 129OLA
-type strain
-description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
-
-term Spretus.BL6-Xist
-tag SPBL6
-type strain
-description M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
-
-term Unknown
-tag UKN
-type strain
-description Unknown strain origin
-
-### Age
-# Used in conjunction with mouse submissions
-# Expected fields:
-# ----------------
-# term (human-readable name)
-# tag (machine-readable name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be age)
-# stage (either embryonic or adult.  cannot say how/where this is used)
-# description (human-readable description.  Can't say where/how it's used)
-
-term E0
-tag E0
-type age
-stage Embryonic
-description Embryonic day 0 (stem cell)
-
-term E11.5
-tag E11HALF
-type age
-stage Embryonic
-description Embryonic day 11.5
-
-term E13.5
-tag E13HALF
-type age
-stage Embryonic
-description Embryonic day 13.5
-
-term E14
-tag E14
-type age
-stage Embryonic
-description Embryonic day 14
-
-term E14.5
-tag E14HALF
-type age
-stage Embryonic
-description Embryonic day 14.5
-
-term E18
-tag E18
-type age
-stage Embryonic
-description Embryonic day 18
-
-term E18.5
-tag E18HALF
-type age
-stage Embryonic
-description Embryonic day 18.5
-
-term adult-4wks
-tag ADULT4WKS
-type age
-stage Adult
-description Adult 4 weeks
-
-term adult-5wks
-tag ADULT5WKS
-type age
-stage Adult
-description Adult 5 weeks
-
-term adult-8wks
-tag ADULT8WKS
-type age
-stage Adult
-description Adult 8 weeks
-
-term immortalized
-tag IMMORTAL
-type age
-stage Cell Line
-description Immortal cells
-
-term ageUnknown
-tag AGEUNKN
-type age
-stage stageUnknown
-description the age when the real age is unknown
-
-
-### Attic
-# Expected fields:
-# ----------------
-# term (human-readable name)
-# tag (machine-readable name, no special characters)
-# type (informs pipeline code of stanza type.  Should always be attic)
-# description (human-readable description.  Can't say where/how it's used)
-
-term supplemental
-tag SUP
-type attic
-description Files supplemental at composite level
-
-term auxSup
-tag AUXSUP
-type attic
-description Unverified files supplemental at experiment level
-
-term auxValid
-tag AUXVAL
-type attic
-description Validated files supplemental to experiments
-
-term auxExp
-tag AUXEXP
-type attic
-description Supplemental experiments
-
-# Expected fields:
-# ----------------
-# term (human-readable name)
-# tag (machine-readable name, no special characters. uppercase)
-# type (informs pipeline code of stanza type.  Should always be sex)
-# description (human-readable description.  Can't say where/how it's used)
-
-#
-# Category: T for tissue, L for cell Line, P for Primary cell
-term Tissue
-tag T
-type category
-description Tissue
-
-term cellLine
-tag L
-type category
-description cell line
-
-term primaryCells
-tag P
-type category
-description primary cells
-
-term M
-tag M
-type sex
-description Male
-
-term F
-tag F
-type sex
-description Female
-
-term B
-tag B
-type sex
-description Both: a cell population with both male and female cells
-
-term U
-tag U
-type sex
-description Unknown
-
-
-## object Status
-term revoked
-tag REVOKED
-type objStatus
-description This file has been REVOKED by the submitting laboratory.  It should not be used for further research.
-
-term replaced
-tag REPLACED
-type objStatus
-description This file has been REPLACED by the submitting laboratory with an improved version.
-
-term renamed
-tag RENAMED
-type objStatus
-description This file has been RENAMED by the submitting laboratory. Please see updated file for newest metadata. 
-
-## Organisms
-term human
-tag HUMAN
-type organism
-description human
-
-term mouse
-tag MOUSE
-type organism
-description mouse
-
-## Tiers (used by cell types)
-term 1
-tag 1
-type tier
-description tier 1
-
-term 2
-tag 2
-type tier
-description tier 2
-
-term 3
-tag 3
-type tier
-description tier 3
-
-
-## Tissue Sourced (Used for Mouse cell)
-term Both
-tag BOTH
-type tissueSourceType
-description Tissue analyzed using replicate samples obtained from and individual and by pooling.
-
-term Individual
-tag INDIV
-type tissueSourceType
-description Tissue obtained from an individual
-
-term Pooled
-tag POOL
-type tissueSourceType
-description Tissue obtained from pooling samples from various sample organisms
-
-#Venkat: Trial to add seqPlatform for use for GEO submissions
-#Uses the GEO terms to be conistent and help with GEO submissions
-### Seq Platform
-# Expected fields:
-# ---------------
-# term (human-readable name)
-# tag (machine-readable name, no special characters. uppercase.)
-# type (informs pipeline code of stanza type, should be seqPlatform)
-# description: Working on inputing description from geo and product website
-
-term Illumina_GA
-tag ILLUMINAGA
-geo Illumina Genome Analyzer
-type seqPlatform
-description Illumina Genome Analyzer
-# Matches GA that Kate initially indicated as the term
-
-term Illumina_GA2
-tag ILLUMINAGA2
-geo Illumina Genome Analyzer II
-type seqPlatform
-description Illumina Genome Analyzer II
-
-term Illumina_GA2e
-tag ILLUMINAGA2E
-geo Illumina Genome Analyzer II
-type seqPlatform
-description Illumina Genome Analyzer IIe
-# Matches GA2 that Kate initially indicated as the term
-
-term Illumina_GA2x
-tag ILLUMINAGA2X
-geo Illumina Genome Analyzer II
-type seqPlatform
-description Illumina Genome Analyzer IIx
-# Matches GA2x that Kate initally indicated as the term
-
-term Illumina_HiSeq_2000
-tag ILLUMINAHISEQ2000
-geo Illumina HiSeq 2000
-type seqPlatform
-description Illumina HiSeq 2000
-
-term 454_GS
-tag 454GS
-geo 454 GS
-type seqPlatform
-description Roche 454 Genome Sequencer
-
-term 454_GS_20
-tag 454GS20
-geo 454 GS 20
-type seqPlatform
-description Roche 454 Genome Sequencer 20
-
-term 454_GS_FLX
-tag 454GSFLX
-geo 454 GS FLX
-type seqPlatform
-description Roche 454 Genome Sequencer FLX
-
-term AB_SOLiD
-tag ABSOLID
-geo AB SOLiD System
-type seqPlatform
-description Applied Biosystems SOLiD System
-
-term AB_SOLiD_2.0
-tag ABSOLID2
-geo AB_SOLiD System 2.0
-type seqPlatform
-description Applied Biosystems SOLiD System 2.0
-
-term AB_SOLiD_3.5
-tag ABSOLID3PLUS
-geo AB SOLiD 3 Plus
-type seqPlatform
-description Applied Biosystems SOLiD System 3.5
-
-
-#LABS          This is the CV for naming the labs.
-#term:
-#tag:	       Short, uppercase, no special characters
-#type:         We use the phrase lab as a source of data
-#label:        What is seen in findTracks.  Roughly "$labPi - $labInst"
-#labInst:      This is the full name of the Institution where the lab is housed
-#labPi:        This is the shortened name that we refer to the PI, usually just last name
-#labPiFull:    The full name of the PI
-#grantPI:      Shortened name of the head PI for the grant
-#type grant
-#grantInst:    The name of the institution where the grant is administered from.
-#projectName:
-#organism:     human or mouse
-
-term BioChain
-tag BIOCHAIN
-type lab
-label BioChain
-description The BioChain subset of HudsonAlpha
-labInst BioChain
-labPi Myers
-labPiFull Richard Myers
-grantPi Myers
-organism human
-
-term Broad
-tag BROAD
-type lab
-label Bernstein - Broad Institute
-description Bernstein - Broad Institute
-labInst Broad Institute
-labPi Bernstein
-labPiFull Bradley Bernstein
-grantPi Bernstein
-organism human
-
-term BU
-tag BU
-type lab
-label Tullius - Boston University
-description Tullius - Boston University
-labInst Boston University
-labPi Tullius
-labPiFull Thomas Tullius
-grantPi Tullius
-organism human
-
-term CRG-Guigo
-tag CRG
-type lab
-label Guigo - CGR, Barcelona
-description Guigo - CGR, Barcelona
-labInst Genome Center for Genomic Regulation, Barcelona
-labPi Guigo
-labPiFull Roderic Guigo
-grantPi Guigo
-organism human
-
-term GIS-Ruan
-tag GISRUAN
-type lab
-label Ruan - GIS (Chia)
-description Ruan - Genome Institute of Singapore (Chia)
-labInst Genome Institute of Singapore (Chia)
+label ChIA-PET
+description Chromatin Interactions Analysis Paired-End Tag
+description Ruan - Genome Institute of Singapore (ChIA)
+labInst Genome Institute of Singapore (ChIA)
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
@@ -11130,7 +10710,7 @@ projectName BU
 term Ruan
 tag RUAN
 type grant
-description Ruan
+description Yijun Ruan
 grantInst Genome Institute of Singapore
 projectName ChIA-PET
 
@@ -11444,6 +11024,7 @@ cvDefined yes
 validate cv
 priority 030
 
+# ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 term dataVersion
 tag DATAVERSION
 type typeOfTerm
@@ -11452,8 +11033,9 @@ description The ENCODE project declares specific data freezes for data to be use
 searchable multiSelect
 cvDefined no
 priority 310
-validate none # ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
+validate none
 
+# later than dateSubmitted
 term dateResubmitted
 tag DATERESUBMITTED
 type typeOfTerm
@@ -11462,8 +11044,9 @@ description Submitted data that was remapped to a new assembly, found to have er
 searchable date
 cvDefined no
 priority 320
-validate date # later than dateSubmitted
+validate date
 
+# nine months less than dateUnrestricted
 term dateSubmitted
 tag DATESUBMITTED
 type typeOfTerm
@@ -11472,8 +11055,9 @@ description Date that a particular file  was originally submitted to the UCSC Ge
 searchable date
 cvDefined no
 priority 315
-validate date # nine months less than dateUnrestricted
+validate date
 
+# nine months more than dateSubmitted
 term dateUnrestricted
 tag DATEUNRESTRICTED
 type typeOfTerm
@@ -11482,7 +11066,7 @@ description ENCODE data is made publicly available but with restrictions on use 
 searchable date
 cvDefined no
 priority 325
-validate date # nine months more than dateSubmitted
+validate date
 
 term dccAccession
 tag DCCACCESSION
@@ -11528,6 +11112,8 @@ hidden beta,public
 validate integer
 priority 100
 
+# Perhaps could add a validte option to restrict/require this var for objType=composite
+# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
 term expVars
 tag EXPVARS
 type typeOfTerm
@@ -11537,8 +11123,7 @@ searchable no
 cvDefined no
 hidden yes
 priority 500
-validate none # Perhaps could add a validte option to restrict/require this var for objType=composite
-# Only defined for objType=composite  This is the list of Experiment Defining Variables (EDVs)
+validate none
 
 term fileName
 tag FILENAME
@@ -11711,13 +11296,14 @@ cvDefined no
 validate regex: ^renamed\|replaced\|revoked - .*$
 priority 1
 
+#(Defined by lab)
 term obtainedBy
 tag OBTAINEDBY
 type typeOfTerm
 label Obtained by
 description The production group that grew the cells and isolated genomic DNA.
 searchable multiSelect
-cvDefined no #(Defined by lab)
+cvDefined no
 validate none
 priority 500
 
@@ -11755,6 +11341,7 @@ validate list: noSequence,none
 priority 450
 # Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
+# Only one so far: all encode is under single project='wgEncode' (11/3/10)
 term project
 tag PROJECT
 type typeOfTerm
@@ -11762,7 +11349,7 @@ label Project funded by
 description Project that funded this and a related set of experiments.
 searchable no
 cvDefined no
-validate list: wgEncode   # Only one so far: all encode is under single project='wgEncode' (11/3/10)
+validate list: wgEncode
 priority 010
 
 term protocol
@@ -11929,6 +11516,7 @@ cvDefined no
 validate integer
 priority 335
 
+# Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
 term submittedDataVersion
 tag SUBMITTEDDATAVERSION
 type typeOfTerm
@@ -11936,7 +11524,7 @@ label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 searchable no
 cvDefined no
-validate regex: ^V[2-9]*.*$   # Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
+validate regex: ^V[2-9]\+ \- .*$
 priority 250
 
 term tableName
