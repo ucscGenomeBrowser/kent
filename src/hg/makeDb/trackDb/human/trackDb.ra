@@ -1678,6 +1678,7 @@ group varRep
 priority 144.48
 visibility hide
 type bed 6 +
+configureByPopup off
 exonArrows off
 
     track hapmapSnpsASW
@@ -3802,6 +3803,7 @@ longLabel SNP Genotyping Arrays
 group varRep
 priority 101
 visibility hide
+configureByPopup off
 type bed 4 .
 
     track snpArrayAffy6
