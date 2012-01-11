@@ -5052,7 +5052,7 @@ type Antibody
 target BCL11A
 targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. The corresponding mouse gene is a common site of retroviral integration in myeloid leukemia, and may function as a leukemia disease gene, in part, through its interaction with BCL6. During hematopoietic cell differentiation, this gene is down-regulated. It is possibly involved in lymphoma pathogenesis since translocations associated with B-cell malignancies also deregulates its expression. Multiple transcript variants encoding several different isoforms have been found for this gene. (provided by RefSeq)
 antibodyDescription Mouse monoclonal IgG, raised against BCL11A of human origin.
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech
 vendorId sc-56011
 orderUrl http://www.scbt.com/datasheet-56011-bcl-11a-14b5-antibody.html
 lab Myers
@@ -8158,7 +8158,7 @@ type Antibody
 target TRIM37
 antibodyDescription Goat polyclonal IgG raised against  a peptide mapping at the C-terminus of TRIM37 of human origin. Antibody Target: TRIM37
 targetDescription This gene encodes a member of the tripartite motif (TRIM) family, whose members are involved in diverse cellular functions such as developmental patterning and oncogenesis.  The TRIM motif includes zinc-binding domains, a RING finger region, a B-box motif and a coiled-coil domain.  The RING finger and B-box domains chelate zinc and might be involved in protein-protein and/or protein-nucleic acid interactions.  The gene mutations are associated with mulibrey (muscle-liver-brain-eye) nanism, an autosomal recessive disorder that involves several tissues of mesodermal origin.  Alternatively spliced transcript variants encoding the same protein have been identified. (provided by RefSeq)
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech
 vendorId sc-49548
 orderUrl http://www.scbt.com/datasheet-49548-trim37-c-15-antibody.html
 lab Myers
