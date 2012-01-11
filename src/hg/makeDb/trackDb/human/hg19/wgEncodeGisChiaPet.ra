@@ -2,7 +2,7 @@ track wgEncodeGisChiaPet
 compositeTrack on
 superTrack wgEncodeChromSuper dense
 shortLabel GIS ChIA-PET
-longLabel  Chromatin Interations PET (ChIA-PET) from ENCODE/GIS-Ruan
+longLabel Chromatin Interaction Analysis Paired-End Tags (ChIA-PET) from ENCODE/GIS-Ruan
 group regulation
 subGroup1 view Views Interactions=Interactions Signal=Signal 
 subGroup2 cellType Cell_Line 1K562=K562<BR>&nbsp;(Tier_1) 2HELAS3=HeLa-S3<BR>&nbsp;(Tier_2) HCT116=HCT-116 MCF7=MCF-7 NB4=NB4 
