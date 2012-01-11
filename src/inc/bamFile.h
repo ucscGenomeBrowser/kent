@@ -139,7 +139,8 @@ void bamUnpackAux(const bam1_t *bam, struct dyString *dy);
 /* Unpack the tag:type:val part of bam into dy */
 
 struct bamChromInfo *bamChromList(samfile_t *fh);
-/* Return list of chromosomes from bam header. We normalize chromosome names to UCSC format. */
+/* Return list of chromosomes from bam header. We make no attempty to normalize chromosome names to UCSC format,
+   so list may contain things like "1" for "chr1", "I" for "chrI", "MT" for "chrM" etc. */
 
 void bamChromInfoFreeList(struct bamChromInfo **pList);
 /* Free a list of dynamically allocated bamChromInfo's */

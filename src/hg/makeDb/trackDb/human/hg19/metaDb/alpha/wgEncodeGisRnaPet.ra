@@ -57,6 +57,7 @@ md5sum 02bef90485e98b5397a70af77f3fa245,b1e134a1fb04a188782052ed4de80394
 origAssembly hg18
 project wgEncode
 replicate 1
+objStatus replaced - Improved sequencing
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 1979
@@ -148,6 +149,7 @@ md5sum d6aca3475c5cb1c7b4e8a9ac6d1026ed
 origAssembly hg18
 project wgEncode
 replicate 1
+objStatus replaced - Improved sequencing
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 1979
