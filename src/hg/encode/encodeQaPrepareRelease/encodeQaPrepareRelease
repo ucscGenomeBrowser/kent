@@ -33,8 +33,8 @@ def parseTrackDb(c, args):
     compositeLines = list()
     for i in includeLines:
         m = p.search(i)
-    if m:
-        compositeLines.append(m3.group(1))
+        if m:
+            compositeLines.append(m.group(1))
 
     return includeLines, compositeLines, trackDbInclude
 
@@ -110,12 +110,10 @@ def main():
     if len(compositeLines) > 2:
         print "There are 3 include lines for composite %s, this must currently be resolved manually"
         return
-
     #make dictionary of included composites to compare
     compare = dict()
     for i in compositeLines:
         compare[i.partition(" ")[0]] = i.partition(" ")[2]
-
     if args.stage == "beta":
         betaMetaDbInclude = "%s/makefile" % c._betaMdbDir
         addInclude(args.composite, betaMetaDbInclude, args.stage)
@@ -126,7 +124,6 @@ def main():
             if re.search("public", compare[i]):
                 compare[i] = "public"
                 continue
-
 
     if args.stage == "public":
         publicMetaDbInclude = "%s/makefile" % c._publicMdbDir
