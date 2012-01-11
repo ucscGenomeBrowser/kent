@@ -453,17 +453,6 @@ oldToNew kg3ToKg4
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-track tRNAs
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
-
 # Overrides for track pgSnp:
     track pgKb1Comb override
     pgSiftPredTab pgKb1Sift
@@ -597,14 +586,6 @@ searchTable nscanGene
 searchType genePred
 termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]+
 searchPriority 50
-
-searchName tRNA-name
-searchTable tRNAs
-searchType bed
-searchMethod fuzzy
-query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
-searchDescription tRNAscan-SE tRNA Name
-searchPriority 63
 
 searchTable nscanPasaGene
 searchType genePred
