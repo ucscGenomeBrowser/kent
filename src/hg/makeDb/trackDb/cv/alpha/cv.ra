@@ -5052,7 +5052,7 @@ type Antibody
 target BCL11A
 targetDescription This gene encodes a C2H2 type zinc-finger protein by its similarity to the mouse Bcl11a/Evi9 protein. The corresponding mouse gene is a common site of retroviral integration in myeloid leukemia, and may function as a leukemia disease gene, in part, through its interaction with BCL6. During hematopoietic cell differentiation, this gene is down-regulated. It is possibly involved in lymphoma pathogenesis since translocations associated with B-cell malignancies also deregulates its expression. Multiple transcript variants encoding several different isoforms have been found for this gene. (provided by RefSeq)
 antibodyDescription Mouse monoclonal IgG, raised against BCL11A of human origin.
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech
 vendorId sc-56011
 orderUrl http://www.scbt.com/datasheet-56011-bcl-11a-14b5-antibody.html
 lab Myers
@@ -7167,7 +7167,7 @@ type Antibody
 target NR2F2
 targetDescription This gene encodes a member of the steroid thyroid hormone superfamily of nuclear receptors. The encoded protein is a ligand inducible transcription factor that is involved in the regulation of many different genes. Alternate splicing results in multiple transcript variants. (provided by RefSeq)
 antibodyDescription Mouse monoclonal IgG, specific for an epitope mapping between amino acids 13-44 at the N-terminus of NR2F2 of human origin.
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech
 vendorId sc-271940
 orderUrl http://www.scbt.com/datasheet-271940-arp-1-e-11-antibody.html
 lab Myers
@@ -8158,7 +8158,7 @@ type Antibody
 target TRIM37
 antibodyDescription Goat polyclonal IgG raised against  a peptide mapping at the C-terminus of TRIM37 of human origin. Antibody Target: TRIM37
 targetDescription This gene encodes a member of the tripartite motif (TRIM) family, whose members are involved in diverse cellular functions such as developmental patterning and oncogenesis.  The TRIM motif includes zinc-binding domains, a RING finger region, a B-box motif and a coiled-coil domain.  The RING finger and B-box domains chelate zinc and might be involved in protein-protein and/or protein-nucleic acid interactions.  The gene mutations are associated with mulibrey (muscle-liver-brain-eye) nanism, an autosomal recessive disorder that involves several tissues of mesodermal origin.  Alternatively spliced transcript variants encoding the same protein have been identified. (provided by RefSeq)
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech
 vendorId sc-49548
 orderUrl http://www.scbt.com/datasheet-49548-trim37-c-15-antibody.html
 lab Myers
@@ -8444,7 +8444,7 @@ type Antibody
 target CBX3
 targetDescription At the nuclear envelope, the nuclear lamina and heterochromatin are adjacent to the inner nuclear membrane. The protein encoded by this gene binds DNA and is a component of heterochromatin. This protein also can bind lamin B receptor, an integral membrane protein found in the inner nuclear membrane. The dual binding functions of the encoded protein may explain the association of heterochromatin with the inner nuclear membrane. This protein binds histone H3 tails methylated at Lys-9 sites. This protein is also recruited to sites of ultraviolet-induced DNA damage and double-strand breaks. Two transcript variants encoding the same protein but differing in the 5' UTR, have been found for this gene.
 antibodyDescription Mouse monoclonal IgG, raised against recombinant CBX3 of human origin.
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech
 vendorId sc-101004
 orderUrl http://www.scbt.com/datasheet-101004-hp1gamma-s-19-antibody.html
 lab Myers
