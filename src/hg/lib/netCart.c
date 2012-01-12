@@ -12,7 +12,7 @@
 
 
 enum netColorEnum netFetchColorOption(struct cart *cart, struct trackDb *tdb,
-	boolean compositeLevel)
+	boolean parentLevel)
 /******	netColorOption - Chrom colors by default **************************/
 {
 char *netColor = NULL;
@@ -25,7 +25,7 @@ if (sameWord(TDB_GRAY_SCALE,netColor))
     netColor = GRAY_SCALE;
 /* and then, allow cart to override trackDb */
 ret = netColorStringToEnum(
-        cartUsualStringClosestToHome(cart, tdb, compositeLevel, NET_COLOR,
+        cartUsualStringClosestToHome(cart, tdb, parentLevel, NET_COLOR,
         netColor));
 
 return(ret);
@@ -33,7 +33,7 @@ return(ret);
 
 
 enum netLevelEnum netFetchLevelOption(struct cart *cart, struct trackDb *tdb,
-	boolean compositeLevel)
+	boolean parentLevel)
 /******	netLevelOption - net level 0 (All levels) by default    ***********/
 {
 char *netLevel = NULL;
@@ -60,7 +60,7 @@ switch(sqlUnsigned(netLevel))
 
 /* allow cart to override trackDb */
 ret = netLevelStringToEnum(
-        cartUsualStringClosestToHome(cart, tdb, compositeLevel, NET_LEVEL,
+        cartUsualStringClosestToHome(cart, tdb, parentLevel, NET_LEVEL,
         netLevelEnumToString(ret)));
 
 return(ret);

@@ -157,7 +157,7 @@ if ( -e GitReports.ok ) then
 
 # add engineers that want to be notified of the build being complete
     foreach USER (braney larrym angie hiram)
-	echo  "v$BRANCHNN has been built successfully on beta.  Time to do your code summaries.\n\nFor a git log use:\n git log --author=$USER --since=$LASTWEEK --until=$TODAY  " | mail -s "Code summaries are due" braney 
+	echo  "v$BRANCHNN has been built successfully on beta.  Time to do your code summaries.\n\nFor a git log use:\n git log --author=$USER --since=$LASTWEEK --until=$TODAY  " | mail -s "Code summaries are due" $USER
     end
 else
     echo "Git Reports had some error, no ok file found. [${0}: `date`]"
