@@ -2,6 +2,7 @@ metaObject wgEncodeUwRepliSeq
 objType composite
 composite wgEncodeUwRepliSeq
 expVars lab,dataType,cell
+geoSeriesAccession GSE34399
 
 metaObject wgEncodeUwRepliSeqBg02esG1bAlnRep1
 objType file
@@ -7951,4 +7952,4 @@ subId 4862
 tableName wgEncodeUwRepliSeqSknshraWaveSignalRep1
 view WaveSignal
 
-# MAGIC: 204515594
+# MAGIC: 621221626
