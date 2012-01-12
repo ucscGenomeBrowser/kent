@@ -10195,14 +10195,9 @@ dataGroup Other
 term ChiaPet
 tag CHIAPET
 type dataType
-label ChIA-PET
-description Ruan - Genome Institute of Singapore (ChIA)
-labInst Genome Institute of Singapore (ChIA)
-labPi Ruan
-labPiFull Yijun Ruan
-grantPi Ruan
+label ChIA-pet
+description ChIA-pet
 dataGroup Other
-organism human
 
 term Orchid
 tag ORCHID
