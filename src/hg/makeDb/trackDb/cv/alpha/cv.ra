@@ -7,8 +7,6 @@
 # - remember standard cv.ra editing protocol: after you add or modify any stanza,
 #   add the keyword "Provisional" to the description line
 #
-
-
 # NOTE: the revision history of this file was lost when it was moved in the repository.
 #     For history prior to Oct. 11, 2010  see the files v242_cv* in this directory.
 #
@@ -36,9 +34,6 @@
 #       Should correspond to a "type tier" stanza. required)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf. optional)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human. optional)
-
-
-
 term GM12878
 tag GM12878
 type Cell Line
@@ -165,7 +160,6 @@ protocol ENCODE:HeLa-S3_protocol.pdf Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
 #color 0,119,158
 #tier 3
 #protocol Protocol:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
-
 term HUVEC
 tag HUVEC
 type Cell Line
@@ -484,7 +478,6 @@ protocol Myers:Myers_BioChain_protocol.pdf
 #termId BTO:0001421
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001421
 #protocol Myers:Myers_BioChain_protocol.pdf
-
 term BC_Colon_01-11002
 tag BCCOLON
 type Cell Line
@@ -878,7 +871,6 @@ protocol Myers:Myers_BioChain_protocol.pdf
 #termId BTO:0001281
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001281
 #protocol Myers:Myers_BioChain_protocol.pdf
-
 term BC_Spleen_H12817N
 tag BCSPLEENb
 type Cell Line
@@ -962,7 +954,6 @@ orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001424
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001424
 protocol Myers:Myers_BioChain_protocol.pdf
-
 
 term BE2_C
 tag BE2C
@@ -1658,7 +1649,6 @@ protocol Myers:GM12878-XiMat_Myers_protocol.pdf
 #sex F
 #tier 3
 #protocol Myers:GM12878-XiPat_Myers_protocol.pdf
-
 term GM12891
 tag GM12891
 type Cell Line
@@ -2374,7 +2364,6 @@ sex U
 tier 3
 protocol Stam:HHSEC_Stam_protocol.pdf
 
-
 term HIPEpiC
 tag HIPE
 type Cell Line
@@ -2845,7 +2834,6 @@ protocol missing
 #sex F
 #tier 3
 #protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
-
 term HTR8svn
 tag HTR8
 type Cell Line
@@ -2992,7 +2980,6 @@ termId BTO:0000023
 termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000023
 protocol Wold:LHCNM2_Wold_protocol.pdf
 
-
 term LHSR
 tag LHSR
 type Cell Line
@@ -3053,7 +3040,7 @@ description malignant glioblastoma, glioma, lack DNA-dependent protein kinase ac
 karyotype cancer
 sex M
 tissue brain
-vendorName ATCC 
+vendorName ATCC
 vendorId CRL-2366
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2366&Template=cellBiology
 termId BTO:0000527
@@ -3096,7 +3083,6 @@ protocol Crawford:MCF-7_Crawford_protocol.pdf Farnham:MCF-7_Farnham_protocol.pdf
 #sex F
 #tier 3
 #protocol Yale_TFBS(Struhl):MCF-10A_Struhl_protocol.pdf
-
 term MCF10A-Er-Src
 tag MCF10AES
 type Cell Line
@@ -3129,7 +3115,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol Struhl:MDA-MB-231_Struhl_protocol.pdf
-
 
 term Medullo
 tag MEDULLO
@@ -3406,7 +3391,7 @@ term PANC-1
 tag PANC1
 type Cell Line
 organism human
-description pancreatic carcinoma, (PMID: 1140870) PANC-1 was established from a pancreatic carcinoma, which was extracted via pancreatico-duodenectomy specimen from a 56-year-old Caucasian individual. Malignancy of this cell line was verified via in vitro and in vivo assays. 
+description pancreatic carcinoma, (PMID: 1140870) PANC-1 was established from a pancreatic carcinoma, which was extracted via pancreatico-duodenectomy specimen from a 56-year-old Caucasian individual. Malignancy of this cell line was verified via in vitro and in vivo assays.
 tissue pancreas
 vendorName ATCC
 vendorId CRL-1469
@@ -3426,10 +3411,10 @@ organism human
 description dedifferentiated human pancreatic islets from the National Disease Research Interchange (NDRI), same source as PanIslets
 tissue pancreas
 lineage endoderm
-vendorName National Disease Research Interchange 
+vendorName National Disease Research Interchange
 vendorId PanIsletD
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
-termId BTO:0000991 (non-specific) 
+termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex B
 tier 3
@@ -3445,7 +3430,7 @@ lineage endoderm
 vendorName Refer to publication or NDRI
 vendorId PanIslets
 orderUrl http://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
-termId BTO:0000991 (non-specific) 
+termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
 sex M
 tier 3
@@ -3550,7 +3535,6 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 protocol Stam:PrEC_Stam_protocol.pdf
 
-
 term ProgFib
 tag PROGFIB
 type Cell Line
@@ -3623,7 +3607,7 @@ vendorId CRL-11609
 karyotype normal
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-11609&Template=cellBiology
 termId BTO:0002397
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002397 
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002397
 sex M
 tier 3
 protocol Crawford:RWPE_Crawford_protocol.pdf
@@ -3768,7 +3752,6 @@ protocol Crawford:Stellate_Crawford_protocol.pdf
 #sex M
 #tier 3
 #protocol Myers:T98G_Myers_protocol.pdf
-
 term TBEC
 tag TBEC
 type Cell Line
@@ -3866,7 +3849,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Myers:U-87_Myers_protocol.pdf
-# There is considerable confusion about the gender of this cell line.  It was at first described by the vendor as female and that 
+# There is considerable confusion about the gender of this cell line.  It was at first described by the vendor as female and that
 #is how it is mapped in most cases.  However, the vendor is now saying the further testing has proven it to be male.
 
 term U2OS
@@ -3937,7 +3920,6 @@ orderUrl http://www-dsv.cea.fr/dsv/instituts/institut-de-biologie-et-de-technolo
 termId BTO:0001958
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001958
 protocol Stam:WI38_Stam_protocol.pdf
-
 
 ### Mouse Cell Lines
 # Human cell types, template below
@@ -4180,7 +4162,6 @@ color 65,105,225
 sex U
 protocol Stam:ES-CJ7_Stam_protocol.pdf
 
-
 term Colon
 tag COLON
 type Cell Line
@@ -4304,7 +4285,6 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=3883
 color 102,50,200
 sex U
 protocol Stam:ForelimbBuds_Stam_protocol.pdf
-
 
 term G1E
 tag G1E
@@ -4500,7 +4480,6 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
 protocol Ren:Lung_Ren_protocol.pdf
-
 
 term MEF
 tag MEF
@@ -4706,7 +4685,7 @@ tissue brain
 category Tissue
 age ageUnknown
 strain Unknown
-description Retina 
+description Retina
 vendorName UW lab
 vendorId Retina
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -4724,7 +4703,7 @@ tissue skeletal muscle
 category Tissue
 age ageUnknown
 strain Unknown
-description Skeletal Muscle 
+description Skeletal Muscle
 vendorName UW lab
 vendorId Skeletal Muscle
 orderUrl http://www.gs.washington.edu/faculty/stamj.htm
@@ -4879,8 +4858,6 @@ color 65,105,225
 sex M
 protocol Stam:ZhBTc4_Stam_protocol.pdf
 
-
-
 # Gene types
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters. uppercase)
@@ -4922,7 +4899,6 @@ description pseudogene
 # lab (lab that first asked for this antibody.  Should match the "labPi" field in some "type lab" stanza)
 # validation (either missing or the name of a validation document in a format to be documented by Venkat)
 # lots (optional lot numbers)
-
 term AP-2alpha
 tag AP2ALPHA
 type Antibody
@@ -5937,7 +5913,6 @@ targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 validation Mouse_-_GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf
 label  GATA1 (sc-266)
-
 
 term GATA-2
 tag GATA2
@@ -7919,7 +7894,6 @@ lots K0905 F2706
 validation Human_-_TAF1(ChIP,MassSpec):human_TAF1_validation_Myers.pdf
 label TAF1 (sc-735)
 
-
 term  TAF7_(SC-101167)
 tag  TAF7
 type Antibody
@@ -7962,7 +7936,6 @@ label TAL1 (sc-12984)
 #lab Myers / Wold
 #lots K0905 F2706
 #validation missing
-
 term TBP
 tag TBP
 type Antibody
@@ -8431,12 +8404,9 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation Human_-_:missing
 label ZZZ3
 
-
 ###  Antibodies
 ### These are all for the  experiments.
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
-
-
 ##This does not appear in metaDb
 term CBX3_(SC-101004)
 tag CBX3SC101004
@@ -8469,7 +8439,6 @@ targetId GeneCards:CBX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX5
 validation 
 label CBX5 (05-689)
-
 
 term CELF1
 tag CELF1
@@ -8639,7 +8608,6 @@ targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
 validation 
 label hnRNPM (05-620)
 
-
 term IGF2BP1
 tag IGF2BP1
 type Antibody
@@ -8656,7 +8624,6 @@ targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation Human_-_:missing
 label IGF2BP1 (SC-21027)
 
-
 term Mxi1_(AF4185)
 tag MXI1
 type Antibody
@@ -8672,7 +8639,6 @@ targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
 validation Human_-_:missing Mouse_-_:missing
 label Mxi1 (AF4185)
-
 
 ##This does not appear in metaDb
 term NONO
@@ -8740,7 +8706,6 @@ targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
 validation 
 label QKI (AB9904)
-
 
 ##This does not appear in metaDb
 term RPS6KA1
@@ -8872,8 +8837,6 @@ tag TH131
 type mapAlgorithm
 description TopHat v1.3.1
 
-
-
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -8937,8 +8900,6 @@ description Paired 101 nt directed reads
 #### insertLength
 #### This is being used by the Wold lab as a variable.
 #### I do not think that it needs to be controlled. - Cricket
-
-
 term 400
 tag IL400
 type insertLength
@@ -8953,7 +8914,6 @@ term ilNA
 tag ILNA
 type insertLength
 description insert length not applicable
-
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 term 1k
@@ -8975,7 +8935,6 @@ term 20k
 tag F20K
 type fragSize
 description 20 kb DNA fragments
-
 
 ### localization
 # term (human-readable name)
@@ -9110,7 +9069,6 @@ tag PROTEINRNAEXTRACTS
 type rnaExtract
 description RNA associated with RNA binding proteins
 
-
 ### promoters
 term SV40
 tag SV40
@@ -9239,7 +9197,6 @@ tag NONE
 description No special treatment or protocol applies
 type control
 
-
 ### Inputs which are a special type of control
 term std
 tag STD
@@ -9281,9 +9238,7 @@ tag UCD
 type control
 description Input library was prepared at UC Davis.
 
-
 ### Treatments
-
 term androgen
 tag ANDRO
 description 12 hrs with 1 nM Methyltrienolone (R1881) (Crawford)
@@ -9482,7 +9437,6 @@ type treatment
 term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
-description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
 description 24 h with 1% p02 and 10mM Lactate, pH 6.7
 type treatment
 
@@ -9616,8 +9570,6 @@ tag VEH
 description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
 
-
-
 ### Protocols
 term FASP
 tag FASP
@@ -9705,7 +9657,6 @@ tag S4
 type phase
 description Flow sorted, S4 phase corresponds to the sixth DNA content window
 
-
 ### region
 # genomic regions used in experiments that are not whole-genome
 term chr21
@@ -9733,7 +9684,6 @@ tag UW5CGENE
 type region
 description Set of 25 regions interrogated in UW 5C gene-targeted experiments
 
-
 ### restrictionEnzyme
 term msp
 tag MSP
@@ -9745,12 +9695,10 @@ tag HPA
 description HPA Restriction Enzyme
 type restrictionEnzyme
 
-
 ### view     THIS WHOLE SECTION IS A ATTEMPT AT CONTROLLING VIEWS
 ### term:
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display
-
 term Alignability
 tag ALIGNABI
 type view
@@ -9835,7 +9783,6 @@ description FASTA Read 2
 #type view
 #label Fastq
 #description Raw sequence with Phred33 quality scores
-
 term FastqRd1
 tag FASTQRD1
 type view
@@ -10142,7 +10089,6 @@ label Wavelet-smoothed Signal
 ### term:  Ideally this should be the term used by NHGRI for the data type
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display and should also match NHGRI with any further information
-
 term 5C
 tag 5C
 type dataType
@@ -10156,7 +10102,6 @@ type dataType
 label Exon-array
 description Affymetrix Exon Array
 dataGroup RNA Profiling
-
 
 #not currently in metaDb
 term Bip
@@ -10251,9 +10196,588 @@ term ChiaPet
 tag CHIAPET
 type dataType
 label ChIA-PET
-description Chromatin Interactions Analysis Paired-End Tag
 description Ruan - Genome Institute of Singapore (ChIA)
 labInst Genome Institute of Singapore (ChIA)
+labPi Ruan
+labPiFull Yijun Ruan
+grantPi Ruan
+dataGroup Other
+organism human
+
+term Orchid
+tag ORCHID
+type dataType
+label ORChID
+description ORChID
+dataGroup Other
+
+term Mapability
+tag MAPABILITY
+type dataType
+label Mapability
+description Uniqueness of n-mer sequence fragments across the genome
+dataGroup Other
+
+term MethylArray
+tag METHYLARRAY
+type dataType
+label Methyl Array
+description Methyl Bead Array
+dataGroup DNA Methylation
+
+term MethylSeq
+tag METHYLSEQ
+type dataType
+label Methyl-Seq
+description MethylSeq
+dataGroup DNA Methylation
+
+term MethylRrbs
+tag METHYLRRBS
+type dataType
+label Methyl RRBS
+description Methyl RRBS
+dataGroup DNA Methylation
+
+# tag not standard to match hg18
+term NRE
+tag NRE
+type dataType
+label Neg Regulatory
+description Negative Regulatory Elements
+dataGroup Other
+
+term Nucleosome
+tag NUCLEOSOME
+type dataType
+label Nucleosome
+description Nucleosome positioning data
+dataGroup Other
+
+term Proteogenomics
+tag PROTGENO
+type dataType
+label Proteogenomics
+description Mass Spec Proteogenomic Mapping
+dataGroup Other
+
+term RepliSeq
+tag  REPLISEQ
+type dataType
+label Repli-Seq
+description Replication Timing
+dataGroup Other
+
+# tag not standard to match hg18
+term RnaPet
+tag PET
+type dataType
+label RNA-PET
+description RNA Paired-End Tag
+dataGroup RNA Profiling
+
+term RnaChip
+tag RNACHIP
+type dataType
+label RNA-chip
+description microarray analysis of RNA expression
+dataGroup RNA Profiling
+
+term RnaSeq
+tag RNASEQ
+type dataType
+label RNA-seq
+description Sequencing analysis of RNA expression
+dataGroup RNA Profiling
+
+#GeneST and Tiling are flavors of the RIP-chip.
+#They need separate dataTypes for the experiment table to work
+term RipGeneSt
+tag  GENEST
+type dataType
+label RIP-chip Gene ST
+description RIP-Chip on Affymetrix GeneChip (R) Human Gene 1.0 ST Arrays
+dataGroup RNA Binding Proteins
+
+term RipTiling
+tag  TILING
+type dataType
+label RIP-chip Tiling Array
+description RIP-Chip on Affymetrix GeneChip ENCODE 2.0R Tiling Arrays
+dataGroup RNA Binding Proteins
+
+term RipChip
+tag  RIPCHIP
+type dataType
+label RIP-chip
+description Rna IP measured on microarray
+dataGroup RNA Binding Proteins
+
+term RipSeq
+tag  RIPSEQ
+type dataType
+label RIP-seq
+description RNA-seq on RIP-chip data
+dataGroup RNA Binding Proteins
+
+term Switchgear
+tag SWITCHGEAR
+type dataType
+label SwitchGear
+description SwitchGear Genomics 3' UTR reporter assay
+dataGroup RNA Binding Proteins
+
+#This is not in the metaDB currently
+term TfbsValid
+tag TFBSVALID
+type dataType
+label TFBS-Valid
+description TFBS-Valid
+dataGroup Other
+
+### version
+term V2
+tag V2
+type version
+description version
+
+### Strain
+# Used in conjunction with mouse submissions
+# Expected fields:
+# ----------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters)
+# type (informs pipeline code of stanza type.  Should always be strain)
+# description (human-readable description.  Can't say where/how it's used)
+term B10.H-2aH-4bp/Wts
+tag 2A4B
+type strain
+description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+# Used for the CH12 Cell Line
+
+term B6D2F1/J
+tag B6D2F1J
+type strain
+description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1.
+
+term BALB/cAnN
+tag BALBCANN
+type strain
+description ccMyeloma high incidence H2d
+
+term C3H
+tag C3H
+type strain
+description Strain C3H, Very related to C57BL/6
+
+term C57BL/6
+tag C57BL6
+type strain
+description C57 black 6, the most common inbred strain of laboratory mouse
+
+term C57BL/6J
+tag C57BL6J
+type strain
+description C57 black 6, the most common inbred strain of laboratory mouse
+
+term CD-1
+tag CD1
+type strain
+description Multipurpose mouse used for safety testing, aging studies, surgical models and pseudopregnancy.
+
+term NIH/Swiss
+tag NIHS
+type strain
+description An outbred Swiss mouse  used as a general-purpose stock. Used extensively for pertussis HSF testing.
+
+term RIII
+tag RIII
+type strain
+description High mammary tumor incidence in unfostered substrains.
+
+term 129
+tag S129
+type strain
+description Strain 129, has widely available embryonic stem cells
+
+term 129/Ola
+tag 129OLA
+type strain
+description The mice have yellow coats and late onset severe vacuolation in brain (700+ days). Inbred strain used as a control group to compare with null PrP mice.
+
+term Spretus.BL6-Xist
+tag SPBL6
+type strain
+description M.spretus x C57BL/6J hybrid mouse such that the C57Bl/6J X chromosome (maternal) is  always the inactive X.
+
+term Unknown
+tag UKN
+type strain
+description Unknown strain origin
+
+### Age
+# Used in conjunction with mouse submissions
+# Expected fields:
+# ----------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters)
+# type (informs pipeline code of stanza type.  Should always be age)
+# stage (either embryonic or adult.  cannot say how/where this is used)
+# description (human-readable description.  Can't say where/how it's used)
+term E0
+tag E0
+type age
+stage Embryonic
+description Embryonic day 0 (stem cell)
+
+term E11.5
+tag E11HALF
+type age
+stage Embryonic
+description Embryonic day 11.5
+
+term E13.5
+tag E13HALF
+type age
+stage Embryonic
+description Embryonic day 13.5
+
+term E14
+tag E14
+type age
+stage Embryonic
+description Embryonic day 14
+
+term E14.5
+tag E14HALF
+type age
+stage Embryonic
+description Embryonic day 14.5
+
+term E18
+tag E18
+type age
+stage Embryonic
+description Embryonic day 18
+
+term E18.5
+tag E18HALF
+type age
+stage Embryonic
+description Embryonic day 18.5
+
+term newborn-1days
+tag NEW1DAYS
+type age
+stage newborn
+description Newborn 1 day
+
+term adult-1wks
+tag ADULT1WKS
+type age
+stage Adult
+description Adult 1 week
+
+term adult-4wks
+tag ADULT4WKS
+type age
+stage Adult
+description Adult 4 weeks
+
+term adult-5wks
+tag ADULT5WKS
+type age
+stage Adult
+description Adult 5 weeks
+
+term adult-8wks
+tag ADULT8WKS
+type age
+stage Adult
+description Adult 8 weeks
+
+term immortalized
+tag IMMORTAL
+type age
+stage Cell Line
+description Immortal cells
+
+term ageUnknown
+tag AGEUNKN
+type age
+stage stageUnknown
+description the age when the real age is unknown
+
+### Attic
+# Expected fields:
+# ----------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters)
+# type (informs pipeline code of stanza type.  Should always be attic)
+# description (human-readable description.  Can't say where/how it's used)
+term supplemental
+tag SUP
+type attic
+description Files supplemental at composite level
+
+term auxSup
+tag AUXSUP
+type attic
+description Unverified files supplemental at experiment level
+
+term auxValid
+tag AUXVAL
+type attic
+description Validated files supplemental to experiments
+
+term auxExp
+tag AUXEXP
+type attic
+description Supplemental experiments
+
+# Expected fields:
+# ----------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters. uppercase)
+# type (informs pipeline code of stanza type.  Should always be sex)
+# description (human-readable description.  Can't say where/how it's used)
+#
+# Category: T for tissue, L for cell Line, P for Primary cell
+term Tissue
+tag T
+type category
+description Tissue
+
+term cellLine
+tag L
+type category
+description cell line
+
+term primaryCells
+tag P
+type category
+description primary cells
+
+term M
+tag M
+type sex
+description Male
+
+term F
+tag F
+type sex
+description Female
+
+term B
+tag B
+type sex
+description Both: a cell population with both male and female cells
+
+term U
+tag U
+type sex
+description Unknown
+
+## object Status
+term revoked
+tag REVOKED
+type objStatus
+description This file has been REVOKED by the submitting laboratory.  It should not be used for further research.
+
+term replaced
+tag REPLACED
+type objStatus
+description This file has been REPLACED by the submitting laboratory with an improved version.
+
+term renamed
+tag RENAMED
+type objStatus
+description This file has been RENAMED by the submitting laboratory. Please see updated file for newest metadata.
+
+## Organisms
+term human
+tag HUMAN
+type organism
+description human
+
+term mouse
+tag MOUSE
+type organism
+description mouse
+
+## Tiers (used by cell types)
+term 1
+tag 1
+type tier
+description tier 1
+
+term 2
+tag 2
+type tier
+description tier 2
+
+term 3
+tag 3
+type tier
+description tier 3
+
+## Tissue Sourced (Used for Mouse cell)
+term Both
+tag BOTH
+type tissueSourceType
+description Tissue analyzed using replicate samples obtained from and individual and by pooling.
+
+term Individual
+tag INDIV
+type tissueSourceType
+description Tissue obtained from an individual
+
+term Pooled
+tag POOL
+type tissueSourceType
+description Tissue obtained from pooling samples from various sample organisms
+
+#Venkat: Trial to add seqPlatform for use for GEO submissions
+#Uses the GEO terms to be conistent and help with GEO submissions
+### Seq Platform
+# Expected fields:
+# ---------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters. uppercase.)
+# type (informs pipeline code of stanza type, should be seqPlatform)
+# description: Working on inputing description from geo and product website
+term Illumina_GA
+tag ILLUMINAGA
+geo Illumina Genome Analyzer
+type seqPlatform
+description Illumina Genome Analyzer
+# Matches GA that Kate initially indicated as the term
+
+term Illumina_GA2
+tag ILLUMINAGA2
+geo Illumina Genome Analyzer II
+type seqPlatform
+description Illumina Genome Analyzer II
+
+term Illumina_GA2e
+tag ILLUMINAGA2E
+geo Illumina Genome Analyzer II
+type seqPlatform
+description Illumina Genome Analyzer IIe
+# Matches GA2 that Kate initially indicated as the term
+
+term Illumina_GA2x
+tag ILLUMINAGA2X
+geo Illumina Genome Analyzer II
+type seqPlatform
+description Illumina Genome Analyzer IIx
+# Matches GA2x that Kate initally indicated as the term
+
+term Illumina_HiSeq_2000
+tag ILLUMINAHISEQ2000
+geo Illumina HiSeq 2000
+type seqPlatform
+description Illumina HiSeq 2000
+
+term 454_GS
+tag 454GS
+geo 454 GS
+type seqPlatform
+description Roche 454 Genome Sequencer
+
+term 454_GS_20
+tag 454GS20
+geo 454 GS 20
+type seqPlatform
+description Roche 454 Genome Sequencer 20
+
+term 454_GS_FLX
+tag 454GSFLX
+geo 454 GS FLX
+type seqPlatform
+description Roche 454 Genome Sequencer FLX
+
+term AB_SOLiD
+tag ABSOLID
+geo AB SOLiD System
+type seqPlatform
+description Applied Biosystems SOLiD System
+
+term AB_SOLiD_2.0
+tag ABSOLID2
+geo AB_SOLiD System 2.0
+type seqPlatform
+description Applied Biosystems SOLiD System 2.0
+
+term AB_SOLiD_3.5
+tag ABSOLID3PLUS
+geo AB SOLiD 3 Plus
+type seqPlatform
+description Applied Biosystems SOLiD System 3.5
+
+#LABS          This is the CV for naming the labs.
+#term:
+#tag:	       Short, uppercase, no special characters
+#type:         We use the phrase lab as a source of data
+#label:        What is seen in findTracks.  Roughly "$labPi - $labInst"
+#labInst:      This is the full name of the Institution where the lab is housed
+#labPi:        This is the shortened name that we refer to the PI, usually just last name
+#labPiFull:    The full name of the PI
+#grantPI:      Shortened name of the head PI for the grant
+#type grant
+#grantInst:    The name of the institution where the grant is administered from.
+#projectName:
+#organism:     human or mouse
+term BioChain
+tag BIOCHAIN
+type lab
+label BioChain
+description The BioChain subset of HudsonAlpha
+labInst BioChain
+labPi Myers
+labPiFull Richard Myers
+grantPi Myers
+organism human
+
+term Broad
+tag BROAD
+type lab
+label Bernstein - Broad Institute
+description Bernstein - Broad Institute
+labInst Broad Institute
+labPi Bernstein
+labPiFull Bradley Bernstein
+grantPi Bernstein
+organism human
+
+term BU
+tag BU
+type lab
+label Tullius - Boston University
+description Tullius - Boston University
+labInst Boston University
+labPi Tullius
+labPiFull Thomas Tullius
+grantPi Tullius
+organism human
+
+term CRG-Guigo
+tag CRG
+type lab
+label Guigo - CGR, Barcelona
+description Guigo - CGR, Barcelona
+labInst Genome Center for Genomic Regulation, Barcelona
+labPi Guigo
+labPiFull Roderic Guigo
+grantPi Guigo
+organism human
+
+term GIS-Ruan
+tag GISRUAN
+type lab
+label Ruan - GIS (Chia)
+description Ruan - Genome Institute of Singapore (Chia)
+labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
@@ -10303,10 +10827,8 @@ labPiFull John Stamatoyannopoulous
 grantPi Stam
 organism human
 
-
 ### Duke Labs
 ### Crawford and Iyer
-
 term Duke
 tag DUKE
 type lab
@@ -10342,7 +10864,6 @@ organism human
 
 ### HAIB Project Labs
 ### Caltech and HudsonAlpha
-
 term Caltech
 tag CALTECH
 type lab
@@ -10368,7 +10889,6 @@ organism human
 
 ### NHGRI Labs
 ###
-
 term NHGRI-Elnitski
 tag NHGRI-ELNITSKI
 type lab
@@ -10391,10 +10911,8 @@ labPiFull Elliott Margulies
 grantPi Margulies
 organism human
 
-
 ### Transcriptome Project Labs
 ### GIS, Riken, CHSL, CSHL, Affy, Helicos
-
 term CSHL
 tag CSHL
 type lab
@@ -10452,10 +10970,8 @@ labPiFull Piero Carninci
 grantPi Gingeras
 organism human
 
-
 ### UMass Labs
 ### Dekker and Weng
-
 term UMass-Dekker
 tag UMASS-DEKKER
 type lab
@@ -10478,10 +10994,8 @@ labPiFull Zhiping Weng
 grantPi Weng
 organism human
 
-
 #### The SYDH Project
 ####  Stanford, Yale, Davis, Harvard
-
 term Stanford
 tag STANFORD
 type lab
@@ -10536,7 +11050,6 @@ organism human
 #labPiFull Peggy Farnham
 #grantPi Snyder
 #organism human
-
 term USC
 tag USC
 type lab
@@ -10572,11 +11085,8 @@ labPiFull Kevin White
 grantPi White
 organism human
 
-
-
 ### Mouse labs
 ###
-
 term LICR-m
 tag LICRm
 type lab
@@ -10632,7 +11142,6 @@ labPiFull Ross Hardison
 grantPi Hardison
 organism mouse
 
-
 term UW-m
 tag UWm
 type lab
@@ -10667,7 +11176,6 @@ grantPi Snyder
 organism mouse
 
 ### AWG (DAC) Labs
-
 term DAC-Stanford
 tag  DACSTANF
 type lab
@@ -10679,13 +11187,10 @@ labPiFull Ewan Birney
 grantPi Birney
 organism human
 
-
-
 # Grant information
 # term is the last name of the PI
 # grantInst Is the full name of the institution
 # projectName is the name we use to call the project
-
 term Bernstein
 tag BERNSTEIN
 type grant
@@ -10800,7 +11305,6 @@ grantInst Stanford
 projectName SYDH
 # This is broken for mouse which uses StanfYale
 
-
 term Ren
 tag REN
 type grant
@@ -10828,7 +11332,6 @@ type grant
 description Giddings
 grantInst University of North Carolina
 projectName UNC-Giddings
-
 
 #################################################################################################################
 #############   Definition of all term types in cv.ra and most other terms that are in the metaDb   #############
@@ -10876,7 +11379,6 @@ projectName UNC-Giddings
 #  	  500s: typeOfTerm:500 accession:500 expVars:500 obtainedBy:500 region:500 size:500 annotation:590 fragLength:590 fragSize:590 level:590 uniqueness:590
 #	At End:
 #  	  900s: dccInternalNotes:910 sourceObj:921 tableName:970 fileName:980 type:985 md5sum:999
-
 term typeOfTerm
 tag TYPEOFTERM
 type typeOfTerm
@@ -11089,7 +11591,6 @@ validate none
 hidden yes
 priority 910
 
-
 term dccRep
 tag DCCREP
 type typeOfTerm
@@ -11283,7 +11784,6 @@ validate regex: ^\([0-9a-f]\{32\},\)*[0-9a-f]\{32\}$
 priority 999
 #This can either be a valid md5sum 920afe925b7f7b4d7617ef538160579c with 32 digits
 #in the case of bam files, it can be a pair bam=2aac07f3f113b5bd708915081eb1a11d,bai=0da3b2adf4f21d5bb50e7cae31b91f2c
-
 
 term objStatus
 tag OBJSTAT
@@ -11570,7 +12070,6 @@ cvDefined no
 validate none
 priority 985
 
-
 term uniqueness
 tag UNIQUENESS
 type typeOfTerm
@@ -11592,9 +12091,5 @@ searchable multiSelect
 cvDefined yes
 validate cv
 priority 035
-
-
-
-
 
 
