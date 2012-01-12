@@ -2750,4 +2750,9 @@ strain C57BL/6J
 subId 5437
 view Spikeins
 
-# MAGIC: 1409722885
+metaObject wgEncodeCshlLongRnaSeqq
+objType composite
+composite wgEncodeCshlLongRnaSeq
+expVars lab,dataType,cell,age,strain
+
+# MAGIC: 1551866721
