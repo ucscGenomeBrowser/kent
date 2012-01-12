@@ -17,46 +17,17 @@
 // populate: act of filling a subtrack cfg with controls
 // fauxVis: fake control for subtrack visDD, which will be replaced with true vis when clicked.
 
-// TESTED:
-// OK  subCBs enable/disable subVis and subCfg
-// OK  subCBs set compVis to full
-// OK  subVis faux works
-// OK  subVis ajaxed on click
-// OK  subVis change is persistent (as seen in: hgTracks image, rightClick, return to hgTrackUi)
-// OK  subVis overridden by viewVis
-// OK  subVis overridden by compVis
-// -   subVis DOES NOT set compVis to full (when compVis set to hide, but subVis already populated) OK because this slips towords reshaping.
-// OK  subCfg wrench disabled
-// OK  subCfg wrench enable/disable by subCB
-// OK  subCfg wrench enable/disable by subVis
-// OK  subCfg populates (vias ajax) on click
-// OK  subCfg settings persist (as seen in hgTracks rightClick)
-// OK  subCfg open closes mdbArrow display
-// OK  subCfg closed by mdbArrow open
-// OK  subCfgs all closed on a table sort
-// OK  subCfg overridden by viewCfg
-//     STRANGE: clicking wrench to open does not leave viewCfg so viewCfg change isn't (yet) seen.
-// OK  subCfg overridden by compCfg
-// OK  matrix clicks enable/disable sub
-// OK  matrix clicks set compVis to full
-// OK  matrix [+][-] enable/disable subs
-// OK  matrix [+] set compVis to full
-// OK  viewVis changes set compVis to full
-// OK  subVis correct in hgTrackUi, hgTracks image, rightClick memnu, rightClick poCfg
-// OK  cart limited to minimum changed
-// -   sort of subtracks overides imgord - ONLY works if "priority" has changed!
-// OK  viewVis override fixed: viewSig:squish+sub:Full reshapes fine. viewSig->dense overrides all back to dense.
-
-// TODO:
-// - SOLVED: checkboxes: working with name = boolshad.{name}   FIXME: multishad?
+// Issues:
+// - SOLVED: checkboxes: working with name = boolshad.{name}   FIXME: multishad? [no problem currently]
 // - DECIDED: When parent vis makes subs hidden, should they go to unchecked?   No, disabled!
 // - DECIDED: Should user be able to click on disabled vis to check the CB?  No, not important.
 // - DECIDED: Make vis changes "reshape" composite!  NO, I am against this as too disruptive.  We may want to end reshaping in CGIs as well!
-//  - Verify all composites work (hg19 hg18 mm9 mm8 panTro3 galGal3 braFlo1 dm3 ce10 homPan20 sacCer3 hg19Patch5 tested so far)
-//  - Speed up massive composites!  HAIB TFBS SYDH TFBS
-//  - Remove debug code when ready
+// - Verified all composites work (hg19 hg18 mm9 mm8 panTro3 galGal3 braFlo1 dm3 ce10 homPan20 sacCer3 hg19Patch5 tested so far)
+// - Speed up massive composites!  HAIB TFBS SYDH TFBS
+// - subVis DOES NOT set compVis to full (when compVis set to hide, but subVis already populated) OK because this slips towords reshaping.
 // NOTE:
 // Current implementation relies upon '.' delimiter in name and no '_-' in name.  Nothing breaks rule yet...
+// Can remove "DEBUG" messages when fully QA'd.  They are asserts.
 
 var subCfg = { // subtrack config module.
     //mySelf: null, // There is no need for a "mySelf" unless this object is being instantiated.
@@ -578,7 +549,6 @@ var subCfg = { // subtrack config module.
             if (this.name != undefined) { // The filter("[name]") above didn't do it!
                 if (this.type != 'hidden') {
                     subCfg.inheritSetting(this,false); // updates any values that have been changed on this page
-                    // if view vis do more than just name it on change
                     var suffix = subCfg.objSuffixGet(this);
                     if (suffix != undefined)
                         $(this).change( subCfg.markChange );
@@ -686,30 +656,30 @@ var subCfg = { // subtrack config module.
 
     enableCfg: function (subCb,setTo)
     { // Enables or disables subVis and wrench
-        var td = normed($(subCb).parent('td'));
-        if (td == undefined) {
-            warn("DEBUG: subCfg.enableCfg() could not find TD for CB: "+subCb.name);
+        var tr = normed($(subCb).closest('tr'));
+        if (tr == undefined) {
+            warn("DEBUG: subCfg.enableCfg() could not find TR for CB: "+subCb.name);
             return false;
         }
-        var subFaux = normed($(td).find('div.subVisDD'));
+        var subFaux = normed($(tr).find('div.subVisDD'));
         if (subFaux != undefined) {
             if (setTo == true)
                 $(subFaux).removeClass('disabled');
             else
                 $(subFaux).addClass('disabled');
         } else {
-            var subVis = normed($(td).find('select.subVisDD'));
+            var subVis = normed($(tr).find('select.subVisDD'));
             if (subVis != undefined) {
                 $(subVis).attr('disabled',!setTo);
             }
         }
-        var wrench = normed($(td).find('span.clickable')); // TODO tighten this
+        var wrench = normed($(tr).find('span.clickable')); // TODO tighten this
         if (wrench != undefined) {
             if (setTo == true)
                 $(wrench).removeClass('disabled');
             else {
                 $(wrench).addClass('disabled');
-                var cfg = normed($(td).parent('tr').find('div.subCfg'));
+                var cfg = normed($(tr).find('div.subCfg'));
                 if (cfg != undefined)
                     $(cfg).hide();
             }
@@ -752,12 +722,12 @@ var subCfg = { // subtrack config module.
 
     viewInit: function (viewTag)
     { // sets up view controls for propagation
-        // iterate through all matching controls and unname
         var tr = normed($('tr#tr_cfg_'+viewTag));
         if (tr == undefined) {
             warn('DEBUG: Did not find view: ' + viewTag);
             return;
         }
+        // iterate through all matching controls and setup for propgation and change flagging
         var viewObjs = $(tr).find('input,select');
         if (viewObjs.length > 0) {
             $(viewObjs).each(function (i) {
@@ -783,9 +753,9 @@ var subCfg = { // subtrack config module.
     },
 
     initialize: function ()
-    { // unnames all composite controls and then all view controls
-      // names will be added back in onchange events
-        // mySelf = this; // There is no need for a "mySelf" unless this object is being instantiated.
+    { // sets up all composite controls and then all view controls
+      // onchange gets set to mark controls as 'changed'.  Unchanged controls will
+      // be disabled on 'submit'.  Disabled controls will not get to the cart!
 
         var compVis = $('.visDD');
         if (compVis == undefined || compVis.length < 1) {
@@ -800,16 +770,14 @@ var subCfg = { // subtrack config module.
         subCfg.compositeName = $(compVis).attr('name');
         subCfg.visIndependent = ($('.subVisDD').length > 0);  // Can subtracks have their own vis?
 
-        // Unname and set up vis propagation
+        // Set up vis propagation and change flagging
         compVis = compVis[0];
         $(compVis).bind('change',function (e) {
             subCfg.markChange(e,compVis);
             subCfg.propagateVis(compVis,undefined);
         });
 
-        // Find all appropriate controls and unname
-
-        // SubCBs will get renamed and on change will name them back.
+        // SubCBs will may enable/diable vis/wrench and will be flagged on change
         var subCbs = $('input.subCB');
         $(subCbs).change( function (e) {
             subCfg.enableCfg(this, (this.checked && !isFauxDisabled(this, true)));
@@ -858,7 +826,7 @@ var subCfg = { // subtrack config module.
         $("FORM").submit(function (i) {
             $('input.subCB.changed.disabled').attr('disabled',true);  // shadows will go to cart as they should
 
-            // Names will be removed for all controls that have not changed
+            // Unchanged controls will be disabled to avoid sending to the cart
             $('select,input').filter("[name]").not(".allOrOnly").not('.changed').each( function (i) {
                 if (this.type != 'hidden' || $(this).hasClass('trPos')
                 || $(this).hasClass('cbShadow') || $(this).hasClass('sortOrder')) {
@@ -867,7 +835,6 @@ var subCfg = { // subtrack config module.
                     this.disabled = true;
                 }
             });
-            // to do: other hiddens?
         });
     }
 };
