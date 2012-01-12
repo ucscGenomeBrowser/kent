@@ -1,3 +1,8 @@
+metaObject wgEncodeUwDgf
+objType composite
+composite wgEncodeUwDgf
+expVars lab,dataType,cell,age
+
 metaObject wgEncodeUwDgf3134RiiiMImmortalAlnRep1
 objType file
 age immortalized
@@ -2350,4 +2355,4 @@ tableName wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: 373705916
+# MAGIC: -987280235
