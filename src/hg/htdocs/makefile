@@ -73,6 +73,51 @@ doSymLink: doRsync
 	ln -sfn /gbdb/hg19/RNA-img ${destDir}/RNA-img/hg19
 	ln -sfn /gbdb/mm9/RNA-img  ${destDir}/RNA-img/mm9
 	ln -sfn /gbdb/rn4/RNA-img  ${destDir}/RNA-img/rn4
+	ln -sfn /gbdb/ailMel1/RNA-img  ${destDir}/RNA-img/ailMel1
+	ln -sfn /gbdb/caePb1/RNA-img  ${destDir}/RNA-img/caePb1
+	ln -sfn /gbdb/canFam2/RNA-img  ${destDir}/RNA-img/canFam2
+	ln -sfn /gbdb/danRer5/RNA-img  ${destDir}/RNA-img/danRer5
+	ln -sfn /gbdb/felCat3/RNA-img  ${destDir}/RNA-img/felCat3
+	ln -sfn /gbdb/gorGor3/RNA-img  ${destDir}/RNA-img/gorGor3
+	ln -sfn /gbdb/ornAna1/RNA-img  ${destDir}/RNA-img/ornAna1
+	ln -sfn /gbdb/panTro3/RNA-img  ${destDir}/RNA-img/panTro3
+	ln -sfn /gbdb/susScr2/RNA-img  ${destDir}/RNA-img/susScr2
+	ln -sfn /gbdb/anoCar2/RNA-img  ${destDir}/RNA-img/anoCar2
+	ln -sfn /gbdb/caePb2/RNA-img  ${destDir}/RNA-img/caePb2
+	ln -sfn /gbdb/cavPor3/RNA-img  ${destDir}/RNA-img/cavPor3
+	ln -sfn /gbdb/danRer6/RNA-img  ${destDir}/RNA-img/danRer6
+	ln -sfn /gbdb/felCat4/RNA-img  ${destDir}/RNA-img/felCat4
+	ln -sfn /gbdb/loxAfr3/RNA-img  ${destDir}/RNA-img/loxAfr3
+	ln -sfn /gbdb/oryCun2/RNA-img  ${destDir}/RNA-img/oryCun2
+	ln -sfn /gbdb/petMar1/RNA-img  ${destDir}/RNA-img/petMar1
+	ln -sfn /gbdb/taeGut1/RNA-img  ${destDir}/RNA-img/taeGut1
+	ln -sfn /gbdb/bosTau4/RNA-img  ${destDir}/RNA-img/bosTau4
+	ln -sfn /gbdb/caeRem2/RNA-img  ${destDir}/RNA-img/caeRem2
+	ln -sfn /gbdb/cb3/RNA-img  ${destDir}/RNA-img/cb3
+	ln -sfn /gbdb/danRer7/RNA-img  ${destDir}/RNA-img/danRer7
+	ln -sfn /gbdb/fr2/RNA-img  ${destDir}/RNA-img/fr2
+	ln -sfn /gbdb/melGal1/RNA-img  ${destDir}/RNA-img/melGal1
+	ln -sfn /gbdb/oryLat2/RNA-img  ${destDir}/RNA-img/oryLat2
+	ln -sfn /gbdb/ponAbe2/RNA-img  ${destDir}/RNA-img/ponAbe2
+	ln -sfn /gbdb/tetNig2/RNA-img  ${destDir}/RNA-img/tetNig2
+	ln -sfn /gbdb/bosTau6/RNA-img  ${destDir}/RNA-img/bosTau6
+	ln -sfn /gbdb/caeRem3/RNA-img  ${destDir}/RNA-img/caeRem3
+	ln -sfn /gbdb/ce4/RNA-img  ${destDir}/RNA-img/ce4
+	ln -sfn /gbdb/equCab1/RNA-img  ${destDir}/RNA-img/equCab1
+	ln -sfn /gbdb/galGal3/RNA-img  ${destDir}/RNA-img/galGal3
+	ln -sfn /gbdb/monDom5/RNA-img  ${destDir}/RNA-img/monDom5
+	ln -sfn /gbdb/oviAri1/RNA-img  ${destDir}/RNA-img/oviAri1
+	ln -sfn /gbdb/priPac1/RNA-img  ${destDir}/RNA-img/priPac1
+	ln -sfn /gbdb/xenTro3/RNA-img  ${destDir}/RNA-img/xenTro3
+	ln -sfn /gbdb/caeJap1/RNA-img  ${destDir}/RNA-img/caeJap1
+	ln -sfn /gbdb/calJac3/RNA-img  ${destDir}/RNA-img/calJac3
+	ln -sfn /gbdb/ce6/RNA-img  ${destDir}/RNA-img/ce6
+	ln -sfn /gbdb/equCab2/RNA-img  ${destDir}/RNA-img/equCab2
+	ln -sfn /gbdb/gasAcu1/RNA-img  ${destDir}/RNA-img/gasAcu1
+	ln -sfn /gbdb/nomLeu1/RNA-img  ${destDir}/RNA-img/nomLeu1
+	ln -sfn /gbdb/panTro2/RNA-img  ${destDir}/RNA-img/panTro2
+	ln -sfn /gbdb/rheMac2/RNA-img  ${destDir}/RNA-img/rheMac2
+
 
 # Other targets that may be invoked by ../makefile:
 compile:
