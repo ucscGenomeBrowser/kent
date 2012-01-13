@@ -773,7 +773,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseColo829AlnRep1.bam
+fileName wgEncodeOpenChromDnaseColo829AlnRep1.bam,wgEncodeOpenChromDnaseColo829AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -791,7 +791,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseColo829AlnRep2.bam
+fileName wgEncodeOpenChromDnaseColo829AlnRep2.bam,wgEncodeOpenChromDnaseColo829AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -4807,7 +4807,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseHsmmembAlnRep1.bam
+fileName wgEncodeOpenChromDnaseHsmmembAlnRep1.bam,wgEncodeOpenChromDnaseHsmmembAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -4825,7 +4825,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseHsmmembAlnRep2.bam
+fileName wgEncodeOpenChromDnaseHsmmembAlnRep2.bam,wgEncodeOpenChromDnaseHsmmembAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -5865,7 +5865,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam
+fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam,wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -5884,7 +5884,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep2.bam
+fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep2.bam,wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -5996,7 +5996,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep1.bam
+fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep1.bam,wgEncodeOpenChromDnaseIshikawaTam10030AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -6015,7 +6015,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
-fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep2.bam
+fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep2.bam,wgEncodeOpenChromDnaseIshikawaTam10030AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -8508,7 +8508,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
-fileName wgEncodeOpenChromDnaseRwpe1AlnRep1.bam
+fileName wgEncodeOpenChromDnaseRwpe1AlnRep1.bam,wgEncodeOpenChromDnaseRwpe1AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -8526,7 +8526,7 @@ dataType DnaseSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
-fileName wgEncodeOpenChromDnaseRwpe1AlnRep2.bam
+fileName wgEncodeOpenChromDnaseRwpe1AlnRep2.bam,wgEncodeOpenChromDnaseRwpe1AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
