@@ -375,8 +375,8 @@ class RaFile(OrderedDict):
         Output:
             Merged RaFile
                 Stanzas found in 'self' and 'other' that have the 'Term' in 'other'
-                are overwritten (or inserted if not found) into 'self'. Final merged
-                dictionary is returned.
+                are overwritten (or inserted if not found) into 'self'. 
+                Final merged dictionary is returned.
         '''
         ret = self
         common = set(self.iterkeys()) & set(other.iterkeys())
@@ -386,32 +386,25 @@ class RaFile(OrderedDict):
             if term in self[stanza] and term not in other[stanza]:
                     del ret[stanza][term]
                     continue
-
             if term in other[stanza]:
                 #Remake stanza to keep order of terms
                 tempStanza = RaStanza()
                 tempStanza._name = stanza
-                try:
-                    tempStanza['metaObject'] = self[stanza]['metaObject']
-                    tempStanza['objType'] = self[stanza]['objType']
-                    termList = self[stanza].keys()
-                    termList.remove('metaObject')
-                    termList.remove('objType')
-                except KeyError:
-                    termList = self[stanza].keys()
-                if term not in termList:
-                    termList.append(term)
-                for t in sorted(termList, key=str.lower):
-                    if t == term:
-                        if t not in self[stanza]:
-                            tempStanza[t] = other[stanza][t]
-                        elif self[stanza][t] != other[stanza][t]:
-                            tempStanza[t] = other[stanza][t]
-                        else:
-                            tempStanza[t] = self[stanza][t]
+                selfListItor = list(self[stanza].iterkeys())
+                otherListItor = list(other[stanza].iterkeys())
+                newOther = list()
+                for i in otherListItor:
+                    if not i in selfListItor and i != term:
+                        continue
                     else:
-                        tempStanza[t] = self[stanza][t]
-                ret[stanza] = tempStanza
+                        newOther.append(i)
+                masterList = ucscUtils.mergeList(newOther, selfListItor)
+                for i in masterList:
+                    if i == term:
+                        tempStanza[i] = other[stanza][i]
+                    else:
+                        tempStanza[i] = self[stanza][i]
+            ret[stanza] = tempStanza
 
         return ret
 
