@@ -1,6 +1,6 @@
 track wgEncodeUwRepliSeq
 compositeTrack on
-shortLabel UW Repli-Seq
+shortLabel UW Repli-seq
 longLabel Replication Timing by Repli-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views 1PctSignal=Percentage-normalized_Signal 2Peaks=Peaks 3Valleys=Valleys 4WaveSignal=Wavelet-smoothed_Signal 5SumSignal=Summed_Densities
