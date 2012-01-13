@@ -10259,7 +10259,7 @@ dataGroup Other
 term RepliSeq
 tag  REPLISEQ
 type dataType
-label Repli-Seq
+label Repli-seq
 description Replication Timing
 dataGroup Other
 
