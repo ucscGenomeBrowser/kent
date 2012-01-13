@@ -3047,7 +3047,7 @@ objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3067,7 +3067,7 @@ objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3087,7 +3087,7 @@ objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3107,7 +3107,7 @@ objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3171,7 +3171,7 @@ objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3724,4 +3724,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -956119105
+# MAGIC: -10477184
