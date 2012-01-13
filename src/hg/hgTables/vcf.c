@@ -104,6 +104,11 @@ for (i = 0;  i < rec->infoCount;  i++)
 	{
 	if (j > 0)
 	    dyStringAppendC(dy, ',');
+	if (el->missingData[j])
+	    {
+	    dyStringAppend(dy, ".");
+	    continue;
+	    }
 	union vcfDatum dat = el->values[j];
 	switch (type)
 	    {

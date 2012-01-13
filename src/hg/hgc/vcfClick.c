@@ -102,7 +102,10 @@ for (i = 0;  i < rec->infoCount;  i++)
 	{
 	if (j > 0)
 	    printf(", ");
-	vcfPrintDatum(stdout, el->values[j], type);
+	if (el->missingData[j])
+	    printf(".");
+	else
+	    vcfPrintDatum(stdout, el->values[j], type);
 	}
     if (def != NULL)
 	printf("</TD><TD>&nbsp;%s", def->description);
@@ -141,13 +144,13 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	phasedGts++;
     if (gt->hapIxA == 0)
 	refs++;
-    else
+    else if (gt->hapIxA > 0)
 	alts++;
     if (!gt->isHaploid)
 	{
 	if (gt->hapIxB == 0)
 	    refs++;
-	else
+	else if (gt->hapIxB > 0)
 	    alts++;
 	if (gt->hapIxA == 0 && gt->hapIxB == 0)
 	    refRefs++;
@@ -209,8 +212,13 @@ puts("</TR>\n");
 for (i = 0;  i < vcff->genotypeCount;  i++)
     {
     struct vcfGenotype *gt = &(rec->genotypes[i]);
-    char *hapA = rec->alleles[gt->hapIxA];
-    char *hapB = gt->isHaploid ? NA : rec->alleles[gt->hapIxB];
+    char *hapA = ".", *hapB = ".";
+    if (gt->hapIxA >= 0)
+	hapA = rec->alleles[(unsigned char)gt->hapIxA];
+    if (gt->isHaploid)
+	hapB = NA;
+    else if (gt->hapIxB >= 0)
+	hapB = rec->alleles[(unsigned char)gt->hapIxB];
     char sep = gt->isPhased ? '|' : '/';
     char *phasing = gt->isHaploid ? NA : gt->isPhased ? "Y" : "n";
     printf("<TR><TD>%s</TD><TD>%s%c%s</TD><TD>%s</TD>", vcff->genotypeIds[i],
@@ -227,7 +235,10 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 	    {
 	    if (k > 0)
 		printf(", ");
-	    vcfPrintDatum(stdout, el->values[k], formatTypes[j]);
+	    if (el->missingData[k])
+		printf(".");
+	    else
+		vcfPrintDatum(stdout, el->values[k], formatTypes[j]);
 	    }
 	printf("</TD>");
 	}
