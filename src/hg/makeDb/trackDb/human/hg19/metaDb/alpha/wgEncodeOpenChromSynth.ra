@@ -9,7 +9,7 @@ objType table
 cell Gliobla
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002257
@@ -51,7 +51,7 @@ objType table
 cell GM12891
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002253
@@ -72,7 +72,7 @@ objType table
 cell GM12892
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002254
@@ -93,7 +93,7 @@ objType table
 cell GM18507
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002255
@@ -114,7 +114,7 @@ objType table
 cell GM19239
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002256
@@ -156,7 +156,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002259
@@ -219,7 +219,7 @@ objType table
 cell HTR8svn
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002258
@@ -282,7 +282,7 @@ objType table
 cell Medullo
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002260
@@ -324,7 +324,7 @@ objType table
 cell PanIslets
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002261
@@ -345,7 +345,7 @@ objType table
 cell Urothelia
 composite wgEncodeOpenChromSynth
 dataType Combined
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-28
 dateUnrestricted 2012-04-28
 dccAccession wgEncodeEH002262
@@ -361,4 +361,4 @@ tableName wgEncodeOpenChromSynthUrothelUt189Pk
 treatment UT189
 view Peaks
 
-# MAGIC: -305206629
+# MAGIC: -170829841

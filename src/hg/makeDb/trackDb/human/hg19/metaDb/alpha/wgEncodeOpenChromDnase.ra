@@ -770,7 +770,7 @@ objType file
 cell Colo829
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseColo829AlnRep1.bam
@@ -788,7 +788,7 @@ objType file
 cell Colo829
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseColo829AlnRep2.bam
@@ -806,7 +806,7 @@ objType table
 cell Colo829
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseColo829BaseOverlapSignal.bigWig
@@ -824,7 +824,7 @@ objType table
 cell Colo829
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseColo829Pk.narrowPeak.gz
@@ -842,7 +842,7 @@ objType file
 cell Colo829
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseColo829RawDataRep1.fastq.gz
@@ -859,7 +859,7 @@ objType file
 cell Colo829
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseColo829RawDataRep2.fastq.gz
@@ -876,7 +876,7 @@ objType table
 cell Colo829
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseColo829Sig.bigWig
@@ -894,7 +894,7 @@ objType file
 cell ECC-1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseEcc1Est10nm1hAlnRep1.bam,wgEncodeOpenChromDnaseEcc1Est10nm1hAlnRep1.bam.bai
@@ -913,7 +913,7 @@ objType file
 cell ECC-1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseEcc1Est10nm1hAlnRep2.bam,wgEncodeOpenChromDnaseEcc1Est10nm1hAlnRep2.bam.bai
@@ -932,7 +932,7 @@ objType table
 cell ECC-1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseEcc1Est10nm1hBaseOverlapSignal.bigWig
@@ -951,7 +951,7 @@ objType table
 cell ECC-1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseEcc1Est10nm1hPk.narrowPeak.gz
@@ -970,7 +970,7 @@ objType file
 cell ECC-1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseEcc1Est10nm1hRawDataRep1.fastq.gz
@@ -988,7 +988,7 @@ objType file
 cell ECC-1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseEcc1Est10nm1hRawDataRep2.fastq.gz
@@ -1006,7 +1006,7 @@ objType table
 cell ECC-1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseEcc1Est10nm1hSig.bigWig
@@ -1156,7 +1156,7 @@ attic auxSup
 cell Fibrobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000583
@@ -1809,7 +1809,7 @@ attic auxSup
 cell GM12878
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000534
@@ -2384,7 +2384,7 @@ attic auxSup
 cell GM18507
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000581
@@ -3081,7 +3081,7 @@ objType file
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esAlnRep1.bam,wgEncodeOpenChromDnaseH7esAlnRep1.bam.bai
@@ -3099,7 +3099,7 @@ objType file
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esAlnRep2.bam,wgEncodeOpenChromDnaseH7esAlnRep2.bam.bai
@@ -3117,7 +3117,7 @@ objType file
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esAlnRep3.bam,wgEncodeOpenChromDnaseH7esAlnRep3.bam.bai
@@ -3135,7 +3135,7 @@ objType table
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esBaseOverlapSignal.bigWig
@@ -3153,7 +3153,7 @@ objType table
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esPk.narrowPeak.gz
@@ -3171,7 +3171,7 @@ objType file
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esRawDataRep1.fastq.gz
@@ -3188,7 +3188,7 @@ objType file
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esRawDataRep2.fastq.gz
@@ -3205,7 +3205,7 @@ objType file
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esRawDataRep3.fastq.gz
@@ -3222,7 +3222,7 @@ objType table
 cell H7-hESC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseH7esSig.bigWig
@@ -3409,7 +3409,7 @@ objType file
 cell HEK293
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-31
 dateUnrestricted 2012-10-01
 fileName wgEncodeOpenChromDnaseHek293AlnRep1.bam,wgEncodeOpenChromDnaseHek293AlnRep1.bam.bai
@@ -3427,7 +3427,7 @@ objType file
 cell HEK293
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-31
 dateUnrestricted 2012-10-01
 fileName wgEncodeOpenChromDnaseHek293AlnRep2.bam,wgEncodeOpenChromDnaseHek293AlnRep2.bam.bai
@@ -3445,7 +3445,7 @@ objType table
 cell HEK293
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-31
 dateUnrestricted 2012-10-01
 fileName wgEncodeOpenChromDnaseHek293BaseOverlapSignal.bigWig
@@ -3463,7 +3463,7 @@ objType table
 cell HEK293
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-31
 dateUnrestricted 2012-10-01
 fileName wgEncodeOpenChromDnaseHek293Pk.narrowPeak.gz
@@ -3481,7 +3481,7 @@ objType file
 cell HEK293
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-31
 dateUnrestricted 2012-10-01
 fileName wgEncodeOpenChromDnaseHek293RawDataRep1.fastq.gz
@@ -3498,7 +3498,7 @@ objType file
 cell HEK293
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-31
 dateUnrestricted 2012-10-01
 fileName wgEncodeOpenChromDnaseHek293RawDataRep2.fastq.gz
@@ -3515,7 +3515,7 @@ objType table
 cell HEK293
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-31
 dateUnrestricted 2012-10-01
 fileName wgEncodeOpenChromDnaseHek293Sig.bigWig
@@ -3924,7 +3924,7 @@ attic auxSup
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000540
@@ -4326,7 +4326,7 @@ attic auxSup
 cell HepG2
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000537
@@ -4468,7 +4468,7 @@ attic auxSup
 cell HMEC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH001101
@@ -4804,7 +4804,7 @@ objType file
 cell HSMM_emb
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseHsmmembAlnRep1.bam
@@ -4822,7 +4822,7 @@ objType file
 cell HSMM_emb
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseHsmmembAlnRep2.bam
@@ -4840,7 +4840,7 @@ objType table
 cell HSMM_emb
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseHsmmembBaseOverlapSignal.bigWig
@@ -4858,7 +4858,7 @@ objType table
 cell HSMM_emb
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseHsmmembPk.narrowPeak.gz
@@ -4876,7 +4876,7 @@ objType table
 cell HSMM_emb
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseHsmmembSig.bigWig
@@ -5697,7 +5697,7 @@ attic auxSup
 cell HUVEC
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000548
@@ -5862,7 +5862,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep1.bam
@@ -5881,7 +5881,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mAlnRep2.bam
@@ -5900,7 +5900,7 @@ objType table
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mBaseOverlapSignal.bigWig
@@ -5919,7 +5919,7 @@ objType table
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mPk.narrowPeak.gz
@@ -5938,7 +5938,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mRawDataRep1.fastq.gz
@@ -5956,7 +5956,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mRawDataRep2.fastq.gz
@@ -5974,7 +5974,7 @@ objType table
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaEst10nm30mSig.bigWig
@@ -5993,7 +5993,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep1.bam
@@ -6012,7 +6012,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaTam10030AlnRep2.bam
@@ -6031,7 +6031,7 @@ objType table
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaTam10030BaseOverlapSignal.bigWig
@@ -6050,7 +6050,7 @@ objType table
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaTam10030Pk.narrowPeak.gz
@@ -6069,7 +6069,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep1.fastq.gz
@@ -6087,7 +6087,7 @@ objType file
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaTam10030RawDataRep2.fastq.gz
@@ -6105,7 +6105,7 @@ objType table
 cell Ishikawa
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeOpenChromDnaseIshikawaTam10030Sig.bigWig
@@ -6296,7 +6296,7 @@ attic auxSup
 cell K562
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000530
@@ -6552,7 +6552,7 @@ attic auxSup
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH001096
@@ -6709,7 +6709,7 @@ attic auxSup
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH001097
@@ -6805,7 +6805,7 @@ objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
@@ -6827,7 +6827,7 @@ objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
@@ -6849,7 +6849,7 @@ objType table
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
@@ -6871,7 +6871,7 @@ objType table
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
@@ -6893,7 +6893,7 @@ objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
@@ -6914,7 +6914,7 @@ objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
@@ -6935,7 +6935,7 @@ objType table
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001745
@@ -7052,7 +7052,7 @@ attic auxSup
 cell MCF-7
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000579
@@ -7708,7 +7708,7 @@ attic auxSup
 cell NHEK
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000553
@@ -8484,7 +8484,7 @@ attic auxSup
 cell ProgFib
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-12
 dateUnrestricted 2012-02-12
 dccAccession wgEncodeEH000576
@@ -8505,7 +8505,7 @@ objType file
 cell RWPE1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
 fileName wgEncodeOpenChromDnaseRwpe1AlnRep1.bam
@@ -8523,7 +8523,7 @@ objType file
 cell RWPE1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
 fileName wgEncodeOpenChromDnaseRwpe1AlnRep2.bam
@@ -8541,7 +8541,7 @@ objType table
 cell RWPE1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
 fileName wgEncodeOpenChromDnaseRwpe1BaseOverlapSignal.bigWig
@@ -8559,7 +8559,7 @@ objType table
 cell RWPE1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
 fileName wgEncodeOpenChromDnaseRwpe1Pk.narrowPeak.gz
@@ -8577,7 +8577,7 @@ objType file
 cell RWPE1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
 fileName wgEncodeOpenChromDnaseRwpe1RawDataRep1.fastq.gz
@@ -8594,7 +8594,7 @@ objType file
 cell RWPE1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
 fileName wgEncodeOpenChromDnaseRwpe1RawDataRep2.fastq.gz
@@ -8611,7 +8611,7 @@ objType table
 cell RWPE1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-03
 dateUnrestricted 2012-07-03
 fileName wgEncodeOpenChromDnaseRwpe1Sig.bigWig
@@ -8857,7 +8857,7 @@ objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseT47dEst10nm1hAlnRep1.bam,wgEncodeOpenChromDnaseT47dEst10nm1hAlnRep1.bam.bai
@@ -8876,7 +8876,7 @@ objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseT47dEst10nm1hAlnRep2.bam,wgEncodeOpenChromDnaseT47dEst10nm1hAlnRep2.bam.bai
@@ -8895,7 +8895,7 @@ objType table
 cell T-47D
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseT47dEst10nm1hBaseOverlapSignal.bigWig
@@ -8914,7 +8914,7 @@ objType table
 cell T-47D
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseT47dEst10nm1hPk.narrowPeak.gz
@@ -8933,7 +8933,7 @@ objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseT47dEst10nm1hRawDataRep1.fastq.gz
@@ -8951,7 +8951,7 @@ objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseT47dEst10nm1hRawDataRep2.fastq.gz
@@ -8969,7 +8969,7 @@ objType table
 cell T-47D
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseT47dEst10nm1hSig.bigWig
@@ -9078,7 +9078,7 @@ objType file
 cell Th1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseTh1AlnRep1.bam,wgEncodeOpenChromDnaseTh1AlnRep1.bam.bai
@@ -9096,7 +9096,7 @@ objType file
 cell Th1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseTh1AlnRep2.bam,wgEncodeOpenChromDnaseTh1AlnRep2.bam.bai
@@ -9114,7 +9114,7 @@ objType table
 cell Th1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseTh1BaseOverlapSignal.bigWig
@@ -9132,7 +9132,7 @@ objType table
 cell Th1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseTh1Pk.narrowPeak.gz
@@ -9150,7 +9150,7 @@ objType file
 cell Th1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseTh1RawDataRep1.fastq.gz
@@ -9167,7 +9167,7 @@ objType file
 cell Th1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseTh1RawDataRep2.fastq.gz
@@ -9184,7 +9184,7 @@ objType table
 cell Th1
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-29
 dateUnrestricted 2012-09-29
 fileName wgEncodeOpenChromDnaseTh1Sig.bigWig
@@ -9522,4 +9522,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -681134714
+# MAGIC: 528256378
