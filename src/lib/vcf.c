@@ -535,15 +535,19 @@ return def->type;
 }
 
 static int parseInfoValue(struct vcfRecord *record, char *infoKey, enum vcfInfoType type,
-			  char *valStr, union vcfDatum **pData)
+			  char *valStr, union vcfDatum **pData, bool **pMissingData)
 /* Parse a comma-separated list of values into array of union vcfInfoDatum and return count. */
 {
 char *valWords[VCF_MAX_INFO];
 int count = chopCommas(valStr, valWords);
 struct vcfFile *vcff = record->file;
 union vcfDatum *data = vcfFileAlloc(vcff, count * sizeof(union vcfDatum));
+bool *missingData = vcfFileAlloc(vcff, count * sizeof(*missingData));
 int j;
 for (j = 0;  j < count;  j++)
+    {
+    if (type != vcfInfoString && type != vcfInfoCharacter && sameString(valWords[j], "."))
+	missingData[j] = TRUE;
     switch (type)
 	{
 	case vcfInfoInteger:
@@ -566,10 +570,12 @@ for (j = 0;  j < count;  j++)
 	    errAbort("invalid vcfInfoType (uninitialized?) %d", type);
 	    break;
 	}
+    }
 // If END is given, use it as chromEnd:
 if (sameString(infoKey, vcfInfoEnd))
     record->chromEnd = data[0].datInt;
 *pData = data;
+*pMissingData = missingData;
 return count;
 }
 
@@ -614,7 +620,7 @@ for (i = 0;  i < record->infoCount;  i++)
     el->key = vcfFilePooledStr(vcff, elStr);
     enum vcfInfoType type = typeForInfoKey(vcff, el->key);
     char *valStr = eq+1;
-    el->count = parseInfoValue(record, el->key, type, valStr, &(el->values));
+    el->count = parseInfoValue(record, el->key, type, valStr, &(el->values), &(el->missingData));
     if (el->count >= VCF_MAX_INFO)
 	vcfFileErr(vcff, "A single element of the INFO column has at least %d values; "
 	       "VCF_MAX_INFO may need to be increased in vcf.c!", VCF_MAX_INFO);
@@ -858,16 +864,21 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 		gt->isPhased = TRUE;
 	    else
 		sep = strchr(genotype, '/');
-	    gt->hapIxA = atoi(genotype);
+	    if (genotype[0] == '.')
+		gt->hapIxA = -1;
+	    else
+		gt->hapIxA = atoi(genotype);
 	    if (sep == NULL)
 		gt->isHaploid = TRUE;
+	    else if (sep[1] == '.')
+		gt->hapIxB = -1;
 	    else
 		gt->hapIxB = atoi(sep+1);
 	    }
 	struct vcfInfoElement *el = &(gt->infoElements[j]);
 	el->key = formatWords[j];
 	el->count = parseInfoValue(record, formatWords[j], formatTypes[j], gtWords[j],
-				   &(el->values));
+				   &(el->values), &(el->missingData));
 	if (el->count >= VCF_MAX_INFO)
 	    vcfFileErr(vcff, "A single element of the genotype column for \"%s\" "
 		       "has at least %d values; "

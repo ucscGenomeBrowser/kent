@@ -390,15 +390,17 @@ class RaFile(OrderedDict):
                 #Remake stanza to keep order of terms
                 tempStanza = RaStanza()
                 tempStanza._name = stanza
-                selfListItor = list(self[stanza].iterkeys())
-                otherListItor = list(other[stanza].iterkeys())
+                selfKeys = list(self[stanza].iterkeys())
+                otherKeys = list(other[stanza].iterkeys())
                 newOther = list()
-                for i in otherListItor:
-                    if not i in selfListItor and i != term:
+                #filter out keys in other that aren't in self, or the term we're interested in
+                for i in otherKeys:
+                    if not i in selfKeys and i != term:
                         continue
                     else:
                         newOther.append(i)
-                masterList = ucscUtils.mergeList(newOther, selfListItor)
+                #merge self keylist and filtered other list
+                masterList = ucscUtils.mergeList(newOther, selfKeys)
                 for i in masterList:
                     if i == term:
                         tempStanza[i] = other[stanza][i]
