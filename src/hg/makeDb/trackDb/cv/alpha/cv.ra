@@ -10133,12 +10133,12 @@ description Element cluster by integrative analysis
 dataGroup Other
 
 #tag not standard to match hg18
-term Cnv
-tag CNVdt
-type dataType
-label CNV
-description Copy Number Variation
-dataGroup Other
+#term Cnv
+#tag CNVdt
+#type dataType
+#label CNV
+#description Copy Number Variation
+#dataGroup Other
 
 term Combined
 tag COMBO

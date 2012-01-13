@@ -390,15 +390,17 @@ class RaFile(OrderedDict):
                 #Remake stanza to keep order of terms
                 tempStanza = RaStanza()
                 tempStanza._name = stanza
-                selfListItor = list(self[stanza].iterkeys())
-                otherListItor = list(other[stanza].iterkeys())
+                selfKeys = list(self[stanza].iterkeys())
+                otherKeys = list(other[stanza].iterkeys())
                 newOther = list()
-                for i in otherListItor:
-                    if not i in selfListItor and i != term:
+                #filter out keys in other that aren't in self, or the term we're interested in
+                for i in otherKeys:
+                    if not i in selfKeys and i != term:
                         continue
                     else:
                         newOther.append(i)
-                masterList = ucscUtils.mergeList(newOther, selfListItor)
+                #merge self keylist and filtered other list
+                masterList = ucscUtils.mergeList(newOther, selfKeys)
                 for i in masterList:
                     if i == term:
                         tempStanza[i] = other[stanza][i]
@@ -407,6 +409,53 @@ class RaFile(OrderedDict):
             ret[stanza] = tempStanza
 
         return ret
+
+    def printTrackDbFormat(self):
+        retstring = ""
+        space = False
+        tab = False
+        commentList = []
+        for stanza in self:
+            if stanza == "":
+                if commentList:
+                    for line in commentList:
+                        if space == True:
+                            retstring += "    "
+                        if tab == True:
+                            retstring += "    "
+                        retstring += line + "\n"
+                    commentList = []
+                    retstring += "\n"
+                continue
+            if stanza.startswith("#"):
+                commentList.append(stanza)
+                continue
+            if "visibility" in self[stanza].keys():
+                tab = False
+                space = True
+            if "subGroups" in self[stanza].keys():
+                tab = True
+                space = True
+            if commentList:
+                for line in commentList:
+                    if space == True:
+                        retstring += "    "
+                    if tab == True:
+                        retstring += "    "
+                    retstring += line + "\n"
+                commentList = []
+            for line in self[stanza]:
+                if space == True:
+                    retstring += "    "
+                if tab == True:
+                    retstring += "    "
+                if line.startswith("#"):
+                    retstring += line + "\n"
+                else:
+                    retstring += line + " " + self[stanza][line] + "\n"
+            retstring += "\n"
+        return retstring
+
 
     def __str__(self):
         str = ''
