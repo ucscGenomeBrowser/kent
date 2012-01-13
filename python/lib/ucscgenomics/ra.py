@@ -410,6 +410,53 @@ class RaFile(OrderedDict):
 
         return ret
 
+    def printTrackDbFormat(self):
+        retstring = ""
+        space = False
+        tab = False
+        commentList = []
+        for stanza in self:
+            if stanza == "":
+                if commentList:
+                    for line in commentList:
+                        if space == True:
+                            retstring += "    "
+                        if tab == True:
+                            retstring += "    "
+                        retstring += line + "\n"
+                    commentList = []
+                    retstring += "\n"
+                continue
+            if stanza.startswith("#"):
+                commentList.append(stanza)
+                continue
+            if "visibility" in self[stanza].keys():
+                tab = False
+                space = True
+            if "subGroups" in self[stanza].keys():
+                tab = True
+                space = True
+            if commentList:
+                for line in commentList:
+                    if space == True:
+                        retstring += "    "
+                    if tab == True:
+                        retstring += "    "
+                    retstring += line + "\n"
+                commentList = []
+            for line in self[stanza]:
+                if space == True:
+                    retstring += "    "
+                if tab == True:
+                    retstring += "    "
+                if line.startswith("#"):
+                    retstring += line + "\n"
+                else:
+                    retstring += line + " " + self[stanza][line] + "\n"
+            retstring += "\n"
+        return retstring
+
+
     def __str__(self):
         str = ''
         for item in self.iteritems():
