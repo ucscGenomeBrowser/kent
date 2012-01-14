@@ -48,18 +48,20 @@ struct vcfInfoElement
     char *key;			// An identifier described by a struct vcfInfoDef
     int count;			// Number of data values following id
     union vcfDatum *values;	// Array of data values following id
+    bool *missingData;		// Array of flags for missing data values ("." instead of number)
     };
 
 struct vcfGenotype
 /* A single component of the optional GENOTYPE column. */
     {
     char *id;			// Name of individual/sample (pointer to vcfFile genotypeIds) or .
-    unsigned char hapIxA;	// Index of one haplotype's allele: 0=reference, 1=alt, 2=other alt
-    unsigned char hapIxB;	// Index of other haplotype's allele
+    char hapIxA;		// Index of one haplotype's allele: 0=reference, 1=alt, 2=other alt
+				// *or* if negative, missing data
+    char hapIxB;		// Index of other haplotype's allele, or if negative, missing data
     bool isPhased;		// True if haplotypes are phased
     bool isHaploid;		// True if there is only one haplotype (e.g. chrY)
     int infoCount;		// Number of components named in FORMAT column
-    struct vcfInfoElement *infoElements;	// Array of info components
+    struct vcfInfoElement *infoElements;	// Array of info components for this genotype call
     };
 
 struct vcfRecord

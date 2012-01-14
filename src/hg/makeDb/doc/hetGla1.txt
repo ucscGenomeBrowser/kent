@@ -83,6 +83,7 @@ taxId 10181
     # we will re-ln with masked one after we done the mask business later! ***
     ln -s `pwd`/hetGla1.unmasked.2bit /gbdb/hetGla1/hetGla1.2bit
 
+XXXX TODO - replace *** use actual url for project etc.. in all html files
     #  Per instructions in makeGenomeDb.log:
 # Search for '***' notes in each file in and make corrections (sometimes the
 # files used for a previous assembly might make a better template):
@@ -404,10 +405,11 @@ hetGla1.genbank.est.native.loadDesc = yes
     make etc-update
 
 #########################################################################
-# reset default position as galGal3 Chicken (???? working 2011-03-08  - Chin)
+# reset default position as JH169644:1002890-1003079 (DONE 2012-01-04 - Chin)
+# for hox1- (NM_214560) homeobox protein HB1 
 #
     hgsql -e \
-'update dbDb set defaultPos="chr5:57710001-57780000" where name="hetGla1";' \
+'update dbDb set defaultPos="JH169644:1002890-1003079" where name="hetGla1";' \
 	hgcentraltest
 
 ############################################################################
@@ -506,16 +508,31 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	cleanup
     rm -fr hardMaskedFa
 
+##########################################################################
+#  BLATSERVERS ENTRY (DONE 2011-01-05 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+#  
+# blat5
+# ports 17784 (trans) and 17785 (untrans).
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("hetGla1", "blat5", "17784", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("hetGla1", "blat5", "17785", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
 #########################################################################
-# all.joiner update, downloads and in pushQ - ( working 2011-03-08 - Chin)
+# all.joiner update, downloads and in pushQ - ( working 2012-01-04 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
-    # add hetGla after rn4???
+    # add hetGla after myoLuc
     joinerCheck -database=hetGla1 -all all.joiner
 
     mkdir /hive/data/genomes/hetGla1/goldenPath
     cd /hive/data/genomes/hetGla1/goldenPath
     makeDownloads.pl hetGla1 > do.log 2>&1
+XXXX 2012-01-04 TODO: read the do.log and edit README before push!!
 
     #	now ready for pushQ entry
     mkdir /hive/data/genomes/hetGla1/pushQ
@@ -540,19 +557,4 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
 
-##########################################################################
-#  BLATSERVERS ENTRY (working 2011-03-23 - Chin)
-#       After getting a blat server assigned by the Blat Server Gods,
-#   
-# blat13
-# trans port 17828
-# untrans port 17829
-
-    
-    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-        VALUES ("hetGla1", "blat13", "17828", "1", "0"); \
-        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-        VALUES ("hetGla1", "blat13", "17829", "0", "1");' \
-            hgcentraltest
-    #   test it with some sequence
 #######################################################################
