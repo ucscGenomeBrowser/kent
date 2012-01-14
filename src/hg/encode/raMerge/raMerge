@@ -12,7 +12,7 @@ def main():
         )
     parser.add_argument('RaFileOne', help='The .ra file')
     parser.add_argument('RaFileTwo', help='The .ra file to merge with')
-
+    parser.add_argument('-t', '--trackDb', action="store_true", default=0, help="Print as trackDb")
 
     if len(sys.argv) == 1:
         parser.print_help()
@@ -24,7 +24,10 @@ def main():
 
 
     merged = ra1.mergeRa(ra2)
-    print merged
+    if args.trackDb:
+        print merged.printTrackDbFormat()
+    else:
+        print merged
 
 if __name__ == '__main__':
     main()

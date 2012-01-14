@@ -5068,7 +5068,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -5092,7 +5093,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -5141,7 +5143,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5165,7 +5168,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5189,7 +5193,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5213,7 +5218,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5237,7 +5243,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -5261,7 +5268,8 @@ control Input
 controlId G1E-ER4+E2/Input/Input
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -7325,4 +7333,4 @@ subId 5240
 tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: 2105113736
+# MAGIC: 156695560
