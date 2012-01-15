@@ -128,7 +128,7 @@ else
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format4'>GTF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/bigWig.html'>bigWig</A>,\n"
-  " <A TARGET=_BLANK HREF='../goldenPath/help/maf.html'>MAF</A>,\n"
+  " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format5'>MAF</A>,\n"
   " <A TARGET=_BLANK HREF='../goldenPath/help/bam.html'>BAM</A>,\n"
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1.7'>BED detail</A>,\n"
   " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"

@@ -42,9 +42,9 @@ subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BE2C=BE2c BJ=BJ Caco2=Caco-2 CD20RO01778=CD20+&nbsp;(RO&nbsp;01778) CD20RO01794=CD20+&nbsp;(RO&nbsp;01794) H7es=H7-HESC HAC=HAc HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HFF=HFF HFFMYC=HFF-Myc HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12866=GM12866 GM12867=GM12867 GM12868=GM12868 GM12869=GM12869 GM12870=GM12870 GM12871=GM12871 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat LNCAP=LNCaP MCF7=MCF-7 MONOCD14RO1746=Monocytes-CD14+&nbsp;(RO&nbsp;01794) NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNMC=SK-N-MC SKNSHRA=SK-N-SH_RA WI38=WI-38 WERIRb1=WERI-Rb-1
 subGroup3 treatment Treatment aNone=None OHTAM=OH-tamoxifen_20nM
 subGroup4 factor Factor CTCF=CTCF  zInput=Input
-subGroup5 rep Replicate 1=1 2=2 3=3
+subGroup5 rep Replicate rep1=1 rep2=2 rep3=3
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
-dimensionZchecked 1,2
+dimensionZchecked rep1,rep2
 sortOrder cellType=+ factor=+ rep=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target replicate=Rep view=View controlId=Control_ID origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
@@ -64,168 +64,168 @@ html wgEncodeUwTfbs.release2
     pValueFilterLimits 0:324
 
         track wgEncodeUwTfbsBjCtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel BJ CTCF Ht 1
         longLabel BJ CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=BJ rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=BJ rep=rep1 treatment=aNone
         type broadPeak
         # subId=1255 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot      
+        parent wgEncodeUwTfbsViewHot on
         shortLabel GM78 CTCF Ht 1
         longLabel GM12878 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=1GM12878 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=1GM12878 rep=rep1 treatment=aNone
         type broadPeak
         color 153,38,0
         # subId=1263 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot      
+        parent wgEncodeUwTfbsViewHot on
         shortLabel K562 CTCF Ht 1
         longLabel K562 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=1K562 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=1K562 rep=rep1 treatment=aNone
         type broadPeak
         color 46,0,184
         # subId=1266 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel GM90 CTCF Ht 1
         longLabel GM06990 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM06990 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM06990 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1268 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsCaco2CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel Caco2 CTCF Ht 1
         longLabel Caco-2 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=Caco2 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=Caco2 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1269 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12864CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel GM64 CTCF Ht 1
         longLabel GM12864 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12864 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12864 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1272 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel GM65 CTCF Ht 1
         longLabel GM12865 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12865 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12865 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1275 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel GM72 CTCF Ht 1
         longLabel GM12872 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12872 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12872 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1277 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel GM74 CTCF Ht 1
         longLabel GM12874 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12874 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12874 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1281 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsHek293CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel H293 CTCF Ht 1
         longLabel HEK293 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HEK293 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HEK293 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1294 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHelas3CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel HeLaS3 CTCF Ht 1
         longLabel HeLa-S3 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=2HELA rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=2HELA rep=rep1 treatment=aNone
         type broadPeak
         color 0,119,158
         # subId=1297 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel HepG2 CTCF Ht 1
         longLabel HepG2 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=2HEPG2 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=2HEPG2 rep=rep1 treatment=aNone
         type broadPeak
         color 189,0,157
         # subId=1298 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHl60CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel HL60 CTCF Ht 1
         longLabel HL-60 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HL60 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HL60 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1300 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHmecCtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel HMEC CTCF Ht 1
         longLabel HMEC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HMEC rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HMEC rep=rep1 treatment=aNone
         type broadPeak
         # subId=1301 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel HRE CTCF Ht 1
         longLabel HRE CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HRE rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HRE rep=rep1 treatment=aNone
         type broadPeak
         # subId=1304 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel HUVEC CTCF Ht 1
         longLabel HUVEC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=2HUVEC rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=2HUVEC rep=rep1 treatment=aNone
         type broadPeak
         color 224,75,0
         # subId=1307 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel NHEK CTCF Ht 1
         longLabel NHEK CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=NHEK rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=NHEK rep=rep1 treatment=aNone
         type broadPeak
         color 179,0,134
         # subId=1310 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel SAEC CTCF Ht 1
         longLabel SAEC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=SAEC rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=SAEC rep=rep1 treatment=aNone
         type broadPeak
         # subId=1312 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel SKRA CTCF Ht 1
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=rep1 treatment=aNone
         type broadPeak
         # subId=1313 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep1
-        parent wgEncodeUwTfbsViewHot       off
+        parent wgEncodeUwTfbsViewHot off
         shortLabel WERI CTCF Ht 1
         longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1315 dateSubmitted=2010-06-10
 
@@ -233,24 +233,24 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel BJ CTCF Ht 2
         longLabel BJ CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=BJ rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=BJ rep=rep2 treatment=aNone
         type broadPeak
         # subId=1262 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdHotspotsRep2
-        parent wgEncodeUwTfbsViewHot 
+        parent wgEncodeUwTfbsViewHot on
         shortLabel K562 CTCF Ht 2
         longLabel K562 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=1K562 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=1K562 rep=rep2 treatment=aNone
         type broadPeak
         color 46,0,184
         # subId=1264 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep2
-        parent wgEncodeUwTfbsViewHot 
+        parent wgEncodeUwTfbsViewHot on
         shortLabel GM78 CTCF Ht 2
         longLabel GM12878 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=1GM12878 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=1GM12878 rep=rep2 treatment=aNone
         type broadPeak
         color 153,38,0
         # subId=1265 dateSubmitted=2010-06-07
@@ -259,7 +259,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel Caco2 CTCF Ht 2
         longLabel Caco-2 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=Caco2 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=Caco2 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1267 dateSubmitted=2010-06-08
 
@@ -267,7 +267,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM90 CTCF Ht 2
         longLabel GM06990 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM06990 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM06990 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1271 dateSubmitted=2010-06-08
 
@@ -275,7 +275,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM65 CTCF Ht 2
         longLabel GM12865 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12865 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12865 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1274 dateSubmitted=2010-06-08
 
@@ -283,7 +283,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM72 CTCF Ht 2
         longLabel GM12872 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12872 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12872 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1278 dateSubmitted=2010-06-08
 
@@ -291,7 +291,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM74 CTCF Ht 2
         longLabel GM12874 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12874 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12874 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1280 dateSubmitted=2010-06-08
 
@@ -299,7 +299,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HeLaS3 CTCF Ht 2
         longLabel HeLa-S3 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=2HELA rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=2HELA rep=rep2 treatment=aNone
         type broadPeak
         color 0,119,158
         # subId=1296 dateSubmitted=2010-06-10
@@ -308,7 +308,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HepG2 CTCF Ht 2
         longLabel HepG2 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=2HEPG2 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=2HEPG2 rep=rep2 treatment=aNone
         type broadPeak
         color 189,0,157
         # subId=1299 dateSubmitted=2010-06-10
@@ -317,7 +317,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HRE CTCF Ht 2
         longLabel HRE CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HRE rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HRE rep=rep2 treatment=aNone
         type broadPeak
         # subId=1305 dateSubmitted=2010-06-10
 
@@ -325,7 +325,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HUVEC CTCF Ht 2
         longLabel HUVEC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=2HUVEC rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=2HUVEC rep=rep2 treatment=aNone
         type broadPeak
         color 224,75,0
         # subId=1306 dateSubmitted=2010-06-10
@@ -334,7 +334,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel NHEK CTCF Ht 2
         longLabel NHEK CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=NHEK rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=NHEK rep=rep2 treatment=aNone
         type broadPeak
         color 179,0,134
         # subId=1309 dateSubmitted=2010-06-10
@@ -343,7 +343,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel SAEC CTCF Ht 2
         longLabel SAEC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=SAEC rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=SAEC rep=rep2 treatment=aNone
         type broadPeak
         # subId=1311 dateSubmitted=2010-06-10
 
@@ -351,7 +351,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel SKRA CTCF Ht 2
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=rep2 treatment=aNone
         type broadPeak
         # subId=1314 dateSubmitted=2010-06-10
 
@@ -359,7 +359,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM64 CTCF Ht 2
         longLabel GM12864 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12864 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12864 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1273 dateSubmitted=2010-06-08
 
@@ -367,7 +367,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM73 CTCF Ht 1
         longLabel GM12873 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12873 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12873 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1276 dateSubmitted=2010-06-15
 
@@ -375,7 +375,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM75 CTCF Ht 1
         longLabel GM12875 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12875 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12875 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1482 dateSubmitted=2010-06-15
 
@@ -383,7 +383,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM01 CTCF Ht 1
         longLabel GM12801 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12801 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12801 rep=rep1 treatment=aNone
         type broadPeak
         # subId=1270 dateSubmitted=2010-06-16
 
@@ -391,7 +391,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM73 CTCF Ht 2
         longLabel GM12873 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12873 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12873 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1279 dateSubmitted=2010-06-15
 
@@ -399,7 +399,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel H293 CTCF Ht 2
         longLabel HEK293 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HEK293 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HEK293 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1486 dateSubmitted=2010-06-16
 
@@ -407,7 +407,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM75 CTCF Ht 2
         longLabel GM12875 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12875 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12875 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1484 dateSubmitted=2010-06-16
 
@@ -415,7 +415,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel WERI CTCF Ht 2
         longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=rep2 treatment=aNone
         type broadPeak
         # subId=1492 dateSubmitted=2010-06-16
 
@@ -423,7 +423,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG49 CTCF Ht 2
         longLabel AG04449 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG04449  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG04449  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2595 dateSubmitted=2010-10-22
 
@@ -431,7 +431,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG49 CTCF Ht 1
         longLabel AG04449 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG04449  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG04449  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2596 dateSubmitted=2010-10-22
 
@@ -439,7 +439,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG50 CTCF Ht 1
         longLabel AG04450 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG04450  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG04450  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2663 dateSubmitted=2010-10-23
 
@@ -447,7 +447,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG09 CTCF Ht 2
         longLabel AG09309 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG09309  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG09309  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2665 dateSubmitted=2010-10-23
 
@@ -455,7 +455,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG09 CTCF Ht 1
         longLabel AG09309 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG09309  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG09309  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2666 dateSubmitted=2010-10-23
 
@@ -463,7 +463,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG19 CTCF Ht 2
         longLabel AG09319 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG09319  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG09319  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2669 dateSubmitted=2010-10-23
 
@@ -471,7 +471,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG03 CTCF Ht 1
         longLabel AG10803 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG10803  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG10803  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2671 dateSubmitted=2010-10-23
 
@@ -479,7 +479,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG03 CTCF Ht 2
         longLabel AG10803 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG10803  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG10803  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2672 dateSubmitted=2010-10-23
 
@@ -487,7 +487,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AoAF CTCF Ht 1
         longLabel AoAF CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AOAF rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AOAF rep=rep1 treatment=aNone
         type broadPeak
         # subId=2675 dateSubmitted=2010-10-23
 
@@ -495,7 +495,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AoAF CTCF Ht 2
         longLabel AoAF CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AOAF  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AOAF  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2674 dateSubmitted=2010-10-23
 
@@ -503,7 +503,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HBMEC CTCF Ht 1
         longLabel HBMEC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HBMEC  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HBMEC  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2677 dateSubmitted=2010-10-23
 
@@ -511,7 +511,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HBMEC CTCF Ht 2
         longLabel HBMEC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HBMEC  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HBMEC  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2678 dateSubmitted=2010-10-23
 
@@ -519,7 +519,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCFa CTCF Ht 1
         longLabel HCFaa CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HCFaa  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HCFaa  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2680 dateSubmitted=2010-10-23
 
@@ -527,7 +527,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCpC CTCF Ht 1
         longLabel HCPEpIC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HCPE  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HCPE  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2682 dateSubmitted=2010-10-23
 
@@ -535,7 +535,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCpC CTCF Ht 2
         longLabel HCPEpIC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HCPE  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HCPE  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2683 dateSubmitted=2010-10-23
 
@@ -543,7 +543,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HEpC CTCF Ht 2
         longLabel HEEpIC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HEE  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HEE  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2685 dateSubmitted=2010-10-23
 
@@ -551,7 +551,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HEpC CTCF Ht 1
         longLabel HEEpIC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HEE  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HEE  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2686 dateSubmitted=2010-10-23
 
@@ -559,7 +559,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HMF CTCF Ht 2
         longLabel HMF CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HMF  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HMF  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2688 dateSubmitted=2010-10-23
 
@@ -567,7 +567,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HMF CTCF Ht 1
         longLabel HMF CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HMF  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HMF  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2689 dateSubmitted=2010-10-23
 
@@ -575,7 +575,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPAF CTCF Ht 2
         longLabel HPAF CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HPAF  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HPAF  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2691 dateSubmitted=2010-10-23
 
@@ -583,7 +583,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPAF CTCF Ht 1
         longLabel HPAF CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HPAF  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HPAF  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2692 dateSubmitted=2010-10-23
 
@@ -591,7 +591,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPF CTCF Ht 1
         longLabel HPF CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HPF  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HPF  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2694 dateSubmitted=2010-10-23
 
@@ -599,7 +599,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HRpC CTCF Ht 1
         longLabel HRPEpIC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HRPE  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HRPE  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2697 dateSubmitted=2010-10-23
 
@@ -607,7 +607,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HAsp CTCF Ht 1
         longLabel HA-sp CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HA-sp  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HA-sp  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2781 dateSubmitted=2010-10-28
 
@@ -615,7 +615,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG19 CTCF Ht 1
         longLabel AG09319 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG09319  rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG09319  rep=rep1 treatment=aNone
         type broadPeak
         # subId=2668 dateSubmitted=2010-10-23
 
@@ -623,7 +623,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPF CTCF Ht 2
         longLabel HPF CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HPF  rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HPF  rep=rep2 treatment=aNone
         type broadPeak
         # subId=2695 dateSubmitted=2010-10-23
 
@@ -631,7 +631,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel BE2c CTCF Ht 1
         longLabel BE2c CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=BE2C rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=BE2C rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4387 dateSubmitted=2011-06-25
@@ -640,7 +640,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel A549 CTCF Ht 2
         longLabel A549 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=A549 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=A549 rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4384 dateSubmitted=2011-06-25
@@ -649,7 +649,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel BE2c CTCF Ht 2
         longLabel BE2c CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=BE2C rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=BE2C rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4388 dateSubmitted=2011-06-25
@@ -658,7 +658,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG50 CTCF Ht 2
         longLabel AG04450 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=AG04450 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=AG04450 rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4386 dateSubmitted=2011-06-25
@@ -667,7 +667,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel A549 CTCF Ht 1
         longLabel A549 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=A549 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=A549 rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4385 dateSubmitted=2011-06-25
@@ -676,7 +676,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HAc CTCF Ht 1
         longLabel HAc CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HAC rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HAC rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4389 dateSubmitted=2011-06-25
@@ -685,7 +685,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCM CTCF Ht 1
         longLabel HCM CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HCM rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HCM rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4390 dateSubmitted=2011-06-25
@@ -694,7 +694,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HFMyc CTCF Ht 2
         longLabel HFF-Myc CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HFFMYC rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HFFMYC rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4392 dateSubmitted=2011-06-25
@@ -703,7 +703,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel NB4 CTCF Ht 1
         longLabel NB4 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=NB4 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=NB4 rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4393 dateSubmitted=2011-06-25
@@ -712,7 +712,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HFMyc CTCF Ht 1
         longLabel HFF-Myc CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HFFMYC rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HFFMYC rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4391 dateSubmitted=2011-06-25
@@ -721,7 +721,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel WI-38 CTCF Ht 1
         longLabel WI-38 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=WI38 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=WI38 rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4394 dateSubmitted=2011-06-25
@@ -730,7 +730,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel WI-38 CTCF Ht 2
         longLabel WI-38 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=WI38 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=WI38 rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4395 dateSubmitted=2011-06-25
@@ -739,7 +739,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM64 CTCF Ht 3
         longLabel GM12864 CTCF TFBS ChIP-seq Hotspots 3 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12864 rep=3 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12864 rep=rep3 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4652 dateSubmitted=2011-07-29
@@ -748,7 +748,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM65 CTCF Ht 3
         longLabel GM12865 CTCF TFBS ChIP-seq Hotspots 3 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12865 rep=3 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12865 rep=rep3 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4653 dateSubmitted=2011-07-29
@@ -757,7 +757,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM72 CTCF Ht 3
         longLabel GM12872 CTCF TFBS ChIP-seq Hotspots 3 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12872 rep=3 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12872 rep=rep3 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4666 dateSubmitted=2011-07-29
@@ -766,7 +766,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM73 CTCF Ht 3
         longLabel GM12873 CTCF TFBS ChIP-seq Hotspots 3 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12873 rep=3 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=GM12873 rep=rep3 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4667 dateSubmitted=2011-07-29
@@ -775,7 +775,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel MCF7 CTCF Ht 2
         longLabel MCF-7 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=MCF7 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=MCF7 rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4676 dateSubmitted=2011-07-29
@@ -784,7 +784,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel MCF7 CTCF Ht 1
         longLabel MCF-7 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=MCF7 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=MCF7 rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4677 dateSubmitted=2011-07-29
@@ -793,7 +793,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel NHDF CTCF Ht 1
         longLabel NHDF-neo CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=NHDF-neo rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=NHDF-neo rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4678 dateSubmitted=2011-07-29
@@ -802,7 +802,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel NHDF CTCF Ht 2
         longLabel NHDF-neo CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=NHDF-neo rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=NHDF-neo rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4679 dateSubmitted=2011-07-29
@@ -811,7 +811,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel RPTC CTCF Ht 1
         longLabel RPTEC CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=RPTEC rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=RPTEC rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4682 dateSubmitted=2011-07-29
@@ -820,7 +820,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel RPTC CTCF Ht 2
         longLabel RPTEC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=RPTEC rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=RPTEC rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4681 dateSubmitted=2011-07-29
@@ -829,7 +829,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HAc CTCF Ht 2
         longLabel HAc CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HAC rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HAC rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4686 dateSubmitted=2011-07-29
@@ -838,7 +838,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HAsp CTCF Ht 2
         longLabel HA-sp CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HA-sp rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HA-sp rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4687 dateSubmitted=2011-07-29
@@ -847,7 +847,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCM CTCF Ht 2
         longLabel HCM CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HCM rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HCM rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4688 dateSubmitted=2011-07-29
@@ -856,7 +856,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCT16 CTCF Ht 2
         longLabel HCT-116 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HCT116 rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HCT116 rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4689 dateSubmitted=2011-07-29
@@ -865,7 +865,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCT16 CTCF Ht 1
         longLabel HCT-116 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HCT116 rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HCT116 rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4690 dateSubmitted=2011-07-29
@@ -874,7 +874,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HMEC CTCF Ht 2
         longLabel HMEC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HMEC rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HMEC rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4692 dateSubmitted=2011-07-29
@@ -883,7 +883,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HRpC CTCF Ht 2
         longLabel HRPEpIC CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HRPE rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HRPE rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4693 dateSubmitted=2011-07-29
@@ -892,7 +892,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HVMF CTCF Ht 1
         longLabel HVMF CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HVMF rep=1 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HVMF rep=rep1 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4694 dateSubmitted=2011-07-29
@@ -901,7 +901,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewHot off
         shortLabel HVMF CTCF Ht 2
         longLabel HVMF CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HVMF rep=2 treatment=aNone
+        subGroups view=Hot factor=CTCF cellType=HVMF rep=rep2 treatment=aNone
         type broadPeak
         origAssembly hg19
         # subId=4695 dateSubmitted=2011-07-29
@@ -910,7 +910,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM66 CTCF Ht 2
         #longLabel GM12866 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12866 rep=2 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12866 rep=rep2 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4655 dateSubmitted=2011-07-29
@@ -919,7 +919,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM66 CTCF Ht 1
         #longLabel GM12866 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12866 rep=1 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12866 rep=rep1 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4654 dateSubmitted=2011-07-29
@@ -928,7 +928,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM67 CTCF Ht 2
         #longLabel GM12867 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12867 rep=2 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12867 rep=rep2 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4657 dateSubmitted=2011-07-29
@@ -937,7 +937,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM68 CTCF Ht 2
         #longLabel GM12868 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12868 rep=2 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12868 rep=rep2 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4659 dateSubmitted=2011-07-29
@@ -946,7 +946,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM68 CTCF Ht 1
         #longLabel GM12868 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12868 rep=1 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12868 rep=rep1 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4658 dateSubmitted=2011-07-29
@@ -955,7 +955,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM67 CTCF Ht 1
         #longLabel GM12867 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12867 rep=1 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12867 rep=rep1 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4656 dateSubmitted=2011-07-29
@@ -964,7 +964,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM70 CTCF Ht 2
         #longLabel GM12870 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12870 rep=2 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12870 rep=rep2 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4662 dateSubmitted=2011-07-29
@@ -973,7 +973,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM69 CTCF Ht 2
         #longLabel GM12869 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12869 rep=2 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12869 rep=rep2 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4661 dateSubmitted=2011-07-29
@@ -982,7 +982,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM69 CTCF Ht 1
         #longLabel GM12869 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12869 rep=1 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12869 rep=rep1 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4660 dateSubmitted=2011-07-29
@@ -991,7 +991,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM70 CTCF Ht 1
         #longLabel GM12870 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12870 rep=1 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12870 rep=rep1 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4663 dateSubmitted=2011-07-29
@@ -1000,7 +1000,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM71 CTCF Ht 1
         #longLabel GM12871 CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12871 rep=1 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12871 rep=rep1 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4664 dateSubmitted=2011-07-29
@@ -1009,7 +1009,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewHot off
         #shortLabel GM71 CTCF Ht 2
         #longLabel GM12871 CTCF TFBS ChIP-seq Hotspots 2 from ENCODE/UW
-        #subGroups view=Hot factor=CTCF cellType=GM12871 rep=2 treatment=aNone
+        #subGroups view=Hot factor=CTCF cellType=GM12871 rep=rep2 treatment=aNone
         #type broadPeak
         #origAssembly hg19
         # subId=4665 dateSubmitted=2011-07-29
@@ -1023,566 +1023,566 @@ html wgEncodeUwTfbs.release2
     pValueFilterLimits 0:324
 
         track wgEncodeUwTfbsBjCtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel BJ CTCF Pk 1
-        longLabel BJ CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=BJ rep=1 treatment=aNone
+        longLabel BJ CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=BJ rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1255 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks 
+        parent wgEncodeUwTfbsViewPeaks on
         shortLabel GM78 CTCF Pk 1
-        longLabel GM12878 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=1GM12878 rep=1 treatment=aNone
+        longLabel GM12878 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=1GM12878 rep=rep1 treatment=aNone
         type narrowPeak
         color 153,38,0
         # subId=1263 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks 
+        parent wgEncodeUwTfbsViewPeaks on
         shortLabel K562 CTCF Pk 1
-        longLabel K562 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=1K562 rep=1 treatment=aNone
+        longLabel K562 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=1K562 rep=rep1 treatment=aNone
         type narrowPeak
         color 46,0,184
         # subId=1266 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM90 CTCF Pk 1
-        longLabel GM06990 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM06990 rep=1 treatment=aNone
+        longLabel GM06990 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM06990 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1268 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsCaco2CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel Caco2 CTCF Pk 1
-        longLabel Caco-2 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=Caco2 rep=1 treatment=aNone
+        longLabel Caco-2 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=Caco2 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1269 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12864CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM64 CTCF Pk 1
-        longLabel GM12864 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=1 treatment=aNone
+        longLabel GM12864 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1272 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM65 CTCF Pk 1
-        longLabel GM12865 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=1 treatment=aNone
+        longLabel GM12865 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1275 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM72 CTCF Pk 1
-        longLabel GM12872 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=1 treatment=aNone
+        longLabel GM12872 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1277 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM74 CTCF Pk 1
-        longLabel GM12874 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12874 rep=1 treatment=aNone
+        longLabel GM12874 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12874 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1281 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsHek293CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel H293 CTCF Pk 1
-        longLabel HEK293 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HEK293 rep=1 treatment=aNone
+        longLabel HEK293 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HEK293 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1294 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHelas3CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HeLaS3 CTCF Pk 1
-        longLabel HeLa-S3 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=2HELA rep=1 treatment=aNone
+        longLabel HeLa-S3 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=2HELA rep=rep1 treatment=aNone
         type narrowPeak
         color 0,119,158
         # subId=1297 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HepG2 CTCF Pk 1
-        longLabel HepG2 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=2HEPG2 rep=1 treatment=aNone
+        longLabel HepG2 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=2HEPG2 rep=rep1 treatment=aNone
         type narrowPeak
         color 189,0,157
         # subId=1298 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHl60CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HL60 CTCF Pk 1
-        longLabel HL-60 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HL60 rep=1 treatment=aNone
+        longLabel HL-60 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HL60 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1300 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHmecCtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HMEC CTCF Pk 1
-        longLabel HMEC CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HMEC rep=1 treatment=aNone
+        longLabel HMEC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HMEC rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1301 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HRE CTCF Pk 1
-        longLabel HRE CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HRE rep=1 treatment=aNone
+        longLabel HRE CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HRE rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1304 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HUVEC CTCF Pk 1
-        longLabel HUVEC CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=2HUVEC rep=1 treatment=aNone
+        longLabel HUVEC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=2HUVEC rep=rep1 treatment=aNone
         type narrowPeak
         color 224,75,0
         # subId=1307 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel NHEK CTCF Pk 1
-        longLabel NHEK CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=NHEK rep=1 treatment=aNone
+        longLabel NHEK CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=NHEK rep=rep1 treatment=aNone
         type narrowPeak
         color 179,0,134
         # subId=1310 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel SAEC CTCF Pk 1
-        longLabel SAEC CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=SAEC rep=1 treatment=aNone
+        longLabel SAEC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=SAEC rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1312 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel SKRA CTCF Pk 1
-        longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=1 treatment=aNone
+        longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1313 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsWerirb1CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel WERI CTCF Pk 1
-        longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=1 treatment=aNone
+        longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1315 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsBjCtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel BJ CTCF Pk 2
-        longLabel BJ CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=BJ rep=2 treatment=aNone
+        longLabel BJ CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=BJ rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1262 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  
+        parent wgEncodeUwTfbsViewPeaks on
         shortLabel K562 CTCF Pk 2
-        longLabel K562 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=1K562 rep=2 treatment=aNone
+        longLabel K562 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=1K562 rep=rep2 treatment=aNone
         type narrowPeak
         color 46,0,184
         # subId=1264 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks 
+        parent wgEncodeUwTfbsViewPeaks on
         shortLabel GM78 CTCF Pk 2
-        longLabel GM12878 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=1GM12878 rep=2 treatment=aNone
+        longLabel GM12878 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=1GM12878 rep=rep2 treatment=aNone
         type narrowPeak
         color 153,38,0
         # subId=1265 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsCaco2CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel Caco2 CTCF Pk 2
-        longLabel Caco-2 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=Caco2 rep=2 treatment=aNone
+        longLabel Caco-2 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=Caco2 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1267 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM90 CTCF Pk 2
-        longLabel GM06990 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM06990 rep=2 treatment=aNone
+        longLabel GM06990 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM06990 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1271 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM65 CTCF Pk 2
-        longLabel GM12865 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=2 treatment=aNone
+        longLabel GM12865 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1274 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM72 CTCF Pk 2
-        longLabel GM12872 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=2 treatment=aNone
+        longLabel GM12872 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1278 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM74 CTCF Pk 2
-        longLabel GM12874 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12874 rep=2 treatment=aNone
+        longLabel GM12874 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12874 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1280 dateSubmitted=2010-06-08
 
      	track wgEncodeUwTfbsHelas3CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HeLaS3 CTCF Pk 2
-        longLabel HeLa-S3 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=2HELA rep=2 treatment=aNone
+        longLabel HeLa-S3 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=2HELA rep=rep2 treatment=aNone
         type narrowPeak
         color 0,119,158
         # subId=1296 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HepG2 CTCF Pk 2
-        longLabel HepG2 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=2HEPG2 rep=2 treatment=aNone
+        longLabel HepG2 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=2HEPG2 rep=rep2 treatment=aNone
         type narrowPeak
         color 189,0,157
         # subId=1299 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HRE CTCF Pk 2
-        longLabel HRE CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HRE rep=2 treatment=aNone
+        longLabel HRE CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HRE rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1305 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel HUVEC CTCF Pk 2
-        longLabel HUVEC CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=2HUVEC rep=2 treatment=aNone
+        longLabel HUVEC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=2HUVEC rep=rep2 treatment=aNone
         type narrowPeak
         color 224,75,0
         # subId=1306 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel NHEK CTCF Pk 2
-        longLabel NHEK CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=NHEK rep=2 treatment=aNone
+        longLabel NHEK CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=NHEK rep=rep2 treatment=aNone
         type narrowPeak
         color 179,0,134
         # subId=1309 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel SAEC CTCF Pk 2
-        longLabel SAEC CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=SAEC rep=2 treatment=aNone
+        longLabel SAEC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=SAEC rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1311 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel SKRA CTCF Pk 2
-        longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=2 treatment=aNone
+        longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1314 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsGm12864CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM64 CTCF Pk 2
-        longLabel GM12864 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=2 treatment=aNone
+        longLabel GM12864 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1273 dateSubmitted=2010-06-08
 
        track wgEncodeUwTfbsGm12873CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM73 CTCF Pk 1
-        longLabel GM12873 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=1 treatment=aNone
+        longLabel GM12873 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1276 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsGm12875CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM75 CTCF Pk 1
-        longLabel GM12875 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12875 rep=1 treatment=aNone
+        longLabel GM12875 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12875 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1482 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsGm12873CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM73 CTCF Pk 2
-        longLabel GM12873 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=2 treatment=aNone
+        longLabel GM12873 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1279 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsHek293CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel H293 CTCF Pk 2
-        longLabel HEK293 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HEK293 rep=2 treatment=aNone
+        longLabel HEK293 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HEK293 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1486 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12875CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM75 CTCF Pk 2
-        longLabel GM12875 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12875 rep=2 treatment=aNone
+        longLabel GM12875 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12875 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1484 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12801CtcfStdPkRep1
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM01 CTCF Pk 1
-        longLabel GM12801 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12801 rep=1 treatment=aNone
+        longLabel GM12801 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=GM12801 rep=rep1 treatment=aNone
         type narrowPeak
         # subId=1270 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsWerirb1CtcfStdPkRep2
-        parent wgEncodeUwTfbsViewPeaks  off
+        parent wgEncodeUwTfbsViewPeaks off
         shortLabel WERI CTCF Pk 2
-        longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=2 treatment=aNone
+        longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=rep2 treatment=aNone
         type narrowPeak
         # subId=1492 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsAg04449CtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG49 CTCF Pk 2
-        longLabel AG04449 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG04449  rep=2 treatment=aNone
+        longLabel AG04449 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG04449  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2595 dateSubmitted=2010-10-22
 
         track wgEncodeUwTfbsAg04449CtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG49 CTCF Pk 1
-        longLabel AG04449 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG04449  rep=1 treatment=aNone
+        longLabel AG04449 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG04449  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2596 dateSubmitted=2010-10-22
 
         track wgEncodeUwTfbsAg04450CtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG50 CTCF Pk 1
-        longLabel AG04450 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG04450  rep=1 treatment=aNone
+        longLabel AG04450 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG04450  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2663 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09309CtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG09 CTCF Pk 2
-        longLabel AG09309 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG09309  rep=2 treatment=aNone
+        longLabel AG09309 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG09309  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2665 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09309CtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG09 CTCF Pk 1
-        longLabel AG09309 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG09309  rep=1 treatment=aNone
+        longLabel AG09309 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG09309  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2666 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09319CtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG19 CTCF Pk 2
-        longLabel AG09319 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG09319  rep=2 treatment=aNone
+        longLabel AG09319 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG09319  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2669 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg10803CtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG03 CTCF Pk 1
-        longLabel AG10803 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG10803  rep=1 treatment=aNone
+        longLabel AG10803 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG10803  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2671 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg10803CtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG03 CTCF Pk 2
-        longLabel AG10803 CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG10803  rep=2 treatment=aNone
+        longLabel AG10803 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG10803  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2672 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AoAF CTCF Pk 1
-        longLabel AoAF CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AOAF rep=1 treatment=aNone
+        longLabel AoAF CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AOAF rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2675 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AoAF CTCF Pk 2
-        longLabel AoAF CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AOAF  rep=2 treatment=aNone
+        longLabel AoAF CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AOAF  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2674 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHbmecCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HBMEC CTCF Pk 1
-        longLabel HBMEC CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HBMEC  rep=1 treatment=aNone
+        longLabel HBMEC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HBMEC  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2677 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHbmecCtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HBMEC CTCF Pk 2
-        longLabel HBMEC CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HBMEC  rep=2 treatment=aNone
+        longLabel HBMEC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HBMEC  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2678 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcfaaCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCFa CTCF Pk 1
-        longLabel HCFaa CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HCFaa  rep=1 treatment=aNone
+        longLabel HCFaa CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HCFaa  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2680 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcpeCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCpC CTCF Pk 1
-        longLabel HCPEpiC CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HCPE  rep=1 treatment=aNone
+        longLabel HCPEpiC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HCPE  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2682 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcpeCtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCpC CTCF Pk 2
-        longLabel HCPEpiC CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HCPE  rep=2 treatment=aNone
+        longLabel HCPEpiC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HCPE  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2683 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHeeCtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HEpC CTCF Pk 2
-        longLabel HEEpiC CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HEE  rep=2 treatment=aNone
+        longLabel HEEpiC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HEE  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2685 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHeeCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HEpC CTCF Pk 1
-        longLabel HEEpiC CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HEE  rep=1 treatment=aNone
+        longLabel HEEpiC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HEE  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2686 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHmfCtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HMF CTCF Pk 2
-        longLabel HMF CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HMF  rep=2 treatment=aNone
+        longLabel HMF CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HMF  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2688 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHmfCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HMF CTCF Pk 1
-        longLabel HMF CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HMF  rep=1 treatment=aNone
+        longLabel HMF CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HMF  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2689 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpafCtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPAF CTCF Pk 2
-        longLabel HPAF CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HPAF  rep=2 treatment=aNone
+        longLabel HPAF CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HPAF  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2691 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpafCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPAF CTCF Pk 1
-        longLabel HPAF CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HPAF  rep=1 treatment=aNone
+        longLabel HPAF CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HPAF  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2692 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpfCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPF CTCF Pk 1
-        longLabel HPF CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HPF  rep=1 treatment=aNone
+        longLabel HPF CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HPF  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2694 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHrpeCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HRpC CTCF Pk 1
-        longLabel HRPEpiC CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HRPE  rep=1 treatment=aNone
+        longLabel HRPEpiC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HRPE  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2697 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHaspCtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HAsp CTCF Pk 1
-        longLabel HA-sp CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HA-sp  rep=1 treatment=aNone
+        longLabel HA-sp CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HA-sp  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2781 dateSubmitted=2010-10-28
 
         track wgEncodeUwTfbsAg09319CtcfStdPkRep1
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG19 CTCF Pk 1
-        longLabel AG09319 CTCF TFBS ChIP-seq Peaks (FDR 1%) 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG09319  rep=1 treatment=aNone
+        longLabel AG09319 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AG09319  rep=rep1 treatment=aNone
         type narrowPeak
         # subId=2668 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpfCtcfStdPkRep2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPF CTCF Pk 2
-        longLabel HPF CTCF TFBS ChIP-seq Peaks (FDR 1%) 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HPF  rep=2 treatment=aNone
+        longLabel HPF CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=HPF  rep=rep2 treatment=aNone
         type narrowPeak
         # subId=2695 dateSubmitted=2010-10-23
 
@@ -1590,7 +1590,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel BE2c CTCF Pk 1
         longLabel BE2c CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=BE2C rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=BE2C rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4387 dateSubmitted=2011-06-25
@@ -1599,7 +1599,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel A549 CTCF Pk 2
         longLabel A549 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=A549 rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=A549 rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4384 dateSubmitted=2011-06-25
@@ -1608,7 +1608,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel BE2c CTCF Pk 2
         longLabel BE2c CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=BE2C rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=BE2C rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4388 dateSubmitted=2011-06-25
@@ -1617,7 +1617,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG50 CTCF Pk 2
         longLabel AG04450 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=AG04450 rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=AG04450 rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4386 dateSubmitted=2011-06-25
@@ -1626,7 +1626,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel A549 CTCF Pk 1
         longLabel A549 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=A549 rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=A549 rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4385 dateSubmitted=2011-06-25
@@ -1635,7 +1635,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HAc CTCF Pk 1
         longLabel HAc CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HAC rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HAC rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4389 dateSubmitted=2011-06-25
@@ -1644,7 +1644,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCM CTCF Pk 1
         longLabel HCM CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HCM rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HCM rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4390 dateSubmitted=2011-06-25
@@ -1653,7 +1653,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HFMyc CTCF Pk 2
         longLabel HFF-Myc CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HFFMYC rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HFFMYC rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4392 dateSubmitted=2011-06-25
@@ -1662,7 +1662,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel NB4 CTCF Pk 1
         longLabel NB4 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=NB4 rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=NB4 rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4393 dateSubmitted=2011-06-25
@@ -1671,7 +1671,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HFMyc CTCF Pk 1
         longLabel HFF-Myc CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HFFMYC rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HFFMYC rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4391 dateSubmitted=2011-06-25
@@ -1680,7 +1680,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel WI-38 CTCF Pk 1
         longLabel WI-38 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=WI38 rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=WI38 rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4394 dateSubmitted=2011-06-25
@@ -1689,7 +1689,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel WI-38 CTCF Pk 2
         longLabel WI-38 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=WI38 rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=WI38 rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4395 dateSubmitted=2011-06-25
@@ -1698,7 +1698,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM64 CTCF Pk 3
         longLabel GM12864 CTCF TFBS ChIP-seq Peaks 3 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=3 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=rep3 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4652 dateSubmitted=2011-07-29
@@ -1707,7 +1707,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM65 CTCF Pk 3
         longLabel GM12865 CTCF TFBS ChIP-seq Peaks 3 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=3 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=rep3 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4653 dateSubmitted=2011-07-29
@@ -1716,7 +1716,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM72 CTCF Pk 3
         longLabel GM12872 CTCF TFBS ChIP-seq Peaks 3 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=3 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=rep3 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4666 dateSubmitted=2011-07-29
@@ -1725,7 +1725,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel GM73 CTCF Pk 3
         longLabel GM12873 CTCF TFBS ChIP-seq Peaks 3 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=3 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=rep3 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4667 dateSubmitted=2011-07-29
@@ -1734,7 +1734,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel MCF7 CTCF Pk 2
         longLabel MCF-7 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=MCF7 rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=MCF7 rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4676 dateSubmitted=2011-07-29
@@ -1743,7 +1743,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel MCF7 CTCF Pk 1
         longLabel MCF-7 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=MCF7 rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=MCF7 rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4677 dateSubmitted=2011-07-29
@@ -1752,7 +1752,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel NHDF CTCF Pk 1
         longLabel NHDF-neo CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=NHDF-neo rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=NHDF-neo rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4678 dateSubmitted=2011-07-29
@@ -1761,7 +1761,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel NHDF CTCF Pk 2
         longLabel NHDF-neo CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=NHDF-neo rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=NHDF-neo rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4679 dateSubmitted=2011-07-29
@@ -1770,7 +1770,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel RPTC CTCF Pk 1
         longLabel RPTEC CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=RPTEC rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=RPTEC rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4682 dateSubmitted=2011-07-29
@@ -1779,7 +1779,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel RPTC CTCF Pk 2
         longLabel RPTEC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=RPTEC rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=RPTEC rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4681 dateSubmitted=2011-07-29
@@ -1788,7 +1788,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HAc CTCF Pk 2
         longLabel HAc CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HAC rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HAC rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4686 dateSubmitted=2011-07-29
@@ -1797,7 +1797,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HAsp CTCF Pk 2
         longLabel HA-sp CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HA-sp rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HA-sp rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4687 dateSubmitted=2011-07-29
@@ -1806,7 +1806,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCM CTCF Pk 2
         longLabel HCM CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HCM rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HCM rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4688 dateSubmitted=2011-07-29
@@ -1815,7 +1815,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCT16 CTCF Pk 2
         longLabel HCT-116 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HCT116 rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HCT116 rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4689 dateSubmitted=2011-07-29
@@ -1824,7 +1824,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCT16 CTCF Pk 1
         longLabel HCT-116 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HCT116 rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HCT116 rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4690 dateSubmitted=2011-07-29
@@ -1833,7 +1833,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HMEC CTCF Pk 2
         longLabel HMEC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HMEC rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HMEC rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4692 dateSubmitted=2011-07-29
@@ -1842,7 +1842,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HRpC CTCF Pk 2
         longLabel HRPEpIC CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HRPE rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HRPE rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4693 dateSubmitted=2011-07-29
@@ -1851,7 +1851,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HVMF CTCF Pk 1
         longLabel HVMF CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HVMF rep=1 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HVMF rep=rep1 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4694 dateSubmitted=2011-07-29
@@ -1860,7 +1860,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HVMF CTCF Pk 2
         longLabel HVMF CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HVMF rep=2 treatment=aNone
+        subGroups view=Peaks factor=CTCF cellType=HVMF rep=rep2 treatment=aNone
         type narrowPeak
         origAssembly hg19
         # subId=4695 dateSubmitted=2011-07-29
@@ -1869,7 +1869,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM66 CTCF Pk 2
         #longLabel GM12866 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12866 rep=2 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12866 rep=rep2 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4655 dateSubmitted=2011-07-29
@@ -1878,7 +1878,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM66 CTCF Pk 1
         #longLabel GM12866 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12866 rep=1 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12866 rep=rep1 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4654 dateSubmitted=2011-07-29
@@ -1887,7 +1887,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM67 CTCF Pk 2
         #longLabel GM12867 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12867 rep=2 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12867 rep=rep2 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         ## subId=4657 dateSubmitted=2011-07-29
@@ -1896,7 +1896,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM68 CTCF Pk 2
         #longLabel GM12868 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12868 rep=2 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12868 rep=rep2 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4659 dateSubmitted=2011-07-29
@@ -1905,7 +1905,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM68 CTCF Pk 1
         #longLabel GM12868 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12868 rep=1 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12868 rep=rep1 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4658 dateSubmitted=2011-07-29
@@ -1914,7 +1914,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM67 CTCF Pk 1
         #longLabel GM12867 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12867 rep=1 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12867 rep=rep1 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         ## subId=4656 dateSubmitted=2011-07-29
@@ -1923,7 +1923,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM70 CTCF Pk 2
         #longLabel GM12870 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12870 rep=2 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12870 rep=rep2 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4662 dateSubmitted=2011-07-29
@@ -1932,7 +1932,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM69 CTCF Pk 2
         #longLabel GM12869 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12869 rep=2 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12869 rep=rep2 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4661 dateSubmitted=2011-07-29
@@ -1941,7 +1941,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM69 CTCF Pk 1
         #longLabel GM12869 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12869 rep=1 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12869 rep=rep1 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4660 dateSubmitted=2011-07-29
@@ -1950,7 +1950,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM70 CTCF Pk 1
         #longLabel GM12870 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12870 rep=1 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12870 rep=rep1 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4663 dateSubmitted=2011-07-29
@@ -1959,7 +1959,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM71 CTCF Pk 1
         #longLabel GM12871 CTCF TFBS ChIP-seq Peaks 1 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12871 rep=1 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12871 rep=rep1 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         ## subId=4664 dateSubmitted=2011-07-29
@@ -1968,7 +1968,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewPeaks off
         #shortLabel GM71 CTCF Pk 2
         #longLabel GM12871 CTCF TFBS ChIP-seq Peaks 2 from ENCODE/UW
-        #subGroups view=Peaks factor=CTCF cellType=GM12871 rep=2 treatment=aNone
+        #subGroups view=Peaks factor=CTCF cellType=GM12871 rep=rep2 treatment=aNone
         #type narrowPeak
         #origAssembly hg19
         # subId=4665 dateSubmitted=2011-07-29
@@ -1989,24 +1989,24 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BJ CTCF Sg 1
         longLabel BJ CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=BJ rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=BJ rep=rep1 treatment=aNone
         type bigWig 1.000000 8153.000000
         # subId=1255 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdRawRep1
-        parent wgEncodeUwTfbsViewRawSig
+        parent wgEncodeUwTfbsViewRawSig on
         shortLabel GM78 CTCF Sg 1
         longLabel GM12878 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=1GM12878 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=1GM12878 rep=rep1 treatment=aNone
         type bigWig 1.000000 2723.000000
         color 153,38,0
         # subId=1263 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdRawRep1
-        parent wgEncodeUwTfbsViewRawSig
+        parent wgEncodeUwTfbsViewRawSig on
         shortLabel K562 CTCF Sg 1
         longLabel K562 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=1K562 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=1K562 rep=rep1 treatment=aNone
         type bigWig 1.000000 8445.000000
         color 46,0,184
         # subId=1266 dateSubmitted=2010-06-08
@@ -2015,7 +2015,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM90 CTCF Sg 1
         longLabel GM06990 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM06990 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM06990 rep=rep1 treatment=aNone
         type bigWig 1.000000 6903.000000
         # subId=1268 dateSubmitted=2010-06-08
 
@@ -2023,7 +2023,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Caco2 CTCF Sg 1
         longLabel Caco-2 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=Caco2 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=Caco2 rep=rep1 treatment=aNone
         type bigWig 1.000000 8162.000000
         # subId=1269 dateSubmitted=2010-06-08
 
@@ -2031,7 +2031,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM64 CTCF Sg 1
         longLabel GM12864 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=rep1 treatment=aNone
         type bigWig 1.000000 4037.000000
         # subId=1272 dateSubmitted=2010-06-08
 
@@ -2039,7 +2039,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM65 CTCF Sg 1
         longLabel GM12865 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=rep1 treatment=aNone
         type bigWig 1.000000 4888.000000
         # subId=1275 dateSubmitted=2010-06-08
 
@@ -2047,7 +2047,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM72 CTCF Sg 1
         longLabel GM12872 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=rep1 treatment=aNone
         type bigWig 1.000000 4091.000000
         # subId=1277 dateSubmitted=2010-06-08
 
@@ -2055,7 +2055,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM74 CTCF Sg 1
         longLabel GM12874 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12874 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12874 rep=rep1 treatment=aNone
         type bigWig 1.000000 3615.000000
         # subId=1281 dateSubmitted=2010-06-08
 
@@ -2063,7 +2063,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel H293 CTCF Sg 1
         longLabel HEK293 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HEK293 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HEK293 rep=rep1 treatment=aNone
         type bigWig 1.000000 5462.000000
         # subId=1294 dateSubmitted=2010-06-10
 
@@ -2071,7 +2071,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLaS3 CTCF Sg 1
         longLabel HeLa-S3 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=2HELA rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=2HELA rep=rep1 treatment=aNone
         type bigWig 1.000000 4129.000000
         color 0,119,158
         # subId=1297 dateSubmitted=2010-06-10
@@ -2080,7 +2080,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 CTCF Sg 1
         longLabel HepG2 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=2HEPG2 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=2HEPG2 rep=rep1 treatment=aNone
         type bigWig 1.000000 2546.000000
         color 189,0,157
         # subId=1298 dateSubmitted=2010-06-10
@@ -2089,7 +2089,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HL60 CTCF Sg 1
         longLabel HL-60 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HL60 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HL60 rep=rep1 treatment=aNone
         type bigWig 1.000000 2968.000000
         # subId=1300 dateSubmitted=2010-06-10
 
@@ -2097,7 +2097,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMEC CTCF Sg 1
         longLabel HMEC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HMEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HMEC rep=rep1 treatment=aNone
         type bigWig 1.000000 4919.000000
         # subId=1301 dateSubmitted=2010-06-10
 
@@ -2105,7 +2105,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRE CTCF Sg 1
         longLabel HRE CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HRE rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HRE rep=rep1 treatment=aNone
         type bigWig 1.000000 2395.000000
         # subId=1304 dateSubmitted=2010-06-10
 
@@ -2113,7 +2113,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC CTCF Sg 1
         longLabel HUVEC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=2HUVEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=2HUVEC rep=rep1 treatment=aNone
         type bigWig 1.000000 2691.000000
         color 224,75,0
         # subId=1307 dateSubmitted=2010-06-10
@@ -2122,7 +2122,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHEK CTCF Sg 1
         longLabel NHEK CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=NHEK rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=NHEK rep=rep1 treatment=aNone
         type bigWig 1.000000 2291.000000
         color 179,0,134
         # subId=1310 dateSubmitted=2010-06-10
@@ -2131,7 +2131,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SAEC CTCF Sg 1
         longLabel SAEC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=SAEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=SAEC rep=rep1 treatment=aNone
         type bigWig 1.000000 1813.000000
         # subId=1312 dateSubmitted=2010-06-10
 
@@ -2139,7 +2139,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA CTCF Sg 1
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 3210.000000
         # subId=1313 dateSubmitted=2010-06-10
 
@@ -2147,7 +2147,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WERI CTCF Sg 1
         longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=rep1 treatment=aNone
         type bigWig 1.000000 2991.000000
         # subId=1315 dateSubmitted=2010-06-10
 
@@ -2155,24 +2155,24 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BJ CTCF Sg 2
         longLabel BJ CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=BJ rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=BJ rep=rep2 treatment=aNone
         type bigWig 1.000000 5047.000000
         # subId=1262 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdRawRep2
-        parent wgEncodeUwTfbsViewRawSig 
+        parent wgEncodeUwTfbsViewRawSig on
         shortLabel K562 CTCF Sg 2
         longLabel K562 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=1K562 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=1K562 rep=rep2 treatment=aNone
         type bigWig 1.000000 8080.000000
         color 46,0,184
         # subId=1264 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdRawRep2
-        parent wgEncodeUwTfbsViewRawSig 
+        parent wgEncodeUwTfbsViewRawSig on
         shortLabel GM78 CTCF Sg 2
         longLabel GM12878 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=1GM12878 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=1GM12878 rep=rep2 treatment=aNone
         type bigWig 1.000000 7099.000000
         color 153,38,0
         # subId=1265 dateSubmitted=2010-06-07
@@ -2181,7 +2181,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Caco2 CTCF Sg 2
         longLabel Caco-2 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=Caco2 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=Caco2 rep=rep2 treatment=aNone
         type bigWig 1.000000 10289.000000
         # subId=1267 dateSubmitted=2010-06-08
 
@@ -2189,7 +2189,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM90 CTCF Sg 2
         longLabel GM06990 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM06990 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM06990 rep=rep2 treatment=aNone
         type bigWig 1.000000 8819.000000
         # subId=1271 dateSubmitted=2010-06-08
 
@@ -2197,7 +2197,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM65 CTCF Sg 2
         longLabel GM12865 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=rep2 treatment=aNone
         type bigWig 1.000000 3768.000000
         # subId=1274 dateSubmitted=2010-06-08
 
@@ -2205,7 +2205,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM72 CTCF Sg 2
         longLabel GM12872 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=rep2 treatment=aNone
         type bigWig 1.000000 6815.000000
         # subId=1278 dateSubmitted=2010-06-08
 
@@ -2213,7 +2213,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM74 CTCF Sg 2
         longLabel GM12874 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12874 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12874 rep=rep2 treatment=aNone
         type bigWig 1.000000 4160.000000
         # subId=1280 dateSubmitted=2010-06-08
 
@@ -2221,7 +2221,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLaS3 CTCF Sg 2
         longLabel HeLa-S3 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=2HELA rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=2HELA rep=rep2 treatment=aNone
         type bigWig 1.000000 3763.000000
         color 0,119,158
         # subId=1296 dateSubmitted=2010-06-10
@@ -2230,7 +2230,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 CTCF Sg 2
         longLabel HepG2 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=2HEPG2 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=2HEPG2 rep=rep2 treatment=aNone
         type bigWig 1.000000 5725.000000
         color 189,0,157
         # subId=1299 dateSubmitted=2010-06-10
@@ -2239,7 +2239,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRE CTCF Sg 2
         longLabel HRE CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HRE rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HRE rep=rep2 treatment=aNone
         type bigWig 1.000000 4640.000000
         # subId=1305 dateSubmitted=2010-06-10
 
@@ -2247,7 +2247,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC CTCF Sg 2
         longLabel HUVEC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=2HUVEC rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=2HUVEC rep=rep2 treatment=aNone
         type bigWig 1.000000 1952.000000
         color 224,75,0
         # subId=1306 dateSubmitted=2010-06-10
@@ -2256,7 +2256,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHEK CTCF Sg 2
         longLabel NHEK CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=NHEK rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=NHEK rep=rep2 treatment=aNone
         type bigWig 1.000000 4245.000000
         color 179,0,134
         # subId=1309 dateSubmitted=2010-06-10
@@ -2265,7 +2265,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SAEC CTCF Sg 2
         longLabel SAEC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=SAEC rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=SAEC rep=rep2 treatment=aNone
         type bigWig 1.000000 2175.000000
         # subId=1311 dateSubmitted=2010-06-10
 
@@ -2273,7 +2273,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA CTCF Sg 2
         longLabel SK-N-SH_RA CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=rep2 treatment=aNone
         type bigWig 1.000000 3470.000000
         # subId=1314 dateSubmitted=2010-06-10
 
@@ -2281,7 +2281,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM64 CTCF Sg 2
         longLabel GM12864 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=rep2 treatment=aNone
         type bigWig 1.000000 6440.000000
         # subId=1273 dateSubmitted=2010-06-08
 
@@ -2289,7 +2289,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM73 CTCF Sg 1
         longLabel GM12873 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=rep1 treatment=aNone
         type bigWig 1.000000 3714.000000
         # subId=1276 dateSubmitted=2010-06-15
 
@@ -2297,7 +2297,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM75 CTCF Sg 1
         longLabel GM12875 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12875 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12875 rep=rep1 treatment=aNone
         type bigWig 1.000000 4128.000000
         # subId=1482 dateSubmitted=2010-06-15
 
@@ -2305,7 +2305,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM01 CTCF Sg 1
         longLabel GM12801 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12801 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12801 rep=rep1 treatment=aNone
         type bigWig 1.000000 1190.000000
         # subId=1270 dateSubmitted=2010-06-16
 
@@ -2313,7 +2313,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM73 CTCF Sg 2
         longLabel GM12873 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=rep2 treatment=aNone
         type bigWig 1.000000 4813.000000
         # subId=1279 dateSubmitted=2010-06-15
 
@@ -2321,7 +2321,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel H293 CTCF Sg 2
         longLabel HEK293 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HEK293 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HEK293 rep=rep2 treatment=aNone
         type bigWig 1.000000 1536.000000
         # subId=1486 dateSubmitted=2010-06-16
 
@@ -2329,7 +2329,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM75 CTCF Sg 2
         longLabel GM12875 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12875 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12875 rep=rep2 treatment=aNone
         type bigWig 1.000000 3639.000000
         # subId=1484 dateSubmitted=2010-06-16
 
@@ -2337,7 +2337,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WERI CTCF Sg 2
         longLabel WERI-Rb-1 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=rep2 treatment=aNone
         type bigWig 1.000000 3015.000000
         # subId=1492 dateSubmitted=2010-06-16
 
@@ -2345,7 +2345,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BJ In Sg 1
         longLabel BJ Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=BJ rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=BJ rep=rep1 treatment=aNone
         type bigWig 1.000000 15966.000000
         # subId=1283 dateSubmitted=2010-06-10
 
@@ -2353,7 +2353,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Caco2 In Sg 1
         longLabel Caco-2 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=Caco2 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=Caco2 rep=rep1 treatment=aNone
         type bigWig 1.000000 9741.000000
         # subId=1287 dateSubmitted=2010-06-10
 
@@ -2362,7 +2362,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM90 In Sg 1
         longLabel GM06990 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM06990 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM06990 rep=rep1 treatment=aNone
         type bigWig 1.000000 8015.000000
         # subId=1288 dateSubmitted=2010-06-10
 
@@ -2371,7 +2371,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM01 In Sg 1
         longLabel GM12801 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12801 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM12801 rep=rep1 treatment=aNone
         type bigWig 1.000000 10337.000000
         # subId=1289 dateSubmitted=2010-06-10
 
@@ -2380,7 +2380,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM64 In Sg 1
         longLabel GM12864 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12864 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM12864 rep=rep1 treatment=aNone
         type bigWig 1.000000 8541.000000
         # subId=1290 dateSubmitted=2010-06-10
 
@@ -2389,7 +2389,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM65 In Sg 1
         longLabel GM12865 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12865 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM12865 rep=rep1 treatment=aNone
         type bigWig 1.000000 9831.000000
         # subId=1291 dateSubmitted=2010-06-10
 
@@ -2398,15 +2398,15 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM72 In Sg 1
         longLabel GM12872 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12872 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM12872 rep=rep1 treatment=aNone
         type bigWig 1.000000 7087.000000
         # subId=1292 dateSubmitted=2010-06-10
         
 	track wgEncodeUwTfbsGm12878InputStdRawRep1
-        parent wgEncodeUwTfbsViewRawSig
+        parent wgEncodeUwTfbsViewRawSig on
         shortLabel GM78 In Sg 1
         longLabel GM12878 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=1GM12878 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=1GM12878 rep=rep1 treatment=aNone
         type bigWig 1.000000 8963.000000
         color 153,38,0
         # subId=1293 dateSubmitted=2010-06-10
@@ -2416,7 +2416,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel H293 In Sg 1
         longLabel HEK293 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HEK293 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HEK293 rep=rep1 treatment=aNone
         type bigWig 1.000000 8215.000000
         # subId=1295 dateSubmitted=2010-06-10
 
@@ -2424,7 +2424,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMEC In Sg 1
         longLabel HMEC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HMEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HMEC rep=rep1 treatment=aNone
         type bigWig 1.000000 9968.000000
         # subId=1302 dateSubmitted=2010-06-10
 
@@ -2432,15 +2432,15 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRE In Sg 1
         longLabel HRE Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HRE rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HRE rep=rep1 treatment=aNone
         type bigWig 1.000000 7076.000000
         # subId=1303 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsK562InputStdRawRep1
-        parent wgEncodeUwTfbsViewRawSig
+        parent wgEncodeUwTfbsViewRawSig on
         shortLabel K562 In Sg 1
         longLabel K562 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=1K562 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=1K562 rep=rep1 treatment=aNone
         type bigWig 1.000000 13124.000000
         color 46,0,184
         # subId=1308 dateSubmitted=2010-06-10
@@ -2449,7 +2449,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC In Sg 1
         longLabel HUVEC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=2HUVEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=2HUVEC rep=rep1 treatment=aNone
         type bigWig 1.000000 8683.000000
         color 224,75,0
         # subId=1316 dateSubmitted=2010-06-10
@@ -2458,7 +2458,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHEK In Sg 1
         longLabel NHEK Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=NHEK rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=NHEK rep=rep1 treatment=aNone
         type bigWig 1.000000 11841.000000
         color 179,0,134
         # subId=1317 dateSubmitted=2010-06-10
@@ -2467,7 +2467,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SAEC In Sg 1
         longLabel SAEC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SAEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SAEC rep=rep1 treatment=aNone
         type bigWig 1.000000 8873.000000
         # subId=1318 dateSubmitted=2010-06-10
 
@@ -2475,7 +2475,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA In Sg 1
         longLabel SK-N-SH_RA Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=rep1 treatment=aNone
         type bigWig 1.000000 12154.000000
         # subId=1319 dateSubmitted=2010-06-10
 
@@ -2484,7 +2484,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WERI In Sg 1
         longLabel WERI-Rb-1 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=WERIRb1 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=WERIRb1 rep=rep1 treatment=aNone
         type bigWig 1.000000 9496.000000
         # subId=1320 dateSubmitted=2010-06-10
 
@@ -2493,7 +2493,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM74 In Sg 1
         longLabel GM12874 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12874 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM12874 rep=rep1 treatment=aNone
         type bigWig 1.000000 8370.000000
         # subId=1416 dateSubmitted=2010-06-14
 
@@ -2501,7 +2501,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLaS3 In Sg 1
         longLabel HeLa-S3 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=2HELA rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=2HELA rep=rep1 treatment=aNone
         type bigWig 1.000000 10388.000000
         color 0,119,158
         # subId=1423 dateSubmitted=2010-06-14
@@ -2510,7 +2510,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 In Sg 1
         longLabel HepG2 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=2HEPG2 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=2HEPG2 rep=rep1 treatment=aNone
         type bigWig 1.000000 7679.000000
         color 189,0,157
         # subId=1435 dateSubmitted=2010-06-15
@@ -2519,7 +2519,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HL60 In Sg 1
         longLabel HL-60 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HL60 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HL60 rep=rep1 treatment=aNone
         type bigWig 1.000000 9223.000000
         # subId=1438 dateSubmitted=2010-06-15
 
@@ -2528,7 +2528,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM73 In Sg 1
         longLabel GM12873 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12873 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM12873 rep=rep1 treatment=aNone
         type bigWig 1.000000 8562.000000
         # subId=1481 dateSubmitted=2010-06-15
 
@@ -2537,7 +2537,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM75 In Sg 1
         longLabel GM12875 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12875 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=GM12875 rep=rep1 treatment=aNone
         type bigWig 1.000000 7544.000000
         # subId=1485 dateSubmitted=2010-06-16
 
@@ -2545,7 +2545,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG49 CTCF Sg 2
         longLabel AG04449 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG04449  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG04449  rep=rep2 treatment=aNone
         type bigWig 1.000000 14258.000000
         # subId=2595 dateSubmitted=2010-10-22
 
@@ -2554,7 +2554,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG49 CTCF Sg 1
         longLabel AG04449 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG04449  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG04449  rep=rep1 treatment=aNone
         type bigWig 1.000000 2542.000000
         # subId=2596 dateSubmitted=2010-10-22
 
@@ -2562,7 +2562,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG49 In Sg 1
         longLabel AG04449 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=AG04449  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=AG04449  rep=rep1 treatment=aNone
         type bigWig 1.000000 14656.000000
         # subId=2597 dateSubmitted=2010-10-22
 
@@ -2571,7 +2571,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG50 In Sg 1
         longLabel AG04450 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=AG04450  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=AG04450  rep=rep1 treatment=aNone
         type bigWig 1.000000 17581.000000
         # subId=2662 dateSubmitted=2010-10-23
 
@@ -2579,7 +2579,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG50 CTCF Sg 1
         longLabel AG04450 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG04450  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG04450  rep=rep1 treatment=aNone
         type bigWig 1.000000 13221.000000
         # subId=2663 dateSubmitted=2010-10-23
 
@@ -2587,7 +2587,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel MCF7 In Sg 1
         longLabel MCF-7 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=MCF7  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=MCF7  rep=rep1 treatment=aNone
         type bigWig 1.000000 25597.000000
         # subId=2700 dateSubmitted=2010-10-23
 
@@ -2596,7 +2596,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09 In Sg 1
         longLabel AG09309 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=AG09309  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=AG09309  rep=rep1 treatment=aNone
         type bigWig 1.000000 7173.000000
         # subId=2664 dateSubmitted=2010-10-23
 
@@ -2605,7 +2605,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09 CTCF Sg 2
         longLabel AG09309 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG09309  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG09309  rep=rep2 treatment=aNone
         type bigWig 1.000000 7371.000000
         # subId=2665 dateSubmitted=2010-10-23
 
@@ -2614,16 +2614,16 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09 CTCF Sg 1
         longLabel AG09309 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG09309  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG09309  rep=rep1 treatment=aNone
         type bigWig 1.000000 8409.000000
-	# subId=2666 dateSubmitted=2010-10-23
+        # subId=2666 dateSubmitted=2010-10-23
 
 
         track wgEncodeUwTfbsAg09319InputStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG19 In Sg 1
         longLabel AG09319 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=AG09319  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=AG09319  rep=rep1 treatment=aNone
         type bigWig 1.000000 23698.000000
         # subId=2667 dateSubmitted=2010-10-23
 
@@ -2632,7 +2632,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG19 CTCF Sg 2
         longLabel AG09319 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG09319  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG09319  rep=rep2 treatment=aNone
         type bigWig 1.000000 16542.000000
         # subId=2669 dateSubmitted=2010-10-23
 
@@ -2641,7 +2641,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG03 In Sg 1
         longLabel AG10803 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=AG10803  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=AG10803  rep=rep1 treatment=aNone
         type bigWig 1.000000 21401.000000
         # subId=2670 dateSubmitted=2010-10-23
 
@@ -2650,7 +2650,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG03 CTCF Sg 1
         longLabel AG10803 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG10803  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG10803  rep=rep1 treatment=aNone
         type bigWig 1.000000 19625.000000
         # subId=2671 dateSubmitted=2010-10-23
 
@@ -2659,7 +2659,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG03 CTCF Sg 2
         longLabel AG10803 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG10803  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG10803  rep=rep2 treatment=aNone
         type bigWig 1.000000 21460.000000
         # subId=2672 dateSubmitted=2010-10-23
 
@@ -2668,7 +2668,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AoAF In Sg 1
         longLabel AoAF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=AOAF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=AOAF  rep=rep1 treatment=aNone
         type bigWig 1.000000 17667.000000
         # subId=2673 dateSubmitted=2010-10-23
 
@@ -2676,7 +2676,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AoAF CTCF Sg 1
         longLabel AoAF CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AOAF rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AOAF rep=rep1 treatment=aNone
         type bigWig 1.000000 4397.000000
         # subId=2675 dateSubmitted=2010-10-23
 
@@ -2684,7 +2684,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AoAF CTCF Sg 2
         longLabel AoAF CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AOAF  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AOAF  rep=rep2 treatment=aNone
         type bigWig 1.000000 18876.000000
         # subId=2674 dateSubmitted=2010-10-23
 
@@ -2693,7 +2693,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HBMEC CTCF Sg 1
         longLabel HBMEC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HBMEC  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HBMEC  rep=rep1 treatment=aNone
         type bigWig 1.000000 5796.000000
         # subId=2677 dateSubmitted=2010-10-23
 
@@ -2702,7 +2702,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HBMEC CTCF Sg 2
         longLabel HBMEC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HBMEC  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HBMEC  rep=rep2 treatment=aNone
         type bigWig 1.000000 8110.000000
         # subId=2678 dateSubmitted=2010-10-23
 
@@ -2711,7 +2711,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCFa CTCF Sg 1
         longLabel HCFaa CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HCFaa  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HCFaa  rep=rep1 treatment=aNone
         type bigWig 1.000000 8603.000000
         # subId=2680 dateSubmitted=2010-10-23
 
@@ -2720,7 +2720,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCpC In Sg 1
         longLabel HCPEpIC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HCPE  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HCPE  rep=rep1 treatment=aNone
         type bigWig 1.000000 15167.000000
         # subId=2681 dateSubmitted=2010-10-23
 
@@ -2729,7 +2729,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCpC CTCF Sg 1
         longLabel HCPEpIC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HCPE  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HCPE  rep=rep1 treatment=aNone
         type bigWig 1.000000 2683.000000
         # subId=2682 dateSubmitted=2010-10-23
 
@@ -2738,7 +2738,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCpC CTCF Sg 2
         longLabel HCPEpIC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HCPE  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HCPE  rep=rep2 treatment=aNone
         type bigWig 1.000000 15624.000000
         # subId=2683 dateSubmitted=2010-10-23
 
@@ -2747,7 +2747,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEpC In Sg 1
         longLabel HEEpIC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HEE  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HEE  rep=rep1 treatment=aNone
         type bigWig 1.000000 6633.000000
         # subId=2684 dateSubmitted=2010-10-23
 
@@ -2755,7 +2755,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEpC CTCF Sg 2
         longLabel HEEpIC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HEE  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HEE  rep=rep2 treatment=aNone
         type bigWig 1.000000 4700.000000
         # subId=2685 dateSubmitted=2010-10-23
 
@@ -2764,7 +2764,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEpC CTCF Sg 1
         longLabel HEEpIC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HEE  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HEE  rep=rep1 treatment=aNone
         type bigWig 1.000000 8672.000000
         # subId=2686 dateSubmitted=2010-10-23
 
@@ -2773,7 +2773,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMF In Sg 1
         longLabel HMF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HMF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HMF  rep=rep1 treatment=aNone
         type bigWig 1.000000 4624.000000
         # subId=2687 dateSubmitted=2010-10-23
 
@@ -2782,7 +2782,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMF CTCF Sg 2
         longLabel HMF CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HMF  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HMF  rep=rep2 treatment=aNone
         type bigWig 1.000000 8513.000000
         # subId=2688 dateSubmitted=2010-10-23
 
@@ -2791,7 +2791,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMF CTCF Sg 1
         longLabel HMF CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HMF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HMF  rep=rep1 treatment=aNone
         type bigWig 1.000000 3170.000000
         # subId=2689 dateSubmitted=2010-10-23
 
@@ -2800,7 +2800,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPAF In Sg 1
         longLabel HPAF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HPAF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HPAF  rep=rep1 treatment=aNone
         type bigWig 1.000000 15992.000000
         # subId=2690 dateSubmitted=2010-10-23
 
@@ -2809,7 +2809,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPAF CTCF Sg 2
         longLabel HPAF CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HPAF  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HPAF  rep=rep2 treatment=aNone
         type bigWig 1.000000 15544.000000
         # subId=2691 dateSubmitted=2010-10-23
 
@@ -2818,7 +2818,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPAF CTCF Sg 1
         longLabel HPAF CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HPAF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HPAF  rep=rep1 treatment=aNone
         type bigWig 1.000000 12801.000000
         # subId=2692 dateSubmitted=2010-10-23
 
@@ -2827,7 +2827,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPF In Sg 1
         longLabel HPF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HPF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HPF  rep=rep1 treatment=aNone
         type bigWig 1.000000 13754.000000
         # subId=2693 dateSubmitted=2010-10-23
 
@@ -2836,7 +2836,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPF CTCF Sg 1
         longLabel HPF CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HPF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HPF  rep=rep1 treatment=aNone
         type bigWig 1.000000 12089.000000
         # subId=2694 dateSubmitted=2010-10-23
 
@@ -2845,7 +2845,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRpC In Sg 1
         longLabel HRPEpIC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HRPE  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HRPE  rep=rep1 treatment=aNone
         type bigWig 1.000000 11983.000000
         # subId=2696 dateSubmitted=2010-10-23
 
@@ -2854,7 +2854,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRpC CTCF Sg 1
         longLabel HRPEpIC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HRPE  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HRPE  rep=rep1 treatment=aNone
         type bigWig 1.000000 14608.000000
         # subId=2697 dateSubmitted=2010-10-23
 
@@ -2863,7 +2863,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HVMF In Sg 1
         longLabel HVMF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HVMF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HVMF  rep=rep1 treatment=aNone
         type bigWig 1.000000 21799.000000
         # subId=2698 dateSubmitted=2010-10-23
 
@@ -2872,7 +2872,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Jurk In Sg 1
         longLabel Jurkat Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=Jurkat  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=Jurkat  rep=rep1 treatment=aNone
         type bigWig 1.000000 18193.000000
         # subId=2699 dateSubmitted=2010-10-23
 
@@ -2880,7 +2880,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NB4 In Sg 1
         longLabel NB4 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=NB4  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=NB4  rep=rep1 treatment=aNone
         type bigWig 1.000000 18098.000000
         # subId=2701 dateSubmitted=2010-10-23
 
@@ -2889,7 +2889,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHDF In Sg 1
         longLabel NHDF-neo Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=NHDF-neo  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=NHDF-neo  rep=rep1 treatment=aNone
         type bigWig 1.000000 26277.000000
         # subId=2702 dateSubmitted=2010-10-23
 
@@ -2898,7 +2898,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCF In Sg 1
         longLabel HCF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HCF  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HCF  rep=rep1 treatment=aNone
         type bigWig 1.000000 19717.000000
         # subId=2703 dateSubmitted=2010-10-23
 
@@ -2907,7 +2907,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCT16 In Sg 1
         longLabel HCT-116 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HCT116  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HCT116  rep=rep1 treatment=aNone
         type bigWig 1.000000 14872.000000
         # subId=2705 dateSubmitted=2010-10-23
 
@@ -2915,7 +2915,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HAsp In Sg 1
         longLabel HA-sp Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HA-sp  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HA-sp  rep=rep1 treatment=aNone
         type bigWig 1.000000 22062.000000
         # subId=2780 dateSubmitted=2010-10-28
 
@@ -2923,7 +2923,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HAsp CTCF Sg 1
         longLabel HA-sp CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HA-sp  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HA-sp  rep=rep1 treatment=aNone
         type bigWig 1.000000 8186.000000
         # subId=2781 dateSubmitted=2010-10-28
 
@@ -2931,7 +2931,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HBMEC In Sg 1
         longLabel HBMEC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HBMEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HBMEC rep=rep1 treatment=aNone
         type bigWig 1.000000 15288.000000
         # subId=2676 dateSubmitted=2010-10-23
 
@@ -2939,7 +2939,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCFa In Sg 1
         longLabel HCFaa Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HCFaa  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HCFaa  rep=rep1 treatment=aNone
         type bigWig 1.000000 16198.000000
         # subId=2679 dateSubmitted=2010-10-23
 
@@ -2947,7 +2947,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG19 CTCF Sg 1
         longLabel AG09319 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG09319  rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG09319  rep=rep1 treatment=aNone
         type bigWig 1.000000 11837.000000
         # subId=2668 dateSubmitted=2010-10-23
 
@@ -2956,7 +2956,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCM In Sg 1
         longLabel HCM Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HCM  rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HCM  rep=rep1 treatment=aNone
         type bigWig 1.000000 18082.000000
         # subId=2704 dateSubmitted=2010-10-23
 
@@ -2964,7 +2964,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPF CTCF Sg 2
         longLabel HPF CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HPF  rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HPF  rep=rep2 treatment=aNone
         type bigWig 1.000000 17174.000000
         # subId=2695 dateSubmitted=2010-10-23
 
@@ -2972,7 +2972,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BE2c In Sg 1
         longLabel BE2c Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=BE2C rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=BE2C rep=rep1 treatment=aNone
         type bigWig 1.000000 17997.000000
         origAssembly hg19
         # subId=4359 dateSubmitted=2011-06-25
@@ -2981,7 +2981,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHLF In Sg 1
         longLabel NHLF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=NHLF rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=NHLF rep=rep1 treatment=aNone
         type bigWig 1.000000 29301.000000
         origAssembly hg19
         # subId=4362 dateSubmitted=2011-06-25
@@ -2990,7 +2990,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HFMyc In Sg 1
         longLabel HFF-Myc Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HFFMYC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HFFMYC rep=rep1 treatment=aNone
         type bigWig 1.000000 18402.000000
         origAssembly hg19
         # subId=4360 dateSubmitted=2011-06-25
@@ -2999,7 +2999,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel LNCP In Sg 1
         longLabel LNCaP Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=LNCAP rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=LNCAP rep=rep1 treatment=aNone
         type bigWig 1.000000 21185.000000
         origAssembly hg19
         color 0,119,158
@@ -3009,7 +3009,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel PANC In Sg 1
         longLabel PANC-1 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=PANC1 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=PANC1 rep=rep1 treatment=aNone
         type bigWig 1.000000 22326.000000
         origAssembly hg19
         # subId=4363 dateSubmitted=2011-06-25
@@ -3018,7 +3018,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKMC In Sg 1
         longLabel SK-N-MC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SKNMC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SKNMC rep=rep1 treatment=aNone
         type bigWig 1.000000 15364.000000
         origAssembly hg19
         # subId=4364 dateSubmitted=2011-06-25
@@ -3027,7 +3027,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WI-38 In Sg 1
         longLabel WI-38 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=WI38 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=WI38 rep=rep1 treatment=aNone
         type bigWig 1.000000 13078.000000
         origAssembly hg19
         # subId=4365 dateSubmitted=2011-06-25
@@ -3036,7 +3036,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BE2c CTCF Sg 1
         longLabel BE2c CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=BE2C rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=BE2C rep=rep1 treatment=aNone
         type bigWig 1.000000 23779.000000
         origAssembly hg19
         # subId=4387 dateSubmitted=2011-06-25
@@ -3045,7 +3045,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel A549 CTCF Sg 2
         longLabel A549 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=A549 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=A549 rep=rep2 treatment=aNone
         type bigWig 1.000000 8690.000000
         origAssembly hg19
         # subId=4384 dateSubmitted=2011-06-25
@@ -3054,7 +3054,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BE2c CTCF Sg 2
         longLabel BE2c CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=BE2C rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=BE2C rep=rep2 treatment=aNone
         type bigWig 1.000000 14708.000000
         origAssembly hg19
         # subId=4388 dateSubmitted=2011-06-25
@@ -3063,7 +3063,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG50 CTCF Sg 2
         longLabel AG04450 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=AG04450 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=AG04450 rep=rep2 treatment=aNone
         type bigWig 1.000000 10438.000000
         origAssembly hg19
         # subId=4386 dateSubmitted=2011-06-25
@@ -3072,7 +3072,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel A549 CTCF Sg 1
         longLabel A549 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=A549 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=A549 rep=rep1 treatment=aNone
         type bigWig 1.000000 6710.000000
         origAssembly hg19
         # subId=4385 dateSubmitted=2011-06-25
@@ -3081,7 +3081,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HAc CTCF Sg 1
         longLabel HAc CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HAC rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HAC rep=rep1 treatment=aNone
         type bigWig 1.000000 8822.000000
         origAssembly hg19
         # subId=4389 dateSubmitted=2011-06-25
@@ -3090,7 +3090,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCM CTCF Sg 1
         longLabel HCM CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HCM rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HCM rep=rep1 treatment=aNone
         type bigWig 1.000000 7615.000000
         origAssembly hg19
         # subId=4390 dateSubmitted=2011-06-25
@@ -3099,7 +3099,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HFMyc CTCF Sg 2
         longLabel HFF-Myc CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HFFMYC rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HFFMYC rep=rep2 treatment=aNone
         type bigWig 1.000000 15556.000000
         origAssembly hg19
         # subId=4392 dateSubmitted=2011-06-25
@@ -3108,7 +3108,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NB4 CTCF Sg 1
         longLabel NB4 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=NB4 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=NB4 rep=rep1 treatment=aNone
         type bigWig 1.000000 11314.000000
         origAssembly hg19
         # subId=4393 dateSubmitted=2011-06-25
@@ -3117,7 +3117,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HFMyc CTCF Sg 1
         longLabel HFF-Myc CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HFFMYC rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HFFMYC rep=rep1 treatment=aNone
         type bigWig 1.000000 10059.000000
         origAssembly hg19
         # subId=4391 dateSubmitted=2011-06-25
@@ -3126,7 +3126,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WI-38 CTCF Sg 1
         longLabel WI-38 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=WI38 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=WI38 rep=rep1 treatment=aNone
         type bigWig 1.000000 9025.000000
         origAssembly hg19
         # subId=4394 dateSubmitted=2011-06-25
@@ -3135,7 +3135,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WI-38 CTCF Sg 2
         longLabel WI-38 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=WI38 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=WI38 rep=rep2 treatment=aNone
         type bigWig 1.000000 8270.000000
         origAssembly hg19
         # subId=4395 dateSubmitted=2011-06-25
@@ -3144,7 +3144,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel A549 In Sg 1
         longLabel A549 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=A549 rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=A549 rep=rep1 treatment=aNone
         type bigWig 1.000000 12152.000000
         origAssembly hg19
         # subId=4350 dateSubmitted=2011-06-29
@@ -3153,7 +3153,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HAc In Sg 1
         longLabel HAc Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HAC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HAC rep=rep1 treatment=aNone
         type bigWig 1.000000 18298.000000
         origAssembly hg19
         # subId=4635 dateSubmitted=2011-07-28
@@ -3162,7 +3162,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM64 CTCF Sg 3
         longLabel GM12864 CTCF TFBS ChIP-seq Raw Signal 3 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=3 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=rep3 treatment=aNone
         type bigWig 1.000000 7668.000000
         origAssembly hg19
         # subId=4652 dateSubmitted=2011-07-29
@@ -3171,7 +3171,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM65 CTCF Sg 3
         longLabel GM12865 CTCF TFBS ChIP-seq Raw Signal 3 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=3 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=rep3 treatment=aNone
         type bigWig 1.000000 9191.000000
         origAssembly hg19
         # subId=4653 dateSubmitted=2011-07-29
@@ -3180,7 +3180,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM72 CTCF Sg 3
         longLabel GM12872 CTCF TFBS ChIP-seq Raw Signal 3 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=3 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=rep3 treatment=aNone
         type bigWig 1.000000 8480.000000
         origAssembly hg19
         # subId=4666 dateSubmitted=2011-07-29
@@ -3189,7 +3189,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM73 CTCF Sg 3
         longLabel GM12873 CTCF TFBS ChIP-seq Raw Signal 3 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=3 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=rep3 treatment=aNone
         type bigWig 1.000000 7017.000000
         origAssembly hg19
         # subId=4667 dateSubmitted=2011-07-29
@@ -3198,7 +3198,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel MCF7 CTCF Sg 2
         longLabel MCF-7 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=MCF7 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=MCF7 rep=rep2 treatment=aNone
         type bigWig 1.000000 15951.000000
         origAssembly hg19
         # subId=4676 dateSubmitted=2011-07-29
@@ -3207,7 +3207,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel MCF7 CTCF Sg 1
         longLabel MCF-7 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=MCF7 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=MCF7 rep=rep1 treatment=aNone
         type bigWig 1.000000 15641.000000
         origAssembly hg19
         # subId=4677 dateSubmitted=2011-07-29
@@ -3216,7 +3216,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel RPTC In Sg 1
         longLabel RPTEC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=RPTEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=RPTEC rep=rep1 treatment=aNone
         type bigWig 1.000000 17750.000000
         origAssembly hg19
         # subId=4680 dateSubmitted=2011-07-29
@@ -3225,7 +3225,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHDF CTCF Sg 1
         longLabel NHDF-neo CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=NHDF-neo rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=NHDF-neo rep=rep1 treatment=aNone
         type bigWig 1.000000 11619.000000
         origAssembly hg19
         # subId=4678 dateSubmitted=2011-07-29
@@ -3234,7 +3234,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHDF CTCF Sg 2
         longLabel NHDF-neo CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=NHDF-neo rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=NHDF-neo rep=rep2 treatment=aNone
         type bigWig 1.000000 13883.000000
         origAssembly hg19
         # subId=4679 dateSubmitted=2011-07-29
@@ -3243,7 +3243,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel RPTC CTCF Sg 1
         longLabel RPTEC CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=RPTEC rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=RPTEC rep=rep1 treatment=aNone
         type bigWig 1.000000 9148.000000
         origAssembly hg19
         # subId=4682 dateSubmitted=2011-07-29
@@ -3252,7 +3252,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel RPTC CTCF Sg 2
         longLabel RPTEC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=RPTEC rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=RPTEC rep=rep2 treatment=aNone
         type bigWig 1.000000 7511.000000
         origAssembly hg19
         # subId=4681 dateSubmitted=2011-07-29
@@ -3261,7 +3261,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HAc CTCF Sg 2
         longLabel HAc CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HAC rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HAC rep=rep2 treatment=aNone
         type bigWig 1.000000 12920.000000
         origAssembly hg19
         # subId=4686 dateSubmitted=2011-07-29
@@ -3270,7 +3270,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HAsp CTCF Sg 2
         longLabel HA-sp CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HA-sp rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HA-sp rep=rep2 treatment=aNone
         type bigWig 1.000000 8548.000000
         origAssembly hg19
         # subId=4687 dateSubmitted=2011-07-29
@@ -3279,7 +3279,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCM CTCF Sg 2
         longLabel HCM CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HCM rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HCM rep=rep2 treatment=aNone
         type bigWig 1.000000 7263.000000
         origAssembly hg19
         # subId=4688 dateSubmitted=2011-07-29
@@ -3288,7 +3288,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCT16 CTCF Sg 2
         longLabel HCT-116 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HCT116 rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HCT116 rep=rep2 treatment=aNone
         type bigWig 1.000000 8347.000000
         origAssembly hg19
         # subId=4689 dateSubmitted=2011-07-29
@@ -3297,7 +3297,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCT16 CTCF Sg 1
         longLabel HCT-116 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HCT116 rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HCT116 rep=rep1 treatment=aNone
         type bigWig 1.000000 8816.000000
         origAssembly hg19
         # subId=4690 dateSubmitted=2011-07-29
@@ -3306,7 +3306,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HFF In Sg 1
         longLabel HFF Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HFF rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=HFF rep=rep1 treatment=aNone
         type bigWig 1.000000 19349.000000
         origAssembly hg19
         # subId=4691 dateSubmitted=2011-07-29
@@ -3315,7 +3315,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMEC CTCF Sg 2
         longLabel HMEC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HMEC rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HMEC rep=rep2 treatment=aNone
         type bigWig 1.000000 6406.000000
         origAssembly hg19
         # subId=4692 dateSubmitted=2011-07-29
@@ -3324,7 +3324,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRpC CTCF Sg 2
         longLabel HRPEpIC CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HRPE rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HRPE rep=rep2 treatment=aNone
         type bigWig 1.000000 7607.000000
         origAssembly hg19
         # subId=4693 dateSubmitted=2011-07-29
@@ -3333,7 +3333,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HVMF CTCF Sg 1
         longLabel HVMF CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HVMF rep=1 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HVMF rep=rep1 treatment=aNone
         type bigWig 1.000000 8064.000000
         origAssembly hg19
         # subId=4694 dateSubmitted=2011-07-29
@@ -3342,16 +3342,16 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HVMF CTCF Sg 2
         longLabel HVMF CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HVMF rep=2 treatment=aNone
+        subGroups view=zRSig factor=CTCF cellType=HVMF rep=rep2 treatment=aNone
         type bigWig 1.000000 5159.000000
         origAssembly hg19
         # subId=4695 dateSubmitted=2011-07-29
 
         track wgEncodeUwTfbsWi38InputOhtamStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel WI38 In TAM Sg 1
+        shortLabel WI-38 In TAM Sg 1
         longLabel WI-38 Input OH-tamoxifen 20nM TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=WI38 treatment=OHTAM rep=1
+        subGroups view=zRSig factor=zInput cellType=WI38 treatment=OHTAM rep=rep1
         type bigWig 1.000000 18598.000000
         origAssembly hg19
         # subId=4696 dateSubmitted=2011-08-10
@@ -3360,7 +3360,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM66 CTCF Sg 2
         #longLabel GM12866 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12866 rep=2 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12866 rep=rep2 treatment=aNone
         #type bigWig 1.000000 3283.000000
         #origAssembly hg19
         # subId=4655 dateSubmitted=2011-07-29
@@ -3369,7 +3369,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM66 CTCF Sg 1
         #longLabel GM12866 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12866 rep=1 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12866 rep=rep1 treatment=aNone
         #type bigWig 1.000000 4152.000000
         #origAssembly hg19
         # subId=4654 dateSubmitted=2011-07-29
@@ -3378,7 +3378,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM67 CTCF Sg 2
         #longLabel GM12867 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12867 rep=2 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12867 rep=rep2 treatment=aNone
         #type bigWig 1.000000 6270.000000
         #origAssembly hg19
         # subId=4657 dateSubmitted=2011-07-29
@@ -3387,7 +3387,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM68 CTCF Sg 2
         #longLabel GM12868 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12868 rep=2 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12868 rep=rep2 treatment=aNone
         #type bigWig 1.000000 7037.000000
         #origAssembly hg19
         # subId=4659 dateSubmitted=2011-07-29
@@ -3396,7 +3396,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM68 CTCF Sg 1
         #longLabel GM12868 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12868 rep=1 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12868 rep=rep1 treatment=aNone
         #type bigWig 1.000000 4832.000000
         #origAssembly hg19
         # subId=4658 dateSubmitted=2011-07-29
@@ -3405,7 +3405,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM67 CTCF Sg 1
         #longLabel GM12867 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12867 rep=1 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12867 rep=rep1 treatment=aNone
         #type bigWig 1.000000 4956.000000
         #origAssembly hg19
         # subId=4656 dateSubmitted=2011-07-29
@@ -3414,7 +3414,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM70 CTCF Sg 2
         #longLabel GM12870 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12870 rep=2 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12870 rep=rep2 treatment=aNone
         #type bigWig 1.000000 912.000000
         #origAssembly hg19
         ## subId=4662 dateSubmitted=2011-07-29
@@ -3423,7 +3423,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM69 CTCF Sg 2
         #longLabel GM12869 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12869 rep=2 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12869 rep=rep2 treatment=aNone
         #type bigWig 1.000000 4736.000000
         #origAssembly hg19
         ## subId=4661 dateSubmitted=2011-07-29
@@ -3432,7 +3432,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM69 CTCF Sg 1
         #longLabel GM12869 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12869 rep=1 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12869 rep=rep1 treatment=aNone
         #type bigWig 1.000000 5138.000000
         #origAssembly hg19
         ## subId=4660 dateSubmitted=2011-07-29
@@ -3441,7 +3441,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM70 CTCF Sg 1
         #longLabel GM12870 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12870 rep=1 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12870 rep=rep1 treatment=aNone
         #type bigWig 1.000000 4945.000000
         #origAssembly hg19
         # subId=4663 dateSubmitted=2011-07-29
@@ -3450,7 +3450,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM71 CTCF Sg 1
         #longLabel GM12871 CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12871 rep=1 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12871 rep=rep1 treatment=aNone
         #type bigWig 1.000000 5833.000000
         #origAssembly hg19
         ## subId=4664 dateSubmitted=2011-07-29
@@ -3459,7 +3459,7 @@ html wgEncodeUwTfbs.release2
         #parent wgEncodeUwTfbsViewRawSig off
         #shortLabel GM71 CTCF Sg 2
         #longLabel GM12871 CTCF TFBS ChIP-seq Raw Signal 2 from ENCODE/UW
-        #subGroups view=zRSig factor=CTCF cellType=GM12871 rep=2 treatment=aNone
+        #subGroups view=zRSig factor=CTCF cellType=GM12871 rep=rep2 treatment=aNone
         #type bigWig 1.000000 4776.000000
         #origAssembly hg19
         # subId=4665 dateSubmitted=2011-07-29
@@ -3468,7 +3468,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel CD20+94 In Sg 1
         longLabel CD20+ RO01794 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=CD20RO01794 treatment=aNone rep=1
+        subGroups view=zRSig factor=zInput cellType=CD20RO01794 treatment=aNone rep=rep1
         type bigWig 1.000000 15322.000000
         origAssembly hg19
         # subId=4644 dateSubmitted=2011-09-26
@@ -3477,7 +3477,7 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel CD20+78 In Sg 1
         longLabel CD20+ RO01778 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=CD20RO01778 treatment=aNone rep=1
+        subGroups view=zRSig factor=zInput cellType=CD20RO01778 treatment=aNone rep=rep1
         type bigWig 1.000000 15457.000000
         origAssembly hg19
         # subId=4645 dateSubmitted=2011-09-26
@@ -3486,16 +3486,16 @@ html wgEncodeUwTfbs.release2
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel CD14+ In Sg 1
         longLabel Monocytes-CD14+ RO1746 Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=MONOCD14RO1746 treatment=aNone rep=1
+        subGroups view=zRSig factor=zInput cellType=MONOCD14RO1746 treatment=aNone rep=rep1
         type bigWig 1.000000 3306.000000
         origAssembly hg19
         # subId=4646 dateSubmitted=2011-09-21
 
         track wgEncodeUwTfbsSkmcInputStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKMC Input Raw 1
+        shortLabel SKMC In Sg 1
         longLabel SKMC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=SKMC rep=1 treatment=aNone
+        subGroups view=zRSig factor=zInput cellType=SKMC rep=rep1 treatment=aNone
         type bigWig 1.000000 16362.000000
         # subId=5033 dateSubmitted=2011-10-27
 

@@ -48,9 +48,9 @@ options:
     -cv             custom cv directory (default is /data/apache/cgi-bin/encode)
     -directory      custom download directory (default is working directory)
     -fileMask       only allows selected pattern matches (must be in quotes)
-                E.g. -fileMask "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb" (default)
+                E.g. -fileMask "wgEncode*" (default)
                 Regex Example:  -fileMask "wgEncode\\S+Huvec.* wgEncode\\S+GM\\d+Input"
-                Normal example: -fileMask "*.gz *GM12878* *GM12*Tnfa
+                Normal example: -fileMask "*.gz *GM12878* *GM12*Tnfa"
 
 END
 exit 1;
@@ -279,7 +279,9 @@ sub metaDbUpdate {
         if ($file eq $filename) {
             $inlist = 1;
         }
-        $md5Str = $md5Str . "$md5sums{$file},";
+        if ($md5sums{$file}) {
+            $md5Str = $md5Str . "$md5sums{$file},";
+        }
     }
     unless ($inlist) {
         print STDERR "$filename is not in fileName field\n";
@@ -399,7 +401,7 @@ unless ($err) {
 
 # default file Masking, if updated, please update usage statement
 my %fileMask;
-my $fileMask = "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb";
+my $fileMask = "wgEncode*";
 if ($opt{'fileMask'}) {
     $fileMask = $opt{'fileMask'};
 }

@@ -110,7 +110,7 @@ metaObject wgEncodeDacMapabilityConsensusExcludable
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-04
 dccAccession wgEncodeEH001432
 expId 1432
@@ -128,7 +128,7 @@ metaObject wgEncodeDukeMapabilityRegionsExcludable
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-28
 dccAccession wgEncodeEH000322
 expId 322
@@ -146,7 +146,7 @@ metaObject wgEncodeDukeMapabilityUniqueness20bp
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-28
 dccAccession wgEncodeEH000323
 expId 323
@@ -165,7 +165,7 @@ metaObject wgEncodeDukeMapabilityUniqueness35bp
 objType table
 composite wgEncodeMapability
 dataType Mapability
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-28
 dccAccession wgEncodeEH000325
 expId 325
@@ -185,4 +185,4 @@ objType composite
 composite wgEncodeMapability
 expVars lab,dataType,view,size
 
-# MAGIC: -337904583
+# MAGIC: -1143147327

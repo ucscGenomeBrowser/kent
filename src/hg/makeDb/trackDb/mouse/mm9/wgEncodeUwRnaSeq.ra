@@ -31,7 +31,7 @@ shortLabel UW RNA-seq
 longLabel RNA-seq from ENCODE/UW
 group regulation
 subGroup1 view Views Signal=Signal Alignments=Alignments PlusRawSignal=PlusRawSignal MinusRawSignal=MinusRawSignal
-subGroup2 cellType Cell_Line 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HEART=Heart HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=LgIntestine LUNG=Lung LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=SkMuscle SPLEEN=Spleen THYMUS=Thymus TNAIVE=T-Naive WHOLEBRAIN=WholeBrain
+subGroup2 cellType Cell_Line 416B=416B A20=A20 BCELLCD19P=B-cell_(CD19+) BCELLCD43N=B-cell_(CD43-) CBELLUM=Cerebellum CEREBRUM=Cerebrum FAT=FatPad GFAT=GenitalFatPad HEART=Heart HLEMBRYO=HeadlessEmbryo KIDNEY=Kidney LGINT=LgIntestine LUNG=Lung LIVER=Liver MEL=MEL NIH3T3=NIH-3T3 PATSKI=Patski SKMUSCLE=SkMuscle SPLEEN=Spleen THYMUS=Thymus TNAIVE=T-Naive WBRAIN=WholeBrain
 subGroup3 localization Localization CELL=cell
 subGroup4 rnaExtract RnaExtract POLYA=polyA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
@@ -221,23 +221,25 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 1
         longLabel ENCODE UW RNA-seq Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Signal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 29009.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 2
         longLabel ENCODE UW RNA-seq Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Signal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 46115.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6SigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
         track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
@@ -249,23 +251,25 @@ noInherit on
         # subId=4437 dateSubmitted=2011-06-30
         # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6SigRep1 vsmalladi Tue Jan  3 09:20:59 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep2
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 2
         longLabel ENCODE UW RNA-seq Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Signal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 36131.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep2 vsmalladi Tue Jan 10 15:20:52 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
         shortLabel WholeBrain cell polyA Sig 1
         longLabel ENCODE UW RNA-seq Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Signal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Signal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 177312.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6SigRep1 vsmalladi Tue Jan 10 15:20:52 2012
 
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6SigRep1
         parent wgEncodeUwRnaSeqViewSignal off
@@ -604,23 +608,25 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=PlusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 29009.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6PlusRawSigRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=PlusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 46115.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6PlusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
         track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6PlusRawSigRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
@@ -632,23 +638,25 @@ noInherit on
         # subId=4437 dateSubmitted=2011-06-30
         # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6PlusRawSigRep1 vsmalladi Tue Jan  3 09:20:31 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep2
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=PlusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 36131.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6PlusRawSigRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Plus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=PlusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=PlusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 177312.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6PlusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6PlusRawRep1
         parent wgEncodeUwRnaSeqViewPlusRawSig off
@@ -987,23 +995,25 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=MinusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 24820.000000
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6MinusRawSigRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=MinusRawSignal age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 19618.000000
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6MinusRawSigRep2 vsmalladi Tue Jan 10 15:20:50 2012
 
         track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6MinusRawSigRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
@@ -1015,23 +1025,25 @@ noInherit on
         # subId=4437 dateSubmitted=2011-06-30
         # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6MinusRawSigRep1 vsmalladi Tue Jan  3 09:19:48 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep2
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 2
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=MinusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bigWig 1.000000 30690.000000
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6MinusRawSigRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
         shortLabel WholeBrain cell polyA 1
         longLabel ENCODE UW RNA-seq Minus Strand Raw Signal Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=MinusRawSignal age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=MinusRawSignal age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bigWig 1.000000 89685.000000
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6MinusRawSigRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6MinusRawRep1
         parent wgEncodeUwRnaSeqViewMinusRawSig off
@@ -1382,23 +1394,25 @@ noInherit on
         color 230,159,0
         # subId=4439 dateSubmitted=2011-06-28
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 1
         longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Alignments age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
         # subId=4440 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep1 vsmalladi Tue Jan 10 15:20:50 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME14halfC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 2
         longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E14HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Alignments age=E14HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
         # subId=4442 dateSubmitted=2011-06-28
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME14halfC57bl6AlnRep2 vsmalladi Tue Jan 10 15:20:50 2012
 
         track wgEncodeUwRnaSeqPatskiCellPolyaFAdult8wksSpbl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
@@ -1410,23 +1424,25 @@ noInherit on
         # subId=4437 dateSubmitted=2011-06-30
         # was wgEncodeUwRnaSeqPatskiCellPolyaMAdult8wksSpbl6AlnRep1 vsmalladi Tue Jan  3 09:19:34 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep2
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 2
         longLabel ENCODE UW RNA-seq Alignments Replicate 2 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
+        subGroups view=Alignments age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep2
         type bam
         color 105,105,105
         # subId=4441 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep2 vsmalladi Tue Jan 10 15:20:51 2012
 
-        track wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1
+        track wgEncodeUwRnaSeqWbrainCellPolyaME18halfC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off
         shortLabel WholeBrain cell polyA Aln 1
         longLabel ENCODE UW RNA-seq Alignments Replicate 1 (polyA in WholeBrain cell)
-        subGroups view=Alignments age=E18HALF cellType=WHOLEBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
+        subGroups view=Alignments age=E18HALF cellType=WBRAIN localization=CELL rnaExtract=POLYA sex=M strain=C57BL6 rep=rep1
         type bam
         color 105,105,105
         # subId=4443 dateSubmitted=2011-06-30
+        # was wgEncodeUwRnaSeqWholebrainCellPolyaME18halfC57bl6AlnRep1 vsmalladi Tue Jan 10 15:20:51 2012
 
         track wgEncodeUwRnaSeqBcellcd19pCellPolyaMAdult8wksC57bl6AlnRep1
         parent wgEncodeUwRnaSeqViewAlignments off

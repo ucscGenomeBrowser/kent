@@ -1,3 +1,8 @@
+metaObject wgEncodeUwDgf
+objType composite
+composite wgEncodeUwDgf
+expVars lab,dataType,cell,age
+
 metaObject wgEncodeUwDgf3134RiiiMImmortalAlnRep1
 objType file
 age immortalized
@@ -2056,7 +2061,7 @@ tableName wgEncodeUwDgfTregC57bl6MAdult8wksSigRep1
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwDgfWholebrainC57bl6MAdult8wksAlnRep1
+metaObject wgEncodeUwDgfWbrainC57bl6MAdult8wksAlnRep1
 objType file
 age adult-8wks
 cell WholeBrain
@@ -2065,7 +2070,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
-fileName wgEncodeUwDgfWholebrainC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfWholebrainC57bl6MAdult8wksAlnRep1.bam.bai
+fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfWbrainC57bl6MAdult8wksAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS12727
@@ -2080,7 +2085,7 @@ subId 5236
 tissueSourceType Pooled
 view Alignments
 
-metaObject wgEncodeUwDgfWholebrainC57bl6MAdult8wksHotspotsRep1
+metaObject wgEncodeUwDgfWbrainC57bl6MAdult8wksHotspotsRep1
 objType table
 age adult-8wks
 cell WholeBrain
@@ -2089,7 +2094,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
-fileName wgEncodeUwDgfWholebrainC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS12727
@@ -2101,11 +2106,11 @@ seqPlatform Illumina_GA2x
 sex M
 strain C57BL/6
 subId 5236
-tableName wgEncodeUwDgfWholebrainC57bl6MAdult8wksHotspotsRep1
+tableName wgEncodeUwDgfWbrainC57bl6MAdult8wksHotspotsRep1
 tissueSourceType Pooled
 view Hotspots
 
-metaObject wgEncodeUwDgfWholebrainC57bl6MAdult8wksPkRep1
+metaObject wgEncodeUwDgfWbrainC57bl6MAdult8wksPkRep1
 objType table
 age adult-8wks
 cell WholeBrain
@@ -2114,7 +2119,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
-fileName wgEncodeUwDgfWholebrainC57bl6MAdult8wksPkRep1.narrowPeak.gz
+fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS12727
@@ -2126,11 +2131,11 @@ seqPlatform Illumina_GA2x
 sex M
 strain C57BL/6
 subId 5236
-tableName wgEncodeUwDgfWholebrainC57bl6MAdult8wksPkRep1
+tableName wgEncodeUwDgfWbrainC57bl6MAdult8wksPkRep1
 tissueSourceType Pooled
 view Peaks
 
-metaObject wgEncodeUwDgfWholebrainC57bl6MAdult8wksRawDataRep1
+metaObject wgEncodeUwDgfWbrainC57bl6MAdult8wksRawDataRep1
 objType file
 age adult-8wks
 cell WholeBrain
@@ -2139,7 +2144,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
-fileName wgEncodeUwDgfWholebrainC57bl6MAdult8wksRawDataRep1.fastq.tgz
+fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion DS12727
@@ -2153,7 +2158,7 @@ subId 5236
 tissueSourceType Pooled
 view RawData
 
-metaObject wgEncodeUwDgfWholebrainC57bl6MAdult8wksRawRep1
+metaObject wgEncodeUwDgfWbrainC57bl6MAdult8wksRawRep1
 objType table
 age adult-8wks
 cell WholeBrain
@@ -2162,7 +2167,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
-fileName wgEncodeUwDgfWholebrainC57bl6MAdult8wksRawRep1.bigWig
+fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS12727
@@ -2174,11 +2179,11 @@ seqPlatform Illumina_GA2x
 sex M
 strain C57BL/6
 subId 5236
-tableName wgEncodeUwDgfWholebrainC57bl6MAdult8wksRawRep1
+tableName wgEncodeUwDgfWbrainC57bl6MAdult8wksRawRep1
 tissueSourceType Pooled
 view RawSignal
 
-metaObject wgEncodeUwDgfWholebrainC57bl6MAdult8wksSigRep1
+metaObject wgEncodeUwDgfWbrainC57bl6MAdult8wksSigRep1
 objType table
 age adult-8wks
 cell WholeBrain
@@ -2187,7 +2192,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
-fileName wgEncodeUwDgfWholebrainC57bl6MAdult8wksSigRep1.bigWig
+fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksSigRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS12727
@@ -2199,11 +2204,11 @@ seqPlatform Illumina_GA2x
 sex M
 strain C57BL/6
 subId 5236
-tableName wgEncodeUwDgfWholebrainC57bl6MAdult8wksSigRep1
+tableName wgEncodeUwDgfWbrainC57bl6MAdult8wksSigRep1
 tissueSourceType Pooled
 view Signal
 
-metaObject wgEncodeUwDgfWholebrainC57bl6ME14halfAlnRep1
+metaObject wgEncodeUwDgfWbrainC57bl6ME14halfAlnRep1
 objType file
 age E14.5
 cell WholeBrain
@@ -2212,7 +2217,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfWholebrainC57bl6ME14halfAlnRep1.bam,wgEncodeUwDgfWholebrainC57bl6ME14halfAlnRep1.bam.bai
+fileName wgEncodeUwDgfWbrainC57bl6ME14halfAlnRep1.bam,wgEncodeUwDgfWbrainC57bl6ME14halfAlnRep1.bam.bai
 grant Stam
 lab UW-m
 labExpId DS14536
@@ -2227,7 +2232,7 @@ subId 5252
 tissueSourceType Pooled
 view Alignments
 
-metaObject wgEncodeUwDgfWholebrainC57bl6ME14halfHotspotsRep1
+metaObject wgEncodeUwDgfWbrainC57bl6ME14halfHotspotsRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -2236,7 +2241,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfWholebrainC57bl6ME14halfHotspotsRep1.broadPeak.gz
+fileName wgEncodeUwDgfWbrainC57bl6ME14halfHotspotsRep1.broadPeak.gz
 grant Stam
 lab UW-m
 labExpId DS14536
@@ -2248,11 +2253,11 @@ seqPlatform Illumina_HiSeq_2000
 sex M
 strain C57BL/6
 subId 5252
-tableName wgEncodeUwDgfWholebrainC57bl6ME14halfHotspotsRep1
+tableName wgEncodeUwDgfWbrainC57bl6ME14halfHotspotsRep1
 tissueSourceType Pooled
 view Hotspots
 
-metaObject wgEncodeUwDgfWholebrainC57bl6ME14halfPkRep1
+metaObject wgEncodeUwDgfWbrainC57bl6ME14halfPkRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -2261,7 +2266,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfWholebrainC57bl6ME14halfPkRep1.narrowPeak.gz
+fileName wgEncodeUwDgfWbrainC57bl6ME14halfPkRep1.narrowPeak.gz
 grant Stam
 lab UW-m
 labExpId DS14536
@@ -2273,11 +2278,11 @@ seqPlatform Illumina_HiSeq_2000
 sex M
 strain C57BL/6
 subId 5252
-tableName wgEncodeUwDgfWholebrainC57bl6ME14halfPkRep1
+tableName wgEncodeUwDgfWbrainC57bl6ME14halfPkRep1
 tissueSourceType Pooled
 view Peaks
 
-metaObject wgEncodeUwDgfWholebrainC57bl6ME14halfRawDataRep1
+metaObject wgEncodeUwDgfWbrainC57bl6ME14halfRawDataRep1
 objType file
 age E14.5
 cell WholeBrain
@@ -2286,7 +2291,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfWholebrainC57bl6ME14halfRawDataRep1.fastq.tgz
+fileName wgEncodeUwDgfWbrainC57bl6ME14halfRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion DS14536
@@ -2300,7 +2305,7 @@ subId 5252
 tissueSourceType Pooled
 view RawData
 
-metaObject wgEncodeUwDgfWholebrainC57bl6ME14halfRawRep1
+metaObject wgEncodeUwDgfWbrainC57bl6ME14halfRawRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -2309,7 +2314,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfWholebrainC57bl6ME14halfRawRep1.bigWig
+fileName wgEncodeUwDgfWbrainC57bl6ME14halfRawRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS14536
@@ -2321,11 +2326,11 @@ seqPlatform Illumina_HiSeq_2000
 sex M
 strain C57BL/6
 subId 5252
-tableName wgEncodeUwDgfWholebrainC57bl6ME14halfRawRep1
+tableName wgEncodeUwDgfWbrainC57bl6ME14halfRawRep1
 tissueSourceType Pooled
 view RawSignal
 
-metaObject wgEncodeUwDgfWholebrainC57bl6ME14halfSigRep1
+metaObject wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1
 objType table
 age E14.5
 cell WholeBrain
@@ -2334,7 +2339,7 @@ dataType DnaseDgf
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfWholebrainC57bl6ME14halfSigRep1.bigWig
+fileName wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1.bigWig
 grant Stam
 lab UW-m
 labExpId DS14536
@@ -2346,8 +2351,8 @@ seqPlatform Illumina_HiSeq_2000
 sex M
 strain C57BL/6
 subId 5252
-tableName wgEncodeUwDgfWholebrainC57bl6ME14halfSigRep1
+tableName wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: 373720332
+# MAGIC: -987280235

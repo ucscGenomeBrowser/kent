@@ -162,7 +162,7 @@ else
      * end of the last one are not splice sites. */
     int gpIx, bedIx;
     boolean foundSharedSpliceSite = FALSE;
-    if (strcmp(gp->strand, bed->strand) == 0) 
+    if (gp->strand[0] == bed->strand[0]) 
 	{
 	for (gpIx = 1; gpIx < gp->exonCount && !foundSharedSpliceSite; gpIx++)
 	    {
@@ -485,16 +485,14 @@ return cloneString(type);
 }
 
 
-struct hash *hashOneColumn(char *fileName)
+void hashOneColumn(char *fileName, struct hash *hash)
 /* Make up a hash out of a one column file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[1];
-struct hash *hash = hashNew(17);
 while (lineFileRow(lf, row))
     hashAddInt(hash, row[0], 1);
 lineFileClose(&lf);
-return hash;
 }
 
 struct hash *hashTwoColumns(char *fileName)
@@ -527,8 +525,8 @@ if (lookupFile != NULL)
     lookupHash = hashTwoColumns(lookupFile);
 if (overrideFile != NULL)
     overrideHash = hashTwoColumns(overrideFile);
-if (excludeFile != NULL)
-    excludeHash = hashOneColumn(excludeFile);
+ if (excludeFile != NULL) 
+     hashOneColumn(excludeFile, excludeHash);
 if (type == NULL)
     type = tdbType(conn, track);
 
