@@ -13049,6 +13049,8 @@ registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
 // one per gencode version, after V7 when it was substantially changed
 // FIXME: this is hacky, need a way to register based on pattern
+registerTrackHandlerOnFamily("wgEncodeGencodeV3", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV4", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
