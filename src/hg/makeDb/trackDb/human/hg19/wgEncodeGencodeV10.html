@@ -153,6 +153,61 @@ The gene annotations are colored based on the annotation type:
   </tr>
 </table>
 
+<h4><a name="tsl">Transcription Support Level (TSL)</a></h4>
+<p>
+It is important that users understand how to assess transcript annotations
+that they see in GENCODE; while some transcript models have a high level of
+support through the full length of their exon structure, there are also
+transcripts that are poorly supported and that should be considered
+speculative. Transcription Support Levels (TSLs) is a method to highlight the
+well-supported and poorly-supported transcript models for users. The method
+relies on the primary data for that can support full-length transcript
+structure: mRNA and EST alignments supplied by UCSC and Ensembl.</p>
+
+<p>The mRNA and EST alignments are compared to the GENCODE transcripts and the
+transcripts are scored according to how well the alignment matches over its
+full length. The GENCODE transcription support levels provides a consistent
+method of evaluating the level of support that a GENCODE transcript annotation
+is expressed in human.  The evidence used for this analysis are human
+transcript sequences from the International Nucleotide database Collaboration
+databases (GenBank, ENA, and DDBJ). Exonerate RNA alignments from Ensembl, and
+BLAT RNA and EST alignments from the UCSC Genome Browser Database are used in
+the analysis. Erroneous transcripts and libraries identified in lists
+maintained by the Ensembl, UCSC, HAVANA and RefSeq groups are flagged as
+suspect.  GENCODE annotations for protein-coding and non-protein-coding
+transcripts are compared with the evidence alignments.</p>
+
+<p>Annotations in the MHC region and other immunological genes are not
+evaluated, as automatic alignments tend to be very problematic. We are still
+working on methods of evaluating single-exon genes and they are not included
+in the current analysis.  Multi-exon GENCODE annotations are evaluated using
+the criteria that all introns are supported by an evidence alignment and the
+evidence alignment doesn't indicate that there are unannotated exons. Small
+insertions and deletions in evidence alignments are assumed to be due to
+polymorphisms and not considered as differing from the annotations. All
+introns boundaries must match exactly. The transcript start and end locations
+are allowed to differ.</p>
+
+<p>The following categories are assigned to each of the evaluated annotations:</p>
+
+<ul>
+  <li> <a name="tsl1"><b>tsl1</b></a> - All splice junctions of the transcript are supported by
+    at least one non-suspect mRNA.</li>
+  <li> <a name="tsl2"><b>tsl2</b></a> - The best supporting mRNA is flagged as suspect or the support is from multiple ESTs.</li>
+  <li> <a name="tsl3"><b>tsl3</b></a> - The only support is from a single EST.</li>
+  <li> <a name="tsl4"><b>tsl4</b></a> - The best supporting EST is flagged as suspect.</li>
+  <li> <a name="tsl5"><b>tsl5</b></a> - No single transcript supports the model structure</li>
+  <li> <a name="tslNA"><b>tslNA</b></a> - The transcript was not analyzed for one of the following reasons:
+    <ul>
+      <li> pseudogene annotation, including transcribed pseudogenes
+      <li> Human Leukocyte Antigen (HLA) transcript
+      <li> Immunoglobin gene transcript
+      <li> T-cell receptor transcript
+      <li> Single exon transcript (will be included in a future version)
+    </ul>
+  </li>
+</ul>
+
 <h2>Methods</h2>
 
 <p>
@@ -217,7 +272,7 @@ GENCODE at the Sanger Institute</A>.
     </tr>
     <tr>
       <td><a href="http://medicine.yale.edu/bbs/computational/index.aspx" target="_blank">Computational Biology and Bioinformatics, Yale University</a> (Yale), USA</td>
-      <td>Philip Cayting, Mark Gerstein</td>
+      <td>Philip Cayting, Suganthi Balasubramanian, Baikang Pei, Cristina Sisu, Mark Gerstein</td>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: left;"><a href="http://www.unil.ch/cig" target="_blank">Center for Integrative Genomics</a>,
