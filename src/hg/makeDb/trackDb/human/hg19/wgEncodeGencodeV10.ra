@@ -1,3 +1,7 @@
+##
+# WARNING: must update hgTracks/simpleTracks.c to add calls
+# to registerTrackHandlerOnFamily for new gencode versions
+##
 
 track wgEncodeGencodeV10
 compositeTrack on

@@ -501,8 +501,6 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
 struct dyString *dy = newDyString(512);
 
 dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
-#define TOGGLE_SUBTRACKS
-#ifdef TOGGLE_SUBTRACKS
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
@@ -530,9 +528,13 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
 
     if(setView)
         {
+    #ifdef SUBTRACK_CFG
+        dyStringPrintf(dy, "&%s=%s", toggleGroup->tdb->parent->track, hStringFromTv(vis));
+    #else///ifndef SUBTRACK_CFG
         char *encodeView = cgiEncode(view);
         dyStringPrintf(dy, "&%s.%s.vis=%s", encodedTableName,encodeView, hStringFromTv(vis));
         freeMem(encodeView);
+    #endif///ndef SUBTRACK_CFG
         }
     else
         {
@@ -542,7 +544,6 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     freeMem(encodedTableName);
     }
 else
-#endif//def TOGGLE_SUBTRACKS
     {
     if (toggleGroup != NULL)
         {
@@ -913,7 +914,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* We may want to use this, or add a config setting for it */
         if (*text == '=' || *text == '-' || *text == '.' || *text == 'N')
             clr = noMatchColor;
-#endif
+#endif///def FADE_IN_DOT_MODE
         }
     else
         {
@@ -1999,9 +2000,7 @@ if (scoreColumn == NULL)
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
 extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and); // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
-#ifdef ALL_SCORE_FILTERS_LOGIC
 extraWhere = dyAddAllScoreFilters(cart,tdb,extraWhere,&and); // All *Filter style filters
-#endif///def ALL_SCORE_FILTERS_LOGIC
 if (and == FALSE || strstrNoCase(extraWhere->string,"score in ") == NULL) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
@@ -5103,8 +5102,8 @@ if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	safef(query, sizeof(query), 
-	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d", 
+    	safef(query, sizeof(query),
+	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d",
 	      decipherId, bed->chromStart+1, bed->chromEnd);
 	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
@@ -13049,6 +13048,8 @@ registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
 // one per gencode version, after V7 when it was substantially changed
 // FIXME: this is hacky, need a way to register based on pattern
+registerTrackHandlerOnFamily("wgEncodeGencodeV3", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV4", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);

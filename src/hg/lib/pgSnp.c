@@ -715,6 +715,8 @@ int i;
 for (i = 0;  i < rec->infoCount;  i++)
     if (sameString(rec->infoElements[i].key, "AN"))
 	{
+	if (rec->infoElements[i].missingData[0])
+	    break;
 	gotTotalCount = TRUE;
 	// Set ref allele to total count, subtract alt counts below.
 	alCounts[0] = rec->infoElements[i].values[0].datInt;
@@ -729,6 +731,8 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    int j;
 	    for (j = 0;  j < rec->infoElements[i].count && j < alDescCount-1;  j++)
 		{
+		if (rec->infoElements[i].missingData[j])
+		    continue;
 		int ac = rec->infoElements[i].values[j].datInt;
 		alCounts[1+j] = ac;
 		if (gotTotalCount)
@@ -760,9 +764,10 @@ else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
 	struct vcfGenotype *gt = &(rec->genotypes[i]);
 	if (gt == NULL)
 	    uglyf("i=%d gt=NULL wtf?\n", i);
-	alCounts[gt->hapIxA]++;
-	if (! gt->isHaploid)
-	    alCounts[gt->hapIxB]++;
+	if (gt->hapIxA >= 0)
+	    alCounts[(unsigned char)gt->hapIxA]++;
+	if (!gt->isHaploid && gt->hapIxB >= 0)
+	    alCounts[(unsigned char)gt->hapIxB]++;
 	}
     dyStringPrintf(dy, "%d", alCounts[0]);
     for (i = 1;  i < alDescCount;  i++)
@@ -806,7 +811,7 @@ pgs->alleleFreq = alleleCountsFromVcfRecord(rec, alCount);
 // the VCF spec only gives us one BQ... for the reference position?  should ask.
 dyStringClear(dy);
 for (i = 0;  i < rec->infoCount;  i++)
-    if (sameString(rec->infoElements[i].key, "BQ"))
+    if (sameString(rec->infoElements[i].key, "BQ") && !rec->infoElements[i].missingData[0])
 	{
 	float qual = rec->infoElements[i].values[0].datFloat;
 	dyStringPrintf(dy, "%.1f", qual);

@@ -2066,7 +2066,11 @@ foreach my $ddfLine (@ddfLines) {
     $metadata .= " labVersion=$ddfLine->{labVersion}" if $ddfLine->{labVersion};
     $metadata .= " softwareVersion=$ddfLine->{softwareVersion}" if $ddfLine->{softwareVersion};
     $metadata .= " origAssembly=$ddfLine->{origAssembly}" if $ddfLine->{origAssembly};
-    $metadata .= ' dataVersion="' . $Encode::dataVersion .'"';
+    if ($daf->{assembly} eq "mm9"){
+        $metadata .= ' dataVersion="ENCODE Mar 2012 Freeze"';
+    } else {
+        $metadata .= ' dataVersion="' . $Encode::dataVersion .'"';
+    }
     if($submitDir =~ /(\d+)$/) {
         $subId = $1;
     } elsif($submitDir =~ /(\d+)/) {

@@ -367,4 +367,225 @@ close (FH);
     rm /gbdb/rheMac3/rheMac3.2bit
     ln -s `pwd`/rheMac3.2bit /gbdb/rheMac3/rheMac3.2bit
 
+
+############################################################################
+# set this as defaultDb (DONE - 2012-01-06 - Chin)
+#   and make this the default genome for Rhesus
+    hgsql -e 'update defaultDb set name="rheMac3" where name="rheMac2";' \
+        hgcentraltest
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE 2012-01-09 - Chin)
+# Create kluster run files (
+    # numerator is rheMac3 gapless bases "real" as reported by: 
+    featureBits -noRandom -noHap rheMac3 gap
+    # 323705474 bases of 2562964352 (12.630%) in intersection
+
+    # Use -repMatch=650, based on size -- for human we use 1024
+    # use the "real" number from the faSize measurement,
+    # hg19 is 2897316137, calculate the ratio factor for 1024:
+    calc \(  2562964352 / 2897316137 \) \* 1024
+    # ( 2562964352 / 2897316137 ) * 1024 = 905.829869
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50 (900 in this case)
+
+    cd /hive/data/genomes/rheMac3
+    blat rheMac3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/rheMac3.11.ooc -repMatch=900
+    #   Wrote 26800 overused 11-mers to jkStuff/rheMac3.11.ooc
+
+    # there are non-bridged gaps.
+    hgsql -N -e "select bridge from gap;" rheMac3 | sort | uniq -c
+    #    4122 no
+    #  410465 yes
+
+    # copy the stuff to kluster
+    mkdir /hive/data/staging/data/rheMac3
+    cp -p rheMac3.2bit chrom.sizes jkStuff/rheMac3.11.ooc \
+        /hive/data/staging/data/rheMac3
+
+    gapToLift -bedFile=jkStuff/nonBridgedGaps.bed rheMac3 \
+        jkStuff/rheMac3.nonBridged.lft
+    cp -p jkStuff/rheMac3.nonBridged.lft /hive/data/staging/data/rheMac3
+
+    # ask cluster-admin to copy (evry time if any file changed)
+    #    /hive/data/staging/data/rheMac3 directory to
+    #    /scratch/data/rheMac3 on cluster nodes
+    # before porceed to genbank step
+
+
+#########################################################################
+# AUTO UPDATE GENBANK (DONE 2012-01-19 - Chin)
+    # examine the file:
+    /cluster/data/genbank/data/organism.lst
+    # for your species to see what counts it has for:
+# organism       mrnaCnt estCnt  refSeqCnt
+# Macaca mulatta  6156    60360   2302
+# Macaca mulatta cytomegalovirus  1       0       0
+
+# Gorilla gorilla       546     4       0
+# Gorilla gorilla gorilla       1       0       0
+    # to decide which "native" mrna or ests you want to specify in
+    # genbank.conf
+    # this appears that rheMac3 has almost no native est's
+
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add rheMac3 after rheMac2 and commit to
+    # GIT
+# Rhesus macaque (macaca mulatta)
+rheMac3.serverGenome = /hive/data/genomes/rheMac3/rheMac3.2bit
+rheMac3.clusterGenome = /scratch/data/rheMac3/rheMac3.2bit
+rheMac3.ooc = /scratch/data/rheMac3/rheMac3.11.ooc
+rheMac3.lift = no
+rheMac3.perChromTables = no
+rheMac3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+rheMac3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+rheMac3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+rheMac3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+rheMac3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+rheMac3.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+rheMac3.downloadDir = rheMac3
+rheMac3.genbank.mrna.xeno.load = yes
+rheMac3.refseq.mrna.native.load  = yes
+rheMac3.refseq.mrna.xeno.load  = yes
+rheMac3.upstreamGeneTbl = refGene
+
+    # end of section added to etc/genbank.conf
+    git commit -m "adding rheMac3 Rhesus macaque" etc/genbank.conf
+    git push
+    make etc-update
+
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # rheMac genome information, if this is a new species, need to add
+    # stuff there
+
+    ssh hgwdev                  # used to do this on "genbank" machine
+    screen                      # long running job managed in screen
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbAlignStep -initial rheMac3 &
+    # logFile: var/build/logs/2012.01.11-08:40:51.rheMac3.initalign.log
+    #   real    1496m10.582s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad rheMac3 &
+    #   logFile: var/dbload/hgwdev/logs/2012.01.12-11:34:20.dbload.log
+    #   real    49m3.743s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rheMac3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "daily update for rheMac3 replaces daily update for gorGor2" \
+        etc/align.dbs etc/hgwdev.dbs
+
+    git push
+    make etc-update
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE 2012-01-13 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+#  rheMac3 (trans) on blat1 port 17818
+#  rheMac3 (untrans) on blat1 port 17819
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("rheMac3", "blat1", "17818", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("rheMac3", "blat1", "17819", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
+XXXX 2012-01-13
+############################################################################
+# scaffolds ctgPos2 track (pending working - 2011-10-13 - Chin)
+#### incorrect for GorGor3 !!!!!
+    mkdir /hive/data/genomes/rheMac3/bed/ctgPos2
+    cd /hive/data/genomes/rheMac3/bed/ctgPos2
+    cat << '_EOF_' > scaffoldToCtgPos2.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my %chromSizes;
+
+open (FH, "<../../chrom.sizes") or die "can not read ../../chrom.sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chromSizes{$chr} = $size;
+}
+close (FH);
+
+my %fragToChrom;
+my %fragToPosition;
+my %fragType;
+my %fragSize;
+my %chrType;
+
+open (FH, "hgsql -N -e 'select chrom,chromStart,chromEnd,type,frag,fragStart,fragEnd,strand from gold;' rheMac3|") or die "can not select from gold.rheMac3";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chrom,$chromStart,$chromEnd,$type,$frag,$fragStart,$fragEnd,$strand) =
+        split('\t', $line);
+    next if (exists($fragToChrom{$frag}));
+    my $size = $fragEnd - $fragStart;
+    $fragToChrom{$frag} = $chrom;
+    $fragToPosition{$frag} = $chromStart;
+    $fragType{$frag} = $type;
+    if (exists($chrType{$chrom})) {
+        if ($chrType{$chrom} ne $type) {
+            printf STDERR "WARN: different types for chrom $chrom: $type NE $chrType{$chrom}\n";
+        }
+    }
+    $chrType{$chrom} = $type;
+    $fragSize{$frag} = $size;
+}
+close (FH);
+open (FH, "</hive/data/genomes/rheMac3/genbank/Primary_Assembly/scaffold_localID2acc") or die "can not read scaffold_localID2acc";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#Scaffold/);
+    chomp $line;
+    my ($scafName, $fragName) = split('\s+', $line);
+    my $noSuffix = $fragName;
+    $noSuffix =~ s/\.1$//;
+    if (exists($chromSizes{$noSuffix})) {
+        my $type = "";
+        $type = $chrType{$noSuffix} if (exists($chrType{$noSuffix}));
+        $type = $fragType{$fragName} if (exists($fragType{$fragName}));
+        if (length($type) > 0) {
+        my $size = $chromSizes{$noSuffix};
+        printf "%s\t%d\t%s\t0\t%d\t%s\n", $scafName, $size, $noSuffix,
+            $size, $type;
+        } else {
+            printf STDERR "can not find fragType for $fragName, $noSuffix\n";
+        }
+    } elsif (exists($fragToChrom{$fragName})) {
+        printf "%s\t%d\t%s\t0\t%d\t%s\n", $scafName, $fragSize{$fragName},
+            $fragToChrom{$fragName}, $fragSize{$fragName}, $fragType{$fragName};
+    } else {
+        printf STDERR "can not find: $fragName -> $scafName\n";
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x scaffoldToCtgPos2.pl
+    ./scaffoldToCtgPos2.pl > scaffold.ctgPos2.tab
+
+    cut -f1 scaffold.ctgPos2.tab | awk '{print length($1)}' | sort -rn | head -1
+    #   23
+    cut -f3 scaffold.ctgPos2.tab | awk '{print length($1)}' | sort -rn | head -1
+    #   12
+
+    sed -e "s/20/23/; s/16/12/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+
+    hgLoadSqlTab rheMac3 ctgPos2 ctgPos2.sql scaffold.ctgPos2.tab
+
 ########################################################################

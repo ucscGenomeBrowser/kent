@@ -124,8 +124,9 @@ def mergeList(list1,list2):
     before.extend(consensus)
     setcon = list()
     p = re.compile('^#')
+    p2 = re.compile('^\s*$')
     for i in before:
-        if p.match(i):
+        if p.match(i) or p2.match(i):
             setcon.append(i)
             continue
         if i in setcon:

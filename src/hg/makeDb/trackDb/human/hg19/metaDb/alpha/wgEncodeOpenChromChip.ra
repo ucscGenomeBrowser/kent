@@ -12,7 +12,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
@@ -37,7 +37,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
@@ -62,7 +62,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
@@ -87,7 +87,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
@@ -113,7 +113,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
@@ -137,7 +137,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
@@ -161,7 +161,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002078
@@ -186,7 +186,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH002077
@@ -210,7 +210,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH002077
@@ -233,7 +233,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-27
 dateUnrestricted 2012-06-27
 dccAccession wgEncodeEH002077
@@ -258,7 +258,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
@@ -283,7 +283,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
@@ -308,7 +308,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
@@ -333,7 +333,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
@@ -359,7 +359,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
@@ -383,7 +383,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
@@ -407,7 +407,7 @@ cell A549
 composite wgEncodeOpenChromChip
 controlId A549/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-29
 dateUnrestricted 2012-06-29
 dccAccession wgEncodeEH002079
@@ -1241,7 +1241,7 @@ cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000547
@@ -1499,7 +1499,7 @@ cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000532
@@ -1786,7 +1786,7 @@ cell GM12878
 composite wgEncodeOpenChromChip
 controlId GM12878/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000592
@@ -3319,7 +3319,7 @@ cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000542
@@ -3531,7 +3531,7 @@ cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000541
@@ -3820,7 +3820,7 @@ cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000597
@@ -4085,7 +4085,7 @@ cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000545
@@ -4297,7 +4297,7 @@ cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000543
@@ -4637,7 +4637,7 @@ cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000554
@@ -4980,7 +4980,7 @@ cell HUVEC
 composite wgEncodeOpenChromChip
 controlId HUVEC/None/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-18
 dateUnrestricted 2012-02-18
 dccAccession wgEncodeEH000551
@@ -5507,7 +5507,7 @@ cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000536
@@ -5772,7 +5772,7 @@ cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000535
@@ -6060,7 +6060,7 @@ cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000555
@@ -7965,4 +7965,4 @@ tableName wgEncodeOpenChromChipProgfibPol2Sig
 treatment None
 view Signal
 
-# MAGIC: -1245616308
+# MAGIC: -842485944

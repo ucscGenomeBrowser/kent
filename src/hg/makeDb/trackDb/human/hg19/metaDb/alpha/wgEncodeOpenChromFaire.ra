@@ -719,7 +719,7 @@ attic auxSup
 cell GM12878
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000533
@@ -1043,7 +1043,7 @@ attic auxSup
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH001117
@@ -1225,7 +1225,7 @@ attic auxSup
 cell GM18507
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000586
@@ -1407,7 +1407,7 @@ attic auxSup
 cell GM19239
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000580
@@ -2080,7 +2080,7 @@ attic auxSup
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000544
@@ -2305,7 +2305,7 @@ attic auxSup
 cell HepG2
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000546
@@ -2639,7 +2639,7 @@ attic auxSup
 cell HUVEC
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000549
@@ -3137,7 +3137,7 @@ attic auxSup
 cell K562
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000531
@@ -3619,7 +3619,7 @@ objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3641,7 +3641,7 @@ objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3663,7 +3663,7 @@ objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3685,7 +3685,7 @@ objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3755,7 +3755,7 @@ objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-02-11
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3939,7 +3939,7 @@ attic auxSup
 cell NHEK
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-17
 dateUnrestricted 2012-02-17
 dccAccession wgEncodeEH000558
@@ -4380,4 +4380,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 161521194
+# MAGIC: -1495780414
