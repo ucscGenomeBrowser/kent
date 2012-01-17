@@ -297,7 +297,7 @@ def writeBetaMdb(mdb, qaDir):
 		for j in mdb[i]:
 			f.write("%s %s\n" % (j, mdb[i][j]))
 		f.write("\n")
-:
+
 	f.close()
 
 def writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir, initDate):
