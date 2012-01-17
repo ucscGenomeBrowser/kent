@@ -41,7 +41,7 @@
 #include "gbDefs.h"
 #include "gbFileOps.h"
 #include "gbProcessed.h"
-#include "blackList.h"
+#include "genbankBlackList.h"
 
 
 /* command line option specifications */
@@ -520,7 +520,7 @@ static boolean keepGbEntry(boolean isEst)
 {
 char *acc = gbAccessionField->val->string;
 char *cat = kvtGet(kvt, "cat")->val;
-if (blackListFail(acc, blackListRanges))
+if (genbankBlackListFail(acc, blackListRanges))
     return FALSE;
 else if (gbGuessSrcDb(acc) == GB_REFSEQ)
     {
@@ -821,7 +821,7 @@ if (pepFa != NULL)
 
 char *blackList = optionVal("blackList", NULL);
 if (blackList != NULL)
-    blackListRanges = blackListParse(blackList);
+    blackListRanges = genbankBlackListParse(blackList);
 
 while (argi < argc)
     {

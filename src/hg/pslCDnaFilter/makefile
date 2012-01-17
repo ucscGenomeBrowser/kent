@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${MYLIBDIR}/jkhgap.a
 
 .SECONDARY:
 
