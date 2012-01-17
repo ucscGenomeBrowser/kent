@@ -232,10 +232,10 @@ for (info = infoList; info != NULL; info = info->next)
 	assert(accessionTokens->next->next != NULL);
 	char *contigCoordinates = replaceChars(accessionTokens->next->next->name,
 					       "Note=", "");
-	description =  needMem(strlen(rfamAcc) + strlen(contigCoordinates) + 45);
+	struct dyString *dyTmp = dyStringCreate("Rfam model %s hit found at contig region %s", 
+						rfamAcc, contigCoordinates);
+	description = dyStringCannibalize(&dyTmp);
 	freeMem(contigCoordinates);
-	(void) sprintf(description,  "Rfam model %s hit found at contig region %s", 
-		       rfamAcc, contigCoordinates);
 	slFreeList(&accessionTokens);
         }
     /* If it's a tRNA from the tRNA track, sourceAcc will have the following 
