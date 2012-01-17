@@ -41,7 +41,7 @@
 #include "gbDefs.h"
 #include "gbFileOps.h"
 #include "gbProcessed.h"
-#include "blackList.h"
+#include "genbankBlackList.h"
 
 
 /* command line option specifications */

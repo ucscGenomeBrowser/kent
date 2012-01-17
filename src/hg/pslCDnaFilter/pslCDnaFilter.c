@@ -8,7 +8,7 @@
 #include "hapRegions.h"
 #include "psl.h"
 #include "options.h"
-#include "blackList.h"
+#include "genbankBlackList.h"
 
 struct blackListRange *gBlackListRanges = NULL;
 
