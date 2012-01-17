@@ -18,8 +18,7 @@ These annotations are available for download in the GENCODE GTF files.
 </p>
 
 <p>
-<B>NOTE</B>: We try and synchronize the release cycles for GENCODE, Havana and
-Ensembl. This GENCODE version 10 corresponds to Ensembl 65 from December 2011
+<B>NOTE</B>: This GENCODE version 10 corresponds to Ensembl 65 from December 2011
 and Vega 45 from Oct 2011.  Also see:
 <a href="http://www.gencodegenes.org/" target="_blank">GENCODE project</a>.
 </p>
@@ -46,11 +45,11 @@ The available tracks are:
     including polymorphic pseudogenes.  This includes both manual and
     automatic annotations, except pseudogenes.  This is super-set of
     the <em>basic set</em>.
-  <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes
+  <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes.
 
   <li><em>GENCODE 2-way Pseudogenes</em> - Pseudogenes predicted by the Yale
     Pseudopipe and UCSC Retrofinder pipelines. 
-    The set was derived by looking for a 50 base pairs
+    The set was derived by looking for 50 base pairs
     of overlap between pseudogenes derived from both sets based on their genomic
     locations i.e. chromosomal coordinates.  When multiple Pseudopipe
     predictions map to a single Retrofinder prediction, only one match is kept
@@ -90,7 +89,7 @@ each locus.
     </ul>
 </ul>
 
-<h5>Non-coding transcript categories</h5>
+<!--! <h5>Non-coding transcript categories</h5> -->
 <p>Non-coding transcripts are categorized using
 their <a href="http://www.gencodegenes.org/gencode_biotypes.html">BioType</a>
 and the following criteria:
@@ -105,7 +104,7 @@ and the following criteria:
 <h4>Filtering</h4>
 <p>
 Items in the GENCODE Basic, Comprehensive and Pseudogene tracks
-can be filter using the following criteria:
+can be filtered using the following criteria:
 </p>
 <ul>
   <li> Transcript class: Filter by the basic biological function of a transcript
@@ -125,9 +124,9 @@ can be filter using the following criteria:
        also created automatically.
      <li> automatic - display automatically created annotations, including those that are 
        also created manually.
-     <li> manual_only - display manually created annotations there were
+     <li> manual_only - display manually created annotations that were
        not annotated by the automatic method.
-     <li> automatic_only - display automatically created annotations there were
+     <li> automatic_only - display automatically created annotations that were
        not annotated by the manual method.
    </ul>
 
@@ -161,7 +160,7 @@ support through the full length of their exon structure, there are also
 transcripts that are poorly supported and that should be considered
 speculative. Transcription Support Levels (TSLs) is a method to highlight the
 well-supported and poorly-supported transcript models for users. The method
-relies on the primary data for that can support full-length transcript
+relies on the primary data that can support full-length transcript
 structure: mRNA and EST alignments supplied by UCSC and Ensembl.</p>
 
 <p>The mRNA and EST alignments are compared to the GENCODE transcripts and the
@@ -178,11 +177,12 @@ suspect.  GENCODE annotations for protein-coding and non-protein-coding
 transcripts are compared with the evidence alignments.</p>
 
 <p>Annotations in the MHC region and other immunological genes are not
-evaluated, as automatic alignments tend to be very problematic. We are still
-working on methods of evaluating single-exon genes and they are not included
+evaluated, as automatic alignments tend to be very problematic. 
+Methods for evaluating single-exon genes are still being developed and 
+they are not included
 in the current analysis.  Multi-exon GENCODE annotations are evaluated using
 the criteria that all introns are supported by an evidence alignment and the
-evidence alignment doesn't indicate that there are unannotated exons. Small
+evidence alignment does not indicate that there are unannotated exons. Small
 insertions and deletions in evidence alignments are assumed to be due to
 polymorphisms and not considered as differing from the annotations. All
 introns boundaries must match exactly. The transcript start and end locations
@@ -196,7 +196,7 @@ are allowed to differ.</p>
   <li> <a name="tsl2"><b>tsl2</b></a> - The best supporting mRNA is flagged as suspect or the support is from multiple ESTs.</li>
   <li> <a name="tsl3"><b>tsl3</b></a> - The only support is from a single EST.</li>
   <li> <a name="tsl4"><b>tsl4</b></a> - The best supporting EST is flagged as suspect.</li>
-  <li> <a name="tsl5"><b>tsl5</b></a> - No single transcript supports the model structure</li>
+  <li> <a name="tsl5"><b>tsl5</b></a> - No single transcript supports the model structure.</li>
   <li> <a name="tslNA"><b>tslNA</b></a> - The transcript was not analyzed for one of the following reasons:
     <ul>
       <li> pseudogene annotation, including transcribed pseudogenes
@@ -211,12 +211,12 @@ are allowed to differ.</p>
 <h2>Methods</h2>
 
 <p>
-We aim to annotate all evidence-based gene features at high accuracy on
-the human reference sequence. This includes identifying all
-protein-coding loci with associated alternative variants, non-coding
-loci which have transcript evidence, and pseudogenes. We integrate
+The GENCODE project aims to annotate all evidence-based gene features at 
+high accuracy on the human reference sequence by integrating 
 computational approaches (including comparative methods), manual
-annotation and targeted experimental verification.
+annotation and targeted experimental verification. This goal includes identifying 
+all protein-coding loci with associated alternative variants, non-coding
+loci which have transcript evidence, and pseudogenes. 
 </p>
 <p>For a detailed description of the methods and references used, see
 Harrow <em>et al</em> (2006).
@@ -227,6 +227,18 @@ Harrow <em>et al</em> (2006).
 <p> See Harrow <em>et al.</em> (2006) for information on verification
 techniques.
 </p>
+<P>
+Selected transcript models are verified experimentally by RT-PCR amplification followed by sequencing.
+Those experiments can be found at GEO:
+<ul>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30619" target="_blank"><b>GSE30619:[E-MTAB-612]</b></a> - Batch I is based on annotation from July 2008 (without pseudogenes).</li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE25711" target="_blank"><b>GSE25711:[E-MTAB-407]</b></a> - Batch II is based on annotation from April 2009. </li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE30612" target="_blank"><b>GSE30612:[E-MTAB-533]</b></a> - Batch III is .</li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34797" target="_blank"><b>GSE34797:[E-MTAB-684]</b></a> - Batch IV is based on chromosome 3, 4 and 5 annotations from GENCODE 4 (January 2010).</li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34820" target="_blank"><b>GSE34820:[E-MTAB-737]</b></a> - Batch V is based on annotations from GENCODE 6 (November 2010).</li>
+  <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34821" target="_blank"><b>GSE34821:[E-MTAB-831]</b></a> - Batch VI is based on annotations from GENCODE 6 (November 2010) as well as transcript models predicted by the Ensembl Genebuild group based on the Illumina Human BodyMap 2.0 data. </li>
+</ul>
+</P>
 
 <h2>Credits</h2>
 
@@ -287,7 +299,7 @@ GENCODE at the Sanger Institute</A>.
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: left;"><a href="http://www.cnio.es/ing/grupos/plantillas/presentacion.asp?pag=726" target="_blank">
-Structural Computational Biology Group</a>, Centro Natcional de Investigaciones Oncologicas (CNIO), Madrid, Spain</td>
+Structural Computational Biology Group</a>, Centro Nacional de Investigaciones Oncologicas (CNIO), Madrid, Spain</td>
       <td>Jos&eacute; Manuel Rodr&iacute;guez, Michael Tress, Alfonso Valencia</td>
     </tr>
   </tbody>
