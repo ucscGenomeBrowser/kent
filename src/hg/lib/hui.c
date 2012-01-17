@@ -2217,6 +2217,19 @@ tdbExtrasFourStateSet(subtrack,fourState);
 }
 
 
+static char *tagEncode(char *name)
+// Turns out css classes cannot begin with a number.  So prepend 'A'
+// If this were more widely used, could move to cheapcgi.c.
+{
+if (!isdigit(*name))
+     return name;
+
+char *newName = needMem(strlen(name)+1);
+*newName = 'A';
+strcpy(newName+1,name);
+return newName;
+}
+
 typedef struct _dimensions {
     int count;
     char**names;
@@ -2264,7 +2277,7 @@ for (ix = 0,dimensions->count=0; ix < cnt; ix++)
     if (parseAssignment(words[ix], &name, &value))
         {
         dimensions->names[dimensions->count]     = name;
-        dimensions->subgroups[dimensions->count] = value;
+        dimensions->subgroups[dimensions->count] = tagEncode(value);
         dimensions->count++;
         }
     }
@@ -2281,19 +2294,6 @@ if(dimensions && *dimensions)
     freeMem((*dimensions)->subgroups);
     freez(dimensions);
     }
-}
-
-static char *tagEncode(char *name)
-// Turns out css classes cannot begin with a number.  So prepend 'A'
-// If this were more widely used, could move to cheapcgi.c.
-{
-if (!isdigit(*name))
-     return name;
-
-char *newName = needMem(strlen(name)+1);
-*newName = 'A';
-strcpy(newName+1,name);
-return newName;
 }
 
 #define SUBGROUP_MAX 9
@@ -2575,12 +2575,22 @@ struct dyString *currentlyCheckedTags = NULL;
 // Need a string of subGroup tags which are currently checked
 safef(settingName,sizeof(settingName),"dimension%cchecked",letter);
 char *dimCheckedDefaults = trackDbSettingOrDefault(parentTdb,settingName,"All");
+char *checkedDefaults[12];
+int defaultCount = 0;
+if (dimCheckedDefaults != NULL
+&& differentWord(dimCheckedDefaults,"All") && differentWord(dimCheckedDefaults,"Any"))
+    {
+    defaultCount = chopCommas(dimCheckedDefaults, checkedDefaults);
+    int dIx = 0;
+    for (;dIx < defaultCount;dIx++)
+        checkedDefaults[dIx] = tagEncode(checkedDefaults[dIx]); // Need to encode these before compare!
+    }                                                           // Will leak, but this is a tiny amount
 for(mIx=0;mIx<members->count;mIx++)
     {
     safef(settingName, sizeof(settingName), "%s.mat_%s_dim%c_cb",parentTdb->track,members->tags[mIx],letter);
     members->selected[mIx] = TRUE;
-    if (differentWord(dimCheckedDefaults,"All") && differentWord(dimCheckedDefaults,"Any"))
-        members->selected[mIx] = (NULL!=findWordByDelimiter(members->tags[mIx],',',dimCheckedDefaults));
+    if (defaultCount > 0)
+        members->selected[mIx] = (-1 != stringArrayIx(members->tags[mIx],checkedDefaults,defaultCount));
     members->selected[mIx] = cartUsualBoolean(cart,settingName,members->selected[mIx]);
     if(members->selected[mIx])
         {

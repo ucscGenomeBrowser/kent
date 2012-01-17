@@ -225,7 +225,10 @@ printf("<tr><th>Status<td>%s<td>%s</tr>\n", transAttrs->transcriptStatus, transA
 printf("<tr><th>Annotation Level<td>%s (%d)<td></tr>\n", getLevelDesc(transAttrs->level), transAttrs->level);
 printf("<tr><th>Annotation Method<td>%s<td>%s</tr>\n", getMethodDesc(transcriptSource->source), getMethodDesc(geneSource->source));
 if (haveTsl)
-    printf("<tr><th>Support Level<td>%s<td></tr>\n", getSupportLevelDesc(tsl));
+    {
+    char *tslDesc = getSupportLevelDesc(tsl);
+    printf("<tr><th><a href=\"#tsl\">Transcription Support Level</a><td><a href=\"#%s\">%s</a><td></tr>\n", tslDesc, tslDesc);
+    }
 printf("<tr><th>HUGO gene<td colspan=2>%s</tr>\n", transAttrs->geneName);
 printf("<tr><th>CCDS<td>%s<td></tr>\n", transAttrs->ccdsId);
 // FIXME: add sequence here??
