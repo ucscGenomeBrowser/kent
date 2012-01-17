@@ -454,18 +454,18 @@ bosTau7.upstreamGeneTbl = refGene
             hgcentraltest
     #   test it with some sequence
 
-XXXX 2012-01-13
-#########################################################################
-# reset default position (working - 2011-05-11 - Chin)
-#       Reset default position to an area of chr3 with a number of genes
-    hgsql -e \
-'update dbDb set defaultPos="chr3:21,592,157-21,596,916" where name="bosTau7";' \
-        hgcentraltest
 
+#########################################################################
+# reset default position (DONE - 2012-01-13  - Chin)
+#       Reset default position to an area contains RHO and a number of
+#       other genes
+    hgsql -e \
+'update dbDb set defaultPos="chr22:56,647,062-58,290,728" where name="bosTau7";' \
+        hgcentraltest
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#	(working 2011-05-11 - Chin)
+#	(DONE 2011-05-11 - Chin)
 # NOTE - create bosTau7 entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/bosTau7/bed/ctgPos2
     cd /hive/data/genomes/bosTau7/bed/ctgPos2
@@ -490,6 +490,7 @@ while (my $line = <FH>) {
     chomp $line;
     my @a = split('\s+', $line);
     next if ($a[4] =~ m/^U$/);
+    next if ($a[4] =~ m/^N$/);
     my $chrSize = $a[2]-$a[1]+1;
     my $ctgSize = $a[7]-$a[6]+1;
     die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
@@ -502,7 +503,7 @@ close (FH);
 chmod 775 agpToCtgPos2.pl
 
 export S=../../genbank/Primary_Assembly/assembled_chromosomes
-cut -f2 ${S}/chr2acc | while read ACC
+cat  ${S}/chr2acc | grep -v "^#Chromosome" | cut -f2 | while read ACC
 do
     C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
     zcat ${S}/AGP/chr${C}.agp.gz \
