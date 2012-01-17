@@ -106,7 +106,7 @@ include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
 include wgEncodeCaltechRnaSeq.ra public
-include wgEncodeCaltechRnaSeq.new.ra alpha,beta
+include wgEncodeCaltechRnaSeq.release2.ra alpha,beta
 
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra beta,public
