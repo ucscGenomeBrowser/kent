@@ -297,13 +297,17 @@ def writeBetaMdb(mdb, qaDir):
 		for j in mdb[i]:
 			f.write("%s %s\n" % (j, mdb[i][j]))
 		f.write("\n")
-
+:
 	f.close()
 
 def writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir, initDate):
 	newYN = "Y"
-	if int(args.release) > 1:
+        track = short
+	releaseLog = long
+        if int(args.release) > 1:
 		newYN = "N"
+		releaseLog = "%s (Release %s)" % (long, args.release)
+                track = "%s (Release %s)" % (short, args.release)
 
 	sql = """tbls={
 %s
@@ -330,7 +334,7 @@ track={
 %s
 }
 releaseLog={
-%s (Release %s)
+%s
 }
 priority={
 L
@@ -367,7 +371,7 @@ releaseLogUrl={
 }
 pushState={
 D
-}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(initDate), str(d), short, long, args.release, args.database, newYN, args.redmine, notes, args.database, args.composite) 
+}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(initDate), str(d), track, releaseLog, args.database, newYN, args.redmine, notes, args.database, args.composite)
 	f = open(qaDir + "/release.sql", "w")
 	f.write(sql)
 	f.close()
