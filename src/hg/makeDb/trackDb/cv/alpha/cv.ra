@@ -3446,7 +3446,7 @@ lineage mesoderm
 #vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 vendorId PBDE
 vendorName Farnham lab
-orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
+orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205 
 termId BTO:0000574 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000574
 sex M
@@ -7871,7 +7871,7 @@ targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, 
 antibodyDescription rabbit polyclonal. Antibody Target: SUZ12
 vendorName Antibody made by Farnham lab
 vendorId SUZ12
-orderUrl http://www.ucdmc.ucdavis.edu/pharmacology/Faculty/farnham/index.html
+orderUrl http://pibbs.usc.edu/faculty/profile/?fid=205
 lab Farnham
 targetId GeneCard:SUZ12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
@@ -11035,16 +11035,6 @@ labPiFull Kevin Struhl
 grantPi Snyder
 organism human
 
-#This is being depricated to be replaced by USC
-#term UCD
-#tag UCD
-#type lab
-#label Farnham - University of California at Davis
-#description Farnham - University of California at Davis
-#labPi Farnham
-#labPiFull Peggy Farnham
-#grantPi Snyder
-#organism human
 term USC
 tag USC
 type lab
