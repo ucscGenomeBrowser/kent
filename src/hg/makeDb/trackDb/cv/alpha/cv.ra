@@ -9437,7 +9437,7 @@ type treatment
 term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
-description 24 h with 1% p02 and 10mM Lactate, pH 6.7
+description 24 h with 1% p02 and 10mM Lactate, pH 6.7 (Crawford)
 type treatment
 
 #missing concentration
