@@ -130,7 +130,7 @@ def main():
         addInclude(args.composite, publicMetaDbInclude, args.stage)
         for i in compare.keys():
             if re.search("beta", compare[i]):
-                compare[i] = "public"
+                compare[i] = " "
                 continue
             if re.search("public", compare[i]):
                 compare[i] = "delete"
@@ -145,7 +145,10 @@ def main():
             continue
         if m.group(1) in compare:
             if compare[m.group(1)] != "delete":
-                f.write("include %s %s\n" % (m.group(1), compare[m.group(1)]))
+                line = "include %s %s" % (m.group(1), compare[m.group(1)])
+                line = line.rstrip()
+                line = line + "\n"
+                f.write(line)
             continue
         f.write(i)
     f.close()
