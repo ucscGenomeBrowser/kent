@@ -18,6 +18,8 @@ rheMac	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Macaca
 
 papHam	Haplorrhini; Catarrhini; Cercopithecidae; Cercopithecinae; Papio
 
+saiBol	Haplorrhini; Simiiformes; Platyrrhini; Cebidae; Saimiriinae; Saimiri; Saimiri boliviensis
+
 calJac	Haplorrhini; Platyrrhini; Cebidae; Callitrichinae; Callithrix
 
 tarSyr	Haplorrhini; Tarsiiformes; Tarsiidae; Tarsius
