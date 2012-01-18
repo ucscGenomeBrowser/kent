@@ -6739,7 +6739,7 @@ vendorName Abcam
 vendorId ab10483
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 lab Farnham
-targetId GeneCard:TRIM2B
+targetId GeneCard:TRIM28
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation Human_-_KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
 label KAP1 (ab10483)
