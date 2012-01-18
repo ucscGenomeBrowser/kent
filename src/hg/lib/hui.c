@@ -2224,7 +2224,7 @@ static char *tagEncode(char *name)
 if (!isdigit(*name))
      return name;
 
-char *newName = needMem(strlen(name)+1);
+char *newName = needMem(strlen(name)+2);
 *newName = 'A';
 strcpy(newName+1,name);
 return newName;
