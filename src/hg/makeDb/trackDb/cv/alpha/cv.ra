@@ -3668,7 +3668,7 @@ term SK-N-SH
 tag SKNSH
 type Cell Line
 organism human
-description neuroblastoma, newly promoted to tier 2: not in 2011 analysis PROVISONAL The SK-N-SH line was established from a neuroblastoma in a 4 year old individual.
+description neuroblastoma, newly promoted to tier 2: not in 2011 analysis, the SK-N-SH line was established from a neuroblastoma in a 4 year old individual.
 tissue brain
 lineage ectoderm
 vendorName ATCC
