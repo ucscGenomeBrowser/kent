@@ -62,6 +62,7 @@ fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAss
 dragAndDrop subTracks
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+html wgEncodeUwDnase.release4
 priority 4
 type bed 3 +
 wgEncode 1
