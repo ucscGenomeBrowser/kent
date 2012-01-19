@@ -83,7 +83,7 @@ void printSeqHeaders(bool showDesc, bool isClickedSection)
     printf("<TR style=\"background-color: #%s; color: #FFFFFF\">\n", HG_COL_TABLE_LABEL);
     if (showDesc)
         puts("  <TH style=\"width: 10%\">Article file</TH>\n");
-    puts("  <TH style=\"width: 70%\">Sequence (in bold) with flanking text</TH>\n");
+    puts("  <TH style=\"width: 70%\">One table row per sequence, with flanking text, sequence in bold</TH>\n");
     if (t2gDebug)
         puts("  <TH style=\"width: 30%\">Identifiers</TH>\n");
 
