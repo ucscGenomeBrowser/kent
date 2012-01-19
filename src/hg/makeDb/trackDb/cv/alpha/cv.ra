@@ -5488,7 +5488,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F4
 validation Human_-_E2F4(Immunoprecipitation-Western_blot,ChIP):human_E2F4_validation_Farnham.pdf Mouse_-_:missing
 label E2F4 (sc-866)
 
-term E2F6_(SC-22823)
+term E2F6
 tag E2F6
 type Antibody
 target E2F6
