@@ -61,7 +61,7 @@ sortOrder cellType=+ rep=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 dragAndDrop subTracks
 noInherit on
-html wgEncodeUwDnase.new
+html wgEncodeUwDnase.release3
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 priority 4
 type bed 3 +
