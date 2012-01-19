@@ -37,7 +37,7 @@ def getMethods(qaDir, args, user, d):
 
 def writeClaimMail(args, user, qaDir):
 	f = open(qaDir + '/claimMail', 'w')
-	mail = """Hi Kate,
+	mail = """Hi Cricket,
 
 I am claiming the %s (Release %s) %s track.
 Please let me know if there is another track you'd like me to work on instead.
