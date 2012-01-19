@@ -407,21 +407,22 @@ class RaFile(OrderedDict):
                     else:
                         tempStanza[i] = self[stanza][i]
             ret[stanza] = tempStanza
-
         return ret
 
     def printTrackDbFormat(self):
+        '''
+        Converts a .ra file into TrackDb format.
+        Returns a printable string.
+        '''
         retstring = ""
-        space = False
-        tab = False
+        parentTrack = ""
+        tier = 0
         commentList = []
         for stanza in self:
             if stanza == "":
                 if commentList:
                     for line in commentList:
-                        if space == True:
-                            retstring += "    "
-                        if tab == True:
+                        for i in range(tier):
                             retstring += "    "
                         retstring += line + "\n"
                     commentList = []
@@ -430,24 +431,26 @@ class RaFile(OrderedDict):
             if stanza.startswith("#"):
                 commentList.append(stanza)
                 continue
-            if "visibility" in self[stanza].keys():
-                tab = False
-                space = True
-            if "subGroups" in self[stanza].keys():
-                tab = True
-                space = True
+            if "subTrack" in self[stanza].keys():
+                if parentTrack not in self[stanza]['subTrack'] or parentTrack == "":
+                    parentTrack = self[stanza]['track']
+                    tier = 1
+                else:
+                    tier = 2
+            if "parent" in self[stanza].keys():
+                if parentTrack not in self[stanza]['parent'] or parentTrack == "":
+                    parentTrack = self[stanza]['track']
+                    tier = 1
+                else:
+                    tier = 2
             if commentList:
                 for line in commentList:
-                    if space == True:
-                        retstring += "    "
-                    if tab == True:
+                    for i in range(tier):
                         retstring += "    "
                     retstring += line + "\n"
                 commentList = []
             for line in self[stanza]:
-                if space == True:
-                    retstring += "    "
-                if tab == True:
+                for i in range(tier):
                     retstring += "    "
                 if line.startswith("#"):
                     retstring += line + "\n"
@@ -455,7 +458,6 @@ class RaFile(OrderedDict):
                     retstring += line + " " + self[stanza][line] + "\n"
             retstring += "\n"
         return retstring
-
 
     def __str__(self):
         str = ''
