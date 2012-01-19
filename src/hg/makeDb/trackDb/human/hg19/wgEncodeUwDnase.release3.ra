@@ -61,7 +61,7 @@ sortOrder cellType=+ rep=+ view=+
 fileSortOrder cell=Cell_Line treatment=Treatment replicate=Rep view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to dccAccession=UCSC_Accession geoSampleAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until 
 dragAndDrop subTracks
 noInherit on
-html wgEncodeUwDnase.new
+html wgEncodeUwDnase.release3
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 priority 4
 type bed 3 +
@@ -1343,12 +1343,12 @@ wgEncode 1
         # was wgEncodeUwDnaseCD20ro01778HotspotsRep2 wong Tue Oct  4 16:39:34 2011
 
         #revoked, bad peaks
-        #track wgEncodeUwDnaseMonocd14ro1746HotspotsRep1V2
-        #parent wgEncodeUwDnaseViewHot off
-        #shortLabel Mono-CD14+ Hspt 1
-        #longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 1 from ENCODE/UW
-        #subGroups view=Hot cellType=MONOCD14 treatment=None rep=1
-        #type broadPeak
+        track wgEncodeUwDnaseMonocd14ro1746HotspotsRep1V2
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel Mono-CD14+ Hspt 1
+        longLabel Monocytes-CD14+ DNaseI HS Hotspots Rep 1 from ENCODE/UW
+        subGroups view=Hot cellType=MONOCD14 treatment=None rep=1
+        type broadPeak
         # subId=4398 dateSubmitted=2011-06-25
         # was wgEncodeUwDnaseMonocd14HotspotsRep1V2 wong Wed Oct  5 23:59:20 2011
 
@@ -2678,12 +2678,12 @@ wgEncode 1
         # was wgEncodeUwDnaseCD20ro01778PkRep2 wong Tue Oct  4 16:39:34 2011
 
         #bad peaks
-        #track wgEncodeUwDnaseMonocd14ro1746PkRep1V2
-        #parent wgEncodeUwDnaseViewaPeaks off
-        #shortLabel Mono-CD14+ Pk 1
-        #longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        #subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
-        #type narrowPeak
+        track wgEncodeUwDnaseMonocd14ro1746PkRep1V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel Mono-CD14+ Pk 1
+        longLabel Monocytes-CD14+ DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        subGroups view=Peaks cellType=MONOCD14 treatment=None rep=1
+        type narrowPeak
         # subId=4398 dateSubmitted=2011-06-25
         # was wgEncodeUwDnaseMonocd14PkRep1V2 wong Wed Oct  5 23:59:20 2011
 
@@ -4015,12 +4015,12 @@ wgEncode 1
         # was wgEncodeUwDnaseCD20ro01778RawRep2 wong Tue Oct  4 16:39:34 2011
 
         #bad peaks, revoked
-        #track wgEncodeUwDnaseMonocd14ro1746RawRep1V2
-        #parent wgEncodeUwDnaseViewzRaw off
-        #shortLabel Mono-CD14+ Sig 1
-        #longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 1 from ENCODE/UW
-        #subGroups view=zRSig cellType=MONOCD14 treatment=None rep=1
-        #type bigWig 1.000000 41303.000000
+        track wgEncodeUwDnaseMonocd14ro1746RawRep1V2
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel Mono-CD14+ Sig 1
+        longLabel Monocytes-CD14+ DNaseI HS Raw Signal Rep 1 from ENCODE/UW
+        subGroups view=zRSig cellType=MONOCD14 treatment=None rep=1
+        type bigWig 1.000000 41303.000000
         # subId=4398 dateSubmitted=2011-06-25
         # was wgEncodeUwDnaseMonocd14RawRep1V2 wong Wed Oct  5 23:59:21 2011
 

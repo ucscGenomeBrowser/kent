@@ -60,8 +60,7 @@ include wgEncodeUw5C.new.ra alpha
 # Encode Affy Exon --------------------------------------------
 
 # UW Affy Exon (wrangler: cricket)
-include wgEncodeUwAffyExonArray.ra public
-include wgEncodeUwAffyExonArray.new.ra alpha,beta
+include wgEncodeUwAffyExonArray.ra
 
 # Duke Affy Exon (wrangler: cricket)
 include wgEncodeDukeAffyExon.ra beta,public
@@ -81,7 +80,8 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.ra beta,public 
+include wgEncodeUwDnase.release3.ra public
+include wgEncodeUwDnase.release3.patch.ra beta
 include wgEncodeUwDnase.release4.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
@@ -100,14 +100,13 @@ include wgEncodeRikenCage.ra
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public
-include wgEncodeCshlShortRnaSeq.new.ra alpha
+include wgEncodeCshlShortRnaSeq.release2.ra alpha
 
 # GIS RNA Seq (wrangler: cricket)
 include wgEncodeGisRnaSeq.ra
 
 # Caltech RNA Seq (wrangler: cricket)
-include wgEncodeCaltechRnaSeq.ra beta,public
-include wgEncodeCaltechRnaSeq.new.ra alpha
+include wgEncodeCaltechRnaSeq.release2.ra
 
 # CSHL Long Rna Seq (wrangler: cricket)
 include wgEncodeCshlLongRnaSeq.ra beta,public
@@ -163,8 +162,7 @@ include wgEncodeSydhHistone.ra
 # ENCODE TFBS -------------------------------------------
 
 # UW CTCF Binding (wrangler: Venkat)
-include wgEncodeUwTfbs.release2.ra alpha
-include wgEncodeUwTfbs.ra beta,public
+include wgEncodeUwTfbs.release2.ra
 
 #UTA TFBS (wrangler: Matt)
 include wgEncodeOpenChromChip.release2.ra alpha

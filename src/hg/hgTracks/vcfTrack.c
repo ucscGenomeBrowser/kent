@@ -104,6 +104,8 @@ if (afEl != NULL && afDef != NULL && afDef->type == vcfInfoFloat)
     gotInfo = TRUE;
     for (i = 0;  i < afEl->count;  i++)
 	{
+	if (afEl->missingData[i])
+	    continue;
 	double altFreq = afEl->values[i].datFloat;
 	refFreq -= altFreq;
 	if (altFreq > maxAltFreq)
@@ -118,12 +120,15 @@ else
     const struct vcfInfoElement *anEl = vcfRecordFindInfo(record, "AN");
     const struct vcfInfoDef *anDef = vcfInfoDefForKey(vcff, "AN");
     if (acEl != NULL && acDef != NULL && acDef->type == vcfInfoInteger &&
-	anEl != NULL && anDef != NULL && anDef->type == vcfInfoInteger && anEl->count == 1)
+	anEl != NULL && anDef != NULL && anDef->type == vcfInfoInteger && anEl->count == 1 &&
+	anEl->missingData[0] == FALSE)
 	{
 	gotInfo = TRUE;
 	int totalCount = anEl->values[0].datFloat;
 	for (i = 0;  i < acEl->count;  i++)
 	    {
+	    if (acEl->missingData[i])
+		continue;
 	    int altCount = acEl->values[i].datFloat;
 	    double altFreq = (double)altCount / totalCount;
 	    refFreq -= altFreq;
@@ -230,7 +235,7 @@ struct hapCluster
     unsigned short *refCounts; // per-variant count of reference alleles observed
     unsigned short *unkCounts; // per-variant count of unknown (or unphased het) alleles
     unsigned short leafCount;  // number of leaves under this node (or 1 if leaf)
-    unsigned short gtHapIx;    // if leaf, (genotype index << 1) + hapIx (0 or 1 for diploid)
+    unsigned short gtHapIx;    // if leaf, (genotype index << 1) + hap (0 or 1 for diploid)
 };
 
 INLINE boolean isRef(const struct hapCluster *c, int varIx)
@@ -404,7 +409,9 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 	    // first chromosome:
 	    c1->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
-	    if (gt->hapIxA == 0)
+	    if (gt->hapIxA < 0)
+		c1->unkCounts[countIx] = 1;
+	    else if (gt->hapIxA == 0)
 		c1->refCounts[countIx] = 1;
 	    if (gt->isHaploid)
 		haveHaploid = TRUE;
@@ -412,13 +419,15 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 		{
 		c2->leafCount = 1;
 		c2->gtHapIx = (gtIx << 1) | 1;
-		if (gt->hapIxB == 0)
+		if (gt->hapIxB < 0)
+		    c2->unkCounts[countIx] = 1;
+		else if (gt->hapIxB == 0)
 		    c2->refCounts[countIx] = 1;
 		}
 	    }
 	else
 	    {
-	    // Unphased heterozygote, don't use haplotype info for clustering
+	    // Missing data or unphased heterozygote, don't use haplotype info for clustering
 	    c1->leafCount = c2->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
 	    c2->gtHapIx = (gtIx << 1) | 1;
@@ -627,7 +636,9 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
 	else
 	    {
 	    int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
-	    if (alIx)
+	    if (alIx < 0)
+		unks++;
+	    else if (alIx > 0)
 		alts++;
 	    else
 		refs++;

@@ -8,7 +8,7 @@
 #include "hapRegions.h"
 #include "psl.h"
 #include "options.h"
-#include "blackList.h"
+#include "genbankBlackList.h"
 
 struct blackListRange *gBlackListRanges = NULL;
 
@@ -132,7 +132,7 @@ static void blackListFilter(struct cDnaQuery *cdna)
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
-    if (!aln->drop && blackListFail(aln->psl->qName, gBlackListRanges))
+    if (!aln->drop && genbankBlackListFail(aln->psl->qName, gBlackListRanges))
         cDnaAlignDrop(aln, FALSE, &cdna->stats->blackListCnts, "black listed");
     }
 }
@@ -507,7 +507,7 @@ gDecayMinCover = optionExists("decayMinCover");
 char *blackList = optionVal("blackList", NULL);
 
 if (blackList != NULL)
-    gBlackListRanges = blackListParse(blackList);
+    gBlackListRanges = genbankBlackListParse(blackList);
 
 if ( gDecayMinCover && (gMinCover > 0.0))
     errAbort("can only specify one of -minCoverage and -decayMinCoverage");

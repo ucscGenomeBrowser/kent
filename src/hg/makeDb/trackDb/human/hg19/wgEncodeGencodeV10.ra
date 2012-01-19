@@ -1,3 +1,7 @@
+##
+# WARNING: must update hgTracks/simpleTracks.c to add calls
+# to registerTrackHandlerOnFamily for new gencode versions
+##
 
 track wgEncodeGencodeV10
 compositeTrack on
@@ -36,6 +40,7 @@ wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportV10
 wgEncodeGencodeUniProt wgEncodeGencodeUniProtV10
 wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureV10
 wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkV10
+wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelV10
 cdsDrawDefault genomic\ codons
 itemClassTbl wgEncodeGencodeAttrsV10
 itemClassNameColumn transcriptId

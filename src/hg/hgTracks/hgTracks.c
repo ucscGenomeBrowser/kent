@@ -954,6 +954,7 @@ tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
 tdb->type = cloneString("psl");
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 addUserSeqBaseAndIndelSettings(tdb);
 tg->tdb = tdb;
@@ -1114,6 +1115,7 @@ tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 tg->tdb = tdb;
 return tg;
@@ -1338,7 +1340,6 @@ static void doLabelNextItemButtons(struct track *track, struct track *parentTrac
 {
 int portWidth = insideWidth;
 int portX = insideX;
-#ifdef IMAGEv2_DRAG_SCROLL
 // If a portal was established, then set the portal dimensions
 int portalStart,chromStart;
 double basesPerPixel;
@@ -1350,7 +1351,6 @@ if (theImgBox && imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&po
         portX += tl.leftLabelWidth + gfxBorder;
     portWidth = portWidth-gfxBorder-insideX;
     }
-#endif//def IMAGEv2_DRAG_SCROLL
 int arrowWidth = insideHeight;
 int arrowButtonWidth = arrowWidth + 2 * NEXT_ITEM_ARROW_BUFFER;
 int rightButtonX = portX + portWidth - arrowButtonWidth - 1;
@@ -1965,7 +1965,6 @@ if(theImgBox)
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
     hPrintf("<input type='hidden' name='r' value='%d'>\n", winEnd);
     hPrintf("<input type='hidden' name='pix' value='%d'>\n", tl.picWidth);
-    #ifdef IMAGEv2_DRAG_SCROLL
     // If a portal was established, then set the global dimensions to the entire image size
     if(imgBoxPortalDimensions(theImgBox,&winStart,&winEnd,&(tl.picWidth),NULL,NULL,NULL,NULL,NULL))
         {
@@ -1973,7 +1972,6 @@ if(theImgBox)
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_DRAG_SCROLL
     memset((char *)sliceWidth,  0,sizeof(sliceWidth));
     memset((char *)sliceOffsetX,0,sizeof(sliceOffsetX));
     if (withLeftLabels)
@@ -2598,12 +2596,11 @@ else if(sameString(type, "png") || sameString(type, "pdf") || sameString(type, "
     unlink(file);
     return;
     }
-#endif
+#endif///def SUPPORT_CONTENT_TYPE
 
 if(theImgBox)
     {
     imageBoxDraw(theImgBox);
-    #ifdef IMAGEv2_DRAG_SCROLL
     // If a portal was established, then set the global dimensions back to the portal size
     if(imgBoxPortalDimensions(theImgBox,NULL,NULL,NULL,NULL,&winStart,&winEnd,&(tl.picWidth),NULL))
         {
@@ -2611,7 +2608,6 @@ if(theImgBox)
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_DRAG_SCROLL
     imgBoxFree(&theImgBox);
     }
 else
@@ -3169,7 +3165,7 @@ else if (sameString(type, "bigBed"))
     /* Finish wrapping track around tdb. */
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = bbi;
-    tg->nextItemButtonable = FALSE;
+    tg->nextItemButtonable = TRUE;
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
@@ -3295,8 +3291,6 @@ else
     {
     errAbort("Unrecognized custom track type %s", type);
     }
-if (!ct->dbTrack)
-    tg->nextItemButtonable = FALSE;
 tg->hasUi = TRUE;
 tg->customTrack = TRUE;// Explicitly declare this a custom track for flatTrack ordering
 
@@ -4706,7 +4700,6 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" id=\"TrackHeaderForm\" MET
 jsonHashAddNumber(jsonForClient, "insideX", insideX);
 jsonHashAddBoolean(jsonForClient, "revCmplDisp", revCmplDisp);
 
-hPrintf("<script type='text/javascript'>var newJQuery=true;</script>\n");
 if (hPrintStatus()) cartSaveSession(cart);
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
@@ -4761,14 +4754,12 @@ if(!psOutput && !cartUsualBoolean(cart, "hgt.imageV1", FALSE))
     if (withLeftLabels)
         sideSliceWidth   = (insideX - gfxBorder*3) + 2;
     theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
-    #ifdef IMAGEv2_DRAG_SCROLL
     // Define a portal with a default expansion size, then set the global dimensions to the full image size
     if(imgBoxPortalDefine(theImgBox,&winStart,&winEnd,&(tl.picWidth),0))
         {
         winBaseCount = winEnd - winStart;
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
-    #endif//def IMAGEv2_DRAG_SCROLL
     }
 
 char *jsCommand = cartCgiUsualString(cart, hgtJsCommand, "");
@@ -4868,7 +4859,6 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-#ifdef IMAGEv2_DRAG_SCROLL
 if(theImgBox)
     {
     // If a portal was established, then set the global dimensions back to the portal size
@@ -4878,7 +4868,6 @@ if(theImgBox)
         insideWidth = tl.picWidth-gfxBorder-insideX;
         }
     }
-#endif//def IMAGEv2_DRAG_SCROLL
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
@@ -5029,7 +5018,7 @@ if (!hideControls)
 	jsonHashAddBoolean(jsonForClient, "assemblySupportsGeneSuggest", assemblySupportsGeneSuggest(database));
 	if(assemblySupportsGeneSuggest(database))
 	    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(database));
-#else
+#else///ifndef MERGE_GENE_SUGGEST
 	hWrites("position/search ");
 	hTextVar("position", addCommasToPos(database, position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
@@ -5044,7 +5033,7 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
-#endif
+#endif///ndef MERGE_GENE_SUGGEST
 	if (survey && differentWord(survey, "off"))
             hPrintf("&nbsp;&nbsp;<span style='background-color:yellow;'><A HREF='%s' TARGET=_BLANK><EM><B>%s</EM></B></A></span>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	hPutc('\n');
@@ -5076,7 +5065,7 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
     hPrintf("<td width='30' align='right'><a href='?hgt.right2=1' title='move 47.5&#37; to the right'>&gt;&gt;</a>\n");
     hPrintf("<td width='40' align='right'><a href='?hgt.right3=1' title='move 95&#37; to the right'>&gt;&gt;&gt;</a>\n");
     hPrintf("</tr></table>\n");
-#endif//def USE_NAVIGATION_LINKS
+#endif///def USE_NAVIGATION_LINKS
 
 /* Make clickable image and map. */
 makeActiveImage(trackList, psOutput);
@@ -5120,10 +5109,7 @@ if (!hideControls)
     hWrites("Click or drag in the base position track to zoom in. ");
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
-#ifdef IMAGEv2_DRAG_SCROLL
     hWrites("Drag tracks left or right to new position. ");
-#endif//def IMAGEv2_DRAG_SCROLL
-//#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
     hPrintf("</TD>");
 #ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
@@ -5320,7 +5306,7 @@ if (!hideControls)
 			{
 			/* check for option of limiting visibility to one mode */
 			hTvDropDownClassVisOnly(track->track, track->visibility,
-				    track->canPack, (track->visibility == tvHide) ?
+				    rTdbTreeCanPack(track->tdb), (track->visibility == tvHide) ?
 				    "hiddenText" : "normalText",
 				    trackDbSetting(track->tdb, "onlyVisibility"));
 			}
@@ -5950,9 +5936,7 @@ void ajaxWarnHandler(char *format, va_list args)
 // When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
 char buf[4096];
 vsnprintf(buf, sizeof(buf), format, args);
-// We don't use jsonForClient for fear that it might now be corrupted.
-printf("<script type='text/javascript'>\n// START hgTracks\nvar hgTracks = {\"err\": \"%s\"};\n// END hgTracks\n</script>\n",
-       javaScriptLiteralEncode(buf));
+jsonHashAddString(jsonForClient, "err", buf);
 }
 
 void doMiddle(struct cart *theCart)
@@ -6025,7 +6009,7 @@ if(!trackImgOnly)
     jsIncludeFile("ajax.js", NULL);
 #ifdef MERGE_GENE_SUGGEST
     jsIncludeFile("jquery.watermarkinput.js", NULL);
-#endif
+#endif///def MERGE_GENE_SUGGEST
     if(!searching)
         {
         jsIncludeFile("jquery.imgareaselect.js", NULL);
@@ -6035,7 +6019,7 @@ if(!trackImgOnly)
 
 #ifdef LOWELAB
     jsIncludeFile("lowetooltip.js", NULL);
-#endif
+#endif///def LOWELAB
 
         webIncludeResourceFile("jquery-ui.css");
         if (!searching) // NOT doing search

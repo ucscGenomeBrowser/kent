@@ -2,19 +2,29 @@
 #	$Id: placentals.txt,v 1.1 2010/04/05 19:09:43 hiram Exp $
 
 # Common to all:	Eukaryota; Metazoa; Chordata; Craniata; Vertebrata;
-# 	Euteleostomi; Mammalia;
+# 	Euteleostomi; Mammalia; Theria;
 
+# Tree shrew Tupaia belangeri
 tupBel	Eutheria; Euarchontoglires; Scandentia; Tupaiidae; Tupaia
 
-speTri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Sciuridae; Xerinae; Marmotini; Spermophilus
-
+# Rabbit Oryctolagus cuniculus
 oryCun	Eutheria; Euarchontoglires; Glires; Lagomorpha; Leporidae; Oryctolagus
 
+# Pika Ochotona princeps
 ochPri	Eutheria; Euarchontoglires; Glires; Lagomorpha; Ochotonidae; Ochotona
 
+# Naked mole-rat Heterocephalus glaber
+hetGla	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Bathyergidae; Heterocephalus
+
+# Guinea pig Cavia porcellus
 cavPor	Eutheria; Euarchontoglires; Glires; Rodentia; Hystricognathi; Caviidae; Cavia
 
+# Squirrel Spermophilus tridecemlineatus
+speTri	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Sciuridae; Xerinae; Marmotini; Spermophilus
+
+# Kangaroo rat Dipodomys ordii
 dipOrd	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Heteromyidae; Dipodomyinae; Dipodomys
+
 
 mm	Eutheria; Euarchontoglires; Glires; Rodentia; Sciurognathi; Muroidea; Muridae; Murinae; Mus
 
@@ -54,4 +64,5 @@ loxAfr	Eutheria; Afrotheria; Proboscidea; Elephantidae; Loxodonta
 
 proCap	Eutheria; Afrotheria; Hyracoidea; Procaviidae; Procavia
 
+# Tenrec Echinops telfairi
 echTel	Eutheria; Afrotheria; Tenrecidae; Tenrecinae; Echinops

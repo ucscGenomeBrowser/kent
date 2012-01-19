@@ -1249,7 +1249,7 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
-    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    kgBioCyc1 genes.tab pathways.tab $tempDb bioCycPathway.tab bioCycMapDesc.tab
     hgLoadSqlTab $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
@@ -1341,8 +1341,8 @@ cd $dir
 # You'll need superuser powers for this step.....
 
 # Save old known genes and kgXref tables
-#sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
-#sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db knownGene $tempDb knownGeneOld$lastVer
+sudo ~kent/bin/copyMysqlTable $db kgXref $tempDb kgXrefOld$lastVer
 
 # Create backup database
 hgsqladmin create ${db}Backup

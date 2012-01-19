@@ -1,8 +1,9 @@
 #include "common.h"
 #include "linefile.h"
-#include "blackList.h"
+#include "genbank.h"
+#include "genbankBlackList.h"
 
-struct blackListRange *blackListParse(char *blackList)
+struct blackListRange *genbankBlackListParse(char *blackList)
 /* parse a black list file into blackListRange data structure */
 {
 struct lineFile *lf = lineFileMayOpen(blackList, TRUE);
@@ -15,11 +16,13 @@ char *words[2];
 while(lineFileRow(lf, words))
     {
     char *prefix1 = cloneString(words[0]);
+    genbankDropVer(prefix1, prefix1);
     char *number1 = skipToNumeric(prefix1);
     int begin = atoi(number1); 
     *number1 = 0;   // null so now prefix1 points to only the prefix
 
     char *prefix2 = cloneString(words[1]);
+    genbankDropVer(prefix2, prefix2);
     char *number2 = skipToNumeric(prefix2);
     int end = atoi(number2);
     *number2 = 0;   // null so now prefix2 points to only the prefix
@@ -41,7 +44,7 @@ while(lineFileRow(lf, words))
 return ranges;
 }
 
-boolean blackListFail(char *accession, struct blackListRange *ranges)
+boolean genbankBlackListFail(char *accession, struct blackListRange *ranges)
 /* check to see if accession is black listed */
 {
 char prefix[20];  // way too big, prefixes are only 2 chars now.
@@ -53,14 +56,15 @@ while((*ptr) && !isdigit(*ptr))
     prefix[count++] = *ptr++;
     if (count > sizeof(prefix) - 1)
         errAbort("overflowed prefix buffer. Accession prefix > %lu chars\n",
-            sizeof(prefix) - 1);
+            (unsigned long)sizeof(prefix) - 1);
     }
 prefix[count] = 0;
 
 if (*ptr == 0)
     errAbort("accession not in proper format (%s)", accession);
 
-unsigned number = atoi(ptr);	// ignores version number if present
+// get number of accession up till optional version number
+unsigned number = atoi(ptr);	// returns number up to '.' or null
 
 struct blackListRange *range = ranges;
 for(; range ; range = range->next)

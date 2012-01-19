@@ -1,0 +1,33 @@
+#!/hive/groups/encode/dcc/bin/python
+import sys, os, re, argparse, subprocess, math, datetime, time
+from ucscgenomics import ra 
+
+
+def main():
+
+    parser = argparse.ArgumentParser(
+        prog='raMerge',
+        description='Merges two .ra files in a way that you would expect',
+        epilog='example: raMerge alpha/wgEncodeUwTfbs.ra beta/wgEncodeUwTfbs.ra'
+        )
+    parser.add_argument('RaFileOne', help='The .ra file')
+    parser.add_argument('RaFileTwo', help='The .ra file to merge with')
+    parser.add_argument('-t', '--trackDb', action="store_true", default=0, help="Print as trackDb")
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+        return
+
+    args = parser.parse_args(sys.argv[1:])
+    ra1 = ra.RaFile(args.RaFileOne)
+    ra2 = ra.RaFile(args.RaFileTwo)
+
+
+    merged = ra1.mergeRa(ra2)
+    if args.trackDb:
+        print merged.printTrackDbFormat()
+    else:
+        print merged
+
+if __name__ == '__main__':
+    main()

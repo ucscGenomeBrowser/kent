@@ -21,6 +21,7 @@ use Digest::MD5;
 use threads;
 use threads::shared;
 use Time::HiRes qw(usleep nanosleep);
+use POSIX;
 
 # for debug only, you'll need to find the package on your own
 # use DataBrowser qw(browse);
@@ -47,9 +48,9 @@ options:
     -cv             custom cv directory (default is /data/apache/cgi-bin/encode)
     -directory      custom download directory (default is working directory)
     -fileMask       only allows selected pattern matches (must be in quotes)
-                E.g. -fileMask "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb" (default)
+                E.g. -fileMask "wgEncode*" (default)
                 Regex Example:  -fileMask "wgEncode\\S+Huvec.* wgEncode\\S+GM\\d+Input"
-                Normal example: -fileMask "*.gz *GM12878* *GM12*Tnfa
+                Normal example: -fileMask "*.gz *GM12878* *GM12*Tnfa"
 
 END
 exit 1;
@@ -278,7 +279,9 @@ sub metaDbUpdate {
         if ($file eq $filename) {
             $inlist = 1;
         }
-        $md5Str = $md5Str . "$md5sums{$file},";
+        if ($md5sums{$file}) {
+            $md5Str = $md5Str . "$md5sums{$file},";
+        }
     }
     unless ($inlist) {
         print STDERR "$filename is not in fileName field\n";
@@ -319,6 +322,11 @@ sub metaDbUpdate {
 ############
 
 my $user = "$ENV{'USER'}";
+my $nice = POSIX::nice(19);
+
+unless ($nice) {
+    print STDERR "Can't set nice to 19\n";
+}
 my %opt;
 my $goodopts = GetOptions(\%opt,
                     "md5",
@@ -393,7 +401,7 @@ unless ($err) {
 
 # default file Masking, if updated, please update usage statement
 my %fileMask;
-my $fileMask = "*.gz *.tgz *.bam *.bam.bai *.bigWig *.bb";
+my $fileMask = "wgEncode*";
 if ($opt{'fileMask'}) {
     $fileMask = $opt{'fileMask'};
 }
@@ -503,12 +511,6 @@ if ($opt{'md5'}) {
     }
     foreach my $file (sort { $a cmp $b } keys %md5sums) {
         my @stat = stat("$file");
-        unless (exists $seenmd5s{$md5sums{$file}}) {
-            $seenmd5s{$md5sums{$file}} = $file;
-        } else {
-            print STDERR "$file and $seenmd5s{$md5sums{$file}}".
-                         " have the same md5sum: $md5sums{$file}\n";
-        }
         print MDF "$file $md5sums{$file} $stat[9]\n";
     }
     close MDF;
@@ -622,6 +624,18 @@ foreach my $file (@fileMask) {
 
     #put hash into fileInfo container
     $fileInfo{$file} = \%fileHash;
+}
+
+for my $file (sort { $a cmp $b } keys %md5sums) {
+    if (exists $fileInfo{$file} and exists ${$fileInfo{$file}}{'objStatus'} and ${$fileInfo{$file}}{'objStatus'} =~ m/re.*/) {
+        next
+    }
+    unless (exists $seenmd5s{$md5sums{$file}}) {
+        $seenmd5s{$md5sums{$file}} = $file;
+    } else {
+        print STDERR "$file and $seenmd5s{$md5sums{$file}}".
+                     " have the same md5sum: $md5sums{$file}\n";
+    }
 }
 
 #if the metaDb was updated, and the species is matching either mm or hg

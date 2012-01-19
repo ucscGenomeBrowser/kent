@@ -21,8 +21,10 @@
 # url:
 # http://www.ncbi.nlm.nih.gov/nuccore/AAFC00000000
 # chrM: AY526085 
-http://www.ncbi.nlm.nih.gov/nuccore/AY526085.1
+# http://www.ncbi.nlm.nih.gov/nuccore/AY526085.1
 
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAFC00
+#  7X WGS coverage
 
 ##########################################################################
 # Download sequence (DONE - 2011-05-02 Chin)
@@ -36,6 +38,19 @@ http://www.ncbi.nlm.nih.gov/nuccore/AY526085.1
     # FINISHED --2011-12-16 15:36:00--
     # Downloaded: 244 files, 2.1G in 30m 24s (1.17 MB/s)
     # Read ASSEMBLY_INFO 
+
+    # measure total sequence in this assembly
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa \
+        Primary_Assembly/unplaced_scaffolds/FASTA/un*.fa.gz
+# 2981103241 bases (176446405 N's 2804656836 real 2804656836 upper 
+# 0 lower) in 11691 sequences in 32 files
+# Total size: mean 254991.3 sd 4719241.6 min 152 (gi|346076751|gb|JH125284.1|) 
+# max 161428367 (gi|346683426|gb|CM000177.5|) median 8572
+# N count: mean 15092.5 sd 280692.5
+# U count: mean 239898.8 sd 4441763.7
+# L count: mean 0.0 sd 0.0
+# %0.00 masked total, %0.00 masked real
+
 
     mkdir ucscChr
     # stay at genbank directory
@@ -84,7 +99,7 @@ zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
 gzip ucscChr/chrUn.agp &
 
 zcat ${S}/FASTA/unplaced.scaf.fa.gz \
-        | sed -e "s#^>.*|tpg|#>chrUn_#; s#|.*##"  -e "s/\.1//"  \
+        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##"  -e "s/\.1//"  \
         | gzip > ucscChr/chrUn.fa.gz
    # about 11660 sequences in the unplaced
 zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
@@ -100,7 +115,7 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    # 0 lower) in 11660 sequences in 1 files
 
 #########################################################################
-# Initial  database build (working - 2011-05-09 - Chin)
+# Initial  database build (DONE - 201201-03 - Chin)
     cd /hive/data/genomes/bosTau7
     cat << '_EOF_' > bosTau7.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -123,13 +138,13 @@ taxId 9913
     # << happy emacs
     time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev bosTau7.config.ra \
 	> makeGenomeDb.log 2>&1 &
-    # real    21m31.993s
+    # real    23m34.828s
 
-    # real    real    12m42.419s
     #	add the trackDb entries to the source tree, and the 2bit link:
     ln -s `pwd`/bosTau7.unmasked.2bit /gbdb/bosTau7/bosTau7.2bit
 
     #  Per instructions in makeGenomeDb.log:
+XXXX TODO - replace *** use actual url for project etc.. in all html files
 #Search for '***' notes in each file in and make corrections (sometimes the
 #files used for a previous assembly might make a better template):
 #  description.html /cluster/data/bosTau7/html/{trackDb.ra,gap.html,gold.html}
@@ -147,55 +162,29 @@ taxId 9913
 
 
 #########################################################################
-# RepeatMasker (working 2011-05-09 - Chin)
+# RepeatMasker (DONE 2012-01-04 - Chin)
     mkdir /hive/data/genomes/bosTau7/bed/repeatMasker
     cd /hive/data/genomes/bosTau7/bed/repeatMasker
     time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
 	-workhorse=hgwdev -bigClusterHub=swarm -noSplit bosTau7 > do.log 2>&1 &
-    #   real    355m43.294s
+    #   real    472m4.476s
     cat faSize.rmsk.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370807360 upper 
-    # 1278874669 lower) in 3317 sequences in 1 files
-    # %47.89 masked total, %48.27 masked real
+    # 2981119579 bases (176446405 N's 2804673174 real 1415188620 upper 
+    # 1389484554 lower) in 11692 sequences in 1 files
+    # %46.61 masked total, %49.54 masked real
 
 #########################################################################
-# simpleRepeats (working - 2011-05-09 - Chin)
+# simpleRepeats (DONE - 2012-01-05 - Chin)
     mkdir /hive/data/genomes/bosTau7/bed/simpleRepeat
     cd /hive/data/genomes/bosTau7/bed/simpleRepeat
 
     time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
 	-dbHost=hgwdev -bigClusterHub=swarm -smallClusterHub=memk \
         bosTau7 > do.log 2>&1 &
-    #   real    13m47.346s
-
-    # Batch failed after 4 tries on 
-    #   ./TrfRun.csh /hive/data/genomes/bosTau7/TrfPart/071/071.lst.bed
-    # Command failed:
-    # ssh -x -o 'StrictHostKeyChecking = no' -o 'BatchMode = yes' memk 
-    #  nice /hive/data/genomes/bosTau7/bed/simpleRepeat/run.cluster/doTrf.csh
-    # 071 failed due to no input TrfPart/071/071.lst.bed
-    #  which is chrM and can be ignored.
-    # to continue, create an empty TrfPart/071/071.lst.bed by:
-    touch /hive/data/genomes/bosTau7/TrfPart/071/071.lst.bed 
-    # run a para time > run.time on memk to get that file to exist:
-    # Checking finished jobs
-    # Completed: 71 of 72 jobs
-    # Crashed: 1 jobs
-    # CPU time in finished jobs: 12340s     205.67m     3.43h    0.14d  0.000 y
-    # IO & Wait Time:              236s       3.93m     0.07h    0.00d  0.000 y
-    # Average job time:            177s       2.95m     0.05h    0.00d
-    # Longest finished job:        606s      10.10m     0.17h    0.01d
-    # Submission to last job:      984s      16.40m     0.27h    0.01d
-
-
-    #   continue
-    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
-        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
-        -continue=filter bosTau7 > filter.log 2>&1 &
-    # real	0m20.430s
+    #   real    39m2.413s
 
     cat fb.simpleRepeat 
-    # 32390355 bases of 2649685036 (1.222%) in intersection
+    # 40432561 bases of 2804801325 (1.442%) in intersection
 
     #	add to the repeatMasker
     cd /hive/data/genomes/bosTau7
@@ -203,34 +192,34 @@ taxId 9913
     #	safe to ignore warnings about >=13 fields
     twoBitToFa bosTau7.2bit stdout | faSize stdin > bosTau7.2bit.faSize.txt
     cat bosTau7.2bit.faSize.txt
-    # 2670422299 bases (20740270 N's 2649682029 real 1370313596 upper 
-    #    1279368433 lower) in 3317 sequences in 1 files
-    # %47.91 masked total, %48.28 masked real
+    # 2981119579 bases (176446405 N's 2804673174 real 1414674956 upper 
+    # 1389998218 lower) in 11692 sequences in 1 files
+    # %46.63 masked total, %49.56 masked real
 
     # double check with featureBits
     featureBits -countGaps bosTau7 gap
-    # 20740270 bases of 2670422299 (0.777%) in intersection
+    # 176318254 bases of 2981119579 (5.914%) in intersection
 
     rm /gbdb/bosTau7/bosTau7.2bit
     ln -s `pwd`/bosTau7.2bit /gbdb/bosTau7/bosTau7.2bit
 
 #########################################################################
 # Marking *all* gaps - they are not all in the AGP file
-#	(working - 2011-05-10 - Chin)
+#	(DONE - 2012-01-05 - Chin)
     mkdir /hive/data/genomes/bosTau7/bed/allGaps
     cd /hive/data/genomes/bosTau7/bed/allGaps
 
     time nice -n +19 findMotif -motif=gattaca -verbose=4 \
 	-strand=+ ../../bosTau7.unmasked.2bit > findMotif.txt 2>&1
-    #   real    1m10.942s
+    #   real    0m42.321s
     grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
     featureBits bosTau7 -not gap -bed=notGap.bed
-    # 2649685036 bases of 2649685036 (100.000%) in intersection
+    # 2804801325 bases of 2804801325 (100.000%) in intersection
     featureBits bosTau7 allGaps.bed notGap.bed -bed=new.gaps.bed
-    # 3007 bases of 2649685036 (0.000%) in intersection
+    # 128151 bases of 2804801325 (0.005%) in intersection
     #	what is the highest index in the existing gap table:
     hgsql -N -e "select ix from gap;" bosTau7 | sort -n | tail -1
-    #	17354
+    #	10242
 
     # use tcsh and ctrl-c to create the here doc
     cat << '_EOF_' > mkGap.pl
@@ -255,42 +244,104 @@ close (FH);
     chmod +x ./mkGap.pl
     ./mkGap.pl > other.bed
     featureBits bosTau7 other.bed
-    # 3007 bases of 2649685036 (0.000%) in intersection
+    # 128151 bases of 2804801325 (0.005%) in intersection
     hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
 	-noLoad bosTau7 otherGap other.bed
-    #  Loaded 2011 elements of size 8
+    #  Loaded 12612  elements of size 8
     #	adding this many:
     wc -l bed.tab
-    #   2011 bed.tab 
+    #   12612 bed.tab 
     #	starting with this many
     hgsql -e "select count(*) from gap;" bosTau7
-    #	72454
+    #	69725
     hgsql bosTau7 -e 'load data local infile "bed.tab" into table gap;'
     #	result count:
     hgsql -e "select count(*) from gap;" bosTau7
-    #	74465
-    # == 72454 + 2011
+    #	82337
+    # == 69725 + 12612
 
+
+##########################################################################
+## WINDOWMASKER (DONE 2012-01-05 Chin)
+    mkdir /hive/data/genomes/bosTau7/bed/windowMasker
+    cd /hive/data/genomes/bosTau7/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev bosTau7 > do.log 2>&1 &
+    #   real    191m59.940s
+
+    # Masking statistics
+    twoBitToFa bosTau7.wmsk.2bit stdout | faSize stdin
+    # 2981119579 bases (176446405 N's 2804673174 real 1660551615 upper 
+    # 1144121559 lower) in 11692 sequences in 1 files
+    # %38.38 masked total, %40.79 masked real
+
+    twoBitToFa bosTau7.wmsk.sdust.2bit stdout | faSize stdin
+    # 2981119579 bases (176446405 N's 2804673174 real 1645487915 upper 
+    # 1159185259 lower) in 11692 sequences in 1 files
+    # %38.88 masked total, %41.33 masked real
+
+    hgLoadBed bosTau7 windowmaskerSdust windowmasker.sdust.bed.gz
+    # Reading windowmasker.sdust.bed.gz
+    # Read 13173670 elements of size 3 from windowmasker.sdust.bed.gz
+    # Sorted
+    # Creating table definition for windowmaskerSdust
+    # Saving bed.tab
+    # Loading bosTau7
+
+    featureBits -countGaps bosTau7 windowmaskerSdust
+    # 1335621689 bases of 2981119579 (44.803%) in intersection
+
+    #   eliminate the gaps from the masking
+    featureBits bosTau7 -not gap -bed=notGap.bed
+    # 2804673174 bases of 2804673174 (100.000%) in intersection
+    time nice -n +19 featureBits bosTau7 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    # real    4m52.720s
+    # 1159185259 bases of 2804673174 (41.330%) in intersection
+
+    #   reload track to get it clean
+    hgLoadBed bosTau7 windowmaskerSdust cleanWMask.bed.gz
+    # Read 13181547 elements of size 4 from cleanWMask.bed.gz
+    # Loading bosTau7
+
+    time featureBits -countGaps bosTau7 windowmaskerSdust
+    #   real    1m11.488s
+    # 1159185259 bases of 2981119579 (38.884%) in intersection
+
+    zcat cleanWMask.bed.gz \
+        | twoBitMask ../../bosTau7.unmasked.2bit stdin \
+            -type=.bed bosTau7.cleanWMSdust.2bit
+    twoBitToFa bosTau7.cleanWMSdust.2bit stdout | faSize stdin \
+        > bosTau7.cleanWMSdust.faSize.txt
+    cat bosTau7.cleanWMSdust.faSize.txt
+    # 2981119579 bases (176446405 N's 2804673174 real 1645487915 upper 
+    # 1159185259 lower) in 11692 sequences in 1 files
+    # %38.88 masked total, %41.33 masked real
+
+    # how much does this window masker and repeat masker overlap:
+    featureBits -countGaps bosTau7 rmsk windowmaskerSdust
+    # 934428494 bases of 2981119579 (31.345%) in intersection
 
 ########################################################################
-# Create kluster run files (working - 2011-05-10 - Chin)
+# Create kluster run files (DONE - 2012-01-05 - Chin)
     # numerator is bosTau7 gapless bases "real" as reported by: 
     featureBits -noRandom -noHap bosTau7 gap
-    # 20740230 bases of 2640182513 (0.786%) in intersection
+    # 159233025 bases of 2513924776 (6.334%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
     #	featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2640182513 / 2861349177 \) \* 1024
-    ( 2640182513 / 2861349177 ) * 1024 = 944.850393
+    calc \( 2513924776 / 2861349177 \) \* 1024
+    ( 2513924776 / 2861349177 ) * 1024 = 899.666140
+
     # ==> use -repMatch=900 according to size scaled down from 1024 for human.
-    #	and rounded down to nearest 50
+    #	and rounded down to nearest 50 (runup 899.666140 to 900 in this case)
     cd /hive/data/genomes/bosTau7
     blat bosTau7.2bit \
 	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/bosTau7.11.ooc \
 	-repMatch=900 &
-    #	Wrote 33615 overused 11-mers to jkStuff/bosTau7.11.ooc
+    #	Wrote 37068 overused 11-mers to jkStuff/bosTau7.11.ooc
     mkdir /hive/data/staging/data/bosTau7
     cp -p bosTau7.2bit jkStuff/bosTau7.11.ooc /hive/data/staging/data/bosTau7
     cp -p chrom.sizes /hive/data/staging/data/bosTau7
@@ -298,22 +349,35 @@ close (FH);
     hgsql -N \
 	-e 'select * from gap where bridge="no" order by size;' bosTau7 \
 	| sort -k7,7nr
-    #   most non-bridges gaps have size = 100, follow pig's example (5000) 
-    #	decide on a minimum gap for this break
+    #   most non-bridges gaps have size = 5000, follow pig's example (most
+    #   100, but use 5000) 
+    #	decide on a minimum gap for this break, use either 100 or 5000 will
+    #	generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
     gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
 	-bedFile=jkStuff/nonBridged.bed
     cp -p jkStuff/nonBridged.lft \
 	/hive/data/staging/data/bosTau7/bosTau7.nonBridged.lft
-    # ask cluster-admin to copy (evry time if any file chsnged)
+    # ask cluster-admin to copy (evry time if any file changed)
     #    /hive/data/staging/data/bosTau7 directory to
     #    /scratch/data/bosTau7 on cluster nodes
     # before porceed to genbank step
 
+############################################################################
+# set this as defaultDb (DONE - 2012-01-06 - Chin)
+#   and make this the default genome for Cow
+
+    hgsql -e 'update defaultDb set name="bosTau7" where name="bosTau6";' \
+        hgcentraltest
+
 ########################################################################
-# GENBANK AUTO UPDATE (working - 2011-05-10 - Chin)
+# GENBANK AUTO UPDATE (DONE - 2012-01-09 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Bos taurus      18945   1559562 13153
 
     # edit etc/genbank.conf to add bosTau7 just before susScr2
 
@@ -333,6 +397,9 @@ bosTau7.downloadDir = bosTau7
 bosTau7.refseq.mrna.native.load  = yes
 bosTau7.refseq.mrna.xeno.load = yes
 bosTau7.refseq.mrna.xeno.loadDesc  = yes
+bosTau7.upstreamGeneTbl = refGene
+
+
 
 
     git add etc/genbank.conf
@@ -346,25 +413,24 @@ bosTau7.refseq.mrna.xeno.loadDesc  = yes
 
     screen	#  control this business with a screen since it takes a while
     cd /cluster/data/genbank
-     time nice -n +19 ./bin/gbAlignStep -initial bosTau7 &
-    #   logFile: var/build/logs/2011.05.10-15:10:42.bosTau7.initalign.log
-    #   real    736m26.569s
-    #   To re-do, rm the dir first:
-    #     /cluster/data/genbank/data/aligned/genbank.183.0/bosTau7
 
+    time nice -n +19 ./bin/gbAlignStep -initial bosTau7 &
+    # logFile: var/build/logs/2012.01.11-09:14:36.bosTau7.initalign.log
+    #   real     1258m43.818s
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/data/aligned/genbank.187.0/bosTau7
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad bosTau7 &
-    # logFile: var/dbload/hgwdev/logs/2011.05.11-08:24:53.dbload.log
-    #   real    32m5.964s
-
+    # logFile: var/dbload/hgwdev/logs/2012.01.12-10:33:25.dbload.log
+    #   real    58m49.817s
 
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
-    gitpull
+    git pull
     # add bosTau7 to:
     #   etc/align.dbs
     #   etc/hgwdev.dbs
@@ -374,17 +440,32 @@ bosTau7.refseq.mrna.xeno.loadDesc  = yes
     git push
     make etc-update
 
-#########################################################################
-# reset default position (working - 2011-05-11 - Chin)
-#       Reset default position to an area of chr3 with a number of genes
-    hgsql -e \
-'update dbDb set defaultPos="chr3:21,592,157-21,596,916" where name="bosTau7";' \
-        hgcentraltest
+##########################################################################
+#  BLATSERVERS ENTRY (DONE 2012-01-13 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+#  
+#  bosTau7 (trans) on blatx port 17842
+#  bosTau7 (untrans) on blatx port 17843
 
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("bosTau7", "blatx", "17842", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("bosTau7", "blatx", "17843", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
+
+#########################################################################
+# reset default position (DONE - 2012-01-13  - Chin)
+#       Reset default position to an area contains RHO and a number of
+#       other genes
+    hgsql -e \
+'update dbDb set defaultPos="chr22:56,647,062-58,290,728" where name="bosTau7";' \
+        hgcentraltest
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#	(working 2011-05-11 - Chin)
+#	(DONE 2011-05-11 - Chin)
 # NOTE - create bosTau7 entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/bosTau7/bed/ctgPos2
     cd /hive/data/genomes/bosTau7/bed/ctgPos2
@@ -409,6 +490,7 @@ while (my $line = <FH>) {
     chomp $line;
     my @a = split('\s+', $line);
     next if ($a[4] =~ m/^U$/);
+    next if ($a[4] =~ m/^N$/);
     my $chrSize = $a[2]-$a[1]+1;
     my $ctgSize = $a[7]-$a[6]+1;
     die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
@@ -421,7 +503,7 @@ close (FH);
 chmod 775 agpToCtgPos2.pl
 
 export S=../../genbank/Primary_Assembly/assembled_chromosomes
-cut -f2 ${S}/chr2acc | while read ACC
+cat  ${S}/chr2acc | grep -v "^#Chromosome" | cut -f2 | while read ACC
 do
     C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
     zcat ${S}/AGP/chr${C}.agp.gz \

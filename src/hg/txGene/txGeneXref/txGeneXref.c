@@ -224,14 +224,18 @@ for (info = infoList; info != NULL; info = info->next)
 	assert(accessionTokens != NULL);
 	rfamAcc = cloneString(accessionTokens->name);
 	assert(accessionTokens->next != NULL);
-	geneSymbol = replaceChars(accessionTokens->next->name, "-", "_");
+	char *accession = replaceChars(accessionTokens->next->name, "-", "_");
+	geneSymbol = replaceChars(accession, "Alias=", "");
+	freeMem(accession);
 	if (isalpha(*geneSymbol))
 	    *geneSymbol = toupper(*geneSymbol);
 	assert(accessionTokens->next->next != NULL);
-	char *contigCoordinates = accessionTokens->next->next->name;
-	description =  needMem(strlen(rfamAcc) + strlen(contigCoordinates) + 45);
-	(void) sprintf(description,  "Rfam model %s hit found at contig region %s", 
-		       rfamAcc, contigCoordinates);
+	char *contigCoordinates = replaceChars(accessionTokens->next->next->name,
+					       "Note=", "");
+	struct dyString *dyTmp = dyStringCreate("Rfam model %s hit found at contig region %s", 
+						rfamAcc, contigCoordinates);
+	description = dyStringCannibalize(&dyTmp);
+	freeMem(contigCoordinates);
 	slFreeList(&accessionTokens);
         }
     /* If it's a tRNA from the tRNA track, sourceAcc will have the following 

@@ -45,7 +45,7 @@ set url2=".cse.ucsc.edu/cgi-bin/hgTables?db="
 set url3="&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table="
 # $table = trackDb
 set url4="&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results"
-set url5="&field_tableName=on"
+set url5="&hgta_group=allTables&field_tableName=on"
 set url6="&hgta_fs.check.$db.$table.$field=1&hgta_database=$db"
 set url7="&hgta_fieldSelectTable=$db.$table"
 set url8="&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
