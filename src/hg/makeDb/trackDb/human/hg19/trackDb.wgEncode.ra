@@ -151,9 +151,7 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release2.ra public
-
-include wgEncodeUwHistone.patch.ra beta
+include wgEncodeUwHistone.release2.ra beta,public
 include wgEncodeUwHistone.release3.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
