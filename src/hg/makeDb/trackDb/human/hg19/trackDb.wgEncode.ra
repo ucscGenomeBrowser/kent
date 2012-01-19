@@ -80,8 +80,7 @@ include wgEncodeOpenChromDnase.new.ra alpha
 include wgEncodeOpenChromDnase.ra beta,public
 
 #Uw Dnase-Seq (wrangler: Venkat)
-include wgEncodeUwDnase.release3.ra public
-include wgEncodeUwDnase.release3.patch.ra beta
+include wgEncodeUwDnase.release3.ra beta,public
 include wgEncodeUwDnase.release4.ra alpha
 
 #UW DNase DGF (wrangler: Venkat)
@@ -151,9 +150,7 @@ include wgEncodeBroadHistone.ra beta,public
 include wgEncodeBroadHmm.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.release2.ra public
-
-include wgEncodeUwHistone.patch.ra beta
+include wgEncodeUwHistone.release2.ra beta,public
 include wgEncodeUwHistone.release3.ra alpha
 
 # SYDH Histone (wrangler: Venkat)
