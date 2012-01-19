@@ -7473,6 +7473,7 @@ grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
 md5sum 9ef860623cbde0e7e5343d378005a0e8
+objStatus revoked - old version of bigWig (version 3)
 origAssembly hg18
 privacy noSequence
 project wgEncode
