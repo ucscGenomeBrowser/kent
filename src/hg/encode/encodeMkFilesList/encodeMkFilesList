@@ -511,12 +511,6 @@ if ($opt{'md5'}) {
     }
     foreach my $file (sort { $a cmp $b } keys %md5sums) {
         my @stat = stat("$file");
-        unless (exists $seenmd5s{$md5sums{$file}}) {
-            $seenmd5s{$md5sums{$file}} = $file;
-        } else {
-            print STDERR "$file and $seenmd5s{$md5sums{$file}}".
-                         " have the same md5sum: $md5sums{$file}\n";
-        }
         print MDF "$file $md5sums{$file} $stat[9]\n";
     }
     close MDF;
@@ -630,6 +624,18 @@ foreach my $file (@fileMask) {
 
     #put hash into fileInfo container
     $fileInfo{$file} = \%fileHash;
+}
+
+for my $file (sort { $a cmp $b } keys %md5sums) {
+    if (exists $fileInfo{$file} and exists ${$fileInfo{$file}}{'objStatus'} and ${$fileInfo{$file}}{'objStatus'} =~ m/re.*/) {
+        next
+    }
+    unless (exists $seenmd5s{$md5sums{$file}}) {
+        $seenmd5s{$md5sums{$file}} = $file;
+    } else {
+        print STDERR "$file and $seenmd5s{$md5sums{$file}}".
+                     " have the same md5sum: $md5sums{$file}\n";
+    }
 }
 
 #if the metaDb was updated, and the species is matching either mm or hg
