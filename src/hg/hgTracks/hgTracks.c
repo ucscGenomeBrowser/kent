@@ -954,6 +954,7 @@ tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
 tdb->type = cloneString("psl");
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 addUserSeqBaseAndIndelSettings(tdb);
 tg->tdb = tdb;
@@ -1114,6 +1115,7 @@ tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);
 tdb->grp = cloneString(tg->groupName);
 tdb->priority = tg->priority;
+tdb->canPack = tg->canPack;
 trackDbPolish(tdb);
 tg->tdb = tdb;
 return tg;
@@ -5934,9 +5936,7 @@ void ajaxWarnHandler(char *format, va_list args)
 // When we are generating a response for ajax client and hit an error, put any warnings into hgTracks.err in the response.
 char buf[4096];
 vsnprintf(buf, sizeof(buf), format, args);
-// We don't use jsonForClient for fear that it might now be corrupted.
-printf("<script type='text/javascript'>\n// START hgTracks\nvar hgTracks = {\"err\": \"%s\"};\n// END hgTracks\n</script>\n",
-       javaScriptLiteralEncode(buf));
+jsonHashAddString(jsonForClient, "err", buf);
 }
 
 void doMiddle(struct cart *theCart)
