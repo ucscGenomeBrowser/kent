@@ -615,8 +615,8 @@ var subCfg = { // subtrack config module.
         });
         selectHtml += "</SELECT>";
         $(obj).replaceWith(selectHtml);
+        var newObj = $("select[name='"+subtrack+"']");
         if (open) {
-            var newObj = $("select[name='"+subtrack+"']");
             $(newObj).css({'zIndex':'2','vertical-align':'top'});
             $(newObj).attr('size',5);
             $(newObj).one('blur',function (e) {
@@ -627,31 +627,31 @@ var subCfg = { // subtrack config module.
                 $(this).attr('size',1);
                 $(this).unbind('blur');
             });
-            $(newObj).change(function (e) {
-                if ($(this).attr('size') > 1) {
-                    $(this).attr('size',1);
-                    $(this).unbind('blur');
-                    $(this).unbind('click');
-                }
-                if (this.selectedIndex == 0) { // setting to hide so uncheck and disable.
-                    // Easiest is to uncheck subCB and reset vis
-                    //    so that the reverse action makes sense
-                    var subCb = normed($("input[name='" + this.name + "_sel']"));
-                    if (subCb != undefined) {
-                        subCfg.checkOneSubtrack(subCb,false,true);
-                        subCfg.inheritSetting(this,true);
-                    } else {
-                        warn('DEBUG: Cant find subCB for ' + this.name);
-                    }
-                } else {
-                    subCfg.markChange(e,this);
-                    // if just being made visible then composite to full?  NO (implications to other subs)
-                    // Make view visible?  NO (subtrack override)
-                    // reshape?  NO (much too complex)
-                }
-            });
             $(newObj).focus();
         }
+        $(newObj).change(function (e) {
+            if ($(this).attr('size') > 1) {
+                $(this).attr('size',1);
+                $(this).unbind('blur');
+                $(this).unbind('click');
+            }
+            if (this.selectedIndex == 0) { // setting to hide so uncheck and disable.
+                // Easiest is to uncheck subCB and reset vis
+                //    so that the reverse action makes sense
+                var subCb = normed($("input[name='" + this.name + "_sel']"));
+                if (subCb != undefined) {
+                    subCfg.checkOneSubtrack(subCb,false,true);
+                    subCfg.inheritSetting(this,true);
+                } else {
+                    warn('DEBUG: Cant find subCB for ' + this.name);
+                }
+            } else {
+                subCfg.markChange(e,this);
+                // if just being made visible then composite to full?  NO (implications to other subs)
+                // Make view visible?  NO (subtrack override)
+                // reshape?  NO (much too complex)
+            }
+        });
     },
 
     enableCfg: function (subCb,setTo)
