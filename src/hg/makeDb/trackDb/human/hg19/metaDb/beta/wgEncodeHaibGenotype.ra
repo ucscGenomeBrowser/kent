@@ -423,7 +423,7 @@ grant Myers
 lab HudsonAlpha
 labExpId Illumina 1MDuo
 labVersion HudsonAlpha
-md5sum 2c9ee0b5e0abe5b9b41e797d1ebd2638
+md5sum 857fdbcfa98c5d7a5c0bb7f740abb2b1
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
@@ -2260,4 +2260,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -228603701
+# MAGIC: -1500758117
