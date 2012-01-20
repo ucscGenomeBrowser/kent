@@ -1,7 +1,7 @@
 metaObject wgEncodeLicrHistone
 objType composite
 composite wgEncodeLicrHistone
-expVars lab,dataType,cell,antibody
+expVars lab,dataType,cell,antibody,age
 geoSeriesAccession GSE31039
 
 metaObject wgEncodeLicrHistoneBmarrowH3k27acMAdult8wksC57bl6StdAlnRep1
@@ -10821,4 +10821,4 @@ subId 5367
 tableName wgEncodeLicrHistoneWbrainInputUE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -2116652212
+# MAGIC: -95189443
