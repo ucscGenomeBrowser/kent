@@ -1759,7 +1759,7 @@ html wgEncodeHaibTfbs.release2
         # subId=3058 dateSubmitted=2010-12-03
 
 
-        track wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
+        track wgEncodeHaibTfbsK562E2f6V0416102PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6 V102 2
         longLabel K562 E2F6 v041610.2 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
@@ -1769,8 +1769,9 @@ html wgEncodeHaibTfbs.release2
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep2 cricket Tue Apr 19 10:32:38 2011
 	# sas wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2
+        # was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep2 wong Thu Jan 19 11:39:53 2012
 
-        track wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
+        track wgEncodeHaibTfbsK562E2f6V0416102PkRep1
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 E2F6 V102 1
         longLabel K562 E2F6 v041610.2 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
@@ -1780,6 +1781,7 @@ html wgEncodeHaibTfbs.release2
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102PkRep1 cricket Tue Apr 19 10:32:37 2011
 	# was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1
+        # was wgEncodeHaibTfbsK562E2f6sc22823V0416102PkRep1 wong Thu Jan 19 11:39:53 2012
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101PkRep2
         parent wgEncodeHaibTfbsViewPeaks off
@@ -5443,7 +5445,7 @@ html wgEncodeHaibTfbs.release2
         # was wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1 wong Tue Jun  7 11:53:55 2011
         # was wgEncodeHaibTfbsA549ControlPcr2xDex100nmRawRep1 vsmalladi Wed Jul  6 14:18:59 2011
 
-        track wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
+        track wgEncodeHaibTfbsK562E2f6V0416102RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6 V102 2
         longLabel K562 E2F6 v041610.2 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
@@ -5453,6 +5455,7 @@ html wgEncodeHaibTfbs.release2
         # subId=3029 dateSubmitted=2010-11-29
         # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep2 cricket Tue Apr 19 10:32:38 2011
 	# was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2
+        # was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep2 wong Thu Jan 19 11:39:54 2012
 
         track wgEncodeHaibTfbsK562Ets1V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -5984,7 +5987,7 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=3058 dateSubmitted=2010-12-03
 
-        track wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
+        track wgEncodeHaibTfbsK562E2f6V0416102RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 E2F6 V102 1
         longLabel K562 E2F6 v041610.2 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
@@ -5994,6 +5997,7 @@ html wgEncodeHaibTfbs.release2
         # subId=3069 dateSubmitted=2010-12-08
         # was wgEncodeHaibTfbsK562E2f6h50V0416102RawRep1 cricket Tue Apr 19 10:32:38 2011
 	#was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1
+        # was wgEncodeHaibTfbsK562E2f6sc22823V0416102RawRep1 wong Thu Jan 19 11:39:54 2012
 
         track wgEncodeHaibTfbsHepg2Rad21V0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
