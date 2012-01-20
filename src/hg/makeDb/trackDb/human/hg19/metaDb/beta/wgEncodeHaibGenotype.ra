@@ -194,6 +194,7 @@ grant Myers
 lab HudsonAlpha
 labVersion Illumina 1MDuo
 md5sum bcc5e51c79a12a026aea4607b25e837c
+objStatus renamed - cell name changed renamed this to wgEncodeHaibGenotypeNhaDukeRegionsRep1
 obtainedBy Duke
 origAssembly hg19
 project wgEncode
@@ -395,12 +396,41 @@ lab HudsonAlpha
 labExpId Illumina 1MDuo
 labVersion HudsonAlpha
 md5sum 02d0b2c753c7aef6eb1919fb56dc1c72
+objStatus replaced - now mapped to hg19 in wgEncodeHaibGenotypeGm12878RegionsRep1V2
 obtainedBy HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 4057
 tableName wgEncodeHaibGenotypeGm12878RegionsRep1
+treatment None
+view CNV
+
+metaObject wgEncodeHaibGenotypeGm12878RegionsRep1V2
+objType table
+cell GM12878
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-06
+dateSubmitted 2011-05-09
+dateUnrestricted 2012-02-09
+dccAccession wgEncodeEH000273
+dccRep 1
+expId 273
+fileName wgEncodeHaibGenotypeGm12878RegionsRep1V2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labExpId Illumina 1MDuo
+labVersion HudsonAlpha
+md5sum 2c9ee0b5e0abe5b9b41e797d1ebd2638
+obtainedBy HudsonAlpha
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5128
+submittedDataVersion V2 - New data mapped to hg19
+tableName wgEncodeHaibGenotypeGm12878RegionsRep1V2
 treatment None
 view CNV
 
@@ -1679,6 +1709,32 @@ tableName wgEncodeHaibGenotypeNb4RegionsRep2
 treatment None
 view CNV
 
+metaObject wgEncodeHaibGenotypeNhaDukeRegionsRep1
+objType table
+cell NH-A
+composite wgEncodeHaibGenotype
+dataType Genotype
+dataVersion post ENCODE Jan 2011 Freeze
+dateResubmitted 2011-12-14
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001289
+dccRep 1
+expId 1289
+fileName wgEncodeHaibGenotypeNhaDukeRegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labVersion Illumina 1MDuo
+md5sum 0c76e996b3aaaae7410837639aaeea68
+obtainedBy Duke
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 5231
+tableName wgEncodeHaibGenotypeNhaDukeRegionsRep1
+treatment None
+view CNV
+
 metaObject wgEncodeHaibGenotypeNhaRegionsRep1
 objType table
 cell NH-A
@@ -2204,4 +2260,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view CNV
 
-# MAGIC: -279997394
+# MAGIC: -1168220393
