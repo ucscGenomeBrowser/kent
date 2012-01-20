@@ -4439,7 +4439,6 @@ for (;track != NULL; track = track->next)
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
         // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
@@ -4449,9 +4448,12 @@ for (;track != NULL; track = track->next)
             {
             struct trackDb * childTdb = childRef->val;
             struct track *child = hashFindVal(trackHash, childTdb->track);
-            char *cartVis = cartOptionalString(cart,child->track);
-            if (cartVis)
-                child->visibility = hTvFromString(cartVis);
+            if (child != NULL && child->track!=NULL)
+                {
+                char *cartVis = cartOptionalString(cart,child->track);
+                if (cartVis)
+                    child->visibility = hTvFromString(cartVis);
+                }
             }
         }
     }
