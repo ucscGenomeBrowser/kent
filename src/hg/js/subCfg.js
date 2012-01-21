@@ -732,21 +732,19 @@ var subCfg = { // subtrack config module.
     viewInit: function (viewTag)
     { // sets up view controls for propagation
         var tr = normed($('tr#tr_cfg_'+viewTag));
-        if (tr == undefined) {
-            warn('DEBUG: Did not find view: ' + viewTag);
-            return;
-        }
-        // iterate through all matching controls and setup for propgation and change flagging
-        var viewObjs = $(tr).find('input,select');
-        if (viewObjs.length > 0) {
-            $(viewObjs).each(function (i) {
-                if (this.type != 'hidden') {
-                    $(this).bind('change',function (e) {
-                        subCfg.markChange(e,this);
-                        subCfg.propagateSetting(this);
-                    });
-                }
-            });
+        if (tr != undefined) {
+            // iterate through all matching controls and setup for propgation and change flagging
+            var viewObjs = $(tr).find('input,select');
+            if (viewObjs.length > 0) {
+                $(viewObjs).each(function (i) {
+                    if (this.type != 'hidden') {
+                        $(this).bind('change',function (e) {
+                            subCfg.markChange(e,this);
+                            subCfg.propagateSetting(this);
+                        });
+                    }
+                });
+            }
         }
 
         // Now vis control
