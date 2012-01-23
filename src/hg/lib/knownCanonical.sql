@@ -10,7 +10,7 @@ CREATE TABLE knownCanonical (
     chromEnd int not null,	# End position (non-inclusive). Corresponds to txEnd for + strand genes
     clusterId int not null,	# Which cluster of transcripts this belongs to in knownIsoforms
     transcript varchar(255) not null,	# Corresponds to knownGene name field.
-    protein varchar(255) not null,	# SwissProt ID or more recently UCSC ID of associated protein.
+    protein varchar(255) not null,	# UniProt ID of the associated protein, if any.
               #Indices
     PRIMARY KEY(chrom)
 );
