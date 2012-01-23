@@ -100,6 +100,7 @@ taxId 9315
 	> makeGenomeDb.log 2>&1 &
     # real  26m19.911s
     #	add the trackDb entries to the source tree, and the 2bit link:
+    # we will re-ln with masked one after we done the mask business later! ***
     ln -s `pwd`/macEug2.unmasked.2bit /gbdb/macEug2/macEug2.2bit
 
     #  Per instructions in makeGenomeDb.log:
@@ -149,6 +150,13 @@ taxId 9315
     # 3075184024 bases (539107070 N's 2536076954 real 1334271294 upper 
     # 1201805660 lower) in 277711 sequences in 1 files
     # %39.08 masked total, %47.39 masked real
+
+    # double check with featureBits
+    featureBits -countGaps macEug2 gap
+    # 539107067 bases of 3075184024 (17.531%) in intersection
+    
+    rm /gbdb/macEug2/macEug2.2bit
+    ln -s `pwd`/macEug2.2bit /gbdb/macEug2/macEug2.2bit
 
 #########################################################################
 # Marking *all* gaps - they are all in the AGP file

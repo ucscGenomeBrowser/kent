@@ -163,6 +163,7 @@ tg->defaultPriority = 99.9;
 tg->groupName = cloneString("map");
 tg->defaultGroupName = cloneString("map");
 tdb->track = cloneString(CUTTERS_TRACK_NAME);
+tdb->canPack = tg->canPack;
 tdb->table = cloneString(CUTTERS_TRACK_NAME);
 tdb->shortLabel = cloneString(tg->shortLabel);
 tdb->longLabel = cloneString(tg->longLabel);

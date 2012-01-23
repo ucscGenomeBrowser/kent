@@ -779,3 +779,119 @@ TMPDIR=/scratch/tmp
     #	181436751 bases of 700386597 (25.905%) in intersection
 
 ############################################################################
+# lastz Atlantic Cod gadMor1 (DONE - 2012-01-11,17 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/lastzGadMor1.2012-01-11
+    cd /hive/data/genomes/fr3/bed/lastzGadMor1.2012-01-11
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Atlantic Cod
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Atlantic Cod gadMor1
+SEQ2_DIR=/hive/data/genomes/gadMor1/gadMor1.2bit
+SEQ2_LEN=/hive/data/genomes/gadMor1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzGadMor1.2012-01-11
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	Elapsed time: 5107m6s == 3 days 13 hours 7m
+
+    cat fb.fr3.chainGadMor1Link.txt 
+    #	106436551 bases of 350961831 (30.327%) in intersection
+
+    mkdir /hive/data/genomes/gadMor1/bed/blastz.fr3.swap
+    cd /hive/data/genomes/gadMor1/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzGadMor1.2012-01-11/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    160m13.224s
+    cat fb.gadMor1.chainFr3Link.txt 
+    #	115839168 bases of 608038597 (19.051%) in intersection
+
+############################################################################
+# lastz Coelacanth latCha1 (DONE - 2011-12-12,17 - Hiram)
+    mkdir /hive/data/genomes/fr3/bed/lastzLatCha1.2012-01-12
+    cd /hive/data/genomes/fr3/bed/lastzLatCha1.2012-01-12
+
+    cat << '_EOF_' > DEF
+# Fugu vs. Coelacanth
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Fugu fr3
+#	CHUNK of 24,000,000 is big enough to fit chr1 the largest in one go
+SEQ1_DIR=/scratch/data/fr3/fr3.2bit
+SEQ1_LEN=/scratch/data/fr3/chrom.sizes
+SEQ1_CHUNK=24000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Coelacanth latCha1
+SEQ2_DIR=/hive/data/genomes/latCha1/latCha1.2bit
+SEQ2_LEN=/hive/data/genomes/latCha1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/fr3/bed/lastzLatCha1.2012-01-12
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium -workhorse=hgwdev \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    1626m11.140s
+
+    cat fb.fr3.chainLatCha1Link.txt 
+    #	48206149 bases of 350961831 (13.735%) in intersection
+
+    mkdir /hive/data/genomes/latCha1/bed/blastz.fr3.swap
+    cd /hive/data/genomes/latCha1/bed/blastz.fr3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/fr3/bed/lastzLatCha1.2012-01-12/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-qRepeats=windowmaskerSdust -tRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    8m47.103s
+    cat fb.latCha1.chainFr3Link.txt 
+    #	62854403 bases of 2183592768 (2.878%) in intersection
+
+############################################################################
