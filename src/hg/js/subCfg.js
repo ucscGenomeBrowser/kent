@@ -34,6 +34,7 @@ var subCfg = { // subtrack config module.
 
     // There is one instance and these vars are page wide
     compositeName: undefined,
+    canPack: true,  // if composite vis is only hide,dense,full, then all children will also be restricted.
     visIndependent: false,
     viewTags: [],
 
@@ -383,9 +384,12 @@ var subCfg = { // subtrack config module.
         var visText = 'hide';
         if (limitedVis == 1)
             visText = 'dense';
-        else if (limitedVis == 2)
-            visText = 'squish';
-        else if (limitedVis == 3)
+        else if (limitedVis == 2) {
+            if (subCfg.canPack)
+                visText = 'squish';
+            else
+                visText = 'full';
+        } else if (limitedVis == 3)
             visText = 'pack';
         else if (limitedVis == 4)
             visText = 'full';
@@ -417,9 +421,12 @@ var subCfg = { // subtrack config module.
                 var visText = 'hide';
                 if (parentVis == 1)
                     visText = 'dense';
-                else if (parentVis == 2)
-                    visText = 'squish';
-                else if (parentVis == 3)
+                else if (parentVis == 2) {
+                    if (subCfg.canPack)
+                        visText = 'squish';
+                    else
+                        visText = 'full';
+                } else if (parentVis == 3)
                     visText = 'pack';
                 else if (parentVis == 4)
                     visText = 'full';
@@ -609,6 +616,8 @@ var subCfg = { // subtrack config module.
             selectHtml += " style='width:70px;'>";
         var selected = $(obj).text();
         var visibilities = ['hide','dense','squish','pack','full'];
+        if (subCfg.canPack == false)
+            visibilities = ['hide','dense','full'];
         $(visibilities).each( function (ix) {
              selectHtml += "<OPTION"+(visibilities[ix] == selected ? " SELECTED":"")+">";
              selectHtml += visibilities[ix]+"</OPTION>";
@@ -618,7 +627,7 @@ var subCfg = { // subtrack config module.
         var newObj = $("select[name='"+subtrack+"']");
         if (open) {
             $(newObj).css({'zIndex':'2','vertical-align':'top'});
-            $(newObj).attr('size',5);
+            $(newObj).attr('size',visibilities.length);
             $(newObj).one('blur',function (e) {
                 $(this).attr('size',1);
                 $(this).unbind('click');
@@ -723,21 +732,19 @@ var subCfg = { // subtrack config module.
     viewInit: function (viewTag)
     { // sets up view controls for propagation
         var tr = normed($('tr#tr_cfg_'+viewTag));
-        if (tr == undefined) {
-            warn('DEBUG: Did not find view: ' + viewTag);
-            return;
-        }
-        // iterate through all matching controls and setup for propgation and change flagging
-        var viewObjs = $(tr).find('input,select');
-        if (viewObjs.length > 0) {
-            $(viewObjs).each(function (i) {
-                if (this.type != 'hidden') {
-                    $(this).bind('change',function (e) {
-                        subCfg.markChange(e,this);
-                        subCfg.propagateSetting(this);
-                    });
-                }
-            });
+        if (tr != undefined) {
+            // iterate through all matching controls and setup for propgation and change flagging
+            var viewObjs = $(tr).find('input,select');
+            if (viewObjs.length > 0) {
+                $(viewObjs).each(function (i) {
+                    if (this.type != 'hidden') {
+                        $(this).bind('change',function (e) {
+                            subCfg.markChange(e,this);
+                            subCfg.propagateSetting(this);
+                        });
+                    }
+                });
+            }
         }
 
         // Now vis control
@@ -766,6 +773,8 @@ var subCfg = { // subtrack config module.
             warn('DEBUG: Multiple visibility controls for composite???');
             return;
         }
+        if ($(compVis).children('option').length < 5)
+            subCfg.canPack = false; // Note that if composite vis has no pack then no child should have pack
 
         subCfg.compositeName = $(compVis).attr('name');
         subCfg.visIndependent = ($('.subVisDD').length > 0);  // Can subtracks have their own vis?
