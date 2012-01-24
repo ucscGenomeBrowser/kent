@@ -2779,7 +2779,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         }
     else
         {
-        handler = lookupTrackHandler(tdb->table);
+        handler = lookupTrackHandlerClosestToHome(tdb);
         if (handler != NULL)
             handler(track);
         }
