@@ -84,7 +84,7 @@ struct trackDb *subtdb;
 for (subtdb = tdb->subtracks; subtdb != NULL; subtdb = subtdb->next)
     {
     struct track *subtrack = trackFromTrackDb(subtdb);
-    TrackHandler handler = lookupTrackHandler(subtdb->table);
+    TrackHandler handler = lookupTrackHandlerClosestToHome(subtdb);
     if (handler != NULL)
 	handler(subtrack);
     slAddHead(&track->subtracks, subtrack);

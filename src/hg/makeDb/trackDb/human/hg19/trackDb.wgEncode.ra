@@ -8,7 +8,7 @@ include wgEncodeGencodeV4.ra
 #include wgEncodeGencodeV5.ra alpha
 include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV9.ra alpha
-include wgEncodeGencodeV10.ra alpha
+include wgEncodeGencodeV10.ra alpha,beta
 
 # UNC/BSU Proteogenomics (wrangler: cline,cricket)
 include wgEncodeUncBsuProt.ra
@@ -35,8 +35,7 @@ include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
 
 # HAIB Genotype (CNV) (wrangler: Cricket)
-include wgEncodeHaibGenotype.ra beta,public
-include wgEncodeHaibGenotype.release2.ra alpha
+include wgEncodeHaibGenotype.release2.ra
 
 # BU Orchid (wrangler: cricket)
 include wgEncodeBuOrchid.ra

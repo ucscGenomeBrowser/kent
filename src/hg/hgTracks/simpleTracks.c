@@ -12550,7 +12550,7 @@ if (startsWith("wig", tdb->type) || startsWith("bedGraph", tdb->type) ||
         smart = TRUE;
 
 /* setup function handlers for composite track */
-handler = lookupTrackHandler(tdb->table);
+handler = lookupTrackHandlerClosestToHome(tdb);
 if (smart && handler != NULL)
     /* handles it's own load and height */
     handler(track);
@@ -12574,24 +12574,8 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     subTdb = tdbRef->val;
 
-    /* Initialize from composite track settings */
-    if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
-	{
-	/* install parent's track handler */
-	/* TODO JK - rework.  The gencode tracks currently depend on this, wgEncodeGencode in particular,
-	 * but it seems very dangerous in general.  What if the subtracks already have their own handler?
-	 * Waiting to fix until after viewInTheMiddle branch merge since preferred fix involves
-	 * edits to trackDb.ra files - that is putting in an explicit setting when you want
-	 * this behavior rather than relying on absence of an overloaded setting. */
-	subtrack = trackFromTrackDb(tdb);
-	subtrack->tdb = subTdb;
-	handler = lookupTrackHandler(tdb->table);
-	}
-    else
-	{
-	subtrack = trackFromTrackDb(subTdb);
-	handler = lookupTrackHandler(subTdb->table);
-	}
+    subtrack = trackFromTrackDb(subTdb);
+    handler = lookupTrackHandlerClosestToHome(subTdb);
     if (handler != NULL)
         handler(subtrack);
 
@@ -12749,12 +12733,28 @@ else
 // If parents and children put in different handlers, there's no way to know which one
 // the child will get.
 
-TrackHandler lookupTrackHandler(char *name)
+static TrackHandler lookupTrackHandler(char *name)
 /* Lookup handler for track of give name.  Return NULL if none. */
 {
 if (handlerHash == NULL)
     return NULL;
 return hashFindVal(handlerHash, name);
+}
+
+TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb)
+/* Lookup handler for track of give name.  Try parents if
+ * subtrack has a NULL handler.  Return NULL if none. */
+{
+TrackHandler handler = lookupTrackHandler(tdb->table);
+
+// while handler is NULL and we have a parent, use the parent's handler
+for( ; (handler == NULL) && (tdb->parent != NULL);  )
+    {
+    tdb = tdb->parent;
+    handler = lookupTrackHandler(tdb->table);
+    }
+
+return handler;
 }
 
 void registerTrackHandlers()

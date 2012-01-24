@@ -7,8 +7,8 @@
 CREATE TABLE kgXref (
     kgID varchar(255) not null,	# Known Gene ID
     mRNA varchar(255) not null,	# mRNA ID
-    spID varchar(255) not null,	# SWISS-PROT protein Accession number
-    spDisplayID varchar(255) not null,	# SWISS-PROT display ID
+    spID varchar(255) not null,	# UniProt protein Accession number
+    spDisplayID varchar(255) not null,	# UniProt display ID
     geneSymbol varchar(255) not null,	# Gene Symbol
     refseq varchar(255) not null,	# RefSeq ID
     protAcc varchar(255) not null,	# NCBI protein Accession number
@@ -16,13 +16,5 @@ CREATE TABLE kgXref (
     rfamAcc varchar(255) not null,	# Rfam accession number
     tRnaName varchar(255) not null,	# Name from the tRNA track
               #Indices
-    KEY(kgID),
-    KEY(mRNA),
-    KEY(spID),
-    KEY(spDisplayID),
-    KEY(geneSymbol),
-    KEY(refseq),
-    KEY(protAcc),
-    KEY(rfamAcc),
-    KEY(tRnaName)
+    PRIMARY KEY(kgID)
 );

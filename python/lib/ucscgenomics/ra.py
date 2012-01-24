@@ -418,6 +418,8 @@ class RaFile(OrderedDict):
         parentTrack = ""
         tier = 0
         commentList = []
+        p = re.compile('^.*parent')
+        p2 = re.compile('^.*subTrack')
         for stanza in self:
             if stanza == "":
                 if commentList:
@@ -431,14 +433,15 @@ class RaFile(OrderedDict):
             if stanza.startswith("#"):
                 commentList.append(stanza)
                 continue
-            if "subTrack" in self[stanza].keys():
-                if parentTrack not in self[stanza]['subTrack'] or parentTrack == "":
-                    parentTrack = self[stanza]['track']
-                    tier = 1
-                else:
-                    tier = 2
-            if "parent" in self[stanza].keys():
-                if parentTrack not in self[stanza]['parent'] or parentTrack == "":
+            keys = self[stanza].keys()
+            parentKey = "NOKEYFOUND"
+            for key in keys:
+                if p.search(key):
+                    parentKey = key
+                if p2.search(key):
+                    parentKey = key
+            if parentKey in keys:
+                if parentTrack not in self[stanza][parentKey] or parentTrack == "":
                     parentTrack = self[stanza]['track']
                     tier = 1
                 else:
