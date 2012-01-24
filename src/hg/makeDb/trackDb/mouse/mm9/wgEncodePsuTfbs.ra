@@ -57,7 +57,7 @@ wgEncode 1
 	track wgEncodePsuTfbsViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	#viewUi on
 	subTrack wgEncodePsuTfbs
 	signalFilter 0
@@ -195,7 +195,7 @@ wgEncode 1
         # subId=3045 dateSubmitted=2011-10-21
 
         track wgEncodePsuTfbsG1eGata2sc9008ME0S129InputPk
-        parent wgEncodePsuTfbsViewPeaks off
+        parent wgEncodePsuTfbsViewPeaks
         shortLabel G1E GATA2
         longLabel G1E GATA2 ChIP-seq Peaks from ENCODE/PSU 
         subGroups view=Peaks age=E0 factor=GATA2SC9008 cellType=G1E control=INPUT sex=M strain=S129
@@ -204,7 +204,7 @@ wgEncode 1
         # subId=3046 dateSubmitted=2011-10-21
 
         track wgEncodePsuTfbsG1eGata1aME0S129InputPk
-        parent wgEncodePsuTfbsViewPeaks
+        parent wgEncodePsuTfbsViewPeaks off
         shortLabel G1E GATA1
         longLabel G1E GATA1 ChIP-seq Peaks from ENCODE/PSU 
         subGroups view=Peaks age=E0 factor=GATA1a cellType=G1E control=INPUT sex=M strain=S129
@@ -395,7 +395,7 @@ wgEncode 1
         # subId=3045 dateSubmitted=2011-10-21
 
         track wgEncodePsuTfbsG1eGata2sc9008ME0S129InputSig
-        parent wgEncodePsuTfbsViewSignal off
+        parent wgEncodePsuTfbsViewSignal
         shortLabel G1E GATA2 
         longLabel G1E GATA2 ChIP-seq Signal from ENCODE/PSU 
         subGroups view=Signal age=E0 factor=GATA2SC9008 cellType=G1E control=INPUT sex=M strain=S129
@@ -405,7 +405,7 @@ wgEncode 1
         # subId=3046 dateSubmitted=2011-10-21
 
         track wgEncodePsuTfbsG1eGata1aME0S129InputSig
-        parent wgEncodePsuTfbsViewSignal
+        parent wgEncodePsuTfbsViewSignal off
         shortLabel G1E GATA1 
         longLabel G1E GATA1 ChIP-seq Signal from ENCODE/PSU 
         subGroups view=Signal age=E0 factor=GATA1a cellType=G1E control=INPUT sex=M strain=S129
