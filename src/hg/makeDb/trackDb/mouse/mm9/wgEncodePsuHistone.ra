@@ -52,7 +52,7 @@ wgEncode 1
 	track wgEncodePsuHistoneViewPeaks
 	shortLabel Peaks
 	view Peaks
-	visibility dense
+	visibility pack
 	#viewUi on
 	subTrack wgEncodePsuHistone
 	signalFilter 0
