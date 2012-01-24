@@ -585,6 +585,31 @@ var subCfg = { // subtrack config module.
             this.id = this.name.replace(/\./g,'_-'); // Must have id unique to page!
             ddcl.setup(this, 'noneIsAll');
         });
+
+        // Adjust cfg box size?
+        // Especially needed for filterBys, but generic in case some other overrun occurs
+        var curRight = $(cfg).offset().left + $(cfg).width();
+        var calcRight = curRight;
+        $(cfg).find(':visible').each( function(i) { // All visible, including labels, etc.
+            var childRight = $(this).offset().left + $(this).width();
+            if (calcRight < childRight)
+                calcRight = childRight;
+        });
+        if (curRight < calcRight) {
+            var cfgWidth = calcRight - $(cfg).offset().left + 16; // clip offset but add some for border
+            $(cfg).css({ width: cfgWidth + 'px' });
+
+            // Now containing tables may need adjustment
+            var tables = $(cfg).parents('table');
+            var maxWidth = 0;
+            $(tables).each(function(i) {
+                var myWidth = $(this).width();
+                if (maxWidth < myWidth)
+                    maxWidth = myWidth;
+                else if (maxWidth > myWidth)
+                    $(this).css('width',maxWidth + 'px');
+            });
+        }
     },
 
     cfgPopulate: function (cfg,subtrack)
