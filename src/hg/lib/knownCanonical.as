@@ -6,5 +6,5 @@ table knownCanonical
     int chromEnd;	"End position (non-inclusive). Represents transcription end for + strand genes, start for - strand genes"
     int clusterId;	"Which cluster of transcripts this belongs to in knownIsoforms"
     string transcript;	"Corresponds to knownGene name field."
-    string protein;	"UniProt ID of the associated protein, if any."
+    string protein;	"Accession of the associated protein, if any."
     )
