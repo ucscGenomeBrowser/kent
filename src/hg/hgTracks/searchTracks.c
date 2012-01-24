@@ -569,7 +569,7 @@ char *typeSearch  = cartUsualString(   cart, TRACK_SEARCH_ON_TYPE,ANYLABEL);
 char *simpleEntry = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
 char *descSearch  = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 char *groupSearch = cartUsualString(  cart, TRACK_SEARCH_ON_GROUP,ANYLABEL);
-boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
+boolean doSearch = sameWord(cartString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int tracksFound = 0;
@@ -582,27 +582,6 @@ enum searchTab selectedTab = (sameString(currentTab, "advancedTab") ? advancedTa
 
 if(selectedTab == simpleTab && !isEmpty(simpleEntry)) // NOTE: could support quotes in simple tab by detecting quotes and choosing to use doesNameMatch() || doesDescriptionMatch()
     stripChar(simpleEntry, '"');
-trackList = getTrackList(&groupList, -2); // global
-makeGlobalTrackHash(trackList);
-
-// NOTE: This is necessary when container cfg by '*' results in vis changes
-// This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
-parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
-
-slSort(&groupList, gCmpGroup);
-for (group = groupList; group != NULL; group = group->next)
-    {
-    groupTrackListAddSuper(cart, group);
-    if (group->trackList != NULL)
-        {
-        groups[numGroups] = cloneString(group->name);
-        labels[numGroups] = cloneString(group->label);
-        numGroups++;
-        if (numGroups >= ArraySize(groups))
-            internalErr();
-        }
-    }
-
 safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly", organism, hFreezeFromDb(database));
 webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
@@ -721,6 +700,27 @@ if(doSearch)
     {
     // Now search
     struct slRef *tracks = NULL;
+    trackList = getTrackList(&groupList, -2); // global
+    makeGlobalTrackHash(trackList);
+
+    // NOTE: This is necessary when container cfg by '*' results in vis changes
+    // This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
+    parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+
+    slSort(&groupList, gCmpGroup);
+    for (group = groupList; group != NULL; group = group->next)
+        {
+        groupTrackListAddSuper(cart, group);
+        if (group->trackList != NULL)
+            {
+            groups[numGroups] = cloneString(group->name);
+            labels[numGroups] = cloneString(group->label);
+            numGroups++;
+            if (numGroups >= ArraySize(groups))
+                internalErr();
+            }
+        }
+
     if(selectedTab==simpleTab && !isEmpty(simpleEntry))
         tracks = simpleSearchForTracksstruct(simpleEntry);
     else if(selectedTab==advancedTab)
