@@ -1,6 +1,5 @@
 
 LIST=\
-wgEncodeGencodeV10.ra \
 wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBroadHmm.ra \
