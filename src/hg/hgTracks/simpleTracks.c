@@ -12229,6 +12229,7 @@ hFreeConn(&conn);
 static void t2gMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
+/* create mouse overs with titles for t2g bed features */
 {
 if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     {
@@ -12248,10 +12249,50 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     }
 }
 
+char *splitPart(char* string, int index)
+/* splits string with | and returns part index (is there no easier way to do this?)*/
+{
+    char* name2;
+    name2 = cloneString(string);
+    char **parts = NULL;
+	AllocArray(parts, 2);
+    chopString(name2, "|", parts, 2);
+    return (char *)parts[index];
+}
+
+static void t2gMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height) 
+/* split item name on | and show second part as mouse over*/
+{
+char* itemNamePart2 = splitPart(itemName, 1);
+
+genericMapItem(tg, hvg, item,
+		    itemNamePart2, mapItemName, start, end,
+		    x, y, width, height);
+}
+
+char *t2gMarkerItemName(struct track *tg, void *item)
+/* split item name on | and shows first part as name */
+{
+    struct bed *bed = item;
+
+    return splitPart(bed->name, 0);
+
+}
+
 static void t2gMethods(struct track *tg)
 {
-tg->loadItems = t2gLoadItems;
-tg->mapItem = t2gMapItem;
+if (startsWith("t2gMarker", tg->table))
+{
+    tg->mapItem = t2gMarkerMapItem;
+    tg->itemName = t2gMarkerItemName;
+}
+else
+{
+    tg->loadItems = t2gLoadItems;
+    tg->mapItem = t2gMapItem;
+}
 }
 
 
@@ -12275,7 +12316,8 @@ if (sameWord(type, "bed"))
        settings. */
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
-    if (startsWith("t2g", track->table))
+    
+    if (startsWith("t2g", track->table) )
         t2gMethods(track);
     }
 /*

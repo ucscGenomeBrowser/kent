@@ -17,6 +17,20 @@ int t2gDebug = 0;
 char* sequenceTable;
 char* articleTable;
 
+void printMarkerSnippets(struct sqlConnection *conn, char* item)
+{
+    char query[4000];
+    safef(query, sizeof(query), "SELECT t2gElsevierMarker.articleId, url, title, authors, citation, markerId, markerType, snippet FROM t2gElsevierMarker JOIN t2gElsevierArticle ON t2gElsevierMarker.articleId=t2gElsevierArticle.articleId WHERE markerId='2q23.1' AND markerType='band'");
+
+    struct sqlResult *sr = sqlGetResult(conn, query);
+    char **row;
+    if ((row = sqlNextRow(sr)) != NULL)
+    {
+    char* snippet = row[7];
+    printf(snippet);
+    }
+}
+
 char* printArticleInfo(struct sqlConnection *conn, char* item)
 /* Header with information about paper, return documentId */
 {
@@ -304,15 +318,22 @@ struct sqlConnection *conn = hAllocConn(database);
 printTrackVersion(tdb, conn, item);
 printPositionAndSize(start, end);
 
-sequenceTable = hashMustFindVal(tdb->settingsHash, "sequenceTable");
-articleTable = hashMustFindVal(tdb->settingsHash, "articleTable");
-
-char* docId = printArticleInfo(conn, item);
-if (docId!=0) 
+if (startsWith("t2gMarker", trackTable)) 
 {
-    bool showDesc; 
-    showDesc = (! endsWith(trackTable, "Elsevier"));
-    printSeqInfo(conn, trackTable, docId, item, seqName, start, showDesc, fasta);
+    printMarkerSnippets(conn, item);
+}
+else 
+{
+    sequenceTable = hashMustFindVal(tdb->settingsHash, "sequenceTable");
+    articleTable = hashMustFindVal(tdb->settingsHash, "articleTable");
+
+    char* docId = printArticleInfo(conn, item);
+    if (docId!=0) 
+    {
+        bool showDesc; 
+        showDesc = (! endsWith(trackTable, "Elsevier")); // avoid clutter: Elsevier has only main text
+        printSeqInfo(conn, trackTable, docId, item, seqName, start, showDesc, fasta);
+    }
 }
 
 printTrackHtml(tdb);
