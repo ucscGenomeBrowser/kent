@@ -17,17 +17,40 @@ int t2gDebug = 0;
 char* sequenceTable;
 char* articleTable;
 
+/* splits string with | and returns part index (is there no easier way to do this?)
+char *splitPart(char* string, int index)
+{
+    char* name2;
+    name2 = cloneString(string);
+    char **parts = NULL;
+	AllocArray(parts, 2);
+    chopString(name2, "|", parts, 2);
+    return (char *)parts[index];
+}*/
+
 void printMarkerSnippets(struct sqlConnection *conn, char* item)
 {
-    char query[4000];
-    safef(query, sizeof(query), "SELECT t2gElsevierMarker.articleId, url, title, authors, citation, markerId, markerType, snippet FROM t2gElsevierMarker JOIN t2gElsevierArticle ON t2gElsevierMarker.articleId=t2gElsevierArticle.articleId WHERE markerId='2q23.1' AND markerType='band'");
+char query[4000];
+safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' GROUP by articleId", item);
 
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    char **row;
-    if ((row = sqlNextRow(sr)) != NULL)
+struct sqlResult *sr = sqlGetResult(conn, query);
+printf("<H3>Snippets from Publications:</H3>");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    char* snippet = row[7];
-    printf(snippet);
+    char* articleId = row[0];
+    char* url = row[1];
+    char* title = row[2];
+    char* authors = row[3];
+    char* citation = row[4];
+    char* snippets = row[5];
+    printf("<SMALL>%s</SMALL><BR>", authors);
+    printf("<A HREF=\"%s\">%s</A><BR>", url, title);
+    printf("<SMALL>%s</SMALL><P>", citation);
+    if (t2gDebug)
+        printf("articleId=%s", articleId);
+    printf("<I>%s</I><P>", snippets);
+    printf("<HR>");
     }
 }
 

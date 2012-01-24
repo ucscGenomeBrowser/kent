@@ -12249,37 +12249,37 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     }
 }
 
-char *splitPart(char* string, int index)
-/* splits string with | and returns part index (is there no easier way to do this?)*/
+char* t2gLastMarkerName;
+
+char *t2gMarkerItemName(struct track *tg, void *item)
+/* retrieve article count from extra field, and return
+ * side effect: save original name in global var for mapItem 
+ * Is this too hacky? No idea where I could save the original name otherwise... */
 {
-    char* name2;
-    name2 = cloneString(string);
-    char **parts = NULL;
-	AllocArray(parts, 2);
-    chopString(name2, "|", parts, 2);
-    return (char *)parts[index];
+struct bed *bed = item;
+char query[256];
+char *escName = sqlEscapeString(bed->name);
+safef(query, sizeof(query), "select matchCount from %s where name = '%s'", tg->table, escName);
+
+char *articleCount = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+articleCount = sqlQuickString(conn, query);
+char* newName = catTwoStrings(articleCount, " articles");
+freeMem(articleCount);
+hFreeConn(&conn);
+t2gLastMarkerName = bed->name;
+return newName;
 }
 
 static void t2gMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height) 
-/* split item name on | and show second part as mouse over*/
+/* use previously saved itemName for the mouseOver */
 {
-char* itemNamePart2 = splitPart(itemName, 1);
-
 genericMapItem(tg, hvg, item,
-		    itemNamePart2, mapItemName, start, end,
+		    t2gLastMarkerName, mapItemName, start, end,
 		    x, y, width, height);
-}
-
-char *t2gMarkerItemName(struct track *tg, void *item)
-/* split item name on | and shows first part as name */
-{
-    struct bed *bed = item;
-
-    return splitPart(bed->name, 0);
-
-}
+} 
 
 static void t2gMethods(struct track *tg)
 {
