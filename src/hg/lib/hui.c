@@ -4111,6 +4111,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
            (enabledCB?"":" title='view is hidden'"),
            (useDragAndDrop?" class='dragHandle' title='Drag to reorder'":""));
 
+    // A hidden field to keep track of subtrack order if it could change
+    if (sortOrder != NULL || useDragAndDrop)
+        {
+        safef(buffer, sizeof(buffer), "%s.priority", subtrack->track);
+        float priority = (float)cartUsualDouble(cart, buffer, subtrack->priority);
+        printf("<INPUT TYPE=HIDDEN NAME='%s' class='trPos' VALUE=\"%.0f\">", buffer, priority); // keeing track of priority
+        }
+
     // The checkbox has identifying classes including subCB and the tag for each dimension (e.g. class='subCB GM12878 CTCF Peak')
     dyStringClear(dyHtml);
     dyStringAppend(dyHtml, "subCB"); // always first
@@ -4150,7 +4158,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #ifdef SUBTRACK_CFG
     if (!tdbIsMultiTrack(parentTdb))  // MultiTracks never have independent vis
         {
-        printf("<TD>"); // An extra column for subVis/wrench so dragAndDrop works
+        printf("</TD><TD>"); // An extra column for subVis/wrench so dragAndDrop works
         enum trackVisibility vis = tdbVisLimitedByAncestors(cart,subtrack,FALSE,FALSE);
         char *view = NULL;
         if (membersForAll->members[dimV]
@@ -4168,17 +4176,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             #define SUBTRACK_CFG_WRENCH "<span class='clickable%s' onclick='return subCfg.cfgToggle(this,\"%s\");' title='Configure this subtrack'><img src='../images/wrench.png'></span>\n"
             printf(SUBTRACK_CFG_WRENCH,(visibleCB ? "":" disabled"),subtrack->track);
             }
-        printf("</TD>");
         }
+    printf("</TD>");
 #endif///def SUBTRACK_CFG
-
-    // A hidden field to keep track of subtrack order if it could change
-    if (sortOrder != NULL || useDragAndDrop)
-        {
-        safef(buffer, sizeof(buffer), "%s.priority", subtrack->track);
-        float priority = (float)cartUsualDouble(cart, buffer, subtrack->priority);
-        printf("<INPUT TYPE=HIDDEN NAME='%s' class='trPos' VALUE=\"%.0f\">", buffer, priority); // keeing track of priority
-        }
 
     // A color patch which helps distinguish subtracks in some types of composites
     if (doColorPatch)

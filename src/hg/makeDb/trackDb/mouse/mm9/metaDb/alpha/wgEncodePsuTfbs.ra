@@ -10,12 +10,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -36,12 +38,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam,wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -62,12 +66,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -88,12 +94,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -114,12 +122,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -140,12 +150,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -166,12 +178,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -192,12 +206,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -218,12 +234,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -244,12 +262,14 @@ antibody CTCF
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-30
 dateSubmitted 2010-11-12
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001922
+expId 1922
 fileName wgEncodePsuTfbsCh12CtcfFImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -270,12 +290,14 @@ antibody Input
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001923
+expId 1923
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -296,12 +318,14 @@ antibody Input
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001923
+expId 1923
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep2.bam,wgEncodePsuTfbsCh12InputFImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -322,12 +346,14 @@ antibody Input
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001923
+expId 1923
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -348,12 +374,14 @@ antibody Input
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001923
+expId 1923
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -374,12 +402,14 @@ antibody Input
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001923
+expId 1923
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -400,12 +430,14 @@ antibody Input
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001923
+expId 1923
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -426,12 +458,14 @@ antibody Input
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001923
+expId 1923
 fileName wgEncodePsuTfbsCh12InputFImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -452,11 +486,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -477,11 +513,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep2.bam,wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -502,11 +540,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -527,11 +567,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -552,11 +594,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -577,11 +621,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -602,11 +648,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -627,11 +675,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -652,11 +702,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -677,11 +729,13 @@ antibody PAX5_(N-15)
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002353
+expId 2353
 fileName wgEncodePsuTfbsCh12Pax5cFImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -702,11 +756,13 @@ antibody Pol2-4H8
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-13
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001924
+expId 1924
 fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam,wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -727,11 +783,13 @@ antibody Pol2-4H8
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-13
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001924
+expId 1924
 fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -752,11 +810,13 @@ antibody Pol2-4H8
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-13
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001924
+expId 1924
 fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -777,11 +837,13 @@ antibody Pol2-4H8
 cell CH12
 composite wgEncodePsuTfbs
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-13
 dateUnrestricted 2011-08-12
+dccAccession wgEncodeEM001924
+expId 1924
 fileName wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -802,11 +864,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -827,11 +891,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -852,11 +918,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -877,11 +945,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -902,11 +972,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -927,11 +999,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -952,11 +1026,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -977,11 +1053,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -1002,11 +1080,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -1027,11 +1107,13 @@ antibody GATA1_(SC-265)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002349
+expId 2349
 fileName wgEncodePsuTfbsErythroblGata1aBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -1052,12 +1134,14 @@ antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002350
+expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -1078,12 +1162,14 @@ antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002350
+expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblInputBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -1104,12 +1190,14 @@ antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002350
+expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1130,12 +1218,14 @@ antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002350
+expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1156,12 +1246,14 @@ antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002350
+expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -1182,12 +1274,14 @@ antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002350
+expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -1208,12 +1302,14 @@ antibody Input
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-15
 dateSubmitted 2011-08-17
 dateUnrestricted 2012-05-17
+dccAccession wgEncodeEM002350
+expId 2350
 fileName wgEncodePsuTfbsErythroblInputBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -1234,11 +1330,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -1259,11 +1357,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -1284,11 +1384,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep3.bam,wgEncodePsuTfbsErythroblTal1BE14halfCd1InputAlnRep3.bam.bai
 grant Hardison
 lab PSU-m
@@ -1309,11 +1411,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1334,11 +1438,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1359,11 +1465,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1384,11 +1492,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRawDataRep3.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1409,11 +1519,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1434,11 +1546,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1459,11 +1573,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepPeaksRep3.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1484,11 +1600,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -1509,11 +1627,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -1534,11 +1654,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputRepSignalRep3.bigWig
 grant Hardison
 lab PSU-m
@@ -1559,11 +1681,13 @@ antibody TAL1_(SC-12984)
 cell Erythrobl
 composite wgEncodePsuTfbs
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-01
 dateUnrestricted 2012-08-01
+dccAccession wgEncodeEM002359
+expId 2359
 fileName wgEncodePsuTfbsErythroblTal1BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -1584,12 +1708,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -1610,12 +1736,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eCtcfME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -1636,12 +1764,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1663,12 +1793,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1689,12 +1821,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1715,12 +1849,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1741,12 +1877,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1767,12 +1905,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -1793,12 +1933,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -1819,12 +1961,14 @@ antibody CTCF
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-31
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001925
+expId 1925
 fileName wgEncodePsuTfbsG1eCtcfME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -1846,11 +1990,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -1871,11 +2017,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eGata1aME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -1896,11 +2044,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1921,11 +2071,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1946,11 +2098,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1971,11 +2125,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1996,11 +2152,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2021,11 +2179,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -2046,11 +2206,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -2071,11 +2233,13 @@ antibody GATA1_(SC-265)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
+dccAccession wgEncodeEM002358
+expId 2358
 fileName wgEncodePsuTfbsG1eGata1aME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -2096,11 +2260,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -2121,11 +2287,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eGata2sc9008ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -2146,11 +2314,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2171,11 +2341,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2196,11 +2368,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2221,11 +2395,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2246,11 +2422,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2271,11 +2449,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -2296,11 +2476,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -2321,11 +2503,13 @@ antibody GATA2_(SC-9008)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002356
+expId 2356
 fileName wgEncodePsuTfbsG1eGata2sc9008ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -2346,12 +2530,14 @@ antibody Input
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001916
+expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -2372,12 +2558,14 @@ antibody Input
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001916
+expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eInputME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -2398,12 +2586,14 @@ antibody Input
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001916
+expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2424,12 +2614,14 @@ antibody Input
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001916
+expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2450,12 +2642,14 @@ antibody Input
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001916
+expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -2476,12 +2670,14 @@ antibody Input
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001916
+expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -2502,12 +2698,14 @@ antibody Input
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-16
 dateSubmitted 2010-11-19
 dateUnrestricted 2011-08-19
+dccAccession wgEncodeEM001916
+expId 1916
 fileName wgEncodePsuTfbsG1eInputME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -2528,11 +2726,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -2553,11 +2753,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1ePol24h8ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -2578,11 +2780,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2603,11 +2807,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2628,11 +2834,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2653,11 +2861,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2678,11 +2888,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2703,11 +2915,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -2728,11 +2942,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -2753,11 +2969,13 @@ antibody Pol2-4H8
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002354
+expId 2354
 fileName wgEncodePsuTfbsG1ePol24h8ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -2778,12 +2996,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -2804,12 +3024,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eTal1ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -2830,12 +3052,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2856,12 +3080,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2882,12 +3108,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2908,12 +3136,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2934,12 +3164,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2960,12 +3192,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -2986,12 +3220,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -3012,12 +3248,14 @@ antibody TAL1_(SC-12984)
 cell G1E
 composite wgEncodePsuTfbs
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-26
 dateSubmitted 2011-02-11
 dateUnrestricted 2011-11-11
+dccAccession wgEncodeEM001930
+expId 1930
 fileName wgEncodePsuTfbsG1eTal1ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -3038,12 +3276,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -3065,12 +3305,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2CtcfME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -3091,12 +3333,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3118,12 +3362,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3145,12 +3391,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3171,12 +3419,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3197,12 +3447,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3223,12 +3475,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -3249,12 +3503,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -3275,12 +3531,14 @@ antibody CTCF
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-19
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-25
+dccAccession wgEncodeEM001926
+expId 1926
 fileName wgEncodePsuTfbsG1eer4e2CtcfME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -3302,12 +3560,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -3328,12 +3588,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -3354,12 +3616,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3380,12 +3644,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3406,12 +3672,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3432,12 +3700,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3458,12 +3728,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3484,12 +3756,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -3510,12 +3784,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -3536,12 +3812,14 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-08-09
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1aME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -3562,11 +3840,13 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -3587,11 +3867,13 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3612,11 +3894,13 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3637,11 +3921,13 @@ antibody GATA1_(SC-265)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-26
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001927
+expId 1927
 fileName wgEncodePsuTfbsG1eer4e2Gata1sc265ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -3662,11 +3948,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -3687,11 +3975,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -3712,11 +4002,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3737,11 +4029,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3762,11 +4056,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3787,11 +4083,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3812,11 +4110,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3837,11 +4137,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -3862,11 +4164,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -3887,11 +4191,13 @@ antibody GATA2_(SC-9008)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-21
 dateUnrestricted 2012-07-21
+dccAccession wgEncodeEM002357
+expId 2357
 fileName wgEncodePsuTfbsG1eer4e2Gata2sc9008ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -3912,12 +4218,14 @@ antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001921
+expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -3939,12 +4247,14 @@ antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001921
+expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2InputME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -3965,12 +4275,14 @@ antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001921
+expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3992,12 +4304,14 @@ antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001921
+expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4018,12 +4332,14 @@ antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001921
+expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -4044,12 +4360,14 @@ antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001921
+expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -4070,12 +4388,14 @@ antibody Input
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-11-28
 dateUnrestricted 2011-08-26
+dccAccession wgEncodeEM001921
+expId 1921
 fileName wgEncodePsuTfbsG1eer4e2InputME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -4096,11 +4416,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -4121,11 +4443,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -4146,11 +4470,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3.bam,wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputAlnRep3.bam.bai
 grant Hardison
 lab PSU-m
@@ -4171,11 +4497,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4196,11 +4524,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4221,11 +4551,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4246,11 +4578,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRawDataRep3.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4271,11 +4605,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4296,11 +4632,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4321,11 +4659,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepPeaksRep3.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4346,11 +4686,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -4371,11 +4713,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -4396,11 +4740,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputRepSignalRep3.bigWig
 grant Hardison
 lab PSU-m
@@ -4421,11 +4767,13 @@ antibody Pol2-4H8
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-09-26
 dateUnrestricted 2012-06-26
+dccAccession wgEncodeEM002355
+expId 2355
 fileName wgEncodePsuTfbsG1eer4e2Pol24h8ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -4446,11 +4794,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam,wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -4471,11 +4821,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam,wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -4496,11 +4848,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4521,11 +4875,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4546,11 +4902,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4571,11 +4929,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4596,11 +4956,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4621,11 +4983,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -4646,11 +5010,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -4671,11 +5037,13 @@ antibody TAL1_(SC-12984)
 cell G1E-ER4+E2
 composite wgEncodePsuTfbs
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
+dccAccession wgEncodeEM002348
+expId 2348
 fileName wgEncodePsuTfbsG1eer4e2Tal1ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -4696,11 +5064,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -4721,11 +5091,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -4746,11 +5118,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4771,11 +5145,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4796,11 +5172,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4821,11 +5199,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4846,11 +5226,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4871,11 +5253,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -4896,11 +5280,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -4921,11 +5307,13 @@ antibody GATA1_(SC-265)
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002351
+expId 2351
 fileName wgEncodePsuTfbsMegakaryoGata1aBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -4946,12 +5334,14 @@ antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002352
+expId 2352
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -4972,12 +5362,14 @@ antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002352
+expId 2352
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -4998,12 +5390,14 @@ antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002352
+expId 2352
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5024,12 +5418,14 @@ antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002352
+expId 2352
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5050,12 +5446,14 @@ antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002352
+expId 2352
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -5076,12 +5474,14 @@ antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002352
+expId 2352
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -5102,12 +5502,14 @@ antibody Input
 cell Megakaryo
 composite wgEncodePsuTfbs
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2011-08-18
 dateUnrestricted 2012-05-18
+dccAccession wgEncodeEM002352
+expId 2352
 fileName wgEncodePsuTfbsMegakaryoInputBE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -5128,12 +5530,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -5154,12 +5558,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -5180,12 +5586,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5206,12 +5614,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5232,12 +5642,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5258,12 +5670,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5284,12 +5698,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5310,12 +5726,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -5336,12 +5754,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -5362,12 +5782,14 @@ antibody CTCF
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-09-08
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001928
+expId 1928
 fileName wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -5388,12 +5810,14 @@ antibody Input
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001929
+expId 1929
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -5414,12 +5838,14 @@ antibody Input
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001929
+expId 1929
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelInputUImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -5440,12 +5866,14 @@ antibody Input
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001929
+expId 1929
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5466,12 +5894,14 @@ antibody Input
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001929
+expId 1929
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5492,12 +5922,14 @@ antibody Input
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001929
+expId 1929
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -5518,12 +5950,14 @@ antibody Input
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001929
+expId 1929
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -5544,12 +5978,14 @@ antibody Input
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateResubmitted 2011-12-18
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001929
+expId 1929
 fileName wgEncodePsuTfbsMelInputUImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -5570,11 +6006,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -5595,11 +6033,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -5620,11 +6060,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5645,11 +6087,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5670,11 +6114,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5695,11 +6141,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5720,11 +6168,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5745,11 +6195,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -5770,11 +6222,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -5795,11 +6249,13 @@ antibody Pol2-4H8
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-10
 dateUnrestricted 2012-08-09
+dccAccession wgEncodeEM002361
+expId 2361
 fileName wgEncodePsuTfbsMelPol24h8UImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -5820,11 +6276,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep1.bam,wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
@@ -5845,11 +6303,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep2.bam,wgEncodePsuTfbsMelTal1UImmortalC57bl6InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
@@ -5870,11 +6330,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5895,11 +6357,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5920,11 +6384,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5945,11 +6411,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5970,11 +6438,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5995,11 +6465,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -6020,11 +6492,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -6045,11 +6519,13 @@ antibody TAL1_(SC-12984)
 cell MEL
 composite wgEncodePsuTfbs
 control Input
-controlId MEL/Input/Input
+controlId wgEncodeEM001929
 dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-11-05
 dateUnrestricted 2012-08-05
+dccAccession wgEncodeEM002360
+expId 2360
 fileName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -6063,4 +6539,4 @@ subId 5096
 tableName wgEncodePsuTfbsMelTal1UImmortalC57bl6InputSig
 view Signal
 
-# MAGIC: -1261314590
+# MAGIC: 42419884
