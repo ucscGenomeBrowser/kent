@@ -19,10 +19,10 @@ int begin;     /* starting value to range */
 int end;       /* ending value to range */
 };
 
-struct blackListRange *blackListParse(char *blackList);
+struct blackListRange *genbankBlackListParse(char *blackList);
 /* parse a black list file into blackListRange data structure */
 
-boolean blackListFail(char *accession, struct blackListRange *ranges);
+boolean genbankBlackListFail(char *accession, struct blackListRange *ranges);
 /* check to see if accession is black listed */
 
 #endif /* BLACKLIST_H */

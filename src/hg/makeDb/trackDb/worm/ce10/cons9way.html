@@ -104,7 +104,7 @@ Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html"
 TARGET=_blank>Graph configuration help</A> link for an explanation 
 of the configuration options.</P>
 <P>
-Pairwise alignments of each species to the $organism genome are 
+Pairwise alignments of each species to the <em>$organism</em> genome are 
 displayed below the conservation histogram as a grayscale density plot (in 
 pack mode) or as a wiggle (in full mode) that indicates alignment quality.
 In dense display mode, conservation is shown in grayscale using
@@ -131,15 +131,15 @@ enables display of gaps between alignment blocks in the pairwise alignments in
 a manner similar to the Chain track display.  The following
 conventions are used:
 <UL>
-<LI><B>Single line:</B> no bases in the aligned species. Possibly due to a
-lineage-specific insertion between the aligned blocks in the $organism genome
+<LI><B>Single line:</B> No bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the <em>$organism</em> genome
 or a lineage-specific deletion between the aligned blocks in the aligning
 species.
-<LI><B>Double line:</B> aligning species has one or more unalignable bases in
+<LI><B>Double line:</B> Aligning species has one or more unalignable bases in
 the gap region. Possibly due to excessive evolutionary distance between 
 species or independent indels in the region between the aligned blocks in both
 species. 
-<LI><B>Pale yellow coloring:</B> aligning species has Ns in the gap region.
+<LI><B>Pale yellow coloring:</B> Aligning species has Ns in the gap region.
 Reflects uncertainty in the relationship between the DNA of both species, due
 to lack of sequence in relevant portions of the aligning species. 
 </UL></P>
@@ -150,16 +150,16 @@ Discontinuities in the genomic context (chromosome, scaffold or region) of the
 aligned DNA in the aligning species are shown as follows: 
 <UL>
 <LI>
-<B>Vertical blue bar:</B> represents a discontinuity that persists indefinitely
+<B>Vertical blue bar:</B> Represents a discontinuity that persists indefinitely
 on either side, <em>e.g.</em> a large region of DNA on either side of the bar
 comes from a different chromosome in the aligned species due to a large scale
 rearrangement. 
 <LI>
-<B>Green square brackets:</B> enclose shorter alignments consisting of DNA from
+<B>Green square brackets:</B> Enclose shorter alignments consisting of DNA from
 one genomic context in the aligned species nested inside a larger chain of
 alignments from a different genomic context. The alignment within the
 brackets may represent a short misalignment, a lineage-specific insertion of a
-transposon in the $organism genome that aligns to a paralogous copy somewhere
+transposon in the <em>$organism</em> genome that aligns to a paralogous copy somewhere
 else in the aligned species, or other similar occurrence.
 </UL></P>
 
@@ -168,8 +168,8 @@ else in the aligned species, or other similar occurrence.
 When zoomed-in to the base-level display, the track shows the base 
 composition of each alignment, with bases in annotated repetitive 
 elements displayed in lower case. The numbers and symbols on the Gaps
-line indicate the lengths of gaps in the $organism sequence at those 
-alignment positions relative to the longest non-$organism sequence. 
+line indicate the lengths of gaps in the <em>$organism</em> sequence at those 
+alignment positions relative to the longest non-<em>$organism</em> sequence. 
 If there is sufficient space in the display, the size of the gap is shown. 
 If the space is insufficient and the gap size is a multiple of 3, a 
 &quot;*&quot; is displayed; other gap sizes are indicated by &quot;+&quot;.</P>
@@ -181,19 +181,19 @@ Translation configuration section at the top of the page. Then, select one of
 the following modes:
 <UL>
 <LI> 
-<B>No codon translation:</B> the gene annotation is not used; the bases are
+<B>No codon translation:</B> The gene annotation is not used; the bases are
 displayed without translation. 
 <LI>
-<B>Use default species reading frames for translation:</B> the annotations from the genome
+<B>Use default species reading frames for translation:</B> The annotations from the genome
 displayed 
-in the <EM>Default species for translation</EM>; pull-down menu are used to
+in the <EM>Default species to establish reading frame</EM> pull-down menu are used to
 translate all the aligned species present in the alignment. 
 <LI>
-<B>Use reading frames for species if available, otherwise no translation:</B> codon
+<B>Use reading frames for species if available, otherwise no translation:</B> Codon
 translation is performed only for those species where the region is
 annotated as protein coding.
 <LI><B>Use reading frames for species if available, otherwise use default species:</B>
-codon translation is done on those species that are annotated as being protein
+Codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
 species are translated using the default species annotation. 
 </UL></P>
@@ -220,7 +220,7 @@ species-specific reading frames for gene translation.
 
 <H2>Methods</H2>
 <P> 
-Pairwise alignments with the C. elegans genome were generated for 
+Pairwise alignments with the <em>C. elegans</em> genome were generated for 
 each species using lastz from repeat-masked genomic sequence. 
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
@@ -261,7 +261,7 @@ generated using the <em>phyloFit</em> program from the PHAST package
 (REV model, EM algorithm, medium precision) using multiple alignments of 
 4-fold degenerate sites extracted from the 9-way alignment
 (msa_view).  The 4d sites were derived from the Ensembl v62 gene set
-of C. elegans, filtered to select single-coverage long transcripts.
+of <em>C. elegans</em>, filtered to select single-coverage long transcripts.
 </P>
 <h3> PhastCons Conservation </h3>
 <P>
@@ -285,7 +285,7 @@ More information about
 phastCons can be found in Siepel <EM>et al</EM>. 2005.</P> 
 <P> 
 The phastCons parameters were tuned to produce approximately 70% conserved
-elements in the C. elegans Ensembl v62 gene coding regions.
+elements in the <em>C. elegans</em> Ensembl v62 gene coding regions.
 This parameter set (expected-length=15, target-coverage=0.55, rho=0.3) was
 then used to generate the conservation scoring.</P>
 

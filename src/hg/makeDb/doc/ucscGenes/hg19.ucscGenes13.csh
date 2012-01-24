@@ -27,7 +27,7 @@ set RatDb = Rn4
 set fishDb = danRer7
 set flyDb = dm3
 set wormDb = ce6
-set yeastDb = sacCer2
+set yeastDb = sacCer3
 
 # The net alignment for the closely-related species indicated in $xdb
 set xdbNetDir = $genomes/$db/bed/lastz.${xdb}/axtChain
@@ -69,7 +69,7 @@ set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
-set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
+set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
@@ -921,12 +921,14 @@ grep -v -e ^# knownToTreefam.temp | cut -f 1,2 > knownToTreefam.tab
 hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 
 
+
 if ($db =~ hg*) then
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db HInvGeneMrna knownGene knownToHInv
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133Plus2 knownGene knownToU133Plus2
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU133 knownGene knownToU133
     hgMapToGene -exclude=abGenes.txt -tempDb=$tempDb $db affyU95 knownGene knownToU95
     knownToHprd $tempDb $genomes/$db/p2p/hprd/FLAT_FILES/HPRD_ID_MAPPINGS.txt
+    hgsql $tempDb -e "delete k from knownToHprd k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 endif
 
 if ($db =~ hg*) then
@@ -953,6 +955,7 @@ endif
 
 # Update visiGene stuff
 knownToVisiGene $tempDb -probesDb=$db
+hgsql $tempDb -e "delete k from knownToVisiGene k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text $vgTextDbs
 cd /usr/local/apache/cgi-bin/visiGeneData
 ixIxx visiGene.text visiGene.ix visiGene.ixx
@@ -1008,10 +1011,15 @@ hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+cd $dir
+
 
 # Remove non-syntenic hits for human and rat
 # Takes a few minutes
 mkdir -p /gbdb/$tempDb/liftOver
+rm /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz /gbdb/$tempDb/liftOver/${tempDb}To$Xdb.over.chain.gz
 ln -s $genomes/$db/bed/liftOver/${db}To$RatDb.over.chain.gz \
     /gbdb/$tempDb/liftOver/${tempDb}To$RatDb.over.chain.gz
 ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
@@ -1054,6 +1062,7 @@ blastRecipBest $aToB/all.tab $bToA/all.tab $aToB/recipBest.tab $bToA/recipBest.t
 hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 hgLoadBlastTab $wormDb tfBlastTab $bToA/recipBest.tab
 
+
 # Us vs. yeast
 cd $dir/hgNearBlastp
 set aToB = run.$tempDb.$yeastDb
@@ -1070,6 +1079,9 @@ cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 rm -r run.*/out
 gzip run.*/all.tab
+
+# Move this to the end of the section to be done next
+exit $status # BRACKET
 
 
 # MAKE FOLDUTR TABLES 
@@ -1178,6 +1190,7 @@ cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > know
 rm -f sub.tab
 hgLoadSqlTab $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
 hgLoadSqlTab $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
+hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
 
 # Do scop run. Takes about 6 hours
@@ -1217,6 +1230,8 @@ catDir scop/result | \
 scopCollapse scopPlusScore.tab /hive/data/outside/scop/model.tab ucscScop.tab \
 	scopDesc.tab knownToSuper.tab
 hgLoadSqlTab $tempDb knownToSuper $kent/src/hg/lib/knownToSuper.sql knownToSuper.tab
+hgsql $tempDb -e "delete k from knownToSuper k, kgXref x where k.gene = x.kgID and x.geneSymbol = 'abParts'"
+
 hgLoadSqlTab $tempDb scopDesc $kent/src/hg/lib/scopDesc.sql scopDesc.tab
 hgLoadSqlTab $tempDb ucscScop $kent/src/hg/lib/ucscScop.sql ucscScop.tab
 
@@ -1249,7 +1264,7 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
-    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    kgBioCyc1 genes.tab pathways.tab $tempDb bioCycPathway.tab bioCycMapDesc.tab
     hgLoadSqlTab $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
@@ -1288,6 +1303,7 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
         |sort -u| sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
    hgLoadSqlTab $tempDb knownToKeggEntrez $kent/src/hg/lib/knownToKeggEntrez.sql \
         knownToKeggEntrez.tab
+    hgsql $tempDb -e "delete k from knownToKeggEntrez k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
 
 # Make spMrna table (useful still?)
    cd $dir
@@ -1333,10 +1349,6 @@ ln -s $dir/kgTargetSeq.2bit /gbdb/hg19/targetDb/
 cut -f 1-10 ucscGenes.gp | genePredToFakePsl $tempDb stdin kgTargetAli.psl /dev/null
 hgLoadPsl $tempDb kgTargetAli.psl
 
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-cd $dir
-		
 # NOW SWAP IN TABLES FROM TEMP DATABASE TO MAIN DATABASE.
 # You'll need superuser powers for this step.....
 
@@ -1377,9 +1389,6 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 3. Ask cluster-admin to start an untranslated, -stepSize=5 gfServer on       
 # /gbdb/hg19/targetDb/kgTargetSeq.2bit .          
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.
 hgsql hgcentraltest -e \                                                
@@ -1390,6 +1399,9 @@ hgsql hgcentraltest -e \
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 
+# move this endif statement past business that has successfully been completed
+endif # BRACKET		
+cd $dir
 
 
 #
@@ -1408,6 +1420,11 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
 synBlastp.csh $ratDb $db
+
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 #
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr

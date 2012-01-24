@@ -1,5 +1,6 @@
 
 LIST=\
+wgEncodeGencodeV10.ra \
 wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBroadHmm.ra \
@@ -10,6 +11,7 @@ wgEncodeCshlShortRnaSeq.ra \
 wgEncodeDukeAffyExon.ra \
 wgEncodeGencodeV4.ra \
 wgEncodeGencodeV7.ra \
+wgEncodeGencodeV10.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeGisRnaSeq.ra \

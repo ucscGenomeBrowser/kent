@@ -303,7 +303,8 @@ age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-18
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksAlnRep1.bam.bai
@@ -311,7 +312,7 @@ grant Stam
 lab UW-m
 labExpId DS16168
 labVersion Bowtie 0.12.5
-md5sum 13c12f711f11fe863d3887a832b3940e,b3429d6815914cc275db0c6b97eeeb0d
+md5sum d98de031245130f89aa2b07d4e551046,aa1a9744eae56151c8eacf9fd8f573b1
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -327,7 +328,8 @@ age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-18
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -335,7 +337,7 @@ grant Stam
 lab UW-m
 labExpId DS16168
 labVersion Hotspot-v5.2
-md5sum 0198c0c12e70ad29f5b1657b969fa333
+md5sum 1d4a51693b24f8a7071fb3cd4dfbb333
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -352,7 +354,8 @@ age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-18
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -360,7 +363,7 @@ grant Stam
 lab UW-m
 labExpId DS16168
 labVersion lmax-v1.1
-md5sum 8b1e71c02b12cccb05eca4a11d85f37e
+md5sum a8c491fd3f429dbac42bb8615969e340
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -377,14 +380,15 @@ age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-18
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksRawDataRep1.fastq.tgz
 grant Stam
 lab UW-m
 labVersion DS16168
-md5sum 246c11101470c4a6c2c7ca58fa861957
+md5sum 1b2a60cb97bd1d7e3e1448b2aeb0f6b1
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -400,7 +404,8 @@ age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-18
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksRawRep1.bigWig
@@ -408,7 +413,7 @@ grant Stam
 lab UW-m
 labExpId DS16168
 labVersion WindowDensity-bin20-win+/-75
-md5sum 9de0ac6b53e99542c5bcfd1b38115bfa
+md5sum c1cb94e259b79ca6eacf233cc656fa5c
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -425,7 +430,8 @@ age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-18
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd19pC57bl6MAdult8wksSigRep1.bigWig
@@ -433,7 +439,7 @@ grant Stam
 lab UW-m
 labExpId DS16168
 labVersion None
-md5sum 44d905a24a6433c4371e91470d8560e0
+md5sum 428585baecb0e9b345fe06ec37923b8b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -588,153 +594,6 @@ sex M
 strain C57BL/6
 subId 5242
 tableName wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksSigRep1
-tissueSourceType Pooled
-view Signal
-
-metaObject wgEncodeUwDgfGfatC57bl6MAdult8wksAlnRep1
-objType file
-age adult-8wks
-cell GenitalFatPad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfGfatC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfGfatC57bl6MAdult8wksAlnRep1.bam.bai
-grant Stam
-lab UW-m
-labExpId DS18182
-labVersion Bowtie 0.12.5
-md5sum 588c6a91c0338a9cb74a88c2ddd6fd0c,dccb5ea48cda8692d3e3a9a84225539c
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-sex M
-strain C57BL/6
-subId 5244
-tissueSourceType Pooled
-view Alignments
-
-metaObject wgEncodeUwDgfGfatC57bl6MAdult8wksHotspotsRep1
-objType table
-age adult-8wks
-cell GenitalFatPad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfGfatC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
-grant Stam
-lab UW-m
-labExpId DS18182
-labVersion Hotspot-v5.2
-md5sum 6f17cae99b46a75d0a7bff77a8449a12
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-sex M
-strain C57BL/6
-subId 5244
-tableName wgEncodeUwDgfGfatC57bl6MAdult8wksHotspotsRep1
-tissueSourceType Pooled
-view Hotspots
-
-metaObject wgEncodeUwDgfGfatC57bl6MAdult8wksPkRep1
-objType table
-age adult-8wks
-cell GenitalFatPad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfGfatC57bl6MAdult8wksPkRep1.narrowPeak.gz
-grant Stam
-lab UW-m
-labExpId DS18182
-labVersion lmax-v1.1
-md5sum 4a30dbcca83fa5f1fde283ca7b15bafe
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-sex M
-strain C57BL/6
-subId 5244
-tableName wgEncodeUwDgfGfatC57bl6MAdult8wksPkRep1
-tissueSourceType Pooled
-view Peaks
-
-metaObject wgEncodeUwDgfGfatC57bl6MAdult8wksRawDataRep1
-objType file
-age adult-8wks
-cell GenitalFatPad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfGfatC57bl6MAdult8wksRawDataRep1.fastq.tgz
-grant Stam
-lab UW-m
-labVersion DS18182
-md5sum 2ecb83e58d559ad8e87e079db2df4fca
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-sex M
-strain C57BL/6
-subId 5244
-tissueSourceType Pooled
-view RawData
-
-metaObject wgEncodeUwDgfGfatC57bl6MAdult8wksRawRep1
-objType table
-age adult-8wks
-cell GenitalFatPad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfGfatC57bl6MAdult8wksRawRep1.bigWig
-grant Stam
-lab UW-m
-labExpId DS18182
-labVersion WindowDensity-bin20-win+/-75
-md5sum c5490824b8b47eacc3b85fb04dd0e31d
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-sex M
-strain C57BL/6
-subId 5244
-tableName wgEncodeUwDgfGfatC57bl6MAdult8wksRawRep1
-tissueSourceType Pooled
-view RawSignal
-
-metaObject wgEncodeUwDgfGfatC57bl6MAdult8wksSigRep1
-objType table
-age adult-8wks
-cell GenitalFatPad
-composite wgEncodeUwDgf
-dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-12-17
-dateUnrestricted 2012-09-17
-fileName wgEncodeUwDgfGfatC57bl6MAdult8wksSigRep1.bigWig
-grant Stam
-lab UW-m
-labExpId DS18182
-labVersion None
-md5sum 4acccf4a72cd849aa746befdb9fd613a
-project wgEncode
-replicate 1
-seqPlatform Illumina_HiSeq_2000
-sex M
-strain C57BL/6
-subId 5244
-tableName wgEncodeUwDgfGfatC57bl6MAdult8wksSigRep1
 tissueSourceType Pooled
 view Signal
 
@@ -2355,4 +2214,4 @@ tableName wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: -987280235
+# MAGIC: -1662653211
