@@ -24,7 +24,7 @@ hgsid on
 # html wgEncodeGencodeV10
 baseColorUseCds given
 baseColorDefault genomicCodons
-subGroup1 view View 1Basic=Basic 2Comp=Comprehensive 3Pseudo=PseudoGenes 42-way=2-way_PseudoGene  5Polya=Polya
+subGroup1 view View 1Basic=Basic 2Comp=Comprehensive 3Pseudo=Pseudogenes 42-way=2-way_Pseudogenes  5Polya=PolyA
 sortOrder view=+
 wgEncode 1
 wgEncodeGencodeVersion 10
