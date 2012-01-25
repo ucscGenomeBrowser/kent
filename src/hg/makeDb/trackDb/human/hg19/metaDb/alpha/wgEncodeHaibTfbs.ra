@@ -22226,7 +22226,7 @@ composite wgEncodeHaibTfbs
 controlId SL1783
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-04-25
+dateResubmitted 2012-01-23
 dateSubmitted 2010-01-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEH001518
@@ -22282,7 +22282,7 @@ composite wgEncodeHaibTfbs
 controlId SL1783
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-03-07
+dateResubmitted 2012-01-23
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEH001518
@@ -22297,8 +22297,8 @@ project wgEncode
 protocol v041610.1
 replicate 1
 setType input
-subId 5452
-submittedDataVersion V2 - replacement files for updated BAMs and fastqs
+subId 5457
+submittedDataVersion V2 - Corrected file, the other file was of ambiguous origin.
 treatment None
 view RawData
 
@@ -22366,7 +22366,7 @@ composite wgEncodeHaibTfbs
 controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-04-25
+dateResubmitted 2012-01-23
 dateSubmitted 2010-05-31
 dateUnrestricted 2011-03-03
 dccAccession wgEncodeEH001510
@@ -53383,7 +53383,7 @@ composite wgEncodeHaibTfbs
 controlId SL1714
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateResubmitted 2011-04-25
+dateResubmitted 2012-01-23
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEH001535
@@ -57823,6 +57823,30 @@ subId 1848
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1V2
+objType file
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL103
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-08
+fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1V2.bam,wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL88
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2
 objType file
 antibody NRSF
@@ -57846,6 +57870,30 @@ protocol PCR2x
 replicate 2
 setType exp
 subId 1585
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2V2
+objType file
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL414
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2V2.bam,wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL413
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
 treatment None
 view Alignments
 
@@ -57877,6 +57925,32 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1
 treatment None
 view Peaks
 
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xPkRep1V2
+objType table
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL103
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-08
+fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1V2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL88
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1V2
+treatment None
+view Peaks
+
 metaObject wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 objType table
 antibody NRSF
@@ -57902,6 +57976,32 @@ setType exp
 softwareVersion MACS
 subId 1585
 tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xPkRep2V2
+objType table
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL414
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2V2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL413
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2V2
 treatment None
 view Peaks
 
@@ -57932,6 +58032,30 @@ subId 3877
 treatment None
 view RawData
 
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep1V2
+objType file
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL103
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-08
+fileName wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep1V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL88
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+treatment None
+view RawData
+
 metaObject wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep2
 objType file
 antibody NRSF
@@ -57955,6 +58079,30 @@ protocol PCR2x
 replicate 2
 setType exp
 subId 3017
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep2V2
+objType file
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL414
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep2V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL413
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
 treatment None
 view RawData
 
@@ -57985,6 +58133,31 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xRawRep1V2
+objType table
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL103
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-08
+fileName wgEncodeHaibTfbsU87NrsfPcr2xRawRep1V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL88
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep1V2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 objType table
 antibody NRSF
@@ -58009,6 +58182,31 @@ replicate 2
 setType exp
 subId 3035
 tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsU87NrsfPcr2xRawRep2V2
+objType table
+antibody NRSF
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL414
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL413
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2V2
 treatment None
 view RawSignal
 
@@ -58038,6 +58236,30 @@ subId 4159
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep1V2
+objType file
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL2338
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep1V2.bam,wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep1V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL1962
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2
 objType file
 antibody Pol2-4H8
@@ -58061,6 +58283,30 @@ protocol v041610.1
 replicate 2
 setType exp
 subId 4159
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2V2
+objType file
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL3777
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-20
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2V2.bam,wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL3773
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
 treatment None
 view Alignments
 
@@ -58092,6 +58338,32 @@ tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1
 treatment None
 view Peaks
 
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1V2
+objType table
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL2338
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1V2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1962
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+softwareVersion MACS
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1V2
+treatment None
+view Peaks
+
 metaObject wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2
 objType table
 antibody Pol2-4H8
@@ -58117,6 +58389,32 @@ setType exp
 softwareVersion MACS
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2V2
+objType table
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL3777
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-20
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2V2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3773
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+softwareVersion MACS
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+tableName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2V2
 treatment None
 view Peaks
 
@@ -58146,6 +58444,30 @@ subId 4159
 treatment None
 view RawData
 
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep1V2
+objType file
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL2338
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep1V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1962
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+treatment None
+view RawData
+
 metaObject wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep2
 objType file
 antibody Pol2-4H8
@@ -58169,6 +58491,30 @@ protocol v041610.1
 replicate 2
 setType exp
 subId 4159
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep2V2
+objType file
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL3777
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-20
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep2V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3773
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
 treatment None
 view RawData
 
@@ -58199,6 +58545,31 @@ tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1V2
+objType table
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL2338
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL1962
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1V2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
 objType table
 antibody Pol2-4H8
@@ -58223,6 +58594,31 @@ replicate 2
 setType exp
 subId 4159
 tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2V2
+objType table
+antibody Pol2-4H8
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL3777
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-20
+dateUnrestricted 2012-02-20
+fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL3773
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+tableName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2V2
 treatment None
 view RawSignal
 
@@ -58252,6 +58648,30 @@ subId 1848
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibTfbsU87RxlchPcr2xAlnRep1V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL103
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-08
+fileName wgEncodeHaibTfbsU87RxlchPcr2xAlnRep1V2.bam,wgEncodeHaibTfbsU87RxlchPcr2xAlnRep1V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL103
+project wgEncode
+protocol PCR2x
+replicate 1
+setType input
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2
 objType file
 antibody RevXlinkChromatin
@@ -58275,6 +58695,30 @@ protocol PCR2x
 replicate 2
 setType input
 subId 3091
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL414
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2V2.bam,wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL414
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
 treatment None
 view Alignments
 
@@ -58304,6 +58748,30 @@ subId 3019
 treatment None
 view RawData
 
+metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep1V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL103
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-08
+fileName wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep1V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL103
+project wgEncode
+protocol PCR2x
+replicate 1
+setType input
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+treatment None
+view RawData
+
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep2
 objType file
 antibody RevXlinkChromatin
@@ -58327,6 +58795,30 @@ protocol PCR2x
 replicate 2
 setType input
 subId 3019
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep2V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL414
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep2V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL414
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
 treatment None
 view RawData
 
@@ -58357,6 +58849,31 @@ tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawRep1V2
+objType table
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL103
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-03-08
+dateUnrestricted 2011-12-08
+fileName wgEncodeHaibTfbsU87RxlchPcr2xRawRep1V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL103
+project wgEncode
+protocol PCR2x
+replicate 1
+setType input
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep1V2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawRep2
 objType table
 antibody RevXlinkChromatin
@@ -58381,6 +58898,31 @@ replicate 2
 setType input
 subId 3035
 tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep2
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsU87RxlchPcr2xRawRep2V2
+objType table
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL414
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-24
+dateSubmitted 2011-01-21
+dateUnrestricted 2011-10-20
+fileName wgEncodeHaibTfbsU87RxlchPcr2xRawRep2V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL414
+project wgEncode
+protocol PCR2x
+replicate 2
+setType input
+subId 5456
+submittedDataVersion V2 - remapped U87 to correct reference, originally mapped to wrong sex
+tableName wgEncodeHaibTfbsU87RxlchPcr2xRawRep2V2
 treatment None
 view RawSignal
 
@@ -58410,6 +58952,30 @@ subId 4160
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibTfbsU87RxlchV0416101AlnRep1V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL2338
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-23
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87RxlchV0416101AlnRep1V2.bam,wgEncodeHaibTfbsU87RxlchV0416101AlnRep1V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL2338
+project wgEncode
+protocol v041610.1
+replicate 1
+setType input
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsU87RxlchV0416101AlnRep2
 objType file
 antibody RevXlinkChromatin
@@ -58433,6 +58999,30 @@ protocol v041610.1
 replicate 2
 setType input
 subId 4160
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsU87RxlchV0416101AlnRep2V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL3777
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-23
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87RxlchV0416101AlnRep2V2.bam,wgEncodeHaibTfbsU87RxlchV0416101AlnRep2V2.bam.bai
+grant Myers
+lab HudsonAlpha
+labExpId SL3777
+project wgEncode
+protocol v041610.1
+replicate 2
+setType input
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
 treatment None
 view Alignments
 
@@ -58462,6 +59052,30 @@ subId 4160
 treatment None
 view RawData
 
+metaObject wgEncodeHaibTfbsU87RxlchV0416101RawDataRep1V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL2338
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-23
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87RxlchV0416101RawDataRep1V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL2338
+project wgEncode
+protocol v041610.1
+replicate 1
+setType input
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+treatment None
+view RawData
+
 metaObject wgEncodeHaibTfbsU87RxlchV0416101RawDataRep2
 objType file
 antibody RevXlinkChromatin
@@ -58485,6 +59099,30 @@ protocol v041610.1
 replicate 2
 setType input
 subId 4160
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsU87RxlchV0416101RawDataRep2V2
+objType file
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL3777
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-23
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87RxlchV0416101RawDataRep2V2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3777
+project wgEncode
+protocol v041610.1
+replicate 2
+setType input
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
 treatment None
 view RawData
 
@@ -58515,6 +59153,31 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep1
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2
+objType table
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL2338
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-23
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL2338
+project wgEncode
+protocol v041610.1
+replicate 1
+setType input
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 objType table
 antibody RevXlinkChromatin
@@ -58542,4 +59205,29 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -914710398
+metaObject wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
+objType table
+antibody RevXlinkChromatin
+cell U87
+composite wgEncodeHaibTfbs
+controlId SL3777
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-01-23
+dateSubmitted 2011-05-23
+dateUnrestricted 2012-02-23
+fileName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL3777
+project wgEncode
+protocol v041610.1
+replicate 2
+setType input
+subId 5453
+submittedDataVersion V2 - Remapping U87 due to an incorrectly reported cell sex
+tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
+treatment None
+view RawSignal
+
+# MAGIC: -913490193
