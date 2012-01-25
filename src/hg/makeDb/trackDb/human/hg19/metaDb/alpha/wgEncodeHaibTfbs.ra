@@ -57815,6 +57815,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL88
 md5sum 08342dd3ed84e0914277a091db0c12ca,b3d3e9f66120c03d61bc19aa2197bb6f
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -57838,6 +57839,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1V2.bam,wgEncodeHaibTfbsU87NrsfPcr2xA
 grant Myers
 lab HudsonAlpha
 labExpId SL88
+md5sum 96bbb9f17441763579bdbdd71ea33081,d79c4e523a839dce57e3812c40e048c8
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -57865,6 +57867,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL413
 md5sum e34fa3ec91fa3a644f07fd09a11a6fea,58f1d49d094c773d45ee6ec297c516af
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -57888,6 +57891,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2V2.bam,wgEncodeHaibTfbsU87NrsfPcr2xA
 grant Myers
 lab HudsonAlpha
 labExpId SL413
+md5sum 47c292c8d7c502926d5355740194db68,d096554e0e2cf2e9880d6bb8a0f0c7b8
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -57915,6 +57919,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL88
 md5sum 1979883ad1732d2025243bb55a3bb55c
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -57940,6 +57945,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL88
+md5sum d271dd91bbb0287242d81fb0341dc7e4
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -57969,6 +57975,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL413
 md5sum 94ca78711aa166b94046e61bc892fd1c
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -57994,6 +58001,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL413
+md5sum 609a9218b80c68ded7c498a799084858
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58024,6 +58032,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL88
 md5sum bda12ae12f2dff74a0faca0a11212369
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58047,6 +58056,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL88
+md5sum bda12ae12f2dff74a0faca0a11212369
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58074,6 +58084,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL413
 md5sum 59cacc52e4769991a0b6f42a7b64c4e2
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58097,6 +58108,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL413
+md5sum 7a10e6c974276d03613108df97b32884
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58124,6 +58136,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL88
 md5sum 2fe270334860194dc9bcba9a56f4ab1e
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58148,6 +58161,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xRawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL88
+md5sum 11e0440b84adb978d67bd9404a1cb72e
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58176,6 +58190,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL413
 md5sum 1d4b6d6335a2fc121003fcbe417a8e8d
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58200,6 +58215,7 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL413
+md5sum 00bf42337a7a61b4e4e6964eeb99fd87
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58228,6 +58244,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1962
 md5sum b0ea1ad7c67585f9f5c6f26a739e7da6,d2447c5d26616bc94928e39e934262c6
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58251,6 +58268,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep1V2.bam,wgEncodeHaibTfbsU87Pol2
 grant Myers
 lab HudsonAlpha
 labExpId SL1962
+md5sum 17f7ced6c77db4632e8a43715e9af667,1c8698b0398599273e1f8eaa043b076d
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58278,6 +58296,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3773
 md5sum bb507f04011437f208ef44903ae83adc,f363ecd29e5083f3846b9fb44a05e2de
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58301,6 +58320,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2V2.bam,wgEncodeHaibTfbsU87Pol2
 grant Myers
 lab HudsonAlpha
 labExpId SL3773
+md5sum 075c68169ce97a6c5cb85d4f0f9b3f72,074c6c33ed9eba9414e49cefe33f6847
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58328,6 +58348,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1962
 md5sum 97923d3e1483f0ce8c24bcd01c3c4b8d
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58353,6 +58374,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1962
+md5sum 93bcca22eb3e25e7389fe47a113701b7
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58382,6 +58404,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3773
 md5sum d50adeb9f57f7d848ea2235eb5c59784
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58407,6 +58430,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3773
+md5sum 67faecb4aa17bc7e3d2142b4e16acce6
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58436,6 +58460,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1962
 md5sum 74336755600f17d1414e5aa16f4f5caa
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58459,6 +58484,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1962
+md5sum 30779b4f1d9e1dfb5d1369621a8dd3e2
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58486,6 +58512,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3773
 md5sum ad0ceef4531dafe3a67d7bf51a61bf51
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58509,6 +58536,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3773
+md5sum 64f80d8a27fe29b96072ffcd8ee0450d
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58536,6 +58564,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1962
 md5sum dfbd799aaf7bab36e1006a073dc58c9e
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58560,6 +58589,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1962
+md5sum 3ebef4c898abac33b66645b2865d0fd1
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58588,6 +58618,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3773
 md5sum 72d8387740264359801146027e221930
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58612,6 +58643,7 @@ fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3773
+md5sum 0e2f5fdc8a6a40da00a2b6ad48c41ca9
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -58640,6 +58672,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL103
 md5sum 1f298401c2b86540cdbd7baa4146c8e5,924e103ac428c7869946d6420f55011a
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58663,6 +58696,7 @@ fileName wgEncodeHaibTfbsU87RxlchPcr2xAlnRep1V2.bam,wgEncodeHaibTfbsU87RxlchPcr2
 grant Myers
 lab HudsonAlpha
 labExpId SL103
+md5sum fcc40409e93967864f9f73cd0ec8beba,20298d7371a18951f096efea169b59a7
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58690,6 +58724,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL414
 md5sum f942ce4c04b14fea30a6123d40a48b3a,e24adac18b4a87bd13c44d7a038f2f7d
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58713,6 +58748,7 @@ fileName wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2V2.bam,wgEncodeHaibTfbsU87RxlchPcr2
 grant Myers
 lab HudsonAlpha
 labExpId SL414
+md5sum c4f309185948b7715147a5df10a197da,ed9666d52ea28aeccebeee4b62159e81
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58740,6 +58776,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL103
 md5sum 85f2b9a30c0984e179a7d52ac072ac19
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58763,6 +58800,7 @@ fileName wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL103
+md5sum 4168eb6cde2739af8b0dfd7fd68c7a06
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58790,6 +58828,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL414
 md5sum ca8e83214b520a89948c3df5558d344a
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58813,6 +58852,7 @@ fileName wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL414
+md5sum 1bc1deda950f3233b15225067d6bdda2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58840,6 +58880,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL103
 md5sum a6c48a03a7eae5d50a56684b9675adee
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58864,6 +58905,7 @@ fileName wgEncodeHaibTfbsU87RxlchPcr2xRawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL103
+md5sum fc23847633b70959a9381f5b77706df0
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -58892,6 +58934,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL414
 md5sum 69803a92fd257894e7b2d4d4dfba30ab
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58916,6 +58959,7 @@ fileName wgEncodeHaibTfbsU87RxlchPcr2xRawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL414
+md5sum 17bead091eb8a82c0e22851a47032e90
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -58944,6 +58988,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL2338
 md5sum 81a50a2013ff0d2504dbca1730fd28c3,52fd312f123177977c5636eaad0be903
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58967,6 +59012,7 @@ fileName wgEncodeHaibTfbsU87RxlchV0416101AlnRep1V2.bam,wgEncodeHaibTfbsU87RxlchV
 grant Myers
 lab HudsonAlpha
 labExpId SL2338
+md5sum b05bec0d4f81b72ebd68b0ac18f4b1b1,1de4ac3e5b1d3277fc8ca094e6d511a3
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -58994,6 +59040,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3777
 md5sum 9f9da1f5f7d4969d9197f948ad7a12fc,cc21c430d83052069cd0a0050db10ab2
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -59017,6 +59064,7 @@ fileName wgEncodeHaibTfbsU87RxlchV0416101AlnRep2V2.bam,wgEncodeHaibTfbsU87RxlchV
 grant Myers
 lab HudsonAlpha
 labExpId SL3777
+md5sum 0526f9cf8887269186ff0a7500afe7dc,002e07ba3be580336438e029571782b5
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -59044,6 +59092,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL2338
 md5sum ffc2b7e9cfe63307eb01a1dfd8fa53d2
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -59067,6 +59116,7 @@ fileName wgEncodeHaibTfbsU87RxlchV0416101RawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2338
+md5sum b73a74e95889771423840251e8fad3ca
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -59094,6 +59144,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3777
 md5sum 784d42612a3d56d16c5d38e77f4f6875
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -59117,6 +59168,7 @@ fileName wgEncodeHaibTfbsU87RxlchV0416101RawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL3777
+md5sum 23d77de2f6e09e1480567deab6fea690
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -59144,6 +59196,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL2338
 md5sum a12b96f702940169b6a4fd36da24bfa7
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -59168,6 +59221,7 @@ fileName wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL2338
+md5sum 6f7feaad76bc0be24fed60fa7a1d5a75
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -59196,6 +59250,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL3777
 md5sum 36a6fc7442d4bf17fb4d8775cd7363c2
+objStatus revoked - Original experiment was mapped to wrong sex
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -59220,6 +59275,7 @@ fileName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL3777
+md5sum d948d69e2d4872dc972d8c9f92b44bc9
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -59230,4 +59286,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -913490193
+# MAGIC: 1402200690
