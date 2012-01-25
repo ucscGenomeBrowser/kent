@@ -30,6 +30,7 @@ char *splitPart(char* string, int index)
 
 void printMarkerSnippets(struct sqlConnection *conn, char* item)
 {
+sqlUpdate(conn, "SET SESSION group_concat_max_len = 10000");
 char query[4000];
 safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' GROUP by articleId", item);
 

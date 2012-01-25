@@ -501,6 +501,7 @@ prevExonText Prev Match
     articleTable t2gPmcArticle
     sequenceTable t2gPmcSequence
     priority 1
+    color 0,0,100
     release alpha
 
     track t2gElsevier
@@ -512,7 +513,38 @@ prevExonText Prev Match
     sequenceTable t2gElsevierSequence
     type bed 12 .
     release alpha
+    color 0,100,0
     maxItems 300
+
+    track t2gMarkerSnp
+    shortLabel SNPs
+    longLabel SNPs mentioned in Publications
+    parent t2g
+    visibility pack
+    priority 3
+    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
+    type bed 4 +
+    release alpha
+
+    track t2gMarkerBand
+    shortLabel Bands
+    longLabel Cytogenetic bands mentioned in Publications
+    parent t2g
+    visibility pack
+    priority 3
+    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
+    type bed 4 +
+    release alpha
+
+    track t2gMarkerGene
+    shortLabel Genes
+    longLabel Gene symbols mentioned in Publications
+    parent t2g
+    priority 3
+    visibility pack
+    ##t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
+    type bed 4 +
+    release alpha
 
 searchTable mgcFullMrna
 searchType psl
