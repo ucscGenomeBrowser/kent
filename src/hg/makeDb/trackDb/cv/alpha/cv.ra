@@ -1390,6 +1390,60 @@ sex U
 tier 3
 protocol Crawford:FibroP_Crawford_protocol.pdf
 
+term FibroP_AG20443
+tag FIBROPAG20443
+type Cell Line
+organism human
+description fibroblasts taken from individuals with Parkinson's disease
+tissue skin fibroblast
+vendorName Coriell
+vendorId AG20443
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG20443&PgId=166
+karyotype skin
+lineage missing
+termId BTO:0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+sex M
+tier 3
+lab Crawford
+protocol Crawford:FibroP_Crawford_protocol.pdf
+
+term FibroP_AG08395
+tag FIBROPAG08395
+type Cell Line
+organism human
+description fibroblasts taken from individuals with Parkinson's disease
+tissue skin fibroblast
+vendorName Coriell
+vendorId AG08395
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08395&PgId=166
+karyotype skin
+lineage missing
+termId BTO:0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+sex F
+tier 3
+lab Crawford
+protocol Crawford:FibroP_Crawford_protocol.pdf
+
+term FibroP_AG08396
+tag FIBROPAG08396
+type Cell Line
+organism human
+description fibroblasts taken from individuals with Parkinson's disease
+tissue lung fibroblast
+vendorName Coriell
+vendorId AG08396
+orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08396&PgId=166
+karyotype skin
+lineage missing
+termId BTO:0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+sex F
+tier 3
+lab Crawford
+protocol Crawford:FibroP_Crawford_protocol.pdf
+
 term Gliobla
 tag GLIOBLA
 type Cell Line
@@ -4465,60 +4519,6 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 sex U
 protocol Stam:Fibroblast_Stam_protocol.pdf
-
-term FibroP_AG20443
-tag FIBROPAG20443
-type Cell Line
-organism human
-description fibroblasts taken from individuals with Parkinson's disease
-tissue skin fibroblast
-vendorName Coriell
-vendorId AG20443
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG20443&PgId=166
-karyotype skin
-lineage missing
-termId BTO:0000452
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
-sex M
-tier 3
-lab Crawford
-protocol Crawford:FibroPAG20443_Crawford_protocol.pdf
-
-term FibroP_AG08395
-tag FIBROPAG08395
-type Cell Line
-organism human
-description fibroblasts taken from individuals with Parkinson's disease
-tissue skin fibroblast
-vendorName Coriell
-vendorId AG08395
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08395&PgId=166
-karyotype skin
-lineage missing
-termId BTO:0000452
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
-sex F
-tier 3
-lab Crawford
-protocol Crawford:FibroPAG08395_Crawford_protocol.pdf
-
-term FibroP_AG08396
-tag FIBROPAG08396
-type Cell Line
-organism human
-description fibroblasts taken from individuals with Parkinson's disease
-tissue lung fibroblast
-vendorName Coriell
-vendorId AG08396
-orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08396&PgId=166
-karyotype skin
-lineage missing
-termId BTO:0000452
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
-sex F
-tier 3
-lab Crawford
-protocol Crawford:FibroPAG08396_Crawford_protocol.pdf
 
 term ForelimbBud
 tag FLBUD
