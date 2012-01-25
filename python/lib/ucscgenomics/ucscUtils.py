@@ -49,12 +49,6 @@ def zeros(m,n):
     return cross
 
 def mergeList(list1,list2):
-    """ Takes in two lists, returns a single list merged into a consensus list using a modified Needleman-Wunsch
-        alignment. The comment lines with two comments are there to signalify a change to Smith-Waterman, remove the 
-        double commented lines to convert.
-        Single comment lines are for debugging, remove when this routine matures.
-    """
-
     m,n = len(list1),len(list2)
     score = zeros(m+1,n+1)
     pointer = zeros(m+1,n+1)
@@ -62,8 +56,7 @@ def mergeList(list1,list2):
     max_i = 0
     max_j = 0
     maxScore = 0
-     
-    #print "len_i = %s, len_j = %s" % (m,n)
+
     for i in range(1,m+1):
         for j in range(1,n+1):
             scoreUp = score[i-1][j]+penalty
@@ -80,20 +73,14 @@ def mergeList(list1,list2):
                 pointer[i][j] = 2
             if score[i][j] == scoreDiagonal:
                 pointer[i][j] = 3
-            ##if score[i][j] >= maxScore:
-            ##    max_i = i
-            ##    max_j = j
-            ##    maxScore = score[i][j]
-
-    #for k in pointer:
-    #    line = ""
-    #    for l in k:
-    #        line = line + "%s " % l
-    #    print line
+            if score[i][j] >= maxScore:
+                max_i = i
+                max_j = j
+                maxScore = score[i][j]
 
     align1,align2 = list(),list()
-    ##after_i,after_j = max_i,max_j
-    #print "max_i = %s, max_j = %s" % (max_i, max_j)
+    after_i,after_j = max_i,max_j
+
     while pointer[i][j] != 0:
         if pointer[i][j] == 3:
             align1.append(str(list1[i-1]))
@@ -114,9 +101,6 @@ def mergeList(list1,list2):
     align2.reverse()
     consensus = list()
 
-    #for i in range(len(align1)):
-    #    print "%s = %s" % (align1[i], align2[i])
-
     for i in range(len(align1)):
         if align1[i] == align2[i]:
             consensus.append(align1[i])
@@ -127,15 +111,16 @@ def mergeList(list1,list2):
         elif align1[i] != align2[i]:
             consensus.append(align1[i])
             consensus.append(align2[i])
+
     before = list()
     if before_i != 0:
         before.extend(list1[0:before_i])
     if before_j != 0:
         before.extend(list2[0:before_j])
-    ##if after_i < len(list1):
-    ##    consensus.extend(list1[after_i:])
-    ##if after_j < len(list2):
-    ##    consensus.extend(list2[after_j:])
+    if after_i < len(list1):
+        consensus.extend(list1[after_i:])
+    if after_j < len(list2):
+        consensus.extend(list2[after_j:])
     before.extend(consensus)
     setcon = list()
     p = re.compile('^#')
