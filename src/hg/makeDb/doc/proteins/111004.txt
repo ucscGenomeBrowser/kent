@@ -644,4 +644,44 @@ hgsql rn4 -N -e \
 # !!! NOTE: Email the above 6 list files to Lisa Matthews [lmatthews.nyumc@gmail.com]
 # AFTER THE NEW PROTEIN DBs ARE RELEASED ON RR.
 
+####################################################################
+# REACTOME UPDATE v39 (DONE, Andy 2012-01-24)
+
+scp UCSC_Reactome_v39.zip aamp@hgwdev.cse.ucsc.edu:/hive/data/outside/reactome/
+# (from redmine #5425)
+ssh hgwdev
+cd /hive/data/outside/reactome
+unzip UCSC_Reactome_v39.zip
+rm -rf __MACOSX/ UCSC_Reactome_v39.zip
+mkdir reactome39
+mv ucsc_e* reactome39/
+rm current reactome
+ln -s /hive/data/outside/reactome/reactome39 current
+ln -s /hive/data/outside/reactome/reactome39 reactome
+cd reatome39/
+tail -n +7 ucsc_entity39 > ucsc_entity39.tab
+tail -n +7 ucsc_events39 > ucsc_events39.tab
+hgLoadSqlTab proteome spReactomeEvent ~/kent/src/hg/lib/spReactomeEvent.sql ucsc_events39.tab
+hgLoadSqlTab proteome spReactomeId ~/kent/src/hg/lib/spReactomeId.sql ucsc_entity39.tab
+hgsql hg17 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg17.lis
+hgsql hg18 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg18.lis
+hgsql hg19 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >hg19.lis
+hgsql mm9 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm9.lis
+hgsql mm8 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >mm8.lis
+hgsql rn4 -N -e \
+'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' \
+|sort -u >rn4.lis
+
+# these lists are e-mailed to someone at Reactome for updating their site, presumably.
+
 endif # BRACKET
