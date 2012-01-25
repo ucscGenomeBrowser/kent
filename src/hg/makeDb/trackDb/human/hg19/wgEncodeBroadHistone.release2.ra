@@ -3699,7 +3699,7 @@ html wgEncodeBroadHistone.release2
         color 224,75,0
         # subId=5024 dateSubmitted=2011-10-26
 
-        track wgEncodeBroadHistoneDnd41ControlSig
+        track wgEncodeBroadHistoneDnd41ControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Dnd41 Input
         longLabel Dnd41 Input Histone Mods by ChIP-seq Signal from ENCODE/Broad
@@ -3707,6 +3707,7 @@ html wgEncodeBroadHistone.release2
         type bigWig 0.040000 56285.160156
         origAssembly hg19
         # subId=5022 dateSubmitted=2011-10-26
+        # was wgEncodeBroadHistoneDnd41ControlSig vsmalladi Wed Jan 25 10:09:03 2012
 
         track wgEncodeBroadHistoneNhdfadEzh239875Sig
         parent wgEncodeBroadHistoneViewSignal off
