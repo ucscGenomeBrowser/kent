@@ -35,7 +35,7 @@ html wgEncodeHaibTfbs.release2
     track wgEncodeHaibTfbsViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility dense
+    visibility pack
    # viewUi on
     subTrack wgEncodeHaibTfbs
     scoreFilter 0

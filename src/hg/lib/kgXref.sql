@@ -16,5 +16,13 @@ CREATE TABLE kgXref (
     rfamAcc varchar(255) not null,	# Rfam accession number
     tRnaName varchar(255) not null,	# Name from the tRNA track
               #Indices
-    PRIMARY KEY(kgID)
+    KEY(kgID),
+    KEY(mRNA),
+    KEY(spID),
+    KEY(spDisplayID),
+    KEY(geneSymbol),
+    KEY(refseq),
+    KEY(protAcc),
+    KEY(rfamAcc),
+    KEY(tRnaName)
 );
