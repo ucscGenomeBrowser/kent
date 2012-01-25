@@ -4485,14 +4485,19 @@ wigFetchYLineMarkValueWithCart(cart,tdb,name, &yLineMark);
 
 printf("<TABLE BORDER=0>");
 
-char *aggregate = trackDbSetting(tdb, "aggregate");
-if (aggregate != NULL && tdb->subtracks)
+boolean parentLevel = isNameAtParentLevel(tdb, name);
+if(parentLevel)
     {
-    char *aggregateVal = cartOrTdbString(cart, tdb, "aggregate", NULL);
-    printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
-    safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-    aggregateDropDown(option, aggregateVal);
-    puts("</td></TR>");
+    assert(tdb->parent != NULL);
+    char *aggregate = trackDbSetting(tdb->parent, "aggregate");
+    if (aggregate != NULL && parentLevel)
+        {
+        char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
+        printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
+        safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
+        aggregateDropDown(option, aggregateVal);
+        puts("</td></TR>");
+        }
     }
 
 printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
