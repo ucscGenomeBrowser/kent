@@ -10225,7 +10225,7 @@ term MethylSeq
 tag METHYLSEQ
 type dataType
 label Methyl-Seq
-description DNA Methylation sequencing
+description DNA Methylation Sequencing
 dataGroup DNA Methylation
 
 term MethylRrbs
