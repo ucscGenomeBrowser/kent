@@ -4,23 +4,23 @@ hg19 wgEncodeHaibTfbs Release 2 vs Release 1
 
 QA Count Summaries for Release 2:
 Tables: 1025
-Files: 2686
+Files: 2687
 Gbdbs: 554
 Supplemental: 0
 Other: 3
 
 REVOKED:
 Tables: 28
-Files: 86
+Files: 85
 Gbdbs: 16
 
 Sizes of New:
 Table: 543 MB
-Files: 409421 MB (400 GB)
+Files: 409032 MB (399 GB)
 Gbdbs: 3446 MB (3 GB)
 Supplemental: 0 MB
 Other: 2 MB
-Total: 413412 MB (404 GB)
+Total: 413023 MB (403 GB)
 
 
 TABLES:
@@ -1093,12 +1093,9 @@ wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 DOWNLOAD FILES:
 New: 798
 Untouched: 1889
-Revoked/Replaced/Renamed: 86
+Revoked/Replaced/Renamed: 85
 New + Untouched: 2687
 Total (New + Untouched + Revoked/Replaced/Renamed): 2772
-
-These 1 objects exist in both new and revoked download files:
-wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V2.fastq.gz
 
 New Download Files (798):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsA549Atf3V0422111Etoh02AlnRep1.bam
@@ -1431,7 +1428,6 @@ New Download Files (798):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Runx3sc101553V0422111RawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Runx3sc101553V0422111RawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Runx3sc101553V0422111RawRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V3.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Stat5asc74442V0422111AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Stat5asc74442V0422111AlnRep1.bam.bai
@@ -1455,6 +1451,7 @@ New Download Files (798):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Tcf3Pcr1xRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416101AlnRep1V2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416101AlnRep1V2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416101RawDataRep1V2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416102AlnRep1V2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416102AlnRep1V2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsH1hescAtf2sc81188V0422111AlnRep1.bam
@@ -3791,10 +3788,9 @@ Untouched Download Files (1889):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsT47dRxlchV0416102Dm002p1hRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsT47dRxlchV0416102Dm002p1hRawRep1.bigWig
 
-Revoked/Replaced/Renamed Download Files (86):
+Revoked/Replaced/Renamed Download Files (85):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Pu1Pcr1xRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416101AlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416101AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeHaibTfbs/release2/wgEncodeHaibTfbsGm12892RxlchV0416101RawDataRep1.fastq.gz
