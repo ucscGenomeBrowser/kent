@@ -15624,8 +15624,9 @@ composite wgEncodeHaibTfbs
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-01-12
-dateUnrestricted 2012-10-12
+dateResubmitted 2012-01-12
+dateSubmitted 2010-12-08
+dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001476
 expId 1476
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xRawDataRep1V2.fastq.gz
@@ -17533,8 +17534,9 @@ composite wgEncodeHaibTfbs
 controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-01-12
-dateUnrestricted 2012-10-12
+dateResubmitted 2012-01-12
+dateSubmitted 2010-05-15
+dateUnrestricted 2010-04-20
 dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V3.fastq.gz
@@ -59342,4 +59344,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 1310199811
+# MAGIC: 21078576
