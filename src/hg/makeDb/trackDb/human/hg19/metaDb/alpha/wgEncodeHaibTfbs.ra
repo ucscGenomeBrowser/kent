@@ -22292,7 +22292,7 @@ geoSampleAccession GSM803482
 grant Myers
 lab HudsonAlpha
 labExpId SL1783
-md5sum 3490da61c7cf4025acae51e196319eca
+md5sum de9b7846053c1b71b5fc4684a01fafc3
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -59286,4 +59286,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 348690204
+# MAGIC: -2043580921
