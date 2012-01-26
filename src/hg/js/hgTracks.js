@@ -2225,7 +2225,8 @@ var rightClick = {
                 if(rightClick.selectedMenuItem && rec && rec["configureBy"] != 'none') {
                     // Add cfg options at just shy of end...
                     var o = new Object();
-                    if(tdbIsLeaf(rec)) {
+                    if(tdbIsLeaf(rec) && (!tdbIsCompositeSubtrack(rec) || rec["configureBy"] != 'clickThrough')) {
+                        // Note that subtracks never do clickThrough because composite cfg is the desired clickThrough
                         o[rightClick.makeImgTag("wrench.png")+" Configure "+rec.shortLabel] = {
                             onclick: function(menuItemClicked, menuObject) {
                                 rightClick.hit(menuItemClicked, menuObject, "hgTrackUi_popup");

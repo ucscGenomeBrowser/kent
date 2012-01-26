@@ -18172,8 +18172,21 @@ TMPDIR=/scratch/tmp
     #   1388551419 bases of 2804673174 (49.508%) in intersection
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.hg19.swap lastz.hg19
-
-
 ############################################################################
+# UPDATE COSMIC TRACK - v257 (DONE 2012-01-26 larrym)
 
+# Table stats before
 
+hgsql hg19 -s -e 'select count(*) from cosmicRaw'
+55579
+hgsql hg19 -s -e 'select count(*) from cosmic'
+49087
+
+~/kent/src/hg/utils/automation/loadCosmic.pl hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v57_180112.csv
+
+# Table stats after
+
+hgsql hg19 -s -e 'select count(*) from cosmicRaw'
+78152
+hgsql hg19 -s -e 'select count(*) from cosmic'
+71437

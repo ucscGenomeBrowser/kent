@@ -1158,11 +1158,13 @@ function stripJsEmbedded(returnedHtml,showError)
                 if (showError)
                     alert("jsEmbedded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
             } else {
-                var ix3 = cleanHtml.indexOf('<P>',ix);
-                var ix4 = cleanHtml.indexOf('</P>',ix);
-                var warnMsg = cleanHtml.slice(ix3+3,ix4-1);
-                cleanHtml = cleanHtml.slice(0,ix3) + cleanHtml.slice(ix4+4);
-                warn(warnMsg);
+                var ix3 = ix;
+                while ((ix3 = cleanHtml.indexOf('<P>',ix3)) != -1) {
+                    var ix4 = cleanHtml.indexOf('</P>',ix);
+                    var warnMsg = cleanHtml.slice(ix3+3,ix4-1);
+                    cleanHtml = cleanHtml.slice(0,ix3) + cleanHtml.slice(ix4+4);
+                    warn(warnMsg);
+                }
             }
         }
         cleanHtml = cleanHtml.slice(0,ix) + cleanHtml.slice(ix2+"</script>".length);
