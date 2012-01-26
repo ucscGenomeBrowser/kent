@@ -16,10 +16,11 @@ $(function() {
 
 // creates keyup event; listening for return key press
 $(document).ready(function() {
-    $('#hubUrl').bind('keyup',function(e) {  // binds listener to url field
+    $('#hubUrl').bind('keypress', function(e) {  // binds listener to url field
 		if (e.which == 13) {  // listens for return key
-		$('input[name="hubAddButton"]').focus().click();  // clicks the AddHub button
-		e.preventDefault();   // prevents return from also submitting whole form
+		        e.preventDefault();   // prevents return from also submitting whole form
+                        if(validateUrl($('#hubUrl').val()))
+		            $('input[name="hubAddButton"]').focus().click();  // clicks the AddHub button
 		}
     })
 });
