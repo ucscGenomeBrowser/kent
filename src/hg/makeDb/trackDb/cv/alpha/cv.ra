@@ -3621,6 +3621,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol Crawford:Osteoblast_Crawford_protocol.pdf Bernstein:Osteoblast_Bernstein_protocol.pdf
+label Osteoblasts
 
 term ovcar-3
 tag OVCAR3
