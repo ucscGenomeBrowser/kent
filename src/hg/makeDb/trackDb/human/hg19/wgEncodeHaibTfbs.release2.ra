@@ -4258,7 +4258,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1V2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87 Pol2-4H8 Pk 1
+        shortLabel U87 POL24 V101 1
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep1
         type broadPeak
@@ -4266,7 +4266,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2V2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87 Pol2-4H8 Pk 2
+        shortLabel U87 POL24 V101 2
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep2
         type broadPeak
@@ -4274,7 +4274,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87NrsfPcr2xPkRep1V2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87 NRSF Pk 1
+        shortLabel U87 NRSF PCR2 1
         longLabel U87 NRSF PCR2x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
         subGroups view=Peaks factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep1
         type broadPeak
@@ -4282,7 +4282,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87NrsfPcr2xPkRep2V2
         parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel U87 NRSF Pk 2
+        shortLabel U87 NRSF PCR2 2
         longLabel U87 NRSF PCR2x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
         subGroups view=Peaks factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
         type broadPeak
@@ -9278,7 +9278,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 Pol2-4H8 Raw 1
+        shortLabel U87 POL24 V101 1
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.264047 126.082001
@@ -9286,7 +9286,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 RevXlinkChromatin Raw 1
+        shortLabel U87 RvXL V101 1
         longLabel U87 Control v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.145366 640.666016
@@ -9294,7 +9294,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 Pol2-4H8 Raw 2
+        shortLabel U87 POL24 V101 2
         longLabel U87 Pol2-4H8 v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=POL24H8 cellType=U87 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.115622 132.242004
@@ -9302,7 +9302,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 RevXlinkChromatin Raw 2
+        shortLabel U87 RvXL V101 2
         longLabel U87 Control v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.089594 220.559006
@@ -9310,7 +9310,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87RxlchPcr2xRawRep1V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 RevXlinkChromatin Raw 1
+        shortLabel U87 RvXL PCR2 1
         longLabel U87 Control PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=PCR2X treatment=NONE rep=rep1
         type bigWig 0.336776 262.516998
@@ -9318,7 +9318,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87RxlchPcr2xRawRep2V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 RevXlinkChromatin Raw 2
+        shortLabel U87 RvXL PCR2 2
         longLabel U87 Control PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
         type bigWig 0.150999 209.585999
@@ -9326,7 +9326,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87NrsfPcr2xRawRep1V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 NRSF Raw 1
+        shortLabel U87 NRSF PCR2 1
         longLabel U87 NRSF PCR2x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep1
         type bigWig 0.326481 237.352005
@@ -9334,7 +9334,7 @@ html wgEncodeHaibTfbs.release2
 
         track wgEncodeHaibTfbsU87NrsfPcr2xRawRep2V2
         parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel U87 NRSF Raw 2
+        shortLabel U87 NRSF PCR2 2
         longLabel U87 NRSF PCR2x ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
         type bigWig 0.190402 245.143005
