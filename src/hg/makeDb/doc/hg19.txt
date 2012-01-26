@@ -18173,7 +18173,7 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.hg19.swap lastz.hg19
 ############################################################################
-# UPDATE COSMIC TRACK - v257 (DONE 2012-01-26 larrym)
+# UPDATE COSMIC TRACK - v57 (DONE 2012-01-26 larrym)
 
 # Table stats before
 
@@ -18190,3 +18190,11 @@ hgsql hg19 -s -e 'select count(*) from cosmicRaw'
 78152
 hgsql hg19 -s -e 'select count(*) from cosmic'
 71437
+
+Here's some ID's that were added in this release (and not present on RR):
+
+COSM143850
+COSM143824
+COSM143823
+COSM143802
+COSM143801
