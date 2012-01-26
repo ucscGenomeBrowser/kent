@@ -1,15 +1,15 @@
 #!/usr/bin/env perl
-# loadCosmic.pl - load bi-monthly COSMIC data
+# loadCosmic.pl - load bi-monthly COSMIC data via URL provided by them
 
 use strict;
 
 use Cwd;
 
 my $db = shift(@ARGV) || die "Missing assembly argument";
-my $srcFile = shift(@ARGV) || die "Missing file name argument";
+my $srcUrl = shift(@ARGV) || die "Missing source URL argument";
 my ($fileName, $ver, $cmd);
 
-if($srcFile =~ m,/([^/]+?_v(\d+)_.+\.csv)$,) {
+if($srcUrl =~ m,/([^/]+?_v(\d+)_.+\.csv)$,) {
     $fileName = $1;
     $ver = $2;
 } else {
@@ -23,7 +23,7 @@ if(!(-d $outsideDir)) {
 
 # save raw data file, received by email, in $outsideDir
 
-$cmd = "wget -O $outsideDir/$fileName $srcFile";
+$cmd = "wget -O $outsideDir/$fileName $srcUrl";
 !system($cmd) || die "cmd '$cmd' failed: err: $!";
 
 my $loadDir = "/hive/data/genomes/$db/bed/cosmic/v$ver";
