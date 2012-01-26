@@ -8616,63 +8616,70 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.131247 293.501007
         # subId=4778 dateSubmitted=2011-08-16
 
-        track wgEncodeHaibTfbsSknshControlV0416101RawRep1
+        track wgEncodeHaibTfbsSknshRxlchV0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SKSH RvXL V101 1
         longLabel SK-N-SH Control v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.112652 219.136993
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsSknshControlV0416101RawRep1 wong Thu Jan 26 11:44:41 2012
 
-        track wgEncodeHaibTfbsPfsk1ControlV0416101RawRep1
+        track wgEncodeHaibTfbsPfsk1RxlchV0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PFSK RvXL V101 1
         longLabel PFSK-1 Control v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=PFSK1 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.212393 233.207993
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsPfsk1ControlV0416101RawRep1 wong Thu Jan 26 11:44:39 2012
 
-        track wgEncodeHaibTfbsPanc1ControlV0416101RawRep1
+        track wgEncodeHaibTfbsPanc1RxlchV0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PANC RvXL V101 1
         longLabel PANC-1 Control v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep1
         type bigWig 0.066014 232.074005
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsPanc1ControlV0416101RawRep1 wong Thu Jan 26 11:44:39 2012
 
-        track wgEncodeHaibTfbsSknshControlV0416101RawRep2
+        track wgEncodeHaibTfbsSknshRxlchV0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SKSH RvXL V101 2
         longLabel SK-N-SH Control v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.122278 190.447998
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsSknshControlV0416101RawRep2 wong Thu Jan 26 11:44:41 2012
 
-        track wgEncodeHaibTfbsSknshControlV0416101RawRep3
+        track wgEncodeHaibTfbsSknshRxlchV0416101RawRep3
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel SKSH RvXL V101 3
         longLabel SK-N-SH Control v041610.1 ChIP-seq Raw Signal Rep 3 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=SKNSH protocol=V0416101 treatment=NONE rep=rep3
         type bigWig 0.128654 169.501999
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsSknshControlV0416101RawRep3 wong Thu Jan 26 11:44:41 2012
 
-        track wgEncodeHaibTfbsPanc1ControlV0416101RawRep2
+        track wgEncodeHaibTfbsPanc1RxlchV0416101RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel PANC RvXL V101 2
         longLabel PANC-1 Control v041610.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=PANC1 protocol=V0416101 treatment=NONE rep=rep2
         type bigWig 0.085486 268.854004
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsPanc1ControlV0416101RawRep2 wong Thu Jan 26 11:44:39 2012
 
-        track wgEncodeHaibTfbsA549ControlV0416101Etoh02RawRep1
+        track wgEncodeHaibTfbsA549RxlchV0416101Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 RvXL ETOH 1
         longLabel A549 Control EtOH .02% v041610.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=V0416101 treatment=ETOH02 rep=rep1
         type bigWig 0.148981 209.354996
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsA549ControlV0416101Etoh02RawRep1 wong Thu Jan 26 11:44:34 2012
 
-        track wgEncodeHaibTfbsH1hescControlV0422111RawRep1
+        track wgEncodeHaibTfbsH1hescRxlchV0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HESC RvXL V111 1
         longLabel H1-hESC Control v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
@@ -8680,8 +8687,9 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.081923 204.009003
         color 0,107,27
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsH1hescControlV0422111RawRep1 wong Thu Jan 26 11:44:35 2012
 
-        track wgEncodeHaibTfbsHepg2ControlV0422111RawRep1
+        track wgEncodeHaibTfbsHepg2RxlchV0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HEPG RvXL V111 1
         longLabel HepG2 Control v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
@@ -8689,22 +8697,25 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.084620 145.080002
         color 189,0,157
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsHepg2ControlV0422111RawRep1 wong Thu Jan 26 11:44:36 2012
 
-        track wgEncodeHaibTfbsA549ControlV0422111Dex100nmRawRep1
+        track wgEncodeHaibTfbsA549RxlchV0422111Dex100nmRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 RvXL Dx100 1
         longLabel A549 Control DEX 100nM v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=V0422111 treatment=DEX100NM rep=rep1
         type bigWig 0.082165 233.000000
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsA549ControlV0422111Dex100nmRawRep1 wong Thu Jan 26 11:44:34 2012
 
-        track wgEncodeHaibTfbsA549ControlV0422111Etoh02RawRep1
+        track wgEncodeHaibTfbsA549RxlchV0422111Etoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel A549 RvXL ETOH 1
         longLabel A549 Control EtOH .02% v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal factor=zRXLCH cellType=A549 protocol=V0422111 treatment=ETOH02 rep=rep1
         type bigWig 0.079808 214.365005
         # subId=4321 dateSubmitted=2011-07-18
+        # was wgEncodeHaibTfbsA549ControlV0422111Etoh02RawRep1 wong Thu Jan 26 11:44:35 2012
 
         track wgEncodeHaibTfbsSknshPol24h8V0416101RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -9027,7 +9038,7 @@ html wgEncodeHaibTfbs.release2
         color 153,38,0
         # subId=4939 dateSubmitted=2011-09-30
 
-        track wgEncodeHaibTfbsHuvecControlPcr1xRawRep1
+        track wgEncodeHaibTfbsHuvecRxlchPcr1xRawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HUVEC RvXL PCR1 1
         longLabel HUVEC Control PCR1x ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
@@ -9035,6 +9046,7 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.279927 170.895004
         color 224,75,0
         # subId=4882 dateSubmitted=2011-09-30
+        # was wgEncodeHaibTfbsHuvecControlPcr1xRawRep1 wong Thu Jan 26 11:44:37 2012
 
         track wgEncodeHaibTfbsA549Creb1sc240Pcr1xEtoh02RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -9100,7 +9112,7 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.168205 364.584991
         # subId=4882 dateSubmitted=2011-09-30
 
-        track wgEncodeHaibTfbsK562ControlV0422111RawRep1
+        track wgEncodeHaibTfbsK562RxlchV0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 RvXL V111 1
         longLabel K562 Control v042211.1 ChIP-seq Raw Signal Rep 1 from ENCODE/HAIB
@@ -9108,6 +9120,7 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.106519 131.205002
         color 46,0,184
         # subId=4882 dateSubmitted=2011-09-30
+        # was wgEncodeHaibTfbsK562ControlV0422111RawRep1 wong Thu Jan 26 11:44:37 2012
 
         track wgEncodeHaibTfbsA549Six5V0422111Etoh02RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
@@ -9222,7 +9235,7 @@ html wgEncodeHaibTfbs.release2
         color 46,0,184
         # subId=5271 dateSubmitted=2011-12-21
 
-        track wgEncodeHaibTfbsK562ControlV0422111RawRep2
+        track wgEncodeHaibTfbsK562RxlchV0422111RawRep2
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 RvXL V111 2
         longLabel K562 Control v042211.1 ChIP-seq Raw Signal Rep 2 from ENCODE/HAIB
@@ -9230,6 +9243,7 @@ html wgEncodeHaibTfbs.release2
         type bigWig 0.097815 216.807007
         color 46,0,184
         # subId=5271 dateSubmitted=2011-12-21
+        # was wgEncodeHaibTfbsK562ControlV0422111RawRep2 wong Thu Jan 26 11:44:38 2012
 
         track wgEncodeHaibTfbsK562Stat5asc74442V0422111RawRep1
         parent wgEncodeHaibTfbsViewRawSignal off
