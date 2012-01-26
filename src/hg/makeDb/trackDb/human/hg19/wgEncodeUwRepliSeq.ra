@@ -4,7 +4,7 @@ shortLabel UW Repli-seq
 longLabel Replication Timing by Repli-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views 1PctSignal=Percentage-normalized_Signal 2Peaks=Peaks 3Valleys=Valleys 4WaveSignal=Wavelet-smoothed_Signal 5SumSignal=Summed_Densities
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ BG02ES=BG02ES GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSHRA=SK-N-SH_RA
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ BG02ES=BG02ES GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSH=SK-N-SH
 subGroup3 phase Phase 1G1=G1 1G1B=G1b 2S1=S1 3S2=S2 4S3=S3 5S4=S4 6G2=G2 zNONE=None
 subGroup4 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
@@ -73,14 +73,15 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraPkRep1
+        track wgEncodeUwRepliSeqSknshPkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
-        shortLabel SK-N-SH_RA Pk 1
-        longLabel SK-N-SH_RA Repli-seq Peaks Rep 1 from ENCODE/UW
-        subGroups view=2Peaks cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Pk 1
+        longLabel SK-N-SH Repli-seq Peaks Rep 1 from ENCODE/UW
+        subGroups view=2Peaks cellType=SKNSH phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraPkRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
         track wgEncodeUwRepliSeqBjPkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
@@ -231,14 +232,15 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraValleysRep1
+        track wgEncodeUwRepliSeqSknshValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
-        shortLabel SK-N-SH_RA Vly 1
-        longLabel SK-N-SH_RA Repli-seq Valleys Rep 1 from ENCODE/UW
-        subGroups view=3Valleys cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Vly 1
+        longLabel SK-N-SH Repli-seq Valleys Rep 1 from ENCODE/UW
+        subGroups view=3Valleys cellType=SKNSH phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraValleysRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
@@ -629,59 +631,65 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraG1bPctSignalRep1
+        track wgEncodeUwRepliSeqSknshG1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA G1b 1
-        longLabel SK-N-SH_RA G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=1G1B rep=rep1
+        shortLabel SK-N-SH G1b 1
+        longLabel SK-N-SH G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraG1bPctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
-        track wgEncodeUwRepliSeqSknshraG2PctSignalRep1
+        track wgEncodeUwRepliSeqSknshG2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA G2 1
-        longLabel SK-N-SH_RA G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=6G2 rep=rep1
+        shortLabel SK-N-SH G2 1
+        longLabel SK-N-SH G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraG2PctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
-        track wgEncodeUwRepliSeqSknshraS1PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S1 1
-        longLabel SK-N-SH_RA S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=2S1 rep=rep1
+        shortLabel SK-N-SH S1 1
+        longLabel SK-N-SH S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS1PctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
-        track wgEncodeUwRepliSeqSknshraS2PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S2 1
-        longLabel SK-N-SH_RA S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=3S2 rep=rep1
+        shortLabel SK-N-SH S2 1
+        longLabel SK-N-SH S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS2PctSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
-        track wgEncodeUwRepliSeqSknshraS3PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S3 1
-        longLabel SK-N-SH_RA S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=4S3 rep=rep1
+        shortLabel SK-N-SH S3 1
+        longLabel SK-N-SH S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS3PctSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
-        track wgEncodeUwRepliSeqSknshraS4PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S4 1
-        longLabel SK-N-SH_RA S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=5S4 rep=rep1
+        shortLabel SK-N-SH S4 1
+        longLabel SK-N-SH S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS4PctSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjG1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
@@ -1297,14 +1305,15 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraSumSignalRep1
+        track wgEncodeUwRepliSeqSknshSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
-        shortLabel SK-N-SH_RA Sd 1
-        longLabel SK-N-SH_RA Replication Timing by Summed Densities Rep 1 from ENCODE/UW
-        subGroups view=5SumSignal cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Sd 1
+        longLabel SK-N-SH Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        subGroups view=5SumSignal cellType=SKNSH phase=zNONE rep=rep1
         type bigWig 1.000000 2886.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraSumSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
@@ -1455,14 +1464,15 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraWaveSignalRep1
+        track wgEncodeUwRepliSeqSknshWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
-        shortLabel SK-N-SH_RA Ws 1
-        longLabel SK-N-SH_RA Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
-        subGroups view=4WaveSignal cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Ws 1
+        longLabel SK-N-SH Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        subGroups view=4WaveSignal cellType=SKNSH phase=zNONE rep=rep1
         type bigWig -4.517115 80.696381
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraWaveSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
