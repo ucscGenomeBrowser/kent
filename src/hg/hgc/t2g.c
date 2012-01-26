@@ -30,12 +30,21 @@ char *splitPart(char* string, int index)
 
 void printMarkerSnippets(struct sqlConnection *conn, char* item)
 {
-sqlUpdate(conn, "SET SESSION group_concat_max_len = 10000");
+printf("<H3>Snippets from Publications:</H3>");
+
 char query[4000];
+safef(query, sizeof(query), "SELECT COUNT(*) from t2gElsevierMarker WHERE markerId='%s'", item);
+if (sqlNeedQuickNum(conn, query) > 4000) {
+    printf("Sorry, this marker is mentioned in more than 4000 times<BR>");
+    printf("The results would take too long to load in your browser and are therefore not shown.<P>");
+    return;
+}
+
+sqlUpdate(conn, "SET SESSION group_concat_max_len = 10000");
+
 safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' GROUP by articleId", item);
 
 struct sqlResult *sr = sqlGetResult(conn, query);
-printf("<H3>Snippets from Publications:</H3>");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
