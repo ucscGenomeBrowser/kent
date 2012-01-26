@@ -3360,14 +3360,16 @@ for(ix=0;ix<filterCount;ix++)
         safef(suffix, sizeof(suffix), "filterBy.%s", filterBy->column);
         boolean parentLevel = isNameAtParentLevel(tdb,name);
         if(cartLookUpVariableClosestToHome(cart,tdb,parentLevel,suffix,&(filterBy->htmlName)))
+            {
             filterBy->slChoices = cartOptionalSlNameList(cart,filterBy->htmlName);
+            freeMem(filterBy->htmlName);
+            }
         }
-    if(filterBy->htmlName == NULL)
-        {
-        int len = strlen(name) + strlen(filterBy->column) + 15;
-        filterBy->htmlName = needMem(len);
-        safef(filterBy->htmlName, len, "%s.filterBy.%s", name,filterBy->column);
-        }
+
+    // Note: cannot use found name above because that may be at a higher (composite/view) level
+    int len = strlen(name) + strlen(filterBy->column) + 15;
+    filterBy->htmlName = needMem(len);
+    safef(filterBy->htmlName, len, "%s.filterBy.%s", name,filterBy->column);
     }
 freeMem(setting);
 
@@ -3740,6 +3742,7 @@ void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *td
 // When only one subtrack, then show it's cfg settings instead of composite/view level settings
 // This simplifies the UI where hgTrackUi won't have 2 levels of cfg,
 // while hgTracks still supports rightClick cfg of the subtrack.
+
 if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by ajax do we consider this option
     {
     if (tdbIsComposite(tdb)                       // called for the composite
@@ -4493,11 +4496,11 @@ if(parentLevel)
     if (aggregate != NULL && parentLevel)
         {
         char *aggregateVal = cartOrTdbString(cart, tdb->parent, "aggregate", NULL);
-        printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
-        safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
-        aggregateDropDown(option, aggregateVal);
-        puts("</td></TR>");
-        }
+    printf("<TR valign=center><th align=right>Overlay method:</th><td align=left>");
+    safef(option, sizeof(option), "%s.%s", name, AGGREGATE);
+    aggregateDropDown(option, aggregateVal);
+    puts("</td></TR>");
+    }
     }
 
 printf("<TR valign=center><th align=right>Type of graph:</th><td align=left>");
