@@ -1,6 +1,5 @@
 
 LIST=\
-wgEncodeGencodeV10.ra \
 wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBroadHmm.ra \
@@ -16,6 +15,7 @@ wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeHaibGenotype.ra \
+wgEncodeHaibMethyl450.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeMapability.ra \
@@ -41,7 +41,6 @@ wgEncodeUwDgf.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwTfbs.ra \
-wgEncodeHaibMethyl450.ra \
 
 include ../../../../makefile.metaDb
 

@@ -175,7 +175,7 @@ if (vcff->genotypeCount > 1)
 	   rec->alleles[0], rec->alleles[1], refAlts, 100*(double)refAlts/vcff->genotypeCount,
 	   rec->alleles[1], rec->alleles[1], altAlts, 100*(double)altAlts/vcff->genotypeCount);
     if (gtOther > 0)
-	printf("; other: %d (%.3f)", gtOther, (double)gtOther/vcff->genotypeCount);
+	printf("; other: %d (%.3f%%)", gtOther, 100*(double)gtOther/vcff->genotypeCount);
     printf("<BR>\n");
     if (rec->alleleCount == 2)
 	printf("<B>Hardy-Weinberg equilibrium:</B> "

@@ -12117,4 +12117,59 @@ TMPDIR=/scratch/tmp
     cat fb.xenTro3.chainMm9Link.txt 
     #	89770014 bases of 1358334882 (6.609%) in intersection
 
+#########################################################################
+# LASTZ Cow BosTau7 (working - 2012-01-22 - Chin)
+    mkdir /hive/data/genomes/mm9/bed/lastzBosTau7.2012-01-22
+    cd /hive/data/genomes/mm9/bed/lastzBosTau7.2012-01-22
+
+    cat << '_EOF_' > DEF
+# mouse vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/nib
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau7 
+SEQ2_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ2_LEN=/scratch/data/bosTau7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm9/bed/lastzBosTau7.2012-01-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1
+    # real     190m44.307s 
+    cat fb.mm9.chainBosTau7Link.txt
+    # 695010371 bases of 2620346127 (26.524%) in intersection
+    # Create link
+    cd /hive/data/genomes/mm9/bed
+    ln -s  lastzBosTau7.2012-01-22 lastz.bosTau7
+
+
+    #   and the swap 
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.mm9.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzBosTau7.2012-01-22/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real      51m44.505s 
+    cat fb.bosTau7.chainMm9Link.txt
+    # 711305079 bases of 2804673174 (25.361%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.mm9.swap lastz.mm9
+
 ##############################################################################

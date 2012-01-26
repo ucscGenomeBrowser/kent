@@ -3,7 +3,7 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	encodeQaSqlRelease
+	qaEncodeTracks
 
 SCRIPT_INSTALL = "/cluster/bin/scripts"
 
@@ -19,10 +19,9 @@ scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
 
 ${SCRIPTS}/%: %
 	@mkdir -p $(dir $@)
-	perl -c $<
 	chmod +x $<
 	cp -p $< $@.tmp
 	mv -f $@.tmp $@
 
 clean::
-	echo nothing to clean in hg/encode/encodeQaSqlRelease/
+	echo nothing to clean in hg/encode/qaEncodeTracks2/
