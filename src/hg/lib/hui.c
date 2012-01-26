@@ -3760,8 +3760,15 @@ if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by aja
         prefix = tdb->track; // removes reference to view level
     }
 #endif///def SUBTRACK_CFG
-// composite without view should pass in subtrack as example track!
-if (tdbIsComposite(tdb) && !tdbIsCompositeView(tdb->subtracks))
+
+// Cfg could be explicitly blocked, but if tdb is example subtrack
+// then blocking should have occurred before we got here.
+if (!tdbIsSubtrack(tdb) && trackDbSettingBlocksConfiguration(tdb))
+    return;
+
+// composite/view must pass in example subtrack
+// NOTE: if subtrack types vary then there shouldn't be cfg at composite/view level!
+while (tdb->subtracks)
     tdb = tdb->subtracks;
 
 switch(cType)
@@ -6261,6 +6268,9 @@ for (ix = 0; ix < membersOfView->count; ix++)
         struct trackDb *subtrack = membersOfView->subtrackList[ix]->val;
         matchedViewTracks[ix] = subtrack->parent;
         configurable[ix] = (char)cfgTypeFromTdb(subtrack, TRUE);
+        if (configurable[ix] != cfgNone && trackDbSettingBlocksConfiguration(subtrack))
+            configurable[ix]  = cfgNone;
+
         if(configurable[ix] != cfgNone)
             {
             if(firstOpened == -1)
