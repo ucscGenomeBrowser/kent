@@ -774,7 +774,7 @@ if (ctPopup > cfgNone)
     ||  regexMatch(tdb->track, "^cons[0-9]+way") // (matches logic in json setup in imageV2.c)
     ||  startsWith("hapmapSnps", tdb->track)
     ||  startsWith("hapmapAlleles", tdb->track)
-    ||  trackDbSettingBlocksConfiguration(tdb))
+    ||  trackDbSettingBlocksConfiguration(tdb,TRUE))
         ctPopup *= -1;
 }
 return ctPopup;
@@ -1381,11 +1381,11 @@ else if (tdbIsSuperTrackChild(tdb)) // solo track
     }
 }
 
-boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb)
+boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax)
 // Configuration dialogs may be explicitly blocked in tracDb settings
 {
-return (SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configurable"))
-     || SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configureByPopup")));
-     // NOTE configureByPopup should be deprecated.
+if (SETTING_IS_OFF(trackDbSettingClosestToHome(tdb, "configurable")))
+     return TRUE; // never configurable
+return (onlyAjax && SETTING_IS_OFF(trackDbSettingClosestToHome(tdb,"configureByPopup")));
 }
 

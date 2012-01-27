@@ -3763,7 +3763,7 @@ if (configurableByAjax(tdb,cType) > 0) // Only if subtrack's configurable by aja
 
 // Cfg could be explicitly blocked, but if tdb is example subtrack
 // then blocking should have occurred before we got here.
-if (!tdbIsSubtrack(tdb) && trackDbSettingBlocksConfiguration(tdb))
+if (!tdbIsSubtrack(tdb) && trackDbSettingBlocksConfiguration(tdb,FALSE))
     return;
 
 // composite/view must pass in example subtrack
@@ -6268,7 +6268,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         struct trackDb *subtrack = membersOfView->subtrackList[ix]->val;
         matchedViewTracks[ix] = subtrack->parent;
         configurable[ix] = (char)cfgTypeFromTdb(subtrack, TRUE);
-        if (configurable[ix] != cfgNone && trackDbSettingBlocksConfiguration(subtrack))
+        if (configurable[ix] != cfgNone && trackDbSettingBlocksConfiguration(subtrack,FALSE))
             configurable[ix]  = cfgNone;
 
         if(configurable[ix] != cfgNone)
