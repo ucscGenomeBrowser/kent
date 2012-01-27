@@ -193,7 +193,7 @@ struct sqlResult *sr;
 if (rgdGeneId != NULL)
     {
     safef(query, sizeof(query), 
-	    "select old_symbol, old_name from genes_rat where gene_rgd_id = '%s'", 
+	    "select old_symbol, old_name from rgdGene2Raw where gene_rgd_id = '%s'", 
 	    rgdGeneId+4L);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
