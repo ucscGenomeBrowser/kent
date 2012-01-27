@@ -1125,7 +1125,7 @@ age 43
 tissue blood
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01778
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
@@ -1141,7 +1141,7 @@ age 27
 tissue blood
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01794
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
@@ -1157,7 +1157,7 @@ age 27
 tissue blood
 vendorName Rajinder Kaul, UW
 vendorId CD20+_RO01746
-orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.html
+orderUrl http://depts.washington.edu/medgen/faculty/Rajinder_Kaul.shtml
 termId BTO:0000776
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000776&termName=B-lymphocyte
 protocol Stam:CD20+_Stam_protocol.pdf
