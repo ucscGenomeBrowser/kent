@@ -15624,8 +15624,9 @@ composite wgEncodeHaibTfbs
 controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-01-12
-dateUnrestricted 2012-10-12
+dateResubmitted 2012-01-12
+dateSubmitted 2010-12-08
+dateUnrestricted 2011-09-08
 dccAccession wgEncodeEH001476
 expId 1476
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xRawDataRep1V2.fastq.gz
@@ -17533,8 +17534,9 @@ composite wgEncodeHaibTfbs
 controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
-dateSubmitted 2012-01-12
-dateUnrestricted 2012-10-12
+dateResubmitted 2012-01-12
+dateSubmitted 2010-05-15
+dateUnrestricted 2010-04-20
 dccAccession wgEncodeEH001496
 expId 1496
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1V3.fastq.gz
@@ -22292,7 +22294,7 @@ geoSampleAccession GSM803482
 grant Myers
 lab HudsonAlpha
 labExpId SL1783
-md5sum 3490da61c7cf4025acae51e196319eca
+md5sum de9b7846053c1b71b5fc4684a01fafc3
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -40155,8 +40157,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
-dccAccession wgEncodeEH002331
-expId 2331
+dccAccession wgEncodeEH001675
+expId 1675
 fileName wgEncodeHaibTfbsHuvecRxlchPcr1xAlnRep1.bam,wgEncodeHaibTfbsHuvecRxlchPcr1xAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -40180,8 +40182,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
-dccAccession wgEncodeEH002331
-expId 2331
+dccAccession wgEncodeEH001675
+expId 1675
 fileName wgEncodeHaibTfbsHuvecRxlchPcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -40205,8 +40207,8 @@ dataType ChipSeq
 dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-30
-dccAccession wgEncodeEH002331
-expId 2331
+dccAccession wgEncodeEH001675
+expId 1675
 fileName wgEncodeHaibTfbsHuvecRxlchPcr1xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
@@ -57835,6 +57837,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-03-08
 dateUnrestricted 2011-12-08
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1V2.bam,wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -57887,6 +57891,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2V2.bam,wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -57941,6 +57947,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-03-08
 dateUnrestricted 2011-12-08
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -57997,6 +58005,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -58052,6 +58062,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-03-08
 dateUnrestricted 2011-12-08
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -58104,6 +58116,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xRawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -58157,6 +58171,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-03-08
 dateUnrestricted 2011-12-08
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xRawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -58211,6 +58227,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001554
+expId 1554
 fileName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -58264,6 +58282,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep1V2.bam,wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep1V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -58316,6 +58336,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2V2.bam,wgEncodeHaibTfbsU87Pol24h8V0416101AlnRep2V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -58370,6 +58392,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep1V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -58426,6 +58450,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101PkRep2V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
@@ -58480,6 +58506,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -58532,6 +58560,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -58585,6 +58615,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -58639,6 +58671,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-20
 dateUnrestricted 2012-02-20
+dccAccession wgEncodeEH001674
+expId 1674
 fileName wgEncodeHaibTfbsU87Pol24h8V0416101RawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -58692,6 +58726,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-03-08
 dateUnrestricted 2011-12-08
+dccAccession wgEncodeEH001559
+expId 1559
 fileName wgEncodeHaibTfbsU87RxlchPcr2xAlnRep1V2.bam,wgEncodeHaibTfbsU87RxlchPcr2xAlnRep1V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -58744,6 +58780,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001559
+expId 1559
 fileName wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2V2.bam,wgEncodeHaibTfbsU87RxlchPcr2xAlnRep2V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -58796,6 +58834,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-03-08
 dateUnrestricted 2011-12-08
+dccAccession wgEncodeEH001559
+expId 1559
 fileName wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -58848,6 +58888,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001559
+expId 1559
 fileName wgEncodeHaibTfbsU87RxlchPcr2xRawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -58901,6 +58943,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-03-08
 dateUnrestricted 2011-12-08
+dccAccession wgEncodeEH001559
+expId 1559
 fileName wgEncodeHaibTfbsU87RxlchPcr2xRawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -58955,6 +58999,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-24
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-20
+dccAccession wgEncodeEH001559
+expId 1559
 fileName wgEncodeHaibTfbsU87RxlchPcr2xRawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -59008,6 +59054,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87RxlchV0416101AlnRep1V2.bam,wgEncodeHaibTfbsU87RxlchV0416101AlnRep1V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -59060,6 +59108,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87RxlchV0416101AlnRep2V2.bam,wgEncodeHaibTfbsU87RxlchV0416101AlnRep2V2.bam.bai
 grant Myers
 lab HudsonAlpha
@@ -59112,6 +59162,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87RxlchV0416101RawDataRep1V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -59164,6 +59216,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87RxlchV0416101RawDataRep2V2.fastq.gz
 grant Myers
 lab HudsonAlpha
@@ -59217,6 +59271,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87RxlchV0416101RawRep1V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -59271,6 +59327,8 @@ dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2012-01-23
 dateSubmitted 2011-05-23
 dateUnrestricted 2012-02-23
+dccAccession wgEncodeEH001676
+expId 1676
 fileName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2.bigWig
 grant Myers
 lab HudsonAlpha
@@ -59286,4 +59344,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 348690204
+# MAGIC: 21078576
