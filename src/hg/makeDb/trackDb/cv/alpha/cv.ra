@@ -2579,7 +2579,7 @@ type Cell Line
 organism human
 description mammary fibroblasts
 # mammary stromal cell line
-tissue Mammary
+tissue mammary
 vendorName ScienCell
 vendorId 7630
 orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7630
@@ -4203,7 +4203,7 @@ term 3134
 tag 3134
 type Cell Line
 organism mouse
-tissue Mammary
+tissue mammary
 category cellLine
 description Mammary
 age immortalized
@@ -4257,7 +4257,7 @@ term AtT-20
 tag ATT20
 type Cell Line
 organism mouse
-tissue Cortex
+tissue cortex
 category cellLine
 description Pituitary tumor LAF1
 age immortalized
@@ -4347,7 +4347,7 @@ term Cerebellum
 tag CBELLUM
 type Cell Line
 organism mouse
-tissue Cerebellum
+tissue cerebellum
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4365,7 +4365,7 @@ term Cerebrum
 tag CEREBRUM
 type Cell Line
 organism mouse
-tissue Cerebrum
+tissue cerebrum
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4437,7 +4437,7 @@ term Cortex
 tag CORTEX
 type Cell Line
 organism mouse
-tissue Cortex
+tissue cortex
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4490,7 +4490,7 @@ term FatPad
 tag FAT
 type Cell Line
 organism mouse
-tissue Adipose
+tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4525,7 +4525,7 @@ term ForelimbBud
 tag FLBUD
 type Cell Line
 organism mouse
-tissue Limb
+tissue limb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4577,7 +4577,7 @@ term GenitalFatPad
 tag GFAT
 type Cell Line
 organism mouse
-tissue Adipose
+tissue adipose
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4613,7 +4613,7 @@ term HeadlessEmbryo
 tag HLEMBRYO
 type Cell Line
 organism mouse
-tissue Embryo
+tissue embryo
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4631,7 +4631,7 @@ term HindlimbBud
 tag HLBUD
 type Cell Line
 organism mouse
-tissue Limb
+tissue limb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4685,7 +4685,7 @@ term Limb
 tag LIMB
 type Cell Line
 organism mouse
-tissue Limb
+tissue limb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4738,7 +4738,7 @@ term MEF
 tag MEF
 type Cell Line
 organism mouse
-tissue Embryonic Fibroblast
+tissue embryonic fibroblast
 age ageUnknown
 strain Unknown
 category primaryCells
@@ -4791,7 +4791,7 @@ term Mesoderm
 tag MESODERM
 type Cell Line
 organism mouse
-tissue Mesoderm
+tissue mesoderm
 category Tissue
 age ageUnknown
 strain Unknown
@@ -4862,7 +4862,7 @@ term OlfactBulb
 tag OLFACT
 type Cell Line
 organism mouse
-tissue Olfactory Bulb
+tissue olfactory bulb
 category Tissue
 age ageUnknown
 strain Unknown
@@ -5025,7 +5025,7 @@ term Thymus
 tag THYMUS
 type Cell Line
 organism mouse
-tissue Thymus
+tissue thymus
 category Tissue
 age ageUnknown
 strain Unknown
