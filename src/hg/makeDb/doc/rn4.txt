@@ -5456,6 +5456,26 @@ hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToUniProt.sql
 hgsql rn4 -e "load data local infile 'rgdGene2ToUniProt.tab' into table rgdGene2ToUniProt"
 
 #############################################################################
+# continue rgdGenes2 (WORKING - Hiram - 2012-01-26)
+#   change genes_rat table name to be rgdGene2Raw
+    # fixup source code in src/hg/lib/ from genes_rat to be rgdGene2Raw
+    # and in hg/oneShot/doRgdGene2UniProt/doRgdGene2UniProt.c
+    #	hg/hgGene/synonym.c
+    #	hg/hgGene/rgdInfo.c
+    #	hg/makeDb/schema/all.joiner
+    cd /hive/data/genomes/rn4/bed/rgdGene/093010
+    hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Raw.sql 
+    hgsql rn4 -e \
+     'load data local infile "GENES_RAT" into table rgdGene2Raw ignore 1 lines'
+
+    doRgdGene2UniProt rn4 tmp.rgdGene2ToUniProt
+cat j.tmp |sort -u > rgdGene2ToUniProt.tab
+
+hgsql rn4 -N -e \
+'select "RGD:", gene_rgd_id, "gene_desc", gene_desc from genes_rat where gene_desc <>""'\
+|sed -e 's/RGD:\t/RGD:/'|cut -f 1,3 |sort -u >rgdGene2ToDescription.tab
+
+#############################################################################
 # RE-BUILD HGNEAR PROTEIN BLAST TABLES for RGD GENES -- TARGET (DONE 10/18/10, Fan)
     ssh hgwdev
     
