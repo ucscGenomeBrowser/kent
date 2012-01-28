@@ -1,12 +1,12 @@
 <h2> Description </h2>
 
 <p>This track displays binding sites of the specified transcription factors in the given cell types as identified by chromatin immunoprecipitation followed by high-throughput sequencing 
-(ChIP-Seq &mdash; see Johnson DS, <em>et al.</em>, 2007 and Fields S, 2007).
+(ChIP-seq &mdash; see Johnson DS, <em>et al.</em>, 2007 and Fields S, 2007).
 </p>
 
 <p>
 ChIP-seq was used to assay chromatin fragments bound by specific or general transcription factors as described below.
-DNA isolated by ChIP-Seq was size-selected (~225 bp) and sequenced. 
+DNA isolated by ChIP-seq was size-selected (~225 bp) and sequenced. 
 Short reads of 25-36 bp were mapped to the human reference genome, 
 and enriched regions of high read density relative to a total input chromatin control reads were identified.
 </p>
@@ -79,10 +79,10 @@ up to two mismatches were tolerated; reads that mapped to multiple sites in the 
 
 <p>
 To identify likely binding sites, 
-peak calling was applied to the aligned sequence data sets using Model-based Analysis of Chip-Seq 
+peak calling was applied to the aligned sequence data sets using Model-based Analysis of ChIP-seq 
 <A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html" TARGET=_BLANK>MACS</A>
 (Zhang Y,<em> et al.</em>, 2008). 
-MACS models the shift size of ChIP-Seq tags empirically, 
+MACS models the shift size of ChIP-seq tags empirically, 
 and uses it to improve the spatial resolution of predicted binding sites.  
 MACS also uses a dynamic Poisson distribution to capture local biases in the genome,
 allowing for  more robust predictions 
@@ -92,7 +92,7 @@ allowing for  more robust predictions
 <h4> Protocol Notes </h4>
 
 <p> 
-Several changes and improvements were made to the original ChIP-Seq protocol
+Several changes and improvements were made to the original ChIP-seq protocol
 (Jonshon <em>et al.</em>,2008). 
 The major differences between protocols are the number of cells and magnetic beads used for IP, 
 the method of sonication used to fragment DNA, 
@@ -125,7 +125,7 @@ Please refer to the
 <p>
 The 
 <A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html" TARGET=_BLANK>MACS</A> 
-peak caller was used to call significant peaks on the individual replicates of a ChIP-Seq experiment. 
+peak caller was used to call significant peaks on the individual replicates of a ChIP-seq experiment. 
 Afterwards, the irreproducible discovery rate (IDR) method, 
 developed by Li <em> et al.</em> (2011), 
 was used to quantify the consistency between pairs of ranked peaks lists from replicates.  
@@ -228,7 +228,7 @@ Measuring Reproducibility of High-throughput experiments</a>.
 Zhang Y, Liu T, Meyer CA, Eeckhoute J, Johnson DS, Bernstein BE, Nusbaum C, Myers RM <em>et al</em>.
 <a href="http://www.ncbi.nlm.nih.gov/pubmed/18798982"
  rel="nofollow" target="_blank">
-Model-based analysis of ChIP-Seq (MACS)</a>.
+Model-based analysis of ChIP-seq (MACS)</a>.
 <em>Genome Biol</em>. 2008;9(9):R137.
 </p>
 
