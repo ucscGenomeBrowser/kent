@@ -472,6 +472,9 @@ class makeNotes(object):
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedTables, 0), "Revoked Tables"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedFiles, self.releasePath), "Revoked Files"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedGbdbs, self.gbdbPath), "Revoked Gbdbs"))
+        if self.atticSet:
+            output.append("Attic Objects")
+            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
 
         if not args['ignore']:
             output.append("No Errors")
