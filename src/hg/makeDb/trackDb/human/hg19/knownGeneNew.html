@@ -1,7 +1,8 @@
 <H2>Description</H2>
 <P>
 The UCSC Genes track is a set of gene predictions based on data from RefSeq, Genbank, CCDS,
-UniProt, Rfam, and the tRNA Genes track.  The track includes both protein-coding genes and
+UniProt, Rfam, and the <a href="hgTrackUi?db=hg19&g=tRNAs">tRNA Genes</a> track. The track
+includes both protein-coding genes and
 non-coding RNA genes. Both types of genes can produce non-coding transcripts, but non-coding
 RNA genes do not produce protein-coding transcripts. This is a moderately conservative set of
 predictions.  Transcripts of protein-coding genes require the support of one RefSeq RNA, or one
@@ -52,7 +53,7 @@ output. For other multi-exon transcripts to be output, an edge supported by at l
 line of evidence beyond the RNA is required.  Single-exon genes require either two RNAs or two 
 additional lines of evidence beyond the single RNA. 
 <LI>Alignments are merged in from the hg19
-<A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=213859263&g=tRNAs">tRNA</A>, and from Rfam
+<A HREF="hgTrackUi?db=hg19&g=tRNAs">tRNA Genes</A> track and from Rfam
 in regions that are syntenic with the mm9 mouse genome.  
 <LI>Protein predictions are generated. For non-RefSeq transcripts we use the txCdsPredict program to
 determine if the transcript is protein-coding, and if so, the locations of the start and stop codons. 
