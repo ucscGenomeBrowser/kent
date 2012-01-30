@@ -234,6 +234,7 @@ if (wikiTrackEnabled(database, NULL))
     tg->exonArrows = TRUE;
     tg->nextItemButtonable = TRUE;
     tdb->track = cloneString(tg->track);
+    tdb->canPack = tg->canPack;
     tdb->table = cloneString(tg->table);
     tdb->shortLabel = cloneString(tg->shortLabel);
     tdb->longLabel = cloneString(tg->longLabel);

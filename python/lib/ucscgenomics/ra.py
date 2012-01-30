@@ -420,6 +420,59 @@ class RaFile(OrderedDict):
 
         return ret
 
+    def printTrackDbFormat(self):
+        '''
+        Converts a .ra file into TrackDb format.
+        Returns a printable string.
+        '''
+        retstring = ""
+        parentTrack = ""
+        tier = 0
+        commentList = []
+        p = re.compile('^.*parent')
+        p2 = re.compile('^.*subTrack')
+        for stanza in self:
+            if stanza == "":
+                if commentList:
+                    for line in commentList:
+                        for i in range(tier):
+                            retstring += "    "
+                        retstring += line + "\n"
+                    commentList = []
+                    retstring += "\n"
+                continue
+            if stanza.startswith("#"):
+                commentList.append(stanza)
+                continue
+            keys = self[stanza].keys()
+            parentKey = "NOKEYFOUND"
+            for key in keys:
+                if p.search(key):
+                    parentKey = key
+                if p2.search(key):
+                    parentKey = key
+            if parentKey in keys:
+                if parentTrack not in self[stanza][parentKey] or parentTrack == "":
+                    parentTrack = self[stanza]['track']
+                    tier = 1
+                else:
+                    tier = 2
+            if commentList:
+                for line in commentList:
+                    for i in range(tier):
+                        retstring += "    "
+                    retstring += line + "\n"
+                commentList = []
+            for line in self[stanza]:
+                for i in range(tier):
+                    retstring += "    "
+                if line.startswith("#"):
+                    retstring += line + "\n"
+                else:
+                    retstring += line + " " + self[stanza][line] + "\n"
+            retstring += "\n"
+        return retstring
+
     def __str__(self):
         str = ''
         for item in self.iteritems():

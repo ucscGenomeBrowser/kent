@@ -512,6 +512,7 @@ prevExonText Prev Match
     sequenceTable t2gElsevierSequence
     type bed 12 .
     release alpha
+    maxItems 300
 
 searchTable mgcFullMrna
 searchType psl
@@ -3284,15 +3285,26 @@ url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id
 urlLabel NCBI Incident:
 nonBedFieldsLabel Summary information from incident database:
 
-track nextNcbiIncidentDb
-shortLabel TBD NCBIIncident
-longLabel In Progress NCBI Incident database
+track grcIncidentDb
+shortLabel GRC Incident
+longLabel GRC Incident database
 group map
 priority 27
 visibility hide
 type bigBed 4 +
 url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
-urlLabel NCBI Incident:
+urlLabel GRC Incident:
+nonBedFieldsLabel Summary information from incident database:
+
+track nextNcbiIncidentDb
+shortLabel TBD NCBIIncident
+longLabel In Progress GRC Incident database
+group map
+priority 27
+visibility hide
+type bigBed 4 +
+url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
+urlLabel GRC Incident:
 nonBedFieldsLabel Summary information from incident database:
 
 track tRNAs

@@ -1,7 +1,7 @@
 metaObject wgEncodeLicrRnaSeq
 objType composite
 composite wgEncodeLicrRnaSeq
-expVars lab,dataType,cell
+expVars lab,dataType,cell,age
 
 metaObject wgEncodeLicrRnaSeqBmarrowCellPapMAdult8wksC57bl6AlnRep1
 objType table
@@ -3163,4 +3163,4 @@ tableName wgEncodeLicrRnaSeqWbrainCellPapUE14halfC57bl6SigRep2
 tissueSourceType Individual
 view Signal
 
-# MAGIC: 1403834686
+# MAGIC: 1028583548

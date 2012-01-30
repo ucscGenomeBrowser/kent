@@ -366,6 +366,7 @@ fileName wgEncodeYaleChIPseqAlignmentsRep1Gm12878NfkbIggrab.tagAlign.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 1
 setType exp
@@ -4323,6 +4324,7 @@ fileName wgEncodeYaleChIPseqAlignmentsRep2Gm12878NfkbIggrab.tagAlign.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 2
 setType exp
@@ -7812,6 +7814,7 @@ fileName wgEncodeYaleChIPseqAlignmentsRep3Gm12878NfkbIggrab.tagAlign.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 3
 setType exp
@@ -8770,6 +8773,7 @@ fileName wgEncodeYaleChIPseqAlignmentsRep4Gm12878NfkbIggrab.tagAlign.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 4
 setType exp
@@ -9351,6 +9355,7 @@ fileName wgEncodeYaleChIPseqPeaksGm12878NfkbIggrab.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 setType exp
 softwareVersion PeakSeq1.0
@@ -12784,6 +12789,7 @@ fileName wgEncodeYaleChIPseqRawDataRep1Gm12878NfkbIggrab.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 1
 setType exp
@@ -16396,6 +16402,7 @@ fileName wgEncodeYaleChIPseqRawDataRep2Gm12878NfkbIggrab.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 2
 setType exp
@@ -19731,6 +19738,7 @@ fileName wgEncodeYaleChIPseqRawDataRep3Gm12878NfkbIggrab.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 3
 setType exp
@@ -20664,6 +20672,7 @@ fileName wgEncodeYaleChIPseqRawDataRep4Gm12878NfkbIggrab.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 replicate 4
 setType exp
@@ -21843,6 +21852,7 @@ fileName wgEncodeYaleChIPseqSignalGm12878NfkbIggrab.bedGraph4.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control
+objStatus revoked - incorrect rawdata files used for generation of processed data
 project wgEncode
 setType exp
 softwareVersion PeakSeq1.0
@@ -25122,4 +25132,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1139598526
+# MAGIC: -1499139788

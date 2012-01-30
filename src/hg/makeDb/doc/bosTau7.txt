@@ -465,7 +465,7 @@ bosTau7.upstreamGeneTbl = refGene
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#	(DONE 2011-05-11 - Chin)
+#	(DONE 2012-01-17 - Chin)
 # NOTE - create bosTau7 entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/bosTau7/bed/ctgPos2
     cd /hive/data/genomes/bosTau7/bed/ctgPos2
@@ -520,7 +520,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 
 ############################################################################
-# running cpgIsland business (working -2011-05-16 - Chin)
+# running cpgIsland business (DONE -2012-01-17 - Chin)
     mkdir /hive/data/genomes/bosTau7/bed/cpgIsland
     cd /hive/data/genomes/bosTau7/bed/cpgIsland
     cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
@@ -582,13 +582,14 @@ endif
     # then, kick it with para push
     # check it with plb
     # when all are done, para time shows:
-    #  Checking finished jobs
-    # Completed: 3317 of 3317 jobs
-    # CPU time in finished jobs:   197s       3.29m     0.05h    0.00d  0.000 y
-    # IO & Wait Time:             9373s     156.21m     2.60h    0.11d  0.000 y
-    # Average job time:              3s       0.05m     0.00h    0.00d
-    # Longest finished job:         18s       0.30m     0.01h    0.00d
-    # Submission to last job:      677s      11.28m     0.19h    0.01d
+    # Checking finished jobs
+    # Completed: 11692 of 11692 jobs
+    # CPU time in finished jobs:    201s       3.35m     0.06h    0.00d  0.000 y
+    # IO & Wait Time:             31839s     530.65m     8.84h    0.37d  0.001 y
+    # Average job time:                   3s       0.05m     0.00h    0.00d
+    # Longest finished job:              17s       0.28m     0.00h    0.00d
+    # Submission to last job:           111s       1.85m     0.03h    0.00d
+
 
     # Transform cpglh output to bed +
     catDir results | awk '{
@@ -603,21 +604,21 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /hive/data/genomes/bosTau7/bed/cpgIsland
     hgLoadBed bosTau7 cpgIslandExt -tab \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
-    # Loaded 37638 elements of size 10
+    # Reading cpgIsland.bed
+    # Read 38217 elements of size 10 from cpgIsland.bed
     # Sorted
     # Creating table definition for cpgIslandExt
     # Saving bed.tab
     # Loading bosTau7
-
     #   cleanup
     rm -fr hardMaskedFa
 
 
 ###########################################################################
-# ornAna1 Platypus LASTZ/CHAIN/NET (working - 2011-05-20 - Chin)
+# ornAna1 Platypus LASTZ/CHAIN/NET (DONE - 2012-01-18 - Chin)
     screen # use screen to control this job
-    mkdir /cluster/data/bosTau7/bed/blastzOrnAna1.2011-05-20
-    cd /cluster/data/bosTau7/bed/blastzOrnAna1.2011-05-20
+    mkdir /cluster/data/bosTau7/bed/blastzOrnAna1.2012-01-18
+    cd /cluster/data/bosTau7/bed/blastzOrnAna1.2012-01-18
 
     cat << '_EOF_' > DEF
 # Cow vs. Platypus
@@ -642,7 +643,7 @@ SEQ2_CHUNK=20000000
 SEQ2_LIMIT=300
 SEQ2_LAP=0
 
-BASE=/cluster/data/bosTau7/bed/blastzOrnAna1.2011-05-20
+BASE=/cluster/data/bosTau7/bed/blastzOrnAna1.2012-01-18
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -651,30 +652,37 @@ TMPDIR=/scratch/tmp
         -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=5000 -verbose=2 -chainLinearGap=loose > do.log 2>&1 &
-    #   real     329m59.325s
+    #   real    1780m16.857s
+
+XXXX # TBD for all chain/net:
+ *** All done !  Elapsed time: 1780m17s
+ *** Make sure that goldenPath/bosTau7/vsOrnAna1/README.txt is accurate.
+ *** Add {chain,net}OrnAna1 tracks to trackDb.ra if necessary.
 
     # filter with doRecipBest.pl 
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         bosTau7 ornAna1 > rbest.log 2>&1
-    # real    15m15.120s
+    # real    12m55.429s
     cat fb.bosTau7.chainOrnAna1Link.txt
-    #   195910907 bases of 2649682029 (7.394%) in intersection
+    #   204121295 bases of 2804673174 (7.278%) in intersection
     cd /hive/data/genomes/bosTau7/bed
-    ln -s blastzOrnAna1.2011-05-20 lastz.ornAna1
+    ln -s blastzOrnAna1.2012-01-18 lastz.ornAna1
 
 
     mkdir /cluster/data/ornAna1/bed/blastz.bosTau7.swap
     cd /cluster/data/ornAna1/bed/blastz.bosTau7.swap
+
     time nice -n +19 doBlastzChainNet.pl \
-        /cluster/data/bosTau7/bed/blastzOrnAna1.2011-05-20/DEF \
+        /cluster/data/bosTau7/bed/blastzOrnAna1.2012-01-18/DEF \
         -chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
         -swap -syntenicNet \
           -chainLinearGap=loose -bigClusterHub=swarm > swap.log 2>&1 &
-    #   real       59m45.336
+    #   real       58m6.038s
     cat fb.ornAna1.chainBosTau7Link.txt
-    #   190401000 bases of 1842236818 (10.335%) in intersection
-# TBD for all chain/net:
- *** All done !  Elapsed time: 59m18s
+    # 190094136 bases of 1842236818 (10.319%) in intersection
+
+XXXX # TBD for all chain/net:
+ *** All done !  Elapsed time: 58m6s
  *** Make sure that goldenPath/ornAna1/vsBosTau7/README.txt is accurate.
  *** Add {chain,net}BosTau7 tracks to trackDb.ra if necessary.
 
@@ -682,10 +690,10 @@ TMPDIR=/scratch/tmp
     ln -s blastz.bosTau7.swap lastz.bosTau7
 
 #####################################################################
-# susScr2 Pig BLASTZ/CHAIN/NET (working - 2011-05-24 - Chin)
+# susScr2 Pig BLASTZ/CHAIN/NET (DONE - 2012-01-20 - Chin)
     screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/bosTau7/bed/lastzSusScr2.2011-05-24
-    cd /hive/data/genomes/bosTau7/bed/lastzSusScr2.2011-05-24
+    mkdir /hive/data/genomes/bosTau7/bed/lastzSusScr2.2012-01-20
+    cd /hive/data/genomes/bosTau7/bed/lastzSusScr2.2012-01-20
     
     cat << '_EOF_' > DEF
 # Pig vs. Cow
@@ -703,7 +711,7 @@ SEQ2_LEN=/scratch/data/susScr2/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/hive/data/genomes/bosTau7/bed/lastzSusScr2.2011-05-24
+BASE=/hive/data/genomes/bosTau7/bed/lastzSusScr2.2012-01-20
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
@@ -713,73 +721,74 @@ TMPDIR=/scratch/tmp
         -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #   real    2198m44.401s
+    #   real    1624m48.439s
     cat fb.bosTau7.chainSusScr2Link.txt
-    #   1306738899 bases of 2649682029 (49.317%) in intersection
+    # 1342940418 bases of 2804673174 (47.882%) in intersection
     cd /hive/data/genomes/bosTau7/bed
-    ln -s lastzSusScr2.2011-05-24 lastz.susScr2
+    ln -s lastzSusScr2.2012-01-20 lastz.susScr2
 
     # then swap
     mkdir /hive/data/genomes/susScr2/bed/blastz.bosTau7.swap
     cd /hive/data/genomes/susScr2/bed/blastz.bosTau7.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/bosTau7/bed/lastzSusScr2.2011-05-24/DEF \
+        /hive/data/genomes/bosTau7/bed/lastzSusScr2.2012-01-20/DEF \
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #  real    380m53.612s
+    #  real    209m45.776s
 
     cat fb.susScr2.chainBosTau7Link.txt
-    # 1475323050 bases of 2231298548 (66.119%) in intersection
-
+    # 1443560932 bases of 2231298548 (64.696%) in intersection
 
 
 #########################################################################
-#  SWAP mm9 LASTZ (working - 2010-05-17 - Chin)
+#  SWAP mm9 LASTZ (DONE - 2012-01-22 - Chin)
     #	original alignment done at mm9.txt
-    cd /hive/data/genomes/mm9/bed/lastzBosTau7.2011-05-17
+    cd /hive/data/genomes/mm9/bed/lastzBosTau7.2012-01-22
+
     cat fb.mm9.chainBosTau7Link.txt
-    # 699351036 bases of 2620346127 (26.689%) in intersection
+    # 695010371 bases of 2620346127 (26.524%) in intersection
     # Create link
     cd /hive/data/genomes/mm9/bed
-    ln -s  lastzBosTau7.2011-05-17 lastz.bosTau7
+    ln -s  lastzBosTau7.2012-01-22 lastz.bosTau7
 
     #   and the swap 
     mkdir /hive/data/genomes/bosTau7/bed/blastz.mm9.swap
     cd /hive/data/genomes/bosTau7/bed/blastz.mm9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/mm9/bed/lastzBosTau7.2011-05-17/DEF \
-        -swap -syntenicNet \
+        /hive/data/genomes/mm9/bed/lastzBosTau7.2012-01-22/DEF \
+        -swap -syntenicNet  \
         -noLoadChainSplit \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     53m5.237s
+    #   real      51m44.505s
     cat fb.bosTau7.chainMm9Link.txt
-    # 688894115 bases of 2649682029 (25.999%) in intersection
+    # 711305079 bases of 2804673174 (25.361%) in intersection
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.mm9.swap lastz.mm9
 
 ############################################################################
-#  SWAP hg19 LASTZ (working 2011-05-16 - Chin)
+#  SWAP hg19 LASTZ (DONE 2012-01-23 - Chin)
     #	original alignment
-    cd /hive/data/genomes/hg19/bed/lastzBosTau7.2011-05-16
+    cd /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
     cat fb.hg19.chainBosTau7Link.txt
-    # 1370696434 bases of 2897316137 (47.309%) in intersection
+    # 1360887008 bases of 2897316137 (46.971%) in intersection
 
     #   and the swap
     mkdir /hive/data/genomes/bosTau7/bed/blastz.hg19.swap
     cd /hive/data/genomes/bosTau7/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzBosTau7.2011-05-16/DEF \
-        -swap -syntenicNet \
+        /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23/DEF \
+        -swap  -syntenicNet \
         -noLoadChainSplit \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     72m57.889s
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real     95m9.611s
     cat fb.bosTau7.chainHg19Link.txt
-    #   1336966333 bases of 2649682029 (50.458%) in intersection
+    #   1388551419 bases of 2804673174 (49.508%) in intersection
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.hg19.swap lastz.hg19
+
 
 
 ############################################################################
