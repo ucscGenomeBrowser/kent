@@ -189,13 +189,17 @@ class makeNotes(object):
     def __checkMd5sums(self):
         (newfiles, oldfiles, loose) = (self.newReleaseFiles, self.oldReleaseFiles, self.loose)
         errors = []
+        repush = set()
         for i in oldfiles:
             if i not in newfiles:
                 pass
             elif re.match('wgEncode.*', i):
                 if oldfiles[i].md5sum != newfiles[i].md5sum:
+                    repush.add(i)
                     errors.append("file: %s have changed md5sums between releases. %s vs %s" % (i, oldfiles[i].md5sum, newfiles[i].md5sum))
         if loose:
+            for i in repush:
+                del oldfiles[i]
             return list()
         else:
             return errors
@@ -423,6 +427,10 @@ class makeNotes(object):
         output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
+        output.extend("\n")
+        if self.atticSet:
+            output.append("Attic Objects")
+            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
 
         if not args['ignore']:
             output.append("No Errors")
@@ -464,6 +472,9 @@ class makeNotes(object):
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedTables, 0), "Revoked Tables"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedFiles, self.releasePath), "Revoked Files"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedGbdbs, self.gbdbPath), "Revoked Gbdbs"))
+        if self.atticSet:
+            output.append("Attic Objects")
+            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
 
         if not args['ignore']:
             output.append("No Errors")
