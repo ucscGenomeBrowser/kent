@@ -5005,14 +5005,14 @@ category Tissue
 age ageUnknown
 strain Unknown
 description Spleen
-vendorName LICR lab
-vendorId Spleen
-orderUrl http://www.bio.upenn.edu/faculty/ren/
+vendorName 1) LICR lab; 2)UW Lab
+vendorId Spleen; Spleen
+orderUrl http://www.bio.upenn.edu/faculty/ren/; http://www.gs.washington.edu/faculty/stamj.htm
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 86,180,233
 sex U
-protocol Ren:Spleen_Ren_protocol.pdf
+protocol Ren:Spleen_Ren_protocol.pdf Stam:Spleen_Stam_protocol.pdf
 
 term Testis
 tag TESTIS
