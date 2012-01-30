@@ -5456,6 +5456,26 @@ hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToUniProt.sql
 hgsql rn4 -e "load data local infile 'rgdGene2ToUniProt.tab' into table rgdGene2ToUniProt"
 
 #############################################################################
+# continue rgdGenes2 (WORKING - Hiram - 2012-01-26)
+#   change genes_rat table name to be rgdGene2Raw
+    # fixup source code in src/hg/lib/ from genes_rat to be rgdGene2Raw
+    # and in hg/oneShot/doRgdGene2UniProt/doRgdGene2UniProt.c
+    #	hg/hgGene/synonym.c
+    #	hg/hgGene/rgdInfo.c
+    #	hg/makeDb/schema/all.joiner
+    cd /hive/data/genomes/rn4/bed/rgdGene/093010
+    hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Raw.sql 
+    hgsql rn4 -e \
+     'load data local infile "GENES_RAT" into table rgdGene2Raw ignore 1 lines'
+
+    doRgdGene2UniProt rn4 tmp.rgdGene2ToUniProt
+cat j.tmp |sort -u > rgdGene2ToUniProt.tab
+
+hgsql rn4 -N -e \
+'select "RGD:", gene_rgd_id, "gene_desc", gene_desc from genes_rat where gene_desc <>""'\
+|sed -e 's/RGD:\t/RGD:/'|cut -f 1,3 |sort -u >rgdGene2ToDescription.tab
+
+#############################################################################
 # RE-BUILD HGNEAR PROTEIN BLAST TABLES for RGD GENES -- TARGET (DONE 10/18/10, Fan)
     ssh hgwdev
     
@@ -5966,4 +5986,65 @@ $cb where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
     mkdir -p $pd
     ln -s `pwd`/$cb.$mz.exonAA.fa.gz $pd/$cb.exonAA.fa.gz
     ln -s `pwd`/$cb.$mz.exonNuc.fa.gz $pd/$cb.exonNuc.fa.gz
+
+#########################################################################
+# LASTZ Cow bosTau7 (DONE - 2012-01-24 - Chin)
+    ssh hgwdev
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/rn4/bed/blastzBosTau7.2012-01-24
+    cd /hive/data/genomes/rn4/bed/blastzBosTau7.2012-01-24
+
+    cat << '_EOF_' > DEF
+# Rat vs. Cow
+BLASTZ_M=50
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/data/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+/2012-01-24/2012-01-24/g
+
+# QUERY: Cow bosTau7
+SEQ2_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ2_LEN=/cluster/data/bosTau7/chrom.sizes
+# Maximum number of scaffolds that can be lumped together
+SEQ2_LIMIT=100
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastzBosTau7.2012-01-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    200m57.138
+    cat fb.rn4.chainBosTau7Link.txt
+    # 656136973 bases of 2571531505 (25.515%) in intersection
+    # Create link
+    ln -s blastzBosTau7.2012-01-24 lastz.bosTau7
+
+
+    #   and the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.rn4.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.rn4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rn4/bed/blastzBosTau7.2012-01-24/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real     48m51.145
+
+    cat fb.bosTau7.chainRn4Link.txt
+    # 668440773 bases of 2804673174 (23.833%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.rn4.swap lastz.rn4
+
+#########################################################################
 
