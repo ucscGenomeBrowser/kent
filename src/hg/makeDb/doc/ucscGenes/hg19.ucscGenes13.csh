@@ -1384,9 +1384,9 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.
 hgsql hgcentraltest -e \                                                
-      'INSERT into blatServers values ("hg19Kg", "blat5", 17783, 0, 1);'
+      'INSERT into blatServers values ("hg19Kgv13", "blat5", 17783, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg19Kg", "UCSC Genes", \                    
+      'INSERT into targetDb values("hg19Kgv13", "UCSC Genes", \                    
          "hg19", "kgTargetAli", "", "", \                                       
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
