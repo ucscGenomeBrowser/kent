@@ -37,7 +37,7 @@ subGroup7 age Age E0=E0 E14HALF=E14.5 ADULT8WKS=adult-8wks
 subGroup8 strain Strain C57BL6=C57BL/6 
 dimensions dimensionX=cellType dimensionY=age
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+ age=+ rep=+
-fileSortOrder cell=Cell_Line rnaExtract=RNA<BR>Extract view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+fileSortOrder cell=Cell_Line rnaExtract=RNA<BR>Extract age=Age view=View dccAccession=UCSC_Accession geoSeriesAccession=GEO_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract sex=sex age=age strain=strain
 dragAndDrop subTracks
 priority 0
