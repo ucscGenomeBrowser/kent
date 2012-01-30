@@ -3,7 +3,7 @@
 The UCSC Genes track is a set of gene predictions based on data from
 RefSeq, Genbank, CCDS, UniProt, Rfam, and the tRNA Genes track.  The
 track includes both protein-coding genes and non-coding RNA genes.
-Both types of genes can produce noncoding transcripts, but non-coding
+Both types of genes can produce non-coding transcripts, but non-coding
 RNA genes do not produce protein-coding transcripts. This is a
 moderately conservative set of predictions.  Transcripts of
 protein-coding genes require the support of one RefSeq RNA, or one
@@ -18,7 +18,7 @@ variants.</P>
 <P>
 This track in general follows the display conventions for
 <A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction
-tracks</A>.  The exons for putative noncoding genes and untranslated regions 
+tracks</A>.  The exons for putative non-coding genes and untranslated regions 
 are represented by relatively thin blocks, while those for coding open 
 reading frames are thicker.  The following color key is used:
 <UL>
@@ -29,12 +29,8 @@ reading frames are thicker.  The following color key is used:
 <LI><FONT color="#8282D2"><b>Light blue</b></FONT> -- non-RefSeq transcripts
 </UL></P>
 <P>
-This track contains an optional codon coloring
-feature that allows users to quickly validate and compare gene predictions.
-To display codon colors, select the <em>genomic codons</em> option from the
-<em>Color track by codons</em> pull-down menu. Click
-<A HREF="../goldenPath/help/hgCodonColoring.html">here</A> for more
-information about this feature. </P>
+This track contains an optional <A HREF="../goldenPath/help/hgCodonColoring.html">codon
+coloring feature</A> that allows users to quickly validate and compare gene predictions.
 
 <H2>Methods</H2>
 <P>
@@ -62,14 +58,14 @@ it is added as evidence for the edge.
 <LI>If there is an Exoniphy prediction for an exon, that is added as evidence.
 <LI>The graph is traversed to generate all unique transcripts. The traversal is 
 guided by the initial RNAs to avoid a combinatorial explosion in alternative 
-splicing. All refSeq transcripts are output. For other multi-exon transcripts
+splicing. All RefSeq transcripts are output. For other multi-exon transcripts
 to be output, an edge supported by at least one additional line of evidence 
 beyond the RNA is required.  Single-exon genes require either two RNAs or two 
 additional lines of evidence beyond the single RNA. 
 <LI>Alignments are merged in from the hg19
 <A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?hgsid=213859263&g=tRNAs">tRNA</A>, and from Rfam in regions that are syntenic with the mm9 mouse genome.  
 <LI>Protein predictions are generated. For non-RefSeq transcripts we use the 
-txCdsPredict program to determine if the transcript is protein-coding and if so,
+txCdsPredict program to determine if the transcript is protein-coding, and if so,
 the locations of the start and stop codons. 
 The program weighs as positive evidence the length of the protein, the 
 presence of a Kozak consensus sequence at the start codon, and the length of 
@@ -85,7 +81,7 @@ accession ends with the suffix ".1" indicating that this is the first
 version of this transcript.  If the transcript is identical to some
 transcript in the previous release of UCSC Genes, the accession is
 re-used with the same version number.  If the transcript is not
-identical to any transcript in the previous release, but if it
+identical to any transcript in the previous release but it
 overlaps a similar transcript with a compatible structure, the
 previous accession is re-used with the version number incremented.
 </OL>
@@ -93,14 +89,17 @@ previous accession is re-used with the version number incremented.
 <H2>Related Data</H2>
 <P>
 The UCSC Genes transcripts are annotated in numerous tables, each of
-which is also available as a downloadable file.  These include tables
+which is also available as a
+<a href="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/">downloadable
+file</a>.  These include tables
 that link UCSC Genes transcripts to external datasets (such as
 <I>knownToLocusLink</I>, which maps UCSC Genes transcripts to Entrez
 identifiers, previously know as Locus Link identifiers), and tables
 that detail some property of UCSC Genes transcript sequences (such as
 <I>knownToPfam</I>, which identifies any Pfam domains found in the
 UCSC Genes protein-coding transcripts).  One can see a full list of
-the associated tables in the Table Browser by selecting UCSC Genes at
+the associated tables in the <a href="/cgi-bin/hgTables">Table Browser</a>
+by selecting UCSC Genes at
 the <B>track</B> menu; this list is then available at the <B>table</B>
 menu.  Note that some of these tables refer to UCSC Genes by its
 former name of <I>Known Genes</I>, sometimes abbreviated as
@@ -113,15 +112,15 @@ sequences (if any) on which each each transcript was based.
 <LI> <B>knownToRefSeq</B> identifies the RefSeq transcript that each 
 UCSC Genes transcript is most closely associated with.  That RefSeq 
 transcript is either the RefSeq on which the UCSC Genes transcript was 
-based, if there is one, or otherwise it's the RefSeq transcript that 
+based, if there is one, or it's the RefSeq transcript that 
 the UCSC Genes transcript overlaps at the most bases.  
 <LI> <B>knownGeneMrna</B> contains the mRNA sequence that represents
 each UCSC Genes transcript.  If the transcript is based on a RefSeq
 transcript, then this table contains the RefSeq transcript, including
 any portions that do not align to the genome.
 <LI> <B>knownGeneTxMrna</B> contains mRNA sequences for each UCSC
-Genes transcripts.  In contrast to the sequencess in knownGeneMrna,
-these sequences are derived from obtaining the sequences for each exon
+Genes transcript.  In contrast to the sequencess in knownGeneMrna,
+these sequences are derived by obtaining the sequences for each exon
 from the reference genome and concatenating these exonic sequences.
 <LI> <B>knownGenePep</B> contains the protein sequences derived from
 the knownGeneMrna transcript sequences.  Any protein-level
@@ -180,14 +179,14 @@ TARGET=_blank>GenBank: update</A>.
 <P>
 Chan PP, Lowe TM. 
 <A HREF="http://nar.oxfordjournals.org/cgi/content/abstract/gkn787" TARGET=_blank>GtRNAdb: A database 
-of transfer RNA genes detected in genomic sequence.</A> 
+of transfer RNA genes detected in genomic sequence</A>. 
 <EM>Nucleic Acids Res</EM>. 2009 Jan;37:D93-7.
 </P>
 <P>
 Gardner PP, Daub J, Tate J, Moore BL, Osuch IH, Griffiths-Jones S, Finn RD,
 Nawrocki EP, Kolbe DL, Eddy SR, Bateman A.
 <A HREF="http://nar.oxfordjournals.org/content/early/2010/11/08/nar.gkq1129">
-Rfam: Wikipedia, clans and the "decimal" release</A>
+Rfam: Wikipedia, clans and the "decimal" release</A>.
 <em>Nucleic Acids Res.</em>2011 Jan;39:D141-5.
 </P>
 <P>
@@ -202,7 +201,7 @@ TARGET=_blank>BLAT - the BLAST-like alignment tool</A>.
 <em>Genome Res.</em> 2002 Apr;12(4):656-64.</P>
 <P>
 Lowe TM, Eddy SR. 
-<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/9023104?dopt=Abstract" TARGET=_blank>tRNAscan-SE: A program for
-improved detection of transfer RNA genes in genomic sequence.</A> 
+<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/9023104?dopt=Abstract" TARGET=_blank>tRNAscan-SE: a program for
+improved detection of transfer RNA genes in genomic sequence</A>. 
 <EM>Nucleic Acids Res</EM>. 1997 Mar 1;25(5):955-64.
 </P> 
