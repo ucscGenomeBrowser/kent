@@ -2588,7 +2588,7 @@ track knownGene
 release alpha
 html knownGeneNew
 shortLabel UCSC Genes
-longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
+longLabel UCSC Genes (RefSeq, UniProt, CCDS, Rfam, tRNAs & Comparative Genomics)
 group genes
 priority 34
 visibility pack
