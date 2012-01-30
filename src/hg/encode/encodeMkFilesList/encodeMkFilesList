@@ -190,7 +190,12 @@ sub getMd5Files {
     my %opt = %{$_[4]};
     my %lastmod;
     my %tempmd5;
-    
+    my %files;
+
+    foreach my $key (@files) {
+        $files{$key} = 1;
+    }
+
     # copy over the filenames to tempmd5 hash for removal purposes
     # also initializes all last modification times to 0
     foreach my $file (@files) {
@@ -213,6 +218,9 @@ sub getMd5Files {
             
             # make sure file exists, not deleted, etc....
             unless (-e $file) {
+                next;
+            }
+            unless (exists $files{$file}) {
                 next;
             }
             $md5sums{$file} = $md5;
