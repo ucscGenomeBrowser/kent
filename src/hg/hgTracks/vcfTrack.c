@@ -1142,6 +1142,9 @@ errCatchFree(&errCatch);
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
+#ifdef KNETFILE_HOOKS
+knetUdcInstall();
+#endif
 pgSnpMethods(track);
 // Disinherit next/prev flag and methods since we don't support next/prev:
 track->nextExonButtonable = FALSE;
@@ -1172,9 +1175,7 @@ hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF alignment files, in absence of tabix lib. */
 {
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
-knetUdcInstall();
-#endif//def USE_TABIX && KNETFILE_HOOKS
+// NOP warning method to warn users that tabix is not installed.
 messageLineMethods(track);
 track->drawItems = drawUseVcfTabixWarning;
 }
