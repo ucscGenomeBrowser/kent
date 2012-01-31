@@ -9,7 +9,7 @@ age immortalized
 cell 3134
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgf3134RiiiMImmortalAlnRep1.bam,wgEncodeUwDgf3134RiiiMImmortalAlnRep1.bam.bai
@@ -33,7 +33,7 @@ age immortalized
 cell 3134
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgf3134RiiiMImmortalHotspotsRep1.broadPeak.gz
@@ -58,7 +58,7 @@ age immortalized
 cell 3134
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgf3134RiiiMImmortalPkRep1.narrowPeak.gz
@@ -83,7 +83,7 @@ age immortalized
 cell 3134
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgf3134RiiiMImmortalRawDataRep1.fastq.tgz
@@ -106,7 +106,7 @@ age immortalized
 cell 3134
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgf3134RiiiMImmortalRawRep1.bigWig
@@ -131,7 +131,7 @@ age immortalized
 cell 3134
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgf3134RiiiMImmortalSigRep1.bigWig
@@ -156,7 +156,7 @@ age adult-8wks
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgf416bC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgf416bC57bl6MAdult8wksAlnRep1.bam.bai
@@ -180,7 +180,7 @@ age adult-8wks
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgf416bC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -205,7 +205,7 @@ age adult-8wks
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgf416bC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -230,7 +230,7 @@ age adult-8wks
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgf416bC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -253,7 +253,7 @@ age adult-8wks
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgf416bC57bl6MAdult8wksRawRep1.bigWig
@@ -278,7 +278,7 @@ age adult-8wks
 cell 416B
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgf416bC57bl6MAdult8wksSigRep1.bigWig
@@ -456,7 +456,7 @@ age adult-8wks
 cell B-cell_(CD43-)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksAlnRep1.bam.bai
@@ -480,7 +480,7 @@ age adult-8wks
 cell B-cell_(CD43-)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -505,7 +505,7 @@ age adult-8wks
 cell B-cell_(CD43-)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -530,7 +530,7 @@ age adult-8wks
 cell B-cell_(CD43-)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -553,7 +553,7 @@ age adult-8wks
 cell B-cell_(CD43-)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksRawRep1.bigWig
@@ -578,7 +578,7 @@ age adult-8wks
 cell B-cell_(CD43-)
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfBcellcd43nC57bl6MAdult8wksSigRep1.bigWig
@@ -603,7 +603,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfHeartC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfHeartC57bl6MAdult8wksAlnRep1.bam.bai
@@ -627,7 +627,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfHeartC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -652,7 +652,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfHeartC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -677,7 +677,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfHeartC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -700,7 +700,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfHeartC57bl6MAdult8wksRawRep1.bigWig
@@ -725,7 +725,7 @@ age adult-8wks
 cell Heart
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfHeartC57bl6MAdult8wksSigRep1.bigWig
@@ -750,7 +750,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfKidneyC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfKidneyC57bl6MAdult8wksAlnRep1.bam.bai
@@ -774,7 +774,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfKidneyC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -799,7 +799,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfKidneyC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -824,7 +824,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfKidneyC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -847,7 +847,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfKidneyC57bl6MAdult8wksRawRep1.bigWig
@@ -872,7 +872,7 @@ age adult-8wks
 cell Kidney
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfKidneyC57bl6MAdult8wksSigRep1.bigWig
@@ -897,7 +897,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfLiverC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfLiverC57bl6MAdult8wksAlnRep1.bam.bai
@@ -921,7 +921,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfLiverC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -946,7 +946,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfLiverC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -971,7 +971,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfLiverC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -994,7 +994,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfLiverC57bl6MAdult8wksRawRep1.bigWig
@@ -1019,7 +1019,7 @@ age adult-8wks
 cell Liver
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfLiverC57bl6MAdult8wksSigRep1.bigWig
@@ -1044,7 +1044,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfLungC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfLungC57bl6MAdult8wksAlnRep1.bam.bai
@@ -1068,7 +1068,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfLungC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -1093,7 +1093,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfLungC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -1118,7 +1118,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfLungC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -1141,7 +1141,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfLungC57bl6MAdult8wksRawRep1.bigWig
@@ -1166,7 +1166,7 @@ age adult-8wks
 cell Lung
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfLungC57bl6MAdult8wksSigRep1.bigWig
@@ -1191,7 +1191,7 @@ age adult-8wks
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfMelC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfMelC57bl6MAdult8wksAlnRep1.bam.bai
@@ -1215,7 +1215,7 @@ age adult-8wks
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfMelC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -1240,7 +1240,7 @@ age adult-8wks
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfMelC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -1265,7 +1265,7 @@ age adult-8wks
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfMelC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -1288,7 +1288,7 @@ age adult-8wks
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfMelC57bl6MAdult8wksRawRep1.bigWig
@@ -1313,7 +1313,7 @@ age adult-8wks
 cell MEL
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfMelC57bl6MAdult8wksSigRep1.bigWig
@@ -1338,7 +1338,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfThymusC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfThymusC57bl6MAdult8wksAlnRep1.bam.bai
@@ -1362,7 +1362,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfThymusC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -1387,7 +1387,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfThymusC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -1412,7 +1412,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfThymusC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -1435,7 +1435,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfThymusC57bl6MAdult8wksRawRep1.bigWig
@@ -1460,7 +1460,7 @@ age adult-8wks
 cell Thymus
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfThymusC57bl6MAdult8wksSigRep1.bigWig
@@ -1485,7 +1485,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfTnaiveC57bl6MAdult8wksAlnRep1.bam.bai
@@ -1509,7 +1509,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksAlnRep2.bam,wgEncodeUwDgfTnaiveC57bl6MAdult8wksAlnRep2.bam.bai
@@ -1533,7 +1533,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -1558,7 +1558,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
@@ -1583,7 +1583,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -1608,7 +1608,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksPkRep2.narrowPeak.gz
@@ -1633,7 +1633,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -1656,7 +1656,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksRawDataRep2.fastq.tgz
@@ -1679,7 +1679,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksRawRep1.bigWig
@@ -1704,7 +1704,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksRawRep2.bigWig
@@ -1729,7 +1729,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksSigRep1.bigWig
@@ -1754,7 +1754,7 @@ age adult-8wks
 cell T-Naive
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTnaiveC57bl6MAdult8wksSigRep2.bigWig
@@ -1779,7 +1779,7 @@ age adult-8wks
 cell TReg
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTregC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfTregC57bl6MAdult8wksAlnRep1.bam.bai
@@ -1803,7 +1803,7 @@ age adult-8wks
 cell TReg
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTregC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -1828,7 +1828,7 @@ age adult-8wks
 cell TReg
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTregC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -1853,7 +1853,7 @@ age adult-8wks
 cell TReg
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTregC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -1876,7 +1876,7 @@ age adult-8wks
 cell TReg
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTregC57bl6MAdult8wksRawRep1.bigWig
@@ -1901,7 +1901,7 @@ age adult-8wks
 cell TReg
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfTregC57bl6MAdult8wksSigRep1.bigWig
@@ -1926,7 +1926,7 @@ age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksAlnRep1.bam,wgEncodeUwDgfWbrainC57bl6MAdult8wksAlnRep1.bam.bai
@@ -1950,7 +1950,7 @@ age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
@@ -1975,7 +1975,7 @@ age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksPkRep1.narrowPeak.gz
@@ -2000,7 +2000,7 @@ age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksRawDataRep1.fastq.tgz
@@ -2023,7 +2023,7 @@ age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksRawRep1.bigWig
@@ -2048,7 +2048,7 @@ age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-17
 dateUnrestricted 2012-09-16
 fileName wgEncodeUwDgfWbrainC57bl6MAdult8wksSigRep1.bigWig
@@ -2073,7 +2073,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfWbrainC57bl6ME14halfAlnRep1.bam,wgEncodeUwDgfWbrainC57bl6ME14halfAlnRep1.bam.bai
@@ -2097,7 +2097,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfWbrainC57bl6ME14halfHotspotsRep1.broadPeak.gz
@@ -2122,7 +2122,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfWbrainC57bl6ME14halfPkRep1.narrowPeak.gz
@@ -2147,7 +2147,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfWbrainC57bl6ME14halfRawDataRep1.fastq.tgz
@@ -2170,7 +2170,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfWbrainC57bl6ME14halfRawRep1.bigWig
@@ -2195,7 +2195,7 @@ age E14.5
 cell WholeBrain
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-18
 dateUnrestricted 2012-09-17
 fileName wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1.bigWig
@@ -2214,4 +2214,4 @@ tableName wgEncodeUwDgfWbrainC57bl6ME14halfSigRep1
 tissueSourceType Pooled
 view Signal
 
-# MAGIC: -1662653211
+# MAGIC: -1392881651

@@ -12,7 +12,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002147
@@ -42,7 +42,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002147
@@ -73,7 +73,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002147
@@ -103,7 +103,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002147
@@ -134,7 +134,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002144
@@ -164,7 +164,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002144
@@ -195,7 +195,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002144
@@ -225,7 +225,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002144
@@ -256,7 +256,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002145
@@ -286,7 +286,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002145
@@ -317,7 +317,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002145
@@ -347,7 +347,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002145
@@ -378,7 +378,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002146
@@ -408,7 +408,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002146
@@ -439,7 +439,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002146
@@ -469,7 +469,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002146
@@ -500,7 +500,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002148
@@ -530,7 +530,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002148
@@ -561,7 +561,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002148
@@ -591,7 +591,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002148
@@ -622,7 +622,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002149
@@ -652,7 +652,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002149
@@ -683,7 +683,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002149
@@ -713,7 +713,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEM002149
@@ -744,7 +744,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002141
@@ -774,7 +774,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002141
@@ -805,7 +805,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002141
@@ -835,7 +835,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002141
@@ -866,7 +866,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002142
@@ -896,7 +896,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002142
@@ -927,7 +927,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002142
@@ -957,7 +957,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002142
@@ -988,7 +988,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002143
@@ -1018,7 +1018,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002143
@@ -1049,7 +1049,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002143
@@ -1079,7 +1079,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002143
@@ -1110,7 +1110,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002138
@@ -1140,7 +1140,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002138
@@ -1171,7 +1171,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002138
@@ -1201,7 +1201,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002138
@@ -1232,7 +1232,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002139
@@ -1262,7 +1262,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002139
@@ -1293,7 +1293,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002139
@@ -1323,7 +1323,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002139
@@ -1354,7 +1354,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002140
@@ -1384,7 +1384,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002140
@@ -1415,7 +1415,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002140
@@ -1445,7 +1445,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-10
 dateUnrestricted 2012-05-10
 dccAccession wgEncodeEM002140
@@ -1476,7 +1476,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002110
@@ -1506,7 +1506,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002110
@@ -1536,7 +1536,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10007
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002110
@@ -1567,7 +1567,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002112
@@ -1597,7 +1597,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002112
@@ -1627,7 +1627,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10194
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002112
@@ -1658,7 +1658,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002111
@@ -1688,7 +1688,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002111
@@ -1718,7 +1718,7 @@ composite wgEncodeCaltechHist
 control Control_32bp
 controlId 10135
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002111
@@ -1749,7 +1749,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002126
@@ -1779,7 +1779,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002126
@@ -1809,7 +1809,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11610
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002126
@@ -1840,7 +1840,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002113
@@ -1870,7 +1870,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002113
@@ -1900,7 +1900,7 @@ composite wgEncodeCaltechHist
 control Control_50bp
 controlId 11612
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
 dccAccession wgEncodeEM002113
@@ -1922,4 +1922,4 @@ tableName wgEncodeCaltechHistC2c12InputFCntrl50bPcr1xSigRep1
 treatment None
 view Signal
 
-# MAGIC: 1249378182
+# MAGIC: 377965028

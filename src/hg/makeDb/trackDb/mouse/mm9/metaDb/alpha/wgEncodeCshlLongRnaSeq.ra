@@ -5,7 +5,7 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1.bam.bai
@@ -34,7 +34,7 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep2.bam.bai
@@ -63,7 +63,7 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd1Rep1.fastq.tgz
@@ -91,7 +91,7 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd1Rep2.fastq.tgz
@@ -119,7 +119,7 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd2Rep1.fastq.tgz
@@ -147,7 +147,7 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksFastqRd2Rep2.fastq.tgz
@@ -175,7 +175,7 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep1.bigWig
@@ -204,7 +204,7 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksMinusRawRep2.bigWig
@@ -233,7 +233,7 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep1.bigWig
@@ -262,7 +262,7 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksPlusRawRep2.bigWig
@@ -292,7 +292,7 @@ bioRep 14AWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -321,7 +321,7 @@ bioRep 14BWC
 cell Colon
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqColonAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -349,7 +349,7 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep1.bam.bai
@@ -378,7 +378,7 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqHeartAdult8wksAlnRep2.bam.bai
@@ -407,7 +407,7 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd1Rep1.fastq.tgz
@@ -435,7 +435,7 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd1Rep2.fastq.tgz
@@ -463,7 +463,7 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd2Rep1.fastq.tgz
@@ -491,7 +491,7 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksFastqRd2Rep2.fastq.tgz
@@ -519,7 +519,7 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep1.bigWig
@@ -548,7 +548,7 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksMinusRawRep2.bigWig
@@ -577,7 +577,7 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep1.bigWig
@@ -606,7 +606,7 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksPlusRawRep2.bigWig
@@ -636,7 +636,7 @@ bioRep 16AWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -665,7 +665,7 @@ bioRep 16BWC
 cell Heart
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqHeartAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -693,7 +693,7 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep1.bam.bai
@@ -722,7 +722,7 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqKidneyAdult8wksAlnRep2.bam.bai
@@ -751,7 +751,7 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd1Rep1.fastq.tgz
@@ -779,7 +779,7 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd1Rep2.fastq.tgz
@@ -807,7 +807,7 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd2Rep1.fastq.tgz
@@ -835,7 +835,7 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksFastqRd2Rep2.fastq.tgz
@@ -863,7 +863,7 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep1.bigWig
@@ -892,7 +892,7 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksMinusRawRep2.bigWig
@@ -921,7 +921,7 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep1.bigWig
@@ -950,7 +950,7 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksPlusRawRep2.bigWig
@@ -980,7 +980,7 @@ bioRep 17AWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -1009,7 +1009,7 @@ bioRep 17BWC
 cell Kidney
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqKidneyAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -1037,7 +1037,7 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep1.bam.bai
@@ -1066,7 +1066,7 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqLiverAdult8wksAlnRep2.bam.bai
@@ -1095,7 +1095,7 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd1Rep1.fastq.tgz
@@ -1123,7 +1123,7 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd1Rep2.fastq.tgz
@@ -1151,7 +1151,7 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd2Rep1.fastq.tgz
@@ -1179,7 +1179,7 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksFastqRd2Rep2.fastq.tgz
@@ -1207,7 +1207,7 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep1.bigWig
@@ -1236,7 +1236,7 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksMinusRawRep2.bigWig
@@ -1265,7 +1265,7 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep1.bigWig
@@ -1294,7 +1294,7 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksPlusRawRep2.bigWig
@@ -1324,7 +1324,7 @@ bioRep 18AWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -1353,7 +1353,7 @@ bioRep 18BWC
 cell Liver
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLiverAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -1381,7 +1381,7 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep1.bam.bai
@@ -1410,7 +1410,7 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqLungAdult8wksAlnRep2.bam.bai
@@ -1439,7 +1439,7 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd1Rep1.fastq.tgz
@@ -1467,7 +1467,7 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd1Rep2.fastq.tgz
@@ -1495,7 +1495,7 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd2Rep1.fastq.tgz
@@ -1523,7 +1523,7 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksFastqRd2Rep2.fastq.tgz
@@ -1551,7 +1551,7 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep1.bigWig
@@ -1580,7 +1580,7 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksMinusRawRep2.bigWig
@@ -1609,7 +1609,7 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep1.bigWig
@@ -1638,7 +1638,7 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksPlusRawRep2.bigWig
@@ -1668,7 +1668,7 @@ bioRep 15AWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -1697,7 +1697,7 @@ bioRep 15BWC
 cell Lung
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqLungAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -1725,7 +1725,7 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep1.bam.bai
@@ -1754,7 +1754,7 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqSpleenAdult8wksAlnRep2.bam.bai
@@ -1783,7 +1783,7 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd1Rep1.fastq.tgz
@@ -1811,7 +1811,7 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd1Rep2.fastq.tgz
@@ -1839,7 +1839,7 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd2Rep1.fastq.tgz
@@ -1867,7 +1867,7 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksFastqRd2Rep2.fastq.tgz
@@ -1895,7 +1895,7 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksMinusRawRep1.bigWig
@@ -1924,7 +1924,7 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksMinusRawRep2.bigWig
@@ -1953,7 +1953,7 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksPlusRawRep1.bigWig
@@ -1982,7 +1982,7 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksPlusRawRep2.bigWig
@@ -2012,7 +2012,7 @@ bioRep 13AWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -2041,7 +2041,7 @@ bioRep 13BWC
 cell Spleen
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqSpleenAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -2069,7 +2069,7 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep1.bam.bai
@@ -2098,7 +2098,7 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqTestisAdult8wksAlnRep2.bam.bai
@@ -2127,7 +2127,7 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd1Rep1.fastq.tgz
@@ -2155,7 +2155,7 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd1Rep2.fastq.tgz
@@ -2183,7 +2183,7 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd2Rep1.fastq.tgz
@@ -2211,7 +2211,7 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksFastqRd2Rep2.fastq.tgz
@@ -2239,7 +2239,7 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep1.bigWig
@@ -2268,7 +2268,7 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksMinusRawRep2.bigWig
@@ -2297,7 +2297,7 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep1.bigWig
@@ -2326,7 +2326,7 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksPlusRawRep2.bigWig
@@ -2356,7 +2356,7 @@ bioRep 12AWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -2385,7 +2385,7 @@ bioRep 12BWC
 cell Testis
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-10
 dateUnrestricted 2012-10-10
 fileName wgEncodeCshlLongRnaSeqTestisAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -2413,7 +2413,7 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1.bam,wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep1.bam.bai
@@ -2442,7 +2442,7 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2.bam,wgEncodeCshlLongRnaSeqThymusAdult8wksAlnRep2.bam.bai
@@ -2471,7 +2471,7 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd1Rep1.fastq.tgz
@@ -2499,7 +2499,7 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd1Rep2.fastq.tgz
@@ -2527,7 +2527,7 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd2Rep1.fastq.tgz
@@ -2555,7 +2555,7 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksFastqRd2Rep2.fastq.tgz
@@ -2583,7 +2583,7 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep1.bigWig
@@ -2612,7 +2612,7 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksMinusRawRep2.bigWig
@@ -2641,7 +2641,7 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep1.bigWig
@@ -2670,7 +2670,7 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksPlusRawRep2.bigWig
@@ -2700,7 +2700,7 @@ bioRep 19AWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-05
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep1.spikeins.CL.bam.gz
@@ -2729,7 +2729,7 @@ bioRep 19BWC
 cell Thymus
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2012-01-06
 dateUnrestricted 2012-10-05
 fileName wgEncodeCshlLongRnaSeqThymusAdult8wksSpikeinsRep2.spikeins.CL.bam.gz
@@ -2755,4 +2755,4 @@ objType composite
 composite wgEncodeCshlLongRnaSeq
 expVars lab,dataType,cell,age,strain
 
-# MAGIC: 1545252273
+# MAGIC: -600704399
