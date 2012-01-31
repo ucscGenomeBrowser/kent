@@ -21,7 +21,9 @@ source `which qaConfig.csh`
 set db=""
 set tablelist=""
 
-set warningMessage="\nPushes tables in list to mysqlbeta and records size.\n\
+set warningMessage="\n usage:  `basename $0` database tableList\n\
+\n\
+Pushes tables in list to mysqlbeta and records size. \n\
 Requires sudo access to mypush to run.\n\
 \n\
 Do not redirect output or run in the background,\n\
