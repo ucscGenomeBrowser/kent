@@ -12,7 +12,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
@@ -41,7 +41,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
@@ -70,7 +70,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -99,7 +99,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -127,7 +127,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -155,7 +155,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -184,7 +184,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -213,7 +213,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002001
@@ -240,7 +240,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002001
@@ -269,7 +269,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -297,7 +297,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -325,7 +325,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -354,7 +354,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -382,7 +382,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -410,7 +410,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -439,7 +439,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -468,7 +468,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -497,7 +497,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -526,7 +526,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
@@ -554,7 +554,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
@@ -582,7 +582,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
@@ -611,7 +611,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
@@ -640,7 +640,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
@@ -669,7 +669,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
@@ -699,7 +699,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
@@ -728,7 +728,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 dccAccession wgEncodeEM002003
@@ -755,7 +755,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 dccAccession wgEncodeEM002003
@@ -775,4 +775,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -114163483
+# MAGIC: -1942266315
