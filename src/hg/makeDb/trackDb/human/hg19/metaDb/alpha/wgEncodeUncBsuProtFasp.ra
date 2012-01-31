@@ -3,7 +3,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProtFasp
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-28
 dateUnrestricted 2012-06-28
 fileName wgEncodeUncBsuProtFaspK562MembranefractionRaw.peptideMapping.gz
@@ -22,7 +22,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProtFasp
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 fileName wgEncodeUncBsuProtFaspK562MembranefractionSig.peptideMapping.gz
@@ -37,4 +37,4 @@ subId 4175
 tableName wgEncodeUncBsuProtFaspK562MembranefractionSig
 view Signal
 
-# MAGIC: 1826996604
+# MAGIC: -723108416
