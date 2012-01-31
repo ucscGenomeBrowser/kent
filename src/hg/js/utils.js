@@ -1111,6 +1111,90 @@ function codonColoringChanged(name)
 }
 
 
+var bindings = {
+    // This object is for finding a subtring using tokens as bounds
+    // The tokens can be literal strings or regular expressions.
+    // If regular expressions are used, then only the first expression found will count
+    // If not using regexp, then you can pass in limits to the original string
+
+    _raw: function (begToken,endToken,someString,ixBeg,ixEnd)
+    { // primitive not meant to be called directly but by bindings.inside and bindings.outside
+        if (someString.length <= 0)
+            return '';
+        if (ixBeg == undefined)
+            ixBeg = 0;
+        if (ixEnd == undefined)
+            ixEnd = someString.length;
+        var insideBeg = ixBeg;
+        var insideEnd = ixEnd;
+        if (jQuery.type(begToken) === "regexp")
+            insideBeg = someString.search(begToken);
+        else if (begToken.length > 0)
+            insideBeg = someString.indexOf(begToken,ixBeg);
+        if (jQuery.type(endToken) === "regexp")
+            insideEnd = someString.search(endToken);
+        else if (endToken.length > 0)
+            insideEnd = someString.indexOf(endToken,ixBeg);
+        if (ixBeg <= insideBeg && insideBeg <= insideEnd && insideEnd <= ixEnd)
+            return {start : insideBeg, stop : insideEnd};
+
+        return {start : -1, stop : -1};
+    },
+
+    inside: function (begToken,endToken,someString,ixBeg,ixEnd)
+    { // returns the inside bounds of 2 tokens within a string
+    // Note ixBeg and ixEnd are optional bounds already established within string
+    // Pattern match can be used instead of literal token if a regexp is passed in for the tokens
+        var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
+        if (bounds.start > -1) {
+            if (jQuery.type(begToken) === "regexp")
+                bounds.start += someString.match(begToken).length;
+            else
+                bounds.start += begToken.length;
+        }
+        return bounds;
+    },
+
+    outside: function (begToken,endToken,someString,ixBeg,ixEnd)
+    { // returns the outside bounds of 2 tokens within a string
+    // Note ixBeg and ixEnd are optional bounds already established within string
+    // Pattern match can be used instead of literal token if a regexp is passed in for the tokens
+        var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
+        if (bounds.start > -1) {
+            if (jQuery.type(endToken) === "regexp")
+                bounds.stop  += someString.match(endToken).length;
+            else
+                bounds.stop  += endToken.length;
+        }
+        return bounds;
+    },
+
+    insideOut: function (begToken,endToken,someString,ixBeg,ixEnd)
+    { // returns what falls between begToken and endToken as found in the string provided
+    // Note ixBeg and ixEnd are optional bounds already established within string
+        var bounds = bindings.inside(begToken,endToken,someString,ixBeg,ixEnd);
+        if (bounds.start < bounds.stop)
+            return someString.slice(bounds.start,bounds.stop);
+
+        return '';
+    }
+}
+
+function stripHgErrors(returnedHtml)
+{ // strips HGERROR style 'early errors' and shows them in the warnBox
+    var cleanHtml = returnedHtml;
+    while(cleanHtml.length > 0) {
+        var bounds = bindings.outside('<!-- HGERROR-START -->','<!-- HGERROR-END -->',cleanHtml);
+        if (bounds.start == -1)
+            break;
+        var warnMsg = bindings.insideOut('<P>','</P>',cleanHtml,bounds.start,bounds.stop);
+        if (warnMsg.length > 0)
+            warn(warnMsg);
+        cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
+    }
+    return cleanHtml;
+}
+
 function stripJsFiles(returnedHtml,showError)
 { // strips javascript files from html returned by ajax
     var cleanHtml = returnedHtml;
@@ -1145,31 +1229,23 @@ function stripJsEmbedded(returnedHtml,showError)
     var cleanHtml = returnedHtml;
     // embedded javascript?
     while(cleanHtml.length > 0) {
-        var ix = cleanHtml.search(/\<script type=\'text\/javascript\'\>/i);
-        if (ix == -1)
+        var begPattern = /\<script type=\'text\/javascript\'\>/i;
+        var endPattern = /\<\/script\>/i;
+        var bounds = bindings.outside(begPattern,endPattern,cleanHtml);
+        if (bounds.start == -1)
             break;
-        var ix2 = cleanHtml.search(/\<\/script\>/i);
-        if (ix2 == -1)
-            break;
-        var jsEmbeded = cleanHtml.slice(ix,ix2+"</script>".length);
-        if (jsEmbeded && jsEmbeded.length > 0) {
-            // ignore warnBoxes
-            if(-1 == jsEmbeded.indexOf("showWarnBox")) {
-                if (showError)
-                    alert("jsEmbedded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
-            } else {
-                var ix3 = ix;
-                while ((ix3 = cleanHtml.indexOf('<P>',ix3)) != -1) {
-                    var ix4 = cleanHtml.indexOf('</P>',ix);
-                    var warnMsg = cleanHtml.slice(ix3+3,ix4-1);
-                    cleanHtml = cleanHtml.slice(0,ix3) + cleanHtml.slice(ix4+4);
-                    warn(warnMsg);
-                }
-            }
+        var jsEmbeded = cleanHtml.slice(bounds.start,bounds.stop);
+        if(-1 == jsEmbeded.indexOf("showWarnBox")) {
+            if (showError)
+                alert("jsEmbedded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
+        } else {
+            var warnMsg = bindings.insideOut('<li>','</li>',cleanHtml,bounds.start,bounds.stop);
+            if (warnMsg.length > 0)
+                warn(warnMsg);
         }
-        cleanHtml = cleanHtml.slice(0,ix) + cleanHtml.slice(ix2+"</script>".length);
+        cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
     }
-    return cleanHtml;
+    return stripHgErrors(cleanHtml); // Certain early errors are not called via warnBox
 }
 
 function visTriggersHiddenSelect(obj)
