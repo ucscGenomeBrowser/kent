@@ -131,7 +131,7 @@ noInherit on
         longLabel Kidney H3K4me1 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=ADULT8WKS factor=H3K04ME1 cellType=KIDNEY control=STD sex=M strain=C57BL6
 		type broadPeak
-		color 204,121,167
+		color 204,121,1677
 		# subId=3879 dateSubmitted=2011-04-07
 
 		track wgEncodeLicrHistoneLiverH3k4me1MAdult8wksC57bl6StdPk
@@ -158,7 +158,7 @@ noInherit on
         longLabel Kidney H3K4me3 Histone Modifications by ChIP-seq Peaks from ENCODE/LICR
 		subGroups view=Peaks age=ADULT8WKS factor=H3K04ME3 cellType=KIDNEY control=STD sex=M strain=C57BL6
 		type broadPeak
-		color 204,121,167
+		color 204,121,1677
 		# subId=3003 dateSubmitted=2011-04-12
 
 		track wgEncodeLicrHistoneHeartH3k4me3MAdult8wksC57bl6StdPk
@@ -329,7 +329,7 @@ noInherit on
         longLabel Kidney H3K4me1 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=ADULT8WKS factor=H3K04ME1 cellType=KIDNEY control=STD sex=M strain=C57BL6
 		type bigWig 0.130000 16.070000
-		color 204,121,167
+		color 204,121,1677
 		viewLimits 0.2:3
 		# subId=3879 dateSubmitted=2011-04-07
 
@@ -359,7 +359,7 @@ noInherit on
         longLabel Kidney H3K4me3 Histone Modifications by ChIP-seq Signal from ENCODE/LICR
 		subGroups view=Signal age=ADULT8WKS factor=H3K04ME3 cellType=KIDNEY control=STD sex=M strain=C57BL6
 		type bigWig 0.110000 57.959999
-		color 204,121,167
+		color 204,121,1677
 		viewLimits 0.2:10
 		# subId=3003 dateSubmitted=2011-04-12
 
@@ -433,7 +433,7 @@ noInherit on
         longLabel Kidney Input Histone Modifications by ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=INPUT cellType=KIDNEY control=STD sex=M strain=C57BL6
         type bigWig 0.140000 51.650002
-        color 204,121,167
+        color 204,121,1677
         # subId=3932 dateSubmitted=2011-04-27
 
         track wgEncodeLicrHistoneLiverInputMAdult8wksC57bl6StdSig
@@ -583,7 +583,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=OLFACT control=STD sex=M strain=C57BL6
         type bigWig 0.117609 27.520395
         color 105,105,105
-        viewLimits 0:5
         # subId=5342 dateSubmitted=2011-12-22
 
         track wgEncodeLicrHistoneThymusH3k27acMAdult8wksC57bl6StdSig
@@ -593,7 +592,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=THYMUS control=STD sex=M strain=C57BL6
         type bigWig 0.103252 37.652710
         color 86,180,233
-        viewLimits 0:5
         # subId=5343 dateSubmitted=2011-12-22
 
         track wgEncodeLicrHistoneOlfactInputMAdult8wksC57bl6StdSig
@@ -630,7 +628,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=SMINT control=STD sex=M strain=C57BL6
         type bigWig 0.120000 35.220001
         color 230,159,0
-        viewLimits 0:5
         # subId=5350 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneTestisH3k27acMAdult8wksC57bl6StdSig
@@ -640,7 +637,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=TESTIS control=STD sex=M strain=C57BL6
         type bigWig 0.130000 55.549999
         color 0,158,115
-        viewLimits 0:5
         # subId=5351 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneTestisH3k04me1MAdult8wksC57bl6StdSig
@@ -686,7 +682,6 @@ noInherit on
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=WBRAIN control=STD sex=U strain=C57BL6
         type bigWig 0.110000 47.540001
         color 105,105,105
-        viewLimits 0:5
         # subId=5366 dateSubmitted=2011-12-23
         # was wgEncodeLicrHistoneWholebrainH3k27acUE14halfC57bl6StdSig vsmalladi Tue Jan 10 15:20:48 2012
 
@@ -707,7 +702,6 @@ noInherit on
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=LIMB control=STD sex=U strain=C57BL6
         type bigWig 0.120000 48.669998
         color 102,50,200
-        viewLimits 0:5
         # subId=5370 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneLimbH3k04me1UE14halfC57bl6StdSig
@@ -744,7 +738,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=BMARROW control=STD sex=M strain=C57BL6
         type bigWig 0.110000 49.990002
         color 86,180,233
-        viewLimits 0:5
         # subId=5374 dateSubmitted=2011-12-23
 
         track wgEncodeLicrHistoneCbellumH3k27acMAdult8wksC57bl6StdSig
@@ -754,7 +747,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=CBELLUM control=STD sex=M strain=C57BL6
         type bigWig 0.110000 27.700001
         color 105,105,105
-        viewLimits 0:5
         # subId=5375 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneHeartH3k27acMAdult8wksC57bl6StdSig
@@ -764,7 +756,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=HEART control=STD sex=M strain=C57BL6
         type bigWig 0.100000 33.759998
         color 153,38,0
-        viewLimits 0:5
         # subId=5377 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneKidneyH3k27acMAdult8wksC57bl6StdSig
@@ -773,8 +764,11 @@ noInherit on
         longLabel Kidney adult-8wks C57BL/6 H3K27ac std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=KIDNEY control=STD sex=M strain=C57BL6
         type bigWig 0.110000 37.259998
+<<<<<<< HEAD:src/hg/makeDb/trackDb/mouse/mm9/wgEncodeLicrHistone.new.ra
         color 204,121,16
-        viewLimits 0:5
+=======
+        color 204,121,167
+>>>>>>> 934a92a6f67bb98dc1981f32a9b9734732598999:src/hg/makeDb/trackDb/mouse/mm9/wgEncodeLicrHistone.new.ra
         # subId=5378 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneLiverH3k27acMAdult8wksC57bl6StdSig
@@ -784,7 +778,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=LIVER control=STD sex=M strain=C57BL6
         type bigWig 0.140000 42.110001
         color 230,159,0
-        viewLimits 0:5
         # subId=5379 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneMefH3k27acMAdult8wksC57bl6StdSig
@@ -794,7 +787,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=MEF control=STD sex=M strain=C57BL6
         type bigWig 0.130000 43.160000
         color 65,105,225
-        viewLimits 0:5
         # subId=5380 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneEsb4H3k27acME0C57bl6StdSig
@@ -804,7 +796,6 @@ noInherit on
         subGroups view=Signal age=E0 factor=H3K27AC cellType=ESB4 control=STD sex=M strain=C57BL6
         type bigWig 0.140000 42.669998
         color 65,105,225
-        viewLimits 0:5
         # subId=5381 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneSpleenH3k27acMAdult8wksC57bl6StdSig
@@ -814,7 +805,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=SPLEEN control=STD sex=M strain=C57BL6
         type bigWig 0.120000 46.990002
         color 86,180,233
-        viewLimits 0:5
         # subId=5382 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneCortexH3k27acMAdult8wksC57bl6StdSig
@@ -824,7 +814,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=CORTEX control=STD sex=M strain=C57BL6
         type bigWig 0.140000 26.379999
         color 105,105,105
-        viewLimits 0:5
         # subId=5376 dateSubmitted=2011-12-24
 
         track wgEncodeLicrHistoneHeartH3k04me1UE14halfC57bl6StdSig
@@ -852,7 +841,6 @@ noInherit on
         subGroups view=Signal age=E14HALF factor=H3K27AC cellType=HEART control=STD sex=U strain=C57BL6
         type bigWig 0.110000 38.139999
         color 153,38,0
-        viewLimits 0:5
         # subId=5416 dateSubmitted=2012-01-04
 
         track wgEncodeLicrHistoneHeartInputUE14halfC57bl6StdSig
@@ -880,7 +868,6 @@ noInherit on
         subGroups view=Signal age=ADULT8WKS factor=H3K27AC cellType=PLAC control=STD sex=F strain=C57BL6
         type bigWig 0.130000 51.709999
         color 153,38,0
-        viewLimits 0:5
         # subId=5441 dateSubmitted=2012-01-05
 
         track wgEncodeLicrHistonePlacH3k04me1FAdult8wksC57bl6StdSig
