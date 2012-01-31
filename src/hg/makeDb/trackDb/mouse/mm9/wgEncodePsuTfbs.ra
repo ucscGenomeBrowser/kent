@@ -26,7 +26,7 @@
 #	       Y - Factor
 #	-View specific changes
 #		-Signal
-#			- windowing function = maximum
+#			- windowing function = mean+whiskers
 
 
 
@@ -251,7 +251,7 @@ wgEncode 1
 	autoScale off
 	configurable on
 	maxHeightPixels 100:16:16
-	windowingFunction maximum
+	windowingFunction mean+whiskers
 
 		track wgEncodePsuTfbsCh12Pol24h8FImmortal2a4bInputSig
 		parent wgEncodePsuTfbsViewSignal off 

@@ -67,7 +67,13 @@ def parseTrackDb(c, args):
 def compareMetaDb(c, args):
 
     alphaMetaDb = c.alphaMetaDb
-    betaMetaDb = c.betaMetaDb
+    try:
+       betaMetaDb = c.betaMetaDb
+    except KeyError:
+        print "No beta metaDb exists, this must be the first release"
+        print "Moving alpha metaDb to beta metaDb, please make on hgwbeta"
+        shutil.copy(c._alphaMdbPath, c._betaMdbPath)
+        return
     (retList, addList, dropList) = alphaMetaDb.changeSummary(betaMetaDb)
     if args.stage == "beta":
         f = open("%s.metaDb.beta.diff" % args.composite, "w")
@@ -83,6 +89,7 @@ def compareMetaDb(c, args):
             for j in retList[i]:
                 f.write("\t\t%s\n" % j)
         f.close
+        print "Printed out metaDb changelist between alpha and beta"
         print "Moving alpha metaDb to beta metaDb, please make on hgwbeta"
         shutil.copy(c._alphaMdbPath, c._betaMdbPath)
     if args.stage == "public":
@@ -185,6 +192,5 @@ def main():
     print "Printed out trackDb.wgEncode.ra"
 
     compareMetaDb(c, args)
-    print "Printed out metaDb changelist between alpha and beta"
 if __name__ == "__main__":
     main()

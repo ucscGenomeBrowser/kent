@@ -23,7 +23,7 @@
 #	       Y - Factor
 #	- View Specific changes
 #	       -Signal
-#	               - windowing function = maximum
+#	               - windowing function = mean+whiskers
 
 track wgEncodePsuHistone
 compositeTrack on
@@ -307,7 +307,7 @@ wgEncode 1
 	autoScale off
 	configurable on
 	maxHeightPixels 100:16:16
-	windowingFunction maximum
+	windowingFunction mean+whiskers
 
 		track wgEncodePsuHistoneG1eer4e2H3k4me1ME0S129InputSig
 		parent wgEncodePsuHistoneViewSignal

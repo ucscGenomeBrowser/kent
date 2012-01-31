@@ -56,9 +56,10 @@ else
 boolean isRgdGene(struct sqlConnection *conn)
 /* Return true if the gene set is RGD Genes. */
 {
-/* The existence of the table genes_rat storing GENES_RAT data from RGD indicates that we 
-are using RGD Genes as our main gene set for this genome. */
-return(hTableExists(sqlGetDatabase(conn), "genes_rat"));
+/* The existence of the table rgdGene2Raw storing
+ * GENES_RAT data from RGD indicates that we are using RGD Genes as
+ * our main gene set for this genome. */
+return(hTableExists(sqlGetDatabase(conn), "rgdGene2Raw"));
 }
 
 static boolean rgdGeneInfoExists(struct section *section, 

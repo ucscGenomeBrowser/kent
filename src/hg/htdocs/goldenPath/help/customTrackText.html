@@ -576,6 +576,16 @@ Genome Browser:</P>
 	to 60 characters, and must be enclosed in quotes if the text contains
 	spaces. The default
 	value is &quot;User Supplied Track&quot;.
+        <LI><B>type=<<I>track_type</I>></B> - Defines the track type. The track type
+        attribute is required for
+        <A HREF="/FAQ/FAQformat.html#format5.1" TARGET="_blank">BAM</A>,
+        <A HREF="/FAQ/FAQformat.html#format1.7" TARGET="_blank">BED detail</A>,
+        <A HREF="/FAQ/FAQformat.html#format1.8" TARGET="_blank">bedGraph</A>,
+        <A HREF="/FAQ/FAQformat.html#format1.5" TARGET="_blank">bigBed</A>,
+        <A HREF="/FAQ/FAQformat.html#format6.1" TARGET="_blank">bigWig</A>,
+        <A HREF="/FAQ/FAQformat.html#format6.5" TARGET="_blank">Microarray</A>,
+        <A HREF="/FAQ/FAQformat.html#format10.1" TARGET="_blank">VCF</A> and
+        <A HREF="/FAQ/FAQformat.html#format6" TARGET="_blank">WIG</A> tracks.
 	<LI><B>visibility=<<I>display_mode</I>></B> - Defines the
 	initial display mode of the annotation track. Values for
 	<I>display_mode</I> include: 0 - hide, 1 - dense, 2 - full, 3 - pack, 
@@ -651,6 +661,12 @@ Genome Browser:</P>
 	is blank, allowing the custom track to be displayed on any assembly. 
 	<LI><B>offset=<<I>offset</I>></B> - Defines a number to be added
 	to all coordinates in the annotation track. The default is &quot;0&quot;.
+        <LI><B>maxItems=<<I>&#35;</I>></B> - Defines the maximum number of items
+        the track can contain. The default value is 250. Be aware that tracks
+        with an extremely large number of items can cause system instability. The
+        <A HREF="http://genomewiki.ucsc.edu/index.php/Kent_source_utilities" TARGET="_blank">
+        Kent source utility</A> bedItemOverlapCount can assist in analyzing base
+        overlap with large tracks.
 	<LI><B>url=<<I>external_url</I>></B> - Defines a URL for an
 	external link associated with this track. This URL will be used
 	in the details page for the track. Any '$$' in this string this will be substituted
@@ -661,6 +677,14 @@ Genome Browser:</P>
         format HTML track description is 
         <a class="change" TARGET=_BLANK href="http://genome.ucsc.edu/goldenPath/help/ct_description.txt">
         here</a>.
+        <LI><B>bigDataUrl=<<I>external_url</I>></B> - Defines a URL to the
+        data file for
+        <A HREF="/FAQ/FAQformat.html#format5.1" TARGET="_blank">BAM</A>,
+        <A HREF="/FAQ/FAQformat.html#format1.5" TARGET="_blank">bigBed</A>,
+        <A HREF="/FAQ/FAQformat.html#format6.1" TARGET="_blank">bigWig</A> or
+        <A HREF="/FAQ/FAQformat.html#format10.1" TARGET="_blank">VCF</A>
+        tracks. This is a required attribute for those track types. There is no
+        default for this attribute.
 
 </UL>
 	</TD><TD WIDTH=15></TD></TR></TABLE>

@@ -615,8 +615,8 @@ INLINE boolean tdbIsVcf(struct trackDb *tdb)
 return startsWithWord("vcfTabix", tdb->type);
 }
 
-boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb);
-// Configuration dialogs amy be explicitly blocked in tracDb settings
+boolean trackDbSettingBlocksConfiguration(struct trackDb *tdb, boolean onlyAjax);
+// Configuration dialogs may be explicitly blocked in tracDb settings
 
 #endif /* TRACKDB_H */
 
