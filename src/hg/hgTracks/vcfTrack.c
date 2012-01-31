@@ -104,6 +104,8 @@ if (afEl != NULL && afDef != NULL && afDef->type == vcfInfoFloat)
     gotInfo = TRUE;
     for (i = 0;  i < afEl->count;  i++)
 	{
+	if (afEl->missingData[i])
+	    continue;
 	double altFreq = afEl->values[i].datFloat;
 	refFreq -= altFreq;
 	if (altFreq > maxAltFreq)
@@ -118,12 +120,15 @@ else
     const struct vcfInfoElement *anEl = vcfRecordFindInfo(record, "AN");
     const struct vcfInfoDef *anDef = vcfInfoDefForKey(vcff, "AN");
     if (acEl != NULL && acDef != NULL && acDef->type == vcfInfoInteger &&
-	anEl != NULL && anDef != NULL && anDef->type == vcfInfoInteger && anEl->count == 1)
+	anEl != NULL && anDef != NULL && anDef->type == vcfInfoInteger && anEl->count == 1 &&
+	anEl->missingData[0] == FALSE)
 	{
 	gotInfo = TRUE;
 	int totalCount = anEl->values[0].datFloat;
 	for (i = 0;  i < acEl->count;  i++)
 	    {
+	    if (acEl->missingData[i])
+		continue;
 	    int altCount = acEl->values[i].datFloat;
 	    double altFreq = (double)altCount / totalCount;
 	    refFreq -= altFreq;
@@ -230,7 +235,7 @@ struct hapCluster
     unsigned short *refCounts; // per-variant count of reference alleles observed
     unsigned short *unkCounts; // per-variant count of unknown (or unphased het) alleles
     unsigned short leafCount;  // number of leaves under this node (or 1 if leaf)
-    unsigned short gtHapIx;    // if leaf, (genotype index << 1) + hapIx (0 or 1 for diploid)
+    unsigned short gtHapIx;    // if leaf, (genotype index << 1) + hap (0 or 1 for diploid)
 };
 
 INLINE boolean isRef(const struct hapCluster *c, int varIx)
@@ -309,13 +314,13 @@ for (i=0;  i < helper->len;  i++)
 return (struct slList *)consensus;
 }
 
-INLINE void hapClusterToString(const struct hapCluster *c, struct dyString *dy, int len)
-/* Write a text representation of hapCluster's alleles into dy.  */
+INLINE void hapClusterToString(const struct hapCluster *c, char *s, int len)
+/* Write a text representation of hapCluster's alleles into s which is at least len+1 long.  */
 {
-dyStringClear(dy);
 int i;
 for (i=0;  i < len;  i++)
-    dyStringAppendC(dy, (isRef(c, i) ? '0': '1'));
+    s[i] = isRef(c, i) ? '0': '1';
+s[i] = 0;
 }
 
 static int cwaCmp(const struct slList *item1, const struct slList *item2, void *extraData)
@@ -324,15 +329,11 @@ static int cwaCmp(const struct slList *item1, const struct slList *item2, void *
 const struct hapCluster *c1 = (const struct hapCluster *)item1;
 const struct hapCluster *c2 = (const struct hapCluster *)item2;
 struct cwaExtraData *helper = extraData;
-static struct dyString *dy1 = NULL, *dy2 = NULL;
-if (dy1 == NULL)
-    {
-    dy1 = dyStringNew(0);
-    dy2 = dyStringNew(0);
-    }
-hapClusterToString(c1, dy1, helper->len);
-hapClusterToString(c2, dy2, helper->len);
-return strcmp(dy1->string, dy2->string);
+char s1[helper->len+1];
+char s2[helper->len+1];
+hapClusterToString(c1, s1, helper->len);
+hapClusterToString(c2, s2, helper->len);
+return strcmp(s1, s2);
 }
 
 void rSetGtHapOrder(struct hacTree *ht, unsigned short *gtHapOrder, unsigned short *retGtHapEnd)
@@ -408,7 +409,9 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 	    // first chromosome:
 	    c1->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
-	    if (gt->hapIxA == 0)
+	    if (gt->hapIxA < 0)
+		c1->unkCounts[countIx] = 1;
+	    else if (gt->hapIxA == 0)
 		c1->refCounts[countIx] = 1;
 	    if (gt->isHaploid)
 		haveHaploid = TRUE;
@@ -416,13 +419,15 @@ for (varIx = 0, rec = vcff->records;  rec != NULL && varIx < endIx;  varIx++, re
 		{
 		c2->leafCount = 1;
 		c2->gtHapIx = (gtIx << 1) | 1;
-		if (gt->hapIxB == 0)
+		if (gt->hapIxB < 0)
+		    c2->unkCounts[countIx] = 1;
+		else if (gt->hapIxB == 0)
 		    c2->refCounts[countIx] = 1;
 		}
 	    }
 	else
 	    {
-	    // Unphased heterozygote, don't use haplotype info for clustering
+	    // Missing data or unphased heterozygote, don't use haplotype info for clustering
 	    c1->leafCount = c2->leafCount = 1;
 	    c1->gtHapIx = gtIx << 1;
 	    c2->gtHapIx = (gtIx << 1) | 1;
@@ -465,21 +470,15 @@ else
     return shadesOfGray[5];
 }
 
-INLINE char *gtSummaryString(struct vcfRecord *rec)
+INLINE void gtSummaryString(struct vcfRecord *rec, struct dyString *dy)
 // Make pgSnp-like mouseover text, but with genotype counts instead of allele counts.
-// NOTE: Returned string is statically allocated, don't free it!
 {
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    dy = dyStringNew(0);
-else
-    dyStringClear(dy);
 if (isNotEmpty(rec->name) && !sameString(rec->name, "."))
     dyStringPrintf(dy, "%s: ", rec->name);
 if (rec->alleleCount < 2)
     {
     dyStringAppendC(dy, '?');
-    return dy->string;
+    return;
     }
 const struct vcfFile *vcff = rec->file;
 int gtRefRefCount = 0, gtRefAltCount = 0, gtAltAltCount = 0, gtOtherCount = 0;
@@ -513,18 +512,15 @@ if (revCmplDisp)
     for (i=0;  i < rec->alleleCount;  i++)
 	reverseComplement(rec->alleles[i], strlen(rec->alleles[i]));
     }
-return dy->string;
 }
 
 void mapBoxForCenterVariant(struct vcfRecord *rec, struct hvGfx *hvg, struct track *tg,
 			    int xOff, int yOff, int width)
 /* Special mouseover for center variant */
 {
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    dy = dyStringNew(0);
-dyStringClear(dy);
-dyStringPrintf(dy, "%s   Haplotypes sorted on ", gtSummaryString(rec));
+struct dyString *dy = dyStringNew(0);
+gtSummaryString(rec, dy);
+dyStringAppend(dy, "   Haplotypes sorted on ");
 char *centerChrom = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE, "centerVariantChrom");
 if (centerChrom == NULL || !sameString(chromName, centerChrom))
     dyStringAppend(dy, "middle variant by default. ");
@@ -640,7 +636,9 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
 	else
 	    {
 	    int alIx = hapIx ? gt->hapIxB : gt->hapIxA;
-	    if (alIx)
+	    if (alIx < 0)
+		unks++;
+	    else if (alIx > 0)
 		alts++;
 	    else
 		refs++;
@@ -657,7 +655,6 @@ for (pixIx = 0;  pixIx < hapHeight;  pixIx++)
     if (col != MG_WHITE)
 	hvGfxLine(hvg, x1, y, x2, y, col);
     }
-char *mouseoverText = gtSummaryString(rec);
 int yBot = yOff + tg->height - CLIP_PAD - 1;
 if (isCenter)
     {
@@ -680,8 +677,12 @@ if (isCenter)
     // Mouseover is handled separately by mapBoxForCenterVariant
     }
 else
+    {
+    struct dyString *dy = dyStringNew(0);
+    gtSummaryString(rec, dy);
     mapBoxHgcOrHgGene(hvg, rec->chromStart, rec->chromEnd, x1, yOff, w, tg->height, tg->track,
-		      rec->name, mouseoverText, NULL, TRUE, NULL);
+		      rec->name, dy->string, NULL, TRUE, NULL);
+    }
 if (colorMode == altOnlyMode)
     hvGfxLine(hvg, x1, yBot, x2, yBot, (isClustered ? purple : shadesOfGray[5]));
 }
@@ -726,12 +727,9 @@ struct titleHelper
 void addClusterMapItem(struct hacTree *ht, int x1, int y1, int x2, int y2, struct titleHelper *helper)
 /* If using imageV2, add mouseover text (no link) with info about this cluster. */
 {
-static struct dyString *dy = NULL;
 if (theImgBox && curImgTrack)
     {
-    if (dy == NULL)
-	dy = dyStringNew(0);
-    dyStringClear(dy);
+    struct dyString *dy = dyStringNew(0);
     struct hapCluster *c = (struct hapCluster *)ht->itemOrCluster;
     dyStringPrintf(dy, "N=%d ", c->leafCount);
     while (dyStringLen(dy) < 7)
@@ -1144,7 +1142,14 @@ errCatchFree(&errCatch);
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF + tabix files. */
 {
+#ifdef KNETFILE_HOOKS
+knetUdcInstall();
+#endif
 pgSnpMethods(track);
+// Disinherit next/prev flag and methods since we don't support next/prev:
+track->nextExonButtonable = FALSE;
+track->nextPrevExon = NULL;
+track->nextPrevItem = NULL;
 track->loadItems = vcfTabixLoadItems;
 track->canPack = TRUE;
 }
@@ -1170,9 +1175,7 @@ hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message
 void vcfTabixMethods(struct track *track)
 /* Methods for VCF alignment files, in absence of tabix lib. */
 {
-#if (defined USE_TABIX && defined KNETFILE_HOOKS)
-knetUdcInstall();
-#endif//def USE_TABIX && KNETFILE_HOOKS
+// NOP warning method to warn users that tabix is not installed.
 messageLineMethods(track);
 track->drawItems = drawUseVcfTabixWarning;
 }

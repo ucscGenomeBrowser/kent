@@ -2,6 +2,7 @@ metaObject wgEncodeUwRepliSeq
 objType composite
 composite wgEncodeUwRepliSeq
 expVars lab,dataType,cell
+geoSeriesAccession GSE34399
 
 metaObject wgEncodeUwRepliSeqBg02esG1bAlnRep1
 objType file
@@ -7457,17 +7458,17 @@ subId 4861
 tableName wgEncodeUwRepliSeqNhekWaveSignalRep1
 view WaveSignal
 
-metaObject wgEncodeUwRepliSeqSknshraG1bAlnRep1
+metaObject wgEncodeUwRepliSeqSknshG1bAlnRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraG1bAlnRep1.bam,wgEncodeUwRepliSeqSknshraG1bAlnRep1.bam.bai
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshG1bAlnRep1.bam,wgEncodeUwRepliSeqSknshG1bAlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS9913
@@ -7479,17 +7480,17 @@ replicate 1
 subId 4862
 view Alignments
 
-metaObject wgEncodeUwRepliSeqSknshraG1bPctSignalRep1
+metaObject wgEncodeUwRepliSeqSknshG1bPctSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraG1bPctSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshG1bPctSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId DS9913
@@ -7499,20 +7500,20 @@ phase G1b
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraG1bPctSignalRep1
+tableName wgEncodeUwRepliSeqSknshG1bPctSignalRep1
 view PctSignal
 
-metaObject wgEncodeUwRepliSeqSknshraG1bRawDataRep1
+metaObject wgEncodeUwRepliSeqSknshG1bRawDataRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraG1bRawDataRep1.fastq.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshG1bRawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS9913
@@ -7524,17 +7525,17 @@ replicate 1
 subId 4862
 view RawData
 
-metaObject wgEncodeUwRepliSeqSknshraG2AlnRep1
+metaObject wgEncodeUwRepliSeqSknshG2AlnRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraG2AlnRep1.bam,wgEncodeUwRepliSeqSknshraG2AlnRep1.bam.bai
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshG2AlnRep1.bam,wgEncodeUwRepliSeqSknshG2AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS9914
@@ -7546,17 +7547,17 @@ replicate 1
 subId 4862
 view Alignments
 
-metaObject wgEncodeUwRepliSeqSknshraG2PctSignalRep1
+metaObject wgEncodeUwRepliSeqSknshG2PctSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraG2PctSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshG2PctSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId DS9914
@@ -7566,20 +7567,20 @@ phase G2
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraG2PctSignalRep1
+tableName wgEncodeUwRepliSeqSknshG2PctSignalRep1
 view PctSignal
 
-metaObject wgEncodeUwRepliSeqSknshraG2RawDataRep1
+metaObject wgEncodeUwRepliSeqSknshG2RawDataRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraG2RawDataRep1.fastq.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshG2RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS9914
@@ -7591,17 +7592,17 @@ replicate 1
 subId 4862
 view RawData
 
-metaObject wgEncodeUwRepliSeqSknshraPkRep1
+metaObject wgEncodeUwRepliSeqSknshPkRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraPkRep1.bed.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshPkRep1.bed.gz
 grant Stam
 lab UW
 labExpId SK-N-SH_RA-1
@@ -7611,20 +7612,20 @@ phase None
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraPkRep1
+tableName wgEncodeUwRepliSeqSknshPkRep1
 view Peaks
 
-metaObject wgEncodeUwRepliSeqSknshraS1AlnRep1
+metaObject wgEncodeUwRepliSeqSknshS1AlnRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS1AlnRep1.bam,wgEncodeUwRepliSeqSknshraS1AlnRep1.bam.bai
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS1AlnRep1.bam,wgEncodeUwRepliSeqSknshS1AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS9915
@@ -7636,17 +7637,17 @@ replicate 1
 subId 4862
 view Alignments
 
-metaObject wgEncodeUwRepliSeqSknshraS1PctSignalRep1
+metaObject wgEncodeUwRepliSeqSknshS1PctSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS1PctSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS1PctSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId DS9915
@@ -7656,20 +7657,20 @@ phase S1
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraS1PctSignalRep1
+tableName wgEncodeUwRepliSeqSknshS1PctSignalRep1
 view PctSignal
 
-metaObject wgEncodeUwRepliSeqSknshraS1RawDataRep1
+metaObject wgEncodeUwRepliSeqSknshS1RawDataRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS1RawDataRep1.fastq.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS1RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS9915
@@ -7681,17 +7682,17 @@ replicate 1
 subId 4862
 view RawData
 
-metaObject wgEncodeUwRepliSeqSknshraS2AlnRep1
+metaObject wgEncodeUwRepliSeqSknshS2AlnRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS2AlnRep1.bam,wgEncodeUwRepliSeqSknshraS2AlnRep1.bam.bai
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS2AlnRep1.bam,wgEncodeUwRepliSeqSknshS2AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS9916
@@ -7703,17 +7704,17 @@ replicate 1
 subId 4862
 view Alignments
 
-metaObject wgEncodeUwRepliSeqSknshraS2PctSignalRep1
+metaObject wgEncodeUwRepliSeqSknshS2PctSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS2PctSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS2PctSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId DS9916
@@ -7723,20 +7724,20 @@ phase S2
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraS2PctSignalRep1
+tableName wgEncodeUwRepliSeqSknshS2PctSignalRep1
 view PctSignal
 
-metaObject wgEncodeUwRepliSeqSknshraS2RawDataRep1
+metaObject wgEncodeUwRepliSeqSknshS2RawDataRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS2RawDataRep1.fastq.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS2RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS9916
@@ -7748,17 +7749,17 @@ replicate 1
 subId 4862
 view RawData
 
-metaObject wgEncodeUwRepliSeqSknshraS3AlnRep1
+metaObject wgEncodeUwRepliSeqSknshS3AlnRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS3AlnRep1.bam,wgEncodeUwRepliSeqSknshraS3AlnRep1.bam.bai
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS3AlnRep1.bam,wgEncodeUwRepliSeqSknshS3AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS9917
@@ -7770,17 +7771,17 @@ replicate 1
 subId 4862
 view Alignments
 
-metaObject wgEncodeUwRepliSeqSknshraS3PctSignalRep1
+metaObject wgEncodeUwRepliSeqSknshS3PctSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS3PctSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS3PctSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId DS9917
@@ -7790,20 +7791,20 @@ phase S3
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraS3PctSignalRep1
+tableName wgEncodeUwRepliSeqSknshS3PctSignalRep1
 view PctSignal
 
-metaObject wgEncodeUwRepliSeqSknshraS3RawDataRep1
+metaObject wgEncodeUwRepliSeqSknshS3RawDataRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS3RawDataRep1.fastq.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS3RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS9917
@@ -7815,17 +7816,17 @@ replicate 1
 subId 4862
 view RawData
 
-metaObject wgEncodeUwRepliSeqSknshraS4AlnRep1
+metaObject wgEncodeUwRepliSeqSknshS4AlnRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS4AlnRep1.bam,wgEncodeUwRepliSeqSknshraS4AlnRep1.bam.bai
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS4AlnRep1.bam,wgEncodeUwRepliSeqSknshS4AlnRep1.bam.bai
 grant Stam
 lab UW
 labExpId DS9918
@@ -7837,17 +7838,17 @@ replicate 1
 subId 4862
 view Alignments
 
-metaObject wgEncodeUwRepliSeqSknshraS4PctSignalRep1
+metaObject wgEncodeUwRepliSeqSknshS4PctSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS4PctSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS4PctSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId DS9918
@@ -7857,20 +7858,20 @@ phase S4
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraS4PctSignalRep1
+tableName wgEncodeUwRepliSeqSknshS4PctSignalRep1
 view PctSignal
 
-metaObject wgEncodeUwRepliSeqSknshraS4RawDataRep1
+metaObject wgEncodeUwRepliSeqSknshS4RawDataRep1
 objType file
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraS4RawDataRep1.fastq.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshS4RawDataRep1.fastq.gz
 grant Stam
 lab UW
 labExpId DS9918
@@ -7882,17 +7883,17 @@ replicate 1
 subId 4862
 view RawData
 
-metaObject wgEncodeUwRepliSeqSknshraSumSignalRep1
+metaObject wgEncodeUwRepliSeqSknshSumSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraSumSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshSumSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId SK-N-SH_RA-1
@@ -7902,20 +7903,20 @@ phase None
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraSumSignalRep1
+tableName wgEncodeUwRepliSeqSknshSumSignalRep1
 view SumSignal
 
-metaObject wgEncodeUwRepliSeqSknshraValleysRep1
+metaObject wgEncodeUwRepliSeqSknshValleysRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraValleysRep1.bed.gz
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshValleysRep1.bed.gz
 grant Stam
 lab UW
 labExpId SK-N-SH_RA-1
@@ -7925,20 +7926,20 @@ phase None
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraValleysRep1
+tableName wgEncodeUwRepliSeqSknshValleysRep1
 view Valleys
 
-metaObject wgEncodeUwRepliSeqSknshraWaveSignalRep1
+metaObject wgEncodeUwRepliSeqSknshWaveSignalRep1
 objType table
-cell SK-N-SH_RA
+cell SK-N-SH
 composite wgEncodeUwRepliSeq
 dataType RepliSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
-dccAccession wgEncodeEH002248
-expId 2248
-fileName wgEncodeUwRepliSeqSknshraWaveSignalRep1.bigWig
+dccAccession wgEncodeEH002384
+expId 2384
+fileName wgEncodeUwRepliSeqSknshWaveSignalRep1.bigWig
 grant Stam
 lab UW
 labExpId SK-N-SH_RA-1
@@ -7948,7 +7949,7 @@ phase None
 project wgEncode
 replicate 1
 subId 4862
-tableName wgEncodeUwRepliSeqSknshraWaveSignalRep1
+tableName wgEncodeUwRepliSeqSknshWaveSignalRep1
 view WaveSignal
 
-# MAGIC: 204515594
+# MAGIC: -1256423704

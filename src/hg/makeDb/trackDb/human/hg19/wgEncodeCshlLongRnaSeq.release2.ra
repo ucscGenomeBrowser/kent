@@ -21,7 +21,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-html wgEncodeCshlLongRna.new
+html wgEncodeCshlLongRnaSeq.release2
 
 
 	track wgEncodeCshlLongRnaSeqViewPlusRawSig
@@ -1200,7 +1200,7 @@ html wgEncodeCshlLongRna.new
 
         track wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
-        shortLabel IMR90 cell total PlusRaw 1
+        shortLabel IM90 cell tot + 1
         longLabel IMR90 whole cell total RNA-seq Plus signal Rep 1 from ENCODE/CSHL 
         subGroups view=PlusRawSig cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
         type bigWig 1.000000 5416102.000000
@@ -2384,7 +2384,7 @@ html wgEncodeCshlLongRna.new
 
         track wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
-        shortLabel IMR90 cell total MinusRaw 1
+        shortLabel IM90 cell tot - 1
         longLabel IMR90 cell total RNA-seq Minus signal Rep 1 from ENCODE/CSHL 
         subGroups view=MinusRawSig cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
         type bigWig 1.000000 1657789.000000
@@ -3563,7 +3563,7 @@ html wgEncodeCshlLongRna.new
 
         track wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1
         parent wgEncodeCshlLongRnaSeqViewAlignments off
-        shortLabel IMR90 cell total Aln 1
+        shortLabel IM90 cell tot A 1
         longLabel IMR90 whole cell total RNA-seq Alignments Rep 1 from ENCODE/CSHL 
         subGroups view=Alignments cellType=IMR90 localization=CELL rnaExtract=TOTAL rep=rep1
         type bam

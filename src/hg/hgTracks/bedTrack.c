@@ -13,10 +13,10 @@
 #define SEQ_DELIM '~'
 
 struct bed *bedLoadPairedTagAlign(char **row)
-/* Load first six fields of bed. 
+/* Load first six fields of bed.
  * Add ~seq1~seq2 to end of name
  * Then remove the sequence to extra field when we convert to linkedFeature.
- * Assumes seq1 and seq2 are in row[6] and row[7], as they would be with a 
+ * Assumes seq1 and seq2 are in row[6] and row[7], as they would be with a
  * pairedTagAlign type (hg/lib/encode/pairedTagAlign.as). It would be good to be
  * able to check these columns exist but we dont have the sqlResult here. */
 {
@@ -56,7 +56,7 @@ else
 // pairedTagAlign loader is required for base coloring using sequence from seq1 & seq2
 // after removing optional bin column, this loader assumes seq1 and seq2 are in
 // row[6] and row[7] respectively of the sql result.
-if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE)) 
+if ((setting = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE))
 	&& sameString(setting, "seq1Seq2"))
     loader = bedLoadPairedTagAlign;
 
@@ -297,32 +297,29 @@ if (*pLfList == NULL || mud == NULL)
  * to do the filter. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
-    fil->pattern = cartUsualString(cart, fil->key, "");
+    fil->pattern = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, fil->suffix, "");
     if (fil->pattern[0] != 0)
         anyFilter = TRUE;
     }
 if (!anyFilter)
     return;
 
-type = cartUsualString(cart, mud->filterTypeVar, "red");
+type = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, mud->filterTypeSuffix, "red");
 if (sameString(type, "exclude"))
     isExclude = TRUE;
 else if (sameString(type, "include"))
     isExclude = FALSE;
 else
     colorIx = getFilterColor(type, MG_BLACK);
-type = cartUsualString(cart, mud->logicTypeVar, "and");
+type = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, mud->logicTypeSuffix, "and");
 andLogic = sameString(type, "and");
 
 /* Make a pass though each filter, and start setting up search for
  * those that have some text. */
 for (fil = mud->filterList; fil != NULL; fil = fil->next)
     {
-    fil->pattern = cartUsualString(cart, fil->key, "");
-    if (fil->pattern[0] != 0)
-	{
+    if (fil->pattern[0] != 0) // Already retrieved above.
 	fil->hash = newHash(10);
-	}
     }
 
 /* Scan tables id/name tables to build up hash of matching id's. */
@@ -654,7 +651,7 @@ tg->freeItems = freeSimpleBed;
 }
 
 void addSimpleFeatures(struct simpleFeature **pSfList, int start, int end, int qStart, boolean  everyBase)
-/* Add simple features from start to end to the list. 
+/* Add simple features from start to end to the list.
  * qStart is the offset in the query.
  * If everyBase is TRUE then add a simpleFeature for every base in the start,end region */
 {
@@ -672,14 +669,14 @@ for (s = start ; s < end ; s += stepSize)
     }
 }
 
-struct linkedFeatures *simpleBedToLinkedFeatures(struct bed *b, int bedFields, 
+struct linkedFeatures *simpleBedToLinkedFeatures(struct bed *b, int bedFields,
     boolean everyBase, boolean paired)
 /* Create a linked feature from a single bed item
  * Any bed fields past the 6th field (strand) will be ignored
  * Make one simpleFeature for every base of the bed if everyBase is TRUE,
  * otherwise it will contain a single 'exon' corresponding to the bed (start,end)
- * Dont free the bed as a pointer to each item is stored in lf->original 
- * If paired then need to strip ~seq1~seq2 from name and set it as DNA in lf->extra 
+ * Dont free the bed as a pointer to each item is stored in lf->original
+ * If paired then need to strip ~seq1~seq2 from name and set it as DNA in lf->extra
  *  and treat bed as 2-exon bed.
  */
 {
@@ -691,7 +688,7 @@ if (b)
     lf->end = lf->tallEnd = b->chromEnd;
     lf->components = NULL;
     if (bedFields > 5) // need to know orientation before checking if paired
-	lf->orientation = (b->strand[0] == '+' ? 1 : (b->strand[0] == '-' ? -1 : 0)); 
+	lf->orientation = (b->strand[0] == '+' ? 1 : (b->strand[0] == '-' ? -1 : 0));
     if (paired)
 	{
 	// Find seq1 & seq2, strip them from the name,
@@ -714,7 +711,7 @@ if (b)
 	dyStringAppend(d, seq2);
 	lf->extra = newDnaSeq(dyStringCannibalize(&d), l1+l2, lf->name);
 	// seq1 + seq2 are concatenated for drawing code
-	// in - orientation they are also reverse complemented, 
+	// in - orientation they are also reverse complemented,
 	// and the query start is relative to the reverse complement, so:
 	// in + orientation first feature (f1) is seq1, second (f2) is seq2
 	// in - orientation first feature (f1) is seq2, second (f2) is seq1
@@ -737,7 +734,7 @@ if (b)
 return lf;
 }
 
-struct linkedFeatures *simpleBedListToLinkedFeatures(struct bed *b, int bedFields, 
+struct linkedFeatures *simpleBedListToLinkedFeatures(struct bed *b, int bedFields,
     boolean everyBase, boolean paired)
 /* Create a list of linked features from a list of beds */
 {
@@ -781,7 +778,7 @@ if (chopByWhite(colors, words, sizeof(words)) != 2)
     errAbort("invalid colorByStrand setting %s (expecting pair of RGB values r,g,b r,g,b)", colors);
 if (orientation == 1)
     parseColor(words[0], &r, &g, &b);
-else if (orientation == -1) 
+else if (orientation == -1)
     parseColor(words[1], &r, &g, &b);
 else // return the main color
     {
@@ -831,7 +828,7 @@ if (fieldCount < 8)
     {
     if (baseColorGetDrawOpt(track) != baseColorDrawOff)
 	{
-	// data must be loaded as bed and converted to linkedFeatures 
+	// data must be loaded as bed and converted to linkedFeatures
 	// to draw each base character must make one simpleFeature per base
 	linkedFeaturesMethods(track);
 	char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);

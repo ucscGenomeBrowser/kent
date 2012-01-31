@@ -9,6 +9,9 @@
 #include "wiggle.h"
 #include "asParse.h"
 
+// This temporary define shouuld be removed after rollout of hgTrackUi subtrack cfg changes
+#define SUBTRACK_CFG
+
 struct lineFile;
 
 void setUdcCacheDir();
@@ -99,6 +102,7 @@ char *hBackgroundImage();
 #define BASE_SHOWRULER  "hgt.baseShowRuler"
 #define BASE_SHOWPOS	"hgt.baseShowPos"
 #define BASE_SHOWASM	"hgt.baseShowAsm"
+#define BASE_SHOWASM_SCALEBAR	"hgt.baseShowAsmScaleBar"
 #define BASE_TITLE	"hgt.baseTitle"
 #define REV_CMPL_DISP   "hgt.revCmplDisp"
 
@@ -831,7 +835,7 @@ struct mrnaFilter
    {
    struct  mrnaFilter *next;	/* Next in list. */
    char *label;	  /* Filter label. */
-   char *key;     /* Suffix of cgi variable holding search pattern. */
+   char *suffix;  /* Suffix of cgi variable holding search pattern. */
    char *table;	  /* Associated table to search. */
    char *pattern; /* Pattern to find. */
    int mrnaTableIx;	/* Index of field in mrna table. */
@@ -841,8 +845,8 @@ struct mrnaFilter
 struct mrnaUiData
 /* Data for mrna-specific user interface. */
    {
-   char *filterTypeVar;	/* cgi variable that holds type of filter. */
-   char *logicTypeVar;	/* cgi variable that indicates logic. */
+   char *filterTypeSuffix; /* cgi variable suffix that holds type of filter. */
+   char *logicTypeSuffix;  /* cgi variable suffix that indicates logic. */
    struct mrnaFilter *filterList;	/* List of filters that can be applied. */
    };
 
@@ -1006,14 +1010,23 @@ void filterButtons(char *filterTypeVar, char *filterTypeVal, boolean none);
 void radioButton(char *var, char *val, char *ourVal);
 /* Print one radio button */
 
-void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var, struct cart *cart);
+void oneMrnaFilterUi(struct controlGrid *cg, struct trackDb *tdb, char *text, char *var, char *suffix, struct cart *cart);
 /* Print out user interface for one type of mrna filter. */
 
-void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed);
-/* Put up UI for an bed track with filters. */
+void bedFiltCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed);
+/* Put up UI for an "bedFilter" tracks. */
+
+void mrnaCfgUi(struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed);
+/* Put up UI for an mRNA (or EST) track. */
+
+boolean bedScoreHasCfgUi(struct trackDb *tdb);
+// Confirms that this track has a bedScore Cfg UI
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
+
+void crossSpeciesCfgUi(struct cart *cart, struct trackDb *tdb);
+// Put up UI for selecting rainbow chromosome color or intensity score.
 
 void pslCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
 /* Put up UI for psl tracks */
@@ -1052,8 +1065,6 @@ struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
             uses:  defaultLimits: function param if no tdb limits settings found)
    The 'and' param allows stringing multiple where clauses together */
 
-#define ALL_SCORE_FILTERS_LOGIC
-#ifdef ALL_SCORE_FILTERS_LOGIC
 struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and);
 /* creates the where clause condition to gather together all random double filters
    Filters are expected to follow
@@ -1063,7 +1074,9 @@ struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, st
         {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
             uses:  defaultLimits: function param if no tdb limits settings found)
    The 'and' param and dyString in/out allows stringing multiple where clauses together */
-#endif///def ALL_SCORE_FILTERS_LOGIC
+
+boolean encodePeakHasCfgUi(struct trackDb *tdb);
+// Confirms that this track has encode Peak cfgUI
 
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
@@ -1088,9 +1101,9 @@ boolean tdbRefSortPrioritiesFromCart(struct cart *cart, struct slRef **tdbRefLis
 enum trackVisibility visCompositeViewDefault(struct trackDb *parentTdb,char *view);
 /* returns the default track visibility of particular view within a composite track */
 
-boolean isNameAtCompositeLevel(struct trackDb *tdb,char *name);
-/* cfgUi controls are passed a prefix name that may be at the composite or at the subtrack level
-   returns TRUE for composite level name */
+boolean isNameAtParentLevel(struct trackDb *tdb,char *name);
+// cfgUi controls are passed a prefix name that may be at the composite, view or subtrack level
+// returns TRUE if name at view or composite level
 
 boolean hSameTrackDbType(char *type1, char *type2);
 /* Compare type strings: require same string unless both are wig tracks. */
@@ -1162,7 +1175,8 @@ void filterBySetFree(filterBy_t **filterBySet);
 char *filterBySetClause(filterBy_t *filterBySet);
 /* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
 
-void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet, boolean onOneLine);
+void filterBySetCfgUi(struct cart *cart, struct trackDb *tdb,
+                      filterBy_t *filterBySet, boolean onOneLine);
 /* Does the UI for a list of filterBy structure */
 
 char *filterByClause(filterBy_t *filterBy);

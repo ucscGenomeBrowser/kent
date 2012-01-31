@@ -3,8 +3,8 @@ table kgXref
     (
     string kgID;        "Known Gene ID"
     string mRNA;        "mRNA ID"
-    string spID;        "SWISS-PROT protein Accession number"
-    string spDisplayID; "SWISS-PROT display ID"
+    string spID;        "UniProt protein Accession number"
+    string spDisplayID; "UniProt display ID"
     string geneSymbol;  "Gene Symbol"
     string refseq;      "RefSeq ID"
     string protAcc;     "NCBI protein Accession number"

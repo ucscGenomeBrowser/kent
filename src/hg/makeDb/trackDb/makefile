@@ -30,15 +30,16 @@ include ../../../inc/common.mk
 
 DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	venter1 \
-	panTro1 panTro2 panTro3 \
+	panTro1 panTro2 panTro3 panTro4 \
 	gorGor1 gorGor2 gorGor3 \
         nomLeu1 \
 	ponAbe2 \
-	rheMac2 \
+	rheMac2,rheMac3 \
 	papHam1 \
 	macEug1 macEug2 \
 	calJac1 calJac3 \
 	otoGar1 tupBel1\
+	saiBol1 \
 	ailMel1 \
 	canFam1 canFam2 canFamPoodle1 \
 	felCat3 felCat4  \
@@ -47,7 +48,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	speTri1 cavPor3 \
         hetGla1 \
 	oryCun1 oryCun2 \
-	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 \
+	bosTau2 bosTau3 bosTau4 bosTau5 bosTau6 bosTau7 \
 	equCab1 \
 	equCab2 \
 	oviAri1 \
@@ -60,9 +61,10 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	echTel1 \
 	monDom1 monDom4 monDom5 \
 	anoCar1 anoCar2 \
-	galGal2 galGal3 \
+	galGal2 galGal3 galGal4 \
 	melGal1 \
 	taeGut1 \
+	latCha1 \
 	xenTro1 xenTro2 xenTro3 \
 	tetNig1 tetNig2 \
 	oryLat1 oryLat2 \
@@ -74,6 +76,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 hg19Patch5 \
 	cioSav1 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 \
 	gasAcu1 \
+	gadMor1 \
 	dm1 dm2 dm3 \
 	dp2 dp3 \
 	droYak1 droYak2 \
@@ -129,6 +132,7 @@ DATA_TRIX = /data/trix
 update: #clean
 	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
 	./checkMetaDb alpha metaDb_${USER} ${DBS}
+	${MKDIR} ${CGI_BIN}-${USER}/encode
 	rm -f ${CGI_BIN}-${USER}/encode/cv.ra
 	cp -p cv/alpha/cv.ra  ${CGI_BIN}-${USER}/encode
 #  if you want to test track search tool with your own trix file
@@ -141,6 +145,7 @@ alpha: clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
+	${MKDIR} ${CGI_BIN}/encode
 	rm -f ${CGI_BIN}/encode/cv.ra
 	cp -p cv/alpha/cv.ra ${CGI_BIN}/encode
 	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
@@ -154,6 +159,7 @@ beta: onbeta clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
+	${MKDIR} ${CGI_BIN}/encode
 	rm -f ${CGI_BIN}/encode/cv.ra
 	cp -p cv/beta/cv.ra ${CGI_BIN}/encode
 	rm -f ${DBS:%=${DATA_TRIX}/%_trackDb.{ixx,ix}}
@@ -164,6 +170,7 @@ public: onbeta clean
 	./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb_public ${DBS}
 	rm -f ${CGI_BIN}-public/encode/cv.ra
+	${MKDIR} ${CGI_BIN}-public/encode
 	cp -p cv/public/cv.ra  ${CGI_BIN}-public/encode
 	rm -f ${DBS:%=${DATA_TRIX}/%_trackDb_public.{ixx,ix}}
 	HGDB_TRACKDB=trackDb_public ./buildTrix trackDb_public metaDb_public ${CGI_BIN}-public/encode/cv.ra ${DATA_TRIX} ${DBS}

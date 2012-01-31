@@ -21,8 +21,6 @@
 #define JS_SET_ALL_BUTTON_LABEL  "Set all"
 #define JS_DEFAULTS_BUTTON_LABEL "Set defaults"
 
-#define NEW_JQUERY 1          // temporary define turn on to test new jQuery (1.5) and jQuery UI (1.8)
-
 // Make toggle and [+][-] buttons without image gifs.
 // Not ready for this release.
 //#define BUTTONS_BY_CSS
@@ -190,6 +188,7 @@ struct jsonStringElement *newJsonString(char *str);
 struct jsonHashElement *newJsonHash(struct hash *h);
 struct jsonListElement *newJsonList(struct slRef *list);
 
+// NOTE: Adding to a NULL hash will add to the global "common" hash printed with jsonPrintGlobals()
 void jsonHashAdd(struct jsonHashElement *h, char *name, struct jsonElement *ele);
 
 void jsonHashAddString(struct jsonHashElement *h, char *name, char *val);
@@ -214,6 +213,12 @@ void jsonListAddBoolean(struct slRef **list, boolean val);
 
 void jsonPrint(struct jsonElement *json, char *name, int indentLevel);
 // print out a jsonElement
+
+extern struct jsonHashElement *jsonGlobalsHash; // The "all" globals json hash
+
+void jsonPrintGlobals(boolean wrapWithScriptTags);
+// prints out the "common" globals json hash
+// This hash is the one utils.js and therefore all CGIs know about
 
 void jsonErrPrintf(struct dyString *ds, char *format, ...);
 //  Printf a json error to a dyString for communicating with ajax code; format is:

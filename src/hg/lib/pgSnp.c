@@ -382,7 +382,7 @@ return result;
 
 void aaProperties (char *aa1, char *aa2);
 
-void printSeqCodDisplay(char *db, struct pgSnp *item)
+void printSeqCodDisplay(char *db, struct pgSnp *item, char *genePredTable)
 /* print the display of sequence changes for a coding variant */
 {
 struct bed *list = NULL, *el, *th = NULL;
@@ -390,8 +390,15 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 struct sqlConnection *conn = hAllocConn(db);
-safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, 0, exonCount, exonEnds, exonStarts  from knownGene where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
-   item->chrom, item->chromStart, item->chromEnd);
+if (!sqlTableExists(conn, genePredTable))
+    {
+    hFreeConn(&conn);
+    return;
+    }
+safef(query, sizeof(query), "select chrom, txStart, txEnd, name, 0, strand, cdsStart, cdsEnd, "
+      "0, exonCount, exonEnds, exonStarts  from %s "
+      "where chrom = '%s' and cdsStart <= %d and cdsEnd >= %d",
+      genePredTable, item->chrom, item->chromStart, item->chromEnd);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -568,7 +575,8 @@ char *acid1 = aaAcidity(aa1);
 char *acid2 = aaAcidity(aa2);
 float hyd1 = aaHydropathy(aa1);
 float hyd2 = aaHydropathy(aa2);
-printf("<table border=\"1\"><caption>Amino acid properties</caption><tr><td>&nbsp;</td><td>%s</td><td>%s</td></tr>\n", aa1, aa2);
+printf("<table class=\"descTbl\"><caption>Amino acid properties</caption>"
+       "<tr><th>&nbsp;</th><th>%s</th><th>%s</th></tr>\n", aa1, aa2);
 /* take out highlights, not sure what is significant change for hydropathy */
 //if (differentString(pol1, pol2))
     //printf("<tr bgcolor=\"white\"><td>polarity</td><td>%s</td><td>%s</td></tr>\n", pol1, pol2);
@@ -700,18 +708,15 @@ static char *alleleCountsFromVcfRecord(struct vcfRecord *rec, int alDescCount)
 /* Build up comma-sep list of per-allele counts, if available, up to alDescCount
  * which may be less than rec->alleleCount: */
 {
-static struct dyString *dy = NULL;
-if (dy == NULL)
-    dy = dyStringNew(0);
-else
-    dyStringClear(dy);
-dyStringClear(dy);
+struct dyString *dy = dyStringNew(0);
 int alCounts[VCF_MAX_ALLELE_LEN];
 boolean gotTotalCount = FALSE, gotAltCounts = FALSE;
 int i;
 for (i = 0;  i < rec->infoCount;  i++)
     if (sameString(rec->infoElements[i].key, "AN"))
 	{
+	if (rec->infoElements[i].missingData[0])
+	    break;
 	gotTotalCount = TRUE;
 	// Set ref allele to total count, subtract alt counts below.
 	alCounts[0] = rec->infoElements[i].values[0].datInt;
@@ -726,6 +731,8 @@ for (i = 0;  i < rec->infoCount;  i++)
 	    int j;
 	    for (j = 0;  j < rec->infoElements[i].count && j < alDescCount-1;  j++)
 		{
+		if (rec->infoElements[i].missingData[j])
+		    continue;
 		int ac = rec->infoElements[i].values[j].datInt;
 		alCounts[1+j] = ac;
 		if (gotTotalCount)
@@ -757,15 +764,16 @@ else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
 	struct vcfGenotype *gt = &(rec->genotypes[i]);
 	if (gt == NULL)
 	    uglyf("i=%d gt=NULL wtf?\n", i);
-	alCounts[gt->hapIxA]++;
-	if (! gt->isHaploid)
-	    alCounts[gt->hapIxB]++;
+	if (gt->hapIxA >= 0)
+	    alCounts[(unsigned char)gt->hapIxA]++;
+	if (!gt->isHaploid && gt->hapIxB >= 0)
+	    alCounts[(unsigned char)gt->hapIxB]++;
 	}
     dyStringPrintf(dy, "%d", alCounts[0]);
     for (i = 1;  i < alDescCount;  i++)
 	dyStringPrintf(dy, ",%d", alCounts[i]);
     }
-return cloneStringZ(dy->string, dy->stringSize+1);
+return dyStringCannibalize(&dy);
 }
 
 struct pgSnp *pgSnpFromVcfRecord(struct vcfRecord *rec)
@@ -803,7 +811,7 @@ pgs->alleleFreq = alleleCountsFromVcfRecord(rec, alCount);
 // the VCF spec only gives us one BQ... for the reference position?  should ask.
 dyStringClear(dy);
 for (i = 0;  i < rec->infoCount;  i++)
-    if (sameString(rec->infoElements[i].key, "BQ"))
+    if (sameString(rec->infoElements[i].key, "BQ") && !rec->infoElements[i].missingData[0])
 	{
 	float qual = rec->infoElements[i].values[0].datFloat;
 	dyStringPrintf(dy, "%.1f", qual);

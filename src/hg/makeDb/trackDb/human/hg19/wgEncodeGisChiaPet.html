@@ -1,28 +1,46 @@
 <H2>Description</H2>
 <P>
-This track is produced as part of the ENCODE Chromatin Interaction Analysis with Paired-End
-Tag (ChIA-PET) Project. It shows the locations of RNA polymerase II-bound (RNAPII-bound)
-chromatin interactions determined by Paired-End Tag (PET) sequencing using proximity-ligated
-chromatin extracts from five different human cell lines (HCT116 (colorectal cancer), 
-HeLa (cervical cancer), K562 (chronic myeloid leukemia), MCF7 (breast cancer),  and NB4 (promyelocytic)).
+This track is produced as part of the ENCODE Project. 
+Chromatin Interaction Analysis with Paired-End
+Tag (ChIA-PET) shows the locations of RNA polymerase II-bound (Pol2)
+chromatin interactions determined by paired-end tag 
+sequencing using proximity-ligated
+chromatin extracts from five different human cancer cell lines 
+(K562 (chronic myeloid leukemia), 
+HCT116 (colorectal cancer), 
+HeLa-S3 (cervical cancer), 
+MCF-7 (breast cancer),  
+and NB4 (promyelocytic)).
  A chromatin interaction is
-defined as two regions of the genome that are far apart in terms of genomic distance, but are
-spatially proximate to each other in the 3-dimensional cellular nucleus.
+defined as two regions of the genome that are 
+far apart in terms of genomic distance, but are
+spatially proximate to each other in 
+the 3-dimensional cellular nucleus.
 <P>
-Additionally, the RNAPII ChIA-PET experiment generates RNAPII binding sites. A binding site
-is defined as a region of the genome that is highly enriched by specific Chromatin
-ImmunoPrecipitation (ChIP) against a transcription factor, which indicates that the transcription
-factor binds specifically to this region. Generally, a chromatin interaction is more likely to
-connect two RNAPII binding sites together.
+Additionally, the Pol2 ChIA-PET experiment generates 
+Pol2 binding sites. A binding site
+is defined as a region of the genome 
+that is highly enriched by specific Chromatin
+ImmunoPrecipitation (ChIP) against a transcription 
+factor, which indicates that the transcription
+factor binds specifically to this region. 
+Generally, a chromatin interaction is more likely to
+connect two Pol2 binding sites together.
 <P>
 <h2>Display Conventions and Configuration</h2>
-In the graphical display, the tags (ends) are represented by blocks, and connected by a horizontal
-line if both ends are in the same chromosome and in a viewable window. PET sequences that
-overlap at both ends form PET clusters and the total count of PETs in a PET cluster reflects
-the strength of a chromatin interaction. Singleton PETs (PET count = 1 in a PET cluster) are
-most likely noise, whereas PET clusters with PET count 3 and above could indicate genuine
-chromatin interactions. A density track of the tags shows the ChIP enrichment at different points
-of genome, and high peaks indicate RNAPII binding sites.
+In the graphical display, the tags (ends) are 
+represented by blocks, and connected by a horizontal
+line if both ends are in the same chromosome 
+and in a viewable window. PET sequences that
+overlap at both ends form PET clusters and the 
+total count of PETs in a PET cluster reflects
+the strength of a chromatin interaction. 
+Singleton PETs (PET count = 1 in a PET cluster) are
+most likely noise, whereas PET clusters with 
+PET count 3 and above could indicate genuine
+chromatin interactions. A density track of the 
+tags shows the ChIP enrichment at different points
+of genome, and high peaks indicate Pol2 binding sites.
 </P>
 Instructions for configuring multi-view tracks are 
 <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
@@ -32,52 +50,82 @@ you wish to hide.</p>
 
 <dl>
 <dt><i>Interactions</i>
-</dt><dd>ChIA-PET Chromatin Interaction PET clusters: Two different genomic regions in the chromatin are 
-genomically far from each other or in different chromosomes, but are spatially close to each
- other in the nucleus and interact with each other for regulatory functions.
- BED12 format is used to represent the data.  In addition to the two replicates displayed here there are pooled replicates available as <a href="http://genome-test.cse.ucsc.edu/cgi-bin/hgFileUi?g=wgEncodeGisChiaPet" target=_blank>downloads</a>.
-</dd><dt><i>Alignment densities</i> (currently available only as <a href="http://genome-test.cse.ucsc.edu/cgi-bin/hgFileUi?g=wgEncodeGisChiaPet" target=_blank>downloads</a>)
-</dt><dd>The Alignment densities view shows reads mapped to the genome. BAM format is used to represent the data. The SAM/BAM tags used are 
-QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, MPOS, ISIZE, SEQ  and QUAL.
- For more information about the SAM output and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>
- SAM Format Specification</a> for more information on the SAM/BAM file format.
+</dt><dd>ChIA-PET Chromatin Interaction PET clusters: 
+Two different genomic regions in the chromatin are 
+genomically far from each other or in different 
+chromosomes, but are spatially close to each 
+other in the nucleus and interact with each 
+other for regulatory functions. 
+BED12 format is used to represent the data. 
+In addition to the two replicates displayed here, 
+there are pooled replicates available as 
+<a href="http://genome-test.cse.ucsc.edu/cgi-bin/hgFileUi?g=wgEncodeGisChiaPet" target=_blank>downloads</a>.
+</dd><dt><i>Alignment densities</i> (currently available only as 
+<a href="http://genome-test.cse.ucsc.edu/cgi-bin/hgFileUi?g=wgEncodeGisChiaPet" target=_blank>downloads</a>)
+</dt><dd>The Alignment densities view shows reads 
+mapped to the genome. BAM format is used to 
+represent the data. The SAM/BAM tags used are 
+QNAME, FLAG, RNAME, POS, MAPQ, CIGAR, MRNM, 
+MPOS, ISIZE, SEQ  and QUAL. 
+For more informationon the SAM/BAM file format and output see the 
+<a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>
+ SAM format specifications</a>.
 </dd></dl>
-<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+<p>Metadata for a particular subtrack can be found 
+by clicking the down arrow in the list of subtracks.</p>
 
 <H2>Methods</H2>
 <P>
-Chromatin Interaction Analysis with Paired-End Tag (ChIA-PET) Sequencing is a global, de novo,
+Chromatin Interaction Analysis with Paired-End Tag 
+(ChIA-PET) Sequencing is a global, <i>de novo</i>,
  high-throughput method for characterizing the 3-dimensional
-structure of chromatins in the nucleus. In the ChIA-PET protocol, cells were cross-linked,
-fragmented, and chromatin immunoprecipitated. The DNA fragments which are brought close
-together by the chromatin interactions were then proximity-ligated. During this proximity
-ligation step, the half-linkers containing flanking MmeI sites (type IIS restriction enzymes) were
-first ligated to the DNA fragments; then, the half-linkers were ligated to each other to form full
-linkers. Full linkers bridge either two ends of a self-circularized fragment, or two ends of two
-different chromatin fragments. The material was then reverse cross-linked, purified, and digested
-with MmeI. As MmeI cuts 20 base pairs away from its recognition site, tag-linker-tag (Paired-End
- Tag, PET) constructs were obtained, which was then sequenced by ultra-high-throughput
-methods (Illumina or SOLiD paired end sequencing). ChIA-PET reads were processed with
- <a href="http://www.ncbi.nlm.nih.gov/pubmed/20181287" target=_blank>ChIA-PET Tool </a> by 
- the following steps: linker filtering, short reads mapping, PET classification, binding site
- identification, and interaction cluster identification. The high-confidence binding sites and
- chromatin interaction clusters were reported.
+structure of chromatins in the nucleus. In the 
+ChIA-PET protocol, cells are cross-linked,
+fragmented, and chromatin immunoprecipitated. 
+The DNA fragments which are brought close
+together by the chromatin interactions are then 
+proximity-ligated. During this proximity
+ligation step, the half-linkers containing flanking 
+MmeI sites (type IIS restriction enzymes) are
+first ligated to the DNA fragments; then, the half-linkers 
+are ligated to each other to form full
+linkers. Full linkers bridge either two ends of a 
+self-circularized fragment, or two ends of two
+different chromatin fragments. The material is 
+then reverse cross-linked, purified, and digested
+with MmeI. As MmeI cuts 20 base pairs away from its 
+recognition site, tag-linker-tag (Paired-End
+ Tag, PET) constructs were obtained, which is 
+then sequenced by ultra-high-throughput
+methods (Illumina or SOLiD paired end sequencing). 
+ChIA-PET reads were processed with
+ <a href="http://www.ncbi.nlm.nih.gov/pubmed/20181287" target=_blank>ChIA-PET Tool </a> 
+by the following steps: linker filtering, 
+short reads mapping, PET classification, binding site 
+identification, and interaction cluster identification. 
+The high-confidence binding sites and 
+chromatin interaction clusters were reported.
 <P>
 <H2>Verification</H2>
 <P>
-Chromatin interactions identified by ChIA-PET have been validated by 3C, ChIP-3C, 4C and DNA-FISH 
-(<a href="http://www.ncbi.nlm.nih.gov/pubmed/19890323" target=_blank>Fullwood et al </a>).
+Chromatin interactions identified by ChIA-PET have been 
+validated by 3C, ChIP-3C, 4C and DNA-FISH 
+(<a href="http://www.ncbi.nlm.nih.gov/pubmed/19890323" target=_blank>Fullwood et al</a>).
 <P>
 <H2>Credits</H2>
 <P>
 Guoliang Li, Xiaoan Ruan, Kuljeet Singh Sandhu, Fabianus Hendriyan Mulawadi, Huay Mei Poh, Yufen Goh, Su Qin Peh, Wing-Kin Sung, Yijun Ruan,
 Genome Institute of Singapore.</P>
 <P>
-Collaborators: Raymond Auerbach, Michael Snyder, Department of Genetics, Stanford University, Stanford</P>
+Collaborators: Raymond Auerbach, Michael Snyder, Department of Genetics, Stanford University, Stanford, CA</P>
 
 Contact:
-<A HREF="http://www.gis.a-star.edu.sg/internet/site/investigator/investigator.php?user_id=19"
-TARGET=_BLANK>Yijun Ruan</A>
+<A HREF="mailto:&#114;&#117;a&#110;&#121;j&#64;&#103;&#105;&#115;.
+&#97;&#45;&#115;&#116;&#97;&#114;.
+&#101;&#100;&#117;.
+&#115;g">
+Yijun Ruan</A>
+<!-- above address is ruanyj at gis.a-star.edu.sg -->
 <P>
 <H2>References</H2>
 <P>
@@ -88,13 +136,12 @@ chromatin interaction analysis with paired-end tag sequencing</a>. Genome Biol. 
 <P>
 Fullwood MJ, Han Y, Wei CL, Ruan X, Ruan Y. <a href="http://www.ncbi.nlm.nih.gov/pubmed/20069536" target=_blank>Chromatin interaction analysis using 
 paired-end tag sequencing</a>. Curr Protoc Mol Biol. 2010 Jan;Chapter 21:Unit 21 15 1-25.
+<P>
+Fullwood MJ, Han Y, Wei CL, Ruan X, Ruan Y. <a href="http://www.ncbi.nlm.nih.gov/pubmed/20069536" target=_blank>Chromatin interaction analysis using 
+paired-end tag sequencing</a>. Curr Protoc Mol Biol. 2010 Jan;Chapter 21:Unit 21 15 1-25.
 
 <P>
-Fullwood MJ, Liu MH, Pan YF, Liu J, Xu H, Mohamed YB, Orlov YL, Velkov S, Ho A, Mei PH, 
-Chew EG, Huang PY, Welboren WJ, Han Y, Ooi HS, Ariyaratne PN, Vega VB, Luo Y, Tan PY, 
-Choy PY, Wansa KD, Zhao B, Lim KS, Leow SC, Yow JS, Joseph R, Li H, Desai KV, Thomsen JS, 
-Lee YK, Karuturi RK, Herve T, Bourque G, Stunnenberg HG, Ruan X, Cacheux-Rataboul V, Sung WK, 
-Liu ET, Wei CL, Cheung E, Ruan Y. <a href="http://www.ncbi.nlm.nih.gov/pubmed/19890323" target=_blank>An oestrogen-receptor-alpha-bound human chromatin interactome</a>. 
+Fullwood MJ, Liu MH, Pan YF, Liu J, Xu H, Mohamed YB, Orlov YL, Velkov S, Ho A, Mei PH, Chew EG, Huang PY, Welboren WJ, Han Y, Ooi HS, Ariyaratne PN, Vega VB, Luo Y, Tan PY, Choy PY, Wansa KD, Zhao B, Lim KS, Leow SC, Yow JS, Joseph R, Li H, Desai KV, Thomsen JS, Lee YK, Karuturi RK, Herve T, Bourque G, Stunnenberg HG, Ruan X, Cacheux-Rataboul V, Sung WK, Liu ET, Wei CL, Cheung E, Ruan Y. <a href="http://www.ncbi.nlm.nih.gov/pubmed/19890323" target=_blank>An oestrogen-receptor-alpha-bound human chromatin interactome</a>. 
 Nature. 2009 Nov 5;462(7269):58-64.
 
 <H2> Data Release Policy </H2>

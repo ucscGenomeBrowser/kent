@@ -288,7 +288,7 @@ char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retri
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
-char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
+char *cloneDbScript = "http://www.ncbi.nlm.nih.gov/clone?term=";
 char *traceScript = "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=retrieve&val=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 char *uniprotFormat = "http://www.uniprot.org/uniprot/%s";
@@ -443,10 +443,10 @@ fprintf(f, "%s", id);
 }
 */
 
-static void printCloneRegUrl(FILE *f, char *clone)
+static void printCloneDbUrl(FILE *f, char *clone)
 /* Print URL for Clone Registry at NCBI for a clone */
 {
-fprintf(f, "\"%s%s\"", cloneRegScript, clone);
+fprintf(f, "\"%s%s\"", cloneDbScript, clone);
 }
 
 static void printTraceUrl(FILE *f, char *idType, char *name)
@@ -1418,7 +1418,10 @@ if (word && (sameWord(word,"bed") || sameWord(word,"bigBed")))
     {
     if (NULL != (word = nextWord(&type)))
         start = sqlUnsigned(word);
-    #ifdef EXTRA_FIELDS_SUPPORT
+    #ifndef EXTRA_FIELDS_SUPPORT
+    else // custom beds and bigBeds may not have full type "begBed 9 +"
+        start = max(0,slCount(as->columnList) - fieldCount); 
+    #else///ifdef EXTRA_FIELDS_SUPPORT
     // extraFields do not have to define all fields
     if (fieldCount > slCount(extras))
         start = 0;
@@ -1469,13 +1472,19 @@ for(;col != NULL && count < fieldCount;col=col->next)
         }
     else if (asTypesIsInt(col->lowType->type))
         {
-        long long valInt = sqlLongLong(fields[ix]);
-        printf("<td>%lld</td></tr>\n", valInt);
+        long valInt = strtol(fields[ix],NULL,10);
+        if (errno == 0 && valInt != 0)
+            printf("<td>%ld</td></tr>\n", valInt);
+        else
+            printf("<td>%s</td></tr>\n", fields[ix]);// decided not to print error
         }
     else if (asTypesIsFloating(col->lowType->type))
         {
-        double valDouble = sqlDouble(fields[ix]);
-        printf("<td>%g</td></tr>\n", valDouble);
+        double valDouble = strtod(fields[ix],NULL);
+        if (errno == 0 && valDouble != 0)
+            printf("<td>%g</td></tr>\n", valDouble);
+        else
+            printf("<td>%s</td></tr>\n", fields[ix]);// decided not to print error
         }
     #endif///ndef EXTRA_FIELDS_SUPPORT
     else
@@ -14326,7 +14335,7 @@ if (row != NULL)
     fc = fishClonesLoad(row);
     /* Print out general sequence positional information */
     printf("<H2><A HREF=");
-    printCloneRegUrl(stdout, clone);
+    printCloneDbUrl(stdout, clone);
     printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
     htmlHorizontalLine();
     printf("<TABLE>\n");
@@ -15623,7 +15632,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 printf("<B>NCBI Clone Registry: </B><A href=");
-printCloneRegUrl(stdout, itemName);
+printCloneDbUrl(stdout, itemName);
 printf(" target=_blank>%s</A><BR>\n", itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
@@ -15653,7 +15662,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 printf("<B>NCBI Clone Registry: </B><A href=");
-printCloneRegUrl(stdout, itemName);
+printCloneDbUrl(stdout, itemName);
 printf(" target=_blank>%s</A><BR>\n", itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
@@ -15684,7 +15693,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 printf("<B>NCBI Clone Registry: </B><A href=");
-printCloneRegUrl(stdout, itemName);
+printCloneDbUrl(stdout, itemName);
 printf(" target=_blank>%s</A><BR>\n", itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
@@ -15935,7 +15944,7 @@ if (variantSignal == '#')
    stripChar(itemCopy, '#');
 genericHeader(tdb, itemCopy);
 printf("<B>NCBI Clone Registry: </B><A href=");
-printCloneRegUrl(stdout, itemCopy);
+printCloneDbUrl(stdout, itemCopy);
 printf(" target=_blank>%s</A><BR>\n", itemCopy);
 if (variantSignal == '*' || variantSignal == '?' || variantSignal == '#')
     printf("<B>Note this BAC was found to be variant.   See references.</B><BR>\n");
@@ -15969,7 +15978,7 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 printf("<B>NCBI Clone Registry: </B><A href=");
-printCloneRegUrl(stdout, itemName);
+printCloneDbUrl(stdout, itemName);
 printf(" target=_blank>%s</A><BR>\n", itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
@@ -18267,7 +18276,7 @@ if (row != NULL)
             if (rowb != NULL)
                 {
 	        printf("<H2><A HREF=");
-	        printCloneRegUrl(stdout, clone);
+	        printCloneDbUrl(stdout, clone);
 	        printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
                 if (rowb[0] != NULL)
                     {
@@ -18296,7 +18305,7 @@ if (row != NULL)
         else
             {
 	    printf("<H2><A HREF=");
-	    printCloneRegUrl(stdout, clone);
+	    printCloneDbUrl(stdout, clone);
 	    printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
 	    }
         }
@@ -22957,7 +22966,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     int i = 0;
     printPos(el->chrom, el->chromStart, el->chromEnd, "+", TRUE, el->name);
     printf("Alleles are relative to forward strand of reference genome:<br>\n");
-    printf("<table border=1 cellpadding=3><tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
+    printf("<table class=\"descTbl\">"
+	   "<tr><th>Allele</th><th>Frequency</th><th>Quality Score</th></tr>\n");
     chopByChar(name, '/', all, el->alleleCount);
     if (differentString(el->alleleFreq, ""))
         {
@@ -22983,7 +22993,8 @@ if ((row = sqlNextRow(sr)) != NULL)
         printPgSiftPred(database, siftTab, el);
     if (polyTab != NULL)
         printPgPolyphenPred(database, polyTab, el);
-    printSeqCodDisplay(database, el);
+    char *genePredTable = "knownGene";
+    printSeqCodDisplay(database, el, genePredTable);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
@@ -23781,7 +23792,9 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
-printTrackHtml(tdb);
+/* do not print this for custom tracks, they do this later */
+if (ct == NULL)
+    printTrackHtml(tdb);
 
 bedDetailFree(&r);
 freeMem(escName);

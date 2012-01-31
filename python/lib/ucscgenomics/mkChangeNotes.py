@@ -189,13 +189,17 @@ class makeNotes(object):
     def __checkMd5sums(self):
         (newfiles, oldfiles, loose) = (self.newReleaseFiles, self.oldReleaseFiles, self.loose)
         errors = []
+        repush = set()
         for i in oldfiles:
             if i not in newfiles:
                 pass
             elif re.match('wgEncode.*', i):
                 if oldfiles[i].md5sum != newfiles[i].md5sum:
+                    repush.add(i)
                     errors.append("file: %s have changed md5sums between releases. %s vs %s" % (i, oldfiles[i].md5sum, newfiles[i].md5sum))
         if loose:
+            for i in repush:
+                del oldfiles[i]
             return list()
         else:
             return errors
@@ -423,6 +427,10 @@ class makeNotes(object):
         output.extend(self.__addMissingToReport(missingFiles, "Files", self.releasePathOld))
         output.append("\n")
         output.extend(self.__addMissingToReport(self.droppedTables, "Tables"))
+        output.extend("\n")
+        if self.atticSet:
+            output.append("Attic Objects")
+            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
 
         if not args['ignore']:
             output.append("No Errors")
@@ -464,6 +472,9 @@ class makeNotes(object):
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedTables, 0), "Revoked Tables"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedFiles, self.releasePath), "Revoked Files"))
             output.extend(self.__printSectionOne(output, ucscUtils.printIter(revokedGbdbs, self.gbdbPath), "Revoked Gbdbs"))
+        if self.atticSet:
+            output.append("Attic Objects")
+            output.extend(ucscUtils.printIter((self.atticSet), self.releasePath))
 
         if not args['ignore']:
             output.append("No Errors")
@@ -504,6 +515,10 @@ class makeNotes(object):
         self.summary = args['summary']
         self.specialMdb = args['specialMdb']
         self.args = args
+        if 'verbose' in args:
+            self.verbose = args['verbose']
+        else:
+            self.verbose = 0
 
         errors = []
         c = track.CompositeTrack(self.database, self.composite, None, self.specialMdb)
@@ -515,7 +530,8 @@ class makeNotes(object):
             self.releaseOlf = 'solo'
         elif self.releaseOld > self.releaseNew:
             self.releaseOld = 'solo'
-
+        if self.verbose >= 1:
+            sys.stderr.write("Initializing MkChangeNotes\n")
         self.releasePath = c.httpDownloadsPath + 'release' + args['releaseNew']
         self.gbdbPath = "/gbdb/%s/bbi" % args['database']
         self.trackDbFile = c.currentTrackDb
@@ -523,10 +539,11 @@ class makeNotes(object):
             self.trackDb = None
             errors.append("track: There is no entry in trackDb.wgEncode.ra for %s with the alpha tag" % self.composite)
         else:
-            self.trackDb = ra.RaFile(self.trackDbFile)
+            self.trackDb = ra.RaFile(self.trackDbFile, "track")
             
         if int(self.releaseNew) > 1 and str(self.releaseOld) != 'solo':
-
+            if self.verbose >= 2:
+                sys.stderr.write("Comparison mode\n")
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
             self.oldReleaseFiles = c.releases[int(self.releaseOld)-1]
             self.releasePathOld = c.httpDownloadsPath + 'release' + args['releaseOld']
@@ -535,20 +552,24 @@ class makeNotes(object):
             self.oldMdb = c.publicMetaDb
      
            
-
+            if self.verbose >= 2:
+                sys.stderr.write("Checking for missing files\n")
             #make a list of missing files
             self.missingFiles = self.__checkFilesForDropped()
             #filter them out of old release files
 
 
 
-
+            if self.verbose >= 1:
+                sys.stderr.write("Scanning and parsing release directories\n")
             #check if all files listed in release directories have associated metaDb entries
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
             (self.oldMdb, spam, eggs, ham, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
 
             self.expIds = set(self.newMdb.filter(lambda s: 'expId' in s, lambda s: s['expId']))
 
+            if self.verbose >= 2:
+                sys.stderr.write("Checking for attic files\n")
             #check that attic fiels aren't in trackDb
             if self.trackDb:
                 errors.extend(self.__checkAtticNotInTrackDb())
@@ -556,14 +577,22 @@ class makeNotes(object):
 
 
             #checks to see that nothing has disappeared between public and alpha
+            if self.verbose >= 1:
+                sys.stderr.write("Checking new metaDb for missing stanzas\n")
             errors.extend(self.__checkAlphaForDropped("alpha metaDb", "stanza"))
+            if self.verbose >=1:
+                sys.stderr.write("Checking file md5sums across releases\n")
             errors.extend(self.__checkMd5sums())
 
             #checks and gets tables that are present, also returns a revoked set of tables for new
+            if self.verbose >= 1:
+                sys.stderr.write("Checking table status\n")
             (self.newTableSet, self.revokedTableSet, self.newMissingTables, newTableError) = self.checkTableStatus("alpha metaDb", "new")
             (self.oldTableSet, spam, self.droppedTables, oldTableError) = self.checkTableStatus("public metaDb", "old")
 
             #same as above except for gbdbs
+            if self.verbose >= 1:
+                sys.stderr.write("Checking GBDB status\n")
             (self.newGbdbSet, self.revokedGbdbs, newGbdbError) = self.getGbdbFiles("new")
             (self.oldGbdbSet, eggs, oldGbdbError) = self.getGbdbFiles("old")
             #remove missing files from gbdbs
@@ -608,6 +637,8 @@ class makeNotes(object):
             self.errors = errors
             #don't output.append(report unless ignore option is on or no errors
             #module mode doesn't generate output by default
+            if self.verbose >= 1:
+                sys.stderr.write("Creating report\n")
             if (not errors) or self.ignore:
                 self.output = self.printReport(args, c)
             else:

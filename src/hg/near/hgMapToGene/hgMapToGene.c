@@ -49,6 +49,8 @@ errAbort(
   "   -override=override.txt - Override.txt is a 2 column file\n"
   "            <geneTrackId><trackId>\n"
   "           This overrides the choice of the best element per gene."
+  "   -exclude=exclude.txt - exclude.txt is a 1-column file with the \n"
+  "           accessions of sequences to exlcude from the mapping\n"
   );
 }
 
@@ -70,6 +72,7 @@ static struct optionSpec options[] = {
    {"createOnly", OPTION_BOOLEAN},
    {"lookup", OPTION_STRING},
    {"override", OPTION_STRING},
+   {"exclude", OPTION_STRING},
    {"geneTableType", OPTION_STRING},
    {"tempDb", OPTION_STRING},
    {NULL, 0},
@@ -144,6 +147,45 @@ return overlap;
 }
 
 
+boolean shareSpliceSiteOrBothUnspliced(struct genePred *gp, struct bed *bed)
+/* return TRUE if the sequences share a splice site or neither or spliced, 
+ * FALSE otherwise */
+{
+if (gp->exonCount == 1 && bed->blockCount == 1)
+    {
+    return TRUE;
+    }
+else 
+    {
+    /* Compare the intron coordinates for the genePred and the bed.  If we compared the
+     * exon coordinates, we'd have to remember that the start of the first exon and the
+     * end of the last one are not splice sites. */
+    int gpIx, bedIx;
+    boolean foundSharedSpliceSite = FALSE;
+    if (gp->strand[0] == bed->strand[0]) 
+	{
+	for (gpIx = 1; gpIx < gp->exonCount && !foundSharedSpliceSite; gpIx++)
+	    {
+	    int gpIntronStart = gp->exonEnds[gpIx - 1];
+	    int gpIntronEnd = gp->exonStarts[gpIx];
+	    int bedIntronStart = 0;
+	    int bedIntronEnd = 0;
+	    for (bedIx = 1; bedIx < bed->blockCount && bedIntronEnd <= gpIntronEnd; bedIx++) 
+		{
+		bedIntronStart = bed->chromStart + bed->chromStarts[bedIx - 1] 
+		    + bed->blockSizes[bedIx - 1];
+		bedIntronEnd = bed->chromStart + bed->chromStarts[bedIx];
+		if (gpIntronStart == bedIntronStart || gpIntronEnd == bedIntronEnd)
+		    {
+		    foundSharedSpliceSite = TRUE;
+		    }
+		}
+	    }
+	}
+    return(foundSharedSpliceSite);
+    }
+}
+
 
 struct bed *mostOverlappingBed(struct binKeeper *bk, struct genePred *gp)
 /* Find bed in bk that overlaps most with gp.  Return NULL if no overlap. */
@@ -156,32 +198,36 @@ struct binElement *el, *elList = binKeeperFind(bk, gp->txStart, gp->txEnd);
 for (el = elList; el != NULL; el = el->next)
     {
     bed = el->val;
-    overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
-    /* If the gene prediction is a compatible extension of the bed (meaning that
-     * the bed and the gene prediction have a compatible transcript structure for
-     * the length of the bed), then add an overlap bonus of the length of the 
-     * gene prediction.  This effectively ensures that if there is a bed with a
-     * compatible extension, it will be chosen.  But, if no bed has a compatible
-     * extension, then some bed will be chosen, and that bed will be the one with
-     * the greatest number of overlapping bases. */
-    if (bedCompatibleExtension(bedFromGenePred(gp), bed))
-	{
-	overlap += bedTotalBlockSize(bedFromGenePred(gp));
-	}
-    if (overlap > bestOverlap)
-	{
-	bestOverlap = overlap;
-	bestBed = bed;
-	}
-    else if (overlap == bestOverlap)
-	{
-	/* If two beds have the same number of overlapping bases to
-	 * the gene prediction, then take the bed with the greatest proportion of
-	 * overlapping bases, i.e. the shorter one. */
-	if (bestBed == NULL || (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed)))
+    /* Only consider cases where the bed and gene pred share a splice site,
+     * or neither one is spliced */
+    if (shareSpliceSiteOrBothUnspliced(gp, bed)) {
+	overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
+	/* If the gene prediction is a compatible extension of the bed (meaning that
+	 * the bed and the gene prediction have a compatible transcript structure for
+	 * the length of the bed), then add an overlap bonus of the length of the 
+	 * gene prediction.  This effectively ensures that if there is a bed with a
+	 * compatible extension, it will be chosen.  But, if no bed has a compatible
+	 * extension, then some bed will be chosen, and that bed will be the one with
+	 * the greatest number of overlapping bases. */
+	if (bedCompatibleExtension(bedFromGenePred(gp), bed))
+	    {
+	    overlap += bedTotalBlockSize(bedFromGenePred(gp));
+	    }
+	if (overlap > bestOverlap)
 	    {
 	    bestOverlap = overlap;
 	    bestBed = bed;
+	    }
+	else if (overlap == bestOverlap && overlap > 0)
+	    {
+	    /* If two beds have the same number of overlapping bases to
+	     * the gene prediction, then take the bed with the greatest proportion of
+	     * overlapping bases, i.e. the shorter one. */
+	    if (bestBed == NULL || (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed)))
+		{
+		bestOverlap = overlap;
+		bestBed = bed;
+		}
 	    }
 	}
     }
@@ -203,10 +249,9 @@ void oneChromStrandTrackToGene(char *database, struct sqlConnection *conn, struc
 			     char *geneTable, char *geneTableType, 
 			     char *otherTable,  char *otherType,
 			     struct hash *dupeHash, boolean doAll, struct hash *lookupHash,
-			     struct hash *overrideHash, FILE *f)
+			       struct hash *overrideHash, struct hash *excludeHash, FILE *f)
 /* For each gene pred in one strand of one chromosome, either find an entry for it 
- * in the override file OR find the most overlapping entry in the indicated table.
- * strand of a chromosome, and write the entry to the file.  */
+ * in the override file OR find the most overlapping entry in the indicated table. */
 {
 int chromSize = hChromSize(database, chrom);
 struct binKeeper *bk = binKeeperNew(0, chromSize);
@@ -321,7 +366,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	gp = genePredLoad(row+rowOffset);
     name = gp->name;
 
-    if (!hashLookup(dupeHash, name))	/* Only take first occurrence. */
+    /* Skip this line if (1) it's in the exclude list, or (2) if something
+     * of the same name has already been processed. */
+    if (!hashLookup(dupeHash, name) && !hashLookup(excludeHash, name))	
 	{
 	if (doAll)
 	    {
@@ -382,7 +429,8 @@ dyStringFree(&dy);
 void hgMapTableToGene(char *database, struct sqlConnection *conn, struct sqlConnection *tConn,
 	char *geneTable, char *geneTableType,
 	char *otherTable, char *otherType, char *outTable,
-	struct hash *lookupHash, struct hash *overrideHash)
+	struct hash *lookupHash, struct hash *overrideHash, 
+	struct hash *excludeHash)
 /* hgMapTableToGene - Create a table that maps geneTable to otherTable, 
  * choosing the best single item in otherTable for each genePred,
  * unless overridden by an entry in the override hash. */
@@ -403,9 +451,9 @@ if (!createOnly)
 	{
 	verbose(2, "%s\n", chrom->name);
 	oneChromStrandTrackToGene(database, conn, tConn, chrom->name, '+', geneTable, geneTableType,  
-	    otherTable, otherType, dupeHash, doAll, lookupHash, overrideHash, f);
+	    otherTable, otherType, dupeHash, doAll, lookupHash, overrideHash,excludeHash, f);
 	oneChromStrandTrackToGene(database, conn, tConn, chrom->name, '-', geneTable, geneTableType,
-	    otherTable, otherType, dupeHash, doAll, lookupHash, overrideHash, f);
+	    otherTable, otherType, dupeHash, doAll, lookupHash, overrideHash, excludeHash, f);
 	}
     hashFree(&dupeHash);
     }
@@ -436,6 +484,17 @@ if (type == NULL)
 return cloneString(type);
 }
 
+
+void hashOneColumn(char *fileName, struct hash *hash)
+/* Make up a hash out of a one column file. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[1];
+while (lineFileRow(lf, row))
+    hashAddInt(hash, row[0], 1);
+lineFileClose(&lf);
+}
+
 struct hash *hashTwoColumns(char *fileName)
 /* Make up a hash out of a two column file. */
 {
@@ -459,11 +518,15 @@ char *lookupFile = optionVal("lookup", NULL);
 struct hash *lookupHash = NULL;
 char *overrideFile = optionVal("override", NULL);
 struct hash *overrideHash = NULL;
+char *excludeFile = optionVal("exclude", NULL);
+struct hash *excludeHash = hashNew(17);
 char *geneTableType = optionVal("geneTableType", NULL);
 if (lookupFile != NULL)
     lookupHash = hashTwoColumns(lookupFile);
 if (overrideFile != NULL)
     overrideHash = hashTwoColumns(overrideFile);
+ if (excludeFile != NULL) 
+     hashOneColumn(excludeFile, excludeHash);
 if (type == NULL)
     type = tdbType(conn, track);
 
@@ -474,7 +537,7 @@ if(geneTableType == NULL)
 if (!startsWith("genePred", geneTableType) && !startsWith("bed", geneTableType))
     errAbort("%s is neither a genePred or bed type track", geneTrack);
 hgMapTableToGene(database, conn, tConn, geneTrack, geneTableType, track, type, 
-                 newTable, lookupHash, overrideHash);
+                 newTable, lookupHash, overrideHash, excludeHash);
 sqlDisconnect(&conn);
 sqlDisconnect(&tConn);
 }

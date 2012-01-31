@@ -23865,6 +23865,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol v041610.1
@@ -23891,6 +23892,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -23916,6 +23918,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol v041610.1
@@ -23943,6 +23946,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -23970,6 +23974,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -23995,6 +24000,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -24019,6 +24025,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1057
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -24044,6 +24051,7 @@ fileName wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1170
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -28885,6 +28893,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -28909,6 +28918,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -28933,6 +28943,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -28959,6 +28970,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -28985,6 +28997,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -29009,6 +29022,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -29033,6 +29047,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1196
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -29058,6 +29073,7 @@ fileName wgEncodeHaibTfbsK562Bcl3Pcr1xRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL1511
+objStatus revoked - Lab decided to re-run this experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -31265,6 +31281,7 @@ fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL845
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -31292,6 +31309,7 @@ fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL987
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -31318,6 +31336,7 @@ fileName wgEncodeHaibTfbsK562Hey1Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL845
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -31346,6 +31365,7 @@ fileName wgEncodeHaibTfbsK562Hey1Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL987
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -31373,6 +31393,7 @@ fileName wgEncodeHaibTfbsK562Hey1Pcr1xRawRep1.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL845
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -31398,6 +31419,7 @@ fileName wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2.bigWig
 grant Myers
 lab HudsonAlpha
 labExpId SL987
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -31424,6 +31446,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL845
 labVersion 3
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -31450,6 +31473,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL987
 labVersion 4
+objStatus revoked - The lab and working group have little confidence that the antibody used is actually HEY1, it looks like Pol2
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -42678,4 +42702,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -286431933
+# MAGIC: 736249323

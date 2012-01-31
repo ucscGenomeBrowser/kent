@@ -94,12 +94,12 @@ static void hgHubConnectUnlisted(struct hubConnectStatus *hubList,
 printf("<div id=\"unlistedHubs\" class=\"hubList\"> "
     "<table id=\"unlistedHubsTable\"> "
     "<thead><tr> "
-	"<th colspan=\"5\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> "
+	"<th colspan=\"6\" id=\"addHubBar\"><label for=\"hubUrl\">URL:</label> "
 	"<input name=\"hubText\" id=\"hubUrl\" class=\"hubField\""
 	    "type=\"text\" size=\"65\"> "
 	"<input name=\"hubAddButton\""
-	    "onClick=\"document.addHubForm.elements['hubUrl'].value=hubText.value;"
-		"document.addHubForm.submit();return true;\" "
+	    "onClick=\"if(validateUrl($('#hubUrl').val())) { document.addHubForm.elements['hubUrl'].value=hubText.value;"
+		"document.addHubForm.submit();return true;} else { return false;}\" "
 		"class=\"hubField\" type=\"button\" value=\"Add Hub\">"
 	"</th> "
     "</tr> ");
@@ -430,6 +430,10 @@ if (cartVarExists(cart, hgHubDoDisconnect))
     {
     gotDisconnect = TRUE;
     doDisconnectHub(cart);
+
+    // now rebuild the cart variable ("trackHubs") that has which lists which
+    // hubs are on.
+    hubConnectHubsInCart(cart);
     }
 
 if (cartVarExists(cart, hgHubDoReset))

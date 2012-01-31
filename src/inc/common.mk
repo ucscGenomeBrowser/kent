@@ -57,7 +57,7 @@ endif
 
 # autodetect local installation of samtools:
 ifeq (${SAMDIR},)
-  SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
+  SAMDIR = /hive/data/outside/samtools/samtools-0.1.18/${MACHTYPE}
   ifneq ($(wildcard ${SAMDIR}),)
      KNETFILE_HOOKS=1
   endif

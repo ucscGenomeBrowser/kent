@@ -17,6 +17,53 @@ int t2gDebug = 0;
 char* sequenceTable;
 char* articleTable;
 
+/* splits string with | and returns part index (is there no easier way to do this?)
+char *splitPart(char* string, int index)
+{
+    char* name2;
+    name2 = cloneString(string);
+    char **parts = NULL;
+	AllocArray(parts, 2);
+    chopString(name2, "|", parts, 2);
+    return (char *)parts[index];
+}*/
+
+void printMarkerSnippets(struct sqlConnection *conn, char* item)
+{
+printf("<H3>Snippets from Publications:</H3>");
+
+char query[4000];
+safef(query, sizeof(query), "SELECT COUNT(*) from t2gElsevierMarker WHERE markerId='%s'", item);
+if (sqlNeedQuickNum(conn, query) > 4000) {
+    printf("Sorry, this marker is mentioned in more than 4000 times<BR>");
+    printf("The results would take too long to load in your browser and are therefore not shown.<P>");
+    return;
+}
+
+sqlUpdate(conn, "SET SESSION group_concat_max_len = 10000");
+
+safef(query, sizeof(query), "SELECT distinct t2gElsevierMarker.articleId, url, title, authors, citation, group_concat(snippet SEPARATOR ' (...) ') FROM t2gElsevierMarker JOIN t2gElsevierArticle USING (articleId) WHERE markerId='%s' GROUP by articleId", item);
+
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char* articleId = row[0];
+    char* url = row[1];
+    char* title = row[2];
+    char* authors = row[3];
+    char* citation = row[4];
+    char* snippets = row[5];
+    printf("<SMALL>%s</SMALL><BR>", authors);
+    printf("<A HREF=\"%s\">%s</A><BR>", url, title);
+    printf("<SMALL>%s</SMALL><P>", citation);
+    if (t2gDebug)
+        printf("articleId=%s", articleId);
+    printf("<I>%s</I><P>", snippets);
+    printf("<HR>");
+    }
+}
+
 char* printArticleInfo(struct sqlConnection *conn, char* item)
 /* Header with information about paper, return documentId */
 {
@@ -83,17 +130,41 @@ void printSeqHeaders(bool showDesc, bool isClickedSection)
     printf("<TR style=\"background-color: #%s; color: #FFFFFF\">\n", HG_COL_TABLE_LABEL);
     if (showDesc)
         puts("  <TH style=\"width: 10%\">Article file</TH>\n");
-    puts("  <TH style=\"width: 70%\">Sequence (in bold) with flanking text</TH>\n");
+    puts("  <TH style=\"width: 70%\">One table row per sequence, with flanking text, sequence in bold</TH>\n");
     if (t2gDebug)
         puts("  <TH style=\"width: 30%\">Identifiers</TH>\n");
 
     if (!isClickedSection && !t2gDebug)
-        puts("  <TH style=\"width: 20%\">Matches</TH>\n");
+        puts("  <TH style=\"width: 20%\">Feature that includes this match</TH>\n");
     puts("</TR>\n");
 }
 
-bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* filterIdHash, bool isClickedSection, bool fasta)
+void printAddWbr(char* text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+{
+int i;
+i = 0;
+char* c;
+c = text;
+while (*c!=0){
+    {
+    if (i % distance == 0) 
+        printf("<wbr>");
+    printf("%c", *c);
+    c++;
+    i++;
+    }
+}
+}
+
+bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnection* conn, struct hash* clickedSeqs, bool isClickedSection, bool fasta)
 /* print a table of sequences, show only sequences with IDs in hash,
+ * There are two sections, respective sequences are shown depending on isClickedSection and clickedSeqs 
+ *   - seqs that were clicked on (isClickedSection=True) -> show only seqs in clickedSeqs
+ *   - other seqs (isClickedSection=False) -> show all other seqs
+ * 
  * */
 {
     // get data from mysql
@@ -133,7 +204,7 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         safef(annotId, 100, "%010d%03d%05d", atoi(artId), atoi(fileId), atoi(seqId));
 
         // only display this sequence if we're in the right section
-        if (filterIdHash!=NULL && ((hashLookup(filterIdHash, annotId)==0) ^ !isClickedSection)) {
+        if (clickedSeqs!=NULL && ((hashLookup(clickedSeqs, annotId)!=0) != isClickedSection)) {
             foundSkippedRows = TRUE;
             continue;
         }
@@ -146,9 +217,11 @@ bool printSeqSection(char* docId, char* title, bool showDesc, struct sqlConnecti
         {
             printf("<TR style=\"background-color: #%s\">\n", HG_COL_LOCAL_TABLE);
             if (showDesc)
-                printf("<TD style=\"word-break: normal\">%s\n", fileDesc);
+                printf("<TD style=\"word-break:break-all\">%s\n", fileDesc);
             //printf("<TD><I>%s</I></TD>\n", snippet); 
-            printf("<TD style=\"word-break: normal\"><I>%s</I></TD>\n", snippet); 
+            printf("<TD style=\"word-break:break-all;\"><I>");
+            printAddWbr(snippet, 40);
+            printf("</I></TD>\n"); 
             if (t2gDebug) 
             {
                 printf("<TD>article %s, file %s, seq %s, annotId %s", artId, fileId, seqId, annotId);
@@ -278,15 +351,22 @@ struct sqlConnection *conn = hAllocConn(database);
 printTrackVersion(tdb, conn, item);
 printPositionAndSize(start, end);
 
-sequenceTable = hashMustFindVal(tdb->settingsHash, "sequenceTable");
-articleTable = hashMustFindVal(tdb->settingsHash, "articleTable");
-
-char* docId = printArticleInfo(conn, item);
-if (docId!=0) 
+if (startsWith("t2gMarker", trackTable)) 
 {
-    bool showDesc; 
-    showDesc = (! endsWith(trackTable, "Elsevier"));
-    printSeqInfo(conn, trackTable, docId, item, seqName, start, showDesc, fasta);
+    printMarkerSnippets(conn, item);
+}
+else 
+{
+    sequenceTable = hashMustFindVal(tdb->settingsHash, "sequenceTable");
+    articleTable = hashMustFindVal(tdb->settingsHash, "articleTable");
+
+    char* docId = printArticleInfo(conn, item);
+    if (docId!=0) 
+    {
+        bool showDesc; 
+        showDesc = (! endsWith(trackTable, "Elsevier")); // avoid clutter: Elsevier has only main text
+        printSeqInfo(conn, trackTable, docId, item, seqName, start, showDesc, fasta);
+    }
 }
 
 printTrackHtml(tdb);

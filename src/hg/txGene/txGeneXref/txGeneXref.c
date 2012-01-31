@@ -16,7 +16,16 @@ void usage()
 errAbort(
   "txGeneXref - Make kgXref type table for genes.\n"
   "usage:\n"
-  "   txGeneXref genomeDb uniProtDb gene.gp gene.info genes.picks genes.ev output.xref\n"
+  "   txGeneXref genomeDb tempDb uniProtDb gene.gp gene.info genes.picks genes.ev output.xref\n"
+  "where:\n"
+  "   genomeDb - a browser database (ex. hg19)\n"
+  "   tempDb - the database where the gene data is getting built"
+  "   uniProtDb - UniProt database containing data on the relevant proteins"
+  "   gene.gp - the gene prediction file, containing the gene structures"
+  "   gene.info - summary information on the gene structures"
+  "   gene.picks - information on the CDS region picked for the gene, if any"
+  "   gene.ev - evidence on which txWalk based the gene structure"
+  "   output.xref - the output file"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -89,10 +98,29 @@ if (strlen(sourceAcc) >= 3)
     }
     return(FALSE);
 }
-    
 
-void txGeneXref(char *genomeDb, char *uniProtDb, char *genePredFile, char *infoFile, char *pickFile, 
-	char *evFile, char *outFile)
+void getNameDescrFromRefSeq(char *refseq, struct sqlConnection *gConn, char **geneSymbol, char **description)
+/* Given a RefSeq accession, get the gene symbol and description */
+{    
+char query[256];
+struct sqlResult *sr;
+safef(query, sizeof(query), "select name,product from refLink where mrnaAcc='%s'", refseq);
+sr = sqlGetResult(gConn, query);
+char **row = sqlNextRow(sr);
+if (row != NULL)
+    *geneSymbol = cloneString(row[0]);
+sqlFreeResult(&sr);
+safef(query, sizeof(query), "select d.name from gbCdnaInfo g, description d where g.description = d.id and g.acc = '%s'", refseq);
+sr = sqlGetResult(gConn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    *description = cloneString(row[0]);
+sqlFreeResult(&sr);
+}
+
+void txGeneXref(char *genomeDb, char *tempDb, char *uniProtDb, 
+		char *genePredFile, char *infoFile, char *pickFile, 
+		char *evFile, char *outFile)
 /* txGeneXref - Make kgXref type table for genes.. */
 {
 /* Load picks into hash.  We don't use cdsPicksLoadAll because empty fields
@@ -117,6 +145,7 @@ for (ev = evList; ev != NULL; ev = ev->next)
 
 /* Open connections to our databases */
 struct sqlConnection *gConn = sqlConnect(genomeDb);
+struct sqlConnection *tConn = sqlConnect(tempDb);
 struct sqlConnection *uConn = sqlConnect(uniProtDb);
 
 /* Read in info file, and loop through it to make out file. */
@@ -139,6 +168,18 @@ for (info = infoList; info != NULL; info = info->next)
     boolean isAb = sameString(info->category, "antibodyParts");
     pick = hashFindVal(pickHash, info->name);
     ev = hashFindVal(evHash, info->name);
+
+    /* Fill in gene symbol and description from an overlapping refseq if possible. */
+    struct sqlResult *sr;
+    safef(query, sizeof(query), "select value from knownToRefSeq where name='%s'", kgID);
+    sr = sqlGetResult(tConn, query);
+    char **row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	getNameDescrFromRefSeq(row[0], gConn, &geneSymbol, &description);
+	}
+    sqlFreeResult(&sr);
+
     if (pick != NULL)
        {
        /* Fill in the relatively straightforward fields. */
@@ -153,21 +194,9 @@ for (info = infoList; info != NULL; info = info->next)
 	       spDisplayID = spAnyAccToId(uConn, spID);
 	    }
 
-       /* Fill in gene symbol and description from refseq if possible. */
-       if (refseq[0] != 0)
+       if (refseq[0] != 0 && (geneSymbol == NULL || description == NULL))
            {
-	   struct sqlResult *sr;
-	   safef(query, sizeof(query), "select name,product from refLink where mrnaAcc='%s'",
-	   	refseq);
-	   sr = sqlGetResult(gConn, query);
-	   char **row = sqlNextRow(sr);
-	   if (row != NULL)
-	       {
-	       geneSymbol = cloneString(row[0]);
-	       if (!sameWord("unknown protein", row[1]))
-		   description = cloneString(row[1]);
-	       }
-	    sqlFreeResult(&sr);
+	   getNameDescrFromRefSeq(refseq, gConn, &geneSymbol, &description);
 	   }
 
        /* If need be try uniProt for gene symbol and description. */
@@ -197,14 +226,18 @@ for (info = infoList; info != NULL; info = info->next)
 	assert(accessionTokens != NULL);
 	rfamAcc = cloneString(accessionTokens->name);
 	assert(accessionTokens->next != NULL);
-	geneSymbol = replaceChars(accessionTokens->next->name, "-", "_");
+	char *accession = replaceChars(accessionTokens->next->name, "-", "_");
+	geneSymbol = replaceChars(accession, "Alias=", "");
+	freeMem(accession);
 	if (isalpha(*geneSymbol))
 	    *geneSymbol = toupper(*geneSymbol);
 	assert(accessionTokens->next->next != NULL);
-	char *contigCoordinates = accessionTokens->next->next->name;
-	description =  needMem(strlen(rfamAcc) + strlen(contigCoordinates) + 45);
-	(void) sprintf(description,  "Rfam model %s hit found at contig region %s", 
-		       rfamAcc, contigCoordinates);
+	char *contigCoordinates = replaceChars(accessionTokens->next->next->name,
+					       "Note=", "");
+	struct dyString *dyTmp = dyStringCreate("Rfam model %s hit found at contig region %s", 
+						rfamAcc, contigCoordinates);
+	description = dyStringCannibalize(&dyTmp);
+	freeMem(contigCoordinates);
 	slFreeList(&accessionTokens);
         }
     /* If it's a tRNA from the tRNA track, sourceAcc will have the following 
@@ -263,8 +296,12 @@ for (info = infoList; info != NULL; info = info->next)
 
 	/* Still no joy? Try genbank RNA records. 
 	 * First, try to get the symbol and description from 
-	 * the same record */
-	if (geneSymbol == NULL || description == NULL)
+	 * the same record.  Don't do any of this if there's a RefSeq.
+	 * GenBank records are last resort, and if there's a RefSeq with
+	 * a blank description, going to GenBank records for the description
+	 * involves too much risk of a gene symbol and description that 
+	 * contradict each other. */
+	if (geneSymbol == NULL && description == NULL && strcmp(refseq, "") != 0) 
 	    {
 	    if (ev != NULL)
 		{
@@ -273,7 +310,7 @@ for (info = infoList; info != NULL; info = info->next)
 		    {
 		    char *acc = ev->accs[i];
 		    chopSuffix(acc);
-		    if (geneSymbol == NULL || description == NULL)
+		    if (geneSymbol == NULL && description == NULL)
 			{
 			safef(query, sizeof(query), 
 			      "select geneName.name from gbCdnaInfo,geneName "
@@ -374,8 +411,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 8)
+if (argc != 9)
     usage();
-txGeneXref(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7]);
+txGeneXref(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], 
+	   argv[7], argv[8]);
 return 0;
 }

@@ -10,15 +10,17 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
-fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep1.bam
+dccAccession wgEncodeEM002370
+expId 2370
+fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep1.bam,wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 60902a90009694c986c9cbe3ebf11062
+md5sum 60902a90009694c986c9cbe3ebf11062,2b42547b1be3524f066b6aecce04c22f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -35,15 +37,17 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
-fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep2.bam
+dccAccession wgEncodeEM002370
+expId 2370
+fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep2.bam,wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 9f1cf3d410522baf404b90264151cd5a
+md5sum 9f1cf3d410522baf404b90264151cd5a,cc5213a6e2c66d589aa48ca59a29961a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -60,11 +64,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -85,11 +91,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -110,11 +118,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -135,11 +145,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -160,11 +172,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -185,11 +199,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -210,11 +226,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -235,11 +253,13 @@ antibody H3K4me1
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-31
 dateUnrestricted 2012-07-31
+dccAccession wgEncodeEM002370
+expId 2370
 fileName wgEncodePsuHistoneCh12H3k04me1FImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -260,15 +280,17 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep1.bam
+dccAccession wgEncodeEM002366
+expId 2366
+fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep1.bam,wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum b3aef4d5550e7f02764103dba4a5c03d
+md5sum b3aef4d5550e7f02764103dba4a5c03d,31312b5df12aea24138a3ef5af16d555
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -285,15 +307,17 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep2.bam
+dccAccession wgEncodeEM002366
+expId 2366
+fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep2.bam,wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum c0c6e181977015a79272056d564c9d9b
+md5sum c0c6e181977015a79272056d564c9d9b,857de94613d6cde44c2fa2bb4a45b870
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -310,11 +334,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -335,11 +361,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -360,11 +388,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -385,11 +415,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -410,11 +442,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -435,11 +469,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -460,11 +496,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -485,11 +523,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002366
+expId 2366
 fileName wgEncodePsuHistoneCh12H3k04me3FImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -510,14 +550,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control None
-controlId CH12/Input/None
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bAlnRep1.bam,wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 6746fa9b75b85015c5cad924534a2fd4,680647d9c3beff0e175abe58c008676e
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -534,14 +577,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control None
-controlId CH12/Input/None
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bAlnRep2.bam,wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum e52f01ce1352f44ef1c062754346d8fa,0d9ac3b004b78de0c51bb9a0a9a399b7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -558,14 +604,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum d92c529b24a123a626144e4bcc286bb8
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -582,14 +631,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum c0291ef55316b1450b8accf9be750baf
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -606,14 +658,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum f38d8b51a4c9ced1990d88f8f9b742d8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -630,14 +685,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 434303cd44a4f237a26ec6ecf8323ab5
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -654,14 +712,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 43beeee0446807299aeda957441b2c4a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -678,14 +739,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum d67e25643b7b5d76bbec245abd6d6e53
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -702,14 +766,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control None
-controlId CH12/Input/None
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 25bd9d6f001c64428b0b3c526ded227f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -726,14 +793,17 @@ antibody H3K9me3
 cell CH12
 composite wgEncodePsuHistone
 control None
-controlId CH12/Input/None
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002372
+expId 2372
 fileName wgEncodePsuHistoneCh12H3k09me3FImmortal2a4bRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 815ff032ce35118333162e59e67d0803
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -750,15 +820,17 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep1.bam
+dccAccession wgEncodeEM002362
+expId 2362
+fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep1.bam,wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 6160800b6e7b1c6806a9254451afb062
+md5sum 6160800b6e7b1c6806a9254451afb062,eb53c847b403acbcaee857522c266228
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -775,15 +847,17 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
-fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep2.bam
+dccAccession wgEncodeEM002362
+expId 2362
+fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep2.bam,wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum e480ce164f4329015bab6c2b016e20f6
+md5sum e480ce164f4329015bab6c2b016e20f6,12aa697ab9eea31a55ae70ca8aabf93c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -800,11 +874,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -825,11 +901,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -850,11 +928,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -875,11 +955,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -900,11 +982,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -925,11 +1009,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -950,11 +1036,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -975,11 +1063,13 @@ antibody H3K27me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM002362
+expId 2362
 fileName wgEncodePsuHistoneCh12H3k27me3FImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -1000,15 +1090,17 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep1.bam
+dccAccession wgEncodeEM002364
+expId 2364
+fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep1.bam,wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum c5ca57ae60d94f707688e895c7c244d8
+md5sum c5ca57ae60d94f707688e895c7c244d8,19b96e8b5e79a2ad1309c962660c99d3
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1025,15 +1117,17 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep2.bam
+dccAccession wgEncodeEM002364
+expId 2364
+fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep2.bam,wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum f2676c5f362d83ead172f99d868eea93
+md5sum f2676c5f362d83ead172f99d868eea93,4c2040484557c675957add2687b0ad55
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1050,11 +1144,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1075,11 +1171,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1100,11 +1198,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -1125,11 +1225,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1150,11 +1252,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -1175,11 +1279,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -1200,11 +1306,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -1225,11 +1333,13 @@ antibody H3K36me3
 cell CH12
 composite wgEncodePsuHistone
 control Input
-controlId CH12/Input/Input
+controlId wgEncodeEM001923
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002364
+expId 2364
 fileName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -1243,6 +1353,195 @@ subId 5013
 tableName wgEncodePsuHistoneCh12H3k36me3FImmortal2a4bInputSig
 view Signal
 
+metaObject wgEncodePsuHistoneCh12InputFImmortal2a4bInputAlnRep1
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001923
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+dccAccession wgEncodeEM001923
+expId 1923
+fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputAlnRep1.bam,wgEncodePsuHistoneCh12InputFImmortal2a4bInputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+md5sum e2b2b0486d847d87ec1f21a5df543249,2606a1d901cf869fbfb0cc109ec6db97
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5185
+view Alignments
+
+metaObject wgEncodePsuHistoneCh12InputFImmortal2a4bInputAlnRep2
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001923
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+dccAccession wgEncodeEM001923
+expId 1923
+fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputAlnRep2.bam,wgEncodePsuHistoneCh12InputFImmortal2a4bInputAlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 66f0fd9f67b84f4e94ce2c550807b796,fc1da78bf260fbbda928243258911e49
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5185
+view Alignments
+
+metaObject wgEncodePsuHistoneCh12InputFImmortal2a4bInputRawDataRep1
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001923
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+dccAccession wgEncodeEM001923
+expId 1923
+fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum d84da8dc33495fe3d7493aea31bce1e3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5185
+view RawData
+
+metaObject wgEncodePsuHistoneCh12InputFImmortal2a4bInputRawDataRep2
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001923
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+dccAccession wgEncodeEM001923
+expId 1923
+fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 3e35831996260ced688daac3c021a131
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5185
+view RawData
+
+metaObject wgEncodePsuHistoneCh12InputFImmortal2a4bInputRepSignalRep1
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001923
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+dccAccession wgEncodeEM001923
+expId 1923
+fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum a02c9860c09456e200ec00fbed66b503
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5185
+view RepSignal
+
+metaObject wgEncodePsuHistoneCh12InputFImmortal2a4bInputRepSignalRep2
+objType file
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001923
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+dccAccession wgEncodeEM001923
+expId 1923
+fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum f3da921afc1b1c1261153355a9d4fa57
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5185
+view RepSignal
+
+metaObject wgEncodePsuHistoneCh12InputFImmortal2a4bInputSig
+objType table
+age immortalized
+antibody Input
+cell CH12
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001923
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-15
+dateUnrestricted 2012-09-15
+dccAccession wgEncodeEM001923
+expId 1923
+fileName wgEncodePsuHistoneCh12InputFImmortal2a4bInputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum fe9c00a1e26cda9b6f62815981c71d52
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex F
+strain B10.H-2aH-4bp/Wts
+subId 5185
+tableName wgEncodePsuHistoneCh12InputFImmortal2a4bInputSig
+view Signal
+
 metaObject wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1AlnRep1
 objType file
 age E14.5
@@ -1250,14 +1549,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 91e21c76ff390e99f84e22e950ed26f1,22f2b1b186eab2e75b81d6f4d8acc949
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1274,14 +1576,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum e487ed46a414176a5ad7658b5986586b,934fb4bc12089e8aeae40ad78faa4fd8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1298,14 +1603,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 79f6f29972e91b90713678c30a210ae8
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1322,14 +1630,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 601fee49a979f6ded80a2be27980d4ab
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1346,14 +1657,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum cf847c88385c37962f3e0ce8a0780262
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1370,14 +1684,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 96bcd1d7c869909dbb6b4334c5817378
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1394,14 +1711,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 64fd448f6173c467ac44bd88d96e0461
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1418,14 +1738,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum ff686c3db1d6527336b2e3ff5ea0c211
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1442,14 +1765,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 9f8c8931a7a78118b08a731afa468956
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1466,14 +1792,17 @@ antibody H3K4me1
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002376
+expId 2376
 fileName wgEncodePsuHistoneErythroblH3k04me1BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum a48983a35352bc6c3a5f2a78e87f3a2c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1490,14 +1819,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum a3a8b7e5e930ffcb0c9a497e9764758b,ce9abf5b5cca36cf3db3442555e74e6e
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1514,14 +1846,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 37fffd402df534d0335e2d1aeea7e3db,f787079fc326081c2082f8fab3f5d8f8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1538,14 +1873,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum c2e09058ef9dd7677778ff338e61be33
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1562,14 +1900,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 623d35167d51ab30eb246601bb0f3c88
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1586,14 +1927,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 2b9b71e3ac1d5b885ae350a4431c6905
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1610,14 +1954,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 7269ce8894c5af61747fc4ee6ae844fe
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1634,14 +1981,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum be9f84de8696ff22cf0b0306c7ce875c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1658,14 +2008,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 7a9c3233c81a8a2bfe12091fcb5502f9
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1682,14 +2035,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 19a947c5bd3d33bf7bd56ea209c7dd6a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1706,14 +2062,17 @@ antibody H3K4me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-16
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002380
+expId 2380
 fileName wgEncodePsuHistoneErythroblH3k04me3BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum ba89ebd60035d80fa9cb6d3ff7dc2fed
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1730,14 +2089,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 72799cedb00ec7c918474a69ff760529,6e3a96d4ef4b6e7b867e87b21c4773f3
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1754,14 +2116,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum b4c8f7730f65f559dc2f68887c9bb4cb,015debb4717170dd764a4137f8d49275
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1778,14 +2143,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 1af20647cbbaca8ab654170f76a5deed
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1802,14 +2170,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 4c45b5ab31b88af88246948e352301ca
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1826,14 +2197,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 094dda1fec6a8e032e02bb606e1a7fc5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1850,14 +2224,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 46e5a21e5d7d2e4fffee0ad21198626e
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1874,14 +2251,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 026c2b8c256d2ee496104bf265c79363
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1898,14 +2278,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum f879052384a138c2aef1162199dbd497
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -1922,14 +2305,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum f7203c69a798a61cb6474f6d5177ae08
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1946,14 +2332,17 @@ antibody H3K9me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002373
+expId 2373
 fileName wgEncodePsuHistoneErythroblH3k09me3BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum d0749b9eb8984a9470370f1062881a9f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -1970,14 +2359,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 732ec752c636ddc2e7c788125af7ae4b,688745d46c2f32269aa0251dd4ecb307
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -1994,14 +2386,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 06e785110509da287bd819629a11908f,f3ffcaf6b6f2601acfbbb3316c227d89
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2018,14 +2413,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum a89622a3554328193a890b4a6f6bff1b
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2042,14 +2440,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum a5ec3262d46e4d458428187413414e14
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2066,14 +2467,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 5751f53ca5f339b1aaf2bdf7c181ab81
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2090,14 +2494,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 5400337407d9dfd59a25c0b096a649e2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2114,14 +2521,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 6943be5291fa757a347253082f16045b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2138,14 +2548,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 813b3f7d29779c4a58931bbdd1c4e638
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2162,14 +2575,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum d0d9e168b91be6de5cbd0dcdb350d8a0
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2186,14 +2602,17 @@ antibody H3K27me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-07
 dateUnrestricted 2012-08-07
+dccAccession wgEncodeEM002371
+expId 2371
 fileName wgEncodePsuHistoneErythroblH3k27me3BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 493b17b9718dc381d288868ec0e0d73d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2210,14 +2629,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum d69c59a8d278da8d1de2a47fa2fe38ec,0b8751ab28bfe1f236ec9f050f32a68a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2234,14 +2656,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 1e6b2284ecd270543b5422c35c7b8bde,0b2a0807429811879d1e548d4b29ce06
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2258,14 +2683,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 988aef38ad5b683b25d210e1edb7a441
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2282,14 +2710,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 786a398ed04c4f850654617c602e4d9b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2306,14 +2737,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 00d5e9ef401b959ab2935b9f72d55d6e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2330,14 +2764,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum defebeba98ef2c036d1741f2ef7baee2
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2354,14 +2791,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 5600fd7985f83393c8c7449445504d32
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2378,14 +2818,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control Input
-controlId Erythrobl/Input/Input
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum fd80615dd6046194540b56cddd1d8261
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -2402,14 +2845,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 7e540495788697993397c6d30b4663f8
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2426,14 +2872,17 @@ antibody H3K36me3
 cell Erythrobl
 composite wgEncodePsuHistone
 control None
-controlId Erythrobl/Input/None
+controlId wgEncodeEM002350
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002375
+expId 2375
 fileName wgEncodePsuHistoneErythroblH3k36me3BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum d3f6b864da6cb423141e87f75ea28cc7
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2443,6 +2892,195 @@ strain CD-1
 subId 5097
 view RawData
 
+metaObject wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep1
+objType file
+age E14.5
+antibody Input
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002350
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-14
+dateUnrestricted 2012-09-14
+dccAccession wgEncodeEM002350
+expId 2350
+fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+md5sum faebb817130e576844cedcbb1fdb9a49,e47f8215cd457394454726b2caf65eae
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex B
+strain CD-1
+subId 5184
+view Alignments
+
+metaObject wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep2
+objType file
+age E14.5
+antibody Input
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002350
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-14
+dateUnrestricted 2012-09-14
+dccAccession wgEncodeEM002350
+expId 2350
+fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuHistoneErythroblInputBE14halfCd1InputAlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 4e84f274271f3bd548890106b711431d,a33fb50f5d4aac6c0f1e1ffa828755d5
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5184
+view Alignments
+
+metaObject wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep1
+objType file
+age E14.5
+antibody Input
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002350
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-14
+dateUnrestricted 2012-09-14
+dccAccession wgEncodeEM002350
+expId 2350
+fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 7ca2f80301586742feb40121510450ac
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex B
+strain CD-1
+subId 5184
+view RawData
+
+metaObject wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep2
+objType file
+age E14.5
+antibody Input
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002350
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-14
+dateUnrestricted 2012-09-14
+dccAccession wgEncodeEM002350
+expId 2350
+fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 0b2fe06fc25a78272216fe84805bd0f1
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5184
+view RawData
+
+metaObject wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep1
+objType file
+age E14.5
+antibody Input
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002350
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-14
+dateUnrestricted 2012-09-14
+dccAccession wgEncodeEM002350
+expId 2350
+fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum 05ae0dcd489fec1ece7ea27d7db66bd6
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex B
+strain CD-1
+subId 5184
+view RepSignal
+
+metaObject wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep2
+objType file
+age E14.5
+antibody Input
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002350
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-14
+dateUnrestricted 2012-09-14
+dccAccession wgEncodeEM002350
+expId 2350
+fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum f7455a125f32ed94a555168758881eff
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5184
+view RepSignal
+
+metaObject wgEncodePsuHistoneErythroblInputBE14halfCd1InputSig
+objType table
+age E14.5
+antibody Input
+cell Erythrobl
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002350
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-14
+dateUnrestricted 2012-09-14
+dccAccession wgEncodeEM002350
+expId 2350
+fileName wgEncodePsuHistoneErythroblInputBE14halfCd1InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum 0a2245f686dac1de5f325953d7a6383c
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5184
+tableName wgEncodePsuHistoneErythroblInputBE14halfCd1InputSig
+view Signal
+
 metaObject wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1
 objType file
 age E0
@@ -2450,16 +3088,18 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1.bam
+dccAccession wgEncodeEM001915
+expId 1915
+fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 59809b97cb8b2e318633e33c03da49b4
+md5sum 59809b97cb8b2e318633e33c03da49b4,98fee3761c1bcd99e3805bbc93703ba8
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2476,16 +3116,18 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
-fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep2.bam
+dccAccession wgEncodeEM001915
+expId 1915
+fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eH3k04me1ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum ef68ed9506a0bd87d14b0470418e27d8
+md5sum ef68ed9506a0bd87d14b0470418e27d8,555919e235203fef9e332cbf6946f808
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2502,12 +3144,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2528,12 +3172,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2554,12 +3200,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2580,12 +3228,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2606,12 +3256,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2632,12 +3284,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -2658,12 +3312,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -2684,12 +3340,14 @@ antibody H3K4me1
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-31
 dateSubmitted 2010-12-01
 dateUnrestricted 2011-08-30
+dccAccession wgEncodeEM001915
+expId 1915
 fileName wgEncodePsuHistoneG1eH3k04me1ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -2710,16 +3368,18 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep1.bam
+dccAccession wgEncodeEM001919
+expId 1919
+fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum f283441a79014d719828582aebe695c7
+md5sum f283441a79014d719828582aebe695c7,35c477fcffa7684e383a0ed7b0c874cb
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -2736,16 +3396,18 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep2.bam
+dccAccession wgEncodeEM001919
+expId 1919
+fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eH3k04me3ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum e98f5ee0904e0bb833ed50a3c5c76761
+md5sum e98f5ee0904e0bb833ed50a3c5c76761,8bcb39ccd5e9f23735728558f231cd5c
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -2762,12 +3424,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2788,12 +3452,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2814,12 +3480,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -2840,12 +3508,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2866,12 +3536,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -2892,12 +3564,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -2918,12 +3592,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -2944,12 +3620,14 @@ antibody H3K4me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-27
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001919
+expId 1919
 fileName wgEncodePsuHistoneG1eH3k04me3ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -2970,14 +3648,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control None
-controlId G1E/Input/None
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep1.bam,wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 07400aa79c00ed8d2b1e35dded891456,a7bc24a28f977b6d9dd1f53601aab44b
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -2994,14 +3675,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control None
-controlId G1E/Input/None
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep2.bam,wgEncodePsuHistoneG1eH3k09me3ME0S129AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum d9924afcacd51b8eaf0229686537dd21,073a3efe902775e380edf9bde0bfbb83
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3018,14 +3702,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 9dfe2d3b1f40be36384f445067c06646
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3042,14 +3729,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum e16d94aae9e19178dbade290cdc25546
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3066,14 +3756,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 40a06cc6a4b3a61c2b9255369e4d0e25
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3090,14 +3783,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum f45459ba7e3ad0c6ae9d2c9074a7907d
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3114,14 +3810,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum af5a3510816fb026d43f6f57e7e0744b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3138,14 +3837,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 1401916586c5e08806d99a7fa4f6be89
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3162,14 +3864,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control None
-controlId G1E/Input/None
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum a0019fa558e4a1f8b10346a0571f922e
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3186,14 +3891,17 @@ antibody H3K9me3
 cell G1E
 composite wgEncodePsuHistone
 control None
-controlId G1E/Input/None
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM002374
+expId 2374
 fileName wgEncodePsuHistoneG1eH3k09me3ME0S129RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 7db1737f23992c8d4ffe2584c20f8e61
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3210,15 +3918,17 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
-fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep1.bam
+dccAccession wgEncodeEM002363
+expId 2363
+fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 576ac87a5ffe27ee2cb355d2ad2f44c2
+md5sum 576ac87a5ffe27ee2cb355d2ad2f44c2,3435dc7d9561b2c0cb43f11e226fce53
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3235,15 +3945,17 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
-fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep2.bam
+dccAccession wgEncodeEM002363
+expId 2363
+fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eH3k27me3ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum ff23138c24ec164cdd215d82ac64867d
+md5sum ff23138c24ec164cdd215d82ac64867d,97be5e672732fff4438af5fe966fc78b
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2x
@@ -3260,11 +3972,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3285,11 +3999,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3310,11 +4026,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3335,11 +4053,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3360,11 +4080,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3385,11 +4107,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -3410,11 +4134,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -3435,11 +4161,13 @@ antibody H3K27me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-30
 dateUnrestricted 2012-06-29
+dccAccession wgEncodeEM002363
+expId 2363
 fileName wgEncodePsuHistoneG1eH3k27me3ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -3460,15 +4188,17 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep1.bam
+dccAccession wgEncodeEM002365
+expId 2365
+fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 40f491082341ba31108dea3018f0607c
+md5sum 40f491082341ba31108dea3018f0607c,0a83efe2c25991a3abf42be17d93933a
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -3485,15 +4215,17 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
-fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep2.bam
+dccAccession wgEncodeEM002365
+expId 2365
+fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eH3k36me3ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum de8433396fe899d6a5809458dae08363
+md5sum de8433396fe899d6a5809458dae08363,efa37a982cbadf8d1c94f9ccf3ee2a1e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3510,11 +4242,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3535,11 +4269,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3560,11 +4296,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -3585,11 +4323,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3610,11 +4350,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -3635,11 +4377,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -3660,11 +4404,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -3685,11 +4431,13 @@ antibody H3K36me3
 cell G1E
 composite wgEncodePsuHistone
 control Input
-controlId G1E/Input/Input
+controlId wgEncodeEM001916
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-25
 dateUnrestricted 2012-07-24
+dccAccession wgEncodeEM002365
+expId 2365
 fileName wgEncodePsuHistoneG1eH3k36me3ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -3703,6 +4451,195 @@ subId 5012
 tableName wgEncodePsuHistoneG1eH3k36me3ME0S129InputSig
 view Signal
 
+metaObject wgEncodePsuHistoneG1eInputME0S129InputAlnRep1
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001916
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001916
+expId 1916
+fileName wgEncodePsuHistoneG1eInputME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eInputME0S129InputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 431d25bc470bee23b740fab6c7c5257a,d0fceb04f84f3f1f8f314bb5be5ba192
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex M
+strain 129
+subId 5154
+view Alignments
+
+metaObject wgEncodePsuHistoneG1eInputME0S129InputAlnRep2
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001916
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001916
+expId 1916
+fileName wgEncodePsuHistoneG1eInputME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eInputME0S129InputAlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 5afc0b6ac724f7d6bcc2bc7480bc9634,4d774ae14c080af9b350ea732222017a
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5154
+view Alignments
+
+metaObject wgEncodePsuHistoneG1eInputME0S129InputRawDataRep1
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001916
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001916
+expId 1916
+fileName wgEncodePsuHistoneG1eInputME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 8ec58e1f276061d51c08210a218116c6
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex M
+strain 129
+subId 5154
+view RawData
+
+metaObject wgEncodePsuHistoneG1eInputME0S129InputRawDataRep2
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001916
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001916
+expId 1916
+fileName wgEncodePsuHistoneG1eInputME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 70209ff9fa28211bb633a9624836b360
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5154
+view RawData
+
+metaObject wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep1
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001916
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001916
+expId 1916
+fileName wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum 56355774e5520eacfb730acfa100445e
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex M
+strain 129
+subId 5154
+view RepSignal
+
+metaObject wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep2
+objType file
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001916
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001916
+expId 1916
+fileName wgEncodePsuHistoneG1eInputME0S129InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum dfdcb2450a49535e7c6df018b3d85dd6
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5154
+view RepSignal
+
+metaObject wgEncodePsuHistoneG1eInputME0S129InputSig
+objType table
+age E0
+antibody Input
+cell G1E
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001916
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001916
+expId 1916
+fileName wgEncodePsuHistoneG1eInputME0S129InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum e3f604047f4fec7ceed6f865235a7610
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5154
+tableName wgEncodePsuHistoneG1eInputME0S129InputSig
+view Signal
+
 metaObject wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep1
 objType file
 age E0
@@ -3710,14 +4647,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 82a8e4b453159e97462fb29d027c08d1,ed7c3477d86cd84d5bd9e0cdabd9434e
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3734,14 +4674,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum c4e8735b1cb4645a51fd7abadf1b8833,51d09bb4e2063ff48d39a0d1da6ed04d
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3758,14 +4701,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 4def55cf1f26e676257a18a1839c4fa0
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3782,14 +4728,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 2b83d68cfc63796da7ec9463866f5fda
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3806,14 +4755,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum a890fe06eb3e8be1913698fe88b9eaa0
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3830,14 +4782,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum b324721c73b387e6989b7594c12cb830
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3854,14 +4809,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 4555dc57db258bd91e150ffa3538ff58
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3878,14 +4836,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 73b1ba09039a4a4ad4f0dfa64360b3ed
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -3902,14 +4863,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum ea3c3eeae2cf6a352f316e68f6795caa
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3926,14 +4890,17 @@ antibody H3K4me1
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-11
 dateUnrestricted 2012-08-11
+dccAccession wgEncodeEM001918
+expId 1918
 fileName wgEncodePsuHistoneG1eer4e2H3k04me1ME0S129RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 4cfede6763c10ff5aa97e9df2712fb8e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -3950,16 +4917,18 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1.bam
+dccAccession wgEncodeEM001920
+expId 1920
+fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum c53f036214d50e340af849794f53587e
+md5sum c53f036214d50e340af849794f53587e,296980c5f3c6659f002049de7a718e5f
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -3976,16 +4945,18 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
-fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2.bam
+dccAccession wgEncodeEM001920
+expId 1920
+fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 88f143501e67f47dc776e46fd53ed5a9
+md5sum 88f143501e67f47dc776e46fd53ed5a9,9c40a194229d1f5559a6e776360532ef
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4002,12 +4973,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4028,12 +5001,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4054,12 +5029,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4080,12 +5057,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4106,12 +5085,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4132,12 +5113,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -4158,12 +5141,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -4184,12 +5169,14 @@ antibody H3K4me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-10-26
 dateSubmitted 2010-12-02
 dateUnrestricted 2011-08-31
+dccAccession wgEncodeEM001920
+expId 1920
 fileName wgEncodePsuHistoneG1eer4e2H3k04me3ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -4210,14 +5197,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 34d5f54de246695f337ebd9a23dd82ff,a8ec0fcc2b2cf788b702c4702f071bf3
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4234,14 +5224,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 1dde3d43d11b9e93bc00492718ef5868,67cab521834468eeab83004bf536273a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4258,14 +5251,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 119be97aaf121f8be45add230bb78400
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4282,14 +5278,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 6bd8785be826e7b6fdcccb60ac8df2af
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4306,14 +5305,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 9a627b83e3da89d3f90bb46f7b2eccd5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4330,14 +5332,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 69ebc27b7c37de512d212fd46d98ece5
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4354,14 +5359,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 7f892abf189821d31163d7c1ef96448f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4378,14 +5386,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 9125da495e8cd7078e19f7d0ad7eb0cf
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -4402,14 +5413,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum f1dda95e720324b718f1208afcce7267
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4426,14 +5440,17 @@ antibody H3K9me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control None
-controlId G1E-ER4+E2/Input/None
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002377
+expId 2377
 fileName wgEncodePsuHistoneG1eer4e2H3k09me3ME0S129RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum cf1a1955d0e7db25edd926eb622bc979
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4450,14 +5467,17 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
-fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
+fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 97325aa30e7a3a93120e589594806772
+md5sum 97325aa30e7a3a93120e589594806772,fad9a28aa776dc81a34a69d969c0e8f4
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2x
@@ -4474,14 +5494,17 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
-fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
+fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 81f4e8bd400583d431b41f4ce9108508
+md5sum 81f4e8bd400583d431b41f4ce9108508,e262a2ca6206bdabb8de649d53f6e575
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4498,11 +5521,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4523,10 +5548,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4547,10 +5575,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4571,10 +5602,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4595,10 +5629,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4619,10 +5656,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -4643,10 +5683,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
-dateResubmitted 2011-09-23
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-09-23
+dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -4667,11 +5710,13 @@ antibody H3K27me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-09-23
 dateUnrestricted 2012-06-23
+dccAccession wgEncodeEM001917
+expId 1917
 fileName wgEncodePsuHistoneG1eer4e2H3k27me3ME0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -4692,15 +5737,17 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep1.bam
+dccAccession wgEncodeEM002368
+expId 2368
+fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum bd94a53e7d35545f7979fd7b74bd4139
+md5sum bd94a53e7d35545f7979fd7b74bd4139,3669a699ddc9247d78451828635dffdf
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4717,15 +5764,17 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep2.bam
+dccAccession wgEncodeEM002368
+expId 2368
+fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 7dee35bc579ed961beead2910a2e5865
+md5sum 7dee35bc579ed961beead2910a2e5865,b3c4669d91580241c774156a0075693f
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4742,11 +5791,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4767,11 +5818,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4792,11 +5845,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -4817,11 +5872,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4842,11 +5899,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -4867,11 +5926,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -4892,11 +5953,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -4917,11 +5980,13 @@ antibody H3K36me3
 cell G1E-ER4+E2
 composite wgEncodePsuHistone
 control Input
-controlId G1E-ER4+E2/Input/Input
+controlId wgEncodeEM001921
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002368
+expId 2368
 fileName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -4935,6 +6000,195 @@ subId 5037
 tableName wgEncodePsuHistoneG1eer4e2H3k36me3BE0S129InputSig
 view Signal
 
+metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep1
+objType file
+age E0
+antibody Input
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001921
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001921
+expId 1921
+fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep1.bam,wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 1ad8e395ae74d1e6e0d2aba9d9879298,29d7c350efeab80f474b5a3b88fe53ec
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex M
+strain 129
+subId 5188
+view Alignments
+
+metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep2
+objType file
+age E0
+antibody Input
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001921
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001921
+expId 1921
+fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep2.bam,wgEncodePsuHistoneG1eer4e2InputME0S129InputAlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+md5sum d547ae54e89c38bbfe6e12b88ac83b29,33427cc54ebab1142b55c26ba9380555
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5188
+view Alignments
+
+metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep1
+objType file
+age E0
+antibody Input
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001921
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001921
+expId 1921
+fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 88bd2eae678e6456b565acf78434854c
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex M
+strain 129
+subId 5188
+view RawData
+
+metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep2
+objType file
+age E0
+antibody Input
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001921
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001921
+expId 1921
+fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 77e301ab157025444bf852ba2018891b
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5188
+view RawData
+
+metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep1
+objType file
+age E0
+antibody Input
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001921
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001921
+expId 1921
+fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum a647363fc3c7a526395f2fd078e0925f
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex M
+strain 129
+subId 5188
+view RepSignal
+
+metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep2
+objType file
+age E0
+antibody Input
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001921
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001921
+expId 1921
+fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum 41ee6e553da1b76f869a2227e5350e13
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5188
+view RepSignal
+
+metaObject wgEncodePsuHistoneG1eer4e2InputME0S129InputSig
+objType table
+age E0
+antibody Input
+cell G1E-ER4+E2
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001921
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-16
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001921
+expId 1921
+fileName wgEncodePsuHistoneG1eer4e2InputME0S129InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum bab3b99c521c19487b65a4e850ee2546
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex M
+strain 129
+subId 5188
+tableName wgEncodePsuHistoneG1eer4e2InputME0S129InputSig
+view Signal
+
 metaObject wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1
 objType file
 age E14.5
@@ -4942,15 +6196,17 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1.bam
+dccAccession wgEncodeEM002369
+expId 2369
+fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1.bam,wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 0568225b551f419f321d9df4cdeea2a3
+md5sum 0568225b551f419f321d9df4cdeea2a3,7ccd4498d82524e8c80bb68b9f7e1395
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -4967,15 +6223,17 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
-fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep2.bam
+dccAccession wgEncodeEM002369
+expId 2369
+fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep2.bam,wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 4e0931bdf54b66cdc38ece45f60f638f
+md5sum 4e0931bdf54b66cdc38ece45f60f638f,55367be2b3346c41152ac643622fdf80
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -4992,11 +6250,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5017,11 +6277,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5042,11 +6304,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5067,11 +6331,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5092,11 +6358,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5117,11 +6385,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -5142,11 +6412,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -5167,11 +6439,13 @@ antibody H3K4me1
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-30
 dateUnrestricted 2012-07-30
+dccAccession wgEncodeEM002369
+expId 2369
 fileName wgEncodePsuHistoneMegakaryoH3k04me1BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -5192,15 +6466,17 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep1.bam
+dccAccession wgEncodeEM002367
+expId 2367
+fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep1.bam,wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep1.bam.bai
 grant Hardison
 lab PSU-m
-md5sum 745351715b27b51eda95112562be8dea
+md5sum 745351715b27b51eda95112562be8dea,1290d44521695565d2d0125968aa6241
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5217,15 +6493,17 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
-fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep2.bam
+dccAccession wgEncodeEM002367
+expId 2367
+fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep2.bam,wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputAlnRep2.bam.bai
 grant Hardison
 lab PSU-m
-md5sum bec570505294f282c7590645073c8bf0
+md5sum bec570505294f282c7590645073c8bf0,459541aa611a8b8b5205dd5ccf3ef208
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5242,11 +6520,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5267,11 +6547,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5292,11 +6574,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
@@ -5317,11 +6601,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5342,11 +6628,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
@@ -5367,11 +6655,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
@@ -5392,11 +6682,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
@@ -5417,11 +6709,13 @@ antibody H3K4me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-28
 dateUnrestricted 2012-07-28
+dccAccession wgEncodeEM002367
+expId 2367
 fileName wgEncodePsuHistoneMegakaryoH3k04me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
@@ -5442,14 +6736,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 6485f4168e06bedfb99d26344234aa83,d5830eae1b3b2c04a832f29dbebf690f
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5466,14 +6763,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum c4ec08e866b210bd59216a7463067071,3200137b52e26fee54dbd9ed726581d9
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5490,14 +6790,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 424ec8e2664a4080b6c290ea4999fd58
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5514,14 +6817,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 45b3fc9a174e82eedb2f5161bd75b87e
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5538,14 +6844,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 7cea4802586abc6192c1d6e3e18e40c6
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5562,14 +6871,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum acdbe5f4b0d9096b790b8ea4cf4be732
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5586,14 +6898,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum d0d807d32da01b7cf37488b0971c9ce8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5610,14 +6925,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 18b831c524be022a02eee9567d7876b3
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5634,14 +6952,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 83b53c358b002959fa4d1dc418716654
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5658,14 +6979,17 @@ antibody H3K9me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-14
+dccAccession wgEncodeEM002379
+expId 2379
 fileName wgEncodePsuHistoneMegakaryoH3k09me3BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 482b429f5ef6ea16313ca5275d5a1a34
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5682,14 +7006,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum af3c6c11cc3052b045bbcf3bea84b4d1,bed80113de45bd5cffe687d0359e5485
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5706,14 +7033,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 361dbf78a57b7824cd944d3df617b9c2,049ddc560d55d0b7749396d5699100b0
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5730,14 +7060,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 49cade8a416fdb056c8734bf46a309f3
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5754,14 +7087,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum ebcf420d72cdfa6de34fefcd0cf6d2ed
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5778,14 +7114,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 2f1ee97f88e5a24ebf3ad98170d0e16e
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5802,14 +7141,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum b1caada2317031c7bd2bed9de38a7589
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5826,14 +7168,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 03eb64c0c37b8c212248a0aa8af52fd5
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5850,14 +7195,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 6723fa046ee63c88d5ca9ebf9d55d178
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5874,14 +7222,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 68bca405495b6a8f1a6c7e49f9664a1d
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5898,14 +7249,17 @@ antibody H3K27me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-17
 dateUnrestricted 2012-08-17
+dccAccession wgEncodeEM002381
+expId 2381
 fileName wgEncodePsuHistoneMegakaryoH3k27me3BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 36133e23edd18a025777a9ebef81150a
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5922,14 +7276,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1AlnRep1.bam,wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1AlnRep1.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 8d9332633a10c8db2d00092fce69ae12,138fa4a3f5b109f8c23758986d6d4ea8
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -5946,14 +7303,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1AlnRep2.bam,wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1AlnRep2.bam.bai
 grant Hardison
 lab PSU-m
+md5sum 0f969582323b07b8d59d570754888556,c1108e8aa719b9f56013f67c1feaa764
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -5970,14 +7330,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputPk.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 8b7cb35af63b96215c429105f0f60600
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -5994,14 +7357,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep1.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 84546dced4ddf5d48fdcbfe4c12988df
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6018,14 +7384,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepPeaksRep2.broadPeak.gz
 grant Hardison
 lab PSU-m
+md5sum 908cc8045a1791041812728decac59c8
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6042,14 +7411,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepSignalRep1.bigWig
 grant Hardison
 lab PSU-m
+md5sum 511dbd1a412e341e4018a98554249b8c
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6066,14 +7438,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputRepSignalRep2.bigWig
 grant Hardison
 lab PSU-m
+md5sum 7dc2e56f3769c49cda394b78cb97be4b
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6090,14 +7465,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control Input
-controlId Megakaryo/Input/Input
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1InputSig.bigWig
 grant Hardison
 lab PSU-m
+md5sum 592314238e2a4f2649fe340e289bef94
 project wgEncode
 seqPlatform Illumina_HiSeq_2000
 setType exp
@@ -6114,14 +7492,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1RawDataRep1.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum b37a24a5919ebf89b0cf1292a1e16f36
 project wgEncode
 replicate 1
 seqPlatform Illumina_HiSeq_2000
@@ -6138,14 +7519,17 @@ antibody H3K36me3
 cell Megakaryo
 composite wgEncodePsuHistone
 control None
-controlId Megakaryo/Input/None
+controlId wgEncodeEM002352
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-15
 dateUnrestricted 2012-08-15
+dccAccession wgEncodeEM002378
+expId 2378
 fileName wgEncodePsuHistoneMegakaryoH3k36me3BE14halfCd1RawDataRep2.fastq.gz
 grant Hardison
 lab PSU-m
+md5sum 16d3d530fee229ac53172bcf2a6c3673
 project wgEncode
 replicate 2
 seqPlatform Illumina_HiSeq_2000
@@ -6155,4 +7539,382 @@ strain CD-1
 subId 5031
 view RawData
 
-# MAGIC: 1731140597
+metaObject wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputAlnRep1
+objType file
+age E14.5
+antibody Input
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002352
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM002352
+expId 2352
+fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputAlnRep1.bam,wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 1f597fa1055753484263dc9fff39fce4,967eaf37086010b5b73d6be1c78adddf
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex B
+strain CD-1
+subId 5239
+view Alignments
+
+metaObject wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputAlnRep2
+objType file
+age E14.5
+antibody Input
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002352
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM002352
+expId 2352
+fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputAlnRep2.bam,wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputAlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 164e2dac031e12d0a4134e8048789385,a3364aee8655a44df8d3f39505eb7f11
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5239
+view Alignments
+
+metaObject wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRawDataRep1
+objType file
+age E14.5
+antibody Input
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002352
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM002352
+expId 2352
+fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum b28f0eb807d7a26c9ce281d9ac825349
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex B
+strain CD-1
+subId 5239
+view RawData
+
+metaObject wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRawDataRep2
+objType file
+age E14.5
+antibody Input
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002352
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM002352
+expId 2352
+fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum 01c1545dcbed2b0e2a5e7698789922f0
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5239
+view RawData
+
+metaObject wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRepSignalRep1
+objType file
+age E14.5
+antibody Input
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002352
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM002352
+expId 2352
+fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum 782b3673b4f75b9597a64e4ff899a92f
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex B
+strain CD-1
+subId 5239
+view RepSignal
+
+metaObject wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRepSignalRep2
+objType file
+age E14.5
+antibody Input
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002352
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM002352
+expId 2352
+fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum 3160224d283ca3efbd13a8c72b92c497
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5239
+view RepSignal
+
+metaObject wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputSig
+objType table
+age E14.5
+antibody Input
+cell Megakaryo
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM002352
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM002352
+expId 2352
+fileName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum 74a96128dbf01ef416d1ae4ce193ea13
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex B
+strain CD-1
+subId 5239
+tableName wgEncodePsuHistoneMegakaryoInputBE14halfCd1InputSig
+view Signal
+
+metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001929
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001929
+expId 1929
+fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep1.bam,wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep1.bam.bai
+grant Hardison
+lab PSU-m
+md5sum 793fcd334f2f550ff3e708cf73b0378a,d02a7fe73853c7b96b9c55db937a3787
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex U
+strain C57BL/6
+subId 5240
+view Alignments
+
+metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep2
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001929
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001929
+expId 1929
+fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep2.bam,wgEncodePsuHistoneMelInputUImmortalC57bl6InputAlnRep2.bam.bai
+grant Hardison
+lab PSU-m
+md5sum fcec7eef6d8170bd6f87c4b3db28b565,c1601d01ef7a358cd6bac3f9abaa93c5
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+strain C57BL/6
+subId 5240
+view Alignments
+
+metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001929
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001929
+expId 1929
+fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep1.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum eb321a714a1fa531257682f66cc6ba03
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex U
+strain C57BL/6
+subId 5240
+view RawData
+
+metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep2
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001929
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001929
+expId 1929
+fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRawDataRep2.fastq.gz
+grant Hardison
+lab PSU-m
+md5sum e0146ae40f4d03cd9ce9203218953d06
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+strain C57BL/6
+subId 5240
+view RawData
+
+metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep1
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001929
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001929
+expId 1929
+fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep1.bigWig
+grant Hardison
+lab PSU-m
+md5sum b0e6e13af5f44865c3e2dcbf59800d53
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2x
+setType input
+sex U
+strain C57BL/6
+subId 5240
+view RepSignal
+
+metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep2
+objType file
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001929
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001929
+expId 1929
+fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputRepSignalRep2.bigWig
+grant Hardison
+lab PSU-m
+md5sum 8b87fe200d2f725e150180c71ca8d091
+project wgEncode
+replicate 2
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+strain C57BL/6
+subId 5240
+view RepSignal
+
+metaObject wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
+objType table
+age immortalized
+antibody Input
+cell MEL
+composite wgEncodePsuHistone
+control Input
+controlId wgEncodeEM001929
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2011-12-17
+dateUnrestricted 2012-09-16
+dccAccession wgEncodeEM001929
+expId 1929
+fileName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig.bigWig
+grant Hardison
+lab PSU-m
+md5sum a920b3ea13270fb08a1ac15e1c1afab0
+project wgEncode
+seqPlatform Illumina_HiSeq_2000
+setType input
+sex U
+strain C57BL/6
+subId 5240
+tableName wgEncodePsuHistoneMelInputUImmortalC57bl6InputSig
+view Signal
+
+# MAGIC: 1410406996

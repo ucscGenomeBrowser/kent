@@ -1,10 +1,10 @@
 track wgEncodeUwRepliSeq
 compositeTrack on
-shortLabel UW Repli-Seq
-longLabel Replication Timing by Repli-Seq from ENCODE/University of Washington
+shortLabel UW Repli-seq
+longLabel Replication Timing by Repli-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views 1PctSignal=Percentage-normalized_Signal 2Peaks=Peaks 3Valleys=Valleys 4WaveSignal=Wavelet-smoothed_Signal 5SumSignal=Summed_Densities
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ BG02ES=BG02ES GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSHRA=SK-N-SH_RA
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HEPG2=HepG2&nbsp;(Tier_2) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ BG02ES=BG02ES GM06990=GM06990 GM12801=GM12801 GM12812=GM12812 GM12813=GM12813 IMR90=IMR90 MCF7=MCF-7 NHEK=NHEK SKNSH=SK-N-SH
 subGroup3 phase Phase 1G1=G1 1G1B=G1b 2S1=S1 3S2=S2 4S3=S3 5S4=S4 6G2=G2 zNONE=None
 subGroup4 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=rep
@@ -20,15 +20,15 @@ wgEncode 1
 	track wgEncodeUwRepliSeqViewPeaks
 	shortLabel Peaks
 	view 2Peaks
-	visibility dense
+	visibility hide
 	parent wgEncodeUwRepliSeq
 	itemRgb on
 	useScore 1
 
         track wgEncodeUwRepliSeqGm12878PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel GM12878 Pk 1
-        longLabel GM12878 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel GM12878 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=1GM12878 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -36,9 +36,9 @@ wgEncode 1
         # subId=4828 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqK562PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel K562 Pk 1
-        longLabel K562 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel K562 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=1K562 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -48,7 +48,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90PkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel IMR90 Pk 1
-        longLabel IMR90 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel IMR90 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=IMR90 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -57,7 +57,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7PkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel MCF-7 Pk 1
-        longLabel MCF-7 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel MCF-7 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=MCF7 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -66,26 +66,27 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekPkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel NHEK Pk 1
-        longLabel NHEK Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel NHEK Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=NHEK phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraPkRep1
+        track wgEncodeUwRepliSeqSknshPkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
-        shortLabel SK-N-SH_RA Pk 1
-        longLabel SK-N-SH_RA Repli-Seq Peaks Rep 1 from ENCODE/UW
-        subGroups view=2Peaks cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Pk 1
+        longLabel SK-N-SH Repli-seq Peaks Rep 1 from ENCODE/UW
+        subGroups view=2Peaks cellType=SKNSH phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraPkRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
         track wgEncodeUwRepliSeqBjPkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel BJ Pk 1
-        longLabel BJ Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel BJ Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=BJ phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -94,7 +95,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjPkRep2
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel BJ Pk 2
-        longLabel BJ Repli-Seq Peaks Rep 2 from ENCODE/UW
+        longLabel BJ Repli-seq Peaks Rep 2 from ENCODE/UW
         subGroups view=2Peaks cellType=BJ phase=zNONE rep=rep2
         type bed 9
         origAssembly hg19
@@ -103,7 +104,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990PkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel GM06990 Pk 1
-        longLabel GM06990 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel GM06990 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=GM06990 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -112,16 +113,16 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801PkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel GM12801 Pk 1
-        longLabel GM12801 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel GM12801 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=GM12801 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         # subId=4866 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHelas3PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel HeLa-S3 Pk 1
-        longLabel HeLa-S3-Phase Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel HeLa-S3-Phase Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=2HELAS3 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -129,9 +130,9 @@ wgEncode 1
         # subId=4869 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHepg2PkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel HepG2 Pk 1
-        longLabel HepG2-Phase Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel HepG2-Phase Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=2HEPG2 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -139,9 +140,9 @@ wgEncode 1
         # subId=4870 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHuvecPkRep1
-        parent wgEncodeUwRepliSeqViewPeaks
+        parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel HUVEC Pk 1
-        longLabel HUVEC Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel HUVEC Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=2HUVEC phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -151,7 +152,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esPkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel BG02ES Pk 1
-        longLabel BG02ES Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel BG02ES Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=BG02ES phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -160,7 +161,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813PkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel GM12813 Pk 1
-        longLabel GM12813 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel GM12813 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=GM12813 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -169,7 +170,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812PkRep1
         parent wgEncodeUwRepliSeqViewPeaks off
         shortLabel GM12812 Pk 1
-        longLabel GM12812 Repli-Seq Peaks Rep 1 from ENCODE/UW
+        longLabel GM12812 Repli-seq Peaks Rep 1 from ENCODE/UW
         subGroups view=2Peaks cellType=GM12812 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -178,15 +179,15 @@ wgEncode 1
 	track wgEncodeUwRepliSeqViewValleys
 	shortLabel Valleys
 	view 3Valleys
-	visibility dense
+	visibility hide
 	parent wgEncodeUwRepliSeq
 	itemRgb on
 	useScore 1
 
         track wgEncodeUwRepliSeqGm12878ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel GM12878 Vly 1
-        longLabel GM12878 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel GM12878 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=1GM12878 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -194,9 +195,9 @@ wgEncode 1
         # subId=4828 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqK562ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel K562 Vly 1
-        longLabel K562 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel K562 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=1K562 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -206,7 +207,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel IMR90 Vly 1
-        longLabel IMR90 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel IMR90 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=IMR90 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -215,7 +216,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel MCF-7 Vly 1
-        longLabel MCF-7 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel MCF-7 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=MCF7 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -224,26 +225,27 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel NHEK Vly 1
-        longLabel NHEK Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel NHEK Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=NHEK phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraValleysRep1
+        track wgEncodeUwRepliSeqSknshValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
-        shortLabel SK-N-SH_RA Vly 1
-        longLabel SK-N-SH_RA Repli-Seq Valleys Rep 1 from ENCODE/UW
-        subGroups view=3Valleys cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Vly 1
+        longLabel SK-N-SH Repli-seq Valleys Rep 1 from ENCODE/UW
+        subGroups view=3Valleys cellType=SKNSH phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraValleysRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel BJ Vly 1
-        longLabel BJ Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel BJ Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=BJ phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -252,7 +254,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjValleysRep2
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel BJ Vly 2
-        longLabel BJ Repli-Seq Valleys Rep 2 from ENCODE/UW
+        longLabel BJ Repli-seq Valleys Rep 2 from ENCODE/UW
         subGroups view=3Valleys cellType=BJ phase=zNONE rep=rep2
         type bed 9
         origAssembly hg19
@@ -261,7 +263,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel GM06990 Vly 1
-        longLabel GM06990 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel GM06990 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=GM06990 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -270,16 +272,16 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel GM12801 Vly 1
-        longLabel GM12801 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel GM12801 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=GM12801 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
         # subId=4866 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHelas3ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys 
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel HeLa-S3 Vly 1
-        longLabel HeLa-S3-Phase Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel HeLa-S3-Phase Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=2HELAS3 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -287,9 +289,9 @@ wgEncode 1
         # subId=4869 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHepg2ValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel HepG2 Vly 1
-        longLabel HepG2-Phase Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel HepG2-Phase Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=2HEPG2 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -297,9 +299,9 @@ wgEncode 1
         # subId=4870 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHuvecValleysRep1
-        parent wgEncodeUwRepliSeqViewValleys
+        parent wgEncodeUwRepliSeqViewValleys off
         shortLabel HUVEC Vly 1
-        longLabel HUVEC Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel HUVEC Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=2HUVEC phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -309,7 +311,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel BG02ES Vly 1
-        longLabel BG02ES Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel BG02ES Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=BG02ES phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -318,7 +320,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel GM12813 Vly 1
-        longLabel GM12813 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel GM12813 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=GM12813 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -327,7 +329,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812ValleysRep1
         parent wgEncodeUwRepliSeqViewValleys off
         shortLabel GM12812 Vly 1
-        longLabel GM12812 Repli-Seq Valleys Rep 1 from ENCODE/UW
+        longLabel GM12812 Repli-seq Valleys Rep 1 from ENCODE/UW
         subGroups view=3Valleys cellType=GM12812 phase=zNONE rep=rep1
         type bed 9
         origAssembly hg19
@@ -344,7 +346,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel GM12878 G1b 1
-        longLabel GM12878 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12878 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1GM12878 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -354,7 +356,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel GM12878 G2 1
-        longLabel GM12878 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12878 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1GM12878 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -364,7 +366,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel GM12878 S1 1
-        longLabel GM12878 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12878 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1GM12878 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -374,7 +376,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel GM12878 S2 1
-        longLabel GM12878 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12878 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1GM12878 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -384,7 +386,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel GM12878 S3 1
-        longLabel GM12878 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12878 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1GM12878 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -394,7 +396,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12878S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel GM12878 S4 1
-        longLabel GM12878 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12878 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1GM12878 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -404,7 +406,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562G1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 G1 1
-        longLabel K562 G1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel K562 G1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1K562 phase=1G1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -414,7 +416,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 G2 1
-        longLabel K562 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel K562 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1K562 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -424,7 +426,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 S1 1
-        longLabel K562 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel K562 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1K562 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -434,7 +436,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 S2 1
-        longLabel K562 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel K562 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1K562 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -444,7 +446,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 S3 1
-        longLabel K562 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel K562 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1K562 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -454,7 +456,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqK562S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel K562 S4 1
-        longLabel K562 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel K562 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=1K562 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -464,7 +466,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel IMR90 G1b 1
-        longLabel IMR90 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel IMR90 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=IMR90 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -473,7 +475,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel IMR90 G2 1
-        longLabel IMR90 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel IMR90 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=IMR90 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -482,7 +484,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel IMR90 S1 1
-        longLabel IMR90 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel IMR90 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=IMR90 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -491,7 +493,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel IMR90 S2 1
-        longLabel IMR90 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel IMR90 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=IMR90 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -500,7 +502,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel IMR90 S3 1
-        longLabel IMR90 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel IMR90 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=IMR90 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -509,7 +511,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqImr90S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel IMR90 S4 1
-        longLabel IMR90 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel IMR90 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=IMR90 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -518,7 +520,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel MCF-7 G1b 1
-        longLabel MCF-7 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=MCF7 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -527,7 +529,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel MCF-7 G2 1
-        longLabel MCF-7 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=MCF7 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -536,7 +538,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel MCF-7 S1 1
-        longLabel MCF-7 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=MCF7 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -545,7 +547,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel MCF-7 S2 1
-        longLabel MCF-7 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=MCF7 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -554,7 +556,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel MCF-7 S3 1
-        longLabel MCF-7 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=MCF7 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -563,7 +565,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqMcf7S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel MCF-7 S4 1
-        longLabel MCF-7 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel MCF-7 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=MCF7 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -572,7 +574,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekG1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel NHEK G1b 1
-        longLabel NHEK G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel NHEK G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=NHEK phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -582,7 +584,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekG2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel NHEK G2 1
-        longLabel NHEK G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel NHEK G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=NHEK phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -592,7 +594,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel NHEK S1 1
-        longLabel NHEK S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel NHEK S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=NHEK phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -602,7 +604,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekS2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel NHEK S2 1
-        longLabel NHEK S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel NHEK S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=NHEK phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -612,7 +614,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekS3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel NHEK S3 1
-        longLabel NHEK S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel NHEK S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=NHEK phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -622,71 +624,77 @@ wgEncode 1
         track wgEncodeUwRepliSeqNhekS4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel NHEK S4 1
-        longLabel NHEK S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel NHEK S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=NHEK phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraG1bPctSignalRep1
+        track wgEncodeUwRepliSeqSknshG1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA G1b 1
-        longLabel SK-N-SH_RA G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=1G1B rep=rep1
+        shortLabel SK-N-SH G1b 1
+        longLabel SK-N-SH G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraG1bPctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
-        track wgEncodeUwRepliSeqSknshraG2PctSignalRep1
+        track wgEncodeUwRepliSeqSknshG2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA G2 1
-        longLabel SK-N-SH_RA G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=6G2 rep=rep1
+        shortLabel SK-N-SH G2 1
+        longLabel SK-N-SH G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraG2PctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
-        track wgEncodeUwRepliSeqSknshraS1PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S1 1
-        longLabel SK-N-SH_RA S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=2S1 rep=rep1
+        shortLabel SK-N-SH S1 1
+        longLabel SK-N-SH S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS1PctSignalRep1 vsmalladi Thu Jan 26 07:58:05 2012
 
-        track wgEncodeUwRepliSeqSknshraS2PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S2 1
-        longLabel SK-N-SH_RA S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=3S2 rep=rep1
+        shortLabel SK-N-SH S2 1
+        longLabel SK-N-SH S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS2PctSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
-        track wgEncodeUwRepliSeqSknshraS3PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S3 1
-        longLabel SK-N-SH_RA S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=4S3 rep=rep1
+        shortLabel SK-N-SH S3 1
+        longLabel SK-N-SH S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS3PctSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
-        track wgEncodeUwRepliSeqSknshraS4PctSignalRep1
+        track wgEncodeUwRepliSeqSknshS4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
-        shortLabel SK-N-SH_RA S4 1
-        longLabel SK-N-SH_RA S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
-        subGroups view=1PctSignal cellType=SKNSHRA phase=5S4 rep=rep1
+        shortLabel SK-N-SH S4 1
+        longLabel SK-N-SH S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        subGroups view=1PctSignal cellType=SKNSH phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraS4PctSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjG1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ G1b 1
-        longLabel BJ G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BJ G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -695,7 +703,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjG2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ G2 1
-        longLabel BJ G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BJ G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -704,7 +712,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S1 1
-        longLabel BJ S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BJ S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -713,7 +721,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S2 1
-        longLabel BJ S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BJ S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -722,7 +730,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S3 1
-        longLabel BJ S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BJ S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -731,7 +739,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S4 1
-        longLabel BJ S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BJ S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -740,7 +748,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjG1bPctSignalRep2
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ G1b 2
-        longLabel BJ G1b-Phase Repli-Seq Percentage-normalized Signal Rep 2 from ENCODE/UW
+        longLabel BJ G1b-Phase Repli-seq Percentage-normalized Signal Rep 2 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=1G1B rep=rep2
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -749,7 +757,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjG2PctSignalRep2
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ G2 2
-        longLabel BJ G2-Phase Repli-Seq Percentage-normalized Signal Rep 2 from ENCODE/UW
+        longLabel BJ G2-Phase Repli-seq Percentage-normalized Signal Rep 2 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=6G2 rep=rep2
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -758,7 +766,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS1PctSignalRep2
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S1 2
-        longLabel BJ S1-Phase Repli-Seq Percentage-normalized Signal Rep 2 from ENCODE/UW
+        longLabel BJ S1-Phase Repli-seq Percentage-normalized Signal Rep 2 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=2S1 rep=rep2
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -767,7 +775,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS2PctSignalRep2
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S2 2
-        longLabel BJ S2-Phase Repli-Seq Percentage-normalized Signal Rep 2 from ENCODE/UW
+        longLabel BJ S2-Phase Repli-seq Percentage-normalized Signal Rep 2 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=3S2 rep=rep2
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -776,7 +784,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS3PctSignalRep2
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S3 2
-        longLabel BJ S3-Phase Repli-Seq Percentage-normalized Signal Rep 2 from ENCODE/UW
+        longLabel BJ S3-Phase Repli-seq Percentage-normalized Signal Rep 2 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=4S3 rep=rep2
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -785,7 +793,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBjS4PctSignalRep2
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BJ S4 2
-        longLabel BJ S4-Phase Repli-Seq Percentage-normalized Signal Rep 2 from ENCODE/UW
+        longLabel BJ S4-Phase Repli-seq Percentage-normalized Signal Rep 2 from ENCODE/UW
         subGroups view=1PctSignal cellType=BJ phase=5S4 rep=rep2
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -794,7 +802,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM06990 G1b 1
-        longLabel GM06990 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM06990 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM06990 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -803,7 +811,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM06990 G2 1
-        longLabel GM06990 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM06990 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM06990 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -812,7 +820,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM06990 S1 1
-        longLabel GM06990 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM06990 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM06990 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -821,7 +829,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM06990 S2 1
-        longLabel GM06990 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM06990 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM06990 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -830,7 +838,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM06990 S3 1
-        longLabel GM06990 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM06990 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM06990 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -839,7 +847,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm06990S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM06990 S4 1
-        longLabel GM06990 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM06990 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM06990 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -848,7 +856,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 G1b 1
-        longLabel GM12801 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12801 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12801 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -857,7 +865,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 G2 1
-        longLabel GM12801 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12801 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12801 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -866,7 +874,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 S1 1
-        longLabel GM12801 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12801 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12801 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -875,7 +883,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 S2 1
-        longLabel GM12801 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12801 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12801 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -884,7 +892,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 S3 1
-        longLabel GM12801 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12801 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12801 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -893,7 +901,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12801S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12801 S4 1
-        longLabel GM12801 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12801 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12801 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -902,7 +910,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 G1b 1
-        longLabel HeLa-S3 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HELAS3 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -912,7 +920,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 G2 1
-        longLabel HeLa-S3 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HELAS3 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -922,7 +930,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 S1 1
-        longLabel HeLa-S3 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HELAS3 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -932,7 +940,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 S2 1
-        longLabel HeLa-S3 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HELAS3 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -942,7 +950,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 S3 1
-        longLabel HeLa-S3 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HELAS3 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -952,7 +960,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHelas3S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HeLa-S3 S4 1
-        longLabel HeLa-S3 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HeLa-S3 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HELAS3 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -962,7 +970,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HepG2 G1b 1
-        longLabel HepG2 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HEPG2 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -972,7 +980,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HepG2 G2 1
-        longLabel HepG2 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HEPG2 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -982,7 +990,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HepG2 S1 1
-        longLabel HepG2 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HEPG2 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -992,7 +1000,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HepG2 S2 1
-        longLabel HepG2 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HEPG2 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1002,7 +1010,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HepG2 S3 1
-        longLabel HepG2 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HEPG2 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1012,7 +1020,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHepg2S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HepG2 S4 1
-        longLabel HepG2 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HepG2 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HEPG2 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1022,7 +1030,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecG1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HUVEC G1b 1
-        longLabel HUVEC G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HUVEC phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1032,7 +1040,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecG2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HUVEC G2 1
-        longLabel HUVEC G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HUVEC phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1042,7 +1050,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HUVEC S1 1
-        longLabel HUVEC S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HUVEC phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1052,7 +1060,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecS2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HUVEC S2 1
-        longLabel HUVEC S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HUVEC phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1062,7 +1070,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecS3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HUVEC S3 1
-        longLabel HUVEC S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HUVEC phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1072,7 +1080,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqHuvecS4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal
         shortLabel HUVEC S4 1
-        longLabel HUVEC S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel HUVEC S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=2HUVEC phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1082,7 +1090,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esG1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BG02ES G1b 1
-        longLabel BG02ES G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BG02ES G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BG02ES phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1091,7 +1099,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esG2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BG02ES G2 1
-        longLabel BG02ES G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BG02ES G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BG02ES phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1100,7 +1108,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esS1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BG02ES S1 1
-        longLabel BG02ES S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BG02ES S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BG02ES phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1109,7 +1117,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esS2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BG02ES S2 1
-        longLabel BG02ES S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BG02ES S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BG02ES phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1118,7 +1126,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esS3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BG02ES S3 1
-        longLabel BG02ES S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BG02ES S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BG02ES phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1127,7 +1135,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqBg02esS4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel BG02ES S4 1
-        longLabel BG02ES S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel BG02ES S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=BG02ES phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1136,7 +1144,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 G1b 1
-        longLabel GM12813 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12813 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12813 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1145,7 +1153,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 G2 1
-        longLabel GM12813 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12813 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12813 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1154,7 +1162,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 S1 1
-        longLabel GM12813 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12813 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12813 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1163,7 +1171,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 S2 1
-        longLabel GM12813 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12813 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12813 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1172,7 +1180,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 S3 1
-        longLabel GM12813 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12813 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12813 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1181,7 +1189,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12813S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12813 S4 1
-        longLabel GM12813 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12813 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12813 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1190,7 +1198,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812G1bPctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12812 G1b 1
-        longLabel GM12812 G1b-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12812 G1b-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12812 phase=1G1B rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1199,7 +1207,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812G2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12812 G2 1
-        longLabel GM12812 G2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12812 G2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12812 phase=6G2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1208,7 +1216,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812S1PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12812 S1 1
-        longLabel GM12812 S1-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12812 S1-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12812 phase=2S1 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1217,7 +1225,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812S2PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12812 S2 1
-        longLabel GM12812 S2-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12812 S2-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12812 phase=3S2 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1226,7 +1234,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812S3PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12812 S3 1
-        longLabel GM12812 S3-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12812 S3-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12812 phase=4S3 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1235,7 +1243,7 @@ wgEncode 1
         track wgEncodeUwRepliSeqGm12812S4PctSignalRep1
         parent wgEncodeUwRepliSeqViewPctSignal off
         shortLabel GM12812 S4 1
-        longLabel GM12812 S4-Phase Repli-Seq Percentage-normalized Signal Rep 1 from ENCODE/UW
+        longLabel GM12812 S4-Phase Repli-seq Percentage-normalized Signal Rep 1 from ENCODE/UW
         subGroups view=1PctSignal cellType=GM12812 phase=5S4 rep=rep1
         type bigWig 1.000000 100.000000
         origAssembly hg19
@@ -1244,13 +1252,13 @@ wgEncode 1
 	track wgEncodeUwRepliSeqViewSumSignal
 	shortLabel Summed Densities
 	view 5SumSignal
-	visibility full
+	visibility hide
 	parent wgEncodeUwRepliSeq
 	windowingFunction mean+whiskers
 	viewLimits 0:2500
 
         track wgEncodeUwRepliSeqGm12878SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off 
         shortLabel GM12878 Sd 1
         longLabel GM12878 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=1GM12878 phase=zNONE rep=rep1
@@ -1260,7 +1268,7 @@ wgEncode 1
         # subId=4828 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqK562SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel K562 Sd 1
         longLabel K562 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=1K562 phase=zNONE rep=rep1
@@ -1297,14 +1305,15 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraSumSignalRep1
+        track wgEncodeUwRepliSeqSknshSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
-        shortLabel SK-N-SH_RA Sd 1
-        longLabel SK-N-SH_RA Replication Timing by Summed Densities Rep 1 from ENCODE/UW
-        subGroups view=5SumSignal cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Sd 1
+        longLabel SK-N-SH Replication Timing by Summed Densities Rep 1 from ENCODE/UW
+        subGroups view=5SumSignal cellType=SKNSH phase=zNONE rep=rep1
         type bigWig 1.000000 2886.000000
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraSumSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjSumSignalRep1
         parent wgEncodeUwRepliSeqViewSumSignal off
@@ -1343,7 +1352,7 @@ wgEncode 1
         # subId=4866 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHelas3SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HeLa-S3 Sd 1
         longLabel HeLa-S3 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HELAS3 phase=zNONE rep=rep1
@@ -1353,7 +1362,7 @@ wgEncode 1
         # subId=4869 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHepg2SumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HepG2 Sd 1
         longLabel HepG2 Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HEPG2 phase=zNONE rep=rep1
@@ -1363,7 +1372,7 @@ wgEncode 1
         # subId=4870 dateSubmitted=2011-10-27
 
         track wgEncodeUwRepliSeqHuvecSumSignalRep1
-        parent wgEncodeUwRepliSeqViewSumSignal
+        parent wgEncodeUwRepliSeqViewSumSignal off
         shortLabel HUVEC Sd 1
         longLabel HUVEC Replication Timing by Summed Densities Rep 1 from ENCODE/UW
         subGroups view=5SumSignal cellType=2HUVEC phase=zNONE rep=rep1
@@ -1455,14 +1464,15 @@ wgEncode 1
         color 179,0,134
         # subId=4861 dateSubmitted=2011-10-31
 
-        track wgEncodeUwRepliSeqSknshraWaveSignalRep1
+        track wgEncodeUwRepliSeqSknshWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off
-        shortLabel SK-N-SH_RA Ws 1
-        longLabel SK-N-SH_RA Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
-        subGroups view=4WaveSignal cellType=SKNSHRA phase=zNONE rep=rep1
+        shortLabel SK-N-SH Ws 1
+        longLabel SK-N-SH Replication Timing by Wavelet-smoothed Signal Rep 1 from ENCODE/UW
+        subGroups view=4WaveSignal cellType=SKNSH phase=zNONE rep=rep1
         type bigWig -4.517115 80.696381
         origAssembly hg19
         # subId=4862 dateSubmitted=2011-10-27
+        # was wgEncodeUwRepliSeqSknshraWaveSignalRep1 vsmalladi Thu Jan 26 07:58:06 2012
 
         track wgEncodeUwRepliSeqBjWaveSignalRep1
         parent wgEncodeUwRepliSeqViewWaveSignal off

@@ -112,6 +112,7 @@ if (isFull)
 	grayLevel = grayInRange(percId, 500, 1000);
 	col = shadesOfGray[grayLevel];
 	x1 = roundingScale(ro.genoStart-winStart, width, baseWidth)+xOff;
+	x1 = max(x1, 0);
 	x2 = roundingScale(ro.genoEnd-winStart, width, baseWidth)+xOff;
 	w = x2-x1;
 	if (w <= 0)

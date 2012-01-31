@@ -310,7 +310,7 @@ webNewSection("Data Formats");
 puts("<ul>");
 puts("<LI>");
 puts(
-    "<A HREF=\"../goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
+    "<A HREF=\"../FAQ/FAQformat.html#format1\" TARGET=_blank>"
     "Browser Extensible Data (BED)</A>\n");
 puts("</LI>");
 puts("<LI>");

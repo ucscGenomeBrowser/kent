@@ -5,10 +5,9 @@ from ucscgenomics import ra, track
 def main():
     parser = argparse.ArgumentParser(
         prog='qaUpdateMetadata',
-        description='Update a the beta metaDb with selected items from the corresponding alpha metaDb object',
+        description='Update the beta metaDb with selected items from the corresponding alpha metaDb object',
         epilog='example: qaUpdateMetadata hg19 wgEncodeUwDnaseSeq md5sum objType cell treatment'
         )
-    parser.add_argument('-t', '--trackPath', help='Overrides the default track path ~/kent/src/hg/makeDb/trackDb/')
     parser.add_argument('database', help='The database, typically hg19 or mm9')
     parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
     parser.add_argument('vars', metavar='VARS', type=str, nargs='+', help='The list of metadata variables to update from alpha to beta')
@@ -20,8 +19,8 @@ def main():
 
     c = track.CompositeTrack(args.database, args.composite)
     newMdb = c.alphaMetaDb
-    oldMdb = c.betaMetaDb
-    temp = track.CompositeTrack(args.database, args.composite).betaMetaDb
+    oldMdb = c.publicMetaDb
+    temp = track.CompositeTrack(args.database, args.composite).publicMetaDb
 
     for i in vars:
         oldMdb = oldMdb.updateDiffFilter(i, newMdb)

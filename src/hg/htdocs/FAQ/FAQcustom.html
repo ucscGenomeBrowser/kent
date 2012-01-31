@@ -13,7 +13,7 @@
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
 
 <TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../inc/FAQ.topbar.html"--></TD></TR>
-<!--Content Tables------------------------------------------------------->
+<!-- Content Tables===================================================== -->
 <TR><TD COLSPAN=2 CELLPADDING=10>
     <!--outer table is for border purposes-->
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
@@ -32,6 +32,8 @@
                 <LI><A HREF="#custom6">Using the hgsid parameter in a URL</A>
                 <LI><A HREF="#custom7">Creating a details page for a custom annotation track</A>
                 <LI><A HREF="#custom8">Custom annotation track troubleshooting</A>
+		<LI><A HREF="#custom9">Error 500: Internal server error</A>
+                <LI><A HREF="#custom10">Byte-range request error</A>
 		</UL>
 		<A HREF="index.html">Return to FAQ Table of Contents</A>
 		<BR>
@@ -40,7 +42,7 @@
     </TD></TR></TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom1"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -97,7 +99,7 @@
     </TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom2"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -148,7 +150,7 @@
     </TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom3"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -186,7 +188,7 @@
     </TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom4"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -230,7 +232,7 @@
     </TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom5"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -273,7 +275,7 @@
     </TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom6"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -311,7 +313,7 @@
     </TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom7"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -360,7 +362,7 @@
     </TABLE>
 <BR>
 
-<!--Content Table------------------------------------------------------------>
+<!-- Content Table========================================================== -->
 <A NAME="custom8"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -403,7 +405,89 @@
 	</TABLE>
 	</TD></TR>
     </TABLE>
-    </TD><TD WIDTH=15></TD></TR>
+    </TD></TR>
 </TABLE>
-</BODY></HTML>
+<BR>
 
+<!-- Content Table========================================================== -->
+<A NAME="custom9"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+            <TR><TD>                
+            <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+                <TR><TD>                
+                <!--cheap trick to get background on row to be continuous-->
+                <TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+                    <TR><TD ALIGN="left">
+                    <FONT SIZE="4"><b>&nbsp; Error 500: Internal server error</b></FONT></TD> 
+                    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+                    </TD></TR>
+                </TABLE>                
+                </TD></TR>
+            </TABLE>                
+            <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+                    <TD>
+                    <P>
+                        <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+                        "I'm getting an Error 500 when trying to upload my custom track(s). 
+			What am I doing wrong?"
+                        <P>
+                        <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+                        "This error may occur when trying to upload a file that is too large. 
+			For larger data sets, we suggest using bigBed and bigWig file formats. 
+			More information about selecting a format can be found  
+			<A HREF="http://genomewiki.ucsc.edu/index.php/Selecting_a_graphing_track_data_format">here</A>."
+                    </TD><TD WIDTH=15></TD>
+                </TR>
+            </TABLE>
+            <br></TD></TR>
+        </TABLE>
+        </TD></TR>
+    </TABLE>
+<BR>
+
+<!-- Content Table========================================================== -->
+<A NAME="custom10"></A>
+    <!--outer table is for border purposes-->
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+            <TR><TD>
+            <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+                <TR><TD>
+                <!--cheap trick to get background on row to be continuous-->
+                <TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+                    <TR><TD ALIGN="left">
+                    <FONT SIZE="4"><b>&nbsp; Byte-range request error</b></FONT></TD>
+                    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+                    </TD></TR>
+                </TABLE>
+                </TD></TR>
+            </TABLE>
+            <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+                    <TD>
+                    <P>
+                        <B><FONT COLOR="#006666">Question: </FONT></B><BR>
+                        "When I try to visualize my custom track, I receive the error
+                        'Byte-range request was ignored by server.'"
+                        <P>
+                        <B><FONT COLOR="#006666">Response:</FONT></B><BR>
+                        "This error occurs when a web server is not configured properly or
+                        does not support byte-ranges. Click
+                        <A HREF="../goldenPath/help/hgTracksHelp.html#BYTERANGE">here</A>
+                        for more information."
+                    </TD><TD WIDTH=15></TD>
+                </TR>
+            </TABLE>
+            <br></TD></TR>
+        </TABLE>
+        </TD></TR>
+    </TABLE>
+<BR>
+</BODY></HTML>

@@ -38,8 +38,8 @@ def main():
     description='Compares files on the RR against a list of files',
     epilog=
 """Example:
-encodeQaCheckRRFiles hg19 wgEncodeSydhTfbs files.list
-encodeQaCheckRRFiles hg18 wgEncodeHudsonalphaChipSeq checkPushFilesList
+encodeQaCheckHgdownloadFiles hg19 wgEncodeSydhTfbs files.list
+encodeQaCheckHgdownloadFiles hg18 wgEncodeHudsonalphaChipSeq checkPushFilesList
 """
     )
     parser.add_argument('database', help='The database, typically hg19 or mm9')

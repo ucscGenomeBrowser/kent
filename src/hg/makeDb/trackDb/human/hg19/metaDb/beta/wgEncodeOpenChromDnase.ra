@@ -1364,7 +1364,7 @@ objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000534
@@ -4687,7 +4687,7 @@ objType file
 cell K562
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-03-21
 dccAccession wgEncodeEH000530
@@ -6981,4 +6981,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1377737520
+# MAGIC: -854513645

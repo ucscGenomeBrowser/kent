@@ -23,7 +23,7 @@
 // allCheckboxes: one to one correspondence with selectOptions
 
 var ddcl = {
-    mySelf: null,
+    //mySelf: null, // There is no need for a "mySelf" unless this object is being instantiated.
 
     textOfObjWrappedInStyle: function (obj)
     { // returns the obj text and if there is obj style, the text gets span wrapped with it
@@ -48,14 +48,14 @@ var ddcl = {
         if(chosenCount == 0) {
             msg = 'Please select...';
         } else if(chosenCount == 1) {
-            msg = mySelf.textOfObjWrappedInStyle(chosen[0]);
+            msg = ddcl.textOfObjWrappedInStyle(chosen[0]);
         } else if(chosenCount == options.length) {
-            msg = mySelf.textOfObjWrappedInStyle(options[0]);
+            msg = ddcl.textOfObjWrappedInStyle(options[0]);
         } else {
             for(var ix=0;ix<chosenCount;ix++) {
                 if (ix > 0)
                     msg += "<BR>";
-                msg += mySelf.textOfObjWrappedInStyle(chosen[ix]);
+                msg += ddcl.textOfObjWrappedInStyle(chosen[ix]);
             }
         }
         return msg;
@@ -80,7 +80,7 @@ var ddcl = {
 
         // Set the label
         var control = $(controlSelector).parent();
-        mySelf.labelSet(control,"Select multiple...",'#000088','Selecting...');
+        ddcl.labelSet(control,"Select multiple...",'#000088','Selecting...');
 
         // Find the active 'items' and original 'options'
         var id = $(control).attr('id').substring('ddcl-'.length);
@@ -92,7 +92,7 @@ var ddcl = {
         // Special juice to handle "exclude" options based upon competing filterBoxes
         try {
             if(($(multiSelect).hasClass('filterComp')  && filterCompositeExcludeOptions(multiSelect))
-            || ($(multiSelect).hasClass('filterTable') && filterTableExcludeOptions(multiSelect))) {
+            || ($(multiSelect).hasClass('filterTable') && filterTable.excludeOptions(multiSelect))) {
 
                 // "exclude" items based upon the exclude tag of the true options
                 allCheckboxes.each(function(index) {
@@ -149,7 +149,7 @@ var ddcl = {
             newColor = '#AA0000'; // red
         //else if (msg.search(/color:/i) == -1)
         //    newColor = 'black';
-        mySelf.labelSet(control,msg,newColor,'Click to select...');
+        ddcl.labelSet(control,msg,newColor,'Click to select...');
 
         // Notice special handling for a custom event
         $(multiSelect).trigger('done',multiSelect);
@@ -168,27 +168,22 @@ var ddcl = {
             var multiSelect = this;
             if (!force) { // condition on bad dimensions
                 var id = $(multiSelect).attr('id');
-                control = $('#ddcl-' + id);
-                if (control != null && control != undefined) {
-                    var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
-                    if ($(controlSelector).width() > 20)
-                        return;  // Dimensions look okay
-                }
+                control = normed($('#ddcl-' + id));
+                if (control == undefined)
+                    return;                            // This is being called before normal init
+                var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
+                if ($(controlSelector).width() > 20)
+                    return;  // Dimensions look okay
             }
             $(multiSelect).dropdownchecklist("destroy");
             $(multiSelect).show(); // necessary to get dimensions
-            if (newJQuery)
-                ddcl.setup(multiSelect,'noneIsAll');
-            else
-                $(multiSelect).dropdownchecklist({ firstItemChecksAll: true,
-                                                   noneIsAll: true,
-                                                   maxDropHeight: filterByMaxHeight(multiSelect) });
+            ddcl.setup(multiSelect,'noneIsAll');
         });
     },
 
     setup: function (obj) {
         // Initialize the multiselect as a DDCL (drop-down checkbox-list)
-        mySelf = this;
+        //mySelf = this; // There is no need for a "mySelf" unless this object is being instantiated.
 
         // Defaults
         var myFirstIsAll = true;
@@ -252,11 +247,11 @@ var ddcl = {
                             emptyText: myEmptyText,
                             explicitClose: myClose,
                             textFormatFunction: function () { return 'selecting...'; } ,
-                            onComplete: mySelf.onComplete
+                            onComplete: ddcl.onComplete
         });
         if (myNoneIsAll)
             $(obj).addClass('noneIsAll'); // Declare this as none selected same as all selected
-        mySelf.onComplete(obj); // shows selected items in multiple lines
+        ddcl.onComplete(obj); // shows selected items in multiple lines
 
         // Set up the selector (control seen always and replacing select)
         var control = $('#ddcl-' + id);
@@ -265,7 +260,7 @@ var ddcl = {
             return;
         }
         var controlSelector = $(control).find(".ui-dropdownchecklist-selector");
-        $(controlSelector).click(mySelf.onOpen);
+        $(controlSelector).click(ddcl.onOpen);
         $(controlSelector).css({width:maxWidth+'px'});
         var controlText = $(control).find(".ui-dropdownchecklist-text");
         $(controlText).css({width:maxWidth+'px'});
@@ -316,14 +311,387 @@ var ddcl = {
             }
         }
 
+    },
+
+    start: function () {  // necessary to delay startup till all selects get ids.
+        $('.filterBy,.filterComp').each( function(i) {
+            if ($(this).hasClass('filterComp'))
+                ddcl.setup(this); // Not nonIsAll
+            else
+                ddcl.setup(this,'noneIsAll')
+        });
     }
 };
 
+  ///////////////////////
+ //// Filter Tables ////
+///////////////////////
+var filterTable = {
+    // Filter Tables are HTML tables that can be filtered by drop-down-checkbox-lists (ddcl) controls
+    // To use this feature trs must have class 'filterble' and contain tds with classes matching category and value
+    //    eg: <TR class='filterable'><TD class='cell 8988T'>8988T</td>
+    // and ddcl 'filterBy' controls with additional classes 'filterTable' and the category, and contains options
+    // with the the value to be filtered.  Also, the ddcl objects onChange event must call filterTable.filter(this)
+    //    eg: <SELECT name='cell' MULTIPLE class='filterTable cell filterBy' onchange='filterTable.filter(this);' style='font-size:.9em;'>
+    //        <OPTION SELECTED VALUE='All'>All</OPTION>
+    //        <OPTION VALUE='8988T'>8988T</OPTION>
+    // Multiple filterTable controls can be defined, but only one table can be the target of filtering.
+
+    variable: function (filter)
+    { // returns the variable associated with a filter
+
+        if($(filter).hasClass('filterBy') == false)
+            return undefined;
+        if($(filter).hasClass('filterTable') == false)
+            return undefined;
+
+        // Find the var for this filter
+        var classes = $(filter).attr("class").split(' ');
+        classes = aryRemove(classes,["filterBy","filterTable","noneIsAll"]);
+        if (classes.length > 1 ) {
+            warn('Too many classes for filterBy: ' + classes);
+            return undefined;
+        }
+        return classes.pop();
+    },
+
+    /* // This version of filterTable() uses the yieldingIterator methods.
+    // These methods and the yieldingIterator were developed because IE was so slow.
+    // HOWEVER: IE was sped up by avoiding .add() and .parent(),
+    // so I reverted to simpler code but wish to retain this example for
+    // future reference of how to deal with slow javascript.
+
+    _byClassesIterative: function (args)
+    { // Applies a single class filter to a filterTable TRs
+    // Called via yieldingIterator
+        if (args.curIx >= args.classes.length)
+            return 0;
+
+        var tds = $(args.tdsRemaining).filter('.' + args.classes[args.curIx]);
+        if (tds.length > 0) {
+            if (args.tdsFiltered == null)
+                args.tdsFiltered = tds;
+            else
+                args.tdsFiltered = jQuery.merge( args.tdsFiltered, tds );  // This one takes too long in IE!
+        }
+        //warnSince("Iterating class:"+args.curIx);
+        args.curIx++;
+        if (args.curIx >= args.classes.length)
+            return 0;
+        return 1;
+    },
+
+    _byClassesComplete: function (args)
+    { // Continues after filterTable._byClassesIterative
+    // Called via yieldingIterator
+        var filtersStruct = args.filtersStruct;
+
+        //warnSince("Completing classes...");
+        if (args.tdsFiltered == null)
+            filtersStruct.trsRemaining = null;
+        else {
+            //filtersStruct.trsRemaining = $(args.tdsFiltered).parent(); // Very slow in IE!!!
+            var tds = args.tdsFiltered;
+            var trs = [];
+            $(tds).each(function (ix) {
+                trs[ix] = this.parentNode;
+            });
+            filtersStruct.trsRemaining = trs;
+        }
+        //warnSince("Mostly complete classes...");
+        filtersStruct.curIx++;
+        yieldingIterator(filterTable._filterIterative,filterTable._complete,filtersStruct);
+        //warnSince("Really complete classes.");
+    },
+
+    _filterIterative: function (args)
+    { // Applies a single filter to a filterTable TRs
+    // Called via yieldingIterator
+
+        //warnSince("Filter "+args.curIx+" iterating...");
+        if (args.curIx >= args.filters.length)
+            return 0;
+
+        var filter = args.filters[args.curIx];
+
+        var classes = $(filter).val();
+        if (classes == null || classes.length == 0)
+            {
+            args.trsRemaining = null;
+            return 0; // Nothing selected so exclude all rows
+            }
+
+        if(classes[0] != 'All') { // nothing excluded by this filter
+            // Get the filter variable
+            var filterVar = filterTable.variable(filter);
+            if (filterVar != undefined) {// No filter variable?!
+                if ($.browser.msie) {   // Special for IE, since it takes so long
+                    var classesStruct = new Object;
+                    classesStruct.filtersStruct = args;
+                    classesStruct.classes       = classes;
+                    classesStruct.curIx         = 0;
+                    classesStruct.tdsRemaining = $(args.trsRemaining).children('td.' + filterVar);
+                    classesStruct.tdsFiltered = null;
+                    yieldingIterator(filterTable._byClassesIterative,filterTable._byClassesComplete,classesStruct);
+                    return -1; // Stops itteration now, but will be resumed in filterTable._byClassesComplete
+                } else {
+                    var varTds = $(args.trsRemaining).children('td.' + filterVar);
+                    var filteredTrs = null;
+                    for(var ix=0;ix<classes.length;ix++) {
+                        var tds = $(varTds).filter('.' + classes[ix]);
+                        if (tds.length > 0) {
+                            var trs = [];
+                            $(tds).each(function (ix) {
+                                trs[ix] = this.parentNode;
+                            });
+                            if (filteredTrs == null)
+                                filteredTrs = trs; // $(tds).parent('tr'); // parent() takes too long in IE
+                            else
+                                filteredTrs = jQuery.merge( filteredTrs, trs );// $(tds).parent() );  // takes too long in IE!
+                        }
+                    }
+                    args.trsRemaining = filteredTrs;
+                }
+            }
+        }
+        args.curIx++;
+        if (args.curIx >= args.filters.length)
+            return 0;
+        return 1;
+    },
+
+    _complete: function (args)
+    { // Continuation after all the filters have been applied
+    // Called via yieldingIterator
+
+        //warnSince("Completing...");
+        //$('tr.filterable').hide();  // <========= This is what is taking so long!
+        $('tr.filterable').css('display', 'none');
+
+        if (args.trsRemaining != null) {
+            //$(args.trsRemaining).show();
+            $(args.trsRemaining).css('display', '');
+
+            // Update count
+            var counter = $('.filesCount');
+            if(counter != undefined)
+                $(counter).text($(args.trsRemaining).length + " / ");
+        } else {
+            var counter = $('.filesCount');
+            if(counter != undefined)
+                $(counter).text(0 + " / ");
+        }
+
+        var tbody = $( $('tr.filterable')[0] ).parent('tbody.sorting');
+        if (tbody != undefined)
+            $(tbody).removeClass('sorting');
+        //warnSince("Really complete.");
+    },
+
+    _filterWithYielding: function ()
+    { // Called by filter onchange event.  Will show/hide trs based upon all filters
+        var trsAll = $('tr.filterable'); // Default all
+        if (trsAll.length == 0)
+            return undefined;
+
+        // Find all filters
+        var filters = $("select.filterBy");
+        if (filters.length == 0)
+            return undefined;
+
+        var filtersStruct = new Object;
+        filtersStruct.filters = filters;
+        filtersStruct.curIx = 0;
+        filtersStruct.trsRemaining = trsAll;
+
+        yieldingIterator(filterTable._filterIterative,filterTable._complete,filtersStruct);
+    },
+    */
+
+    applyOneFilter: function (filter,remainingTrs)
+    { // Applies a single filter to a filterTables TRs
+        var classes = $(filter).val();
+        if (classes == null || classes.length == 0)
+            return null; // Nothing selected so exclude all rows
+
+        if(classes[0] == 'All')
+            return remainingTrs;  // nothing excluded by this filter
+
+        // Get the filter variable
+        var filterVar = filterTable.variable(filter);
+        if (filterVar == undefined)
+            return null;
+
+        var varTds = $(remainingTrs).children('td.' + filterVar);
+        var filteredTrs = null;
+        var ix =0;
+        for(;ix<classes.length;ix++) {
+            var tds = $(varTds).filter('.' + classes[ix]);
+            if (tds.length > 0) {
+                var trs = [];
+                $(tds).each(function (ix) {
+                    trs[ix] = this.parentNode;
+                });
+
+                if (filteredTrs == null)
+                    filteredTrs = trs;
+                else
+                    filteredTrs = jQuery.merge( filteredTrs, trs );  // This one takes too long in IE!
+            }
+        }
+        return filteredTrs;
+    },
+
+    trsSurviving: function (filterClass)
+    // returns a list of trs that satisfy all filters
+    // If defined, will exclude filter identified by filterClass
+    {
+        // find all filterable table rows
+        var showTrs = $('tr.filterable'); // Default all
+        if (showTrs.length == 0)
+            return undefined;
+
+        // Find all filters
+        var filters = $("select.filterBy");
+        if (filters.length == 0)
+            return undefined;
+
+        // Exclude one if requested.
+        if (filterClass != undefined && filterClass.length > 0)
+            filters = $(filters).not('.' + filterClass);
+
+        for(var ix =0;showTrs != null && ix < filters.length;ix++) {
+            showTrs = filterTable.applyOneFilter(filters[ix],showTrs)
+        }
+        return showTrs;
+    },
+
+    _filter: function ()
+    { // Called by filter onchange event.  Will show/hide trs based upon all filters
+        var showTrs = filterTable.trsSurviving();
+        //$('tr.filterable').hide();  // <========= This is what is taking so long!
+        $('tr.filterable').css('display', 'none')
+
+        if (showTrs != undefined && showTrs.length > 0) {
+            //$(showTrs).show();
+            $(showTrs).css('display', '');
+
+            // Update count
+            var counter = $('.filesCount');
+            if(counter != undefined)
+                $(counter).text($(showTrs).length + " / ");
+        } else {
+            var counter = $('.filesCount');
+            if(counter != undefined)
+                $(counter).text(0 + " / ");
+        }
+
+        var tbody = $( $('tr.filterable')[0] ).parent('tbody.sorting');
+        if (tbody != undefined)
+            $(tbody).removeClass('sorting');
+    },
+
+    trigger: function ()
+    { // Called by filter onchange event.  Will show/hide trs based upon all filters
+        var tbody = $( $('tr.filterable')[0] ).parent('tbody');
+        if (tbody != undefined)
+            $(tbody).addClass('sorting');
+
+        waitOnFunction(filterTable._filter);
+    },
+
+    done: function (event)
+    { // Called by custom 'done' event
+        event.stopImmediatePropagation();
+        $(this).unbind( event );
+        filterTable.trigger();
+    },
+
+    filter: function (multiSelect)
+    { // Called by filter onchange event.  Will show/hide trs based upon all filters
+        // IE takes tooo long, so this should be called only when leaving the filterBy box
+        if ( $('tr.filterable').length > 300) {
+            //if ($.browser.msie) { // IE takes tooo long, so this should be called only when leaving the filterBy box
+                $(multiSelect).one('done',filterTable.done);
+                return;
+            //}
+        } else
+            filterTable.trigger();
+    },
+
+    excludeOptions: function (filter)
+    { // bound to 'click' event inside ddcl.js.
+    // Will mark all options in one filterBy box that are inconsistent with the current
+    // selections in other filterBy boxes.  Mark with class ".excluded"
+
+        // Compare to the list of all trs
+        var allTrs = $('tr.filterable'); // Default all
+        if (allTrs.length == 0)
+            return false;
+
+        if ($.browser.msie && $(allTrs).length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+            return false;
+
+        // Find the var for this filter
+        var filterVar = filterTable.variable(filter);
+        if (filterVar == undefined)
+            return false;
+
+        // Look at list of visible trs.
+        var visibleTrs = filterTable.trsSurviving(filterVar);
+        if (visibleTrs == undefined)
+            return false;
+
+        //if ($.browser.msie && $(visibleTrs).length > 300) // IE takes tooo long, so this should be called only when leaving the filterBy box
+        //    return false;
+
+        if (allTrs.length == visibleTrs.length) {
+            $(filter).children('option.excluded').removeClass('excluded');   // remove .excluded" from all
+            return true;  // Nothing more to do.  All are already excluded
+        }
+
+        // Find the tds that belong to this var
+        var tds = $(visibleTrs).find('td.'+filterVar);
+        if (tds.length == 0) {
+            $(filter).children('option').addClass('excluded');   // add .excluded" to all
+            return true;
+        }
+
+        // Find the val classes
+        var classes = new Array();
+        $(tds).each(function (i) {
+            var someClass = $(this).attr("class").split(' ');
+            someClass = aryRemove(someClass,[filterVar]);
+            var val = someClass.pop()
+            if (aryFind(classes,val) == -1)
+                classes.push(val);
+        });
+        if (classes.length == 0) {
+            $(filter).children('option').addClass('excluded');   // add .excluded" to all
+            return true;
+        }
+
+        // Find all options with those classes
+        $(filter).children('option').each(function (i) {
+            if (aryFind(classes,$(this).val()) != -1)
+                $(this).removeClass('excluded'); // remove .excluded from matching
+            else
+                $(this).addClass('excluded');    // add .excluded" to non-matching
+        });
+
+        // If all options except "all" are included then all should nt be excluded
+        var excluded = $(filter).children('option.excluded');
+        if (excluded.length == 1) {
+            var text = $(excluded[0]).text();
+            if (text == 'All' || text == 'Any')
+                $(excluded[0]).removeClass('excluded');
+        }
+        return true;
+    }
+}
+
 $(document).ready(function() {
-    $('.filterBy,.filterComp').each( function(i) {
-        if ($(this).hasClass('filterComp'))
-            ddcl.setup(this); // Not nonIsAll
-        else
-            ddcl.setup(this,'noneIsAll')
-    });
+
+    setTimeout('ddcl.start();',2);  // necessary to delay startup till all selects get ids.
 });
+

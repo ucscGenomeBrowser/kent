@@ -504,6 +504,10 @@ class makeNotes(object):
         self.summary = args['summary']
         self.specialMdb = args['specialMdb']
         self.args = args
+        if 'verbose' in args:
+            self.verbose = args['verbose']
+        else:
+            self.verbose = 0
 
         errors = []
         c = track.CompositeTrack(self.database, self.composite, None, self.specialMdb)
@@ -515,7 +519,8 @@ class makeNotes(object):
             self.releaseOlf = 'solo'
         elif self.releaseOld > self.releaseNew:
             self.releaseOld = 'solo'
-
+        if self.verbose >= 1:
+            sys.stderr.write("Initializing MkChangeNotes\n")
         self.releasePath = c.httpDownloadsPath + 'release' + args['releaseNew']
         self.gbdbPath = "/gbdb/%s/bbi" % args['database']
         self.trackDbFile = c.currentTrackDb
@@ -526,7 +531,8 @@ class makeNotes(object):
             self.trackDb = ra.RaFile(self.trackDbFile)
             
         if int(self.releaseNew) > 1 and str(self.releaseOld) != 'solo':
-
+            if self.verbose >= 2:
+                sys.stderr.write("Comparison mode\n")
             self.newReleaseFiles = c.releases[int(self.releaseNew)-1]
             self.oldReleaseFiles = c.releases[int(self.releaseOld)-1]
             self.releasePathOld = c.httpDownloadsPath + 'release' + args['releaseOld']
@@ -535,20 +541,24 @@ class makeNotes(object):
             self.oldMdb = c.publicMetaDb
      
            
-
+            if self.verbose >= 2:
+                sys.stderr.write("Checking for missing files\n")
             #make a list of missing files
             self.missingFiles = self.__checkFilesForDropped()
             #filter them out of old release files
 
 
 
-
+            if self.verbose >= 1:
+                sys.stderr.write("Scanning and parsing release directories\n")
             #check if all files listed in release directories have associated metaDb entries
             (self.newMdb, self.revokedSet, self.revokedFiles, self.atticSet, self.newSupplementalSet, newFileErrors) = self.checkMetaDbForFiles("alpha metaDb", "new")
             (self.oldMdb, spam, eggs, ham, self.oldSupplementalSet, oldFileErrors) = self.checkMetaDbForFiles("public metaDb", "old")
 
             self.expIds = set(self.newMdb.filter(lambda s: 'expId' in s, lambda s: s['expId']))
 
+            if self.verbose >= 2:
+                sys.stderr.write("Checking for attic files\n")
             #check that attic fiels aren't in trackDb
             if self.trackDb:
                 errors.extend(self.__checkAtticNotInTrackDb())
@@ -556,14 +566,22 @@ class makeNotes(object):
 
 
             #checks to see that nothing has disappeared between public and alpha
+            if self.verbose >= 1:
+                sys.stderr.write("Checking new metaDb for missing stanzas\n")
             errors.extend(self.__checkAlphaForDropped("alpha metaDb", "stanza"))
+            if self.verbose >=1:
+                sys.stderr.write("Checking file md5sums across releases\n")
             errors.extend(self.__checkMd5sums())
 
             #checks and gets tables that are present, also returns a revoked set of tables for new
+            if self.verbose >= 1:
+                sys.stderr.write("Checking table status\n")
             (self.newTableSet, self.revokedTableSet, self.newMissingTables, newTableError) = self.checkTableStatus("alpha metaDb", "new")
             (self.oldTableSet, spam, self.droppedTables, oldTableError) = self.checkTableStatus("public metaDb", "old")
 
             #same as above except for gbdbs
+            if self.verbose >= 1:
+                sys.stderr.write("Checking GBDB status\n")
             (self.newGbdbSet, self.revokedGbdbs, newGbdbError) = self.getGbdbFiles("new")
             (self.oldGbdbSet, eggs, oldGbdbError) = self.getGbdbFiles("old")
             #remove missing files from gbdbs
@@ -602,10 +620,14 @@ class makeNotes(object):
             self.newGbdbs = set(ucscUtils.printIter(self.pushGbdbs, self.gbdbPath))
             self.newSupplemental = set(ucscUtils.printIter(self.newSupp, self.releasePath))
             self.newOthers = set(ucscUtils.printIter(self.additionalList, self.releasePath))
+            self.fullFiles = sorted(self.totalFiles - self.revokedFiles)
+            self.fullTables = self.oldTableSet & self.newTableSet
 
             self.errors = errors
             #don't output.append(report unless ignore option is on or no errors
             #module mode doesn't generate output by default
+            if self.verbose >= 1:
+                sys.stderr.write("Creating report\n")
             if (not errors) or self.ignore:
                 self.output = self.printReport(args, c)
             else:
@@ -643,6 +665,13 @@ class makeNotes(object):
             #clean out special fiels we don't push i.e. md5sum.history
             self.totalFiles = self.__cleanSpecialFiles(totalFiles)
 
+            self.pushTables = self.newTableSet
+            self.pushFiles = self.totalFiles
+            self.pushGbdbs = self.newGbdbSet
+            self.newSupp = self.newSupplementalSet
+            self.fullFiles = self.totalFiles
+            self.fullTables = self.newTableSet
+   
             #makes list for additional files
             (self.oldTotalFiles, self.oldSupplementalSet) = (set(), set())
             (self.oldReleaseFiles, self.additionalList, self.oldAdditionalList, self.totalFiles) = self.__separateOutAdditional()

@@ -3831,11 +3831,8 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
-#define HGAPI_NEEDS_THIS
-#ifdef HGAPI_NEEDS_THIS
-if (isHubTrack(track))
+if (isHubTrack(track))    // hgApi needs this
     return tdbForTrack(db, track,NULL);
-#endif///def HGAPI_NEEDS_THIS
 
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);

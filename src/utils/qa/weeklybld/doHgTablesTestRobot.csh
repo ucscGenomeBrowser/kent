@@ -22,8 +22,8 @@ set res = `cat ./logs/hgTables-v${BRANCHNN}.log | egrep "^[ \t]*Total" | egrep "
 set res2 = `cat ./logs/hgTables-v${BRANCHNN}.log | awk '/^[ \t]*Total/ {print} /TablesTest/ {print}'`
 
 
-set wc = `echo "$res" | wc -w` 
-if ( "$wc" != "2" ) then
+set lines = `echo "$res" | wc -l` 
+if ( "$lines" != "2" ) then
  echo "errs found:"
  echo "$res2"
  echo "$res2" | mail -s "Errors in hgTablesTestRobot on $HOST" $USER rhead pauline luvina

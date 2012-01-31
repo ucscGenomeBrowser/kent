@@ -169,17 +169,6 @@ xrefTable kgXref, ucscRetroInfo1
 xrefQuery select ucscRetroInfo1.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
 searchPriority 3.53
 
-track tRNAs
-shortLabel tRNA Genes
-longLabel Transfer RNA genes identified with tRNAscan-SE
-group genes
-priority 53.5
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
-
 track NIAGene
 shortLabel NIA Gene Index
 longLabel NIA Mouse Gene Index
@@ -546,11 +535,11 @@ group genes
 priority 66
 color 56,108,56
 type genePred
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?db=mm9&query_str=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search.pl?db=mm9&query_str=$$
 urlLabel TROMER database detail:
 
 track sibTxGraph override
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm9&species=M.+musculus&tromer=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=mm9&species=M.+musculus&tromer=$$
 
 track rest
 shortLabel REST
@@ -786,14 +775,6 @@ searchTable NIAGene
 searchMethod fuzzy
 searchType psl
 searchPriority 50
-
-searchName tRNA-name
-searchTable tRNAs
-searchType bed
-searchMethod fuzzy
-query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
-searchDescription tRNAscan-SE tRNA Name
-searchPriority 63
 
 searchName REST
 searchTable REST

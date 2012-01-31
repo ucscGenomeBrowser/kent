@@ -489,20 +489,21 @@ priority 12
 visibility hide
 color 100,0,0
 altColor 100,0,0
-type bed 12
+type bed 12 .
 compositeTrack on
 release alpha
 nextExonText Next Match
-prevExonText Next Match
+prevExonText Prev Match
 
     track t2gPmc
     shortLabel PubmedCentral
     longLabel Publications from PubmedCentral (OA)
     parent t2g
-    type bed 12
+    type bed 12 .
     articleTable t2gPmcArticle
     sequenceTable t2gPmcSequence
     priority 1
+    color 0,0,100
     release alpha
 
     track t2gElsevier
@@ -512,7 +513,39 @@ prevExonText Next Match
     priority 2
     articleTable t2gElsevierArticle
     sequenceTable t2gElsevierSequence
-    type bed 12
+    type bed 12 .
+    release alpha
+    color 0,100,0
+    maxItems 300
+
+    track t2gMarkerSnp
+    shortLabel SNPs
+    longLabel SNPs mentioned in Publications
+    parent t2g
+    visibility pack
+    priority 3
+    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
+    type bed 4 +
+    release alpha
+
+    track t2gMarkerBand
+    shortLabel Bands
+    longLabel Cytogenetic bands mentioned in Publications
+    parent t2g
+    visibility pack
+    priority 3
+    #t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
+    type bed 4 +
+    release alpha
+
+    track t2gMarkerGene
+    shortLabel Genes
+    longLabel Gene symbols mentioned in Publications
+    parent t2g
+    priority 3
+    visibility pack
+    ##t2gMarkerTables t2gElsevierMarkers,t2gPmcMarkers
+    type bed 4 +
     release alpha
 
 
@@ -730,7 +763,7 @@ priority 41.4
 visibility hide
 color 195,90,0
 type genePred
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromer_quick_search.pl?query_str=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromer_quick_search_internal.pl?query_str=$$
 urlLabel SIB link:
 
 track ECgene
@@ -1153,7 +1186,7 @@ group rna
 priority 74.5
 visibility hide
 type altGraphX
-url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&tromer=$$
+url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&tromer=$$
 urlLabel SIB link:
 idInUrlSql select name from sibTxGraph where id=%s
 
@@ -3287,13 +3320,44 @@ url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id
 urlLabel NCBI Incident:
 nonBedFieldsLabel Summary information from incident database:
 
-track nextNcbiIncidentDb
-shortLabel TBD NCBIIncident
-longLabel In Progress NCBI Incident database
+track grcIncidentDb
+shortLabel GRC Incident
+longLabel GRC Incident database
 group map
 priority 27
 visibility hide
 type bigBed 4 +
 url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
-urlLabel NCBI Incident:
+urlLabel GRC Incident:
 nonBedFieldsLabel Summary information from incident database:
+
+track nextNcbiIncidentDb
+shortLabel TBD NCBIIncident
+longLabel In Progress GRC Incident database
+group map
+priority 27
+visibility hide
+type bigBed 4 +
+url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
+urlLabel GRC Incident:
+nonBedFieldsLabel Summary information from incident database:
+
+track tRNAs
+shortLabel tRNA Genes
+longLabel Transfer RNA genes identified with tRNAscan-SE
+group genes
+priority 53.5
+visibility hide
+color 0,20,150
+type bed 6 +
+nextItemButton on
+noScoreFilter .
+
+searchName tRNA-name
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
+

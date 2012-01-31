@@ -104,6 +104,11 @@ for (i = 0;  i < rec->infoCount;  i++)
 	{
 	if (j > 0)
 	    dyStringAppendC(dy, ',');
+	if (el->missingData[j])
+	    {
+	    dyStringAppend(dy, ".");
+	    continue;
+	    }
 	union vcfDatum dat = el->values[j];
 	switch (type)
 	    {
@@ -215,17 +220,10 @@ for (i=0; i<fieldCount; ++i)
     columnArray[i] = hashIntVal(fieldHash, fieldArray[i]);
     }
 
-/* Output row of labels if we are outputting only selected columns.
- * We will include original VCF header below, and adding a comment line
- * at the top invalidates the VCF. */
+// If we are outputting a subset of fields, invalidate the VCF header.
 boolean allFields = (fieldCount == VCFDATALINE_NUM_COLS);
 if (!allFields)
-    {
-    fprintf(f, "#%s", fieldArray[0]);
-    for (i=1; i<fieldCount; ++i)
-	fprintf(f, "\t%s", fieldArray[i]);
-    fprintf(f, "\n");
-    }
+    fprintf(f, "# Only selected columns are included below; output is not valid VCF.\n");
 
 struct asObject *as = vcfAsObj();
 struct asFilter *filter = NULL;
@@ -259,6 +257,13 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
 	fprintf(f, "%s", vcff->headerString);
 	if (filter)
 	    fprintf(f, "# Filtering on %d columns\n", slCount(filter->columnList));
+	if (!allFields)
+	    {
+	    fprintf(f, "#%s", fieldArray[0]);
+	    for (i=1; i<fieldCount; ++i)
+		fprintf(f, "\t%s", fieldArray[i]);
+	    fprintf(f, "\n");
+	    }
 	printedHeader = TRUE;
 	}
     char *row[VCFDATALINE_NUM_COLS];

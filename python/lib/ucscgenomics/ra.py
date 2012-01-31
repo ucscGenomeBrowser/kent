@@ -1,10 +1,11 @@
-import sys
+import sys, string
 import re
 from ucscgenomics.ordereddict import OrderedDict
+from ucscgenomics import ucscUtils
 import collections
 
 class RaFile(OrderedDict):
-    """
+    '''
     Stores a Ra file in a set of entries, one for each stanza in the file.
 
     To make a RaFile, it is usually easiest to just pass it's path:
@@ -71,17 +72,18 @@ class RaFile(OrderedDict):
     possible before operating over them.
 
     Filtering allows you to eliminate a lot of code.
-    """
+    '''
 
-    def __init__(self, filePath=None):
+    def __init__(self, filePath=None, key=None):
         OrderedDict.__init__(self)
         if filePath != None:
-            self.read(filePath)
+            self.read(filePath, key)
 
-    def read(self, filePath):
-        """
-        Reads an rafile stanza by stanza, and internalizes it.
-        """
+    def read(self, filePath, key=None):
+        '''
+        Reads an rafile stanza by stanza, and internalizes it. Don't override
+        this for derived types, instead override readStanza.
+        '''
 
         file = open(filePath, 'r')
 
@@ -89,11 +91,15 @@ class RaFile(OrderedDict):
         stanza = list()
         keyValue = ''
 
-        for line in file:
-
+        reading = 1
+        
+        while reading:
+            line = file.readline()
+            if line == '':
+                reading = 0
+        
             line = line.strip()
-
-            if len(stanza) == 0 and (line.startswith('#') or line == ''):
+            if len(stanza) == 0 and (line.startswith('#') or (line == '' and reading)):
                 OrderedDict.append(self, line)
                 continue
 
@@ -101,38 +107,40 @@ class RaFile(OrderedDict):
                 stanza.append(line)
             elif len(stanza) > 0:
                 if keyValue == '':
-                    keyValue, name, entry = self.readStanza(stanza)
+                    keyValue, name, entry = self.readStanza(stanza, key)
                 else:
-                    testKey, name, entry = self.readStanza(stanza)
+                    testKey, name, entry = self.readStanza(stanza, key)
                     if entry != None and keyValue != testKey:
                         raise KeyError('Inconsistent Key ' + testKey)
 
                 if entry != None:
-                    if name in self:
-                        raise KeyError('Duplicate Key ' + name)
-                    self[name] = entry
+                    if name != None or key == None:
+                        if name in self:
+                            raise KeyError('Duplicate Key ' + name)
+                        self[name] = entry
 
                 stanza = list()
-
-        if len(stanza) > 0:
-            if keyValue == '':
-                keyValue, name, entry = self.readStanza(stanza)
-            else:
-                testKey, name, entry = self.readStanza(stanza)
-                if entry != None and keyValue != testKey:
-                    raise KeyError('Inconsistent Key ' + testKey)
-
-            if entry != None:
-                if name in self:
-                    raise KeyError('Duplicate Key ' + name)
-                self[name] = entry
 
         file.close()
 
 
-    def readStanza(self, stanza):
+    def readStanza(self, stanza, key=None):
+        '''
+        Override this to create custom stanza behavior in derived types.
+        
+        IN
+        stanza: list of strings with keyval data
+        key: optional key for selective key filtering. Don't worry about it
+
+        OUT
+        namekey: the key of the stanza's name
+        nameval: the value of the stanza's name
+        entry: the stanza itself
+        '''
         entry = RaStanza()
-        val1, val2 = entry.readStanza(stanza)
+        if entry.readStanza(stanza, key) == None:
+            return None, None, None
+        val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
 
@@ -165,7 +173,7 @@ class RaFile(OrderedDict):
 
 
     def filter(self, where, select):
-        """
+        '''
         select useful data from matching criteria
 
         where: the conditional function that must be met. Where takes one
@@ -176,7 +184,7 @@ class RaFile(OrderedDict):
         For each stanza, if where(stanza) holds, it will add select(stanza)
         to the list of returned entities. Also forces silent failure of key
         errors, so you don't have to check that a value is or is not in the stanza.
-        """
+        '''
 
         ret = list()
         for stanza in self.itervalues():
@@ -188,7 +196,7 @@ class RaFile(OrderedDict):
         return ret
 
     def filter2(self, where):
-        """
+        '''
         select useful data from matching criteria
         Filter2 returns a Ra dictionary. Easier to use but more memory intensive.
 
@@ -200,7 +208,7 @@ class RaFile(OrderedDict):
         For each stanza, if where(stanza) holds, it will add select(stanza)
         to the list of returned entities. Also forces silent failure of key
         errors, so you don't have to check that a value is or is not in the stanza.
-        """
+        '''
         ret = RaFile()
         for stanza in self.itervalues():
             try:
@@ -210,8 +218,56 @@ class RaFile(OrderedDict):
                 continue
         return ret
 
-    def summaryDiff(self,other):
-        """
+    def mergeRa(self, other):
+        '''
+        Input:
+            Two RaFile objects
+        Output:
+            A merged RaFile
+
+        Common stanzas and key-val pairs are collapsed into
+        one with identical values being preserved,
+        differences are marked with a >>> and <<<
+        '''
+
+        mergedKeys = ucscUtils.mergeList(list(self), list(other))
+        selfKeys = set(self)
+        otherKeys = set(other)
+        newCommon = RaFile()
+        p = re.compile('^\s*#')
+        p2 = re.compile('^\s*$')
+        for i in mergedKeys:
+            if p.match(i) or p2.match(i):
+                newCommon.append(i)
+                continue
+            if i not in selfKeys:
+                newCommon.append(other[i])
+            if i not in otherKeys:
+                newCommon.append(self[i])
+            if i in otherKeys and i in selfKeys:
+                newStanza = RaStanza()
+                selfStanzaKeys = set(self[i].iterkeys())
+                otherStanzaKeys = set(other[i].iterkeys())
+                stanzaKeys = ucscUtils.mergeList(list(self[i].iterkeys()), list(other[i].iterkeys()))
+                for j in stanzaKeys:
+                    if j not in selfStanzaKeys:
+                        newStanza[j] = other[i][j]
+                    if j not in otherStanzaKeys:
+                        newStanza[j] = self[i][j]
+                    if j in selfStanzaKeys and j in otherStanzaKeys:
+                        if self[i][j] == other[i][j]:
+                            newStanza[j] = self[i][j]
+                        else:
+                            in_j = '>>>>>%s' % j
+                            out_j = '<<<<<%s' % j
+                            newStanza[out_j] = self[i][j]
+                            newStanza[in_j] = other[i][j]
+            newCommon.append(newStanza)
+        return newCommon
+
+
+    def summaryDiff(self, other):
+        '''
         Input:
             RaFile object being compared.
         Output: RaFile with differences.
@@ -226,7 +282,7 @@ class RaFile(OrderedDict):
         ra1 = this.summaryDiff(that)
         and
         ra2 = that.summaryDiff(this)
-        """
+        '''
         this = RaFile()
         RetThis = RaFile()
         for stanza in self.itervalues():
@@ -238,12 +294,12 @@ class RaFile(OrderedDict):
         return RetThis
 
     def changeSummary(self, otherRa):
-        """
+        '''
         Input:
             Two RaFile objects
         Output:
             Dictionary showing differences between stanzas, list of added and dropeed stanzas
-        """
+        '''
         retDict = collections.defaultdict(list)
         dropList = set(self.iterkeys()) - set(otherRa.iterkeys())
         addList = set(otherRa.iterkeys()) - set(self.iterkeys())
@@ -258,7 +314,7 @@ class RaFile(OrderedDict):
                     continue
                 if key in otherRa[stanza]:
                     if self[stanza][key] != otherRa[stanza][key]:
-                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, self[stanza][key], otherRa[stanza][key]))
+                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, otherRa[stanza][key], self[stanza][key]))
                 else:
                     retDict[stanza].append("Added %s -> %s" %(key, self[stanza][key]))
             for key in otherRa[stanza]:
@@ -269,7 +325,7 @@ class RaFile(OrderedDict):
         return retDict, dropList, addList
 
     def diffFilter(self, select, other):
-        """
+        '''
         Input:
             Lambda function of desired comparison term
             RaFile object being compared.
@@ -286,7 +342,7 @@ class RaFile(OrderedDict):
         ra1 = this.diffFilter(select function, that)
         and
         ra2 = that.diffFilter(select function, this)
-        """
+        '''
         this = RaFile()
         RetThis = RaFile()
         thisSelectDict = dict()
@@ -315,7 +371,7 @@ class RaFile(OrderedDict):
         return RetThis
 
     def updateDiffFilter(self, term, other):
-        """
+        '''
         Replicates updateMetadata.
         Input:
             Term
@@ -326,9 +382,9 @@ class RaFile(OrderedDict):
                 Stanzas found in 'self' and 'other' that have the 'Term' in 'other'
                 are overwritten (or inserted if not found) into 'self'. Final merged
                 dictionary is returned.
-        """
+        '''
         ret = self
-        common = set(self.iterkeys()) & set(self.iterkeys())
+        common = set(self.iterkeys()) & set(other.iterkeys())
         for stanza in common:
             if term not in self[stanza] and term not in other[stanza]:
                 continue
@@ -364,6 +420,59 @@ class RaFile(OrderedDict):
 
         return ret
 
+    def printTrackDbFormat(self):
+        '''
+        Converts a .ra file into TrackDb format.
+        Returns a printable string.
+        '''
+        retstring = ""
+        parentTrack = ""
+        tier = 0
+        commentList = []
+        p = re.compile('^.*parent')
+        p2 = re.compile('^.*subTrack')
+        for stanza in self:
+            if stanza == "":
+                if commentList:
+                    for line in commentList:
+                        for i in range(tier):
+                            retstring += "    "
+                        retstring += line + "\n"
+                    commentList = []
+                    retstring += "\n"
+                continue
+            if stanza.startswith("#"):
+                commentList.append(stanza)
+                continue
+            keys = self[stanza].keys()
+            parentKey = "NOKEYFOUND"
+            for key in keys:
+                if p.search(key):
+                    parentKey = key
+                if p2.search(key):
+                    parentKey = key
+            if parentKey in keys:
+                if parentTrack not in self[stanza][parentKey] or parentTrack == "":
+                    parentTrack = self[stanza]['track']
+                    tier = 1
+                else:
+                    tier = 2
+            if commentList:
+                for line in commentList:
+                    for i in range(tier):
+                        retstring += "    "
+                    retstring += line + "\n"
+                commentList = []
+            for line in self[stanza]:
+                for i in range(tier):
+                    retstring += "    "
+                if line.startswith("#"):
+                    retstring += line + "\n"
+                else:
+                    retstring += line + " " + self[stanza][line] + "\n"
+            retstring += "\n"
+        return retstring
+
     def __str__(self):
         str = ''
         for item in self.iteritems():
@@ -371,51 +480,64 @@ class RaFile(OrderedDict):
                 str += item[0].__str__() + '\n'
             else:
                 str += item[1].__str__() + '\n'
-        return str
+        return str #.rsplit('\n', 1)[0]
 
 
 class RaStanza(OrderedDict):
-    """
+    '''
     Holds an individual entry in the RaFile.
-    """
-
-    def __init__(self):
-        self._name = ''
-        OrderedDict.__init__(self)
+    '''
 
     @property
     def name(self):
         return self._name
+    
+    def __init__(self):
+        self._name = ''
+        self._nametype = ''
+        OrderedDict.__init__(self)
 
-
-    def readStanza(self, stanza):
-        """
-        Populates this entry from a single stanza
-        """
+    def readStanza(self, stanza, key=None):
+        '''
+        Populates this entry from a single stanza. Override this to create
+        custom behavior in derived classes
+        '''
 
         for line in stanza:
             self.readLine(line)
 
-        return self.readName(stanza[0])
+        return self.readName(stanza, key)
 
 
-    def readName(self, line):
-        """
+    def readName(self, stanza, key=None):
+        '''
         Extracts the Stanza's name from the value of the first line of the
         stanza.
-        """
-
+        '''
+        
+        if key == None:
+            line = stanza[0]
+        else:
+            line = None
+            for s in stanza:
+                if s.split(' ', 1)[0] == key:
+                    line = s
+                    break
+            if line == None:
+                return None
+        
         if len(line.split(' ', 1)) != 2:
             raise ValueError()
 
         names = map(str.strip, line.split(' ', 1))
+        self._nametype = names[0]
         self._name = names[1]
         return names
 
     def readLine(self, line):
-        """
+        '''
         Reads a single line from the stanza, extracting the key-value pair
-        """
+        '''
 
         if line.startswith('#') or line == '':
             OrderedDict.append(self, line)
@@ -468,6 +590,7 @@ class RaStanza(OrderedDict):
     def iter(self):
         iterkeys(self)
 
+        
     def __str__(self):
         str = ''
         for key in self:

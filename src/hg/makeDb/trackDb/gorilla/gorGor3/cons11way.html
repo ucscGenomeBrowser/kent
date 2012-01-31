@@ -6,7 +6,7 @@ two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
 PHAST package</A>.
 The multiple alignments were generated using multiz and 
-other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
+other tools in the UCSC/<A HREF="http://www.bx.psu.edu/miller_lab/" 
 TARGET=_blank>Penn State Bioinformatics</A>
 comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
@@ -57,24 +57,24 @@ by regions of yellow when zoomed out and Ns displayed at base level
 <TR ALIGN=left><TD>Gorilla</TD><TD>Gorilla gorilla gorilla</TD><TD>
     May 2011</TD><TD><A HREF="../cgi-bin/hgGateway?db=gorGor3"
     TARGET=_blank>Sanger gorGor3.1/gorGor3</A></TD><TD>reference species</TD></TR>
-<TR ALIGN=left><TD>Chimp</TD><TD>Pan troglodytes</TD><TD>
-    Oct. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=panTro3"
-    TARGET=_blank>CGSC 2.1.3/panTro3</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>
     Feb. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=hg19"
     TARGET=_blank>GRCh37/hg19</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Gibbon</TD><TD>Nomascus leucogenys</TD><TD>
-    Jan. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=nomLeu1"
-    TARGET=_blank>GGSC Nleu1.0/nomLeu1</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Chimp</TD><TD>Pan troglodytes</TD><TD>
+    Oct. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=panTro3"
+    TARGET=_blank>CGSC 2.1.3/panTro3</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>
     Jul. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ponAbe2"
     TARGET=_blank>WUGSC 2.0.2/ponAbe2</A></TD><TD>Syntenic net</TD></TR>
-<TR ALIGN=left><TD>Baboon</TD><TD>Papio hamadryas</TD><TD>
-    Nov. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=papHam1"
-    TARGET=_blank>Baylor 1.0/papHam1</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Gibbon</TD><TD>Nomascus leucogenys</TD><TD>
+    Jan. 2010</TD><TD><A HREF="../cgi-bin/hgGateway?db=nomLeu1"
+    TARGET=_blank>GGSC Nleu1.0/nomLeu1</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Rhesus</TD><TD>Macaca mulatta</TD><TD>
     Jan. 2006</TD><TD><A HREF="../cgi-bin/hgGateway?db=rheMac2"
     TARGET=_blank>MGSC Merged 1.0/rheMac2</A></TD><TD>Syntenic net</TD></TR>
+<TR ALIGN=left><TD>Baboon</TD><TD>Papio hamadryas</TD><TD>
+    Nov. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=papHam1"
+    TARGET=_blank>Baylor 1.0/papHam1</A></TD><TD>Syntenic net</TD></TR>
 <TR ALIGN=left><TD>Marmoset</TD><TD>Callithrix jacchus</TD><TD>
     Mar. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=calJac3"
     TARGET=_blank>WUGSC 3.2/calJac3</A></TD><TD>Syntenic net</TD></TR>
@@ -196,16 +196,16 @@ the following modes:
 <B>No codon translation:</B> The gene annotation is not used; the bases are
 displayed without translation. 
 <LI>
-<B>Use default species reading frames for translation:</B> the annotations from
+<B>Use default species reading frames for translation:</B> The annotations from
 the genome displayed 
-in the <EM>Default species for translation</EM>; pull-down menu are used to
+in the <EM>Default species to establish reading frame</EM> pull-down menu are used to
 translate all the aligned species present in the alignment. 
 <LI>
 <B>Use reading frames for species if available, otherwise no translation:</B>
-codon translation is performed only for those species where the region is
+Codon translation is performed only for those species where the region is
 annotated as protein coding.
 <LI><B>Use reading frames for species if available, otherwise use default species:</B>
-codon translation is done on those species that are annotated as being protein
+Codon translation is done on those species that are annotated as being protein
 coding over the aligned region using species-specific annotation; the remaining
 species are translated using the default species annotation. 
 </UL></P>
@@ -215,10 +215,9 @@ translation, depending on the species chosen (<B>Table 2</B>).
 
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
-<TR ALIGN=left><TD>Ensembl Genes v63</TD><TD>gorilla, chimp, human, gibbon, orangutan, rhesus, marmoset, tarsier, mouse lemur, bushbaby</TD></TR>
+<TR ALIGN=left><TD>Ensembl Genes v64</TD><TD>gorilla, chimp, human, gibbon, orangutan, rhesus, marmoset, tarsier, mouse lemur, bushbaby</TD></TR>
 <TR ALIGN=left><TD>Xeno Refseq Genes</TD><TD>baboon</TD></TR>
 </TABLE>
-baboon,
 <B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
 </BLOCKQUOTE></P>
 
@@ -324,7 +323,7 @@ details page or in the browser when the track's display mode is set to
 <P> This track was created using the following programs:
 <UL>
 <LI> Alignment tools: blastz and multiz by Minmei Hou, Scott Schwartz and Webb 
-Miller of the <A HREF="http://bio.cse.psu.edu/" 
+Miller of the <A HREF="http://www.bx.psu.edu/miller_lab/" 
 TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
@@ -355,8 +354,8 @@ mammalian phylogenies.</A> <EM>Genome Res</EM>. 2009 Oct 26. [Epub ahead of prin
 
 <P>
 Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
-Clawson H, Spieth J, Hillier LW, Richards S, <EM>et al.</EM>
-<A HREF="http://www.genome.org/cgi/doi/10.1101/gr.3715005"
+Clawson H, Spieth J, Hillier LW, Richards S <EM>et al.</EM>
+<A HREF="http://genome.cshlp.org/content/15/8/1034.full"
 TARGET=_blank>Evolutionarily conserved elements in vertebrate, insect, worm,
 and yeast genomes</A>.
 <EM>Genome Res</EM>. 2005 Aug;15(8):1034-50.
@@ -365,7 +364,7 @@ and yeast genomes</A>.
 <H3>Chain/Net:</H3>
 <P>
 Kent WJ, Baertsch R, Hinrichs A, Miller W, Haussler D.
-<A HREF="http://www.pnas.org/cgi/content/abstract/1932072100v1"
+<A HREF="http://www.pnas.org/content/100/20/11484.full"
 TARGET=_blank>Evolution's cauldron:
 duplication, deletion, and rearrangement in the mouse and human genomes</A>.
 <EM>Proc Natl Acad Sci U S A</EM>. 2003 Sep 30;100(20):11484-9.
@@ -374,8 +373,8 @@ duplication, deletion, and rearrangement in the mouse and human genomes</A>.
 <H3>Multiz:</H3>
 <P>
 Blanchette M, Kent WJ, Riemer C, Elnitski L, Smit AF, Roskin KM,
-Baertsch R, Rosenbloom K, Clawson H, Green ED, <EM>et al.</EM>
-<A HREF="http://www.genome.org/cgi/content/abstract/14/4/708"
+Baertsch R, Rosenbloom K, Clawson H, Green ED <EM>et al.</EM>
+<A HREF="http://genome.cshlp.org/content/14/4/708.full"
 TARGET=_blank>Aligning multiple genomic sequences with the threaded blockset aligner</A>.
 <EM>Genome Res</EM>. 2004 Apr;14(4):708-15.
 </P>
@@ -391,7 +390,7 @@ TARGET=_blank>Scoring pairwise genomic sequence alignments</A>.
 <P>
 Schwartz S, Kent WJ, Smit A, Zhang Z, Baertsch R, Hardison RC,
 Haussler D, Miller W.
-<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103"
+<A HREF="http://genome.cshlp.org/content/13/1/103.full"
 TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
 <EM>Genome Res</EM>. 2003 Jan;13(1):103-7.
 </P>
@@ -400,7 +399,7 @@ TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
 <P>
 Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
 Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
-<A HREF="http://www.sciencemag.org/cgi/content/abstract/294/5550/2348"
+<A HREF="http://www.sciencemag.org/content/294/5550/2348.full"
 TARGET=_blank>Resolution of the early placental mammal radiation using Bayesian phylogenetics</A>.
 <EM>Science</EM>. 2001 Dec 14;294(5550):2348-51.
 </P>

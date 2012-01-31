@@ -24,14 +24,14 @@ baseColorUseCds given
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=$$&doptcmdl=GenBank&tool=genome.ucsc.edu
 refSeqAnnoVersion OVERRIDE
 
-searchName refSeqAnnonName
-searchTable refSeqAnnon
+searchName refSeqAnnoName
+searchTable refSeqAnno
 searchType genePred
 termRegex ((N[MR]_)|(X[MR]_)).+
 searchMethod prefix
 searchPriority 1.1
 
-searchName refSeqAnnonName2
-searchTable refSeqAnnon
+searchName refSeqAnnoName2
+searchTable refSeqAnno
 query select chrom, txStart, txEnd, name2 from %s where name2 = '%s'
 searchPriority 1.1

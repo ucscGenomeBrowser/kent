@@ -12152,6 +12152,7 @@ md5sum 7530297333a2aab5efb1a89d2295cacb
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
+sex F
 subId 3822
 treatment None
 view RawData
@@ -12174,6 +12175,7 @@ md5sum 090bdbd3c6d5e51a944be46f8ca8957c
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
+sex F
 subId 3822
 treatment None
 view RawData
@@ -12197,6 +12199,7 @@ md5sum 814c46a61cb4516e9d39434492a2eef4
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
+sex F
 subId 3159
 tableName wgEncodeHaibMethylRrbsU87HaibSitesRep1
 treatment None
@@ -12221,6 +12224,7 @@ md5sum b815572841ab72b5d4deff7951280292
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 2
+sex F
 subId 3159
 tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
@@ -12316,4 +12320,4 @@ tableName wgEncodeHaibMethylRrbsUch1DukeSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1133378226
+# MAGIC: -1133366866

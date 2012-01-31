@@ -8,6 +8,9 @@
 #include "hapRegions.h"
 #include "psl.h"
 #include "options.h"
+#include "genbankBlackList.h"
+
+struct blackListRange *gBlackListRanges = NULL;
 
 static void usage(char *msg)
 /* usage msg and exit */
@@ -61,6 +64,7 @@ static struct optionSpec optionSpecs[] =
     {"alnIdQNameMode", OPTION_BOOLEAN},
     {"uniqueMapped", OPTION_BOOLEAN},
     {"decayMinCover", OPTION_BOOLEAN},
+    {"blackList", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -122,6 +126,17 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     }
 }
 
+static void blackListFilter(struct cDnaQuery *cdna)
+/* filter for black list */
+{
+struct cDnaAlign *aln;
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    if (!aln->drop && genbankBlackListFail(aln->psl->qName, gBlackListRanges))
+        cDnaAlignDrop(aln, FALSE, &cdna->stats->blackListCnts, "black listed");
+    }
+}
+
 static void invalidPslFilter(struct cDnaQuery *cdna)
 /* filter for invalid PSL */
 {
@@ -161,8 +176,13 @@ static double calcDecayCoverage(int qSize)
 {
 double needCoverage;
 
-/* magic formula from Jim */
-needCoverage = -0.4 * qSize + 100;
+/* Make it so that smaller RNAs had to align a larger fraction of themselves.
+ * RNAs larger than 250bp must align at least 25%, RNAs smaller than 25 bp
+ * must align 90%, for RNAs in between there's a linear interpolation between.
+ * This is backwards compatible with the hard 25% cut off we used to have on the
+ * large side, and should prevent noisy alignments we're now getting from a 
+ * bunch of small RNAs. */
+needCoverage = 1.0 - qSize / 250.0;
 
 if (needCoverage < 0.25)
     needCoverage = 0.25;
@@ -338,6 +358,8 @@ static void filterNonComparative(struct cDnaQuery *cdna)
 /* apply non-comparative filters */
 {
 /* n.b. order must agree with doc in algo.txt */
+if (gBlackListRanges)
+    blackListFilter(cdna);
 if (gValidate)
     invalidPslFilter(cdna);
 if (gMinQSize > 0)
@@ -482,6 +504,10 @@ if (optionExists("ignoreNs"))
     gCDnaOpts |= cDnaIgnoreNs;
 gUniqueMapped = optionExists("uniqueMapped");
 gDecayMinCover = optionExists("decayMinCover");
+char *blackList = optionVal("blackList", NULL);
+
+if (blackList != NULL)
+    gBlackListRanges = genbankBlackListParse(blackList);
 
 if ( gDecayMinCover && (gMinCover > 0.0))
     errAbort("can only specify one of -minCoverage and -decayMinCoverage");

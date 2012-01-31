@@ -66,7 +66,7 @@ priority 103.29
 	type wigMaf 0.0 1.0
 	speciesCodonDefault xenTro3
 	speciesGroups vertebrate
-	sGroup_vertebrate hg19 mm9 rn4 monDom5 melGal1 galGal3 anoCar2 danRer7
+	sGroup_vertebrate melGal1 monDom5 galGal3 anoCar2 hg19 mm9 rn4 danRer7
         itemFirstCharCase noChange
 	treeImage phylo/xenTro3_9way.png
         priority 100
@@ -79,7 +79,7 @@ priority 103.29
 
         # PhyloP conservation
         track phyloP9way
-        subTrack cons9wayViewphyloP off
+        subTrack cons9wayViewphyloP on
         subGroups view=phyloP
         shortLabel PhyloP Cons
         longLabel Basewise Conservation by PhyloP (9 species)

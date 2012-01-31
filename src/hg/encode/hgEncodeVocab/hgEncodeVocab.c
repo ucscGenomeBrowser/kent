@@ -854,7 +854,7 @@ if (slCount(termList) > 0)
     }
 puts("</TBODY></TABLE><BR>");
 if (sortable)
-    puts("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>");
+    puts("<script type='text/javascript'>{$(document).ready(function() {sortTable.initialize($('table.sortable')[0],true,true);});}</script>");
 if (totalPrinted == 0)
     {
     if (!described)

@@ -9,10 +9,10 @@ age immortalized
 cell CH12
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
-fileName wgEncodeSydhRnaSeqCh12PolyaAlnRep1.bam
+fileName wgEncodeSydhRnaSeqCh12PolyaAlnRep1.bam,wgEncodeSydhRnaSeqCh12PolyaAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum e7e8b39ae2df8294c7a93fd959f14fd3,b1f8c35b9805c338f52195f68f27db72
@@ -34,7 +34,7 @@ age immortalized
 cell CH12
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaRawDataRep1.fastq.tgz
@@ -58,7 +58,7 @@ age immortalized
 cell CH12
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 fileName wgEncodeSydhRnaSeqCh12PolyaSigRep1.bigWig
@@ -83,10 +83,10 @@ age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
-fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1.bam
+fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1.bam,wgEncodeSydhRnaSeqMelDm2p5dPolyaAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum a2f5cdba175710f7df2c6ad6a32b919d,0771733a73ee6bed5d4ea3c421dcb4a2
@@ -107,7 +107,7 @@ age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
 fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaRawDataRep1.fastq.gz
@@ -130,7 +130,7 @@ age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-16
 dateUnrestricted 2011-12-16
 fileName wgEncodeSydhRnaSeqMelDm2p5dPolyaSigRep1.bigWig
@@ -154,10 +154,10 @@ age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
-fileName wgEncodeSydhRnaSeqMelPolyaAlnRep1.bam
+fileName wgEncodeSydhRnaSeqMelPolyaAlnRep1.bam,wgEncodeSydhRnaSeqMelPolyaAlnRep1.bam.bai
 grant Snyder
 lab Stanford-m
 md5sum 67c198244e058a49d4e4a1d48a2d98de,3581098b13c4b583e3163ab25fc81e6e
@@ -178,7 +178,7 @@ age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaRawDataRep1.fastq.gz
@@ -201,7 +201,7 @@ age immortalized
 cell MEL
 composite wgEncodeSydhRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-21
 dateUnrestricted 2011-12-21
 fileName wgEncodeSydhRnaSeqMelPolyaSigRep1.bigWig
@@ -219,4 +219,4 @@ tableName wgEncodeSydhRnaSeqMelPolyaSigRep1
 treatment None
 view Signal
 
-# MAGIC: 2002140233
+# MAGIC: 1161169891

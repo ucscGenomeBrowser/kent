@@ -2451,7 +2451,7 @@ objType file
 cell CD20+
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
@@ -2473,7 +2473,7 @@ objType table
 cell CD20+
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
@@ -2496,7 +2496,7 @@ objType table
 cell CD20+
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
@@ -2519,7 +2519,7 @@ objType file
 cell CD20+
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
@@ -2540,7 +2540,7 @@ objType table
 cell CD20+
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001884
@@ -2563,7 +2563,7 @@ objType file
 cell CD34+_Mobilized
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001885
@@ -2585,7 +2585,7 @@ objType table
 cell CD34+_Mobilized
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001885
@@ -2608,7 +2608,7 @@ objType table
 cell CD34+_Mobilized
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001885
@@ -2631,7 +2631,7 @@ objType file
 cell CD34+_Mobilized
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001885
@@ -2652,7 +2652,7 @@ objType table
 cell CD34+_Mobilized
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001885
@@ -8989,7 +8989,7 @@ objType file
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9011,7 +9011,7 @@ objType file
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9033,7 +9033,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9056,7 +9056,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9079,7 +9079,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9102,7 +9102,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9125,7 +9125,7 @@ objType file
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9146,7 +9146,7 @@ objType file
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9167,7 +9167,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -9190,7 +9190,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-29
 dateUnrestricted 2012-03-28
 dccAccession wgEncodeEH001889
@@ -11093,7 +11093,7 @@ objType file
 cell HPAEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001886
@@ -11115,7 +11115,7 @@ objType table
 cell HPAEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001886
@@ -11138,7 +11138,7 @@ objType table
 cell HPAEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001886
@@ -11161,7 +11161,7 @@ objType file
 cell HPAEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001886
@@ -11182,7 +11182,7 @@ objType table
 cell HPAEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001886
@@ -13124,7 +13124,7 @@ objType file
 cell HSMMtube
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001186
@@ -13170,7 +13170,7 @@ objType table
 cell HSMMtube
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001186
@@ -13217,7 +13217,7 @@ objType table
 cell HSMMtube
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001186
@@ -13262,7 +13262,7 @@ objType file
 cell HSMMtube
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001186
@@ -13307,7 +13307,7 @@ objType table
 cell HSMMtube
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001186
@@ -14897,7 +14897,7 @@ objType file
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
@@ -14922,7 +14922,7 @@ objType file
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
@@ -14969,7 +14969,7 @@ objType table
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
@@ -14995,7 +14995,7 @@ objType table
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
@@ -15043,7 +15043,7 @@ objType table
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
@@ -15069,7 +15069,7 @@ objType table
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
@@ -15115,7 +15115,7 @@ objType file
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
@@ -15139,7 +15139,7 @@ objType file
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
@@ -15185,7 +15185,7 @@ objType table
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2011-10-10
 dccAccession wgEncodeEH001196
@@ -15211,7 +15211,7 @@ objType table
 cell Monocytes-CD14+_RO01746
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001196
@@ -16667,7 +16667,7 @@ objType file
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16689,7 +16689,7 @@ objType file
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16711,7 +16711,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16734,7 +16734,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16757,7 +16757,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16780,7 +16780,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16803,7 +16803,7 @@ objType file
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16824,7 +16824,7 @@ objType file
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16845,7 +16845,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -16868,7 +16868,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001887
@@ -17133,7 +17133,7 @@ objType file
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17155,7 +17155,7 @@ objType file
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17177,7 +17177,7 @@ objType table
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17200,7 +17200,7 @@ objType table
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17223,7 +17223,7 @@ objType table
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17246,7 +17246,7 @@ objType table
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17269,7 +17269,7 @@ objType file
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17290,7 +17290,7 @@ objType file
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17311,7 +17311,7 @@ objType table
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -17334,7 +17334,7 @@ objType table
 cell PrEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-25
 dateUnrestricted 2012-03-25
 dccAccession wgEncodeEH001888
@@ -19493,4 +19493,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1056188881
+# MAGIC: 1790440782

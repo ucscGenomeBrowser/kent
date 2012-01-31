@@ -72,8 +72,8 @@ include wgEncodeUwDnaseSeq.ra
 # include wgEncodeYaleRnaSeq.ra
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
-include wgEncodeYaleChIPseq.ra
-
+include wgEncodeYaleChIPseq.ra beta,public
+include wgEncodeYaleChIPseq.patch.ra alpha
 
 # GIS RNA Pet (wrangler: braney)
 include wgEncodeGisPet.ra

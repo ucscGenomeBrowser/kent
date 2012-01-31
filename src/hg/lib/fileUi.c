@@ -486,13 +486,8 @@ if (sortOrder != NULL)
         {
         char *var = sortOrder->column[sIx];
         enum cvSearchable searchBy = cvSearchMethod(var);
-    //#define FILTERBY_ALL_SEARCHABLE
-    #ifdef FILTERBY_ALL_SEARCHABLE
-        if (searchBy == cvNotSearchable)
-    #else///ifndef FILTERBY_ALL_SEARCHABLE
         if (searchBy == cvNotSearchable || searchBy == cvSearchByFreeText)
-    #endif///ndef FILTERBY_ALL_SEARCHABLE
-            continue; // Only single selects and multi-select make good candidates for filtering
+            continue; // Free text is not good candidate for filters.  Best is single word/date/int.
 
         // get all vals for var, then convert to tag/label pairs for filterBys
         struct slName *vals = mdbObjsFindAllVals(mdbObjs, var, CV_LABEL_EMPTY_IS_NONE);
@@ -550,11 +545,7 @@ if (sortOrder != NULL)
                 slPairValSortCase(&tagLabelPairs);
             char extraClasses[256];
             safef(extraClasses,sizeof extraClasses,"filterTable %s",var);
-        #ifdef NEW_JQUERY
-            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable(this);' style='font-size:.9em;'");
-        #else///ifndef NEW_JQUERY
-            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable();' onclick='filterTableExclude(this);'");
-        #endif///ndef NEW_JQUERY
+            char *dropDownHtml = cgiMakeMultiSelectDropList(var,tagLabelPairs,NULL,"All",extraClasses,"onchange='filterTable.filter(this);' style='font-size:.9em;'");
             // Note filterBox has classes: filterBy & {var}
             if (dropDownHtml)
                 {
@@ -581,13 +572,7 @@ if (sortOrder != NULL)
                (count >= 1 ? "categories and ":""),FILTERBY_HELP_LINK);
         printf("%s\n",dyStringContents(dyFilters));
         printf("</tr></table>\n");
-    #ifdef NEW_JQUERY
         jsIncludeFile("ddcl.js",NULL);
-        printf("<script type='text/javascript'>var newJQuery=true;</script>\n");
-    #else///ifndef NEW_JQUERY
-        printf("<script type='text/javascript'>var newJQuery=false;</script>\n");
-        printf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true, maxDropHeight: filterByMaxHeight(this) });});});</script>\n");
-    #endif///ndef NEW_JQUERY
         }
     dyStringFree(&dyFilters);
     }
@@ -655,15 +640,6 @@ if (filesCount > 5)
 printf("</TD>\n");
 columnCount++;
 
-/*#define SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
-#ifdef SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
-if (parentTdb == NULL)
-    {
-    printf("<TD align='center' valign='center'>&nbsp;</TD>");
-    columnCount++;
-    }
-#endif///def SHOW_FOLDER_FOR_COMPOSITE_DOWNLOADS
-*/
 // Now the columns
 int curOrder = 0,ix=0;
 if (sortOrder)
@@ -717,7 +693,7 @@ for( ;oneFile!= NULL;oneFile=oneFile->next)
         field = parentTdb->track;
     else
         {
-        field = mdbObjFindValue(oneFile->mdb,MDB_VAR_COMPOSITE);
+        field = cloneString(mdbObjFindValue(oneFile->mdb,MDB_VAR_COMPOSITE));
         mdbObjRemoveOneVar(oneFile->mdb,MDB_VAR_COMPOSITE,NULL);
         }
     assert(field != NULL);
@@ -835,7 +811,7 @@ printf("</TD></TR>\n");
 printf("</TFOOT></TABLE>\n");
 
 if (parentTdb == NULL)
-    printf("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>\n");
+    printf("<script type='text/javascript'>{$(document).ready(function() {sortTable.initialize($('table.sortable')[0],true,true);});}</script>\n");
 
 if (timeIt)
     uglyTime("Finished table");

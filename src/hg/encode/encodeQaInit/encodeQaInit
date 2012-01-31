@@ -16,7 +16,7 @@ def getMethods(qaDir, args, user, d):
 	f.write(args.database + "\n")
 	f.write("Release " + args.release + "\n")
 	f.write("Redmine #" + args.redmine + "\n")
-        f.write(str(d) + "\n")
+	f.write(str(d) + "\n")
 	f.write(user + "\n")
 	f.write("\n")
 	for line in output:
@@ -37,7 +37,7 @@ def getMethods(qaDir, args, user, d):
 
 def writeClaimMail(args, user, qaDir):
 	f = open(qaDir + '/claimMail', 'w')
-	mail = """Hi Kate,
+	mail = """Hi Cricket,
 
 I am claiming the %s (Release %s) %s track.
 Please let me know if there is another track you'd like me to work on instead.
@@ -239,7 +239,7 @@ Thanks!
 	for i in subIds.keys():
 		f.write(i + "\n")
 	f.close()
-            
+
 	return filestr, set(sorted(subIds.keys()))
 
 def writeHtml(args, c, qaDir):
@@ -258,9 +258,9 @@ def writeHtml(args, c, qaDir):
 				short = m.group(3)
 				
 	html = """<TR>
-        <TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/%s/encodeDCC/%s/"
-        TARGET=_BLANK>%s</A></TD>
-        <TD>%s</TD>
+	<TD><A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/%s/encodeDCC/%s/"
+	TARGET=_BLANK>%s</A></TD>
+	<TD>%s</TD>
 </TR>""" % (args.database, args.composite, short, long)
 
 	f = open(qaDir + "/htmlDownloadSnippet", "w")
@@ -302,8 +302,12 @@ def writeBetaMdb(mdb, qaDir):
 
 def writeSql(tablestr, filestr, gbdbstr, d, short, long, args, notes, size, user, qaDir, initDate):
 	newYN = "Y"
+	track = short
+	releaseLog = long
 	if int(args.release) > 1:
 		newYN = "N"
+		releaseLog = "%s (Release %s)" % (long, args.release)
+		track = "%s (Release %s)" % (short, args.release)
 
 	sql = """tbls={
 %s
@@ -367,7 +371,7 @@ releaseLogUrl={
 }
 pushState={
 D
-}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(initDate), str(d), short, long, args.database, newYN, args.redmine, notes, args.database, args.composite) 
+}""" % (tablestr, filestr + "\n" + gbdbstr, size, user, str(initDate), str(d), track, releaseLog, args.database, newYN, args.redmine, notes, args.database, args.composite)
 	f = open(qaDir + "/release.sql", "w")
 	f.write(sql)
 	f.close()
@@ -427,15 +431,15 @@ You may need to do a 'git pull'.
 
 def main():
 	parser = argparse.ArgumentParser(
-        prog='encodeQaInit',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        description='Initializes QA directory for claiming a release',
-        epilog=
+	prog='encodeQaInit',
+	formatter_class=argparse.RawDescriptionHelpFormatter,
+	description='Initializes QA directory for claiming a release',
+	epilog=
 """Example:
-qaInit hg19 wgEncodeSydhTfbs 1 69
-qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
+encodeQaInit hg19 wgEncodeSydhTfbs 1 69
+encodeQaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 """
-        )
+	)
 	parser.add_argument('database', help='The database, typically hg19 or mm9')
 	parser.add_argument('composite', help='The composite name, wgEncodeCshlLongRnaSeq for instance')
 	parser.add_argument('release', help='The new release to be released')
@@ -466,6 +470,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 					'releaseOld': str(releaseOld),
 					'ignore' : 1,
 					'loose': 1,
+					'verbose': 1,
 					'summary': 0,
 					'specialMdb': specialMdb}
 	errors = []
@@ -501,7 +506,6 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 		return
 	
 	writeClaimMail(args, user, qaDir)
-	print "Making local mkChangeNotes"
 	genNotes = mkChangeNotes.makeNotes(mkNotesArgs)
 	if genNotes.errors:
 		print "NON-FATAL ERROR: Local mkChangeNotes found errors in the release"
@@ -535,7 +539,7 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	writePushHtmlMail(args, user, qaDir)
 	writeCheckList(genNotes.pushFiles, "checkPushFilesList", qaDir)
 	writeCheckList(genNotes.fullFiles, "fullFilesListNoRevoked", qaDir)
-        writeCheckList(genNotes.fullTables, "allTables", qaDir)
+	writeCheckList(genNotes.fullTables, "allTables", qaDir)
 
 	initDate = lastInitDate(qaDir + "/release.sql")
 	if not initDate:
@@ -552,35 +556,35 @@ qaInit hg18 wgEncodeHudsonalphaChipSeq 3 504
 	
 	print "Running qa tests"
 	output.append("Checking for missing table descriptions:")
-        (tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
+	(tableDescOutput, noDescription) = qa.checkTableDescriptions(args.database, tables)
 	output.extend(tableDescOutput)
 
-        output.append("Checking for missing table indexes:")
+	output.append("Checking for missing table indexes:")
 	(tableIndexOut, missingIndex) = qa.checkTableIndex(args.database, tables)
 	output.extend(tableIndexOut)
 	
-        output.append("Checking table names for errors:")
+	output.append("Checking table names for errors:")
 	(tableNameOut, badTableNames) = qa.checkTableName(tables)
 	output.extend(tableNameOut)
 	
 	trackDbPath = c.currentTrackDb
 	if trackDbPath:
-                output.append("Checking short and long labels in trackDb:")
+		output.append("Checking short and long labels in trackDb:")
 		(labelOut, badLabels) = qa.checkLabels(trackDbPath)
 		output.extend(labelOut)
 	else:
 		print "Could not determine track Db to use, does the composite have the alpha tag in trackDb.wgEncode.ra?"
 	
-        output.append("Checking tables for coordinate errors:")
+	output.append("Checking tables for coordinate errors:")
 	(coordsOut, badCoords) = qa.checkTableCoords(args.database, tables)
 	output.extend(coordsOut)
 	
-        output.append("Checking tables for positional errors:")
+	output.append("Checking tables for positional errors:")
 	(posOut, badPos) = qa.positionalTblCheck(args.database, tables)
 	output.extend(posOut)
 
-        output.append("Counts per chromosome:")
-        output.append("")
+	output.append("Counts per chromosome:")
+	output.append("")
 	(countChromOut, tableCounts) = qa.countPerChrom(args.database, tables)
 	output.extend(countChromOut)
 

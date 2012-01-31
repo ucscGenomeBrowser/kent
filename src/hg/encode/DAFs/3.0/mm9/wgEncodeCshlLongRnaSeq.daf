@@ -1,4 +1,4 @@
-# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.1 $
+# Data Agreement File for CSHL Long RNA-seq project $Revision: 1.4 $
 
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
@@ -39,12 +39,12 @@ assembly          mm9
 validationSettings validateFiles.bam:mismatches=7,nMatch,allowOther
 
 # Track/view definition
-view             PlusRawSig
+view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
 required         yes
 
-view             MinusRawSig
+view             MinusRawSignal
 type             bigWig
 hasReplicates    yes
 required         yes
@@ -69,8 +69,8 @@ downloadOnly     yes
 
 view             Spikeins
 longLabelPrefix  CSHL Long RNA-seq Spike-ins
-type             spikes
+type             doc
 hasReplicates    yes
 required         yes
-downloadsOnly    yes
+downloadOnly    yes
 

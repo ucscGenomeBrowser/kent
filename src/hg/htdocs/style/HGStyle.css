@@ -169,8 +169,9 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
     padding-right: 5px;
 }
 
-table.chainTbl, .descTbl {border-collapse: collapse;}
-table.chainTbl td, .descTbl td, .descTbl th {border: 1px solid #666; padding: 5px;}
+/* for displaying a basic table - need to condense these to all just the .stdTbl class */
+table.chainTbl, .descTbl, .stdTbl {border-collapse: collapse;}
+table.chainTbl td, .descTbl td, .descTbl th, .stdTbl td, .stdTbl th {border: 1px solid #666; padding: 5px;}
 
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
@@ -218,6 +219,7 @@ a:link {text-decoration:none;}
 a:visited {text-decoration:none;}
 a:hover {text-decoration:underline;}
 a:active {text-decoration:underline;}    */
+
 a.cv:link {text-decoration:none;}
 a.cv:visited {text-decoration:none;}
 a.cv:hover {text-decoration:underline;}
@@ -365,7 +367,7 @@ span.disabled   { opacity: 0.5; filters.alpha.opacity:50;  }
 /* [+][-] buttons are no longer images but divs */
 .pmButton { font-size: small; font-weight:bold; text-align:center; font-family: courier; color: black;
             display: inline-block; width:16px; height:16px; vertical-align: top;
-            border: 2px outset lightGray; border-bottom-color:darkgray; border-right-color:darkgray; border-radius: 5px; /* radius not working */
+            border: 2px outset lightGray; border-bottom-color:darkgray; border-right-color:darkgray;
             background-color:#F3EDED; cursor: pointer;}
 .pmButton:hover { border-bottom-color:DarkBlue; border-right-color:DarkBlue; color: #0000AA; background-color:#AADDFF; }
 

@@ -501,8 +501,6 @@ struct dyString *uiStateUrlPart(struct track *toggleGroup)
 struct dyString *dy = newDyString(512);
 
 dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
-#define TOGGLE_SUBTRACKS
-#ifdef TOGGLE_SUBTRACKS
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
@@ -530,9 +528,13 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
 
     if(setView)
         {
+    #ifdef SUBTRACK_CFG
+        dyStringPrintf(dy, "&%s=%s", toggleGroup->tdb->parent->track, hStringFromTv(vis));
+    #else///ifndef SUBTRACK_CFG
         char *encodeView = cgiEncode(view);
         dyStringPrintf(dy, "&%s.%s.vis=%s", encodedTableName,encodeView, hStringFromTv(vis));
         freeMem(encodeView);
+    #endif///ndef SUBTRACK_CFG
         }
     else
         {
@@ -542,7 +544,6 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     freeMem(encodedTableName);
     }
 else
-#endif//def TOGGLE_SUBTRACKS
     {
     if (toggleGroup != NULL)
         {
@@ -913,7 +914,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* We may want to use this, or add a config setting for it */
         if (*text == '=' || *text == '-' || *text == '.' || *text == 'N')
             clr = noMatchColor;
-#endif
+#endif///def FADE_IN_DOT_MODE
         }
     else
         {
@@ -1999,9 +2000,7 @@ if (scoreColumn == NULL)
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
 extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and); // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
-#ifdef ALL_SCORE_FILTERS_LOGIC
 extraWhere = dyAddAllScoreFilters(cart,tdb,extraWhere,&and); // All *Filter style filters
-#endif///def ALL_SCORE_FILTERS_LOGIC
 if (and == FALSE || strstrNoCase(extraWhere->string,"score in ") == NULL) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
@@ -5103,8 +5102,8 @@ if (decipherId != NULL)
     {
     if (hTableExists(database, "decipherRaw"))
     	{
-    	safef(query, sizeof(query), 
-	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d", 
+    	safef(query, sizeof(query),
+	      "select mean_ratio > 0 from decipherRaw where id = '%s' and start=%d and end=%d",
 	      decipherId, bed->chromStart+1, bed->chromEnd);
 	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
@@ -7578,8 +7577,8 @@ char *chromPrefixes[] = { "chr", "Group",
 			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold",
-			     "Contig", "SuperCont", "super_", "scaffold", "Zv7_",
-			     NULL };
+    "Contig", "SuperCont", "super_", "scaffold", "Zv7_", "Scfld02_",
+	 NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
 /* Return a pointer into name just past the first matching string from
@@ -9536,10 +9535,14 @@ char *nameCopy = cloneString(myItem->name);
 char *allFreqCopy = cloneString(myItem->alleleFreq);
 int cnt = chopByChar(nameCopy, '/', allele, myItem->alleleCount);
 if (cnt != myItem->alleleCount)
-    errAbort("Bad allele name %s", myItem->name);
+    errAbort("Bad allele name '%s' (%s:%d-%d): expected %d /-sep'd alleles", myItem->name,
+	     myItem->chrom, myItem->chromStart+1, myItem->chromEnd, myItem->alleleCount);
 int fcnt = chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
 if (fcnt != myItem->alleleCount && fcnt != 0)
-    errAbort("Bad freq for %s",  myItem->name);
+    errAbort("Bad freq '%s' for '%s' (%s:%d-%d): expected %d ,-sep'd numbers",
+	     myItem->alleleFreq, myItem->name,
+	     myItem->chrom, myItem->chromStart+1, myItem->chromEnd,
+	     myItem->alleleCount);
 int i = 0;
 for (i=0;i<fcnt;i++)
     allTot += atoi(freq[i]);
@@ -12161,13 +12164,13 @@ char* t2gArticleTable(struct track *tg)
  * the value from the trackDb statement 'articleTable'
  * or the default value: <trackName>Article */
 {
-char* articleTable = NULL;
-articleTable = trackDbSetting(tg->tdb, "articleTable");
-if (articleTable==NULL) {
-    char* buf = needMem(128);
-    sprintf(buf, "%sArticle", tg->track);
-    articleTable = buf;
-}
+char *articleTable = trackDbSetting(tg->tdb, "articleTable");
+if (articleTable == NULL)
+    {
+    char buf[256];
+    safef(buf, sizeof(buf), "%sArticle", tg->track);
+    articleTable = cloneString(buf);
+    }
 return articleTable;
 }
 
@@ -12226,6 +12229,7 @@ hFreeConn(&conn);
 static void t2gMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 				char *itemName, char *mapItemName, int start, int end,
 				int x, int y, int width, int height)
+/* create mouse overs with titles for t2g bed features */
 {
 if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     {
@@ -12245,10 +12249,50 @@ if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
     }
 }
 
+char* t2gLastMarkerName;
+
+char *t2gMarkerItemName(struct track *tg, void *item)
+/* retrieve article count from extra field, and return
+ * side effect: save original name in global var for mapItem 
+ * Is this too hacky? No idea where I could save the original name otherwise... */
+{
+struct bed *bed = item;
+char query[256];
+char *escName = sqlEscapeString(bed->name);
+safef(query, sizeof(query), "select matchCount from %s where name = '%s'", tg->table, escName);
+
+char *articleCount = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+articleCount = sqlQuickString(conn, query);
+char* newName = catTwoStrings(articleCount, " articles");
+freeMem(articleCount);
+hFreeConn(&conn);
+t2gLastMarkerName = bed->name;
+return newName;
+}
+
+static void t2gMarkerMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+				char *itemName, char *mapItemName, int start, int end,
+				int x, int y, int width, int height) 
+/* use previously saved itemName for the mouseOver */
+{
+genericMapItem(tg, hvg, item,
+		    t2gLastMarkerName, mapItemName, start, end,
+		    x, y, width, height);
+} 
+
 static void t2gMethods(struct track *tg)
 {
-tg->loadItems = t2gLoadItems;
-tg->mapItem = t2gMapItem;
+if (startsWith("t2gMarker", tg->table))
+{
+    tg->mapItem = t2gMarkerMapItem;
+    tg->itemName = t2gMarkerItemName;
+}
+else
+{
+    tg->loadItems = t2gLoadItems;
+    tg->mapItem = t2gMapItem;
+}
 }
 
 
@@ -12272,7 +12316,8 @@ if (sameWord(type, "bed"))
        settings. */
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
-    if (startsWith("t2g", track->table))
+    
+    if (startsWith("t2g", track->table) )
         t2gMethods(track);
     }
 /*
@@ -12547,7 +12592,7 @@ if (startsWith("wig", tdb->type) || startsWith("bedGraph", tdb->type) ||
         smart = TRUE;
 
 /* setup function handlers for composite track */
-handler = lookupTrackHandler(tdb->table);
+handler = lookupTrackHandlerClosestToHome(tdb);
 if (smart && handler != NULL)
     /* handles it's own load and height */
     handler(track);
@@ -12571,24 +12616,8 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     subTdb = tdbRef->val;
 
-    /* Initialize from composite track settings */
-    if (trackDbSettingClosestToHome(subTdb, "noInherit") == NULL)
-	{
-	/* install parent's track handler */
-	/* TODO JK - rework.  The gencode tracks currently depend on this, wgEncodeGencode in particular,
-	 * but it seems very dangerous in general.  What if the subtracks already have their own handler?
-	 * Waiting to fix until after viewInTheMiddle branch merge since preferred fix involves
-	 * edits to trackDb.ra files - that is putting in an explicit setting when you want
-	 * this behavior rather than relying on absence of an overloaded setting. */
-	subtrack = trackFromTrackDb(tdb);
-	subtrack->tdb = subTdb;
-	handler = lookupTrackHandler(tdb->table);
-	}
-    else
-	{
-	subtrack = trackFromTrackDb(subTdb);
-	handler = lookupTrackHandler(subTdb->table);
-	}
+    subtrack = trackFromTrackDb(subTdb);
+    handler = lookupTrackHandlerClosestToHome(subTdb);
     if (handler != NULL)
         handler(subtrack);
 
@@ -12746,12 +12775,28 @@ else
 // If parents and children put in different handlers, there's no way to know which one
 // the child will get.
 
-TrackHandler lookupTrackHandler(char *name)
+static TrackHandler lookupTrackHandler(char *name)
 /* Lookup handler for track of give name.  Return NULL if none. */
 {
 if (handlerHash == NULL)
     return NULL;
 return hashFindVal(handlerHash, name);
+}
+
+TrackHandler lookupTrackHandlerClosestToHome(struct trackDb *tdb)
+/* Lookup handler for track of give name.  Try parents if
+ * subtrack has a NULL handler.  Return NULL if none. */
+{
+TrackHandler handler = lookupTrackHandler(tdb->table);
+
+// while handler is NULL and we have a parent, use the parent's handler
+for( ; (handler == NULL) && (tdb->parent != NULL);  )
+    {
+    tdb = tdb->parent;
+    handler = lookupTrackHandler(tdb->table);
+    }
+
+return handler;
 }
 
 void registerTrackHandlers()
@@ -13043,9 +13088,20 @@ registerTrackHandler("jaxPhenotypeLift", jaxPhenotypeMethods);
 /* ENCODE related */
 registerTrackHandlerOnFamily("wgEncodeGencode", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencode", gencodeGeneMethods);
+// one per gencode version, after V7 when it was substantially changed
+// FIXME: this is hacky, need a way to register based on pattern
+registerTrackHandlerOnFamily("wgEncodeGencodeV3", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV4", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV7", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV8", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeGencodeV9", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV10", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV11", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV12", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV13", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV14", gencodeGeneMethods);
+registerTrackHandlerOnFamily("wgEncodeGencodeV15", gencodeGeneMethods);
+
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeManual20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("wgEncodeSangerGencodeGencodeAuto20081001", gencodeGeneMethods);
 registerTrackHandlerOnFamily("encodeGencodeGene", gencodeGeneMethods);

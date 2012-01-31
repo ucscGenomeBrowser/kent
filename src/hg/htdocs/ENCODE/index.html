@@ -14,6 +14,8 @@
  content="text/html; charset=ISO-8859-1">
   <meta http-equiv="content-type"
  content="text/html; charset=ISO-8859-1">
+ <script type="text/javascript" src="../js/jquery.js"></script>
+ <script type="text/javascript" src="../js/staticDoc.js"></script>
 </head>
 <body style="font-family: arial, Geneva, Helvetica, sans-serif;" alink="#6600ff"
  link="#0000cc" vlink="#330066">
@@ -46,7 +48,7 @@
                         <td bgcolor="#0004D99" height="100%" valign="top">
                         <font color="#FFCC00"><b><em>Human</em></b></font><br>
                         <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-                        <a class="leftbar" href="/ENCODE/dataSummary.html">Data Summary</a><font size="-1" color="#F55"><sup><strong><em>New</strong></em></sup></font>
+                        <a class="leftbar" href="/ENCODE/dataSummary.html">Data Summary</a><font size="-1" color="#F55"></font>
                         <!-- TBD
                         <hr> <a class="leftbar" href="/ENCODE/dataMatrix/encodeDataSummaryHuman.html">Data Matrix</a><font color="#F55"><sup><strong><em>New</strong></em></sup></font>
                         -->
@@ -61,7 +63,7 @@
                         <img src="../images/DOT.gif" alt="" height="5" width="0"><br>
                         <font color="#FFCC00"><b><em>Mouse</em></b></font><br>
                         <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-                        <a class="leftbar" href="/ENCODE/dataSummaryMouse.html">Data Summary</a><font color="#F55" size="-1"><sup><strong><em>New</strong></em></sup></font>
+                        <a class="leftbar" href="/ENCODE/dataSummaryMouse.html">Data Summary</a><font color="#F55" size="-1"></font>
                         <hr> <a class="leftbar" href="search.html">Search</a>
                         <hr><a class="leftbar" href="downloadsMouse.html">Downloads</a>
                         <hr><a class="leftbar" href="/cgi-bin/hgTracks?db=mm9">Genome Browser (mm9)</a>
@@ -77,8 +79,8 @@
                         <hr> <a class="leftbar" href="releaseLog.html">Release Log</a>
                         <hr> <a class="leftbar" href="terms.html">Data Policy</a>
                         <hr> <a class="leftbar" href="dataStandards.html">Data Standards</a>
-                        <hr> <a class="leftbar" href="/FAQ/FAQformat.html#ENCODE">File Formats</a><font color="#F55" size="-1"><sup><strong><em>New</strong></em></sup></font>
-                        <hr> <a class="leftbar" href="pubs.html">Publications</a><font color="#F55" size="-1"><sup><strong><em>New</strong></em></sup></font>
+                        <hr> <a class="leftbar" href="/FAQ/FAQformat.html#ENCODE">File Formats</a><font color="#F55" size="-1"></sup></font>
+                        <hr> <a class="leftbar" href="pubs.html">Publications</a><font color="#F55" size="-1"></font>
                         <hr> <a class="leftbar" href="contributors.html">Contributors</a>
                         <hr> <a class="leftbar" href="pilot.html">Pilot Project</a>
                         <hr> <a class="leftbar" href="http://www.cbse.ucsc.edu/jobs/" target="_blank">Jobs</a>
@@ -188,7 +190,7 @@ the <img src="../images/nhgri.gif" alt="" height="16" width="16"> NHGRI logo)
 </li>
 <li><a href="/cgi-bin/hgTables?db=hg18&hgta_group=regulation&hgta_track=wgEncodeHudsonalphaChipSeq"
 target="_blank">Data mining</a> with the UCSC Table Browser and other
-<a href="http://genome.ucsc.edu"> UCSC Genome Bioinformatics tools</a>
+<a href="../">UCSC Genome Bioinformatics tools</a>
 </li>
 </ul>
 </td>
@@ -282,62 +284,76 @@ months following data release. &nbsp;&nbsp;
                               <td style="font-family: arial, Geneva, Helvetica, sans-serif;">
 <!-- start news item -->
 <p>
-<font size="3"><b> 29 Oct 2011 - Human ENCODE data releases: SYDH TFBS, CSHL Long RNA-seq, GIS RNA PET, UW DNaseI HS (release 3), Mapability (Release 3) 
+<font size="3"><b> 5 Jan 2012 - Human ENCODE data releases: UW Histone, HAIB Methyl450, RIKEN CAGE Loc, UW Affy Exon (Release 2)
 </b></font>
 <p>
-Three new tracks and two track updates were released on the hg19 genome browser:
+Three new tracks and one track update were released on the hg19 genome browser:
 <p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeSydhTfbs">
-ENCODE Transcription Factor Binding Sites by ChIP-seq from Stanford/Yale/USC/Harvard</a>:
-This comprehensive track shows 306 ChIP-seq experiments identifying transcription factor binding sites in
-19 cell types.
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwHistone">
+Histone Modifications by ChIP-seq from ENCODE/University of Washington</a>:
+This track shows genome-wide maps of histone modifications associated with active promoters (H3K4me3), repressed regions (H3K27me3), and active transcription (H3K36me3) in 57 cell types, as identified by ChIP-seq.
 <p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlLongRnaSeq">
-Long RNA-seq from ENCODE/Cold Spring Harbor Lab</a>:
-This comprehensive track from the ENCODE Transcriptome group shows RNAs longer than 200 nucleotides. Profiling was performed on RNA extracts enriched and depleted for polyA+, in multiple cellular compartments and whole cell, in 15 cell lines.
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeHaibMethyl450">
+CpG Methylation by Methyl 450K Bead Arrays from ENCODE/HAIB</a>:
+This track displays the methylation status of specific CpG dinucleotides in 61 cell types as identified by the Infinium Human Methylation 450 Bead Array platform.  In general, methylation of CpG sites within a promoter causes silencing of the gene associated with that promoter.   
 <p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGisRnaPet">
-RNA Subcellular Localization by Paired End diTag Sequencing from GIS/ENCODE</a>:
-This track from the ENCODE Transcriptome group shows starts and ends of full length mRNA transcripts determined by GIS paired-end ditag (PET) sequencing.
-Experiments were conducted in 7 cell lines and one tissue (prostate), with RNA extracted from 6 isolated cellular compartments and in whole cell.
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeRikenCage">
+RNA Subcellular CAGE Localization from ENCODE/RIKEN</a>:
+This track from the ENCODE Transcriptome group shows 5' cap analysis gene expression (CAGE) tags and clusters.
+A total of 34 Experiments were conducted in 12 cell lines and one tissue (prostate), with RNA extracted from 6 isolated cellular compartments and in whole cell.
+<p>
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwAffyExonArray">
+Affymetrix Exon Array from ENCODE/University of Washington (Release 2)</a>:
+This track from the ENCODE Transcriptome group shows human tissue miroarray data from the Affymetrix Human Exon 1.0 GeneChip.
+Release 2 of this track shows experiments in 14 additional cell lines.
 <hr>
 <!-- end news item -->
 
 <!-- start news item -->
 <p>
-<font size="3"><b> 19 Sept 2011 - Mouse ENCODE data releases: Stan/Yale Histone, LICR TFBS, LICR RNA-seq, Stan/Yale TFBS (Release 2)
+<font size="3"><b> 1 Dec 2011 - Mouse ENCODE data releases:  Caltech TFBS, Caltech Histone
 </b></font>
 <p>
-Three new tracks and one track update were released on the mm9 genome browser:
+Two new tracks were released on the mm9 genome browser:
 <p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhHist">
-Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale</a>:
-This track shows locations of histone H3K4me3 modification in CH12 and MEL cell types.
-The two cell lines were selected for similarity to the ENCODE Tier1 cell lines (GM12878 and K562).
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeCaltechTfbs">Transcription Factor Binding Sites by ChIP-seq from ENCODE/Caltech</a>:
+This track shows 15 ChIP-seq experiments mapping 7 histone marks in the C2C12 myoblast cell line; both untreated cells and cells under timecourse treament with insulin to stimulate myogenesis.
 <p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeLicrTfbs">
-Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR</a>, and
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeLicrRnaSeq">
-RNA-seq from ENCODE/LICR</a>:
-These tracks show transcriptome and Pol2, p300 and CTCF binding sites in mouse bone marrow, cerebellum, cortex, heart, kidney, liver, lung, spleen, embryonic fibroblast cells  (MEFs) and embryonic stem (ES) cells.
-<p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeSydhTfbs">
-Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale (Release 2)</a>:
-This release adds binding site localization for 13 additional transcription factors to the previously released TFBS track.
+<a class="euro" href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=mm9&g=wgEncodeCaltechHist">Histone Modifications by ChIP-seq by ChIP-seq from ENCODE/Caltech</a>:
+This track shows 26 ChIP-seq experiments mapping 14 transcription factors in the C2C12 myoblast cell line; both untreated cells and cells under timecourse treament with insulin to stimulate myogenesis.
 <hr>
 <!-- end news item -->
 
-
+<!-- start news item -->
+<p>
+<font size="3"><b> 10 Nov 2011 - ENCODE portal changes: New File Formats page and updates to Publications, Data Summaries, and Data Standards
+</b></font>
+<p>
+The ENCODE portal was updated to include informative new and expanded pages.
+ENCODE-related data file formats are now documented on the new 
+<a href="http://genome.ucsc.edu/FAQ/FAQformat.html#ENCODE">File Formats</a> page.
+The 
+<a href="http://encodeproject.org/ENCODE/pubs.html">
+Publications</a> page was expanded to a comprehensive list of Consortium 
+publications, plus methods, resource, and biological findings papers by 
+ENCODE-funded projects.
+The 
+<a href="http://encodeproject.org/ENCODE/dataSummary.html">Human Data Summary</a> and 
+<a href="http://encodeproject.org/ENCODE/dataSummaryMouse.html">Mouse Data Summary</a> spreadsheets detailing ENCODE submissions were updated to reflect 
+status as of the latest ENCODE quarterly reporting (Sept. 30 2011).
+Finally, the
+<a href="http://encodeproject.org/ENCODE/dataStandards.html">Data Standards</a> section was greatly expanded to include new standards documents (v2.0 ChIP-seq) and a new <a href="http://encodeproject.org/ENCODE/platform_characterization.html">
+Platform Characterization</a> section.
+<hr>
+<!-- end news item -->
 
 <!-- start archived item section -->
 <p>
-<font size="3"><b> 15 Sept 2011 - Summer ENCODE human data releases: GENCODE Genes V7, HAIB TFBS, Stanf Nucleosome, HAIB Genotype, SUNY RIP-seq, SUNY Switchgear
+<font size="3"><b> 29 Oct 2011 - Human ENCODE data releases: SYDH TFBS, CSHL Long RNA-seq, GIS RNA PET, UW DNaseI HS (release 3), Mapability (Release 3) 
 </b></font>
 <p>
-Six tracks of human ENCODE data were released in late summer on the hg19 genome browser:
-<a href="newsarch.html#091511">Read more</a>.</p>
-
-<!-- end archived news item -->
+Three new tracks and two track updates were released on the hg19 genome browser:
+<a href="newsarch.html#102911">Read more</a>.</p>
 <br>
 <!-- end archived news item -->
 <!-- end archived item section--> </td>
@@ -397,7 +413,7 @@ nonprofit, and personal use with the following conditions: </p>
                                 <li>ENCODE data are covered by the <a
  href="terms.html">ENCODE Consortium Data Release Policy</a>. </li>
                                 <li>The general <a
- href="http://genome.ucsc.edu/#Conditions">Conditions of Use</a> for
+ href="../#Conditions">Conditions of Use</a> for
 the UCSC Genome Browser apply. </li>
                               </ul>
                               </td>

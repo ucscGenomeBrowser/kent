@@ -12,13 +12,13 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
 expId 2004
-fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam
+fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam,wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep1.bam.bai
 geoSampleAccession GSM798327
 grant Snyder
 lab Yale-m
@@ -41,13 +41,13 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
 expId 2004
-fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2.bam
+fileName wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2.bam,wgEncodeSydhHistCh12H3k04me3IggyaleAlnRep2.bam.bai
 geoSampleAccession GSM798327
 grant Snyder
 lab Yale-m
@@ -70,7 +70,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -99,7 +99,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -127,7 +127,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -155,7 +155,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002004
@@ -184,13 +184,13 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002001
 expId 2001
-fileName wgEncodeSydhHistCh12InputIggyaleAlnRep1.bam
+fileName wgEncodeSydhHistCh12InputIggyaleAlnRep1.bam,wgEncodeSydhHistCh12InputIggyaleAlnRep1.bam.bai
 geoSampleAccession GSM798326
 grant Snyder
 lab Yale-m
@@ -213,7 +213,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002001
@@ -240,7 +240,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 dccAccession wgEncodeEM002001
@@ -269,12 +269,12 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
 expId 2005
-fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep1.bam
+fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep1.bam,wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep1.bam.bai
 geoSampleAccession GSM798328
 grant Snyder
 lab Yale-m
@@ -297,12 +297,12 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
 expId 2005
-fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep2.bam
+fileName wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep2.bam,wgEncodeSydhHistMelH3k04me3Dm2p5dIggyaleAlnRep2.bam.bai
 geoSampleAccession GSM798328
 grant Snyder
 lab Yale-m
@@ -325,7 +325,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -354,7 +354,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -382,7 +382,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -410,7 +410,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEM002005
@@ -439,13 +439,13 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
 expId 2002
-fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1.bam
+fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1.bam,wgEncodeSydhHistMelH3k04me3IggyaleAlnRep1.bam.bai
 geoSampleAccession GSM798324
 grant Snyder
 lab Yale-m
@@ -468,13 +468,13 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
 expId 2002
-fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam
+fileName wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam,wgEncodeSydhHistMelH3k04me3IggyaleAlnRep2.bam.bai
 geoSampleAccession GSM798324
 grant Snyder
 lab Yale-m
@@ -497,7 +497,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-07-19
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
@@ -526,7 +526,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
@@ -554,7 +554,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
@@ -582,7 +582,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 dccAccession wgEncodeEM002002
@@ -611,13 +611,13 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 dccAccession wgEncodeEM001963
 expId 1963
-fileName wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1.bam
+fileName wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1.bam,wgEncodeSydhHistMelInputDm2p5dIggyaleAlnRep1.bam.bai
 geoSampleAccession GSM798323
 grant Snyder
 lab Yale-m
@@ -640,7 +640,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
@@ -669,7 +669,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-16
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
@@ -699,13 +699,13 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-06-09
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 dccAccession wgEncodeEM002003
 expId 2003
-fileName wgEncodeSydhHistMelInputIggyaleAlnRep1.bam
+fileName wgEncodeSydhHistMelInputIggyaleAlnRep1.bam,wgEncodeSydhHistMelInputIggyaleAlnRep1.bam.bai
 geoSampleAccession GSM798325
 grant Snyder
 lab Yale-m
@@ -728,7 +728,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 dccAccession wgEncodeEM002003
@@ -755,7 +755,7 @@ composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 dccAccession wgEncodeEM002003
@@ -775,4 +775,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 1939213885
+# MAGIC: -1942266315

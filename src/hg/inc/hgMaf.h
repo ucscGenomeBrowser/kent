@@ -77,8 +77,8 @@ struct consWiggle *wigMafWiggles(char *db, struct trackDb *tdb);
 /* get conservation wiggle table names and labels from trackDb setting,
    ignoring those where table doesn't exist */
 
-char *wigMafWiggleVar(struct trackDb *tdb, struct consWiggle *wig);
-/* Return name of cart variable for this cons wiggle */
+char *wigMafWiggleVar(char *prefix, struct consWiggle *wig,char **suffix);
+// Return name of cart variable (and optionally the suffix) for this cons wiggle
 
 struct wigMafSpecies
     {
@@ -90,7 +90,7 @@ struct wigMafSpecies
 
 struct wigMafSpecies * wigMafSpeciesTable(struct cart *cart,
     struct trackDb *tdb, char *name, char *db) ;
-char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *db, struct wigMafSpecies **list, int *groupCt);
+char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *prefix, char *db, struct wigMafSpecies **list, int *groupCt);
 
 struct consWiggle *consWiggleFind(char *db,struct trackDb *parent,char *table);
 /* Return conservation wig if it is found in the parent. */

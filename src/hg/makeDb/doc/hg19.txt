@@ -13724,6 +13724,17 @@ hgLoadBed hg19 darned allChroms.bed
 # added darned.html
 # added trackDb.ra entry
 
+# Bug #6417 duplicate records (6) in Human RNA editing (DARNED) track
+# (DONE 2012-12-22 Chin)
+    cat allChroms.bed | sort  > allSort.bed
+    cat allChroms.bed | sort -u > allSort.bed
+    wc -l *.bed
+    #  42045 allChroms.bed
+    #  42045 allSort.bed
+    #  42039 allUniq.bed
+    hgLoadBed hg19 darned allUniq.bed
+    # Loaded 42039 elements of size 9
+
 #############################################################################
 # lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
     # down load from JHU
@@ -17189,7 +17200,7 @@ CREATE TABLE geneReviewsBB (
 
 
 ##############################################################################
-# hgPal downloads redone for new knownGene (re-DONE 2011-10-18 braney)
+# hgPal downloads redone for new knownGene (re-DONE 2012-01-06 braney)
 #   FASTA from 46way for  knownGene, knownCanonical 
 
     ssh hgwdev
@@ -17221,9 +17232,9 @@ CREATE TABLE geneReviewsBB (
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    258m41.548s
-# user    37m23.511s
-# sys     6m47.978s
+# real    205m16.105s
+# user    36m32.438s
+# sys     6m12.046s
 
     mz=multiz46way
     gp=knownGene
@@ -17272,9 +17283,9 @@ CREATE TABLE geneReviewsBB (
     sleep 1
     tail -f $gp.$mz.job.log
 
-# real    255m47.897s
-# user    14m38.822s
-# sys     5m32.823s
+# real    166m1.220s
+# user    13m35.246s
+# sys     2m50.683s
 
     rm *.known.bed
     mz=multiz46way
@@ -17463,7 +17474,7 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
-# LINCRNAS FROM ISCA FROM BROAD (DONE 2011-10-10 Chin)
+# LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
 # Human lincRNA Catalog
 
     # unzip data from Board to /hive/data/outside/lincRnaFromCabili
@@ -18098,3 +18109,92 @@ EOF
 
 
 ############################################################################
+# HGNC: Hugo Gene Nomenclature Committee (DONE 2012-01-17 cline)
+
+mkdir /hive/data/outside/hgnc
+cd /hive/data/outside/hgnc
+mkdir 011712
+cd 011712
+wet -O hgnc.txt "http://www.genenames.org/cgi-bin/hgnc_downloads.cgi?title=HGNC+output+data&hgnc_dbtag=on&preset=all&status=Approved&status=Entry+Withdrawn&status_opt=2&level=pri&=on&where=&order_by=gd_app_sym_sort&limit=&format=text&submit=submit&.cgifields=&.cgifields=level&.cgifields=chr&.cgifields=status&.cgifields=hgnc_dbtag"
+
+tail -n +2 hgnc.txt | hgLoadSqlTab hg19 hgnc ~/kent/src/hg/lib/hgnc.sql stdin       
+#########################################################################
+# LASTZ Cow BosTau7 (DONE - 2012-01-23 - Chin)
+    mkdir /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
+    cd /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
+
+    cat << '_EOF_' > DEF
+# human vs cow
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow bosTau7 
+SEQ2_DIR=/scratch/data/bosTau7/bosTau7.2bit
+SEQ2_LEN=/scratch/data/bosTau7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0    
+
+    
+BASE=/hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        `pwd`/DEF \
+        -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    # real    433m45.814s
+    cat fb.hg19.chainBosTau7Link.txt
+    # 1360887008 bases of 2897316137 (46.971%) in intersection
+    # Create link
+    cd /hive/data/genomes/hg19/bed
+    ln -s  lastzBosTau7.2012-01-23 lastz.bosTau7
+
+    #   running the swap
+    mkdir /hive/data/genomes/bosTau7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/bosTau7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzBosTau7.2012-01-23/DEF \
+        -swap  -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real     95m9.611s
+    cat fb.bosTau7.chainHg19Link.txt
+    #   1388551419 bases of 2804673174 (49.508%) in intersection
+    cd /hive/data/genomes/bosTau7/bed
+    ln -s blastz.hg19.swap lastz.hg19
+############################################################################
+# UPDATE COSMIC TRACK - v57 (DONE 2012-01-26 larrym)
+
+# Table stats before
+
+hgsql hg19 -s -e 'select count(*) from cosmicRaw'
+55579
+hgsql hg19 -s -e 'select count(*) from cosmic'
+49087
+
+~/kent/src/hg/utils/automation/loadCosmic.pl hg19 ftp://ftp.sanger.ac.uk/pub/CGP/cosmic/data_export/Request_based_exports/UCSCMutExp_v57_180112.csv
+
+# Table stats after
+
+hgsql hg19 -s -e 'select count(*) from cosmicRaw'
+78152
+hgsql hg19 -s -e 'select count(*) from cosmic'
+71437
+
+Here's some ID's that were added in this release (and not present on RR):
+
+COSM143850
+COSM143824
+COSM143823
+COSM143802
+COSM143801

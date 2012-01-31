@@ -13,6 +13,9 @@ struct cart;         // forward definition for use in trackDb.h
 #include "linefile.h"
 #include "trackDb.h"
 
+// SUPPORT_EURONODE used to turn on euronode support code (redmine #3104).
+// #define SUPPORT_EURONODE 1
+
 // If cgi set as CART_VAR_EMPTY, then removed from cart
 // If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
 #define CART_VAR_EMPTY "[]"
@@ -100,7 +103,7 @@ struct slPair *cartVarsWithPrefix(struct cart *cart, char *prefix);
 /* Return a slPair list of cart vars that begin with prefix */
 
 struct slPair *cartVarsWithPrefixLm(struct cart *cart, char *prefix, struct lm *lm);
-/* Return list of cart vars that begin with prefix allocated in local memory. 
+/* Return list of cart vars that begin with prefix allocated in local memory.
  * Quite a lot faster than cartVarsWithPrefix. */
 
 void cartRemoveLike(struct cart *cart, char *wildCard);
@@ -477,50 +480,50 @@ char *cartGetOrderFromFileAndMsaTable(char *genomeDb, struct cart *cart, char *s
 /* Look in a cart variable that holds the filename that has a list of
  * species to show in a maf file */
 
-char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,char **pVariable);
+char *cartLookUpVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix,char **pVariable);
 /* Returns value or NULL for a cart variable from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix
    Optionally fills the non NULL pVariable with the actual name of the variable in the cart */
-#define cartOptionalStringClosestToHome(cart,tdb,compositeLevel,suffix) cartLookUpVariableClosestToHome((cart),(tdb),(compositeLevel),(suffix),NULL)
+#define cartOptionalStringClosestToHome(cart,tdb,parentLevel,suffix) cartLookUpVariableClosestToHome((cart),(tdb),(parentLevel),(suffix),NULL)
 
-void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix);
 /* Looks for then removes a cart variable from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
-char *cartStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+char *cartStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix);
 /* Returns value or Aborts for a cart string from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
-boolean cartVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+boolean cartVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix);
 /* Returns TRUE if variable exists anywhere, looking from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
 boolean cartListVarExistsAnyLevel(struct cart *cart, struct trackDb *tdb,
-				  boolean compositeLevel, char *suffix);
+				  boolean parentLevel, char *suffix);
 /* Return TRUE if a list variable for tdb->track (or tdb->parent->track,
  * or tdb->parent->parent->track, etc.) is in cart (list itself may be NULL). */
 
-char *cartUsualStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, char *usual);
+char *cartUsualStringClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix, char *usual);
 /* Returns value or {usual} for a cart string from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
-boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+boolean cartBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix);
 /* Returns value or Aborts for a cart boolean ('on' or != 0) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
-boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix,boolean usual);
+boolean cartUsualBooleanClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix,boolean usual);
 /* Returns value or {usual} for a cart boolean ('on' or != 0) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
-int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, int usual);
+int cartUsualIntClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix, int usual);
 /* Returns value or {usual} for a cart int from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
-double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix, double usual);
+double cartUsualDoubleClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix, double usual);
 /* Returns value or {usual} for a cart fp double from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 
-struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix);
+struct slName *cartOptionalSlNameListClosestToHome(struct cart *cart, struct trackDb *tdb, boolean parentLevel, char *suffix);
 /* Return slName list (possibly with multiple values for the same var) from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
 

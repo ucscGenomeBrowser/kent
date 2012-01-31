@@ -450,11 +450,16 @@ table           - mySQL table name            - Allows multiple tracks to use th
 					      - track associated with the table where the track
 					      - name is the same as the table name, or the table
 					      - browser will have difficulties.
+configurable - on, off                        - Default: on for all track types that allow configuration.  If set to off,
+                                                configuration is blocked.  This setting is most useful in composites where
+                                                some subtracks should be configurable and others not.
 configureByPopup - on, off                    - Default: on for most tracks, off for snp, conservation and multiz tracks.
                                                 If value is off, hgTracks does not use a modal dialog for hgTrackUi, but
                                                 instead always forces user to hgTrackUi page; this is useful for very
-                                                complicated config pages like dbSnp or multiz which do not work well in a modal dialogs,
-                                                and snp tracks which use javascript that is not compatible with modal dialogs.
+                                                complicated config pages like dbSnp or multiz which do not work well in a
+                                                modal dialogs, and snp tracks which use javascript that is not compatible
+                                                with modal dialogs. This setting also turns off individual subtrack
+                                                configuration in the composite configuration (hgTrackUi) page.
 pennantIcon - icon [url [hint]]               - Displays icon next to track in "parade" of tracks found in hgTracks config
                                                 MAY at some point appear in search tracks and next to title in hgTrackUi
                                                 Icon is required and must be in htdocs/images.
@@ -822,10 +827,12 @@ COMPOSITE SUBTRACK CONFIGURATION - 3 ways
 2) Subtrack settings have different types.  "Multi-view" required (see below).
    Cfg settings can be at level of composite, view, or subtrack.
 3) Individual subtracks configurable - used in combination with 1 or 2.
-   "configurable on" setting, which can be at composite, view, or subtrack level.
+   This ocuurs be default depending upon track type and other settings (such as
+   scoreFilter).  Turning subtrack configuration off is done with "configurable off"
+   setting, which can be at composite, view, or subtrack level.
    (NOTE: it is possible to have a composite track that is not multi-view but has
     different types of subtracks. In this case, the subtracks should be individually
-    configurable.)
+    configurable and the composite level should display no configuration controls.)
 
 Composite Track "ClosestToHome" paradigm
 ----------------------------------------
@@ -942,19 +949,26 @@ for the subtrack type.
         viewUi on
     inside of a view if present will make the view's configuration settings displayed by default.
 
-    MULTI-VIEW INDIVIDUAL SUBTRACK CONFIGURATION
-    --------------------------------------------
+    COMPOSITE OR MULTI-VIEW INDIVIDUAL SUBTRACK CONFIGURATION
+    ---------------------------------------------------------
     While in many cases all subtracks for a given view type should share the same
-    configuration settings (eg "Track height:"), in some cases it is desirable to
-    allow configuration of individual subtracks.  To achieve this, add the following
-    setting to the subtrack (not to the composite track):
-        configurable on
+    configuration settings (eg "Track height:"), by default, subtracks can be configured
+    individually by image right-click or by clicking the wrench in the subtrack list.
     It should be understood how individually configured settings work.  Whenever
     settings are configured by the user at the view level, that value will be set
     for all subtracks.  If a subtrack is then individually configured, the setting
     will apply only to that subtrack.  If the setting is then changed at the view
-    level again, the individual setting is lost.
+    or composite level again, the lower level settings are lost.
 
+    BLOCKING CONFIGURATION SETTINGS
+    -------------------------------
+    Sometimes it is desirable to block configuration at either the composite, view or
+    subtrack level, even though the track type allows configuration.  This can be done by
+    setting
+        configurable off
+    at the appropriate level.  The setting can be reversed at a lower level.  For instance,
+    you could set configurable "off" at the composite level and "on" in one of the views,
+    then turn it "off" again for a subtrack that belongs to that view.
 
 SORT
 ----
@@ -1065,6 +1079,7 @@ type bed 3
     view Hmm
     visibility pack
     parent broadChromatinChIPSeq
+    configurable off
 
         track broadStemChipHmmSitesH3K4me3Es
         shortLabel H3K4me3-ES HMM
@@ -1073,7 +1088,6 @@ type bed 3
         subGroups factor=K04 cellType=ES view=Hmm rep=1
         type bed 3
         color 25,25,150
-        configurable on
 
     track broadChromatinChIPSeqViewWin
     shortLabel Sites Windowing
@@ -1090,7 +1104,7 @@ type bed 3
         type bed 5 +
         useScore 1
         color 25,25,150
-        configurable on
+        configurable off
 
     track broadChromatinChIPSeqViewSig
     shortLabel Signal Densities
@@ -1132,11 +1146,9 @@ entire composite track defaults to 'hide' when the user first visits the
 browser.  However, if the user then sets this to 'full' then 2 of 4 types
 of subtracks will be displayed as packed, the signal will be displayed as
 full and the alignments subtracks will still be hidden.  Also, the configurable
-settings for "Sites-Windowing" will be displayed by default.  Additionally all
-of the subtracks are individually configurable except alignments.  Notice this is
-accomplised using "ClosestToHome" methods for 2 of the views (Hmm and Win), but
-directly for the other 2 (Sig and Aln). The wigs have many default settings but
-only the one wig shown has yLine. Notice this example defines a controlled
+settings for all subtracks belonging to the view "Hmm" will be blocked as will
+those for the "H3K4me3-ES Win" subtrack.  The wigs have many default settings
+but only the one wig shown has yLine. Notice this example defines a controlled
 vocabulary for both cellTypes and factors with definitions found in the
 encode/cv.ra directory (off apache/cgi-bin/).
 
@@ -1190,7 +1202,6 @@ Here's an example of a container:
     longLabel ENCODE Promoter Histone Mark (H3K4Me3) on 9 Cell Lines
     type wig 0 30000
     viewLimits 0:100
-    configurable on
     visibility full
     maxHeightPixels 100:30:11
     aggregate transparentOverlay

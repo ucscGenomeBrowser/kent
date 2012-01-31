@@ -3,7 +3,7 @@
 # encodeReport.pl - use metaDb tables to generate report of submitted and released experiments
 #
 # Reporting formats:
-# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession, Lab_IDs
+# ALL: Project, Project-PI, Lab, Lab-PI, Data_Type, Cell_Type, Experiment_Parameters, Experimental_Factors, Freeze, Submit_Date, Release_Date, Status, Submission_IDs, Accession, Assembly, Strain, Age, Treatment, Exp_ID, DCC_Accession, Lab_IDs, Resticted_Until
 
 # DCC:       Project(institution), Lab(institution), Data Type, Cell Type, Experiment Parameters, Freeze, Submit_Date, Release_Date, Status, Assembly, Submission Ids, Accession, Exp_ID, DCC_Accession, Lab_IDs
 # Briefly was:
@@ -25,7 +25,7 @@ use English;
 use Carp qw(cluck);
 use Cwd;
 use IO::File;
-use File::Basename;
+use Date::Parse;
 
 use lib "/cluster/bin/scripts";
 use Encode;
@@ -109,13 +109,13 @@ my $var;
 my $termType;
 my $subId;
 
-printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
         "Project", "Project-PI", "Lab", "Lab-PI", "Data_Type", "Cell_Type", 
         "Experiment_Parameters", "Experimental_Factors", 
         #"Version", 
         "Freeze", "Submit_Date", "Release_Date", 
         "Status", "Submission_IDs", "Accession", "Assembly", 
-        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession", "Lab_IDs");
+        "Strain", "Age", "Treatment", "Exp_ID", "DCC_Accession", "Lab_IDs", "Restricted_Until", "Tissue");
 
 # get experiment-defining variables for each composite from the metaDb
 open(MDB, "mdbPrint $assembly -table=metaDb -all -line | grep 'objType=composite' |") 
@@ -226,8 +226,13 @@ foreach my $objName (keys %metaLines) {
     $experiment{"dataTypeTerm"} = $dataTypeTerm;
 
     $experiment{"cell"} = "none";
+    $experiment{"tissue"} = "unknown";
     if (defined($metadata{"cell"})) {
-        $experiment{"cell"} = $metadata{"cell"};
+        my $cell = $metadata{"cell"};
+        $experiment{"cell"} = $cell;
+        $experiment{"tissue"} = $terms{"Cell Line"}{$cell}->{"tissue"};
+    } else {
+        $experiment{"tissue"} = "none";
     }
     print STDERR "    objName  " . $objName . "\n";
 
@@ -237,7 +242,7 @@ foreach my $objName (keys %metaLines) {
     if (defined($composite)) {
         $expVars = $composites{$composite};
         if (!defined($expVars)) {
-            warn "composite $composite has no expVars, skipping";
+            warn "WARNING: composite $composite has no expVars, skipping";
             next;
         }
     } else  {
@@ -359,10 +364,13 @@ foreach my $objName (keys %metaLines) {
         $experiment{"freeze"} = "unknown";
     }
 
-    $experiment{"submitDate"} = defined($metadata{"dateResubmitted"}) ?
-                $metadata{"dateResubmitted"} : $metadata{"dateSubmitted"};
-
     $experiment{"releaseDate"} = "none";
+
+    if (defined($metadata{"dateUnrestricted"})) {
+        $experiment{"dateUnrestricted"} = $metadata{"dateUnrestricted"};
+    } else {
+        $experiment{"dateUnrestricted"} = "none";
+    }
 
     # a few tracks are missing the subId
     my $subId = (defined($metadata{"subId"})) ? $metadata{"subId"} : 0; 
@@ -387,6 +395,16 @@ foreach my $objName (keys %metaLines) {
     # (include version in vars)
     # subId -- lookup, add to list if exists
     if (defined($experiments{$expKey})) {
+        # replace submit date if it's earlier
+        if (!defined($metadata{"dateSubmitted"}) || 
+            !defined(str2time($metadata{"dateSubmitted"}))) {
+                warn("ERROR: Bad or missing dateSubmitted in experiment: $expKey subId=$subId");
+        } else {
+            if (str2time($metadata{"dateSubmitted"}) < 
+                str2time($experiments{$expKey}->{"submitDate"})) {
+                    $experiments{$expKey}->{"submitDate"} = $metadata{"dateSubmitted"};
+            }
+        }
         # add subId
         # just for diagnostics
         my %ids = %{$experiments{$expKey}->{"ids"}};
@@ -406,6 +424,15 @@ foreach my $objName (keys %metaLines) {
             }
         }
     } else {
+        # add submit date
+        if (!defined($metadata{"dateSubmitted"}) || 
+            !defined(str2time($metadata{"dateSubmitted"}))) {
+                warn("ERROR: Bad or missing dateSubmitted in experiment: $expKey subId=$subId");
+                $experiment{"submitDate"} = "unknown";
+        } else {
+            $experiment{"submitDate"} = $metadata{"dateSubmitted"};
+        }
+
         # add subId
         my %ids = ();
         $ids{$subId} = $subId;
@@ -474,6 +501,7 @@ foreach my $key (keys %experiments) {
     $experiment{"factorLabels"} = "unknown" unless defined($experiment{"factorLabels"});
     $experiment{"submitDate"} = "unknown"  unless defined($experiment{"submitDate"});
     $experiment{"releaseDate"} = "unknown" unless defined($experiment{"releaseDate"});
+    $experiment{"dateUnrestricted"} = "none" unless defined($experiment{"dateUnrestricted"});
 
     # find subId with 'highest' status in current assembly -- use that for reporting
     my $maxId;
@@ -491,7 +519,7 @@ foreach my $key (keys %experiments) {
     }
     # TODO: fix metadata -- for now, exclude if not in status table (e.g. metadata for incorrect assembly)
     if (!defined($maxId)) {
-        print STDERR "discarding experiment with no id in this assembly found in project table: " . $key . "\n";
+        print STDERR "WARNING: discarding experiment with no id in this assembly found in project table: " . $key . "\n";
         next;
     }
     $experiment{"status"} = $submissionStatus{$maxId};
@@ -547,7 +575,7 @@ foreach my $key (keys %experiments) {
                 $tags{"dataType"}{$dataType}->{"term"};
     }
 
-    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\t%s\n", 
+    printf("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n", 
                 $experiment{"project"}, $experiment{"projectPi"}, 
                 $experiment{"lab"}, $experiment{"labPi"}, 
                 $experiment{"dataType"}, $experiment{"cell"}, 
@@ -559,7 +587,7 @@ foreach my $key (keys %experiments) {
                 # nhgri report only
                 $experiment{"strain"}, $experiment{"age"}, $experiment{"treatment"}, 
                 $experiment{"expId"}, $experiment{"dccAccession"}, 
-                join(",", sort keys %labIds));
+                join(",", sort keys %labIds), $experiment{"dateUnrestricted"}, $experiment{"tissue"});
 }
 
 exit 0;

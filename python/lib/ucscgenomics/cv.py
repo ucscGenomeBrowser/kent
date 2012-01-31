@@ -3,7 +3,7 @@ import os
 from ucscgenomics import ra
 
 class CvFile(ra.RaFile):
-	"""
+	'''
 	cv.ra representation. Mainly adds CV-specific validation to the RaFile
 	
 	To create a CvFile, the simplest way is just to call it with no params,
@@ -20,10 +20,10 @@ class CvFile(ra.RaFile):
 	
 	For more information about other things not specific to the cv, but for
 	all ra files, look at the RaFile documentation.
-	"""
+	'''
 
 	def __init__(self, filePath=None, handler=None, protocolPath=None):
-		"""sets up exception handling method, and optionally reads from a file"""
+		'''sets up exception handling method, and optionally reads from a file'''
 		ra.RaFile.__init__(self)
 		
 		self.handler = handler
@@ -40,11 +40,11 @@ class CvFile(ra.RaFile):
 		self.read(filePath)
 
 	def raiseException(self, exception):
-		"""wrapper function for raising exception"""
+		'''wrapper function for raising exception'''
 		raise exception
 
-	def readStanza(self, stanza):
-		"""overriden method from RaFile which makes specialized stanzas based on type"""
+	def readStanza(self, stanza, key=None):
+		'''overriden method from RaFile which makes specialized stanzas based on type'''
 		e = ra.RaStanza()
 		ek, ev = e.readStanza(stanza)
 		type = e['type']
@@ -87,21 +87,21 @@ class CvFile(ra.RaFile):
 
 
 	def validate(self):
-		"""base validation method which calls all stanzas' validate"""
+		'''base validation method which calls all stanzas' validate'''
 		for stanza in self.itervalues():
 				stanza.validate(self)
 
 				
 class CvStanza(ra.RaStanza):
-	"""base class for a single stanza in the cv, which adds validation"""
+	'''base class for a single stanza in the cv, which adds validation'''
 	
 	def __init__(self):
 		ra.RaStanza.__init__(self)
 
 	def readStanza(self, stanza):
-		"""
+		'''
 		Populates this entry from a single stanza
-		"""
+		'''
 		
 		for line in stanza:
 			self.readLine(line)
@@ -109,10 +109,10 @@ class CvStanza(ra.RaStanza):
 		return self.readName(stanza[0])
 		
 	def readName(self, line):
-		"""
+		'''
 		Extracts the Stanza's name from the value of the first line of the
 		stanza.
-		"""
+		'''
 
 		if len(line.split(' ', 1)) != 2:
 			raise ValueError()
@@ -122,9 +122,9 @@ class CvStanza(ra.RaStanza):
 		return names
 		
 	def readLine(self, line):
-		"""
+		'''
 		Reads a single line from the stanza, extracting the key-value pair
-		""" 
+		''' 
 
 		if line.startswith('#') or line == '':
 			self.append(line)
@@ -145,7 +145,7 @@ class CvStanza(ra.RaStanza):
 				self[raKey] = raVal
 		
 	def validate(self, ra, necessary=None, optional=None):
-		"""default validation for a generic cv stanza. Should be called with all arguments if overidden"""
+		'''default validation for a generic cv stanza. Should be called with all arguments if overidden'''
 		
 		if necessary == None:
 			necessary = set()
@@ -172,14 +172,14 @@ class CvStanza(ra.RaStanza):
 		
 		
 	def checkDuplicates(self, ra):
-		"""ensure that all keys are present and not blank in the stanza"""
+		'''ensure that all keys are present and not blank in the stanza'''
 		for key in self.iterkeys():
 			if '__$$' in key:
 				newkey = key.split('__$$', 1)[0]
 				ra.handler(DuplicateKeyError(self, newkey))
 		
 	def checkMandatory(self, ra, keys):
-		"""ensure that all keys are present and not blank in the stanza"""
+		'''ensure that all keys are present and not blank in the stanza'''
 		for key in keys:
 			if not key in self.keys():
 				ra.handler(MissingKeyError(self, key))
@@ -187,20 +187,20 @@ class CvStanza(ra.RaStanza):
 				ra.handler(BlankKeyError(self, key))
 				
 	# def checkOptional(self, ra, keys):
-		# """ensure that all keys are present and not blank in the stanza"""
+		# '''ensure that all keys are present and not blank in the stanza'''
 		# for key in keys:
 			# if key in self and self[key] == '':
 				# ra.handler(BlankKeyError(self, key))
 		
 	def checkExtraneous(self, ra, keys):
-		"""check for keys that are not in the list of keys"""
+		'''check for keys that are not in the list of keys'''
 		for key in self.iterkeys():
 			if key not in keys and '__$$' not in key:
 				ra.handler(ExtraKeyError(self, key))
 	
 	def checkFullRelational(self, ra, key, other, type):
-		"""check that the value at key matches the value of another
-		stanza's value at other, where the stanza type is specified by type"""
+		'''check that the value at key matches the value of another
+		stanza's value at other, where the stanza type is specified by type'''
 		
 		p = 0
 		if key not in self:
@@ -215,7 +215,7 @@ class CvStanza(ra.RaStanza):
 			ra.handler(NonmatchKeyError(self, key, other))
 	
 	def checkRelational(self, ra, key, other):
-		"""check that the value at key matches the value at other"""
+		'''check that the value at key matches the value at other'''
 		p = 0
 		
 		if key not in self:
@@ -230,7 +230,7 @@ class CvStanza(ra.RaStanza):
 			ra.handler(NonmatchKeyError(self, key, other))
 			
 	def checkListRelational(self, ra, key, other):
-		"""check that the value at key matches the value at other"""
+		'''check that the value at key matches the value at other'''
 		
 		if key not in self:
 			return
@@ -260,7 +260,7 @@ class CvStanza(ra.RaStanza):
 						ra.handler(InvalidProtocolError(self, protocol))
 				
 class CvError(Exception):
-	"""base error class for the cv."""
+	'''base error class for the cv.'''
 	def __init__(self, stanza):
 		self.stanza = stanza
 		self.msg = ''
@@ -269,7 +269,7 @@ class CvError(Exception):
 		return str('%s[%s] %s: %s' % (self.stanza.name, self.stanza['type'], self.__class__.__name__, self.msg))
 		
 class MissingKeyError(CvError):
-	"""raised if a mandatory key is missing"""
+	'''raised if a mandatory key is missing'''
 	
 	def __init__(self, stanza, key):
 		CvError.__init__(self, stanza)
@@ -280,7 +280,7 @@ class MissingKeyError(CvError):
 	
 	
 class DuplicateKeyError(CvError):
-	"""raised if a key is duplicated"""
+	'''raised if a key is duplicated'''
 	
 	def __init__(self, stanza, key):
 		CvError.__init__(self, stanza)
@@ -291,7 +291,7 @@ class DuplicateKeyError(CvError):
 	
 	
 class BlankKeyError(CvError):
-	"""raised if a mandatory key is blank"""
+	'''raised if a mandatory key is blank'''
 	
 	def __init__(self, stanza, key):
 		CvError.__init__(self, stanza)
@@ -302,7 +302,7 @@ class BlankKeyError(CvError):
 	
 	
 class ExtraKeyError(CvError):
-	"""raised if an extra key not in the list of keys is found"""
+	'''raised if an extra key not in the list of keys is found'''
 
 	def __init__(self, stanza, key):
 		CvError.__init__(self, stanza)
@@ -313,7 +313,7 @@ class ExtraKeyError(CvError):
 
 		
 class NonmatchKeyError(CvError):
-	"""raised if a relational key does not match any other value"""
+	'''raised if a relational key does not match any other value'''
 	
 	def __init__(self, stanza, key, val):
 		CvError.__init__(self, stanza)
@@ -324,7 +324,7 @@ class NonmatchKeyError(CvError):
 		
 		
 class DuplicateVendorIdError(CvError):
-	"""When there exists more than one connected component of stanzas (through derivedFrom) with the same vendorId"""
+	'''When there exists more than one connected component of stanzas (through derivedFrom) with the same vendorId'''
 	
 	def __init__(self, stanza):
 		CvError.__init__(self, stanza)
@@ -335,7 +335,7 @@ class DuplicateVendorIdError(CvError):
 		
 		
 class InvalidProtocolError(CvError):
-	"""raised if a protocol doesnt match anything in the directory"""
+	'''raised if a protocol doesnt match anything in the directory'''
 	
 	def __init__(self, stanza, key):
 		CvError.__init__(self, stanza)
@@ -346,7 +346,7 @@ class InvalidProtocolError(CvError):
 	
 		
 class InvalidTypeError(CvError):
-	"""raised if a relational key does not match any other value"""
+	'''raised if a relational key does not match any other value'''
 	
 	def __init__(self, stanza, key):
 		CvError.__init__(self, stanza)

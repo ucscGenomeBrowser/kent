@@ -154,6 +154,12 @@ if ( -e GitReports.ok ) then
     echo "Git Reports finished ok. [${0}: `date`]"
     echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
     echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." $USER donnak kuhn ann pauline kate luvina
+
+# add engineers that want to be notified of the build being complete
+    @ LASTNN=$BRANCHNN - 1
+    foreach USER (braney larrym angie hiram tdreszer kate)
+	echo  "v$BRANCHNN has been built successfully on beta.  Time to do your code summaries.\n\nFor a git log use:\n git log --author=$USER v${LASTNN}_branch.1..v${BRANCHNN}_base  " | mail -s "Code summaries are due" $USER
+    end
 else
     echo "Git Reports had some error, no ok file found. [${0}: `date`]"
 endif

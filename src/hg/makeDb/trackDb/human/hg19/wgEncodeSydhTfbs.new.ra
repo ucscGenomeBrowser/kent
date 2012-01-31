@@ -23,8 +23,8 @@ priority 0
 type bed 3
 origAssembly hg19
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
-subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HEPG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293T=HEK293-T-REx HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src NB4=NB4 NT2D1=NT2-D1 PANC1=PANC1 PBDE=PBDE PBDEFetal=PBDE-Fetal PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y U2OS=U2OS 
-subGroup3 factor Factor AP2alpha=AP-2&alpha; AP2gamma=AP-2&gamma; ATF3=ATF3 BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB CFOS=c-FOS CHD2AB68301=CHD2_(AB68301) CJUN=c-Jun CMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-268) GATA3SC269=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MAFFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC584=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF7L2=TCF7L2 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZNF143166181AP=Znf143_(16618-1-AP) ZNF217=ZNF217 ZNF274=ZNF274 ZNF274M01=ZNF274_(M01) ZNF263=ZNF263 ZZZ3=ZZZ3 zInputgoat=Input_(<i>IgG-goat</i>) zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1HESC=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELAS3=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HEPG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293T=HEK293-T-REx HCT116=HCT-116 IMR90=IMR90 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src NB4=NB4 NT2D1=NT2-D1 PANC1=PANC1 PBDE=PBDE PBDEFetal=PBDE-Fetal PBMC=PBMC Raji=Raji SHSY5Y=SH-SY5Y U2OS=U2OS 
+subGroup3 factor Factor AP2alpha=AP-2&alpha; AP2gamma=AP-2&gamma; ATF3=ATF3 BAF155=BAF155 BAF170=BAF170 BDP1=BDP1 BHLHE40NB100=BHLHE40_(NB100-1800) BRCA1A300=BRCA1_(A300-000A) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB CFOS=c-FOS CHD2AB68301=CHD2_(AB68301) CJUN=c-Jun CMYC=c-Myc CTBP2=CtBP2 CTCFSC15914=CTCF_(SC-15914) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF1SC137065=EBF1_(SC-137065) ELK4=ELK4 ERRA=ERRA GATA1=GATA1 GATA2=GATA2 GATA3=GATA3_(SC-268) GATA3SC269=GATA3_(SC-269) GCN5=GCN5 GRP20=GRp20 GTF2B=GTF2B GTF2F1ab28179=GTF2F1_(AB28179) HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 IKZF1IKNUCLA=IKZF1_(IkN)_(UCLA) INI1=INI1 IRF1=IRF1 IRF3=IRF3 JUND=JunD KAP1=KAP1 MAFFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max Mxi1AF4185=Mxi1_(AF4185) NFE2SC22827=NF-E2_(SC-22827) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300SC48343=p300_(SC-48343) P300SC584=p300_(SC-584) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM19115=PRDM1_(9115) RAD21=Rad21 RFX5200401194=RFX5_(200-401-194) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SPT20=SPT20 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF7L2=TCF7L2 TCF7L2C9B92565=TCF7L2_C9B9_(2565) TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZNF143166181AP=Znf143_(16618-1-AP) ZNF217=ZNF217 ZNF274=ZNF274 ZNF274M01=ZNF274_(M01) ZNF263=ZNF263 ZZZ3=ZZZ3 zInputgoat=Input_(<i>IgG-goat</i>) zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>) zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGGOAT=IgG-goat IGGMUS=IgG-mus IGGRAB=IgG-rab IGGYale=IgG-Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
 subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct_36hr ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=4-hydroxytamoxifen TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
@@ -1068,14 +1068,15 @@ wgEncode 1
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878MaxStdPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 Max Std
-        longLabel GM12878 Max Standard ChIP-seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=MAX cellType=1GM12878 control=std treatment=aNone
-        type narrowPeak
-        color 153,38,0
+        #track wgEncodeSydhTfbsGm12878MaxStdPk
+        #parent wgEncodeSydhTfbsViewPeaks off
+        #shortLabel GM78 Max Std
+        #longLabel GM12878 Max Standard ChIP-seq Peaks from ENCODE/SYDH
+        #subGroups view=Peaks factor=MAX cellType=1GM12878 control=std treatment=aNone
+        #type narrowPeak
+        #color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
+		# revoked
 
         track wgEncodeSydhTfbsGm12878Pol2StdPk
         parent wgEncodeSydhTfbsViewPeaks on 
@@ -1866,15 +1867,6 @@ wgEncode 1
         color 153,38,0
         # subId=4165 dateSubmitted=2011-06-03
 
-        track wgEncodeSydhTfbsGm12878NfkbIggrabPk
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel GM78 NKB IgR
-        longLabel GM12878 NFKB IgG-rab ChIP-seq Peaks from ENCODE/SYDH
-        subGroups view=Peaks factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
-        type narrowPeak
-        color 153,38,0
-        # subId=4165 dateSubmitted=2011-06-03
-
         track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabPk
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel GM78 TNF NKB IgR
@@ -2478,6 +2470,65 @@ wgEncode 1
         type narrowPeak
         color 0,107,27
         # subId=4930 dateSubmitted=2011-09-29
+
+        track wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel HeLa-S3 TCF7L2_C9B9_(2565) Pk
+        longLabel HeLa-S3 TCF7L2 C9B9 (2565) UCDavis ChIP-seq Peaks from ENCODE/USC #autogenerated
+        subGroups view=Peaks factor=TCF7L2C9B92565 cellType=2HELAS3 control=UCD treatment=aNone
+        type narrowPeak
+        color 0,119,158
+        # subId=5255 dateSubmitted=2011-12-19
+
+        track wgEncodeSydhTfbsImr90Pol2IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel IMR90 Pol2 Pk
+        longLabel IMR90 Pol2 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
+        subGroups view=Peaks factor=POL2 cellType=IMR90 control=IGGRAB treatment=aNone
+        type narrowPeak
+        # subId=5258 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsImr90Rad21IggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel IMR90 Rad21 Pk
+        longLabel IMR90 Rad21 IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
+        subGroups view=Peaks factor=RAD21 cellType=IMR90 control=IGGRAB treatment=aNone
+        type narrowPeak
+        # subId=5257 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsMcf7Gata3sc269UcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel MCF-7 GATA3_(SC-269) Pk
+        longLabel MCF-7 GATA3 (SC-269) UCDavis ChIP-seq Peaks from ENCODE/USC #autogenerated
+        subGroups view=Peaks factor=GATA3SC269 cellType=MCF7 control=UCD treatment=aNone
+        type narrowPeak
+        # subId=5254 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 IKZF1_(IkN)_(UCLA) Pk
+        longLabel GM12878 IKZF1 (IkN) (UCLA) UCDavis ChIP-seq Peaks from ENCODE/USC #autogenerated
+        subGroups view=Peaks factor=IKZF1IKNUCLA cellType=1GM12878 control=UCD treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=5253 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsImr90CebpbIggrabPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel IMR90 CEBPB Pk
+        longLabel IMR90 CEBPB IgG-rab ChIP-seq Peaks from ENCODE/Stanford #autogenerated
+        subGroups view=Peaks factor=CEBPB cellType=IMR90 control=IGGRAB treatment=aNone
+        type narrowPeak
+        # subId=5256 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsGm12878MaxIggmusPk
+        parent wgEncodeSydhTfbsViewPeaks off
+        shortLabel GM12878 Max Pk
+        longLabel GM12878 Max IgG-mus ChIP-seq Peaks from ENCODE/Stanford #autogenerated
+        subGroups view=Peaks factor=MAX cellType=1GM12878 control=IGGMUS treatment=aNone
+        type narrowPeak
+        color 153,38,0
+        # subId=5259 dateSubmitted=2011-12-18
 
     #Signal Track SYDH TFBS#
     #Short Labels for signal =Sg # 
@@ -3535,23 +3586,15 @@ wgEncode 1
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
 
-        track wgEncodeSydhTfbsGm12878MaxStdSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 Max Std
-        longLabel GM12878 Max Standard ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=MAX cellType=1GM12878 control=std treatment=aNone
-        type bigWig 0.000000 8308.000000
-        color 153,38,0
+        #track wgEncodeSydhTfbsGm12878MaxStdSig
+        #parent wgEncodeSydhTfbsViewSignal off
+        #shortLabel GM78 Max Std
+        #longLabel GM12878 Max Standard ChIP-seq Signal from ENCODE/SYDH
+        #subGroups view=Signal factor=MAX cellType=1GM12878 control=std treatment=aNone
+        #type bigWig 0.000000 8308.000000
+        #color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02
-
-        track wgEncodeSydhTfbsGm12878NfkbIggrabSig
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel GM78 NKB IgR
-        longLabel GM12878 NFKB IgG-rab ChIP-seq Signal from ENCODE/SYDH
-        subGroups view=Signal factor=NFKB cellType=1GM12878 control=IGGRAB treatment=aNone
-        type bigWig 0.000000 9094.099609
-        color 153,38,0
-        # subId=3053 dateSubmitted=2010-12-02
+		# revoked
 
         track wgEncodeSydhTfbsGm12878NfkbTnfaIggrabSig
         parent wgEncodeSydhTfbsViewSignal off
@@ -5788,4 +5831,71 @@ wgEncode 1
         type bigWig 1.000000 8986.000000
         color 189,0,157
         # subId=4925 dateSubmitted=2011-09-29
+
+        track wgEncodeSydhTfbsHelas3Tcf7l2c9b92565UcdSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 TCF7L2_C9B9_(2565) Sig
+        longLabel HeLa-S3 TCF7L2 C9B9 (2565) UCDavis ChIP-seq Signal from ENCODE/USC #autogenerated
+        subGroups view=Signal factor=TCF7L2C9B92565 cellType=2HELAS3 control=UCD treatment=aNone
+        type bigWig 1.000000 16621.000000
+        color 0,119,158
+        # subId=5255 dateSubmitted=2011-12-19
+
+        track wgEncodeSydhTfbsImr90InputIggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel IMR90 Input Sig
+        longLabel IMR90 Input IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
+        subGroups view=Signal factor=zInputrab cellType=IMR90 control=IGGRAB treatment=aNone
+        type bigWig 1.000000 27735.000000
+        # subId=5260 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsImr90Pol2IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel IMR90 Pol2 Sig
+        longLabel IMR90 Pol2 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
+        subGroups view=Signal factor=POL2 cellType=IMR90 control=IGGRAB treatment=aNone
+        type bigWig 1.000000 20680.000000
+        # subId=5258 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsImr90Rad21IggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel IMR90 Rad21 Sig
+        longLabel IMR90 Rad21 IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
+        subGroups view=Signal factor=RAD21 cellType=IMR90 control=IGGRAB treatment=aNone
+        type bigWig 1.000000 18682.000000
+        # subId=5257 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsMcf7Gata3sc269UcdSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel MCF-7 GATA3_(SC-269) Sig
+        longLabel MCF-7 GATA3 (SC-269) UCDavis ChIP-seq Signal from ENCODE/USC #autogenerated
+        subGroups view=Signal factor=GATA3SC269 cellType=MCF7 control=UCD treatment=aNone
+        type bigWig 1.000000 22065.000000
+        # subId=5254 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsGm12878Ikzf1iknuclaUcdSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 IKZF1_(IkN)_(UCLA) Sig
+        longLabel GM12878 IKZF1 (IkN) (UCLA) UCDavis ChIP-seq Signal from ENCODE/USC #autogenerated
+        subGroups view=Signal factor=IKZF1IKNUCLA cellType=1GM12878 control=UCD treatment=aNone
+        type bigWig 1.000000 16841.000000
+        color 153,38,0
+        # subId=5253 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsImr90CebpbIggrabSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel IMR90 CEBPB Sig
+        longLabel IMR90 CEBPB IgG-rab ChIP-seq Signal from ENCODE/Stanford #autogenerated
+        subGroups view=Signal factor=CEBPB cellType=IMR90 control=IGGRAB treatment=aNone
+        type bigWig 1.000000 57153.000000
+        # subId=5256 dateSubmitted=2011-12-18
+
+        track wgEncodeSydhTfbsGm12878MaxIggmusSig
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Max Sig
+        longLabel GM12878 Max IgG-mus ChIP-seq Signal from ENCODE/Stanford #autogenerated
+        subGroups view=Signal factor=MAX cellType=1GM12878 control=IGGMUS treatment=aNone
+        type bigWig 1.000000 15789.000000
+        color 153,38,0
+        # subId=5259 dateSubmitted=2011-12-18
 

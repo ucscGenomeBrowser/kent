@@ -1,4 +1,4 @@
-# Data Agreement File $Revision: 1.6 $
+# Data Agreement File $Revision: 1.8 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -31,7 +31,7 @@ group             expression
 variables         cell,readType,mapAlgorithm,insertLength,treatment
 assembly          hg19
 
-validationSettings validateFiles.fastq:mmCheckOneInN=10;validateFiles.bam:bamPercent=98,mismatches=6
+validationSettings validateFiles.bam:bamPercent=98,mismatches=6
 
 # Track/view definition
 
@@ -56,6 +56,7 @@ type             fastq
 hasReplicates    yes
 required         no
 downloadOnly     yes
+
 view             Signal
 type             bigWig
 hasReplicates    yes
@@ -139,7 +140,7 @@ required         no
 downloadOnly     yes
 
 view             Junctions
-type             junction
+type             bigBed
 hasReplicates    yes
 required         no
 downloadOnly     yes

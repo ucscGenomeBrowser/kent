@@ -232,7 +232,7 @@ if (kindOfChild != kocOrphan)
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
         jsonHashAddNumber(ele, "shouldPack", 0); // default vis is full, but pack is an option
-        track->canPack = parentTdb->canPack;
+        track->canPack = rTdbTreeCanPack(parentTdb);
         }
     }
 
@@ -240,10 +240,12 @@ if (kindOfChild != kocOrphan)
 jsonHashAddNumber(ele, "hasChildren", slCount(track->tdb->subtracks));
 
 // Configuring?
-if (!configurable || track->hasUi == FALSE)
+int cfgByPopup = configurableByAjax(track->tdb,0);
+if (!configurable
+||  track->hasUi == FALSE
+||  cfgByPopup == cfgNone)
     jsonHashAddString(ele, "configureBy", "none");
-else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
-    regexMatch(track->track, "^snp[0-9]+") || regexMatch(track->track, "^cons[0-9]+way") || regexMatch(track->track, "^multiz") ? "off" : "on"), "off"))
+else if (cfgByPopup < 0)  // denied via ajax, but allowed via full normal hgTrackUi page
     jsonHashAddString(ele, "configureBy", "clickThrough");
 else
     jsonHashAddString(ele, "configureBy", "popup");
@@ -993,7 +995,7 @@ int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topL
 struct imgSlice *slice;
 char *imgFile = NULL;               // name of file that hold the image
 char *neededId = NULL; // id is only added it it is NOT the trackId.
-if (imgTrack->tdb == NULL || differentString(id,imgTrack->tdb->track))
+if (imgTrack->tdb == NULL || differentStringNullOk(id, imgTrack->tdb->track))
     neededId = id;
 
 int count = 0;
@@ -1233,11 +1235,7 @@ boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,i
    returns TRUE if successfully defined as having a portal */
 {
 if( (int)imageMultiple == 0)
-#ifdef IMAGEv2_DRAG_SCROLL_SZ
     imageMultiple = IMAGEv2_DRAG_SCROLL_SZ;
-#else//ifndef IMAGEv2_DRAG_SCROLL_SZ
-    imageMultiple = 1;
-#endif//ndef IMAGEv2_DRAG_SCROLL_SZ
 
 imgBox->portalStart = imgBox->chromStart;
 imgBox->portalEnd   = imgBox->chromEnd;
@@ -1754,10 +1752,8 @@ if(slice->parentImg)
         hPrintf(" display:none;");
     hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
 
-    #ifdef IMAGEv2_DRAG_SCROLL
     if(imgBox->showPortal && (sliceType==stData || sliceType==stCenter))
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
-    #endif //def IMAGEv2_DRAG_SCROLL
     hPrintf("'>\n");
     }
 struct mapSet *map = sliceGetMap(slice,FALSE); // Could be the image map or slice specific
@@ -1834,7 +1830,6 @@ if(imgBox->bgImg)
     hPrintf("</style>\n");
     }
 
-#ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
     {
     // Let js code know what's up
@@ -1851,7 +1846,6 @@ if(imgBox->showPortal)
     jsonHashAddDouble( jsonForClient,"imgBoxBasesPerPixel",imgBox->basesPerPixel);
     }
 else
-#endif//def IMAGEv2_DRAG_SCROLL
     jsonHashAddBoolean(jsonForClient,"imgBoxPortal",       FALSE);
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
@@ -1893,11 +1887,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         }
 
     // Main/Data image region
-#ifdef IMAGEv2_DRAG_SCROLL
     hPrintf(" <TD id='td_data_%s' title='click & drag to scroll; shift+click & drag to zoom' width=%d class='tdData'>\n", trackName, imgBox->width);
-#else///ifndef IMAGEv2_DRAG_SCROLL
-    hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
-#endif//ndef IMAGEv2_DRAG_SCROLL
     // centerLabel
     if(imgTrack->hasCenterLabel)
         {

@@ -139,9 +139,9 @@ tableName wgEncodeBroadHistoneA549H3k04me3Etoh02Sig
 treatment EtOH_0.02pct
 view Signal
 
-metaObject wgEncodeBroadHistoneDnd41ControlAlnRep1
+metaObject wgEncodeBroadHistoneDnd41ControlStdAlnRep1
 objType file
-antibody Control
+antibody Input
 cell Dnd41
 composite wgEncodeBroadHistone
 control std
@@ -150,7 +150,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41ControlAlnRep1.bam
+fileName wgEncodeBroadHistoneDnd41ControlStdAlnRep1.bam,wgEncodeBroadHistoneDnd41ControlStdAlnRep1.bam.bai
 grant Bernstein
 lab Broad
 origAssembly hg19
@@ -160,9 +160,9 @@ setType exp
 subId 5022
 view Alignments
 
-metaObject wgEncodeBroadHistoneDnd41ControlAlnRep2
+metaObject wgEncodeBroadHistoneDnd41ControlStdAlnRep2
 objType file
-antibody Control
+antibody Input
 cell Dnd41
 composite wgEncodeBroadHistone
 control std
@@ -171,7 +171,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41ControlAlnRep2.bam
+fileName wgEncodeBroadHistoneDnd41ControlStdAlnRep2.bam,wgEncodeBroadHistoneDnd41ControlStdAlnRep2.bam.bai
 grant Bernstein
 lab Broad
 origAssembly hg19
@@ -181,9 +181,9 @@ setType exp
 subId 5022
 view Alignments
 
-metaObject wgEncodeBroadHistoneDnd41ControlRawDataRep1
+metaObject wgEncodeBroadHistoneDnd41ControlStdRawDataRep1
 objType file
-antibody Control
+antibody Input
 cell Dnd41
 composite wgEncodeBroadHistone
 control std
@@ -192,7 +192,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41ControlRawDataRep1.fastq.gz
+fileName wgEncodeBroadHistoneDnd41ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina Genome Analyzer IIx
@@ -203,9 +203,9 @@ setType exp
 subId 5022
 view RawData
 
-metaObject wgEncodeBroadHistoneDnd41ControlRawDataRep2
+metaObject wgEncodeBroadHistoneDnd41ControlStdRawDataRep2
 objType file
-antibody Control
+antibody Input
 cell Dnd41
 composite wgEncodeBroadHistone
 control std
@@ -214,7 +214,7 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41ControlRawDataRep2.fastq.gz
+fileName wgEncodeBroadHistoneDnd41ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 labVersion Illumina HiSeq 2000
@@ -225,9 +225,9 @@ setType exp
 subId 5022
 view RawData
 
-metaObject wgEncodeBroadHistoneDnd41ControlSig
+metaObject wgEncodeBroadHistoneDnd41ControlStdSig
 objType table
-antibody Control
+antibody Input
 cell Dnd41
 composite wgEncodeBroadHistone
 control std
@@ -236,14 +236,14 @@ dataType ChipSeq
 dataVersion post ENCODE Jan 2011 Freeze
 dateSubmitted 2011-10-26
 dateUnrestricted 2012-07-25
-fileName wgEncodeBroadHistoneDnd41ControlSig.bigWig
+fileName wgEncodeBroadHistoneDnd41ControlStdSig.bigWig
 grant Bernstein
 lab Broad
 origAssembly hg19
 project wgEncode
 setType exp
 subId 5022
-tableName wgEncodeBroadHistoneDnd41ControlSig
+tableName wgEncodeBroadHistoneDnd41ControlStdSig
 view Signal
 
 metaObject wgEncodeBroadHistoneDnd41CtcfAlnRep1
@@ -34366,4 +34366,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: 1108572029
+# MAGIC: -268143022

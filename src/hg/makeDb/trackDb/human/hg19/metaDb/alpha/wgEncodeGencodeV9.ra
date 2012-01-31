@@ -268,23 +268,6 @@ project wgEncode
 subId 5126
 tableName wgEncodeGencodeTranscriptSupportV9
 
-metaObject wgEncodeGencodeAnnotationRemarkV9
-objType table
-composite wgEncodeGencodeV9
-dataType Gencode
-dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-09-01
-dccAccession wgEncodeEH002251
-expId 2251
-fileName wgEncodeGencodeAnnotationRemarkV9.tab.gz
-grant Hubbard
-lab Sanger
-labExpId V9
-labVersion Annotation Remarks
-project wgEncode
-subId 5126
-tableName wgEncodeGencodeAnnotationRemarkV9
-
 metaObject wgEncodeGencodeUniProtV9
 objType table
 composite wgEncodeGencodeV9
@@ -308,4 +291,4 @@ objType composite
 composite wgEncodeGencodeV9
 expVars lab,dataType,labExpId
 
-# MAGIC: -1018736410
+# MAGIC: -1018732250

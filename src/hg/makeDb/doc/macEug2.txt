@@ -100,6 +100,7 @@ taxId 9315
 	> makeGenomeDb.log 2>&1 &
     # real  26m19.911s
     #	add the trackDb entries to the source tree, and the 2bit link:
+    # we will re-ln with masked one after we done the mask business later! ***
     ln -s `pwd`/macEug2.unmasked.2bit /gbdb/macEug2/macEug2.2bit
 
     #  Per instructions in makeGenomeDb.log:
@@ -150,9 +151,16 @@ taxId 9315
     # 1201805660 lower) in 277711 sequences in 1 files
     # %39.08 masked total, %47.39 masked real
 
+    # double check with featureBits
+    featureBits -countGaps macEug2 gap
+    # 539107067 bases of 3075184024 (17.531%) in intersection
+    
+    rm /gbdb/macEug2/macEug2.2bit
+    ln -s `pwd`/macEug2.2bit /gbdb/macEug2/macEug2.2bit
+
 #########################################################################
 # Marking *all* gaps - they are all in the AGP file
-#	(working - 2010-11-08 - Chin)
+#	(DONE - 2010-11-08 - Chin)
     mkdir /hive/data/genomes/macEug2/bed/allGaps
     cd /hive/data/genomes/macEug2/bed/allGaps
 
@@ -333,5 +341,60 @@ macEug2.genbank.est.native.loadDesc = yes
     #   3075184024 bases (539107070 N's 2536076954 real 1617929026 upper 
     #   918147928 lower) in 277711 sequences in 1 files
     #   %29.86 masked total, %36.20 masked real
+
+############################################################################
+# reset position to RHO location as found from blat of hg19 RHO gene
+    hgsql -e \
+'update dbDb set defaultPos="GL095587:25,998-40,635" where name="macEug2";' \
+        hgcentraltest
+    # set default Db to macEug2
+     hgsql -e "update defaultDb set name='macEug2' where genome = 'Wallaby';" \
+         hgcentraltest
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE 2011-12-07  - Chin)
+# After getting a blat server assigned by the Blat Server Gods,
+# Assembly macEug2 has been started on host blat2 on port 17784 (trans) and
+# port 17785 (untrans).
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("macEug2", "blat2", "17784", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("macEug2", "blat2", "17785", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2011-12-07 - Chin)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=macEug2 -all all.joiner
+    # Error: macEug2.tableList tables not in .joiner file ignored
+
+    mkdir /hive/data/genomes/macEug2/goldenPath
+    cd /hive/data/genomes/macEug2/goldenPath
+    makeDownloads.pl macEug2 > do.log 2>&1
+    # edit all htmls and READMEs per do.log instruction 
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/macEug2/pushQ
+    cd /hive/data/genomes/macEug2/pushQ
+    makePushQSql.pl macEug2 > macEug2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+# WARNING: macEug2 does not have seq
+# WARNING: macEug2 does not have extFile
+
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#  bosTau4ChainPileUp
+
+    #   copy it to hgwbeta
+    scp -p macEug2.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < macEug2.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
 
 #########################################################################

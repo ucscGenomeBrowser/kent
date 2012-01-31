@@ -1224,6 +1224,7 @@ char *cgiBooleanShadowPrefix()
 {
 return "boolshad.";
 }
+#define BOOLSHAD_EXTRA "class='cbShadow'"
 
 boolean cgiBooleanDefined(char *name)
 /* Return TRUE if boolean variable is defined (by
@@ -1254,7 +1255,7 @@ printf("<INPUT TYPE=CHECKBOX NAME=\"%s\"%s VALUE=on %s%s%s>", name, idBuf,
     (checked ? " CHECKED" : ""),
     (enabled ? "" : " DISABLED"));
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVar(buf, ( enabled ? "0" : (checked ? "-1" : "-2")));
+cgiMakeHiddenVarWithExtra(buf, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA);
 }
 
 void cgiMakeCheckBoxUtil(char *name, boolean checked, char *msg, char *id)
@@ -1308,7 +1309,7 @@ void cgiMakeCheckBoxFourWay(char *name, boolean checked, boolean enabled, char *
 /* Make check box - with fourWay functionality (checked/unchecked by enabled/disabled)
  * Also makes a shadow hidden variable that supports the 2 boolean states. */
 {
-char shadName[256], extra[256];
+char shadName[256];
 
 printf("<INPUT TYPE=CHECKBOX NAME='%s'", name);
 if(id)
@@ -1316,7 +1317,10 @@ if(id)
 if(checked)
     printf(" CHECKED");
 if(!enabled)
-    printf(" DISABLED");
+    {
+    if (findWordByDelimiter("disabled",' ', classes) == NULL) // fauxDisabled ?
+        printf(" DISABLED");
+    }
 if(classes)
     printf(" class='%s'",classes);
 if(moreHtml)
@@ -1325,8 +1329,7 @@ printf(">");
 
 // The hidden var needs to hold the 4way state
 safef(shadName, sizeof(shadName), "%s%s", cgiBooleanShadowPrefix(), name);
-safef(extra, sizeof(extra), "id='%s_4way'",name);
-cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),extra); // Doesn't need enabled/checked!
+cgiMakeHiddenVarWithExtra(shadName, ( enabled ? "0" : (checked ? "-1" : "-2")),BOOLSHAD_EXTRA); // Doesn't need enabled/checked!
 }
 
 
@@ -1338,7 +1341,7 @@ void cgiMakeHiddenBoolean(char *name, boolean on)
 char buf[256];
 cgiMakeHiddenVar(name, on ? "on" : "off");
 safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
-cgiMakeHiddenVar(buf, "1");
+cgiMakeHiddenVarWithExtra(buf, "1",BOOLSHAD_EXTRA);  // shouldn't this be "0" or "off" ?   Probably any non-"on" will work.
 }
 
 void cgiMakeTextArea(char *varName, char *initialVal, int rowCount, int columnCount)

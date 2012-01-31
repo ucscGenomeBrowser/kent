@@ -1447,9 +1447,10 @@ md5sum 2cd8c007ee34b84f8e8dc4499af91eb1
 obtainedBy HudsonAlpha
 project wgEncode
 replicate 1
+sex F
 subId 4942
 tableName wgEncodeHaibMethyl450U87SitesRep1
 treatment None
 view Sites
 
-# MAGIC: -1837496651
+# MAGIC: -1837493811

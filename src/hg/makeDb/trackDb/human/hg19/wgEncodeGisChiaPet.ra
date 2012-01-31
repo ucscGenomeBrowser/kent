@@ -2,7 +2,7 @@ track wgEncodeGisChiaPet
 compositeTrack on
 superTrack wgEncodeChromSuper dense
 shortLabel GIS ChIA-PET
-longLabel  Chromatin Interations PET (ChIA-PET) from ENCODE/GIS-Ruan
+longLabel Chromatin Interaction Analysis Paired-End Tags (ChIA-PET) from ENCODE/GIS-Ruan
 group regulation
 subGroup1 view Views Interactions=Interactions Signal=Signal 
 subGroup2 cellType Cell_Line 1K562=K562<BR>&nbsp;(Tier_1) 2HELAS3=HeLa-S3<BR>&nbsp;(Tier_2) HCT116=HCT-116 MCF7=MCF-7 NB4=NB4 
@@ -100,7 +100,7 @@ noInherit on
         track wgEncodeGisChiaPetMcf7EraaSigRep3
         parent wgEncodeGisChiaPetSignal off
         shortLabel MCF-7 ERalpha_a Sig 3
-        longLabel MCF-7 ERalpha a ChIA-PET Signal Rep 3 from ENCODE/GIS-Ruan
+        longLabel MCF-7 ERalpha_a ChIA-PET Signal Rep 3 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=ERAA cellType=MCF7 rep=rep3
         type bigWig 1.000000 1735.000000
         # subId=4874 dateSubmitted=2011-09-24
@@ -108,7 +108,7 @@ noInherit on
         track wgEncodeGisChiaPetMcf7EraaSigRep2
         parent wgEncodeGisChiaPetSignal off
         shortLabel MCF-7 ERalpha_a Sig 2
-        longLabel MCF-7 ERalpha a ChIA-PET Signal Rep 2 from ENCODE/GIS-Ruan
+        longLabel MCF-7 ERalpha_a ChIA-PET Signal Rep 2 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=ERAA cellType=MCF7 rep=rep2
         type bigWig 1.000000 1372.000000
         # subId=4830 dateSubmitted=2011-09-21
@@ -116,18 +116,18 @@ noInherit on
         track wgEncodeGisChiaPetMcf7EraaSigRep1
         parent wgEncodeGisChiaPetSignal off
         shortLabel MCF-7 ERalpha_a Sig 1
-        longLabel MCF-7 ERalpha a ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
+        longLabel MCF-7 ERalpha_a ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
         subGroups view=Signal factor=ERAA cellType=MCF7 rep=rep1
         type bigWig 1.000000 973.000000
         # subId=4843 dateSubmitted=2011-09-20
 
-        #track wgEncodeGisChiaPetK562CtcfSigRep1
-        #parent wgEncodeGisChiaPetSignal off
-        #shortLabel K562 CTCF Sig 1
-        #longLabel K562 CTCF ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
-        #subGroups view=Signal factor=CTCF cellType=1K562 rep=rep1
-        #type bigWig 1.000000 1007.000000
-        #color 46,0,184
+        track wgEncodeGisChiaPetK562CtcfSigRep1
+        parent wgEncodeGisChiaPetSignal off
+        shortLabel K562 CTCF Sig 1
+        longLabel K562 CTCF ChIA-PET Signal Rep 1 from ENCODE/GIS-Ruan
+        subGroups view=Signal factor=CTCF cellType=1K562 rep=rep1
+        type bigWig 1.000000 1007.000000
+        color 46,0,184
         # subId=4307 dateSubmitted=2011-08-30
 
         track wgEncodeGisChiaPetHelas3Pol2SigRep1
@@ -240,7 +240,7 @@ noInherit on
 		track wgEncodeGisChiaPetMcf7EraaInteractionsRep3
 		parent wgEncodeGisChiaPetInteractions off
 		shortLabel MCF-7 ERalpha_a 3
-		longLabel MCF-7 ERalpha a ChIA-PET Interactions Rep 3 from ENCODE/GIS-Ruan
+		longLabel MCF-7 ERalpha_a ChIA-PET Interactions Rep 3 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=ERAA cellType=MCF7 rep=rep3
 		type bed 12
 		# subId=4874 dateSubmitted=2011-09-24
@@ -248,7 +248,7 @@ noInherit on
 		track wgEncodeGisChiaPetMcf7EraaInteractionsRep2
 		parent wgEncodeGisChiaPetInteractions off
 		shortLabel MCF-7 ERalpha_a 2
-		longLabel MCF-7 ERalpha a ChIA-PET Interactions Rep 2 from ENCODE/GIS-Ruan
+		longLabel MCF-7 ERalpha_a ChIA-PET Interactions Rep 2 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=ERAA cellType=MCF7 rep=rep2
 		type bed 12
 		# subId=4830 dateSubmitted=2011-09-21
@@ -256,7 +256,7 @@ noInherit on
 		track wgEncodeGisChiaPetMcf7EraaInteractionsRep1
 		parent wgEncodeGisChiaPetInteractions off
 		shortLabel MCF-7 ERalpha_a 1
-		longLabel MCF-7 ERalpha a ChIA-PET Interactions Rep 1 from ENCODE/GIS-Ruan
+		longLabel MCF-7 ERalpha_a ChIA-PET Interactions Rep 1 from ENCODE/GIS-Ruan
 		subGroups view=Interactions factor=ERAA cellType=MCF7 rep=rep1
 		type bed 12
 		# subId=4843 dateSubmitted=2011-09-20

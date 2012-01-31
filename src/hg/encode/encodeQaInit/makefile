@@ -24,4 +24,4 @@ ${SCRIPTS}/%: %
 	mv -f $@.tmp $@
 
 clean::
-	echo nothing to clean in hg/encode/encodeMkFilesList/
+	echo nothing to clean in hg/encode/encodeQaInit/

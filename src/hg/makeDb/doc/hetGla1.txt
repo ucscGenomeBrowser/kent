@@ -54,7 +54,7 @@
     # head:tail =  JH165514:JH204779 
 
 #########################################################################
-# Initial  database build (working - 2011-05-09 - Chin)
+# Initial  database build (DONE - 2011-12-02 - Chin)
     cd /hive/data/genomes/hetGla1
     cat << '_EOF_' > hetGla1.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -83,6 +83,7 @@ taxId 10181
     # we will re-ln with masked one after we done the mask business later! ***
     ln -s `pwd`/hetGla1.unmasked.2bit /gbdb/hetGla1/hetGla1.2bit
 
+XXXX TODO - replace *** use actual url for project etc.. in all html files
     #  Per instructions in makeGenomeDb.log:
 # Search for '***' notes in each file in and make corrections (sometimes the
 # files used for a previous assembly might make a better template):
@@ -203,7 +204,7 @@ close (FH);
     # hgsql -e "select count(*) from gap;" hetGla1
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2011-11-06 - Chin)
+## WINDOWMASKER (DONE - 2011-12-06 - Chin)
     mkdir /hive/data/genomes/hetGla1/bed/windowMasker
     cd /hive/data/genomes/hetGla1/bed/windowMasker
     time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
@@ -255,16 +256,16 @@ close (FH);
     # 408993748 bases of 2643978223 (15.469%) in intersection
 
 #########################################################################
-# MASK SEQUENCE WITH WM+TRF (DONE - 2011-09-09 - Hiram)
+# MASK SEQUENCE WITH WM+TRF (DONE - 2011-12-07 - Chin)
     cd /hive/data/genomes/hetGla1
     twoBitMask -add bed/windowMasker/hetGla1.cleanWMSdust.2bit \
         bed/simpleRepeat/trfMask.bed hetGla1.2bit
     #   safe to ignore the warnings about BED file with >=13 fields
     twoBitToFa hetGla1.2bit stdout | faSize stdin > faSize.hetGla1.txt
     cat faSize.hetGla1.txt
-    #   1799143587 bases (97789820 N's 1701353767 real 987044085 upper
-    #   714309682 lower) in 6457 sequences in 1 files
-    #   %39.70 masked total, %41.98 masked real
+    #   2643978223 bases (213913418 N's 2430064805 real 1636844037 upper 
+    #   793220768 lower) in 39267 sequences in 1 files
+    #   %30.00 masked total, %32.64 masked real
 
     #   create symlink to gbdb
     ssh hgwdev
@@ -273,51 +274,66 @@ close (FH);
 
 
 ########################################################################
-# Create kluster run files (working - 2011-12-06 - Chin)
+# Create kluster run files (DONE - 2011-12-07 - Chin)
     # numerator is hetGla1 gapless bases "real" as reported by: 
     featureBits -noRandom -noHap hetGla1 gap
-    # 20740230 bases of 2640182513 (0.786%) in intersection
+    # 213913418 bases of 2430064805 (8.803%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
     #	featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2640182513 / 2861349177 \) \* 1024
-    ( 2640182513 / 2861349177 ) * 1024 = 944.850393
-    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    calc \( 2430064805 / 2861349177 \) \* 1024
+    ( 2430064805 / 2861349177 ) * 1024 = 869.654910
+
+    # ==> use -repMatch=850 according to size scaled down from 1024 for human.
     #	and rounded down to nearest 50
     cd /hive/data/genomes/hetGla1
     blat hetGla1.2bit \
 	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/hetGla1.11.ooc \
-	-repMatch=900 &
-    #	Wrote 33615 overused 11-mers to jkStuff/hetGla1.11.ooc
+	-repMatch=850 &
+    #	Wrote 33104 overused 11-mers to jkStuff/hetGla1.11.ooc
     mkdir /hive/data/staging/data/hetGla1
     cp -p hetGla1.2bit jkStuff/hetGla1.11.ooc /hive/data/staging/data/hetGla1
     cp -p chrom.sizes /hive/data/staging/data/hetGla1
+
     #	check non-bridged gaps to see what the typical size is:
     hgsql -N \
 	-e 'select * from gap where bridge="no" order by size;' hetGla1 \
 	| sort -k7,7nr
+    # all gaps are bridged 
+    hgsql -e "select bridge from gap;" hetGla1 | sort | uniq
+    # bridge
+    # yes
+
     #   most non-bridges gaps have size = 100, follow pig's example (5000) 
     #	decide on a minimum gap for this break
-    gapToLift -verbose=2 -minGap=100 hetGla1 jkStuff/nonBridged.lft \
-	-bedFile=jkStuff/nonBridged.bed
-    cp -p jkStuff/nonBridged.lft \
-	/hive/data/staging/data/hetGla1/hetGla1.nonBridged.lft
-    # ask cluster-admin to copy (evry time if any file chsnged)
+    # skip the following steps
+    # gapToLift -verbose=2 -minGap=100 hetGla1 jkStuff/nonBridged.lft \
+    #	-bedFile=jkStuff/nonBridged.bed
+    # cp -p jkStuff/nonBridged.lft \
+    #	/hive/data/staging/data/hetGla1/hetGla1.nonBridged.lft
+    # ask cluster-admin to copy (evry time if any file changed)
     #    /hive/data/staging/data/hetGla1 directory to
     #    /scratch/data/hetGla1 on cluster nodes
     # before porceed to genbank step
 
 ########################################################################
-# GENBANK AUTO UPDATE (working - 2011-05-10 - Chin)
+# GENBANK AUTO UPDATE (DONE - 2011-12-12 - Chin)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
 
-    # edit etc/genbank.conf to add hetGla1 just before susScr2
+    # check /cluster/data/genbank/data/organism.lst
+    # to find out  number of RefSeqs, genbank mRNAs, and ESTs available
+    # for hetGla1 first
+    # organism             mrnaCnt estCnt  refSeqCnt
+    # Heterocephalus glaber   39      3       0
+    # Use turkey (redmine 1577) as template
+    # Meleagris gallopavo     229     17443   0
+    # edit etc/genbank.conf to add hetGla1 after rn4
 
-# hetGla1 (Cow)
+# hetGla1 (moleRat)
 hetGla1.serverGenome = /hive/data/genomes/hetGla1/hetGla1.2bit
 hetGla1.clusterGenome = /scratch/data/hetGla1/hetGla1.2bit
 hetGla1.ooc = /scratch/data/hetGla1/hetGla1.11.ooc
@@ -330,10 +346,16 @@ hetGla1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaF
 hetGla1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 hetGla1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 hetGla1.downloadDir = hetGla1
-hetGla1.refseq.mrna.native.load  = yes
+hetGla1.downloadDir = hetGla1
+hetGla1.phalus glaber.mrna.native.load  = no
 hetGla1.refseq.mrna.xeno.load = yes
 hetGla1.refseq.mrna.xeno.loadDesc  = yes
-
+hetGla1.genbank.mrna.native.load = yes
+hetGla1.genbank.mrna.native.loadDesc = yes
+hetGla1.genbank.mrna.xeno.load = yes
+hetGla1.genbank.mrna.xeno.loadDesc = yes
+hetGla1.genbank.est.native.load = yes
+hetGla1.genbank.est.native.loadDesc = yes
 
     git add etc/genbank.conf
     git commit -m "Added hetGla1" etc/genbank.conf
@@ -341,111 +363,64 @@ hetGla1.refseq.mrna.xeno.loadDesc  = yes
     # update /cluster/data/genbank/:
     make etc-update
 
+# Edit src/lib/gbGenome.c to add new species.  With these two lines:
+# static char *hetGlaNames[] = {"Heterocephalus glaber", NULL};
+#   ... later ...
+#    {"hetGla", hetGlaNames},
+#  gbGenome.c is  in
+#  /cluster/home/chinhli/kent/src/hg/makeDb/genbank/src/lib
+# make and checkin
 
-# Edit src/lib/gbGenome.c to add new species.  Skipped 
+    make install-server
+    git add src/lib/gbGenome.c
+    git commit -m "adding hetGla1 moleRat" src/lib/gbGenome.c
+    git pull
+    git push	    
 
+    ssh hgwdev                  # used to do this on "genbank" machine
     screen	#  control this business with a screen since it takes a while
+
     cd /cluster/data/genbank
      time nice -n +19 ./bin/gbAlignStep -initial hetGla1 &
-    #   logFile: var/build/logs/2011.05.10-15:10:42.hetGla1.initalign.log
-    #   real    736m26.569s
-    #   To re-do, rm the dir first:
-    #     /cluster/data/genbank/data/aligned/genbank.183.0/hetGla1
-
-
+    #   logFile: var/build/logs/2011.12.13-10:43:43.hetGla1.initalign.log
+    #   real    1029m23.335s 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad hetGla1 &
-    # logFile: var/dbload/hgwdev/logs/2011.05.11-08:24:53.dbload.log
-    #   real    32m5.964s
-
-
+    #   logFile: var/dbload/hgwdev/logs/2011.12.16-08:48:35.dbload.log
+    #   real    193m46.127s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
-    gitpull
+    git pull
     # add hetGla1 to:
-    #   etc/align.dbs
-    #   etc/hgwdev.dbs
-    git add etc/align.dbs
-    git add etc/hgwdev.dbs
-    git commit -m "Added hetGla1 - Cow" etc/align.dbs etc/hgwdev.dbs
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git add  etc/align.dbs
+    git add  etc/hgwdev.dbs
+    git commit  -m "Added hetGla1 - moleRat" etc/align.dbs etc/hgwdev.dbs
+    git pull
     git push
     make etc-update
 
 #########################################################################
-# reset default position (working - 2011-05-11 - Chin)
-#       Reset default position to an area of chr3 with a number of genes
+# reset default position as JH169644:1002890-1003079 (DONE 2012-01-04 - Chin)
+# for hox1- (NM_214560) homeobox protein HB1 
+#
     hgsql -e \
-'update dbDb set defaultPos="chr3:21,592,157-21,596,916" where name="hetGla1";' \
-        hgcentraltest
-
-
-############################################################################
-# ctgPos2 track - showing clone sequence locations on chromosomes
-#	(working 2011-05-11 - Chin)
-# NOTE - create hetGla1 entry in all.joiner since this is a new species
-    mkdir /hive/data/genomes/hetGla1/bed/ctgPos2
-    cd /hive/data/genomes/hetGla1/bed/ctgPos2
-    cat << '_EOF_' > agpToCtgPos2.pl
-#!/usr/bin/env perl
-
-use warnings;
-use strict;
-
-my $argc = scalar(@ARGV);
-
-if ($argc != 1) {
-    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl /dev/stdin > ctgPos2.tab\n";
-    exit 255;
-}
-
-my $agpFile = shift;
-
-open (FH, "<$agpFile") or die "can not read $agpFile";
-while (my $line = <FH>) {
-    next if ($line =~ m/^#/);
-    chomp $line;
-    my @a = split('\s+', $line);
-    next if ($a[4] =~ m/^U$/);
-    my $chrSize = $a[2]-$a[1]+1;
-    my $ctgSize = $a[7]-$a[6]+1;
-    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
-    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1, $a[2], $a[4];
-}
-close (FH);
-'_EOF_'
-    # << happy emacs
-
-chmod 775 agpToCtgPos2.pl
-
-export S=../../genbank/Primary_Assembly/assembled_chromosomes
-cut -f2 ${S}/chr2acc | while read ACC
-do
-    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
-    zcat ${S}/AGP/chr${C}.agp.gz \
-        | sed -e "s/^${ACC}/chr${C}/"
-done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
-
-    hgLoadSqlTab hetGla1 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
-    # add the track ctgPos2 to src/hg/makeDb/trackDb/cow/hetGla1/trackDb.ra
-    # at src/makeDb/trackdb do "make update DBS=hetGla1" or/and "make alpha"
-    # based on result of
-    # hgsql -N -e "select type from ctgPos2;" hetGla1 | sort | uniq
-    # W
-    # prepare the src/hg/makeDb/trackDb/cow/hetGla1/ctgPos2.html 
-
+'update dbDb set defaultPos="JH169644:1002890-1003079" where name="hetGla1";' \
+	hgcentraltest
 
 ############################################################################
-# running cpgIsland business (working -2011-05-16 - Chin)
+# running cpgIsland business (DONE -2011-12-17 - Chin)
     mkdir /hive/data/genomes/hetGla1/bed/cpgIsland
     cd /hive/data/genomes/hetGla1/bed/cpgIsland
     cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
     cd hg3rdParty/cpgIslands
-    #   needed to fixup this source, adding include to readseq.c:
+    #	needed to fixup this source, adding include to readseq.c:
 #include "string.h"
-    #   and to cpg_lh.c:
+    #	and to cpg_lh.c:
 #include "unistd.h"
 #include "stdlib.h"
     # and fixing a declaration in cpg_lh.c
@@ -459,11 +434,11 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 do
     echo ${C}
     twoBitToFa ../../hetGla1.2bit:$C stdout \
-        | maskOutFa stdin hard hardMaskedFa/${C}.fa
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
 done
 
-    ssh swarm 
-    cd /hive/data/genomes/hetGla1/bed/cpgIsland 
+    ssh swarm
+    cd /hive/data/genomes/hetGla1/bed/cpgIsland
     mkdir results
     cut -f1 ../../chrom.sizes > chr.list
     cat << '_EOF_' > template
@@ -473,12 +448,12 @@ done
 '_EOF_'
     # << happy emacs
 
-    #   the faCount business is to make sure there is enough sequence to
-    #   work with in the fasta.  cpglh.exe does not like files with too many
-    #   N's - it gets stuck
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck
     cat << '_EOF_' > runOne
 #!/bin/csh -fe
-set C = `faCount hardMaskedFa/$1.fa | grep ^chr | awk '{print  $2 - $7 }'`
+set C = `faCount hardMaskedFa/$1.fa | grep "^JH\|^chr" | awk '{print  $2 - $7 }'`
 if ( $C > 200 ) then
     ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
     mv /scratch/tmp/$1.$$ $2
@@ -488,8 +463,7 @@ endif
 '_EOF_'
     # << happy emacs
 
-
-    chmod 775 runOne
+    chmod 775 runOne 
     gensub2 chr.list single template jobList
     para create jobList
     para try
@@ -500,13 +474,17 @@ endif
     # then, kick it with para push
     # check it with plb
     # when all are done, para time shows:
-    #  Checking finished jobs
-    # Completed: 3317 of 3317 jobs
-    # CPU time in finished jobs:   197s       3.29m     0.05h    0.00d  0.000 y
-    # IO & Wait Time:             9373s     156.21m     2.60h    0.11d  0.000 y
-    # Average job time:              3s       0.05m     0.00h    0.00d
-    # Longest finished job:         18s       0.30m     0.01h    0.00d
-    # Submission to last job:      677s      11.28m     0.19h    0.01d
+    # para time
+    # 39267 jobs in batch
+    # 18 jobs (including everybody's) in Parasol queue or running.
+    # Checking finished jobs
+    # Completed: 39267 of 39267 jobs
+    # CPU time in finished jobs:    190s       3.17m     0.05h    0.00d  0.000 y
+    # IO & Wait Time:            100994s    1683.23m    28.05h    1.17d  0.003 y
+    # Average job time:               3s       0.04m     0.00h    0.00d
+    # Longest finished job:           6s       0.10m     0.00h    0.00d
+    # Submission to last job:       123s       2.05m     0.03h    0.00d
+
 
     # Transform cpglh output to bed +
     catDir results | awk '{
@@ -521,259 +499,40 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /hive/data/genomes/hetGla1/bed/cpgIsland
     hgLoadBed hetGla1 cpgIslandExt -tab \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
-    # Loaded 37638 elements of size 10
+    # Loaded 31524 elements of size 10
     # Sorted
     # Creating table definition for cpgIslandExt
     # Saving bed.tab
     # Loading hetGla1
 
-    #   cleanup
+    #	cleanup
     rm -fr hardMaskedFa
 
+##########################################################################
+#  BLATSERVERS ENTRY (DONE 2011-01-05 - Chin)
+#       After getting a blat server assigned by the Blat Server Gods,
+#  
+# blat5
+# ports 17784 (trans) and 17785 (untrans).
 
-###########################################################################
-# ornAna1 Platypus LASTZ/CHAIN/NET (working - 2011-05-20 - Chin)
-    screen # use screen to control this job
-    mkdir /cluster/data/hetGla1/bed/blastzOrnAna1.2011-05-20
-    cd /cluster/data/hetGla1/bed/blastzOrnAna1.2011-05-20
-
-    cat << '_EOF_' > DEF
-# Cow vs. Platypus
-BLASTZ_Y=3400
-BLASTZ_L=6000
-BLASTZ_K=2200
-BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-BLASTZ_M=50
-
-# TARGET: Cow hetGla1
-SEQ1_DIR=/scratch/data/hetGla1/hetGla1.2bit
-SEQ1_LEN=/cluster/data/hetGla1/chrom.sizes
-# Maximum number of scaffolds that can be lumped together
-SEQ1_LIMIT=300
-SEQ1_CHUNK=20000000
-SEQ1_LAP=0
-
-# QUERY: Platypus ornAna1
-SEQ2_DIR=/scratch/data/ornAna1/ornAna1.2bit
-SEQ2_LEN=/cluster/data/ornAna1/chrom.sizes
-SEQ2_CHUNK=20000000
-SEQ2_LIMIT=300
-SEQ2_LAP=0
-
-BASE=/cluster/data/hetGla1/bed/blastzOrnAna1.2011-05-20
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << happy emacs
-    
-    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
-        -syntenicNet -noDbNameCheck \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=5000 -verbose=2 -chainLinearGap=loose > do.log 2>&1 &
-    #   real     329m59.325s
-
-    # filter with doRecipBest.pl 
-    time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
-        hetGla1 ornAna1 > rbest.log 2>&1
-    # real    15m15.120s
-    cat fb.hetGla1.chainOrnAna1Link.txt
-    #   195910907 bases of 2649682029 (7.394%) in intersection
-    cd /hive/data/genomes/hetGla1/bed
-    ln -s blastzOrnAna1.2011-05-20 lastz.ornAna1
-
-
-    mkdir /cluster/data/ornAna1/bed/blastz.hetGla1.swap
-    cd /cluster/data/ornAna1/bed/blastz.hetGla1.swap
-    time nice -n +19 doBlastzChainNet.pl \
-        /cluster/data/hetGla1/bed/blastzOrnAna1.2011-05-20/DEF \
-        -chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
-        -swap -syntenicNet \
-          -chainLinearGap=loose -bigClusterHub=swarm > swap.log 2>&1 &
-    #   real       59m45.336
-    cat fb.ornAna1.chainBosTau6Link.txt
-    #   190401000 bases of 1842236818 (10.335%) in intersection
-# TBD for all chain/net:
- *** All done !  Elapsed time: 59m18s
- *** Make sure that goldenPath/ornAna1/vsBosTau6/README.txt is accurate.
- *** Add {chain,net}BosTau6 tracks to trackDb.ra if necessary.
-
-    cd /cluster/data/ornAna1/bed
-    ln -s blastz.hetGla1.swap lastz.hetGla1
-
-#####################################################################
-# susScr2 Pig BLASTZ/CHAIN/NET (working - 2011-05-24 - Chin)
-    screen # use a screen to manage this multi-day job
-    mkdir /hive/data/genomes/hetGla1/bed/lastzSusScr2.2011-05-24
-    cd /hive/data/genomes/hetGla1/bed/lastzSusScr2.2011-05-24
-    
-    cat << '_EOF_' > DEF
-# Pig vs. Cow
-BLASTZ_M=50
-
-# TARGET: Cow BosTau6
-SEQ1_DIR=/scratch/data/hetGla1/hetGla1.2bit
-SEQ1_LEN=/scratch/data/hetGla1/chrom.sizes
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Pig SusScr2
-SEQ2_DIR=/scratch/data/susScr2/susScr2.2bit
-SEQ2_LEN=/scratch/data/susScr2/chrom.sizes
-SEQ2_CHUNK=10000000
-SEQ2_LAP=0
-
-BASE=/hive/data/genomes/hetGla1/bed/lastzSusScr2.2011-05-24
-TMPDIR=/scratch/tmp
-'_EOF_'
-    # << this line keeps emacs coloring happy
-
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        `pwd`/DEF \
-        -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
-    #   real    2198m44.401s
-    cat fb.hetGla1.chainSusScr2Link.txt
-    #   1306738899 bases of 2649682029 (49.317%) in intersection
-    cd /hive/data/genomes/hetGla1/bed
-    ln -s lastzSusScr2.2011-05-24 lastz.susScr2
-
-    # then swap
-    mkdir /hive/data/genomes/susScr2/bed/blastz.hetGla1.swap
-    cd /hive/data/genomes/susScr2/bed/blastz.hetGla1.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hetGla1/bed/lastzSusScr2.2011-05-24/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #  real    380m53.612s
-
-    cat fb.susScr2.chainBosTau6Link.txt
-    # 1475323050 bases of 2231298548 (66.119%) in intersection
-
-
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("hetGla1", "blat5", "17784", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("hetGla1", "blat5", "17785", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
 
 #########################################################################
-#  SWAP mm9 LASTZ (working - 2010-05-17 - Chin)
-    #	original alignment done at mm9.txt
-    cd /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17
-    cat fb.mm9.chainBosTau6Link.txt
-    # 699351036 bases of 2620346127 (26.689%) in intersection
-    # Create link
-    cd /hive/data/genomes/mm9/bed
-    ln -s  lastzBosTau6.2011-05-17 lastz.hetGla1
-
-    #   and the swap 
-    mkdir /hive/data/genomes/hetGla1/bed/blastz.mm9.swap
-    cd /hive/data/genomes/hetGla1/bed/blastz.mm9.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/mm9/bed/lastzBosTau6.2011-05-17/DEF \
-        -swap -syntenicNet \
-        -noLoadChainSplit \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     53m5.237s
-    cat fb.hetGla1.chainMm9Link.txt
-    # 688894115 bases of 2649682029 (25.999%) in intersection
-    cd /hive/data/genomes/hetGla1/bed
-    ln -s blastz.mm9.swap lastz.mm9
-
-############################################################################
-#  SWAP hg19 LASTZ (working 2011-05-16 - Chin)
-    #	original alignment
-    cd /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16
-    cat fb.hg19.chainBosTau6Link.txt
-    # 1370696434 bases of 2897316137 (47.309%) in intersection
-
-    #   and the swap
-    mkdir /hive/data/genomes/hetGla1/bed/blastz.hg19.swap
-    cd /hive/data/genomes/hetGla1/bed/blastz.hg19.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/hg19/bed/lastzBosTau6.2011-05-16/DEF \
-        -swap -syntenicNet \
-        -noLoadChainSplit \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     72m57.889s
-    cat fb.hetGla1.chainHg19Link.txt
-    #   1336966333 bases of 2649682029 (50.458%) in intersection
-    cd /hive/data/genomes/hetGla1/bed
-    ln -s blastz.hg19.swap lastz.hg19
-
-
-############################################################################
-#  SWAP canFam2 LASTZ (working 2011-05-25 - Chin)
-    #   original alignment
-    cd /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25
-    cat fb.canFam2.chainBosTau6Link.txt
-    # 1389712912 bases of 2384996543 (58.269%) in intersection
-
-    #   and the swap 
-    mkdir /hive/data/genomes/hetGla1/bed/blastz.canFam2.swap
-    cd /hive/data/genomes/hetGla1/bed/blastz.canFam2.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/canFam2/bed/lastzBosTau6.2011-05-25/DEF \
-        -swap -syntenicNet  \
-        -noLoadChainSplit \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     88m38.555s
-    cat fb.hetGla1.chainCanFam2Link.txt
-    # 1404315725 bases of 2649682029 (52.999%) in intersection
-    cd /hive/data/genomes/hetGla1/bed
-    ln -s blastz.canFam2.swap lastz.canFam2
-
-############################################################################
-#  SWAP rn4 LASTZ (working 2011-05-31 - Chin)
-    cd /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31
-    cat fb.rn4.chainBosTau6Link.txt
-    # 660647959 bases of 2571531505 (25.691%) in intersection
-
-    #   and the swap
-    mkdir /hive/data/genomes/hetGla1/bed/blastz.rn4.swap
-    cd /hive/data/genomes/hetGla1/bed/blastz.rn4.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/rn4/bed/blastzBosTau6.2011-05-31/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    49m43.881
-
-    cat fb.hetGla1.chainRn4Link.txt
-    # 648232024 bases of 2649682029 (24.465%) in intersection
-    cd /hive/data/genomes/hetGla1/bed
-    ln -s blastz.rn4.swap lastz.rn4
-
-############################################################################
-#  SWAP monDom5 LASTZ (working 2011-05-31 - Chin)
-    cd /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31
-    cat fb.monDom5.chainBosTau6Link.txt
-    #   207703303 bases of 3501660299 (5.932%) in intersection
-
-    # and the swap
-    mkdir /hive/data/genomes/hetGla1/bed/blastz.monDom5.swap
-    cd /hive/data/genomes/hetGla1/bed/blastz.monDom5.swap
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/monDom5/bed/lastzBosTau6.2011-05-31/DEF \
-        -swap -noLoadChainSplit -syntenicNet \
-        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    52m10.229s
-
-    cat fb.hetGla1.chainMonDom5Link.txt
-    #   199980646 bases of 2649682029 (7.547%) in intersection
-    cd /hive/data/genomes/hetGla1/bed
-    ln -s blastz.monDom5.swap lastz.monDom5
-
-
-#########################################################################
-# all.joiner update, downloads and in pushQ - (working 2011-06-14 - Chin)
+# all.joiner update, downloads and in pushQ - ( working 2012-01-04 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
+    # add hetGla after myoLuc
     joinerCheck -database=hetGla1 -all all.joiner
 
     mkdir /hive/data/genomes/hetGla1/goldenPath
     cd /hive/data/genomes/hetGla1/goldenPath
     makeDownloads.pl hetGla1 > do.log 2>&1
+XXXX 2012-01-04 TODO: read the do.log and edit README before push!!
 
     #	now ready for pushQ entry
     mkdir /hive/data/genomes/hetGla1/pushQ
@@ -788,7 +547,7 @@ TMPDIR=/scratch/tmp
     # 
     # WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
     # supporting and genbank tables) which tracks to assign these tables to:
-    #   tableList
+    #   ctgPos2
 
     #	copy it to hgwbeta
     scp -p hetGla1.pushQ.sql hgwbeta:/tmp
@@ -798,66 +557,4 @@ TMPDIR=/scratch/tmp
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
 
-############################################################################
-#  hetGla1 - Cow - Ensembl Genes version 64  (working - 2011-10-12 - hiram)
-    ssh hgwdev
-    cd /hive/data/genomes/hetGla1
-    cat << '_EOF_' > hetGla1.ensGene.ra
-# required db variable
-db hetGla1
-# optional nameTranslation, the sed command that will transform
-#       Ensemble names to UCSC names.  With quotes just to make sure.
-nameTranslation "s/^\([0-9X][0-9]*\)/chr\1/; s/^MT/chrM/; s/^GJ\([0-9]*\).1/chrUn_GJ\1/"
-'_EOF_'
-#  << happy emacs
-
-    doEnsGeneUpdate.pl  -ensVersion=64 hetGla1.ensGene.ra
-    ssh hgwdev
-    cd /hive/data/genomes/hetGla1/bed/ensGene.64
-    featureBits hetGla1 ensGene
-    # 42264149 bases of 2649682029 (1.595%) in intersection
-
-############################################################################
-# ucscToEnsembl name translation table (working - 2011-10-12 - Chin)
-    mkdir /hive/data/genomes/hetGla1/bed/ucscToEnsembl
-    cd /hive/data/genomes/hetGla1/bed/ucscToEnsembl
-
-    cut -f1 ../../chrom.sizes | while read C
-do
-E=`echo ${C} | sed -e "s/^chrM/MT/; s/chrUn_GJ\([0-9]*\)/GJ\1.1/; s/^chr//;"`
-    echo -e "${C}\t${E}"
-done > ucscToEnsembl.tab
-
-    # determine longest UCSC name:
-    cut -f1 ucscToEnsembl.tab | awk '{print length($0)}' | sort -nr | head -1
-    #	14
-
-    # use that size in this SQL definition index:
-    cat << '_EOF_' > ucscToEnsembl.sql
-# UCSC to Ensembl chr name translation
-CREATE TABLE ucscToEnsembl (
-    ucsc varchar(255) not null,        # UCSC chromosome name
-    ensembl varchar(255) not null,     # Ensembl chromosome name
-              #Indices
-    PRIMARY KEY(ucsc(14))
-);
-'_EOF_'
-
-    hgLoadSqlTab hetGla1 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
-
-#############################################################################
-# LIFTOVER TO bosTau4 (working - 2011-10-20 - Chin)
-
-    sh hgwdev
-    cd /hive/data/genomes/hetGla1
-    ln -s jkStuff/hetGla1.11.ooc 11.ooc
-    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
-         hetGla1 bosTau4 > doLiftOverToBosTau4.log 2>&1 &
-    # real    110m26.710s
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/hetGla1/liftOver/
-    md5sum hetGla1ToBosTau4.over.chain.gz >> md5sum.txt
-    popd
-
-############################################################################
-
+#######################################################################

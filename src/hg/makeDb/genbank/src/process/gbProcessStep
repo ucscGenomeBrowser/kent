@@ -14,7 +14,8 @@ my $usage =
     . "Options\n"
     . "  -keep - keep tmp files for debugging.\n"
     . "  -mkOrganismList - update the organism list\n"
-    . "  -verbose - print details\n";
+    . "  -verbose - print details (sets verbose level to 1)\n"
+    . "  -verbose=number - set verbose level \n";
 #
 # $Id: gbProcessStep,v 1.14 2010/04/11 06:48:31 markd Exp $
 #
@@ -25,6 +26,9 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
 setupServerPath();
+
+# keep track of our verbose settings
+my $verbArg = "";    
 
 # Generate a file name (or glob) for a file name with an access prefix
 sub getAccPrefixedFile($$) {
@@ -96,7 +100,8 @@ sub processSeqs($$$@) {
     makeDir($outDir);    
 
     # generate files with .tmp extension
-    my $cmd = "gbProcess -gbidx=$gbidx.tmp";
+    my $cmd = "gbProcess -gbidx=$gbidx.tmp $verbArg";
+    $cmd .= " -blackList=etc/blackList.txt";
     if ($type eq "est") {
         $cmd .= " -type=est -byAccPrefix=2";
     } else {
@@ -244,6 +249,11 @@ while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
     } elsif ($opt eq "-verbose") {
         $main::verbose = 1;
         $gbCommon::verbose = 1;
+        $verbArg = "-verbose=1";
+    } elsif ($opt =~ /^-verbose=/) {
+        $gbCommon::verbose = parseOptEq($opt);
+        $main::verbose = $gbCommon::verbose;
+        $verbArg = "-verbose=$gbCommon::verbose";
     } elsif ($opt eq "-mkOrganismList") {
         $main::mkOrganismList = 1;
     } else {
