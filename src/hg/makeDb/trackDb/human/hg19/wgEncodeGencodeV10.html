@@ -27,10 +27,6 @@ and Vega 45 from Oct 2011.  Also see:
 <h2> Display Conventions and Configuration </h2>
 <p>
 The annotations are divided into separate tracks based on type of annotation.
-The <em>basic set</em> of coding and non-coding transcripts is a subset of
-the <em>comprehensive set</em> selected to provide a simplified view of the transcript
-set designed to suit the needs of a majority of users.  The selection algorithm is described in
-the <a href="#basicSetSelection">next section</a>.
 The available tracks are:
 
 </p>
@@ -43,8 +39,8 @@ The available tracks are:
 
   <li><em>GENCODE Comprehensive set</em> - all GENCODE coding and non-coding transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
-    automatic annotations, except pseudogenes.  This is super-set of
-    the <em>basic set</em>.
+    automatic annotations.  This is super-set of the <em>basic set</em>.
+
   <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes.
 
   <li><em>GENCODE 2-way Pseudogenes</em> - pseudogenes predicted by the Yale
@@ -59,45 +55,6 @@ The available tracks are:
     transcripts containing at least 3 A's not matching the genome.
 </ul>
 <p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
-
-<h4><a name="basicSetSelection">GENCODE <em>basic set</em> selection</a></h4>
-<p>
-The GENCODE <em>basic set</em> is intended to provide a simplified subset of
-the GENCODE transcript annotations that will be useful to the majority of
-users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
-is done on a per-locus basis and then for coding and non-coding transcripts
-within that locus.  The goal is to use the better quality
-transcript annotations while still having some annotation present for
-each locus.
-</p>
-
-<p>The selection criteria for a given locus is:</p>
-<ul>
-  <li> For coding transcripts (including polymorphic pseudogenes):
-    <ul>
-      <li> If full-length coding transcripts that are not nonsense-mediated decay or problem
-           transcripts exist, then only they are included in the basic set.
-      <li> Otherwise, the coding transcript with the largest CDS is included in the basic set.
-    </ul>
-  <li> For non-coding transcripts:
-    <ul>
-      <li> If full-length non-coding transcripts that have a well characterized BioType (see below)
-           exist, then only they are included in the basic set.
-      <li> Otherwise, the largest non-coding transcript is included in the basic set.
-    </ul>
-</ul>
-
-<!--! <h5>Non-coding transcript categories</h5> -->
-<p>Non-coding transcripts are categorized using
-their <a href="http://www.gencodegenes.org/gencode_biotypes.html">BioType</a>
-and the following criteria:
-</p>
-<ul>
-  <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
-      rRNA, snoRNA, snRNA</em>
-  <li> poorly characterized: <em>non_coding, processed_transcript,
-      retrotransposed, misc_RNA</em>
-</ul>
 
 <h4>Filtering</h4>
 <p>
@@ -115,7 +72,7 @@ can be filtered using the following criteria:
      <li> problem - display problem transcripts.
    </ul>
 
-  <li> Annotation Method: Filter by the method used to create the annotation.
+  <li> Transcript Annotation Method: Filter by the method used to create the annotation.
    <ul>
      <li> All - don't filter by transcript class.
      <li> manual - display manually created annotations, including those that are 
@@ -128,7 +85,7 @@ can be filtered using the following criteria:
        not annotated by the manual method.
    </ul>
 
-  <li> Transcript Type: filter transcripts by <a href="http://www.gencodegenes.org/gencode_biotypes.html">BioType</a>.
+  <li> Transcript Biotype: filter transcripts by <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>.
 </ul>
 
 <h4>Coloring</h4>
@@ -156,18 +113,18 @@ It is important that users understand how to assess transcript annotations
 that they see in GENCODE; while some transcript models have a high level of
 support through the full-length of their exon structure, there are also
 transcripts that are poorly supported and that should be considered
-speculative. Transcription Support Levels (TSLs) is a method to highlight the
+speculative. The Transcription Support Level (TSL) is a method to highlight the
 well-supported and poorly-supported transcript models for users. The method
 relies on the primary data that can support full-length transcript
 structure: mRNA and EST alignments supplied by UCSC and Ensembl.</p>
 
 <p>The mRNA and EST alignments are compared to the GENCODE transcripts and the
 transcripts are scored according to how well the alignment matches over its
-full-length. The GENCODE transcription support levels provides a consistent
+full-length. The GENCODE TSL provides a consistent
 method of evaluating the level of support that a GENCODE transcript annotation
-is expressed in human.  The evidence used for this analysis are human
-transcript sequences from the International Nucleotide database Collaboration
-databases (GenBank, ENA, and DDBJ). Exonerate RNA alignments from Ensembl, and
+is expressed in human.  Human transcript sequences from the International
+Nucleotide database Collaboration databases (GenBank, ENA, and DDBJ) are used as
+the evidence for this analysis. Exonerate RNA alignments from Ensembl,
 BLAT RNA and EST alignments from the UCSC Genome Browser Database are used in
 the analysis. Erroneous transcripts and libraries identified in lists
 maintained by the Ensembl, UCSC, HAVANA and RefSeq groups are flagged as
@@ -201,7 +158,7 @@ are allowed to differ.</p>
       <li> Human Leukocyte Antigen (HLA) transcript
       <li> Immunoglobin gene transcript
       <li> T-cell receptor transcript
-      <li> Single exon transcript (will be included in a future version)
+      <li> Single-exon transcript (will be included in a future version)
     </ul>
   </li>
 </ul>
@@ -219,6 +176,45 @@ loci which have transcript evidence, and pseudogenes.
 <p>For a detailed description of the methods and references used, see
 Harrow <em>et al.</em> (2006).
 </p>
+
+<h4><a name="basicSetSelection">GENCODE <em>Basic Set</em> selection</a></h4>
+<p>
+The GENCODE <em>Basic Set</em> is intended to provide a simplified subset of
+the GENCODE transcript annotations that will be useful to the majority of
+users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
+is done on a per-locus basis and then for coding and non-coding transcripts
+within that locus.  The goal is to use the better quality
+transcript annotations while still having some annotation present for
+each locus.
+</p>
+
+<p>The selection criteria for a given locus is:</p>
+<ul>
+  <li> For coding transcripts (including polymorphic pseudogenes):
+    <ul>
+      <li> If full-length coding transcripts that are not nonsense-mediated decay or problem
+           transcripts exist, then only they are included in the basic set.
+      <li> Otherwise, the coding transcript with the largest CDS is included in the basic set.
+    </ul>
+  <li> For non-coding transcripts:
+    <ul>
+      <li> If full-length non-coding transcripts that have a well characterized biotype (see below)
+           exist, then only they are included in the basic set.
+      <li> Otherwise, the largest non-coding transcript is included in the basic set.
+    </ul>
+</ul>
+
+<!--! <h5>Non-coding transcript categories</h5> -->
+<p>Non-coding transcripts are categorized using
+their <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>
+and the following criteria:
+</p>
+<ul>
+  <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
+      rRNA, snoRNA, snRNA</em>
+  <li> poorly characterized: <em>non_coding, processed_transcript,
+      retrotransposed, misc_RNA</em>
+</ul>
 
 <h2>Verification</h2>
 
