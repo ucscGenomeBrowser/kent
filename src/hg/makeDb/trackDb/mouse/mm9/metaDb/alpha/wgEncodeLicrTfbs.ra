@@ -12,7 +12,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEM001687
@@ -42,7 +42,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEM001687
@@ -72,7 +72,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEM001687
@@ -102,7 +102,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEM001687
@@ -132,7 +132,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEM001687
@@ -162,7 +162,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2011-10-05
 dccAccession wgEncodeEM001687
@@ -192,7 +192,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
 dateUnrestricted 2012-01-21
 dccAccession wgEncodeEM001447
@@ -222,7 +222,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
 dateUnrestricted 2012-01-21
 dccAccession wgEncodeEM001447
@@ -252,7 +252,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
 dateUnrestricted 2012-01-21
 dccAccession wgEncodeEM001447
@@ -282,7 +282,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
 dateUnrestricted 2012-01-21
 dccAccession wgEncodeEM001447
@@ -312,7 +312,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-22
 dateUnrestricted 2012-01-21
 dccAccession wgEncodeEM001447
@@ -342,7 +342,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001688
@@ -372,7 +372,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001688
@@ -402,7 +402,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001688
@@ -432,7 +432,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001688
@@ -462,7 +462,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001688
@@ -492,7 +492,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId BoneMarrow/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001688
@@ -522,7 +522,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001689
@@ -552,7 +552,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001689
@@ -582,7 +582,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001689
@@ -612,7 +612,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001689
@@ -642,7 +642,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001689
@@ -672,7 +672,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001689
@@ -702,7 +702,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
@@ -733,7 +733,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
@@ -764,7 +764,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
@@ -795,7 +795,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
@@ -826,7 +826,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-22
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
@@ -857,7 +857,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
 dateUnrestricted 2011-12-07
 dccAccession wgEncodeEM001692
@@ -887,7 +887,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
 dateUnrestricted 2011-12-07
 dccAccession wgEncodeEM001692
@@ -917,7 +917,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
 dateUnrestricted 2011-12-07
 dccAccession wgEncodeEM001692
@@ -947,7 +947,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
 dateUnrestricted 2011-12-07
 dccAccession wgEncodeEM001692
@@ -977,7 +977,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
 dateUnrestricted 2011-12-07
 dccAccession wgEncodeEM001692
@@ -1007,7 +1007,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cerebellum/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-07
 dateUnrestricted 2011-12-07
 dccAccession wgEncodeEM001692
@@ -1036,7 +1036,7 @@ cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEM001448
@@ -1065,7 +1065,7 @@ cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 dccAccession wgEncodeEM001448
@@ -1095,7 +1095,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001690
@@ -1125,7 +1125,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001690
@@ -1155,7 +1155,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001690
@@ -1185,7 +1185,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001690
@@ -1215,7 +1215,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001690
@@ -1245,7 +1245,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001690
@@ -1275,7 +1275,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001449
@@ -1305,7 +1305,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001449
@@ -1335,7 +1335,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001449
@@ -1365,7 +1365,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001449
@@ -1395,7 +1395,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001449
@@ -1425,7 +1425,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001691
@@ -1455,7 +1455,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001691
@@ -1485,7 +1485,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001691
@@ -1515,7 +1515,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001691
@@ -1545,7 +1545,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001691
@@ -1575,7 +1575,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Cortex/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-20
 dateUnrestricted 2011-10-19
 dccAccession wgEncodeEM001691
@@ -1605,7 +1605,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001703
@@ -1635,7 +1635,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001703
@@ -1665,7 +1665,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001703
@@ -1695,7 +1695,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001703
@@ -1725,7 +1725,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001703
@@ -1755,7 +1755,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001703
@@ -1785,7 +1785,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001683
@@ -1815,7 +1815,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001683
@@ -1845,7 +1845,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001683
@@ -1875,7 +1875,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001683
@@ -1905,7 +1905,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001683
@@ -1935,7 +1935,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001705
@@ -1965,7 +1965,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001705
@@ -1995,7 +1995,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001705
@@ -2025,7 +2025,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001705
@@ -2055,7 +2055,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001705
@@ -2085,7 +2085,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-05
 dccAccession wgEncodeEM001705
@@ -2115,7 +2115,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001704
@@ -2145,7 +2145,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001704
@@ -2175,7 +2175,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001704
@@ -2205,7 +2205,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001704
@@ -2235,7 +2235,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001704
@@ -2265,7 +2265,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId ES-Bruce4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEM001704
@@ -2295,7 +2295,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -2326,7 +2326,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -2357,7 +2357,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -2388,7 +2388,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -2419,7 +2419,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -2450,7 +2450,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -2481,7 +2481,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001450
@@ -2511,7 +2511,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001450
@@ -2541,7 +2541,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001450
@@ -2571,7 +2571,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001450
@@ -2601,7 +2601,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001450
@@ -2631,7 +2631,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
 dccAccession wgEncodeEM001702
@@ -2661,7 +2661,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
 dccAccession wgEncodeEM001702
@@ -2691,7 +2691,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
 dccAccession wgEncodeEM001702
@@ -2721,7 +2721,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
 dccAccession wgEncodeEM001702
@@ -2751,7 +2751,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
 dccAccession wgEncodeEM001702
@@ -2781,7 +2781,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-03
 dateUnrestricted 2012-02-03
 dccAccession wgEncodeEM001702
@@ -2811,7 +2811,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001694
@@ -2841,7 +2841,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001694
@@ -2871,7 +2871,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001694
@@ -2901,7 +2901,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001694
@@ -2931,7 +2931,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001694
@@ -2961,7 +2961,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Heart/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-14
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001694
@@ -2991,7 +2991,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3022,7 +3022,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3053,7 +3053,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3084,7 +3084,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3115,7 +3115,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3146,7 +3146,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-07
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3177,7 +3177,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001451
@@ -3207,7 +3207,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001451
@@ -3237,7 +3237,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001451
@@ -3267,7 +3267,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001451
@@ -3297,7 +3297,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-24
 dateUnrestricted 2012-01-24
 dccAccession wgEncodeEM001451
@@ -3327,7 +3327,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 dccAccession wgEncodeEM001686
@@ -3357,7 +3357,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3388,7 +3388,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3419,7 +3419,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3450,7 +3450,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 dccAccession wgEncodeEM001686
@@ -3479,7 +3479,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3510,7 +3510,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3541,7 +3541,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Kidney/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-04-12
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
@@ -3572,7 +3572,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep1.bam.bai
@@ -3599,7 +3599,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdAlnRep2.bam.bai
@@ -3626,7 +3626,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep1.fastq.gz
@@ -3653,7 +3653,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdRawDataRep2.fastq.gz
@@ -3680,7 +3680,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdSig.bigWig
@@ -3707,7 +3707,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep1.bam.bai
@@ -3734,7 +3734,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdAlnRep2.bam.bai
@@ -3761,7 +3761,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep1.fastq.gz
@@ -3788,7 +3788,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdRawDataRep2.fastq.gz
@@ -3815,7 +3815,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Limb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-23
 fileName wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdSig.bigWig
@@ -3842,7 +3842,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001696
@@ -3872,7 +3872,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001696
@@ -3902,7 +3902,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001696
@@ -3932,7 +3932,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001696
@@ -3962,7 +3962,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001696
@@ -3992,7 +3992,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001696
@@ -4022,7 +4022,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001452
@@ -4052,7 +4052,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001452
@@ -4082,7 +4082,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001452
@@ -4112,7 +4112,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001452
@@ -4142,7 +4142,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001452
@@ -4172,7 +4172,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001693
@@ -4202,7 +4202,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001693
@@ -4232,7 +4232,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001693
@@ -4262,7 +4262,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001693
@@ -4292,7 +4292,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001693
@@ -4322,7 +4322,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Liver/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-13
 dateUnrestricted 2012-01-13
 dccAccession wgEncodeEM001693
@@ -4352,7 +4352,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001697
@@ -4382,7 +4382,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001697
@@ -4412,7 +4412,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001697
@@ -4442,7 +4442,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001697
@@ -4472,7 +4472,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001697
@@ -4502,7 +4502,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001697
@@ -4532,7 +4532,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001453
@@ -4562,7 +4562,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001453
@@ -4592,7 +4592,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001453
@@ -4622,7 +4622,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001453
@@ -4652,7 +4652,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-25
 dateUnrestricted 2012-01-25
 dccAccession wgEncodeEM001453
@@ -4682,7 +4682,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
 dateUnrestricted 2012-01-14
 dccAccession wgEncodeEM001695
@@ -4712,7 +4712,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
 dateUnrestricted 2012-01-14
 dccAccession wgEncodeEM001695
@@ -4742,7 +4742,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
 dateUnrestricted 2012-01-14
 dccAccession wgEncodeEM001695
@@ -4772,7 +4772,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
 dateUnrestricted 2012-01-14
 dccAccession wgEncodeEM001695
@@ -4802,7 +4802,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
 dateUnrestricted 2012-01-14
 dccAccession wgEncodeEM001695
@@ -4832,7 +4832,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Lung/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-15
 dateUnrestricted 2012-01-14
 dccAccession wgEncodeEM001695
@@ -4862,7 +4862,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001698
@@ -4892,7 +4892,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001698
@@ -4922,7 +4922,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001698
@@ -4952,7 +4952,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001698
@@ -4982,7 +4982,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001698
@@ -5012,7 +5012,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001698
@@ -5042,7 +5042,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001456
@@ -5072,7 +5072,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001456
@@ -5102,7 +5102,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001456
@@ -5132,7 +5132,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001456
@@ -5162,7 +5162,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001456
@@ -5192,7 +5192,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001699
@@ -5222,7 +5222,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001699
@@ -5252,7 +5252,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001699
@@ -5282,7 +5282,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001699
@@ -5312,7 +5312,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001699
@@ -5342,7 +5342,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId MEF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001699
@@ -5372,7 +5372,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -5399,7 +5399,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -5426,7 +5426,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
@@ -5453,7 +5453,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -5480,7 +5480,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -5507,7 +5507,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-21
 dateUnrestricted 2012-09-21
 fileName wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig.bigWig
@@ -5534,7 +5534,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -5561,7 +5561,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -5588,7 +5588,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -5615,7 +5615,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -5642,7 +5642,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId OlfactBulb/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig.bigWig
@@ -5669,7 +5669,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -5696,7 +5696,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -5723,7 +5723,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -5750,7 +5750,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -5777,7 +5777,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdSig.bigWig
@@ -5804,7 +5804,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -5831,7 +5831,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -5858,7 +5858,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -5885,7 +5885,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -5912,7 +5912,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId SmIntestine/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdSig.bigWig
@@ -5939,7 +5939,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001700
@@ -5969,7 +5969,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001700
@@ -5999,7 +5999,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001700
@@ -6029,7 +6029,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001700
@@ -6059,7 +6059,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001700
@@ -6089,7 +6089,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEM001700
@@ -6119,7 +6119,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001459
@@ -6149,7 +6149,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001459
@@ -6179,7 +6179,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001459
@@ -6209,7 +6209,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001459
@@ -6239,7 +6239,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001459
@@ -6269,7 +6269,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001701
@@ -6299,7 +6299,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001701
@@ -6329,7 +6329,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001701
@@ -6359,7 +6359,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001701
@@ -6389,7 +6389,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001701
@@ -6419,7 +6419,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Spleen/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-02
 dateUnrestricted 2012-02-02
 dccAccession wgEncodeEM001701
@@ -6449,7 +6449,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -6476,7 +6476,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -6503,7 +6503,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -6530,7 +6530,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -6557,7 +6557,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdSig.bigWig
@@ -6584,7 +6584,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -6611,7 +6611,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -6638,7 +6638,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -6665,7 +6665,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -6692,7 +6692,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Testis/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdSig.bigWig
@@ -6719,7 +6719,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -6746,7 +6746,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -6773,7 +6773,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -6800,7 +6800,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -6827,7 +6827,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdSig.bigWig
@@ -6854,7 +6854,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep1.bam.bai
@@ -6881,7 +6881,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdAlnRep2.bam.bai
@@ -6908,7 +6908,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
@@ -6935,7 +6935,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
@@ -6962,7 +6962,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId Thymus/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-22
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdSig.bigWig
@@ -6989,7 +6989,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep1.bam.bai
@@ -7016,7 +7016,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdAlnRep2.bam.bai
@@ -7043,7 +7043,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep1.fastq.gz
@@ -7070,7 +7070,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdRawDataRep2.fastq.gz
@@ -7097,7 +7097,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig.bigWig
@@ -7124,7 +7124,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep1.bam.bai
@@ -7151,7 +7151,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2.bam,wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdAlnRep2.bam.bai
@@ -7178,7 +7178,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep1.fastq.gz
@@ -7205,7 +7205,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdRawDataRep2.fastq.gz
@@ -7232,7 +7232,7 @@ composite wgEncodeLicrTfbs
 control std
 controlId WholeBrain/Input/std
 dataType ChipSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-23
 dateUnrestricted 2012-09-22
 fileName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig.bigWig
@@ -7250,4 +7250,4 @@ subId 5363
 tableName wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
 view Signal
 
-# MAGIC: -1471704555
+# MAGIC: 511986225
