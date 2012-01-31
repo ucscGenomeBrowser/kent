@@ -56,45 +56,6 @@ The available tracks are:
 </ul>
 <p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
-<h4><a name="basicSetSelection">GENCODE <em>basic set</em> selection</a></h4>
-<p>
-The GENCODE <em>basic set</em> is intended to provide a simplified subset of
-the GENCODE transcript annotations that will be useful to the majority of
-users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
-is done on a per-locus basis and then for coding and non-coding transcripts
-within that locus.  The goal is to use the better quality
-transcript annotations while still having some annotation present for
-each locus.
-</p>
-
-<p>The selection criteria for a given locus is:</p>
-<ul>
-  <li> For coding transcripts (including polymorphic pseudogenes):
-    <ul>
-      <li> If full-length coding transcripts that are not nonsense-mediated decay or problem
-           transcripts exist, then only they are included in the basic set.
-      <li> Otherwise, the coding transcript with the largest CDS is included in the basic set.
-    </ul>
-  <li> For non-coding transcripts:
-    <ul>
-      <li> If full-length non-coding transcripts that have a well characterized biotype (see below)
-           exist, then only they are included in the basic set.
-      <li> Otherwise, the largest non-coding transcript is included in the basic set.
-    </ul>
-</ul>
-
-<!--! <h5>Non-coding transcript categories</h5> -->
-<p>Non-coding transcripts are categorized using
-their <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>
-and the following criteria:
-</p>
-<ul>
-  <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
-      rRNA, snoRNA, snRNA</em>
-  <li> poorly characterized: <em>non_coding, processed_transcript,
-      retrotransposed, misc_RNA</em>
-</ul>
-
 <h4>Filtering</h4>
 <p>
 Items in the GENCODE Basic, Comprehensive and Pseudogene tracks
@@ -215,6 +176,45 @@ loci which have transcript evidence, and pseudogenes.
 <p>For a detailed description of the methods and references used, see
 Harrow <em>et al.</em> (2006).
 </p>
+
+<h4><a name="basicSetSelection">GENCODE <em>Basic Set</em> selection</a></h4>
+<p>
+The GENCODE <em>Basic Set</em> is intended to provide a simplified subset of
+the GENCODE transcript annotations that will be useful to the majority of
+users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
+is done on a per-locus basis and then for coding and non-coding transcripts
+within that locus.  The goal is to use the better quality
+transcript annotations while still having some annotation present for
+each locus.
+</p>
+
+<p>The selection criteria for a given locus is:</p>
+<ul>
+  <li> For coding transcripts (including polymorphic pseudogenes):
+    <ul>
+      <li> If full-length coding transcripts that are not nonsense-mediated decay or problem
+           transcripts exist, then only they are included in the basic set.
+      <li> Otherwise, the coding transcript with the largest CDS is included in the basic set.
+    </ul>
+  <li> For non-coding transcripts:
+    <ul>
+      <li> If full-length non-coding transcripts that have a well characterized biotype (see below)
+           exist, then only they are included in the basic set.
+      <li> Otherwise, the largest non-coding transcript is included in the basic set.
+    </ul>
+</ul>
+
+<!--! <h5>Non-coding transcript categories</h5> -->
+<p>Non-coding transcripts are categorized using
+their <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>
+and the following criteria:
+</p>
+<ul>
+  <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
+      rRNA, snoRNA, snRNA</em>
+  <li> poorly characterized: <em>non_coding, processed_transcript,
+      retrotransposed, misc_RNA</em>
+</ul>
 
 <h2>Verification</h2>
 
