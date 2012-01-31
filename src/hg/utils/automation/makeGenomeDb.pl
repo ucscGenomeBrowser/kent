@@ -91,14 +91,13 @@ assemblyShortLabel XXXXXX
 ncbiAssemblyId nnnnn
   - A numeric NCBI identifier for the assembly. To determine this, do an
     NCBI Assembly query at http://www.ncbi.nlm.nih.gov/genome/assembly/,
-    using the scientific name "Xxxxxx yyyyyy" and choose a project ID that 
+    using the scientific name \"Xxxxxx yyyyyy\" and choose a project ID that 
     match the assembly name.
 
 ncbiAssemblyName xxxxxrr
-  - The assembly name used in the ftp path such as "catChrV17e":  
+  - The assembly name used in the ftp path such as \"catChrV17e\" in  
     ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Felis_catus/catChrV17e/
-    It should be identical to the name returned from the NCBI Assembly 
-    query mention above. 
+    It is identical to the name returned from the NCBI Assembly query mention above. 
 
 orderKey NN
   - A priority number (for the central database's dbDb.orderKey column)
@@ -199,7 +198,7 @@ use vars qw/
     /;
 
 # Required config parameters:
-my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey,
+my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $ncbiAssemblyName, $ncbiAssemblyId,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
