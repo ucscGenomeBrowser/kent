@@ -20111,9 +20111,7 @@ else
     }
 printTrackUiLink(ct->tdb);
 printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
-/* already done in doBedDetail */
-if (differentWord(type, "bedDetail"))
-    printTrackHtml(ct->tdb);
+printTrackHtml(ct->tdb);
 }
 
 void blastProtein(struct trackDb *tdb, char *itemName)
@@ -23794,7 +23792,9 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
-printTrackHtml(tdb);
+/* do not print this for custom tracks, they do this later */
+if (ct == NULL)
+    printTrackHtml(tdb);
 
 bedDetailFree(&r);
 freeMem(escName);
