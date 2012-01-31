@@ -56,9 +56,130 @@ The available tracks are:
 </ul>
 <p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
-<h4><a name="basicSetSelection">GENCODE <em>basic set</em> selection</a></h4>
+<h4>Filtering</h4>
 <p>
-The GENCODE <em>basic set</em> is intended to provide a simplified subset of
+Items in the GENCODE Basic, Comprehensive and Pseudogene tracks
+can be filtered using the following criteria:
+</p>
+<ul>
+  <li> Transcript class: Filter by the basic biological function of a transcript
+    annotation.
+    <ul>
+     <li> All - don't filter by transcript class.
+     <li> coding - display protein coding transcripts, including polymorphic pseudogenes.
+     <li> nonCoding - display non-protein coding transcripts.
+     <li> pseudo - display pseudogene transcript annotations.
+     <li> problem - display problem transcripts.
+   </ul>
+
+  <li> Transcript Annotation Method: Filter by the method used to create the annotation.
+   <ul>
+     <li> All - don't filter by transcript class.
+     <li> manual - display manually created annotations, including those that are 
+       also created automatically.
+     <li> automatic - display automatically created annotations, including those that are 
+       also created manually.
+     <li> manual_only - display manually created annotations that were
+       not annotated by the automatic method.
+     <li> automatic_only - display automatically created annotations that were
+       not annotated by the manual method.
+   </ul>
+
+  <li> Transcript Biotype: filter transcripts by <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>.
+</ul>
+
+<h4>Coloring</h4>
+<p>
+The gene annotations are colored based on the annotation type:
+</p>
+<table border="1">
+  <tr><th>Manual and automatic
+      <td><font color="#0c0c78">coding</font>
+      <td><font color="#006400">non-coding</font>
+      <td><font color="#ff33ff">pseudogene</font>
+      <td><font color="#fe0000">problem</font>
+  </tr>
+  <tr><th>2-way pseudogene
+      <td colspan="4"><font color="#ff33ff">all</font>
+  </tr>
+  <tr><th>PolyA annotations
+      <td colspan="4"><font color="#000000">all</font>
+  </tr>
+</table>
+
+<h4><a name="tsl">Transcription Support Level (TSL)</a></h4>
+<p>
+It is important that users understand how to assess transcript annotations
+that they see in GENCODE; while some transcript models have a high level of
+support through the full-length of their exon structure, there are also
+transcripts that are poorly supported and that should be considered
+speculative. The Transcription Support Level (TSL) is a method to highlight the
+well-supported and poorly-supported transcript models for users. The method
+relies on the primary data that can support full-length transcript
+structure: mRNA and EST alignments supplied by UCSC and Ensembl.</p>
+
+<p>The mRNA and EST alignments are compared to the GENCODE transcripts and the
+transcripts are scored according to how well the alignment matches over its
+full-length. The GENCODE TSL provides a consistent
+method of evaluating the level of support that a GENCODE transcript annotation
+is expressed in human.  Human transcript sequences from the International
+Nucleotide database Collaboration databases (GenBank, ENA, and DDBJ) are used as
+the evidence for this analysis. Exonerate RNA alignments from Ensembl,
+BLAT RNA and EST alignments from the UCSC Genome Browser Database are used in
+the analysis. Erroneous transcripts and libraries identified in lists
+maintained by the Ensembl, UCSC, HAVANA and RefSeq groups are flagged as
+suspect.  GENCODE annotations for protein-coding and non-protein-coding
+transcripts are compared with the evidence alignments.</p>
+
+<p>Annotations in the MHC region and other immunological genes are not
+evaluated, as automatic alignments tend to be very problematic. 
+Methods for evaluating single-exon genes are still being developed and 
+they are not included
+in the current analysis.  Multi-exon GENCODE annotations are evaluated using
+the criteria that all introns are supported by an evidence alignment and the
+evidence alignment does not indicate that there are unannotated exons. Small
+insertions and deletions in evidence alignments are assumed to be due to
+polymorphisms and not considered as differing from the annotations. All
+introns boundaries must match exactly. The transcript start and end locations
+are allowed to differ.</p>
+
+<p>The following categories are assigned to each of the evaluated annotations:</p>
+
+<ul>
+  <li> <a name="tsl1"><b>tsl1</b></a> - all splice junctions of the transcript are supported by
+    at least one non-suspect mRNA.</li>
+  <li> <a name="tsl2"><b>tsl2</b></a> - the best supporting mRNA is flagged as suspect or the support is from multiple ESTs.</li>
+  <li> <a name="tsl3"><b>tsl3</b></a> - the only support is from a single EST.</li>
+  <li> <a name="tsl4"><b>tsl4</b></a> - the best supporting EST is flagged as suspect.</li>
+  <li> <a name="tsl5"><b>tsl5</b></a> - no single transcript supports the model structure.</li>
+  <li> <a name="tslNA"><b>tslNA</b></a> - the transcript was not analyzed for one of the following reasons:
+    <ul>
+      <li> pseudogene annotation, including transcribed pseudogenes
+      <li> Human Leukocyte Antigen (HLA) transcript
+      <li> Immunoglobin gene transcript
+      <li> T-cell receptor transcript
+      <li> Single-exon transcript (will be included in a future version)
+    </ul>
+  </li>
+</ul>
+
+<h2>Methods</h2>
+
+<p>
+The GENCODE project aims to annotate all evidence-based gene features at 
+high accuracy on the human reference sequence by integrating 
+computational approaches (including comparative methods), manual
+annotation and targeted experimental verification. This goal includes identifying 
+all protein-coding loci with associated alternative variants, non-coding
+loci which have transcript evidence, and pseudogenes. 
+</p>
+<p>For a detailed description of the methods and references used, see
+Harrow <em>et al.</em> (2006).
+</p>
+
+<h4><a name="basicSetSelection">GENCODE <em>Basic Set</em> selection</a></h4>
+<p>
+The GENCODE <em>Basic Set</em> is intended to provide a simplified subset of
 the GENCODE transcript annotations that will be useful to the majority of
 users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
 is done on a per-locus basis and then for coding and non-coding transcripts
@@ -94,127 +215,6 @@ and the following criteria:
   <li> poorly characterized: <em>non_coding, processed_transcript,
       retrotransposed, misc_RNA</em>
 </ul>
-
-<h4>Filtering</h4>
-<p>
-Items in the GENCODE Basic, Comprehensive and Pseudogene tracks
-can be filtered using the following criteria:
-</p>
-<ul>
-  <li> Transcript class: Filter by the basic biological function of a transcript
-    annotation.
-    <ul>
-     <li> All - don't filter by transcript class.
-     <li> coding - display protein coding transcripts, including polymorphic pseudogenes.
-     <li> nonCoding - display non-protein coding transcripts.
-     <li> pseudo - display pseudogene transcript annotations.
-     <li> problem - display problem transcripts.
-   </ul>
-
-  <li> Annotation Method: Filter by the method used to create the annotation.
-   <ul>
-     <li> All - don't filter by transcript class.
-     <li> manual - display manually created annotations, including those that are 
-       also created automatically.
-     <li> automatic - display automatically created annotations, including those that are 
-       also created manually.
-     <li> manual_only - display manually created annotations that were
-       not annotated by the automatic method.
-     <li> automatic_only - display automatically created annotations that were
-       not annotated by the manual method.
-   </ul>
-
-  <li> Transcript Type: filter transcripts by <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>.
-</ul>
-
-<h4>Coloring</h4>
-<p>
-The gene annotations are colored based on the annotation type:
-</p>
-<table border="1">
-  <tr><th>Manual and automatic
-      <td><font color="#0c0c78">coding</font>
-      <td><font color="#006400">non-coding</font>
-      <td><font color="#ff33ff">pseudogene</font>
-      <td><font color="#fe0000">problem</font>
-  </tr>
-  <tr><th>2-way pseudogene
-      <td colspan="4"><font color="#ff33ff">all</font>
-  </tr>
-  <tr><th>PolyA annotations
-      <td colspan="4"><font color="#000000">all</font>
-  </tr>
-</table>
-
-<h4><a name="tsl">Transcription Support Level (TSL)</a></h4>
-<p>
-It is important that users understand how to assess transcript annotations
-that they see in GENCODE; while some transcript models have a high level of
-support through the full-length of their exon structure, there are also
-transcripts that are poorly supported and that should be considered
-speculative. Transcription Support Levels (TSLs) is a method to highlight the
-well-supported and poorly-supported transcript models for users. The method
-relies on the primary data that can support full-length transcript
-structure: mRNA and EST alignments supplied by UCSC and Ensembl.</p>
-
-<p>The mRNA and EST alignments are compared to the GENCODE transcripts and the
-transcripts are scored according to how well the alignment matches over its
-full-length. The GENCODE transcription support levels provides a consistent
-method of evaluating the level of support that a GENCODE transcript annotation
-is expressed in human.  The evidence used for this analysis are human
-transcript sequences from the International Nucleotide database Collaboration
-databases (GenBank, ENA, and DDBJ). Exonerate RNA alignments from Ensembl, and
-BLAT RNA and EST alignments from the UCSC Genome Browser Database are used in
-the analysis. Erroneous transcripts and libraries identified in lists
-maintained by the Ensembl, UCSC, HAVANA and RefSeq groups are flagged as
-suspect.  GENCODE annotations for protein-coding and non-protein-coding
-transcripts are compared with the evidence alignments.</p>
-
-<p>Annotations in the MHC region and other immunological genes are not
-evaluated, as automatic alignments tend to be very problematic. 
-Methods for evaluating single-exon genes are still being developed and 
-they are not included
-in the current analysis.  Multi-exon GENCODE annotations are evaluated using
-the criteria that all introns are supported by an evidence alignment and the
-evidence alignment does not indicate that there are unannotated exons. Small
-insertions and deletions in evidence alignments are assumed to be due to
-polymorphisms and not considered as differing from the annotations. All
-introns boundaries must match exactly. The transcript start and end locations
-are allowed to differ.</p>
-
-<p>The following categories are assigned to each of the evaluated annotations:</p>
-
-<ul>
-  <li> <a name="tsl1"><b>tsl1</b></a> - all splice junctions of the transcript are supported by
-    at least one non-suspect mRNA.</li>
-  <li> <a name="tsl2"><b>tsl2</b></a> - the best supporting mRNA is flagged as suspect or the support is from multiple ESTs.</li>
-  <li> <a name="tsl3"><b>tsl3</b></a> - the only support is from a single EST.</li>
-  <li> <a name="tsl4"><b>tsl4</b></a> - the best supporting EST is flagged as suspect.</li>
-  <li> <a name="tsl5"><b>tsl5</b></a> - no single transcript supports the model structure.</li>
-  <li> <a name="tslNA"><b>tslNA</b></a> - the transcript was not analyzed for one of the following reasons:
-    <ul>
-      <li> pseudogene annotation, including transcribed pseudogenes
-      <li> Human Leukocyte Antigen (HLA) transcript
-      <li> Immunoglobin gene transcript
-      <li> T-cell receptor transcript
-      <li> Single exon transcript (will be included in a future version)
-    </ul>
-  </li>
-</ul>
-
-<h2>Methods</h2>
-
-<p>
-The GENCODE project aims to annotate all evidence-based gene features at 
-high accuracy on the human reference sequence by integrating 
-computational approaches (including comparative methods), manual
-annotation and targeted experimental verification. This goal includes identifying 
-all protein-coding loci with associated alternative variants, non-coding
-loci which have transcript evidence, and pseudogenes. 
-</p>
-<p>For a detailed description of the methods and references used, see
-Harrow <em>et al.</em> (2006).
-</p>
 
 <h2>Verification</h2>
 

@@ -2389,20 +2389,10 @@ var popUp = {
         // make sure all links (e.g. help links) open up in a new window
         response = response.replace(/<a /ig, "<a target='_blank' ");
 
-        // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
-        // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
         var cleanHtml = response;
-        var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
-        var jsFiles = cleanHtml.match(shlurpPattern);
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-        shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
-        var jsEmbeded = cleanHtml.match(shlurpPattern);
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-        //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
-        shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
-        var cssFiles = cleanHtml.match(shlurpPattern);
-        cleanHtml = cleanHtml.replace(shlurpPattern,"");
-
+        cleanHtml = stripJsFiles(cleanHtml,true);   // DEBUG msg with true
+        cleanHtml = stripCssFiles(cleanHtml,true);  // DEBUG msg with true
+        cleanHtml = stripJsEmbedded(cleanHtml,true);// DEBUG msg with true
         $('#hgTrackUiDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
 
         // Strategy for poups with js:
@@ -2412,21 +2402,6 @@ var popUp = {
         // - embedded js should not be in the popup box.
         // - Somethings should be in a popup.ready() function, and this is emulated below, as soon as the cleanHtml is added
         //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
-
-        /* //in open ?  Will load of css work this way?
-        $(cssFiles).each(function (i) {
-            bix = "<LINK rel='STYLESHEET' href='".length;
-            eix = this.lastIndexOf("' TYPE='text/css' />");
-            file = this.substring(bix,eix);
-            $.getScript(file); // Should protect against already loaded files.
-        }); */
-        /* //in open ?  Loads fine, but then dialog gets confused
-        $(jsFiles).each(function (i) {
-            bix = "<script type='text/javascript' SRC='".length;
-            eix = this.lastIndexOf("'></script>");
-            file = this.substring(bix,eix);
-            //$.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
-        });*/
 
         if ( ! popUp.trackDescriptionOnly ) {
             var subtrack = tdbIsSubtrack(hgTracks.trackDb[popUp.trackName]) ? popUp.trackName :"";  // If subtrack then vis rules differ
