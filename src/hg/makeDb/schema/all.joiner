@@ -765,30 +765,11 @@ identifier wgEncodeGencodeUniProtV7
 
 # begin Gencode V10
 
-#  = gencode genepreds with joining through wgEncodeGencodeAttrsV10
-# wgEncodeGencodeBasicV10
-# wgEncodeGencodeCompV10
-# wgEncodeGencodePseudoGeneV10
-
-#  = gencode genepreds with no associations
+# gencode genepreds with no associations
 # wgEncodeGencodePolyaV10
 # wgEncodeGencode2wayConsPseudoV10
 
-# gencode association tables (joined through wgEncodeGencodeAttrsV10)
-#wgEncodeGencodeAttrsV10
-#wgEncodeGencodeExonSupportV10
-#wgEncodeGencodeGeneSourceV10
-#wgEncodeGencodePdbV10
-#wgEncodeGencodePubMedV10
-#wgEncodeGencodeRefSeqV10
-#wgEncodeGencodeTagV10
-#wgEncodeGencodeTranscriptSourceV10
-#wgEncodeGencodeTranscriptSupportV10
-#wgEncodeGencodeUniProtV10
-#wgEncodeGencodeTranscriptionSupportLevelV10
-#wgEncodeGencodeAnnotationRemarkV10
-
-
+# gencode genepreds with joining through wgEncodeGencodeAttrsV10
 identifier wgEncodeGencodeBasicAttrsV10
 "Link together Gencode Basic Table with Attributes table"
     hg19.wgEncodeGencodeAttrsV10.transcriptId
@@ -804,6 +785,7 @@ identifier wgEncodeGencodePseudoGeneAttrsV10
     hg19.wgEncodeGencodeAttrsV10.transcriptId
     hg19.wgEncodeGencodePseudoGeneV10.name
 
+# gencode association tables (joined through wgEncodeGencodeAttrsV10)
 identifier wgEncodeGencodeExonSupportV10
 "Link together Gencode Exon Support table with Attributes table"
     hg19.wgEncodeGencodeExonSupportV10.transcriptId dupeOk
