@@ -11046,18 +11046,20 @@ tag RENAMED
 type objStatus
 description This file has been RENAMED by the submitting laboratory. Please see updated file for newest metadata.
 
+# Type Organism
+
 term human
 tag HUMAN
 type organism
-description human
-## Organisms
+description Human
 
 term mouse
 tag MOUSE
 type organism
-description mouse
+description Mouse
 
 ## Tiers (used by cell types)
+# Venkat, I am really worried about this having a term and tag as a numeral.  The git history is lost on this data.  What do you know about it?
 
 term 1
 tag 1
@@ -11973,6 +11975,16 @@ priority 355
 #label Control ID - Specific dataset used as the control
 #This is diffiuclt to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
 
+term dataGroup
+tag DATAGROUP
+type typeOfTerm
+label Experiment (Assay) group
+description The larger groupings of dataTypes.
+searchable no
+cvDefined no 
+validate none
+priority 030
+
 term dataType
 tag DATATYPE
 type typeOfTerm
@@ -12261,6 +12273,17 @@ description The production group that grew the cells and isolated genomic DNA.
 searchable multiSelect
 cvDefined no
 validate none
+priority 500
+#(Defined by lab)
+
+term organism
+tag ORGANISM
+type typeOfTerm
+label Organism
+description The type of organism for an experiment. 
+searchable no
+cvDefined yes
+validate cv  
 priority 500
 #(Defined by lab)
 
