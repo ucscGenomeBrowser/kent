@@ -88,6 +88,18 @@ assemblyShortLabel XXXXXX
   - The abbreviated form of the sequencing center's label or version identifier
     for this release (e.g. 'WUGSC 1.2.3').
 
+ncbiAssemblyId nnnnn
+  - A numeric NCBI identifier for the assembly. To determine this, do an
+    NCBI Assembly query at http://www.ncbi.nlm.nih.gov/genome/assembly/,
+    using the scientific name "Xxxxxx yyyyyy" and choose a project ID that 
+    match the assembly name.
+
+ncbiAssemblyName xxxxxrr
+  - The assembly name used in the ftp path such as "catChrV17e":  
+    ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Felis_catus/catChrV17e/
+    It should be identical to the name returned from the NCBI Assembly 
+    query mention above. 
+
 orderKey NN
   - A priority number (for the central database's dbDb.orderKey column)
     that will determine db's relative position in the assembly menu.
@@ -263,6 +275,8 @@ sub parseConfig {
   $fastaFiles = &requireVar('fastaFiles', \%config);
   $dbDbSpeciesDir = &requireVar('dbDbSpeciesDir', \%config);
   $taxId = &requireVar('taxId', \%config);
+  $ncbiAssemblyName = &requireVar('ncbiAssemblyName', \%config);
+  $ncbiAssemblyId = &requireVar('ncbiAssemblyId', \%config);
   # Conditionally required variables -- optional here, but they might be
   # required later on in some cases.
   $fakeAgpMinContigGap = &optionalVar('fakeAgpMinContigGap', \%config);
@@ -938,6 +952,9 @@ sub makeDescription {
 <P>
 The $assemblyDate <em>$scientificName</em> draft assembly 
 ($assemblyLabel) was produced by the *** sequencing center.
+For more information about this assembly, see
+<A HREF="http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId/" TARGET="_blank">
+$ncbiAssemblyName</A> in the NCBI Assembly database.
 
 <H3>Sample position queries</H3>
 <P>
