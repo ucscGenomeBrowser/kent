@@ -10324,6 +10324,12 @@ type view
 label PeakSeq Optimal Peaks
 description Regions of optimal enriched signal in experiment performed by PeakSeq
 
+term PrimerPeaks
+tag PRIMEPKS
+type view
+label Primer Peaks
+description egions of enriched signal for a given Primer Set PROVISIONAL 
+
 term PeptideMapping
 tag PEPTIDEMAP
 type view
@@ -12372,7 +12378,7 @@ label Genomic region(s)
 description Genomic region(s) targeted by an experiment that is not whole-genome
 searchable multiSelect
 cvDefined yes
-validate cv
+validate cv or None
 priority 500
 
 term replicate
