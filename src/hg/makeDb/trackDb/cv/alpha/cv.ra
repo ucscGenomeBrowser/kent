@@ -4993,7 +4993,6 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 105,105,105
 sex U
 protocol Ren:OlfactoryBulb_Ren_protocol.pdf
-# shortened term
 
 term Ovary
 tag OVARY
@@ -5901,7 +5900,6 @@ targetId GeneCard:CTBP2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2
 validation Human_-_CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
 label CtBP2 (612044)
-##This does not appear in metaDb
 
 term E2F1
 tag E2F1
@@ -8885,7 +8883,6 @@ targetId GeneCard:CBX3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CBX3
 validation CBX3_(SC-101004)(Western_blot,IP-Mass_spec):human_CBX3_SC-101004_validation_Myers.pdf
 label CBX3 (sc-101004)
-##This does not appear in metaDb
 
 term CBX5
 tag CBX5
@@ -9015,8 +9012,6 @@ targetId Gene:1978
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
 validation 
 label EIF4EBP1 (04-1010)
-# lots
-##This does not appear in metaDb
 
 term ELAVL1
 tag ELAVL1
@@ -9080,8 +9075,6 @@ targetId Gene:10614
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
 validation 
 label Hexim1 (07-955)
-# lots
-##This does not appear in metaDb
 
 term HNRNPD
 tag HNRNPD
@@ -9195,8 +9188,6 @@ targetId Gene:37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
 validation 
 label PABP (04-1467)
-# lots
-##This does not appear in metaDb
 
 term PABPC1
 tag PABPC1
@@ -11127,11 +11118,12 @@ tag U
 type sex
 description Unknown
 
+## object Status
+
 term revoked
 tag REVOKED
 type objStatus
 description This file has been REVOKED by the submitting laboratory.  It should not be used for further research.
-## object Status
 
 term replaced
 tag REPLACED
