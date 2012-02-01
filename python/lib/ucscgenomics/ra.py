@@ -140,6 +140,7 @@ class RaFile(OrderedDict):
         entry = RaStanza()
         if entry.readStanza(stanza, key) == None:
             return None, None, None
+        entry = RaStanza()
         val1, val2 = entry.readStanza(stanza, key)
         return val1, val2, entry
 
@@ -241,19 +242,26 @@ class RaFile(OrderedDict):
                 newCommon.append(i)
                 continue
             if i not in selfKeys:
-                newCommon.append(other[i])
+                newCommon[i] = other[i]
+                continue
             if i not in otherKeys:
-                newCommon.append(self[i])
+                newCommon[i] = self[i]
+                continue
             if i in otherKeys and i in selfKeys:
                 newStanza = RaStanza()
                 selfStanzaKeys = set(self[i].iterkeys())
                 otherStanzaKeys = set(other[i].iterkeys())
-                stanzaKeys = ucscUtils.mergeList(list(self[i].iterkeys()), list(other[i].iterkeys()))
+                stanzaKeys = ucscUtils.mergeList(list(self[i]), list(other[i]))
                 for j in stanzaKeys:
+                    if p.match(j):
+                        newStanza.append(j)
+                        continue
                     if j not in selfStanzaKeys:
                         newStanza[j] = other[i][j]
+                        continue
                     if j not in otherStanzaKeys:
                         newStanza[j] = self[i][j]
+                        continue
                     if j in selfStanzaKeys and j in otherStanzaKeys:
                         if self[i][j] == other[i][j]:
                             newStanza[j] = self[i][j]
@@ -262,7 +270,7 @@ class RaFile(OrderedDict):
                             out_j = '<<<<<%s' % j
                             newStanza[out_j] = self[i][j]
                             newStanza[in_j] = other[i][j]
-            newCommon.append(newStanza)
+                newCommon[i] = newStanza
         return newCommon
 
 
@@ -301,8 +309,8 @@ class RaFile(OrderedDict):
             Dictionary showing differences between stanzas, list of added and dropeed stanzas
         '''
         retDict = collections.defaultdict(list)
-        dropList = set(self.iterkeys()) - set(otherRa.iterkeys())
-        addList = set(otherRa.iterkeys()) - set(self.iterkeys())
+        addList = set(self.iterkeys()) - set(otherRa.iterkeys())
+        dropList = set(otherRa.iterkeys()) - set(self.iterkeys())
         common = set(self.iterkeys()) & set(otherRa.iterkeys())
 
         p = re.compile('^\s*#')
@@ -314,7 +322,7 @@ class RaFile(OrderedDict):
                     continue
                 if key in otherRa[stanza]:
                     if self[stanza][key] != otherRa[stanza][key]:
-                        retDict[stanza].append("Changed %s from  %s -> %s" %(key, otherRa[stanza][key], self[stanza][key]))
+                        retDict[stanza].append("Changed %s from %s -> %s" %(key, otherRa[stanza][key], self[stanza][key]))
                 else:
                     retDict[stanza].append("Added %s -> %s" %(key, self[stanza][key]))
             for key in otherRa[stanza]:
@@ -322,7 +330,7 @@ class RaFile(OrderedDict):
                     continue
                 if key not in self[stanza]:
                     retDict[stanza].append("Dropped %s -> %s" %(key, otherRa[stanza][key]))
-        return retDict, dropList, addList
+        return retDict, addList, dropList
 
     def diffFilter(self, select, other):
         '''
@@ -380,8 +388,8 @@ class RaFile(OrderedDict):
         Output:
             Merged RaFile
                 Stanzas found in 'self' and 'other' that have the 'Term' in 'other'
-                are overwritten (or inserted if not found) into 'self'. Final merged
-                dictionary is returned.
+                are overwritten (or inserted if not found) into 'self'. 
+                Final merged dictionary is returned.
         '''
         ret = self
         common = set(self.iterkeys()) & set(other.iterkeys())
@@ -391,33 +399,27 @@ class RaFile(OrderedDict):
             if term in self[stanza] and term not in other[stanza]:
                     del ret[stanza][term]
                     continue
-
             if term in other[stanza]:
                 #Remake stanza to keep order of terms
                 tempStanza = RaStanza()
                 tempStanza._name = stanza
-                try:
-                    tempStanza['metaObject'] = self[stanza]['metaObject']
-                    tempStanza['objType'] = self[stanza]['objType']
-                    termList = self[stanza].keys()
-                    termList.remove('metaObject')
-                    termList.remove('objType')
-                except KeyError:
-                    termList = self[stanza].keys()
-                if term not in termList:
-                    termList.append(term)
-                for t in sorted(termList, key=str.lower):
-                    if t == term:
-                        if t not in self[stanza]:
-                            tempStanza[t] = other[stanza][t]
-                        elif self[stanza][t] != other[stanza][t]:
-                            tempStanza[t] = other[stanza][t]
-                        else:
-                            tempStanza[t] = self[stanza][t]
+                selfKeys = list(self[stanza].iterkeys())
+                otherKeys = list(other[stanza].iterkeys())
+                newOther = list()
+                #filter out keys in other that aren't in self, or the term we're interested in
+                for i in otherKeys:
+                    if not i in selfKeys and i != term:
+                        continue
                     else:
-                        tempStanza[t] = self[stanza][t]
-                ret[stanza] = tempStanza
-
+                        newOther.append(i)
+                #merge self keylist and filtered other list
+                masterList = ucscUtils.mergeList(newOther, selfKeys)
+                for i in masterList:
+                    if i == term:
+                        tempStanza[i] = other[stanza][i]
+                    else:
+                        tempStanza[i] = self[stanza][i]
+            ret[stanza] = tempStanza
         return ret
 
     def printTrackDbFormat(self):
@@ -491,7 +493,7 @@ class RaStanza(OrderedDict):
     @property
     def name(self):
         return self._name
-    
+
     def __init__(self):
         self._name = ''
         self._nametype = ''

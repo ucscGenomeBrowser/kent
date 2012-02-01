@@ -9,7 +9,7 @@ objType file
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
 dccAccession wgEncodeEH002073
@@ -29,7 +29,7 @@ objType table
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEH002073
@@ -50,7 +50,7 @@ objType file
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-15
 dateUnrestricted 2012-05-15
 dccAccession wgEncodeEH002074
@@ -70,7 +70,7 @@ objType table
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-08-11
 dateUnrestricted 2012-05-11
 dccAccession wgEncodeEH002074
@@ -91,7 +91,7 @@ objType file
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001199
@@ -112,7 +112,7 @@ objType table
 cell GM12878
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEH001199
@@ -135,7 +135,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001737
@@ -156,7 +156,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001737
@@ -178,7 +178,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001200
@@ -199,7 +199,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-01-05
 dateUnrestricted 2012-10-05
 dccAccession wgEncodeEH001200
@@ -222,7 +222,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001738
@@ -243,7 +243,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001738
@@ -265,7 +265,7 @@ objType file
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-06
 dateUnrestricted 2012-03-06
 dccAccession wgEncodeEH001739
@@ -286,7 +286,7 @@ objType table
 cell K562
 composite wgEncodeUncBsuProt
 dataType Proteogenomics
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-03
 dateUnrestricted 2012-03-03
 dccAccession wgEncodeEH001739
@@ -303,4 +303,4 @@ subId 4176
 tableName wgEncodeUncBsuProtK562NucleusSig
 view Signal
 
-# MAGIC: -805847425
+# MAGIC: -1476713381
