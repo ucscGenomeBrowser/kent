@@ -19,9 +19,9 @@ include wgEncodePsuTfbs.ra alpha,beta
 # PSU Histone (wrangler: Venkat)
 include wgEncodePsuHistone.ra alpha
 
-# LICR Histone (wrangler: Venkat)
+# LICR Histone (wrangler: Fang)
 include wgEncodeLicrHistone.ra beta,public
-include wgEncodeLicrHistone.new.ra alpha
+include wgEncodeLicrHistone.release2.ra alpha
 
 # LICR TFBS (wrangler: Venkat)
 include wgEncodeLicrTfbs.ra beta,public
