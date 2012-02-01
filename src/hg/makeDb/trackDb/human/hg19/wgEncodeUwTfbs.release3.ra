@@ -907,7 +907,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsHffCtcfStdHotspotsRep1
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HFF CTCF 1
+        shortLabel HFF CTCF Ht 1
         longLabel HFF CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=CTCF cellType=HFF treatment=aNone rep=rep1
         type broadPeak
@@ -916,7 +916,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsNhlfCtcfStdHotspotsRep1
         parent wgEncodeUwTfbsViewHot off
-        shortLabel NHLF CTCF 1
+        shortLabel NHLF CTCF Ht 1
         longLabel NHLF CTCF TFBS ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=CTCF cellType=NHLF treatment=aNone rep=rep1
         type broadPeak
@@ -3527,7 +3527,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsH7esInputStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7 In Sg 1
         longLabel H7-HESC Input TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=aNone rep=rep1
         type bigWig 1.000000 9514.000000
@@ -3536,7 +3536,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsH7esInputStdDiffa5dRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7 In 5d Sg 1
         longLabel H7-HESC Input diffProtA 5d TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=DIFFA5D rep=rep1
         type bigWig 1.000000 10821.000000
@@ -3545,7 +3545,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsH7esInputStdDiffa2dRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7 In 2d Sg 1
         longLabel H7-HESC Input diffProtA 2d TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=DIFFA2D rep=rep1
         type bigWig 1.000000 9642.000000
@@ -3554,7 +3554,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsH7esInputStdDiffa9dRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7 In 9d Sg 1
         longLabel H7-HESC Input diffProtA 9d TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=DIFFA9D rep=rep1
         type bigWig 1.000000 8651.000000
@@ -3563,7 +3563,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsHffCtcfStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HFF CTCF Raw 1
+        shortLabel HFF CTCF Sg 1
         longLabel HFF CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=CTCF cellType=HFF treatment=aNone rep=rep1
         type bigWig 1.000000 9482.000000
@@ -3572,7 +3572,7 @@ html wgEncodeUwTfbs.release3
 
         track wgEncodeUwTfbsNhlfCtcfStdRawRep1
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel NHLF CTCF Raw 1
+        shortLabel NHLF CTCF Sg 1
         longLabel NHLF CTCF TFBS ChIP-seq Raw Signal 1 from ENCODE/UW
         subGroups view=zRSig factor=CTCF cellType=NHLF treatment=aNone rep=rep1
         type bigWig 1.000000 20802.000000
