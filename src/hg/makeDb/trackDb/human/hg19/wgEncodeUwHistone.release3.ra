@@ -1614,7 +1614,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 1
+        shortLabel H7ES H3K4M3 Ht 1
         longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=aNone rep=rep1
         type broadPeak
@@ -1623,7 +1623,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneGm12865H3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM12865 H3K4me3 2
+        shortLabel GM65 H3K4M3 Ht 2
         longLabel GM12865 H3K4me3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=GM12865 treatment=aNone rep=rep2
         type broadPeak
@@ -1632,7 +1632,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa14dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 1
+        shortLabel H7ES H3K4M3 Ht 1
         longLabel H7-hESC H3K4me3 diffProtA 14d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type broadPeak
@@ -1641,7 +1641,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 2
+        shortLabel H7ES H3K4M3 Ht 2
         longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=aNone rep=rep2
         type broadPeak
@@ -1650,7 +1650,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 2
+        shortLabel H7ES H3K27M3 Ht 2
         longLabel H7-hESC H3K27me3 diffProtA 14d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA14D rep=rep2
         type broadPeak
@@ -1659,7 +1659,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 1
+        shortLabel H7ES H3K27M3 Ht 1
         longLabel H7-hESC H3K27me3 diffProtA 5d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA5D rep=rep1
         type broadPeak
@@ -1668,7 +1668,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa5dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 2
+        shortLabel H7ES H3K4M3 Ht 2
         longLabel H7-hESC H3K4me3 diffProtA 5d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type broadPeak
@@ -1677,7 +1677,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa5dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 2
+        shortLabel H7ES H3K27M3 Ht 2
         longLabel H7-hESC H3K27me3 diffProtA 5d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type broadPeak
@@ -1686,7 +1686,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 1
+        shortLabel H7ES H3K36M3 Ht 1
         longLabel H7-hESC H3K36ME3 diffProtA 5d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA5D rep=rep1
         type broadPeak
@@ -1695,7 +1695,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa5dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 2
+        shortLabel H7ES H3K36M3 Ht 2
         longLabel H7-hESC H3K36ME3 diffProtA 5d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type broadPeak
@@ -1704,7 +1704,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 1
+        shortLabel H7ES H3K36M3 Ht 1
         longLabel H7-hESC H3K36ME3 diffProtA 14d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type broadPeak
@@ -1713,7 +1713,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 1
+        shortLabel H7ES H3K27M3 Ht 1
         longLabel H7-hESC H3K27me3 diffProtA 2d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type broadPeak
@@ -1722,7 +1722,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 2
+        shortLabel H7ES H3K36M3 Ht 2
         longLabel H7-hESC H3K36ME3 diffProtA 2d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type broadPeak
@@ -1731,7 +1731,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 1
+        shortLabel H7ES H3K27M3 Ht 1
         longLabel H7-hESC H3K27me3 diffProtA 9d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type broadPeak
@@ -1740,7 +1740,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 1
+        shortLabel H7ES H3K36M3 Ht 1
         longLabel H7-hESC H3K36ME3 diffProtA 9d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type broadPeak
@@ -1749,7 +1749,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa14dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 1
+        shortLabel H7ES H3K27M3 Ht 1
         longLabel H7-hESC H3K27me3 diffProtA 14d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type broadPeak
@@ -1758,7 +1758,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa14dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 2
+        shortLabel H7ES H3K36M3 Ht 2
         longLabel H7-hESC H3K36ME3 diffProtA 14d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA14D rep=rep2
         type broadPeak
@@ -1767,7 +1767,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 2
+        shortLabel H7ES H3K4M3 Ht 2
         longLabel H7-hESC H3K4me3 diffProtA 2d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type broadPeak
@@ -1776,7 +1776,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa2dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 1
+        shortLabel H7ES H3K4M3 Ht 1
         longLabel H7-hESC H3K4me3 diffProtA 2d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type broadPeak
@@ -1785,7 +1785,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 2
+        shortLabel H7ES H3K4M3 Ht 2
         longLabel H7-hESC H3K4me3 diffProtA 9d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type broadPeak
@@ -1794,7 +1794,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa9dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 1
+        shortLabel H7ES H3K4M3 Ht 1
         longLabel H7-hESC H3K4me3 diffProtA 9d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type broadPeak
@@ -1803,7 +1803,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa2dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 2
+        shortLabel H7ES H3K27M3 Ht 2
         longLabel H7-hESC H3K27me3 diffProtA 2d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type broadPeak
@@ -1812,7 +1812,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa9dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 2
+        shortLabel H7ES H3K27M3 Ht 2
         longLabel H7-hESC H3K27me3 diffProtA 9d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type broadPeak
@@ -1821,7 +1821,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa2dHotspotsRep1
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 1
+        shortLabel H7ES H3K36M3 Ht 1
         longLabel H7-hESC H3K36ME3 diffProtA 2d Histone Mod ChIP-seq Hotspots 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type broadPeak
@@ -1830,7 +1830,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa9dHotspotsRep2
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 2
+        shortLabel H7ES H3K36M3 Ht 2
         longLabel H7-hESC H3K36ME3 diffProtA 9d Histone Mod ChIP-seq Hotspots 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type broadPeak
@@ -3380,7 +3380,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 1
+        shortLabel H7ES H3K4M3 Pk 1
         longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=aNone rep=rep1
         type narrowPeak
@@ -3389,7 +3389,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneGm12865H3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM12865 H3K4me3 Pk 2
+        shortLabel GM65 H3K4M3 Pk 2
         longLabel GM12865 H3K4me3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=GM12865 treatment=aNone rep=rep2
         type narrowPeak
@@ -3398,7 +3398,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa14dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 1
+        shortLabel H7ES H3K4M3 Pk 1
         longLabel H7-hESC H3K4me3 diffProtA 14d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type narrowPeak
@@ -3407,7 +3407,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 2
+        shortLabel H7ES H3K4M3 Pk 2
         longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=aNone rep=rep2
         type narrowPeak
@@ -3416,7 +3416,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 2
+        shortLabel H7ES H3K27M3 Pk 2
         longLabel H7-hESC H3K27me3 diffProtA 14d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA14D rep=rep2
         type narrowPeak
@@ -3425,7 +3425,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 1
+        shortLabel H7ES H3K27M3 Pk 1
         longLabel H7-hESC H3K27me3 diffProtA 5d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA5D rep=rep1
         type narrowPeak
@@ -3434,7 +3434,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa5dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 2
+        shortLabel H7ES H3K4M3 Pk 2
         longLabel H7-hESC H3K4me3 diffProtA 5d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type narrowPeak
@@ -3443,7 +3443,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa5dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 2
+        shortLabel H7ES H3K27M3 Pk 2
         longLabel H7-hESC H3K27me3 diffProtA 5d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type narrowPeak
@@ -3452,7 +3452,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 1
+        shortLabel H7ES H3K36M3 Pk 1
         longLabel H7-hESC H3K36ME3 diffProtA 5d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA5D rep=rep1
         type narrowPeak
@@ -3461,7 +3461,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa5dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 2
+        shortLabel H7ES H3K36M3 Pk 2
         longLabel H7-hESC H3K36ME3 diffProtA 5d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type narrowPeak
@@ -3470,7 +3470,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 1
+        shortLabel H7ES H3K36M3 Pk 1
         longLabel H7-hESC H3K36ME3 diffProtA 14d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type narrowPeak
@@ -3479,7 +3479,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 1
+        shortLabel H7ES H3K27M3 Pk 1
         longLabel H7-hESC H3K27me3 diffProtA 2d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type narrowPeak
@@ -3488,7 +3488,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 2
+        shortLabel H7ES H3K36M3 Pk 2
         longLabel H7-hESC H3K36ME3 diffProtA 2d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type narrowPeak
@@ -3497,7 +3497,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 1
+        shortLabel H7ES H3K27M3 Pk 1
         longLabel H7-hESC H3K27me3 diffProtA 9d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type narrowPeak
@@ -3506,7 +3506,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 1
+        shortLabel H7ES H3K36M3 Pk 1
         longLabel H7-hESC H3K36ME3 diffProtA 9d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type narrowPeak
@@ -3515,7 +3515,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa14dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 1
+        shortLabel H7ES H3K27M3 Pk 1
         longLabel H7-hESC H3K27me3 diffProtA 14d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type narrowPeak
@@ -3524,7 +3524,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa14dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 2
+        shortLabel H7ES H3K36M3 Pk 2
         longLabel H7-hESC H3K36ME3 diffProtA 14d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA14D rep=rep2
         type narrowPeak
@@ -3533,7 +3533,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 2
+        shortLabel H7ES H3K4M3 Pk 2
         longLabel H7-hESC H3K4me3 diffProtA 2d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type narrowPeak
@@ -3542,7 +3542,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa2dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 1
+        shortLabel H7ES H3K4M3 Pk 1
         longLabel H7-hESC H3K4me3 diffProtA 2d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type narrowPeak
@@ -3551,7 +3551,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 2
+        shortLabel H7ES H3K4M3 Pk 2
         longLabel H7-hESC H3K4me3 diffProtA 9d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type narrowPeak
@@ -3560,7 +3560,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa9dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 1
+        shortLabel H7ES H3K4M3 Pk 1
         longLabel H7-hESC H3K4me3 diffProtA 9d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type narrowPeak
@@ -3569,7 +3569,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa2dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 2
+        shortLabel H7ES H3K27M3 Pk 2
         longLabel H7-hESC H3K27me3 diffProtA 2d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type narrowPeak
@@ -3578,7 +3578,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa9dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 2
+        shortLabel H7ES H3K27M3 Pk 2
         longLabel H7-hESC H3K27me3 diffProtA 9d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type narrowPeak
@@ -3587,7 +3587,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa2dPkRep1
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 1
+        shortLabel H7ES H3K36M3 Pk 1
         longLabel H7-hESC H3K36ME3 diffProtA 2d Histone Mod ChIP-seq Peaks 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type narrowPeak
@@ -3596,7 +3596,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa9dPkRep2
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 2
+        shortLabel H7ES H3K36M3 Pk 2
         longLabel H7-hESC H3K36ME3 diffProtA 9d Histone Mod ChIP-seq Peaks 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type narrowPeak
@@ -5691,7 +5691,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 1
+        shortLabel H7ES H3K4M3 Sg 1
         longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=aNone rep=rep1
         type bigWig 1.000000 1575.000000
@@ -5700,7 +5700,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneGm12865H3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM12865 H3K4me3 Raw 2
+        shortLabel GM65 H3K4M3 Sg 2
         longLabel GM12865 H3K4me3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=GM12865 treatment=aNone rep=rep2
         type bigWig 1.000000 7990.000000
@@ -5709,7 +5709,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esInputStdDiffa14dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7ES In Sg 1
         longLabel H7-hESC Input diffProtA 14d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=DIFFA14D rep=rep1
         type bigWig 1.000000 9514.000000
@@ -5718,7 +5718,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa14dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 1
+        shortLabel H7ES H3K4M3 Sg 1
         longLabel H7-hESC H3K4me3 diffProtA 14d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type bigWig 1.000000 2473.000000
@@ -5727,7 +5727,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 2
+        shortLabel H7ES H3K4M3 Sg 2
         longLabel H7-hESC H3K4me3 Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=aNone rep=rep2
         type bigWig 1.000000 4069.000000
@@ -5736,7 +5736,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 2
+        shortLabel H7ES H3K27M3 Sg 2
         longLabel H7-hESC H3K27me3 diffProtA 14d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA14D rep=rep2
         type bigWig 1.000000 3743.000000
@@ -5745,7 +5745,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 1
+        shortLabel H7ES H3K27M3 Sg 1
         longLabel H7-hESC H3K27me3 diffProtA 5d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA5D rep=rep1
         type bigWig 1.000000 4283.000000
@@ -5754,7 +5754,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esInputStdDiffa5dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7ES In Sg 1
         longLabel H7-hESC Input diffProtA 5d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=DIFFA5D rep=rep1
         type bigWig 1.000000 10821.000000
@@ -5763,7 +5763,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa5dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 2
+        shortLabel H7ES H3K4M3 Sg 2
         longLabel H7-hESC H3K4me3 diffProtA 5d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type bigWig 1.000000 3239.000000
@@ -5772,7 +5772,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa5dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 2
+        shortLabel H7ES H3K27M3 Sg 2
         longLabel H7-hESC H3K27me3 diffProtA 5d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type bigWig 1.000000 6454.000000
@@ -5781,7 +5781,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 1
+        shortLabel H7ES H3K36M3 Sg 1
         longLabel H7-hESC H3K36ME3 diffProtA 5d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA5D rep=rep1
         type bigWig 1.000000 5955.000000
@@ -5790,7 +5790,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa5dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 2
+        shortLabel H7ES H3K36M3 Sg 2
         longLabel H7-hESC H3K36ME3 diffProtA 5d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA5D rep=rep2
         type bigWig 1.000000 6807.000000
@@ -5799,7 +5799,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 1
+        shortLabel H7ES H3K36M3 Sg 1
         longLabel H7-hESC H3K36ME3 diffProtA 14d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type bigWig 1.000000 3756.000000
@@ -5808,7 +5808,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 1
+        shortLabel H7ES H3K27M3 Sg 1
         longLabel H7-hESC H3K27me3 diffProtA 2d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type bigWig 1.000000 5847.000000
@@ -5817,7 +5817,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 2
+        shortLabel H7ES H3K36M3 Sg 2
         longLabel H7-hESC H3K36ME3 diffProtA 2d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type bigWig 1.000000 10143.000000
@@ -5826,7 +5826,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 1
+        shortLabel H7ES H3K27M3 Sg 1
         longLabel H7-hESC H3K27me3 diffProtA 9d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type bigWig 1.000000 6399.000000
@@ -5835,7 +5835,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 1
+        shortLabel H7ES H3K36M3 Sg 1
         longLabel H7-hESC H3K36ME3 diffProtA 9d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type bigWig 1.000000 8379.000000
@@ -5844,7 +5844,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa14dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 1
+        shortLabel H7ES H3K27M3 Sg 1
         longLabel H7-hESC H3K27me3 diffProtA 14d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA14D rep=rep1
         type bigWig 1.000000 3828.000000
@@ -5853,7 +5853,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa14dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 2
+        shortLabel H7ES H3K36M3 Sg 2
         longLabel H7-hESC H3K36ME3 diffProtA 14d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA14D rep=rep2
         type bigWig 1.000000 7137.000000
@@ -5862,7 +5862,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 2
+        shortLabel H7ES H3K4M3 Sg 2
         longLabel H7-hESC H3K4me3 diffProtA 2d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type bigWig 1.000000 5447.000000
@@ -5871,7 +5871,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa2dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 1
+        shortLabel H7ES H3K4M3 Sg 1
         longLabel H7-hESC H3K4me3 diffProtA 2d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type bigWig 1.000000 5096.000000
@@ -5880,7 +5880,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 2
+        shortLabel H7ES H3K4M3 Sg 2
         longLabel H7-hESC H3K4me3 diffProtA 9d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type bigWig 1.000000 4385.000000
@@ -5889,7 +5889,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k04me3StdDiffa9dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Raw 1
+        shortLabel H7ES H3K4M3 Sg 1
         longLabel H7-hESC H3K4me3 diffProtA 9d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04ME3 cellType=H7ES treatment=DIFFA9D rep=rep1
         type bigWig 1.000000 3462.000000
@@ -5898,7 +5898,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa2dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 2
+        shortLabel H7ES H3K27M3 Sg 2
         longLabel H7-hESC H3K27me3 diffProtA 2d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA2D rep=rep2
         type bigWig 1.000000 7398.000000
@@ -5907,7 +5907,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k27me3StdDiffa9dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Raw 2
+        shortLabel H7ES H3K27M3 Sg 2
         longLabel H7-hESC H3K27me3 diffProtA 9d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type bigWig 1.000000 7194.000000
@@ -5916,7 +5916,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa2dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 1
+        shortLabel H7ES H3K36M3 Sg 1
         longLabel H7-hESC H3K36ME3 diffProtA 2d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA2D rep=rep1
         type bigWig 1.000000 2588.000000
@@ -5925,7 +5925,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esH3k36me3StdDiffa9dRawRep2
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Raw 2
+        shortLabel H7ES H3K36M3 Sg 2
         longLabel H7-hESC H3K36ME3 diffProtA 9d Histone Mod ChIP-seq Raw Sig 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36ME3 cellType=H7ES treatment=DIFFA9D rep=rep2
         type bigWig 1.000000 2855.000000
@@ -5934,7 +5934,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esInputStdDiffa2dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7ES In Sg 1
         longLabel H7-hESC Input diffProtA 2d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=DIFFA2D rep=rep1
         type bigWig 1.000000 9642.000000
@@ -5943,7 +5943,7 @@ html wgEncodeUwHistone.release3
 
         track wgEncodeUwHistoneH7esInputStdDiffa9dRawRep1
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC Input Raw 1
+        shortLabel H7ES In Sg 1
         longLabel H7-hESC Input diffProtA 9d Histone Mod ChIP-seq Raw Sig 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7ES treatment=DIFFA9D rep=rep1
         type bigWig 1.000000 8651.000000
