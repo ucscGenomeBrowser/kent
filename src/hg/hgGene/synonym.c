@@ -170,18 +170,31 @@ if (ccdsKgs != NULL)
     }
 }
 
-char *addComma(char *inStr)
+static char *addCommaSpace(char *inStr)
+/* return all converted character '|' found in inStr to string ', '  */
 {
-char *chp;
+char outStr[2048];
+
+char *chp, *chpOut;
 chp = inStr;
+chpOut = outStr;
 
 while (*chp != '\0')
     {
+    *chpOut = *chp;
     if (*chp == '|')
-       *chp = ',';
+       {
+       *chpOut = ',';
+       chpOut ++;
+       *chpOut = ' ';
+       }
     chp++;
+    chpOut++;
     }
-return inStr;
+*chpOut = '\0';
+
+//return inStr;
+return strdup(outStr);
 }
 
 static void rgdGene2SynonymPrint(struct section *section,
@@ -201,13 +214,13 @@ if (rgdGeneId != NULL)
 	if (row[0][0] != 0 && !sameString(row[0], "n/a"))
 	    {
 	    geneSym = cloneString(row[0]);
-	    hPrintf("<B>Symbol:</B> %s ", addComma(row[0]));
+	    hPrintf("<B>Symbol:</B> %s ", addCommaSpace(row[0]));
 	    hPrintf("<BR>\n");
 	    }
 	if (row[1][0] != 0 && !sameString(row[0], "n/a"))
 	    {
 	    geneName = cloneString(row[1]);
-	    hPrintf("<B>Name:</B> %s ", addComma(geneName));
+	    hPrintf("<B>Name:</B> %s ", addCommaSpace(geneName));
 	    hPrintf("<BR>\n");
 	    }
 	}

@@ -15,5 +15,7 @@ nohup TrackCheck $JAVABUILD/kent/java/src/edu/ucsc/genome/qa/cgiCheck/full.props
 
 echo "TrackCheck robot done. Check to see if any errors in $WEEKLYBLD/logs/$log."
 
+echo "Check to see if any errors in $WEEKLYBLD/logs/$log." | mail -s "v${BRANCHNN} TrackCheck robot done." $USER browser-qa
+
 exit 0
 

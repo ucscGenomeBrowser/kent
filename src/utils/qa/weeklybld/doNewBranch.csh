@@ -157,8 +157,13 @@ if ( -e GitReports.ok ) then
 
 # add engineers that want to be notified of the build being complete
     @ LASTNN=$BRANCHNN - 1
-    foreach USER (braney larrym angie hiram tdreszer kate)
-	echo  "v$BRANCHNN has been built successfully on beta.  Time to do your code summaries.\n\nFor a git log use:\n git log --author=$USER v${LASTNN}_branch.1..v${BRANCHNN}_base  " | mail -s "Code summaries are due" $USER
+    #set victims=`git log v${LASTNN}_branch.1..v${BRANCHNN}_base --name-status | grep Author | sort | uniq | awk '{ end=index($0,"@"); beg=index($0,"<"); addr=substr( $0,beg+1,end-beg-1); printf("%s ",addr); }'`
+    #foreach USER victims
+    foreach USER (braney larrym angie hiram tdreszer kate chinhli)
+		git log --author=${victim} v${LASTNN}_branch.1..v${BRANCHNN}_base --quiet
+		if ( $status ) then
+			./summaryEmail.sh $USER | mail -s "Code summaries are due" $USER
+		endif
     end
 else
     echo "Git Reports had some error, no ok file found. [${0}: `date`]"
