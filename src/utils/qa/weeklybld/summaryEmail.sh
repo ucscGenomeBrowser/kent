@@ -12,14 +12,11 @@ if [ $# -gt 0 ]; then
 fi
 LASTNN=$((BRANCHNN - 1))
 
-git log --author=${victim} v${LASTNN}_branch.1..v${BRANCHNN}_base --quiet
-if [ $? -eq 0 ]; then
-  echo nothing to report for ${victim}
-  exit 0
-fi
+#git log --author=${victim} v${LASTNN}_branch.1..v${BRANCHNN}_base --pretty=oneline > /dev/null
 echo "To those who need reminding..."
 echo ""
-echo "v${BRANCHNN} has been built successfully on beta.  Time to do your code summaries."
+echo "v${BRANCHNN} has been built successfully on beta."
+echo "If you have checked in changes that will affect this release, it is time to do your code summaries. They are due to Ann by 5pm tomorrow."
 echo ""
 echo "The end of this message contains the log of all your changes for this build."
 echo ""
@@ -36,3 +33,6 @@ echo "Here is the log of all your changes for this build obtained by running the
 echo "    git log --author=${victim} v${LASTNN}_branch.1..v${BRANCHNN}_base"
 echo ""
 git log --author=${victim} v${LASTNN}_branch.1..v${BRANCHNN}_base
+if [ $? -ne 0 ]; then
+  echo No changes were found for ${victim}
+fi
