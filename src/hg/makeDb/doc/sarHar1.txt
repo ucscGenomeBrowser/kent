@@ -1,0 +1,216 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the sarHar1
+# Sarcophilus harrisii (Tasmanian Devil)
+
+ASSEMBLY_INFO:
+DATE:   07-Feb-2011
+ORGANISM:       Sarcophilus harrisii
+TAXID:  9305
+ASSEMBLY LONG NAME:     Devil_ref v7.0
+ASSEMBLY SHORT NAME:    Devil_ref v7.0
+ASSEMBLY SUBMITTER:     Wellcome Trust Sanger Institute
+ASSEMBLY TYPE:  Haploid
+NUMBER OF ASSEMBLY-UNITS:       1
+Assembly Accession:     GCA_000189315.1
+
+FTP-RELEASE DATE: 20-Jan-2012
+
+# ftp:
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sarcophilus_harrisii/Devil_ref_v7.0/
+
+# Assembly ID: 32874
+# http://www.ncbi.nlm.nih.gov/genome/assembly/328478/
+
+# WGS Project: AEFK01
+# http://www.ncbi.nlm.nih.gov/nuccore/AEFK00000000.1
+
+
+#############################################################################
+# Fetch sequence from genbank (DONE - 2012-01-27 - Chin)
+
+    mkdir -p /hive/data/genomes/sarHar1/genbank
+    cd /hive/data/genomes/sarHar1/genbank
+
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Sarcophilus_harrisii/Devil_ref_v7.0/*"
+    # FINISHED --2012-01-24
+    # Read ASSEMBLY_INFO 
+
+    # measure sequence to be used here
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/*.fa.gz \
+	Primary_Assembly/unlocalized_scaffolds/FASTA/*.fa.gz
+    #   3174693010 bases (243153308 N's 2931539702 real 2931539702 upper 
+    #   0 lower) in 35974 sequences in 8 files
+    #   Total size: mean 88249.7 sd 413850.2 min 642 
+    #   (gi|323539178|gb|GL867959.1|) max 5315331 
+    #   (gi|323557296|gb|GL849905.1|) median 2948
+
+#############################################################################
+# process into UCSC naming scheme (DONE - 2012-01-30 - Chin)
+    mkdir /hive/data/genomes/sarHar1/ucsc
+    cd /hive/data/genomes/sarHar1/ucsc
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">unplaced.agp") or die "can not write to unplaced.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">unplaced.fa") or die "can not write to unplaced.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1\|.*//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, ">chr${chrN}_random.agp") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            chomp $line;
+            my (@a) = split('\t', $line);
+            my $acc = $a[0];
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC "%s", $ucscName;
+            for (my $i = 1; $i < scalar(@a); ++$i) {
+                printf UC "\t%s", $a[$i];
+            }
+            printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, ">chr${chrN}_random.fa") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            chomp $line;
+            my $acc = $line;
+            $acc =~ s/.*gb\|//;
+            $acc =~ s/\|.*//;
+            my $accNo1 = $acc;
+            $accNo1 =~ s/.1$//;
+            die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+            die "ERROR: chrN $chrN not correct for $acc"
+                if ($accToChr{$acc} ne $chrN);
+            my $ucscName = "chr${chrN}_${accNo1}_random";
+            printf UC ">$ucscName\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x unlocalized.pl
+
+    ./unlocalized.pl
+    ./unplaced.pl
+
+    gzip *.fa *.agp
+    # this takes a few minutes
+
+    # verify nothing lost in the translation, should be the same as above
+    #	except for the name translations
+    faSize *.fa.gz
+    #   3174693010 bases (243153308 N's 2931539702 real 2931539702 upper 
+    #   0 lower) in 35974 sequences in 8 files
+    #   Total size: mean 88249.7 sd 413850.2 min 642 (chrX_GL867959_random) 
+    #   max 5315331 (chr3_GL849905_random) median 2948
+
+#############################################################################
+#   Initial browser build (DONE - 2012-01-30 - Chin)
+    cd /hive/data/genomes/sarHar1
+    cat << '_EOF_' > sarHar1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db sarHar1
+clade mammal
+genomeCladePriority 64
+scientificName Sarcophilus harrisii
+commonName Tasmanian devil
+assemblyDate Feb. 2011
+assemblyLabel Wellcome Trust Sanger Institute Devil_ref v7.0 (GCA_000189315.1)
+assemblyShortLabel WTSI Devil_ref v7.0
+ncbiAssemblyName Devil_ref v7.0
+ncbiAssemblyId 328478
+orderKey 3590
+mitoAcc none
+fastaFiles /hive/data/genomes/sarHar1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/sarHar1/ucsc/*.agp.gz
+dbDbSpeciesDir tasmanianDevil
+taxId   9305
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -stop=agp -dbHost=hgwdev -fileServer=hgwdev \
+       -workhorse=hgwdev -noGoldGapSplit sarHar1.config.ra \
+       > makeGenomeDb.agp.log 2>&1 & 
+    #	real    2m59.472s
+    # check the end of agp.log to verify it is OK
+    time makeGenomeDb.pl -continue=db -dbHost=hgwdev -fileServer=hgwdev \
+       -workhorse=hgwdev -noGoldGapSplit sarHar1.config.ra \
+        > makeGenomeDb.db.log 2>&1 &
+    #	real    21m56.285s
+
+#########################################################################
