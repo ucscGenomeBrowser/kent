@@ -30,9 +30,9 @@ include wgEncodeLicrTfbs.new.ra alpha
 # Stan/Yale RNA-Seq (wrangler: Venkat)
 include wgEncodeSydhRnaSeq.ra alpha
 
-# Licr RNA-Seq (wrangler: Venkat)
+# Licr RNA-Seq (wrangler: Fang)
 include wgEncodeLicrRnaSeq.ra beta,public
-include wgEncodeLicrRnaSeq.new.ra alpha
+include wgEncodeLicrRnaSeq.release2.ra alpha
 
 # Uw RNA-Seq (wrangler: Venkat)
 include wgEncodeUwRnaSeq.ra alpha
