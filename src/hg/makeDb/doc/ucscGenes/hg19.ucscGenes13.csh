@@ -997,6 +997,7 @@ buildDir $dir/hgNearBlastp
 scratchDir $scratchDir/jkgHgNearBlastp
 _EOF_
 
+
 doHgNearBlastp.pl -noLoad -clusterHub=swarm -distrHost=hgwdev -dbHost=hgwdev -workhorse=hgwdev config.ra |& tee do.log 
 # real    464m36.473s
 # done 2009-06-29
@@ -1010,11 +1011,6 @@ cd $dir/hgNearBlastp/run.$tempDb.$xdb
 hgLoadBlastTab $tempDb $xBlastTab -maxPer=1 out/*.tab
 cd $dir/hgNearBlastp/run.$tempDb.$ratDb
 hgLoadBlastTab $tempDb $rnBlastTab -maxPer=1 out/*.tab
-
-# move this endif statement past business that has successfully been completed
-endif # BRACKET		
-cd $dir
-
 
 # Remove non-syntenic hits for human and rat
 # Takes a few minutes
@@ -1077,11 +1073,7 @@ hgLoadBlastTab $yeastDb tfBlastTab $bToA/recipBest.tab
 # Clean up
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
-rm -r run.*/out
 gzip run.*/all.tab
-
-# Move this to the end of the section to be done next
-exit $status # BRACKET
 
 
 # MAKE FOLDUTR TABLES 
@@ -1293,13 +1285,13 @@ hgLoadSqlTab $tempDb kgSpAlias $kent/src/hg/lib/kgSpAlias.sql kgSpAlias.tab
     # Next, use the temporary contents of the keggPathway table to join with
     # knownToLocusLink, creating the real content of the keggPathway table.
     # Load this data, erasing the old temporary content
-    hgsql $tempDb -N -e \
-    'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+    hgsql $tempDb -B -N -e \
+    'select distinct name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
     >keggPathway.tab
     hgLoadSqlTab $tempDb keggPathway $kent/src/hg/lib/keggPathway.sql keggPathway.tab
 
    # Finally, update the knownToKeggEntrez table from the keggPathway table.
-   hgsql $tempDb -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' \
+   hgsql $tempDb -B -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' \
         |sort -u| sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
    hgLoadSqlTab $tempDb knownToKeggEntrez $kent/src/hg/lib/knownToKeggEntrez.sql \
         knownToKeggEntrez.tab
@@ -1390,11 +1382,12 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # /gbdb/hg19/targetDb/kgTargetSeq.2bit .          
 
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
-# host (field 2) and port (field 3) specified by cluster-admin.
+# host (field 2) and port (field 3) specified by cluster-admin.  Identify the
+# blatServer by the keyword hg19Kg with the version number appended
 hgsql hgcentraltest -e \                                                
-      'INSERT into blatServers values ("hg19Kg", "blat5", 17783, 0, 1);'
+      'INSERT into blatServers values ("hg19Kgv13", "blat5", 17783, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg19Kg", "UCSC Genes", \                    
+      'INSERT into targetDb values("hg19Kgv13", "UCSC Genes", \                    
          "hg19", "kgTargetAli", "", "", \                                       
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
@@ -1420,6 +1413,9 @@ hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
 synBlastp.csh $ratDb $db
+
+# Clean up
+rm -r run.*/out
 
 
 # move this exit statement to the end of the section to be done next

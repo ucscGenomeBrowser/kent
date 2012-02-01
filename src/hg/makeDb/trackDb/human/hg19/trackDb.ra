@@ -2554,41 +2554,9 @@ track decodeRmap override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
-#
-# This stanza should go away when the new version of UCSC Genes goes public.
-# It's there temporarily while UCSC Genes is in QA, to ensure that the old
-# version of the track details page is used on beta and rr while the new
-# version is used on alpha only.
-#
 track knownGene
-release beta, public
 shortLabel UCSC Genes
-longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
-group genes
-priority 34
-visibility pack
-color 12,12,120
-type genePred knownGenePep knownGeneMrna
-idXref kgAlias kgID alias
-hgGene on
-hgsid on
-directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
-baseColorUseCds given
-baseColorDefault genomicCodons
-defaultLinkedTables kgXref
-intronGap 12
-
-#
-# This stanza should go away when the new version of UCSC Genes goes public.
-# It's there temporarily while UCSC Genes is in QA, to ensure that the old
-# version of the track details page is used on beta and rr while the new
-# version is used on alpha only.
-#
-track knownGene
-release alpha
-html knownGeneNew
-shortLabel UCSC Genes
-longLabel UCSC Genes Based on RefSeq, UniProt, GenBank, CCDS and Comparative Genomics
+longLabel UCSC Genes (RefSeq, UniProt, CCDS, Rfam, tRNAs & Comparative Genomics)
 group genes
 priority 34
 visibility pack

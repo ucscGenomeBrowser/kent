@@ -348,7 +348,7 @@ objType table
 cell BE2_C
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
 dccAccession wgEncodeEH000824
@@ -532,7 +532,7 @@ objType table
 cell GM12864
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002150
@@ -554,7 +554,7 @@ objType table
 cell GM12865
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002151
@@ -576,7 +576,7 @@ objType table
 cell GM12865
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002151
@@ -666,7 +666,7 @@ objType table
 cell HAc
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
 dccAccession wgEncodeEH000831
@@ -689,7 +689,7 @@ objType table
 cell HAc
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
 dccAccession wgEncodeEH000831
@@ -758,7 +758,7 @@ objType table
 cell HA-h
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002152
@@ -780,7 +780,7 @@ objType table
 cell HA-h
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002152
@@ -890,7 +890,7 @@ objType table
 cell HBVP
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002153
@@ -912,7 +912,7 @@ objType table
 cell HBVSMC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002154
@@ -934,7 +934,7 @@ objType table
 cell HBVSMC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002154
@@ -1408,7 +1408,7 @@ objType table
 cell HFF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002155
@@ -1430,7 +1430,7 @@ objType table
 cell HFF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002155
@@ -1452,7 +1452,7 @@ objType table
 cell HFF-Myc
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002156
@@ -1474,7 +1474,7 @@ objType table
 cell HFF-Myc
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002156
@@ -1719,7 +1719,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002157
@@ -1741,7 +1741,7 @@ objType table
 cell HMVEC-dAd
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002157
@@ -2117,7 +2117,7 @@ objType table
 cell HPAEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002158
@@ -2363,7 +2363,7 @@ objType table
 cell HRGEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
 dccAccession wgEncodeEH000832
@@ -2386,7 +2386,7 @@ objType table
 cell HRGEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
 dccAccession wgEncodeEH000832
@@ -2455,7 +2455,7 @@ objType table
 cell HSMM
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
 dccAccession wgEncodeEH000833
@@ -2478,7 +2478,7 @@ objType table
 cell HSMM
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-03-10
 dateUnrestricted 2011-12-10
 dccAccession wgEncodeEH000833
@@ -2523,7 +2523,7 @@ objType table
 cell HSMMtube
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH000826
@@ -2906,7 +2906,7 @@ objType table
 cell NHBE
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002159
@@ -2928,7 +2928,7 @@ objType table
 cell NHBE
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002159
@@ -3109,7 +3109,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002160
@@ -3131,7 +3131,7 @@ objType table
 cell NT2-D1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002160
@@ -3199,7 +3199,7 @@ objType table
 cell PrEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002161
@@ -3221,7 +3221,7 @@ objType table
 cell PrEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002161
@@ -3379,7 +3379,7 @@ objType table
 cell SK-N-MC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002162
@@ -3401,7 +3401,7 @@ objType table
 cell SK-N-MC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002162
@@ -3492,7 +3492,7 @@ objType table
 cell WERI-Rb-1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-24
 dateUnrestricted 2012-07-24
 dccAccession wgEncodeEH002163
@@ -3599,4 +3599,4 @@ subId 3216
 tableName wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 view SimpleSignal
 
-# MAGIC: 881174152
+# MAGIC: -1606837810

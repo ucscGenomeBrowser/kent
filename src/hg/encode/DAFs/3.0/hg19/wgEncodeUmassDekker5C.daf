@@ -10,14 +10,35 @@ grant             Dekker
 lab               UMass-Dekker
 compositeSuffix  UmassDekker5C
 dataType          5C
-variables         cell
+variables         cell, region
 assembly          hg19
 
-validationSettings skipValidateFiles
+validationSettings
 
 # Track/view definition
 view             Matrix
-type             download
+type             doc
 downloadOnly     yes
 required         yes
 hasReplicates    yes
+
+view            RawData
+type            fastq
+required        yes
+hasReplicates   yes
+
+view			Primer
+type			doc
+downloadOnly	yes
+required		yes
+hasReplicates	no
+
+view			PrimerPeaks
+type			doc
+downloadOnly	yes
+required		yes
+
+view			Peaks
+type			bed12
+required		yes
+
