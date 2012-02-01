@@ -1,3 +1,8 @@
+metaObject wgEncodeCshlLongRnaSeq
+objType composite
+composite wgEncodeCshlLongRnaSeq
+expVars lab,dataType,cell,age,strain
+
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -2755,4 +2760,4 @@ objType composite
 composite wgEncodeCshlLongRnaSeq
 expVars lab,dataType,cell,age,strain
 
-# MAGIC: -600704399
+# MAGIC: 270703244
