@@ -17,7 +17,7 @@ include wgEncodeUwDnase.new.ra alpha
 include wgEncodePsuTfbs.ra alpha,beta
 
 # PSU Histone (wrangler: Venkat)
-include wgEncodePsuHistone.ra alpha
+include wgEncodePsuHistone.ra alpha,beta
 
 # LICR Histone (wrangler: Venkat)
 include wgEncodeLicrHistone.ra beta,public
