@@ -11463,6 +11463,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1507
 md5sum 2bafe02a58c5df166adb4498c2f9964b
+objStatus revoked - original submission was identical to another experiment
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -11470,6 +11471,31 @@ setType exp
 softwareVersion MACS
 subId 2208
 tableName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1V2
+objType table
+antibody ETS1
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1V2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1507
+md5sum c43cdf9708c33a58eaba9c86fd840489
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 5502
+submittedDataVersion V2 - replacement files for peaks that were identical.
+tableName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1V2
 treatment None
 view Peaks
 
@@ -11491,6 +11517,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1655
 md5sum 2bafe02a58c5df166adb4498c2f9964b
+objStatus revoked - original submission was identical to another experiment
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11498,6 +11525,31 @@ setType exp
 softwareVersion MACS
 subId 2208
 tableName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2V2
+objType table
+antibody ETS1
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion ENCODE Mar 2012 Freeze
+dateSubmitted 2012-02-02
+dateUnrestricted 2012-11-02
+fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2V2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1655
+md5sum cd9ea727102f21f511890f4bba5cf11b
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 5502
+submittedDataVersion V2 - replacement files for peaks that were identical.
+tableName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2V2
 treatment None
 view Peaks
 
@@ -59344,4 +59396,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: -1206357113
+# MAGIC: 739172198
