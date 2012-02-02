@@ -1,3 +1,8 @@
+metaObject wgEncodeCshlLongRnaSeq
+objType composite
+composite wgEncodeCshlLongRnaSeq
+expVars lab,dataType,cell,age,strain
+
 metaObject wgEncodeCshlLongRnaSeqColonAdult8wksAlnRep1
 objType table
 age adult-8wks
@@ -2750,9 +2755,4 @@ strain C57BL/6J
 subId 5437
 view Spikeins
 
-metaObject wgEncodeCshlLongRnaSeqq
-objType composite
-composite wgEncodeCshlLongRnaSeq
-expVars lab,dataType,cell,age,strain
-
-# MAGIC: -600704399
+# MAGIC: 128559408

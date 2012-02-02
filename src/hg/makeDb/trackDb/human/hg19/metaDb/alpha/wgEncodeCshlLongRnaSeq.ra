@@ -333,7 +333,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000184
@@ -387,7 +387,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000184
@@ -443,7 +443,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000184
@@ -474,7 +474,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000184
@@ -530,7 +530,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000184
@@ -619,7 +619,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -646,7 +646,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000143
@@ -789,7 +789,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -815,7 +815,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000143
@@ -842,7 +842,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -989,7 +989,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000143
@@ -1016,7 +1016,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000143
@@ -1044,7 +1044,7 @@ bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000143
@@ -1075,7 +1075,7 @@ bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000143
@@ -1105,7 +1105,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000143
@@ -1131,7 +1131,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000143
@@ -1482,7 +1482,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
@@ -1536,7 +1536,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
@@ -1592,7 +1592,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000179
@@ -1623,7 +1623,7 @@ bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000179
@@ -1679,7 +1679,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000179
@@ -1795,7 +1795,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000144
@@ -1964,7 +1964,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000144
@@ -2138,7 +2138,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000144
@@ -2165,7 +2165,7 @@ bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000144
@@ -2193,7 +2193,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000144
@@ -2224,7 +2224,7 @@ bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000144
@@ -2280,7 +2280,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000144
@@ -2631,7 +2631,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000185
@@ -2685,7 +2685,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000185
@@ -2741,7 +2741,7 @@ bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000185
@@ -2772,7 +2772,7 @@ bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000185
@@ -2828,7 +2828,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000185
@@ -2944,7 +2944,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000145
@@ -3113,7 +3113,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000145
@@ -3287,7 +3287,7 @@ bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000145
@@ -3314,7 +3314,7 @@ bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000145
@@ -3342,7 +3342,7 @@ bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000145
@@ -3373,7 +3373,7 @@ bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000145
@@ -3429,7 +3429,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000145
@@ -3780,7 +3780,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000148
@@ -3833,7 +3833,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000148
@@ -3887,7 +3887,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000148
@@ -3914,7 +3914,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000148
@@ -3942,7 +3942,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000148
@@ -3973,7 +3973,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000148
@@ -4029,7 +4029,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000148
@@ -4117,7 +4117,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4144,7 +4144,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000146
@@ -4287,7 +4287,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4313,7 +4313,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000146
@@ -4340,7 +4340,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4487,7 +4487,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000146
@@ -4514,7 +4514,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000146
@@ -4542,7 +4542,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000146
@@ -4573,7 +4573,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000146
@@ -4603,7 +4603,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000146
@@ -4629,7 +4629,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000146
@@ -5200,7 +5200,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000186
@@ -5254,7 +5254,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000186
@@ -5309,7 +5309,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000186
@@ -5336,7 +5336,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000186
@@ -5364,7 +5364,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000186
@@ -5395,7 +5395,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000186
@@ -5451,7 +5451,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000186
@@ -5567,7 +5567,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000147
@@ -5736,7 +5736,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000147
@@ -5910,7 +5910,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000147
@@ -5937,7 +5937,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000147
@@ -5965,7 +5965,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000147
@@ -5996,7 +5996,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000147
@@ -6052,7 +6052,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000147
@@ -6403,7 +6403,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000187
@@ -6457,7 +6457,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000187
@@ -6512,7 +6512,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000187
@@ -6539,7 +6539,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000187
@@ -6567,7 +6567,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000187
@@ -6598,7 +6598,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000187
@@ -6654,7 +6654,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000187
@@ -6770,7 +6770,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
@@ -6940,7 +6940,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
@@ -7115,7 +7115,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000170
@@ -7142,7 +7142,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000170
@@ -7170,7 +7170,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000170
@@ -7201,7 +7201,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000170
@@ -7257,7 +7257,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000170
@@ -7609,7 +7609,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000149
@@ -7662,7 +7662,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000149
@@ -7716,7 +7716,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000149
@@ -7743,7 +7743,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000149
@@ -7771,7 +7771,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000149
@@ -7802,7 +7802,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000149
@@ -7858,7 +7858,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000149
@@ -7973,7 +7973,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000150
@@ -8142,7 +8142,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000150
@@ -8316,7 +8316,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000150
@@ -8343,7 +8343,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000150
@@ -8371,7 +8371,7 @@ bioRep 005WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000150
@@ -8402,7 +8402,7 @@ bioRep 006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000150
@@ -8458,7 +8458,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000150
@@ -8663,7 +8663,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000198
@@ -8719,7 +8719,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000198
@@ -8776,7 +8776,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000198
@@ -8804,7 +8804,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000198
@@ -8862,7 +8862,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000198
@@ -8950,7 +8950,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000151
@@ -9063,7 +9063,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000151
@@ -9179,7 +9179,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000151
@@ -9207,7 +9207,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000151
@@ -9265,7 +9265,7 @@ bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000151
@@ -9470,7 +9470,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000199
@@ -9526,7 +9526,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000199
@@ -9583,7 +9583,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000199
@@ -9611,7 +9611,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000199
@@ -9669,7 +9669,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000199
@@ -9757,7 +9757,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000152
@@ -9870,7 +9870,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000152
@@ -9986,7 +9986,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000152
@@ -10014,7 +10014,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000152
@@ -10072,7 +10072,7 @@ bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000152
@@ -10423,7 +10423,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000191
@@ -10477,7 +10477,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000191
@@ -10532,7 +10532,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000191
@@ -10559,7 +10559,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000191
@@ -10587,7 +10587,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000191
@@ -10618,7 +10618,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000191
@@ -10674,7 +10674,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000191
@@ -10790,7 +10790,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
@@ -10960,7 +10960,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
@@ -11135,7 +11135,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000173
@@ -11162,7 +11162,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000173
@@ -11190,7 +11190,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000173
@@ -11221,7 +11221,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000173
@@ -11277,7 +11277,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000173
@@ -11483,7 +11483,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000201
@@ -11539,7 +11539,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000201
@@ -11596,7 +11596,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000201
@@ -11624,7 +11624,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000201
@@ -11682,7 +11682,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000201
@@ -11798,7 +11798,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
@@ -11968,7 +11968,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
@@ -12143,7 +12143,7 @@ bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000171
@@ -12170,7 +12170,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000171
@@ -12198,7 +12198,7 @@ bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000171
@@ -12229,7 +12229,7 @@ bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000171
@@ -12285,7 +12285,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000171
@@ -12637,7 +12637,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000190
@@ -12691,7 +12691,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000190
@@ -12746,7 +12746,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000190
@@ -12773,7 +12773,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000190
@@ -12801,7 +12801,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000190
@@ -12832,7 +12832,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000190
@@ -12888,7 +12888,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000190
@@ -13004,7 +13004,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
@@ -13174,7 +13174,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
@@ -13349,7 +13349,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000172
@@ -13376,7 +13376,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000172
@@ -13404,7 +13404,7 @@ bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000172
@@ -13435,7 +13435,7 @@ bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000172
@@ -13491,7 +13491,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000172
@@ -13843,7 +13843,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000159
@@ -13896,7 +13896,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000159
@@ -13950,7 +13950,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000159
@@ -13977,7 +13977,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000159
@@ -14005,7 +14005,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000159
@@ -14036,7 +14036,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000159
@@ -14092,7 +14092,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000159
@@ -14207,7 +14207,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000160
@@ -14376,7 +14376,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000160
@@ -14550,7 +14550,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000160
@@ -14577,7 +14577,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000160
@@ -14605,7 +14605,7 @@ bioRep 013WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000160
@@ -14636,7 +14636,7 @@ bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000160
@@ -14692,7 +14692,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000160
@@ -15016,7 +15016,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15043,7 +15043,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000202
@@ -15071,7 +15071,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15097,7 +15097,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000202
@@ -15125,7 +15125,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15152,7 +15152,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000202
@@ -15179,7 +15179,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000202
@@ -15207,7 +15207,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000202
@@ -15238,7 +15238,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000202
@@ -15268,7 +15268,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000202
@@ -15294,7 +15294,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000202
@@ -15410,7 +15410,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000161
@@ -15579,7 +15579,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000161
@@ -15753,7 +15753,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000161
@@ -15780,7 +15780,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000161
@@ -15808,7 +15808,7 @@ bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000161
@@ -15839,7 +15839,7 @@ bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000161
@@ -15895,7 +15895,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000161
@@ -16246,7 +16246,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000192
@@ -16300,7 +16300,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000192
@@ -16355,7 +16355,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000192
@@ -16382,7 +16382,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000192
@@ -16410,7 +16410,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000192
@@ -16441,7 +16441,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000192
@@ -16497,7 +16497,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000192
@@ -16613,7 +16613,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000158
@@ -16782,7 +16782,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000158
@@ -16956,7 +16956,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000158
@@ -16983,7 +16983,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000158
@@ -17011,7 +17011,7 @@ bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000158
@@ -17042,7 +17042,7 @@ bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000158
@@ -17098,7 +17098,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000158
@@ -17303,7 +17303,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
@@ -17359,7 +17359,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
@@ -17416,7 +17416,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000176
@@ -17444,7 +17444,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000176
@@ -17502,7 +17502,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000176
@@ -17590,7 +17590,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000153
@@ -17703,7 +17703,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000153
@@ -17819,7 +17819,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000153
@@ -17847,7 +17847,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000153
@@ -17905,7 +17905,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000153
@@ -18256,7 +18256,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
@@ -18310,7 +18310,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
@@ -18365,7 +18365,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000177
@@ -18392,7 +18392,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000177
@@ -18420,7 +18420,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000177
@@ -18451,7 +18451,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000177
@@ -18507,7 +18507,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000177
@@ -18566,7 +18566,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000154
@@ -18624,7 +18624,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000154
@@ -18793,7 +18793,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000154
@@ -18967,7 +18967,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000154
@@ -18994,7 +18994,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000154
@@ -19022,7 +19022,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000154
@@ -19053,7 +19053,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000154
@@ -19109,7 +19109,7 @@ bioRep 023WC,024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000154
@@ -19460,7 +19460,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000188
@@ -19514,7 +19514,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000188
@@ -19569,7 +19569,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000188
@@ -19596,7 +19596,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000188
@@ -19624,7 +19624,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000188
@@ -19655,7 +19655,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000188
@@ -19711,7 +19711,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000188
@@ -19827,7 +19827,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000155
@@ -19996,7 +19996,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000155
@@ -20170,7 +20170,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000155
@@ -20197,7 +20197,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000155
@@ -20225,7 +20225,7 @@ bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000155
@@ -20256,7 +20256,7 @@ bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000155
@@ -20312,7 +20312,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000155
@@ -20517,7 +20517,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000200
@@ -20573,7 +20573,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000200
@@ -20630,7 +20630,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000200
@@ -20658,7 +20658,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000200
@@ -20716,7 +20716,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000200
@@ -20832,7 +20832,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000156
@@ -21001,7 +21001,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000156
@@ -21175,7 +21175,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000156
@@ -21202,7 +21202,7 @@ bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000156
@@ -21230,7 +21230,7 @@ bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000156
@@ -21261,7 +21261,7 @@ bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000156
@@ -21317,7 +21317,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000156
@@ -21668,7 +21668,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000189
@@ -21722,7 +21722,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000189
@@ -21777,7 +21777,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000189
@@ -21804,7 +21804,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000189
@@ -21832,7 +21832,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000189
@@ -21863,7 +21863,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000189
@@ -21919,7 +21919,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000189
@@ -22035,7 +22035,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000157
@@ -22204,7 +22204,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000157
@@ -22378,7 +22378,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000157
@@ -22405,7 +22405,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000157
@@ -22433,7 +22433,7 @@ bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000157
@@ -22464,7 +22464,7 @@ bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000157
@@ -22520,7 +22520,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000157
@@ -22548,7 +22548,7 @@ bioRep 045WC
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-06
 dateUnrestricted 2012-09-06
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam,wgEncodeCshlLongRnaSeqImr90CellTotalAlnRep1.bam.bai
@@ -22573,7 +22573,7 @@ bioRep 045WC
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-06
 dateUnrestricted 2012-09-06
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd1Rep1.fastq.gz
@@ -22597,7 +22597,7 @@ bioRep 045WC
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-06
 dateUnrestricted 2012-09-06
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalFastqRd2Rep1.fastq.gz
@@ -22621,7 +22621,7 @@ bioRep 045WC
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-06
 dateUnrestricted 2012-09-06
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalMinusRawRep1.bigWig
@@ -22646,7 +22646,7 @@ bioRep 045WC
 cell IMR90
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-06
 dateUnrestricted 2012-09-06
 fileName wgEncodeCshlLongRnaSeqImr90CellTotalPlusRawRep1.bigWig
@@ -22994,7 +22994,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000162
@@ -23047,7 +23047,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000162
@@ -23101,7 +23101,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000162
@@ -23128,7 +23128,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000162
@@ -23156,7 +23156,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000162
@@ -23187,7 +23187,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000162
@@ -23243,7 +23243,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000162
@@ -23331,7 +23331,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23358,7 +23358,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
@@ -23502,7 +23502,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23528,7 +23528,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
@@ -23556,7 +23556,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23703,7 +23703,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000163
@@ -23730,7 +23730,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000163
@@ -23758,7 +23758,7 @@ bioRep 001WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000163
@@ -23789,7 +23789,7 @@ bioRep 002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000163
@@ -23819,7 +23819,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000163
@@ -23845,7 +23845,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000163
@@ -24181,7 +24181,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
@@ -24351,7 +24351,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
@@ -24527,7 +24527,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000180
@@ -24558,7 +24558,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000180
@@ -24614,7 +24614,7 @@ bioRep 025CH,026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000180
@@ -24939,7 +24939,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -24966,7 +24966,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000193
@@ -24994,7 +24994,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -25020,7 +25020,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000193
@@ -25048,7 +25048,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -25075,7 +25075,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000193
@@ -25102,7 +25102,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000193
@@ -25130,7 +25130,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000193
@@ -25161,7 +25161,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000193
@@ -25191,7 +25191,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-02-18
 dateUnrestricted 2011-11-18
 dccAccession wgEncodeEH000193
@@ -25217,7 +25217,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000193
@@ -25330,7 +25330,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000140
@@ -25494,7 +25494,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000140
@@ -25663,7 +25663,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000140
@@ -25689,7 +25689,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000140
@@ -25716,7 +25716,7 @@ bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000140
@@ -25746,7 +25746,7 @@ bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000140
@@ -25800,7 +25800,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000140
@@ -25915,7 +25915,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
@@ -26085,7 +26085,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
@@ -26261,7 +26261,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000181
@@ -26292,7 +26292,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000181
@@ -26348,7 +26348,7 @@ bioRep 025NL,026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000181
@@ -26464,7 +26464,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
@@ -26634,7 +26634,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
@@ -26810,7 +26810,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000182
@@ -26841,7 +26841,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000182
@@ -26897,7 +26897,7 @@ bioRep 025NP,026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000182
@@ -27249,7 +27249,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000194
@@ -27303,7 +27303,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000194
@@ -27358,7 +27358,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000194
@@ -27385,7 +27385,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000194
@@ -27413,7 +27413,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000194
@@ -27444,7 +27444,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000194
@@ -27500,7 +27500,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000194
@@ -27616,7 +27616,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
@@ -27786,7 +27786,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
@@ -27961,7 +27961,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000174
@@ -27988,7 +27988,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000174
@@ -28016,7 +28016,7 @@ bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000174
@@ -28047,7 +28047,7 @@ bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000174
@@ -28103,7 +28103,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000174
@@ -28455,7 +28455,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000183
@@ -28509,7 +28509,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000183
@@ -28564,7 +28564,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000183
@@ -28591,7 +28591,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000183
@@ -28619,7 +28619,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-07
 dateUnrestricted 2012-02-07
 dccAccession wgEncodeEH000183
@@ -28650,7 +28650,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000183
@@ -28706,7 +28706,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000183
@@ -28822,7 +28822,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
@@ -28992,7 +28992,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
@@ -29167,7 +29167,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000175
@@ -29194,7 +29194,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000175
@@ -29222,7 +29222,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000175
@@ -29253,7 +29253,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000175
@@ -29309,7 +29309,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000175
@@ -29816,7 +29816,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
@@ -29845,7 +29845,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
@@ -29902,7 +29902,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
@@ -29930,7 +29930,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
@@ -29987,7 +29987,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000164
@@ -30014,7 +30014,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000164
@@ -30042,7 +30042,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000164
@@ -30069,7 +30069,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000164
@@ -30100,7 +30100,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000164
@@ -30131,7 +30131,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000164
@@ -30188,7 +30188,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000164
@@ -30217,7 +30217,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-14
 dateUnrestricted 2012-04-14
 dccAccession wgEncodeEH000164
@@ -30307,7 +30307,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-09
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -30368,7 +30368,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30397,7 +30397,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30630,7 +30630,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30658,7 +30658,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -30897,7 +30897,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000167
@@ -30924,7 +30924,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000167
@@ -30952,7 +30952,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000167
@@ -30979,7 +30979,7 @@ bioRep 007WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -31010,7 +31010,7 @@ bioRep 008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -31041,7 +31041,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000167
@@ -31098,7 +31098,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -31127,7 +31127,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000167
@@ -31333,7 +31333,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000195
@@ -31389,7 +31389,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000195
@@ -31447,7 +31447,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000195
@@ -31505,7 +31505,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000195
@@ -31621,7 +31621,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
@@ -31791,7 +31791,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
@@ -31966,7 +31966,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000166
@@ -31993,7 +31993,7 @@ bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000166
@@ -32021,7 +32021,7 @@ bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000166
@@ -32052,7 +32052,7 @@ bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000166
@@ -32108,7 +32108,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000166
@@ -32460,7 +32460,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000196
@@ -32514,7 +32514,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000196
@@ -32569,7 +32569,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000196
@@ -32596,7 +32596,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000196
@@ -32624,7 +32624,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000196
@@ -32655,7 +32655,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000196
@@ -32711,7 +32711,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000196
@@ -32770,7 +32770,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000165
@@ -32829,7 +32829,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
@@ -32999,7 +32999,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
@@ -33174,7 +33174,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000165
@@ -33201,7 +33201,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000165
@@ -33229,7 +33229,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000165
@@ -33260,7 +33260,7 @@ bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000165
@@ -33316,7 +33316,7 @@ bioRep 027N,028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000165
@@ -33668,7 +33668,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
@@ -33722,7 +33722,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
@@ -33777,7 +33777,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000178
@@ -33804,7 +33804,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000178
@@ -33832,7 +33832,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000178
@@ -33863,7 +33863,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000178
@@ -33919,7 +33919,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000178
@@ -33948,7 +33948,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000168
@@ -33979,7 +33979,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-06
 dateUnrestricted 2012-02-06
 dccAccession wgEncodeEH000168
@@ -34037,7 +34037,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
@@ -34207,7 +34207,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
@@ -34382,7 +34382,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000168
@@ -34409,7 +34409,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000168
@@ -34437,7 +34437,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000168
@@ -34468,7 +34468,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000168
@@ -34524,7 +34524,7 @@ bioRep 033WC,034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000168
@@ -34876,7 +34876,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000197
@@ -34930,7 +34930,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000197
@@ -34986,7 +34986,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000197
@@ -35017,7 +35017,7 @@ bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000197
@@ -35073,7 +35073,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000197
@@ -35189,7 +35189,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
@@ -35359,7 +35359,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
@@ -35534,7 +35534,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000169
@@ -35561,7 +35561,7 @@ bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-20
 dateUnrestricted 2012-01-20
 dccAccession wgEncodeEH000169
@@ -35589,7 +35589,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000169
@@ -35620,7 +35620,7 @@ bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-08
 dateUnrestricted 2012-03-08
 dccAccession wgEncodeEH000169
@@ -35676,7 +35676,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-13
 dateUnrestricted 2012-04-13
 dccAccession wgEncodeEH000169
@@ -35699,4 +35699,4 @@ subId 4560
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapTranscriptGencV7
 view TranscriptGencV7
 
-# MAGIC: -1307191040
+# MAGIC: -629253436

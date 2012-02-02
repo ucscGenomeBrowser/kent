@@ -3039,7 +3039,19 @@ color 200, 0, 0
 type bed 4
 hgsid on
 url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
+
+track cosmic
+shortLabel COSMIC
+longLabel COSMIC: Catalogue Of Somatic Mutations In Cancer
+group phenDis
+priority 29.80
+visibility hide
+color 200, 0, 0
+type bed 4
+hgsid on
+url http://www.sanger.ac.uk/perl/genetics/CGP/cosmic?action=mut_summary
 dataVersion v57
+release alpha
 
 searchName cosmicId
 searchTable cosmic
