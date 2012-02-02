@@ -11488,6 +11488,7 @@ fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1507
+md5sum c43cdf9708c33a58eaba9c86fd840489
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -11541,6 +11542,7 @@ fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2V2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1655
+md5sum cd9ea727102f21f511890f4bba5cf11b
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -59394,4 +59396,4 @@ tableName wgEncodeHaibTfbsU87RxlchV0416101RawRep2V2
 treatment None
 view RawSignal
 
-# MAGIC: 1622254170
+# MAGIC: 739172198
