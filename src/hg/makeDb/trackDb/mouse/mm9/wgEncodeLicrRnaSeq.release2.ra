@@ -51,7 +51,7 @@ noInherit on
 	visibility full
 	subTrack wgEncodeLicrRnaSeq
 	viewLimits 0:500
-	autoScale on
+	autoScale off
 	transformFunc NONE
 	windowingFunction mean+whiskers
 	maxHeightPixels 100:24:16
