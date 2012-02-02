@@ -288,7 +288,7 @@ char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retri
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
-char *cloneDbScript = "http://www.ncbi.nlm.nih.gov//clone?term=";
+char *cloneDbScript = "http://www.ncbi.nlm.nih.gov/clone?term=";
 char *traceScript = "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=retrieve&val=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 char *uniprotFormat = "http://www.uniprot.org/uniprot/%s";
@@ -20111,9 +20111,7 @@ else
     }
 printTrackUiLink(ct->tdb);
 printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
-/* already done in doBedDetail */
-if (differentWord(type, "bedDetail"))
-    printTrackHtml(ct->tdb);
+printTrackHtml(ct->tdb);
 }
 
 void blastProtein(struct trackDb *tdb, char *itemName)
@@ -23794,7 +23792,9 @@ if ((row = sqlNextRow(sr)) != NULL)
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
-printTrackHtml(tdb);
+/* do not print this for custom tracks, they do this later */
+if (ct == NULL)
+    printTrackHtml(tdb);
 
 bedDetailFree(&r);
 freeMem(escName);

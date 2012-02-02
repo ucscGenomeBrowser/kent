@@ -223,7 +223,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001158
@@ -247,7 +247,7 @@ bioRep 021WC,022WC
 cell A549
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001158
@@ -486,7 +486,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001159
@@ -510,7 +510,7 @@ bioRep 017WC,018WC
 cell AG04450
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001159
@@ -749,7 +749,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001160
@@ -773,7 +773,7 @@ bioRep 037WC,038WC
 cell BJ
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001160
@@ -798,7 +798,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -825,7 +825,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -852,7 +852,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -879,7 +879,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -906,7 +906,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -933,7 +933,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -960,7 +960,7 @@ bioRep 003WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -986,7 +986,7 @@ bioRep 004WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001680
@@ -1012,7 +1012,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001680
@@ -1036,7 +1036,7 @@ bioRep 003WC,004WC
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001680
@@ -1279,7 +1279,7 @@ bioRep gen0104C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000338
@@ -1304,7 +1304,7 @@ bioRep gen0104C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000338
@@ -1330,7 +1330,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
@@ -1357,7 +1357,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001679
@@ -1384,7 +1384,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
@@ -1411,7 +1411,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001679
@@ -1438,7 +1438,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
@@ -1465,7 +1465,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-28
 dateUnrestricted 2012-01-28
 dccAccession wgEncodeEH001679
@@ -1492,7 +1492,7 @@ bioRep 003C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
@@ -1518,7 +1518,7 @@ bioRep 004C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001679
@@ -1544,7 +1544,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001679
@@ -1568,7 +1568,7 @@ bioRep 003C,004C
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001679
@@ -1753,7 +1753,7 @@ bioRep gen0109NL
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000340
@@ -1778,7 +1778,7 @@ bioRep gen0109NL
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000340
@@ -2010,7 +2010,7 @@ bioRep gen0110N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000339
@@ -2035,7 +2035,7 @@ bioRep gen0110N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000339
@@ -2061,7 +2061,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2088,7 +2088,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2115,7 +2115,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2142,7 +2142,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2169,7 +2169,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2196,7 +2196,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2223,7 +2223,7 @@ bioRep 003N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2249,7 +2249,7 @@ bioRep 004N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001678
@@ -2275,7 +2275,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001678
@@ -2299,7 +2299,7 @@ bioRep 003N,004N
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001678
@@ -2542,7 +2542,7 @@ bioRep gen0113WC
 cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000341
@@ -2567,7 +2567,7 @@ bioRep gen0113WC
 cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000341
@@ -2919,7 +2919,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001138
@@ -2943,7 +2943,7 @@ bioRep 005WC,006WC
 cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001138
@@ -3620,7 +3620,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001146
@@ -3644,7 +3644,7 @@ bioRep 011WC,012WC
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001146
@@ -3883,7 +3883,7 @@ bioRep gen0121C
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001155
@@ -3908,7 +3908,7 @@ bioRep gen0121C
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001155
@@ -4260,7 +4260,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001144
@@ -4284,7 +4284,7 @@ bioRep 011C,012C
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001144
@@ -4468,7 +4468,7 @@ bioRep gen0123NL
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001156
@@ -4493,7 +4493,7 @@ bioRep gen0123NL
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001156
@@ -4845,7 +4845,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001145
@@ -4869,7 +4869,7 @@ bioRep 011N,012N
 cell HeLa-S3
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001145
@@ -5220,7 +5220,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001149
@@ -5244,7 +5244,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001149
@@ -5270,7 +5270,7 @@ bioRep 013WC,014WC
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
 dccAccession wgEncodeEH001149
@@ -5514,7 +5514,7 @@ bioRep gen0125C
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000343
@@ -5539,7 +5539,7 @@ bioRep gen0125C
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000343
@@ -5891,7 +5891,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001147
@@ -5915,7 +5915,7 @@ bioRep 013C,014C
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001147
@@ -6100,7 +6100,7 @@ bioRep gen0127NL
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000344
@@ -6125,7 +6125,7 @@ bioRep gen0127NL
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000344
@@ -6152,7 +6152,7 @@ bioRep gen0127NL
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
 dccAccession wgEncodeEH000344
@@ -6396,7 +6396,7 @@ bioRep gen0128N
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000345
@@ -6421,7 +6421,7 @@ bioRep gen0128N
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000345
@@ -6773,7 +6773,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001148
@@ -6797,7 +6797,7 @@ bioRep 013N,014N
 cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001148
@@ -7148,7 +7148,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001141
@@ -7172,7 +7172,7 @@ bioRep 009WC,010WC
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001141
@@ -7415,7 +7415,7 @@ bioRep gen0116C
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000342
@@ -7440,7 +7440,7 @@ bioRep gen0116C
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000342
@@ -7792,7 +7792,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001142
@@ -7816,7 +7816,7 @@ bioRep 029C,030C
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001142
@@ -8167,7 +8167,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001143
@@ -8191,7 +8191,7 @@ bioRep 029N,030N
 cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-10-27
 dateUnrestricted 2012-07-27
 dccAccession wgEncodeEH001143
@@ -8542,7 +8542,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001150
@@ -8566,7 +8566,7 @@ bioRep 001WC,002WC
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001150
@@ -8756,7 +8756,7 @@ bioRep gen0134CH
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000334
@@ -8781,7 +8781,7 @@ bioRep gen0134CH
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000334
@@ -8808,7 +8808,7 @@ bioRep gen0134CH
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
 dccAccession wgEncodeEH000334
@@ -9106,7 +9106,7 @@ bioRep gen0136C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000329
@@ -9131,7 +9131,7 @@ bioRep gen0136C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000329
@@ -9650,7 +9650,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000332
@@ -9674,7 +9674,7 @@ bioRep 001C,002C
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000332
@@ -9802,7 +9802,7 @@ bioRep gen0144NL
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000335
@@ -9827,7 +9827,7 @@ bioRep gen0144NL
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000335
@@ -9854,7 +9854,7 @@ bioRep gen0144NL
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
 dccAccession wgEncodeEH000335
@@ -10045,7 +10045,7 @@ bioRep gen0147NP
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000336
@@ -10070,7 +10070,7 @@ bioRep gen0147NP
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000336
@@ -10097,7 +10097,7 @@ bioRep gen0147NP
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
 dccAccession wgEncodeEH000336
@@ -10389,7 +10389,7 @@ bioRep gen0149N
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000330
@@ -10414,7 +10414,7 @@ bioRep gen0149N
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000330
@@ -10766,7 +10766,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000333
@@ -10790,7 +10790,7 @@ bioRep 001N,002N
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000333
@@ -11033,7 +11033,7 @@ bioRep gen0152P
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000337
@@ -11058,7 +11058,7 @@ bioRep gen0152P
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000337
@@ -11084,7 +11084,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
@@ -11166,7 +11166,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
 dccAccession wgEncodeEH001151
@@ -11248,7 +11248,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-06-17
 dateUnrestricted 2012-03-17
 dccAccession wgEncodeEH001151
@@ -11302,7 +11302,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 dccAccession wgEncodeEH001151
@@ -11354,7 +11354,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001151
@@ -11378,7 +11378,7 @@ bioRep 015WC,016WC
 cell MCF-7
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001151
@@ -11729,7 +11729,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001152
@@ -11753,7 +11753,7 @@ bioRep 007WC,008WC
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001152
@@ -11996,7 +11996,7 @@ bioRep gen0155C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000346
@@ -12021,7 +12021,7 @@ bioRep gen0155C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000346
@@ -12129,7 +12129,7 @@ bioRep 028C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001153
@@ -12211,7 +12211,7 @@ bioRep 028C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001153
@@ -12317,7 +12317,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001153
@@ -12341,7 +12341,7 @@ bioRep 027C,028C
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001153
@@ -12584,7 +12584,7 @@ bioRep gen0157N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH000347
@@ -12609,7 +12609,7 @@ bioRep gen0157N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH000347
@@ -12798,7 +12798,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001154
@@ -12823,7 +12823,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001154
@@ -12850,7 +12850,7 @@ bioRep 027N
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-12-09
 dateUnrestricted 2012-09-09
 dccAccession wgEncodeEH001154
@@ -13202,7 +13202,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001157
@@ -13256,7 +13256,7 @@ bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-05-31
 dateUnrestricted 2012-03-02
 dccAccession wgEncodeEH001157
@@ -13362,7 +13362,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-07-12
 dateUnrestricted 2012-04-12
 dccAccession wgEncodeEH001157
@@ -13386,7 +13386,7 @@ bioRep 019WC,020WC
 cell SK-N-SH_RA
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-11-04
 dateUnrestricted 2012-08-04
 dccAccession wgEncodeEH001157
@@ -13405,4 +13405,4 @@ rnaExtract longPolyA
 subId 5074
 view TssHmm
 
-# MAGIC: -86322330
+# MAGIC: 702481195

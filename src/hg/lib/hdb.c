@@ -98,6 +98,8 @@ struct hash *infoHash = NULL;
 struct hashEl *dHel = NULL;
 struct chromInfo *ci = NULL;
 char upcName[HDB_MAX_CHROM_STRING];
+if (strlen(chrom) >= HDB_MAX_CHROM_STRING)
+    return NULL;
 safef(upcName, sizeof(upcName), "%s", chrom);
 touppers(upcName);
 

@@ -195,6 +195,7 @@ our %validators = (
     tissueSourceType => \&validateControlledVocabOrNone,
     spikeInPool => \&validateNoValidation,
     readType => \&validateControlledVocabOrNone,
+	region => \&validateControlledVocabOrNone,
     default => \&validateControlledVocab,
     );
 
