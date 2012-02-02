@@ -1264,22 +1264,22 @@ html wgEncodeHaibTfbs.release2
         # subId=2212 dateSubmitted=2010-09-15
         # was wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep1 cricket Tue Apr 19 10:19:31 2011
 
-        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ETS1 PCR1 2
-        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
-        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
-        type broadPeak
-        color 153,38,0
+        #track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel GM78 ETS1 PCR1 2
+        #longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 2 from ENCODE/HAIB
+        #subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
+        #type broadPeak
+        #color 153,38,0
         # subId=2208 dateSubmitted=2010-09-15
 
-        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1
-        parent wgEncodeHaibTfbsViewPeaks off
-        shortLabel GM78 ETS1 PCR1 1
-        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
-        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
-        type broadPeak
-        color 153,38,0
+        #track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1
+        #parent wgEncodeHaibTfbsViewPeaks off
+        #shortLabel GM78 ETS1 PCR1 1
+        #longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        #subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
+        #type broadPeak
+        #color 153,38,0
         # subId=2208 dateSubmitted=2010-09-15
 
         track wgEncodeHaibTfbsGm12878Mef2aPcr1xPkRep2
@@ -4287,6 +4287,24 @@ html wgEncodeHaibTfbs.release2
         subGroups view=Peaks factor=NRSF cellType=U87 protocol=PCR2X treatment=NONE rep=rep2
         type broadPeak
         # subId=5456 dateSubmitted=2012-01-24
+
+        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1V2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 ETS1 PCR1 1
+        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=5502 dateSubmitted=2012-02-02
+
+        track wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2V2
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM78 ETS1 PCR1 2
+        longLabel GM12878 ETS1 PCR1x ChIP-seq Peaks Rep 1 from ENCODE/HAIB
+        subGroups view=Peaks factor=ETS1 cellType=1GM12878 protocol=PCR1X treatment=NONE rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=5502 dateSubmitted=2012-02-02
 
 
 
