@@ -13,32 +13,32 @@ dataType          5C
 variables         cell, region
 assembly          hg19
 
-validationSettings
+validationSettings validateFiles.fastq:
 
 # Track/view definition
 view             Matrix
 type             doc
 downloadOnly     yes
-required         yes
+required         no
 hasReplicates    yes
 
 view            RawData
 type            fastq
-required        yes
+required        no
 hasReplicates   yes
 
 view			Primer
 type			doc
 downloadOnly	yes
-required		yes
+required		no
 hasReplicates	no
 
 view			PrimerPeaks
 type			doc
 downloadOnly	yes
-required		yes
+required		no
 
 view			Peaks
-type			bed12
-required		yes
+type			bed 12
+required		no
 
