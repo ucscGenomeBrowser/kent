@@ -115,7 +115,7 @@ zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
    # 0 lower) in 11660 sequences in 1 files
 
 #########################################################################
-# Initial  database build (DONE - 201201-03 - Chin)
+# Initial  database build (DONE - 2012-01-03 - Chin)
     cd /hive/data/genomes/bosTau7
     cat << '_EOF_' > bosTau7.config.ra
 # Config parameters for makeGenomeDb.pl:
@@ -789,69 +789,67 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.hg19.swap lastz.hg19
 
-
-
 ############################################################################
-#  SWAP canFam2 LASTZ (working 2011-05-25 - Chin)
+#  SWAP canFam2 LASTZ (DONE 2012-01-24 - Chin)
     #   original alignment
-    cd /hive/data/genomes/canFam2/bed/lastzBosTau7.2011-05-25
+    cd /hive/data/genomes/canFam2/bed/lastzBosTau7.2012-01-2
     cat fb.canFam2.chainBosTau7Link.txt
-    # 1389712912 bases of 2384996543 (58.269%) in intersection
+    # 1381869475 bases of 2384996543 (57.940%) in intersection
 
     #   and the swap 
     mkdir /hive/data/genomes/bosTau7/bed/blastz.canFam2.swap
     cd /hive/data/genomes/bosTau7/bed/blastz.canFam2.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/canFam2/bed/lastzBosTau7.2011-05-25/DEF \
+        /hive/data/genomes/canFam2/bed/lastzBosTau7.2012-01-24/DEF \
         -swap -syntenicNet  \
         -noLoadChainSplit \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
-    #   real     88m38.555s
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real      86m11.258s
     cat fb.bosTau7.chainCanFam2Link.txt
-    # 1404315725 bases of 2649682029 (52.999%) in intersection
+    # 1458512906 bases of 2804673174 (52.003%) in intersection
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.canFam2.swap lastz.canFam2
 
 ############################################################################
-#  SWAP rn4 LASTZ (working 2011-05-31 - Chin)
-    cd /hive/data/genomes/rn4/bed/blastzBosTau7.2011-05-31
+#  SWAP rn4 LASTZ (DONE 2012-01-24 - Chin)
+    cd /hive/data/genomes/rn4/bed/blastzBosTau7.2012-01-24
     cat fb.rn4.chainBosTau7Link.txt
-    # 660647959 bases of 2571531505 (25.691%) in intersection
+    # 656136973 bases of 2571531505 (25.515%) in intersection
 
     #   and the swap
     mkdir /hive/data/genomes/bosTau7/bed/blastz.rn4.swap
     cd /hive/data/genomes/bosTau7/bed/blastz.rn4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/rn4/bed/blastzBosTau7.2011-05-31/DEF \
+        /hive/data/genomes/rn4/bed/blastzBosTau7.2012-01-24/DEF \
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    #   real    49m43.881
+    #   real     48m51.145
 
     cat fb.bosTau7.chainRn4Link.txt
-    # 648232024 bases of 2649682029 (24.465%) in intersection
+    # 668440773 bases of 2804673174 (23.833%) in intersection
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.rn4.swap lastz.rn4
 
 ############################################################################
-#  SWAP monDom5 LASTZ (working 2011-05-31 - Chin)
-    cd /hive/data/genomes/monDom5/bed/lastzBosTau7.2011-05-31
+#  SWAP monDom5 LASTZ (DONE 2012-01-26 - Chin)
+    cd /hive/data/genomes/monDom5/bed/lastzBosTau7.2012-01-26
     cat fb.monDom5.chainBosTau7Link.txt
-    #   207703303 bases of 3501660299 (5.932%) in intersection
+    # 206928725 bases of 3501660299 (5.909%) in intersection
 
     # and the swap
     mkdir /hive/data/genomes/bosTau7/bed/blastz.monDom5.swap
     cd /hive/data/genomes/bosTau7/bed/blastz.monDom5.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-        /hive/data/genomes/monDom5/bed/lastzBosTau7.2011-05-31/DEF \
+        /hive/data/genomes/monDom5/bed/lastzBosTau7.2012-01-26/DEF \
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    #   real    52m10.229s
+    #   real    59m33.272s
 
     cat fb.bosTau7.chainMonDom5Link.txt
-    #   199980646 bases of 2649682029 (7.547%) in intersection
+    # 207518037 bases of 2804673174 (7.399%) in intersection
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.monDom5.swap lastz.monDom5
 
@@ -888,53 +886,6 @@ TMPDIR=/scratch/tmp
     hgsql qapushq < bosTau7.pushQ.sql
     #	in that pushQ entry walk through each entry and see if the
     #	sizes will set properly
-
-############################################################################
-#  bosTau7 - Cow - Ensembl Genes version 64  (working - 2011-10-12 - hiram)
-    ssh hgwdev
-    cd /hive/data/genomes/bosTau7
-    cat << '_EOF_' > bosTau7.ensGene.ra
-# required db variable
-db bosTau7
-# optional nameTranslation, the sed command that will transform
-#       Ensemble names to UCSC names.  With quotes just to make sure.
-nameTranslation "s/^\([0-9X][0-9]*\)/chr\1/; s/^MT/chrM/; s/^GJ\([0-9]*\).1/chrUn_GJ\1/"
-'_EOF_'
-#  << happy emacs
-
-    doEnsGeneUpdate.pl  -ensVersion=64 bosTau7.ensGene.ra
-    ssh hgwdev
-    cd /hive/data/genomes/bosTau7/bed/ensGene.64
-    featureBits bosTau7 ensGene
-    # 42264149 bases of 2649682029 (1.595%) in intersection
-
-############################################################################
-# ucscToEnsembl name translation table (working - 2011-10-12 - Hiram)
-    mkdir /hive/data/genomes/bosTau7/bed/ucscToEnsembl
-    cd /hive/data/genomes/bosTau7/bed/ucscToEnsembl
-
-    cut -f1 ../../chrom.sizes | while read C
-do
-E=`echo ${C} | sed -e "s/^chrM/MT/; s/chrUn_GJ\([0-9]*\)/GJ\1.1/; s/^chr//;"`
-    echo -e "${C}\t${E}"
-done > ucscToEnsembl.tab
-
-    # determine longest UCSC name:
-    cut -f1 ucscToEnsembl.tab | awk '{print length($0)}' | sort -nr | head -1
-    #	14
-
-    # use that size in this SQL definition index:
-    cat << '_EOF_' > ucscToEnsembl.sql
-# UCSC to Ensembl chr name translation
-CREATE TABLE ucscToEnsembl (
-    ucsc varchar(255) not null,        # UCSC chromosome name
-    ensembl varchar(255) not null,     # Ensembl chromosome name
-              #Indices
-    PRIMARY KEY(ucsc(14))
-);
-'_EOF_'
-
-    hgLoadSqlTab bosTau7 ucscToEnsembl ucscToEnsembl.sql ucscToEnsembl.tab
 
 #############################################################################
 # LIFTOVER TO bosTau4 (working - 2011-10-20 - Chin)

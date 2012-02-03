@@ -5,6 +5,7 @@ wgEncodeCaltechTfbs.ra \
 wgEncodeLicrHistone.ra \
 wgEncodeLicrRnaSeq.ra \
 wgEncodeLicrTfbs.ra \
+wgEncodePsuHistone.ra \
 wgEncodePsuTfbs.ra \
 wgEncodeSydhHist.ra \
 wgEncodeSydhTfbs.ra \

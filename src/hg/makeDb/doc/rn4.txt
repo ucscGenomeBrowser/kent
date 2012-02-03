@@ -5475,6 +5475,106 @@ hgsql rn4 -N -e \
 'select "RGD:", gene_rgd_id, "gene_desc", gene_desc from genes_rat where gene_desc <>""'\
 |sed -e 's/RGD:\t/RGD:/'|cut -f 1,3 |sort -u >rgdGene2ToDescription.tab
 
+    # there are many proteins listed in rgdGene2ToUniProt that are not
+    #	in uniProt - they need to be removed:
+    hgsql -N -e "select value from rgdGene2ToUniProt;" rn4 \
+	| sort > rgdGene2ToUniProt.value.txt
+    hgsql -N -e "select acc from displayId;" uniProt | sort > uniProt.acc.txt
+    comm -23 rgdGene2ToUniProt.value.txt uniProt.acc.txt > removeProtein.list
+    wc -l removeProtein.list
+    #	249 removeProtein.list
+    hgsql -e "select count(*) from rgdGene2ToUniProt;" rn4
+    #	21601
+    for P in `cat removeProtein.list`
+    do
+	hgsql -e "delete from rgdGene2ToUniProt where value=\"${P}\";" rn4
+    done
+    hgsql -e "select count(*) from rgdGene2ToUniProt;" rn4
+    #	21255 -> 21601 - 21255 == 346 removed
+
+    # need to clean up the peptide table to remove bad duplicates
+    mkdir /hive/data/genomes/rn4/bed/rgdGene/093010/dupRemove
+    cd /hive/data/genomes/rn4/bed/rgdGene/093010/dupRemove
+    # via email. RGD indicates a cleaned up correspondence list:
+    wget --timestamping \
+	ftp://rgd.mcw.edu/pub/data_release/gp2protein.rgd.gz
+    zcat gp2protein.rgd.gz | grep "^RGD" | awk 'NF == 2' \
+	| sed -e "s/UniProtKB://" | sort > rgd.gp2protein.txt
+
+    hgsql -N -e "select * from rgdGene2ToUniProt;" rn4 | sort \
+	> rgdGene2ToUniProt.tab
+
+    wc -l rgd.gp2protein.txt rgdGene2ToUniProt.tab
+    #	27270 rgd.gp2protein.txt
+    #	21255 rgdGene2ToUniProt.tab
+    comm -12 rgd.gp2protein.txt rgdGene2ToUniProt.tab | wc -l
+    #	17144
+    # let's see how many we can get out of their new file:
+    cut -f1 rgdGene2ToUniProt.tab | sort -u | while read G
+do
+    grep -w "${G}" rgd.gp2protein.txt
+done | wc -l
+    #	18321
+    # that is almost all of them:
+    cut -f1 rgdGene2ToUniProt.tab | sort -u | wc -l
+    #	18356
+    # are their proteins unique, they 8 dups:
+    cut -f1 rgdGene2ToUniProt.tab | sort -u | while read G
+do
+    grep -w "${G}" rgd.gp2protein.txt | cut -f2
+done | sort | uniq -c | sort -rn | head
+    #	2 Q91887
+    #	2 Q5J3L8
+    #	2 Q0ZFT0
+    #	2 P81795
+    #	2 G3V9A2
+    #	2 D4ABB1
+    #	2 D3ZE98
+    #	2 D3ZAY4
+    # are all their proteins in uniProt:
+    hgsql -N -e "select acc from protein;" uniProt \
+	| sort -u > protein.uniProt.txt
+    cut -f2 rgd.gp2protein.txt | sort -u > rgd.protein.names.txt
+    wc -l protein.uniProt.txt rgd.protein.names.txt
+    #	17449633 protein.uniProt.txt
+    #	27063 rgd.protein.names.txt
+    comm -12 protein.uniProt.txt rgd.protein.names.txt | wc -l
+    #	19652
+    # how about the proteins we want to use:
+    cut -f1 rgdGene2ToUniProt.tab | sort -u | while read G
+do
+    grep -w "${G}" rgd.gp2protein.txt | cut -f2
+done | sort -u > to.select.rgd.protein.names.txt
+    # we can get 17973 out of their new list
+    comm -12 protein.uniProt.txt to.select.rgd.protein.names.txt | wc -l
+    #	17973
+    comm -12 protein.uniProt.txt to.select.rgd.protein.names.txt | while read P
+do
+    grep -w "${P}" rgd.gp2protein.txt
+done | sort > corrected.rgdGene2ToUniProt.tab
+
+    hgsql -N -e "select name from rgdGene2;" rn4 | sort -u > name.rgdGene2.txt
+    # interesting, only 14,339 names in common ?
+    join name.rgdGene2.txt corrected.rgdGene2ToUniProt.tab | wc -l
+    #	14339
+    # there is already a great difference between rgdGene2ToUniProt and
+    # rgdGene2:
+    hgsql -N -e "select name from rgdGene2ToUniProt;" rn4 \
+	| sort -u > name.rgdGene2ToUniProt.txt
+    wc -l name.rgdGene2.txt name.rgdGene2ToUniProt.txt
+    #	17487 name.rgdGene2.txt
+    #	18356 name.rgdGene2ToUniProt.txt
+    comm -12 name.rgdGene2.txt name.rgdGene2ToUniProt.txt | wc
+    #	14509   14509  166686
+    # load up this intersected list:
+    join name.rgdGene2.txt corrected.rgdGene2ToUniProt.tab \
+	| tr '[ ]' '[\t]' > toLoad.rgdGene2ToUniProt.tab
+    hgsql rn4 -e "delete from rgdGene2ToUniProt"
+    hgsql rn4 -e 'load data local infile "toLoad.rgdGene2ToUniProt.tab" into table rgdGene2ToUniProt'
+
+    ### XXX ### the following below was a different path to try this elimination
+    ### check this file history to see that business
+
 #############################################################################
 # RE-BUILD HGNEAR PROTEIN BLAST TABLES for RGD GENES -- TARGET (DONE 10/18/10, Fan)
     ssh hgwdev
