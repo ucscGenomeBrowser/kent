@@ -55,131 +55,131 @@ noInherit on
 	subTrack wgEncodeLicrTfbs
 	signalFilter 0
 	signalFilterLimits 0:82
-    scoreFilterLimits 1:1000
-    scoreFilter 0
-    scoreMin 0
+        scoreFilterLimits 1:1000
+        scoreFilter 0
+        scoreMin 0
 
-		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel BM CTCF
-        longLabel Bone Marrow CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=BMARROW control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 86,180,233
-		# subId=3157 dateSubmitted=2011-01-05
-
-
-		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks
-		shortLabel BM Pol2
-        longLabel Bone Marrow Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=BMARROW control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 86,180,233
-		# subId=3391 dateSubmitted=2011-01-19
-
-		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Crbellum CTCF
-        longLabel Cerebellum CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=CBELLUM control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 105,105,105
-		# subId=3393 dateSubmitted=2011-01-19
-
-		track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Cortex CTCF
-        longLabel Cortex CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=CORTEX control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 105,105,105
-		# subId=3395 dateSubmitted=2011-01-19
+	track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel BM CTCF
+        longLabel Bone Marrow adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=BMARROW control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 86,180,233
+	# subId=3157 dateSubmitted=2011-01-05
 
 
-		track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Cortex Pol2
-        longLabel Cortex Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=CORTEX control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 105,105,105
-		# subId=3406 dateSubmitted=2011-01-20
+	track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks
+	shortLabel BM Pol2 Pk
+        longLabel Bone Marrow adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=BMARROW control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 86,180,233
+	# subId=3391 dateSubmitted=2011-01-19
 
-		track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Crbellum Pol2
-        longLabel Cerebellum Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=CBELLUM control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 105,105,105
-		# subId=3811 dateSubmitted=2011-03-07
+	track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Crbellum CTCF Pk
+        longLabel Cerebellum adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=CBELLUM control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 105,105,105
+	# subId=3393 dateSubmitted=2011-01-19
 
-		track wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Heart CTCF
-        longLabel Heart CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=HEART control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 153,38,0
-		# subId=3884 dateSubmitted=2011-04-12
+	track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Cortex CTCF Pk
+        longLabel Cortex adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=CORTEX control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 105,105,105
+	# subId=3395 dateSubmitted=2011-01-19
 
-		track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks
-		shortLabel Kidney Pol2
-        longLabel Kidney Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=KIDNEY control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 204,121,167
-		# subId=3880 dateSubmitted=2011-04-12
 
-		track wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Kidney CTCF
-        longLabel Kidney CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=KIDNEY control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 204,121,167
-		# subId=3878 dateSubmitted=2011-04-07
+	track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Cortex Pol2 Pk
+        longLabel Cortex adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=CORTEX control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 105,105,105
+	# subId=3406 dateSubmitted=2011-01-20
 
-		track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Heart Pol2
-        longLabel Heart Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=HEART control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 153,38,0
-		# subId=2792 dateSubmitted=2011-04-14
+	track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Crbellum Pol2 Pk
+        longLabel Cerebellum adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=CBELLUM control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 105,105,105
+	# subId=3811 dateSubmitted=2011-03-07
 
-		track wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdPk
-		parent wgEncodeLicrTfbsViewPeaks 
-		shortLabel Liver Pol2
-        longLabel Liver Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
-		subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=LIVER control=STD sex=M strain=C57BL6
-		type broadPeak
-		color 230,159,0
-		# subId=3883 dateSubmitted=2011-04-13
+	track wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Heart CTCF Pk
+        longLabel Heart adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=HEART control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 153,38,0
+	# subId=3884 dateSubmitted=2011-04-12
+
+	track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks
+	shortLabel Kidney Pol2 Pk
+        longLabel Kidney adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=KIDNEY control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 204,121,167
+	# subId=3880 dateSubmitted=2011-04-12
+
+	track wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Kidney CTCF Pk
+        longLabel Kidney adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=KIDNEY control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 204,121,167
+	# subId=3878 dateSubmitted=2011-04-07
+
+	track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Heart Pol2 Pk
+        longLabel Heart adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=HEART control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 153,38,0
+	# subId=2792 dateSubmitted=2011-04-14
+
+	track wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdPk
+	parent wgEncodeLicrTfbsViewPeaks 
+	shortLabel Liver Pol2 Pk
+        longLabel Liver adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+	subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=LIVER control=STD sex=M strain=C57BL6
+	type broadPeak
+	color 230,159,0
+	# subId=3883 dateSubmitted=2011-04-13
 
         track wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel Lung Pol2
-        longLabel Lung Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel Lung Pol2 Pk
+        longLabel Lung adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=LUNG control=STD sex=M strain=C57BL6
         type broadPeak
         # subId=3888 dateSubmitted=2011-04-15
 
         track wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel Lung CTCF
-        longLabel Lung CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel Lung CTCF Pk
+        longLabel Lung adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=LUNG control=STD sex=M strain=C57BL6
         type broadPeak
         # subId=3923 dateSubmitted=2011-04-25
 
         track wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel Liver CTCF
-        longLabel Liver CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel Liver CTCF Pk
+        longLabel Liver adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=LIVER control=STD sex=M strain=C57BL6
         type broadPeak
         color 230,159,0
@@ -187,8 +187,8 @@ noInherit on
 
         track wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel MEF Pol2
-        longLabel MEF Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel MEF Pol2 Pk
+        longLabel Embryonic Fibroblast adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=MEF control=STD sex=M strain=C57BL6
         type broadPeak
         color 65,105,225
@@ -196,8 +196,8 @@ noInherit on
 
         track wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel Spleen CTCF
-        longLabel Spleen CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel Spleen CTCF Pk
+        longLabel Spleen adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=SPLEEN control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -205,8 +205,8 @@ noInherit on
 
         track wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel MEF CTCF
-        longLabel MEF CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel MEF CTCF Pk
+        longLabel Embryonic Fibroblast adult-8wks C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=MEF control=STD sex=M strain=C57BL6
         type broadPeak
         color 65,105,225
@@ -214,8 +214,8 @@ noInherit on
 
         track wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks 
-        shortLabel Spleen Pol2
-        longLabel Spleen Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel Spleen Pol2 Pk
+        longLabel Spleen adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=POL2 cellType=SPLEEN control=STD sex=M strain=C57BL6
         type broadPeak
         color 86,180,233
@@ -223,8 +223,8 @@ noInherit on
 
         track wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks
-        shortLabel Heart p300
-        longLabel Heart p300 TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel Heart p300 Pk
+        longLabel Heart adult-8wks C57BL/6 p300 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=ADULT8WKS factor=P300 cellType=HEART control=STD sex=M strain=C57BL6
         type broadPeak
         color 153,38,0
@@ -232,8 +232,8 @@ noInherit on
 
         track wgEncodeLicrTfbsEsb4P300ME0C57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks
-        shortLabel ES-Bruce4 p300
-        longLabel ES-Bruce4 p300 TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel ES-B4 p300 Pk
+        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6 p300 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=P300 cellType=ESB4 control=STD sex=M strain=C57BL6
         type broadPeak
         color 65,105,225
@@ -241,8 +241,8 @@ noInherit on
 
         track wgEncodeLicrTfbsEsb4Pol2ME0C57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks
-        shortLabel ES-Bruce4 Pol2
-        longLabel ES-Bruce4 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel ES-B4 Pol2 Pk
+        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6 Pol2 TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=POL2 cellType=ESB4 control=STD sex=M strain=C57BL6
         type broadPeak
         color 65,105,225
@@ -250,8 +250,8 @@ noInherit on
 
         track wgEncodeLicrTfbsEsb4CtcfME0C57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks
-        shortLabel ES-Bruce4 CTCF
-        longLabel ES-Bruce4 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
+        shortLabel ES-B4 CTCF Pk
+        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6 CTCF TFBS ChIP-seq Peaks from ENCODE/LICR
         subGroups view=Peaks age=E0 factor=CTCF cellType=ESB4 control=STD sex=M strain=C57BL6
         type broadPeak
         color 65,105,225
@@ -259,8 +259,8 @@ noInherit on
 
         track wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdPk
         parent wgEncodeLicrTfbsViewPeaks off
-        shortLabel OlfactBulb CTCF Pk
-        longLabel OlfactBulb adult-8wks C57BL/6 CTCF std ChIP-seq Peaks from ENCODE/LICR #autogenerated
+        shortLabel OB CTCF Pk
+        longLabel Olfactory Bulb adult-8wks C57BL/6 CTCF std ChIP-seq Peaks from ENCODE/LICR #autogenerated
         subGroups view=Peaks age=ADULT8WKS factor=CTCF cellType=OLFACT control=STD sex=M strain=C57BL6
         type broadPeak
         color 105,105,105
@@ -279,149 +279,149 @@ noInherit on
 	configurable on
 	windowingFunction mean+whiskers
 
-		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel BM CTCF
-        longLabel Bone Marrow CTCF TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=BMARROW control=STD sex=M strain=C57BL6
-		type bigWig 0.150000 40.070000
-		color 86,180,233
-		viewLimits 0.2:10
-		# subId=3157 dateSubmitted=2011-01-05
+	track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal 
+	shortLabel BM CTCF Sg
+        longLabel Bone Marrow adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=BMARROW control=STD sex=M strain=C57BL6
+	type bigWig 0.150000 40.070000
+	color 86,180,233
+	viewLimits 0.2:10
+	# subId=3157 dateSubmitted=2011-01-05
 
 
         track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Crbellum Input
-        longLabel Cerebellum Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel CB Input Sg
+        longLabel Cerebellum adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=CBELLUM control=STD sex=M strain=C57BL6
         type bigWig 0.140000 41.009998
         color 105,105,105
         # subId=3921 dateSubmitted=2011-04-22
 
-		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal
-		shortLabel BM Pol2
-        longLabel Bone Marrow Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=BMARROW control=STD sex=M strain=C57BL6
-		type bigWig 0.120000 46.389999
-		color 86,180,233
-		viewLimits 0.2:3
-		# subId=3391 dateSubmitted=2011-01-19
+	track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal
+	shortLabel BM Pol2 Sg
+        longLabel Bone Marrow adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=BMARROW control=STD sex=M strain=C57BL6
+	type bigWig 0.120000 46.389999
+	color 86,180,233
+	viewLimits 0.2:3
+	# subId=3391 dateSubmitted=2011-01-19
 
-		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Crbellum CTCF
-        longLabel Cerebellum CTCF TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=CBELLUM control=STD sex=M strain=C57BL6
-		type bigWig 0.110000 29.299999
-		color 105,105,105
-		viewLimits 0.2:10
-		# subId=3393 dateSubmitted=2011-01-19
+	track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal 
+	shortLabel CB CTCF Sg
+        longLabel Cerebellum adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=CBELLUM control=STD sex=M strain=C57BL6
+	type bigWig 0.110000 29.299999
+	color 105,105,105
+	viewLimits 0.2:10
+	# subId=3393 dateSubmitted=2011-01-19
 
-		track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cortex CTCF
-        longLabel Cortex CTCF TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=CORTEX control=STD sex=M strain=C57BL6
-		type bigWig 0.130000 58.930000
-		color 105,105,105
-		viewLimits 0.2:10
-		# subId=3395 dateSubmitted=2011-01-19
+	track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal 
+	shortLabel Cortex CTCF Sg
+        longLabel Cortex adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=CORTEX control=STD sex=M strain=C57BL6
+	type bigWig 0.130000 58.930000
+	color 105,105,105
+	viewLimits 0.2:10
+	# subId=3395 dateSubmitted=2011-01-19
 
 
-		track wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal off 
-		shortLabel Cortex Input
-        longLabel Cortex Input TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=Input cellType=CORTEX control=STD sex=M strain=C57BL6
-		type bigWig 0.130000 61.080002
-		color 105,105,105
-		# subId=3398 dateSubmitted=2011-01-20
+	track wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal off 
+	shortLabel Cortex Input Sg
+        longLabel Cortex adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=Input cellType=CORTEX control=STD sex=M strain=C57BL6
+	type bigWig 0.130000 61.080002
+	color 105,105,105
+	# subId=3398 dateSubmitted=2011-01-20
 
-		track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Cortex Pol2
-        longLabel Cortex Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=CORTEX control=STD sex=M strain=C57BL6
-		type bigWig 0.110000 40.849998
-		color 105,105,105
-		viewLimits 0.2:3
-		# subId=3406 dateSubmitted=2011-01-20
+	track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal 
+	shortLabel Cortex Pol2 Sg
+        longLabel Cortex adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=CORTEX control=STD sex=M strain=C57BL6
+	type bigWig 0.110000 40.849998
+	color 105,105,105
+	viewLimits 0.2:3
+	# subId=3406 dateSubmitted=2011-01-20
 
-		track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Crbellum Pol2
-        longLabel Cerebellum Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=CBELLUM control=STD sex=M strain=C57BL6
-		type bigWig 0.150000 52.380001
-		color 105,105,105
-		viewLimits 0.2:3
-		# subId=3811 dateSubmitted=2011-03-07
+	track wgEncodeLicrTfbsCbellumPol2MAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal 
+	shortLabel CB Pol2 Sg
+        longLabel Cerebellum adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=CBELLUM control=STD sex=M strain=C57BL6
+	type bigWig 0.150000 52.380001
+	color 105,105,105
+	viewLimits 0.2:3
+	# subId=3811 dateSubmitted=2011-03-07
 
-		track wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal 
-		shortLabel Heart CTCF
-        longLabel Heart CTCF TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=HEART control=STD sex=M strain=C57BL6
-		type bigWig 0.120000 52.910000
-		color 153,38,0
-		viewLimits 0.2:10
-		# subId=3884 dateSubmitted=2011-04-12
+	track wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal 
+	shortLabel Heart CTCF Sg
+        longLabel Heart adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=HEART control=STD sex=M strain=C57BL6
+	type bigWig 0.120000 52.910000
+	color 153,38,0
+	viewLimits 0.2:10
+	# subId=3884 dateSubmitted=2011-04-12
 
-		track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Kidney Pol2
-        longLabel Kidney Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=KIDNEY control=STD sex=M strain=C57BL6
-		type bigWig 0.140000 40.459999
-		color 204,121,167
-		viewLimits 0.2:3
-		# subId=3880 dateSubmitted=2011-04-12
+	track wgEncodeLicrTfbsKidneyPol2MAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal
+	shortLabel Kidney Pol2 Sg
+        longLabel Kidney adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=KIDNEY control=STD sex=M strain=C57BL6
+	type bigWig 0.140000 40.459999
+	color 204,121,167
+	viewLimits 0.2:3
+	# subId=3880 dateSubmitted=2011-04-12
 
-		track wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Kidney CTCF
-        longLabel Kidney CTCF TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=KIDNEY control=STD sex=M strain=C57BL6
-		type bigWig 0.150000 51.889999
-		color 204,121,167
-		viewLimits 0.2:10
-		# subId=3878 dateSubmitted=2011-04-07
+	track wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal
+	shortLabel Kidney CTCF Sg
+        longLabel Kidney adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=KIDNEY control=STD sex=M strain=C57BL6
+	type bigWig 0.150000 51.889999
+	color 204,121,167
+	viewLimits 0.2:10
+	# subId=3878 dateSubmitted=2011-04-07
 
-		track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Heart Pol2
-        longLabel Heart Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=HEART control=STD sex=M strain=C57BL6
-		type bigWig 0.150000 50.889999
-		color 153,38,0
-		viewLimits 0.2:3
-		# subId=2792 dateSubmitted=2011-04-14
+	track wgEncodeLicrTfbsHeartPol2MAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal
+	shortLabel Heart Pol2 Sg
+        longLabel Heart adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=HEART control=STD sex=M strain=C57BL6
+	type bigWig 0.150000 50.889999
+	color 153,38,0
+	viewLimits 0.2:3
+	# subId=2792 dateSubmitted=2011-04-14
 
-		track wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdSig
-		parent wgEncodeLicrTfbsViewSignal
-		shortLabel Liver Pol2
-        longLabel Liver Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
-		subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=LIVER control=STD sex=M strain=C57BL6
-		type bigWig 0.160000 45.200001
-		color 230,159,0
-		viewLimits 0.2:3
-		# subId=3883 dateSubmitted=2011-04-13
+	track wgEncodeLicrTfbsLiverPol2MAdult8wksC57bl6StdSig
+	parent wgEncodeLicrTfbsViewSignal
+	shortLabel Liver Pol2 Sg
+        longLabel Liver adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+	subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=LIVER control=STD sex=M strain=C57BL6
+	type bigWig 0.160000 45.200001
+	color 230,159,0
+	viewLimits 0.2:3
+	# subId=3883 dateSubmitted=2011-04-13
 
         track wgEncodeLicrTfbsLungPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel Lung Pol2
-        longLabel Lung Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Lung Pol2 Sg
+        longLabel Lung adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=LUNG control=STD sex=M strain=C57BL6
         type bigWig 0.120000 48.990002
-		viewLimits 0.2:3
+	viewLimits 0.2:3
         # subId=3888 dateSubmitted=2011-04-15
 
         track wgEncodeLicrTfbsBmarrowInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel BM Input
-        longLabel Bone Marrow Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel BM Input Sg
+        longLabel Bone Marrow adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=BMARROW control=STD sex=M strain=C57BL6
         type bigWig 0.150000 34.869999
         color 86,180,233
@@ -429,8 +429,8 @@ noInherit on
 
         track wgEncodeLicrTfbsHeartInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Heart Input
-        longLabel Heart Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Heart Input Sg
+        longLabel Heart adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=HEART control=STD sex=M strain=C57BL6
         type bigWig 0.140000 73.459999
         color 153,38,0
@@ -438,8 +438,8 @@ noInherit on
 
         track wgEncodeLicrTfbsKidneyInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Kidney Input
-        longLabel Kidney Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Kidney Input Sg
+        longLabel Kidney adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=KIDNEY control=STD sex=M strain=C57BL6
         type bigWig 0.140000 51.650002
         color 204,121,167
@@ -447,35 +447,35 @@ noInherit on
 
         track wgEncodeLicrTfbsLungCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel Lung CTCF
-        longLabel Lung CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Lung CTCF Sg
+        longLabel Lung adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=LUNG control=STD sex=M strain=C57BL6
         type bigWig 0.160000 34.049999
-		viewLimits 0.2:10
+	viewLimits 0.2:10
         # subId=3923 dateSubmitted=2011-04-25
 
         track wgEncodeLicrTfbsLungInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Lung Input
-        longLabel Lung Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Lung Input Sg
+        longLabel Lung adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=LUNG control=STD sex=M strain=C57BL6
         type bigWig 0.150000 39.330002
         # subId=3924 dateSubmitted=2011-04-25
 
         track wgEncodeLicrTfbsLiverCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel Liver CTCF
-        longLabel Liver CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Liver CTCF Sg
+        longLabel Liver adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=LIVER control=STD sex=M strain=C57BL6
         type bigWig 0.110000 52.470001
         color 230,159,0
-		viewLimits 0.2:10
+	viewLimits 0.2:10
         # subId=3925 dateSubmitted=2011-04-25
 
         track wgEncodeLicrTfbsLiverInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Liver Input
-        longLabel Liver Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Liver Input Sg
+        longLabel Liver adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=LIVER control=STD sex=M strain=C57BL6
         type bigWig 0.130000 65.070000
         color 230,159,0
@@ -483,18 +483,18 @@ noInherit on
 
         track wgEncodeLicrTfbsMefPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel MEF Pol2
-        longLabel MEF Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel MEF Pol2 Sg
+        longLabel Embryonic Fibroblast adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=MEF control=STD sex=M strain=C57BL6
         type bigWig 0.110000 40.720001
         color 65,105,225
-		viewLimits 0.2:3
+	viewLimits 0.2:3
         # subId=4010 dateSubmitted=2011-04-29
 
         track wgEncodeLicrTfbsMefInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel MEF Input
-        longLabel MEF Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel MEF Input Sg
+        longLabel Embryonic Fibroblast adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=MEF control=STD sex=M strain=C57BL6
         type bigWig 0.140000 50.770000
         color 65,105,225
@@ -502,28 +502,28 @@ noInherit on
 
         track wgEncodeLicrTfbsSpleenCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel Spleen CTCF
-        longLabel Spleen CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Spleen CTCF Sg
+        longLabel Spleen adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=SPLEEN control=STD sex=M strain=C57BL6
         type bigWig 0.200000 53.349998
         color 86,180,233
-		viewLimits 0.2:3
+	viewLimits 0.2:3
         # subId=3999 dateSubmitted=2011-04-29
 
         track wgEncodeLicrTfbsMefCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel MEF CTCF
-        longLabel MEF CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel MEF CTCF Sg
+        longLabel Embryonic Fibroblast adult-8wks C57BL/6 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=MEF control=STD sex=M strain=C57BL6
         type bigWig 0.160000 68.889999
         color 65,105,225
-		viewLimits 0.2:10
+	viewLimits 0.2:10
         # subId=4000 dateSubmitted=2011-04-28
 
         track wgEncodeLicrTfbsSpleenInputMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Spleen Input
-        longLabel Spleen Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Spleen Input Sg
+        longLabel Spleen adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=Input cellType=SPLEEN control=STD sex=M strain=C57BL6
         type bigWig 0.130000 31.219999
         color 86,180,233
@@ -531,28 +531,28 @@ noInherit on
 
         track wgEncodeLicrTfbsSpleenPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel Spleen Pol2
-        longLabel Spleen Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Spleen Pol2 Sg
+        longLabel Spleen adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=SPLEEN control=STD sex=M strain=C57BL6
         type bigWig 0.130000 26.709999
         color 86,180,233
-		viewLimits 0.2:3
+	viewLimits 0.2:3
         # subId=4037 dateSubmitted=2011-05-02
 
         track wgEncodeLicrTfbsHeartP300MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal 
-        shortLabel Heart p300
-        longLabel Heart p300 TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel Heart p300 Sg
+        longLabel Heart adult-8wks C57BL/6 p300 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=ADULT8WKS factor=P300 cellType=HEART control=STD sex=M strain=C57BL6
         type bigWig 0.150000 53.220001
         color 153,38,0
-		viewLimits 0.2:3
+	viewLimits 0.2:3
         # subId=4038 dateSubmitted=2011-05-03
 
         track wgEncodeLicrTfbsEsb4InputME0C57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel ES-Bruce4 Input
-        longLabel ES-Bruce4 Input TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel ES-B4 Input Sg
+        longLabel ES-Bruce4 (embryonic stem cell) adult-8wks C57BL/6 Input TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=Input cellType=ESB4 control=STD sex=M strain=C57BL6
         type bigWig 0.130000 64.720001
         color 65,105,225
@@ -560,38 +560,38 @@ noInherit on
 
         track wgEncodeLicrTfbsEsb4P300ME0C57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel ES-Bruce4 p300
-        longLabel ES-Bruce4 p300 TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel ES-B4 p300 Sg
+        longLabel ES-Bruce4 (embryonic stem cell) adult-8wks C57BL/6 p300 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=P300 cellType=ESB4 control=STD sex=M strain=C57BL6
         type bigWig 0.140000 73.150002
         color 65,105,225
-		viewLimits 0.2:3
+	viewLimits 0.2:3
         # subId=4049 dateSubmitted=2011-05-06
 
         track wgEncodeLicrTfbsEsb4Pol2ME0C57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel ES-Bruce4 Pol2
-        longLabel ES-Bruce4 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel ES-B4 Pol2 Sg
+        longLabel ES-Bruce4 (embryonic stem cell) adult-8wks C57BL/6 Pol2 TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=POL2 cellType=ESB4 control=STD sex=M strain=C57BL6
         type bigWig 0.130000 73.010002
         color 65,105,225
-		viewLimits 0.2:3
+	viewLimits 0.2:3
         # subId=4048 dateSubmitted=2011-05-06
 
         track wgEncodeLicrTfbsEsb4CtcfME0C57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal
-        shortLabel ES-Bruce4 CTCF
-        longLabel ES-Bruce4 CTCF TFBS ChIP-seq Signal from ENCODE/LICR
+        shortLabel ES-B4 CTCF Sg
+        longLabel ES-Bruce4 (embryonic stem cell) E0 C57BL/6CTCF TFBS ChIP-seq Signal from ENCODE/LICR
         subGroups view=Signal age=E0 factor=CTCF cellType=ESB4 control=STD sex=M strain=C57BL6
         type bigWig 0.110000 65.250000
         color 65,105,225
-		viewLimits 0.2:10
+	viewLimits 0.2:10
         # subId=4043 dateSubmitted=2011-05-06
 
         track wgEncodeLicrTfbsOlfactCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OlfactBulb CTCF Sig
-        longLabel OlfactBulb adult-8wks C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel OB CTCF Sg
+        longLabel Olfactory Bulb adult-8wks C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=OLFACT control=STD sex=M strain=C57BL6
         type bigWig 0.107427 50.025291
         color 105,105,105
@@ -599,7 +599,7 @@ noInherit on
 
         track wgEncodeLicrTfbsThymusPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Thymus Pol2 Sig
+        shortLabel Thymus Pol2 Sg
         longLabel Thymus adult-8wks C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=THYMUS control=STD sex=M strain=C57BL6
         type bigWig 0.191412 108.530518
@@ -608,7 +608,7 @@ noInherit on
 
         track wgEncodeLicrTfbsThymusCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Thymus CTCF Sig
+        shortLabel Thymus CTCF Sg
         longLabel Thymus adult-8wks C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=THYMUS control=STD sex=M strain=C57BL6
         type bigWig 0.105497 132.820557
@@ -617,8 +617,8 @@ noInherit on
 
         track wgEncodeLicrTfbsOlfactPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel OlfactBulb Pol2 Sig
-        longLabel OlfactBulb adult-8wks C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel OB Pol2 Sg
+        longLabel Olfactory Bulb adult-8wks C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=OLFACT control=STD sex=M strain=C57BL6
         type bigWig 0.128951 53.643612
         color 105,105,105
@@ -626,8 +626,8 @@ noInherit on
 
         track wgEncodeLicrTfbsSmintCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel SmIntestine CTCF Sig
-        longLabel SmIntestine adult-8wks C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel SI CTCF Sg
+        longLabel Small Intestine adult-8wks C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=SMINT control=STD sex=M strain=C57BL6
         type bigWig 0.130000 56.570000
         color 230,159,0
@@ -636,8 +636,8 @@ noInherit on
 
         track wgEncodeLicrTfbsSmintPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel SmIntestine Pol2 Sig
-        longLabel SmIntestine adult-8wks C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
+        shortLabel SI Pol2 Sg
+        longLabel Small Intestine adult-8wks C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=SMINT control=STD sex=M strain=C57BL6
         type bigWig 0.120000 35.160000
         color 230,159,0
@@ -646,7 +646,7 @@ noInherit on
 
         track wgEncodeLicrTfbsWbrainCtcfUE14halfC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel WholeBrain CTCF Sig
+        shortLabel Brain CTCF Sg
         longLabel WholeBrain E14.5 C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=E14HALF factor=CTCF cellType=WBRAIN control=STD sex=U strain=C57BL6
         type bigWig 0.100000 57.000000
@@ -656,7 +656,7 @@ noInherit on
 
         track wgEncodeLicrTfbsTestisPol2MAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Testis Pol2 Sig
+        shortLabel Testis Pol2 Sg
         longLabel Testis adult-8wks C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=POL2 cellType=TESTIS control=STD sex=M strain=C57BL6
         type bigWig 0.120000 43.590000
@@ -665,7 +665,7 @@ noInherit on
 
         track wgEncodeLicrTfbsTestisCtcfMAdult8wksC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Testis CTCF Sig
+        shortLabel Testis CTCF Sg
         longLabel Testis adult-8wks C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=ADULT8WKS factor=CTCF cellType=TESTIS control=STD sex=M strain=C57BL6
         type bigWig 0.120000 51.270000
@@ -674,7 +674,7 @@ noInherit on
 
         track wgEncodeLicrTfbsWbrainPol2UE14halfC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel WholeBrain Pol2 Sig
+        shortLabel Brain Pol2 Sg
         longLabel WholeBrain E14.5 C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=E14HALF factor=POL2 cellType=WBRAIN control=STD sex=U strain=C57BL6
         type bigWig 0.140000 80.190002
@@ -684,7 +684,7 @@ noInherit on
 
         track wgEncodeLicrTfbsLimbCtcfUE14halfC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Limb CTCF Sig
+        shortLabel Limb CTCF Sg
         longLabel Limb E14.5 C57BL/6 CTCF std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=E14HALF factor=CTCF cellType=LIMB control=STD sex=U strain=C57BL6
         type bigWig 0.150000 78.269997
@@ -693,7 +693,7 @@ noInherit on
 
         track wgEncodeLicrTfbsLimbPol2UE14halfC57bl6StdSig
         parent wgEncodeLicrTfbsViewSignal off
-        shortLabel Limb Pol2 Sig
+        shortLabel Limb Pol2 Sg
         longLabel Limb E14.5 C57BL/6 Pol2 std ChIP-seq Signal from ENCODE/LICR #autogenerated
         subGroups view=Signal age=E14HALF factor=POL2 cellType=LIMB control=STD sex=U strain=C57BL6
         type bigWig 0.160000 84.010002
