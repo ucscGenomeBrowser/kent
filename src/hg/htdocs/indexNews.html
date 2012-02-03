@@ -26,54 +26,86 @@
 
             
             <!-- start news -->
-<!-- Wallaby Assembly release  -->
-                <FONT FACE="courier" SIZE="3"><B>23 January 2012 - Wallaby Browser Available</B></FONT>
-                   <P>
-                    We have released a Genome Browser for the September 2009
-                    genome assembly of the Tammar Wallaby, <em>Macropus 
-                    eugenii</em> (TWGS version Meug_1.1, UCSC version macEug2). This assembly,
-                    which has been sequenced to 2X coverage, was produced by
-                    the Tammar Wallaby Genome Sequencing Consortium, a collaboration 
-		    between the Baylor College of Medicine 
-		    <a href="http://www.hgsc.bcm.tmc.edu/project-species-m-Wallaby.hgsc" 
-		    target="_blank"> Human Genome Sequencing Center</a> and the 
-		    <a href="http://www.agrf.org.au/default.aspx" 
-		    target="_blank">Australian Genome Research Facility</a>.
-                    
+                    <FONT FACE="courier" SIZE="3"><B>2 February 2012 - New UCSC 
+		    Genes Track Released for GRCh37/hg19</B></FONT>
                     <P>
-                    Bulk downloads of the sequence and annotation data are
-                    available via the Genome Browser
-                    <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/macEug2/">FTP server</A>
-                    or the
-                    <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#wallaby">Downloads</A>
-                    page.  These data have
-                    <A HREF="goldenPath/credits.html#wallaby_use">specific 
-		    conditions for use</A>.
-                    <P>
-                    We'd like to thank the Tammar Wallaby Genome Sequencing Consortium for 
-		    providing this assembly. The wallaby Genome Browser and annotation
-                    tracks were produced by Chin Li and Luvina Guruvadoo. See the
-                    <A HREF="goldenPath/credits.html#wallaby_credits">Credits</A>
-                    page for a detailed list of the organizations and
-                    individuals who contributed to this release.
-		<P>
-		   <HR>
-
+		    We're happy to announce the release of an updated UCSC Genes
+		    track for the GRCh37/hg19 human Genome Browser. This release
+		    includes more noncoding transcripts based on data from 
+		    <A HREF="http://rfam.sanger.ac.uk/" TARGET=_blank>Rfam</A> 
+		    and from the 
+		    <A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=tRNAs">tRNA Genes track</A> 
+		    contributed by the <A HREF="http://lowelab.ucsc.edu/" 
+		    TARGET=_blank>Todd Lowe lab</A> at UCSC.
+		    <P>
+		    The new release has 80,922 total transcripts, compared with 
+		    77,614 in the previous version. The total number of 
+		    canonical genes has increased from 27,297 to 31,227. 
+		    Comparing the new gene set with the previous version: 
+		    <UL>
+		    <LI>24,804 transcripts did not change between versions.
+		    <LI>483 transcripts were not carried forward to the new 
+		    version.
+		    <LI>46,367 transcripts are "compatible" with those in the 
+		    previous set, meaning that the two transcripts show 
+		    consistent splicing. In most cases, the old and new 
+		    transcripts differ in the lengths of their UTRs.
+		    <LI>5,960 transcripts overlap with those in the previous 
+		    set but do not show consistent splicing, i.e., they contain 
+		    overlapping introns with differing splice sites.
+		    </UL>
+		    <P>
+		    Additionally, several improvements where made to the UCSC 
+		    Genes build pipeline:
+		    <UL>
+		    <LI>We developed new genomic alignment protocols for 
+		    aligning short sequences, facilitating the expansion of the 
+		    noncoding RNA content.
+		    <LI>
+		    We changed the way that gene symbols are assigned to 
+		    transcripts so that names from curated sources are favored 
+		    over names coming directly from GenBank mRNA records. This 
+		    change resolved several confusing naming issues reported to 
+		    us by users.
+		    <LI>We tracked down and corrected a bug in the pipeline that
+		    was causing a number of poor quality protein mappings to 
+		    displace high quality protein mappings.
+		    <LI>We have started producing two new tables, 
+		    knownGeneTxMrna and knownGeneTxPep, that contain sequence 
+		    derived from the genome rather than from the mRNA used for 
+		    the transcript.
+		    </UL>
+		    <P>
+		    More details about the new UCSC Genes track can be found on the 
+		    <A HREF="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=knownGene">UCSC Genes track description page</A>.
+		    <P>
+		    Many thanks to Melissa Cline, Jim Kent, Brian Raney, Mark 
+		    Diekhans, and Brooke Rhead for their work on this track!
+		    <P>
+		    <HR>
+		  
             <!-- start archives -->
-		     <FONT FACE="courier" SIZE="3"><B>3 January 2012 - Roadmap 
-		     Epigenomics Now Available through Data Hub at Washington 
-		     University: </B></FONT>
-		     We are pleased to announce the release of the Roadmap 
-		     Epigenomics data on the UCSC Genome Browser through our 
-		     Data Hub function. 
-                     <A HREF="goldenPath/newsarch.html#030112">Read more</A>.
-		     <P>
-                     <FONT FACE="courier" SIZE="3"><B>19 December 2011 - Variant
-                     Call Format (VCF) Now Supported in Genome Browser: </B></FONT>
-                     We are pleased to announce that the UCSC Genome Browser
-                     now supports Variant Call Format (VCF).  
-                     <A HREF="goldenPath/newsarch.html#191211">Read more</A>.
-                     </P>
+                   <FONT FACE="courier" SIZE="3"><B>23 January 2012 - Wallaby 
+		   Browser Available: </B></FONT>
+                   We have released a Genome Browser for the September 2009
+                   genome assembly of the Tammar Wallaby, <em>Macropus 
+                   eugenii</em> (TWGS version Meug_1.1, UCSC version macEug2).
+                   <A HREF="goldenPath/newsarch.html#230112">Read more</A>.
+		   <P>
+		   <FONT FACE="courier" SIZE="3"><B>3 January 2012 - Roadmap 
+		   Epigenomics Now Available through Data Hub at Washington 
+		   University: </B></FONT>
+		   We are pleased to announce the release of the Roadmap 
+		   Epigenomics data on the UCSC Genome Browser through our 
+		   Data Hub function. 
+                   <A HREF="goldenPath/newsarch.html#030112">Read more</A>.
+		   <P>
+                   <FONT FACE="courier" SIZE="3"><B>19 December 2011 - Variant
+                   Call Format (VCF) Now Supported in Genome Browser: </B></FONT>
+                   We are pleased to announce that the UCSC Genome Browser
+                   now supports Variant Call Format (VCF).  
+                   <A HREF="goldenPath/newsarch.html#191211">Read more</A>.
+                   </P>
                    <P>
 
 ==> <a href="goldenPath/newsarch.html">News Archives</a>
