@@ -37,7 +37,7 @@ subGroup5 age Age ADULT8WKS=adult-8wks E0=E0 E14HALF=E14.5
 subGroup6 strain Strain C57BL6=C57BL/6
 subGroup7 control Control STD=std
 dimensions dimensionX=cellType dimensionY=factor 
-sortOrder cellType=+ factor=+ view=+ 
+sortOrder cellType=+ factor=+ view=+ age=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target sex=Sex age=Age replicate=Replicate view=View dccAccession=UCSC_Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody sex=sex age=age strain=strain control=control:wq
 dragAndDrop subTracks
