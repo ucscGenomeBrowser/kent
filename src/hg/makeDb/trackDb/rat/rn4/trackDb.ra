@@ -110,6 +110,24 @@ shortCircuit 1
 termRegex [AB][A-Z]+[0-9]+(\.[0-9]+)?|chr(M|Un|[0-9UnXY]+_random)_[0-9]+
 searchPriority 8
 
+searchName rgdGene2Acc
+searchTable rgdGene2
+searchType genePred
+searchMethod exact
+shortCircuit 1
+termRegex RGD:[0-9]+
+searchPriority 0.9
+
+searchName rgdGene2Symbol
+searchTable rgdGene2
+searchType genePred
+searchMethod prefix
+semiShortCircuit 1
+xrefTable rgdGene2ToSymbol
+xrefQuery select rgdId,geneSymbol from %s where geneSymbol like '%%%s%%'
+termRegex [A-Za-z0-9_\.-]+
+searchPriority 0.9
+
 searchName snp125Short
 searchTable snp125
 searchMethod exact
