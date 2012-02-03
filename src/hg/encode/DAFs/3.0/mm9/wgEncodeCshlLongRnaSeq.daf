@@ -42,46 +42,46 @@ validationSettings validateFiles.bam:mismatches=7,nMatch,allowOther
 view             PlusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             MinusRawSignal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             Alignments
 type             bam
 hasReplicates    yes
-required         yes
+required         no
 
 # Solexa paired sequence
 view             FastqRd1
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly     yes
 
 view             FastqRd2
 type             fastq
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly     yes
 
 view             Spikeins
 type             doc
 hasReplicates    yes
-required         yes
+required         no
 downloadOnly    yes
 
 view             TranscriptDeNovo
 type             gtf
 hasReplicates    no
-required         yes
+required         no
 downloadOnly     yes
 
 view             Contigs
 type             bigBed
 hasReplicates    no
-required         yes
+required         no
 downloadOnly     no
 
