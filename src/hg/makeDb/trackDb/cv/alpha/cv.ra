@@ -1269,7 +1269,7 @@ tissue blood
 karyotype blood
 lineage missing
 vendorName David Randolph at University of Alabama, Birmingham
-vendoTh0 Cord_CD4_naive
+vendorId Cord_CD4_naive
 orderUrl drdrdr@uab.edu
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
