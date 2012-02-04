@@ -1491,7 +1491,7 @@ html wgEncodeRikenCage.new
 
         track wgEncodeRikenCageSknshraCellPapMinusRawRep1
         subTrack wgEncodeRikenCageViewMinusSignal off
-        shortLabel SKSH cell pAP - 1
+        shortLabel SKSH cell pA+ - 1
         longLabel SK-N-SH_RA whole cell polyA+ CAGE Minus start sites Rep 1 from ENCODE/RIKEN
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 134321.000000
