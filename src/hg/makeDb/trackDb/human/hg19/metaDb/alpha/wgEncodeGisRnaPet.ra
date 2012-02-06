@@ -10,7 +10,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-08-13
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -54,10 +54,10 @@ labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
 md5sum 02bef90485e98b5397a70af77f3fa245,b1e134a1fb04a188782052ed4de80394
+objStatus replaced - Improved sequencing
 origAssembly hg18
 project wgEncode
 replicate 1
-objStatus replaced - Improved sequencing
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 1979
@@ -70,7 +70,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -100,7 +100,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-08-13
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -146,10 +146,10 @@ labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
 md5sum d6aca3475c5cb1c7b4e8a9ac6d1026ed
+objStatus replaced - Improved sequencing
 origAssembly hg18
 project wgEncode
 replicate 1
-objStatus replaced - Improved sequencing
 rnaExtract longPolyA
 seqPlatform Illumina_GA2
 subId 1979
@@ -162,7 +162,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-03-08
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -192,7 +192,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-08-13
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -235,6 +235,7 @@ labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
 md5sum 71652744741071a5964d03e30149243b
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -249,7 +250,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2009-11-17
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -278,7 +279,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-08-13
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -320,6 +321,7 @@ labProtocolId gen0105C+pet
 labVersion clone-based
 localization cytosol
 md5sum 84d5e9d31ed8eed12a827c9cc3f6982c
+objStatus replaced
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -334,7 +336,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2009-11-17
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -363,7 +365,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -393,7 +395,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-08-13
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -453,7 +455,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -483,7 +485,7 @@ bioRep gen0107C
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2010-08-13
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -719,7 +721,7 @@ bioRep gen0114WC
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -748,7 +750,7 @@ bioRep gen0114WC
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -778,7 +780,7 @@ bioRep gen0114WC
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -806,7 +808,7 @@ bioRep gen0114WC
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -834,7 +836,7 @@ bioRep gen0114WC
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -864,7 +866,7 @@ bioRep gen0114WC
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -894,7 +896,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -922,7 +924,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -950,7 +952,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -979,7 +981,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1008,7 +1010,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1035,7 +1037,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1062,7 +1064,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1089,7 +1091,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1116,7 +1118,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1145,7 +1147,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1173,7 +1175,7 @@ bioRep 011WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1202,7 +1204,7 @@ bioRep 012WC
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateSubmitted 2011-04-29
 dateUnrestricted 2012-01-29
 dccAccession wgEncodeEH001744
@@ -1231,7 +1233,7 @@ bioRep gen0122C
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -1260,7 +1262,7 @@ bioRep gen0122C
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -1290,7 +1292,7 @@ bioRep gen0122C
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -1318,7 +1320,7 @@ bioRep gen0122C
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -1346,7 +1348,7 @@ bioRep gen0122C
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -1376,7 +1378,7 @@ bioRep gen0122C
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-17
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -1407,7 +1409,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1436,7 +1438,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -1467,7 +1469,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1497,7 +1499,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -1528,7 +1530,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1556,7 +1558,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -1586,7 +1588,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1614,7 +1616,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -1644,7 +1646,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1674,7 +1676,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -1705,7 +1707,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1735,7 +1737,7 @@ bioRep gen0124N
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -2116,7 +2118,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -2145,7 +2147,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -2176,7 +2178,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -2206,7 +2208,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -2237,7 +2239,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -2265,7 +2267,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -2295,7 +2297,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -2323,7 +2325,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -2353,7 +2355,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -2383,7 +2385,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -2414,7 +2416,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -2444,7 +2446,7 @@ bioRep gen0117C
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2011-11-09
 dateUnrestricted 2012-08-09
@@ -2474,7 +2476,7 @@ bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2503,7 +2505,7 @@ bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2533,7 +2535,7 @@ bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2561,7 +2563,7 @@ bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2589,7 +2591,7 @@ bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2619,7 +2621,7 @@ bioRep gen0118N
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2796,7 +2798,7 @@ bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2825,7 +2827,7 @@ bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2855,7 +2857,7 @@ bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2883,7 +2885,7 @@ bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2911,7 +2913,7 @@ bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2941,7 +2943,7 @@ bioRep gen0138C
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3643,7 +3645,7 @@ bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3672,7 +3674,7 @@ bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3702,7 +3704,7 @@ bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3730,7 +3732,7 @@ bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3758,7 +3760,7 @@ bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3788,7 +3790,7 @@ bioRep gen0156C
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3818,7 +3820,7 @@ bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3847,7 +3849,7 @@ bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3877,7 +3879,7 @@ bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3905,7 +3907,7 @@ bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3933,7 +3935,7 @@ bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -3963,7 +3965,7 @@ bioRep gen0158N
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
 dateResubmitted 2011-05-05
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -4162,4 +4164,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSignal
 
-# MAGIC: 409729145
+# MAGIC: -1102191595
