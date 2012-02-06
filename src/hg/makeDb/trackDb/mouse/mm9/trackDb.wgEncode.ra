@@ -49,3 +49,6 @@ include wgEncodeUwDgf.ra alpha
 
 # CSHL Long RNA-Seq (wrangler: Venkat)
 include wgEncodeCshlLongRnaSeq.ra alpha
+
+# Caltech RNA-Seq (wrangler: Venkat)
+include wgEncodeCaltechRnaSeq.ra alpha

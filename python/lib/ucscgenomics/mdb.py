@@ -19,40 +19,49 @@ class DataType(object):
         return self.type != 'NotGeo'
     
 dataTypes = {
-    'Cage': DataType('Cage', 'OVERRIDE RNA', 'OTHER', 'transcriptomic', 'CAGE', 'HighThroughput'),
-    'ChipSeq': DataType('ChipSeq', 'genomic DNA', 'ChIP-Seq', 'genomic', 'ChIP', 'HighThroughput'),
-    'DnaPet': DataType('DnaPet', 'genomic DNA', 'OTHER', 'genomic', 'size fractionation', 'HighThroughput'),
-    'DnaseDgf': DataType('DnaseDgf', 'genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', 'HighThroughput'),
-    'DnaseSeq': DataType('DnaseSeq', 'genomic DNA', 'DNase-Hypersensitivity', 'genomic', 'DNase', 'HighThroughput'),
-    'FaireSeq': DataType('FaireSeq', 'genomic DNA', 'OTHER', 'genomic', 'other', 'HighThroughput'),
-    'MethylSeq': DataType('MethylSeq', 'genomic DNA', 'MRE-Seq', 'genomic', 'Restriction Digest', 'HighThroughput'),
-    'MethylRrbs': DataType('MethylRrbs', 'genomic DNA', 'Bisulfite-Seq', 'genomic', 'Reduced Representation', 'HighThroughput'),
-    'Orchid': DataType('Orchid', 'genomic DNA', 'OTHER', 'genomic', 'other', 'HighThroughput'),
-    'Proteogenomics': DataType('Proteogenomics', 'protein', 'mass spectrometry-based proteogenomic mapping', 'protein', 'chromatographically fractionated peptides', 'HighThroughput'),
-    'RnaPet': DataType('RnaPet', 'OVERRIDE RNA', 'OTHER', 'transcriptomic', 'other', 'HighThroughput'),
-    'RnaSeq': DataType('RnaSeq', 'OVERRIDE RNA', 'RNA-Seq', 'transcriptomic', 'cDNA', 'HighThroughput'),
+    'Cage': DataType(           'Cage',             'RNA',          'OTHER',                                            'transcriptomic',   'CAGE',                                         'HighThroughput'),
+    'ChipSeq': DataType(        'ChipSeq',          'genomic DNA',  'ChIP-Seq',                                         'genomic',          'ChIP',                                         'HighThroughput'),
+    'DnaPet': DataType(         'DnaPet',           'genomic DNA',  'OTHER',                                            'genomic',          'size fractionation',                           'HighThroughput'),
+    'DnaseDgf': DataType(       'DnaseDgf',         'genomic DNA',  'DNase-Hypersensitivity',                           'genomic',          'DNase',                                        'HighThroughput'),
+    'DnaseSeq': DataType(       'DnaseSeq',         'genomic DNA',  'DNase-Hypersensitivity',                           'genomic',          'DNase',                                        'HighThroughput'),
+    'FaireSeq': DataType(       'FaireSeq',         'genomic DNA',  'OTHER',                                            'genomic',          'other',                                        'HighThroughput'),
+    'MethylSeq': DataType(      'MethylSeq',        'genomic DNA',  'MRE-Seq',                                          'genomic',          'Restriction Digest',                           'HighThroughput'),
+    'MethylRrbs': DataType(     'MethylRrbs',       'genomic DNA',  'Bisulfite-Seq',                                    'genomic',          'Reduced Representation',                       'HighThroughput'),
+    'Orchid': DataType(         'Orchid',           'genomic DNA',  'OTHER',                                            'genomic',          'other',                                        'HighThroughput'),
+    'Proteogenomics': DataType( 'Proteogenomics',   'protein',      'mass spectrometry-based proteogenomic mapping',    'protein',          'chromatographically fractionated peptides',    'HighThroughput'),
+    'RnaPet': DataType(         'RnaPet',           'RNA',          'OTHER',                                            'transcriptomic',   'other',                                        'HighThroughput'),
+    'RnaSeq': DataType(         'RnaSeq',           'RNA',          'RNA-Seq',                                          'transcriptomic',   'cDNA',                                         'HighThroughput'),
+    
+    #doublecheck
+    'ChiaPet': DataType(        'ChiaPet',          'genomic DNA',  'ChIP-Seq followed by ligation',                    'genomic',          'other',                                      'HighThroughput'),
+    'Nucleosome': DataType(     'Nucleosome',       'genomic DNA',  'ChIP-Seq',                                         'genomic',          'ChIP',                                         'HighThroughput'),
+    'RipSeq': DataType(         'RipSeq',           'RNA',          'OTHER',                                          'transcriptomic',   'RNA binding protein antibody',                 'HighThroughput'),
+    #for ripseq, ask geo about new 'ripseq'
+    
+    #not geo stuff
+    '5C': DataType('5C', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'Bip': DataType('Bip', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'Gencode': DataType('Gencode', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'Mapability': DataType('Mapability', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'NRE': DataType('NRE', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'Switchgear': DataType('Switchgear', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'TfbsValid': DataType('TfbsValid', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    'Cluster': DataType('Cluster', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
+    
+    #array
+    'AffyExonArray': DataType(  'AffyExonArray',    'mRNA',         'RNA-Microarray',                                   'transcriptomic',   'polyA',                                        'MicroArray'),
+    'MethylArray': DataType(    'MethylArray',      'genomic DNA',  'REPLACE',                                          'genomic',          'REPLACE',                                      'MicroArray'),
+    'RipGeneSt': DataType(      'RipGeneSt',        'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 'MicroArray'), #this isn't correct
+    'RipTiling': DataType(      'RipTiling',        'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 'MicroArray'),
     
     #these need to be curated
-    '5C': DataType('5C', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'AffyExonArray': DataType('AffyExonArray', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'MicroArray'),
-    'Bip': DataType('Bip', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
-    'Cluster': DataType('Cluster', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'Cnv': DataType('Cnv', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'Combined': DataType('Combined', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'Genotype': DataType('Genotype', 'genomic DNA', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'Gencode': DataType('Gencode', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
-    'ChiaPet': DataType('ChiaPet', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'Mapability': DataType('Mapability', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
-    'MethylArray': DataType('MethylArray', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'NRE': DataType('NRE', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
-    'Nucleosome': DataType('Nucleosome', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'RnaChip': DataType('RnaChip', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'RipGeneSt': DataType('RipGeneSt', 'OVERRIDE RNA', 'REPLACE', 'transcriptomic', 'RNA binding protein antibody', 'MicroArray'), #this isn't correct
-    'RipTiling': DataType('RipTiling', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'RipChip': DataType('RipChip', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'RipSeq': DataType('RipSeq', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', None),
-    'Switchgear': DataType('Switchgear', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo'),
-    'TfbsValid': DataType('TfbsValid', 'REPLACE', 'REPLACE', 'REPLACE', 'REPLACE', 'NotGeo')
+    'Cnv': DataType(            'Cnv',              'REPLACE',      'REPLACE',                                          'REPLACE',          'REPLACE',                                      None),
+    'Combined': DataType(       'Combined',         'REPLACE',      'REPLACE',                                          'REPLACE',          'REPLACE',                                      None),
+    'Genotype': DataType(       'Genotype',         'genomic DNA',  'REPLACE',                                          'genomic',          'REPLACE',                                      None),
+    'RnaChip': DataType(        'RnaChip',          'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 None),
+    'RipChip': DataType(        'RipChip',          'RNA',          'REPLACE',                                          'transcriptomic',   'RNA binding protein antibody',                 None)
+    
+    
 }
 
 #compare this to the source in datatype, give GP ids depending on the type
@@ -90,13 +99,16 @@ class MdbFile(ra.RaFile):
             self._dataType = None
             for e in self.experiments.itervalues():
                 if self._dataType == None and e.dataType != None:
+                    print e.dataType
                     self._dataType = e.dataType
                 elif self._dataType != e.dataType or e.dataType == None:
+                    print 'multiple data types!'
                     self._dataType = None
                     break
+            print 'still none'
             return self._dataType
     
-    @property    
+    @property
     def compositeStanza(self):
         '''the stanza (typically first in file) describing the composite'''
         try:
@@ -181,10 +193,14 @@ class MdbExp(list):
             for s in self:
                 if 'dataType' in s:
                     if self._dataType == None:
+                        print dataTypes[s['dataType']]
                         self._dataType = dataTypes[s['dataType']]
                     elif self._dataType.name != s['dataType']:
+                        print 'exp multiple data types!'
                         self._dataType = None
                         break
+                        
+            print 'still none (exp)'
             return self._dataType
     
     def __init__(self, id, parent, stanzas):
