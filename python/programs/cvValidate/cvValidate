@@ -17,7 +17,7 @@ class validate(object):
         
         self.loose = args.loose
         self.errors = list()
-        self.cv = cv.CvFile(args.cvPath, self.addtoerrs, args.protocolPath)    
+        self.cv = cv.CvFile(args.cvPath, self.addtoerrs, args.protocolPath)  
         self.cv.validate()
         
         
