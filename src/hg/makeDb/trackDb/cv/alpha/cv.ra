@@ -10067,12 +10067,6 @@ type treatment
 label 4-OHTAM_1uM_12hr
 
 term 4OHTAM_1uM_36hr
-tag TAM136H
-description 36 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
-type treatment
-label 4-OHTAM_1uM_36hr
-
-term 4OHTAM_1uM_36hr
 tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
 type treatment
