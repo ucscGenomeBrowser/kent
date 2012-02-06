@@ -329,16 +329,15 @@ term Adult_CD4_naive
 tag ADULTCD4NAIVE
 type Cell Line
 organism human
-description CD4+ cells isolated from human blood and enriched for naive, Th0, and Th1 populations
+description CD4+ cells isolated from human blood and enriched for naive populations
 tissue blood
 karyotype blood
-lineage missing
 vendorName David Randolph at University of Alabama, Birmingham 
 vendorId Adult_CD4_naive
 orderUrl drdrdr@uab.edu
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
-sex F and M
+sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4naive_Crawford_protocol.pdf
@@ -347,16 +346,15 @@ term Adult_CD4_Th0
 tag ADULTCD4TH0
 type Cell Line
 organism human
-description CD4+ cells isolated from human blood and enriched for naive, Th0, and Th1 populations
+description CD4+ cells isolated from human blood and enriched for Th0 populations
 tissue blood
 karyotype blood
-lineage missing
 vendorName David Randolph at University of Alabama, Birmingham 
 vendorId Adult_CD4_Th0
 orderUrl drdrdr@uab.edu
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
-sex F and M
+sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th0_Crawford_protocol.pdf
@@ -365,16 +363,15 @@ term Adult_CD4_Th1
 tag ADULTCD4TH1
 type Cell Line
 organism human
-description CD4+ cells isolated from human blood and enriched for naive, Th0, and Th1 populations
+description CD4+ cells isolated from human blood and enriched for Th1 populations
 tissue blood
 karyotype blood
-lineage missing
 vendorName David Randolph at University of Alabama, Birmingham 
 vendorId Adult_CD4_Th1
 orderUrl drdrdr@uab.edu
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
-sex F and M
+sex B
 tier 3
 lab Crawford
 protocol Crawford:AdultCD4Th1_Crawford_protocol.pdf
@@ -1264,16 +1261,15 @@ term Cord_CD4_naive
 tag CORDCD4NAIVE
 type Cell Line
 organism human
-description CD4+ cells isolated from cord blood and enriched for naive, Th0, and Th1 populations
+description CD4+ cells isolated from cord blood and enriched for naive populations
 tissue blood
 karyotype blood
-lineage missing
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_naive
 orderUrl drdrdr@uab.edu
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
-sex F and M
+sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4naive_Crawford_protocol.pdf
@@ -1282,16 +1278,15 @@ term Cord_CD4_Th0
 tag CORDCD4TH0
 type Cell Line
 organism human
-description CD4+ cells isolated from cord blood and enriched for naive, Th0, and Th1 populations
+description CD4+ cells isolated from cord blood and enriched for Th0 populations
 tissue blood
 karyotype blood
-lineage missing
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th0
 orderUrl drdrdr@uab.edu
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
-sex F and M
+sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th0_Crawford_protocol.pdf
@@ -1300,16 +1295,15 @@ term Cord_CD4_Th1
 tag CORDCD4TH1
 type Cell Line
 organism human
-description CD4+ cells isolated from cord blood and enriched for naive, Th0, and Th1 populations
+description CD4+ cells isolated from cord blood and enriched for Th1 populations
 tissue blood
 karyotype blood
-lineage missing
 vendorName David Randolph at University of Alabama, Birmingham
 vendorId Cord_CD4_Th1
 orderUrl drdrdr@uab.edu
 termId BTO:3A0000782
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000782&termName=T-lymphocyte
-sex F and M
+sex B
 tier 3
 lab Crawford
 protocol Crawford:CordCD4Th1_Crawford_protocol.pdf
@@ -1404,8 +1398,6 @@ tissue skin fibroblast
 vendorName Coriell
 vendorId AG20443
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG20443&PgId=166
-karyotype skin
-lineage missing
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 sex M
@@ -1422,8 +1414,6 @@ tissue skin fibroblast
 vendorName Coriell
 vendorId AG08395
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08395&PgId=166
-karyotype skin
-lineage missing
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 sex F
@@ -1440,8 +1430,6 @@ tissue lung fibroblast
 vendorName Coriell
 vendorId AG08396
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08396&PgId=166
-karyotype skin
-lineage missing
 termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 sex F
@@ -3109,7 +3097,6 @@ organism human
 description iPS cells derived from MSC658 fibroblast
 tissue induced pluripotent cell (iPS)
 karyotype iPS
-lineage missing
 vendorName Paul Tesar at Case Western University
 vendorId iPS_CWRU1
 orderUrl pjt5@case.edu
@@ -3127,7 +3114,6 @@ organism human
 description iPS cells derived from AG08395 fibroblast
 tissue induced pluripotent cell (iPS)
 karyotype iPS
-lineage missing
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi7
 orderUrl chenowej@ninds.nih.gov
@@ -3145,7 +3131,6 @@ organism human
 description iPS cells derived from AG20443 fibroblast
 tissue induced pluripotent cell (iPS)
 karyotype iPS
-lineage missing
 vendorName Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId iPS_NIHi11
 orderUrl chenowej@ninds.nih.gov
@@ -3360,16 +3345,15 @@ term Medullo_D341
 tag MEDULLOD341
 type Cell Line
 organism human
-description Medulloblastoma Cell line
-tissue cell origin is neuron or neuron precursor
-karyotype medulloblastoma
-lineage missing
+description Medulloblastoma cell line of neuron or neuron precurosr origin
+tissue brain
+karyotype cancer
 vendorName Darrell Bigner at Duke University
 vendorId Medullo_D341
 orderUrl bigne001@mc.duke.edu
 termId BTO:0001757
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001757&termName=medulloblastoma%20cell
-sex unknown
+sex U
 tier 3
 lab Crawford
 protocol Crawford:MedulloD341_Crawford_protocol.pdf
@@ -3395,15 +3379,14 @@ tag MEL2183
 type Cell Line
 organism human
 description Melanoma Cell line
-tissue cell line derived from melanoma metastisis
-karyotype melanoma
-lineage missing
+tissue Melanoma cell line derived from melanoma metastasis
+karyotype cancer
 vendorName Dr. Yardena Samuels
 vendorId Mel_2183
 orderUrl samuelsy@mail.nih.gov
 termId BTO:0000849
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000849&termName=melanoma%20cell%20line
-sex unknown
+sex U
 tier 3
 lab Crawford
 protocol Crawford:Mel2183_Crawford_protocol.pdf
@@ -10053,6 +10036,18 @@ tag SERUMSTIM
 description Grown with normal serum levels (10%), then switched back to normal serum levels (10% FBS) for 3 hours.
 type treatment
 label serum-stimulated media
+
+term 4OHTAM_1uM_4hr
+tag TAM14H
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+type treatment
+label 4-OHTAM_1uM_4hr
+
+term 4OHTAM_1uM_12hr
+tag TAM112H
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+type treatment
+label 4-OHTAM_1uM_12hr
 
 term 4OHTAM_1uM_36hr
 tag TAM
