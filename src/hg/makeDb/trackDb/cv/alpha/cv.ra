@@ -10054,6 +10054,24 @@ description Grown with normal serum levels (10%), then switched back to normal s
 type treatment
 label serum-stimulated media
 
+term 4OHTAM_1uM_4hr
+tag TAM14H
+description 4 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+type treatment
+label 4-OHTAM_1uM_4hr
+
+term 4OHTAM_1uM_12hr
+tag TAM112H
+description 12 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+type treatment
+label 4-OHTAM_1uM_12hr
+
+term 4OHTAM_1uM_36hr
+tag TAM136H
+description 36 hours with 1 uM 4-hydroxytamoxifen dissolved in ethanol (Struhl) PROVISIONAL
+type treatment
+label 4-OHTAM_1uM_36hr
+
 term 4OHTAM_1uM_36hr
 tag TAM
 description (To replace TAM_1uM_36hr) 36 h with 1 uM 4-hydroxytamoxifen (Myers)
