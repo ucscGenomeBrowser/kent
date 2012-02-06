@@ -35,11 +35,11 @@ The available tracks are:
     transcript annotations, including polymorphic pseudogenes.  This includes
     both manual and automatic annotations.  The selection criteria is
     described in the <a href="#basicSetSelection">next section</a>.
-    This is subset of the <em>comprehensive set</em>.
+    This is a subset of the <em>comprehensive set</em>.
 
   <li><em>GENCODE Comprehensive set</em> - all GENCODE coding and non-coding transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
-    automatic annotations.  This is super-set of the <em>basic set</em>.
+    automatic annotations.  This is a super-set of the <em>basic set</em>.
 
   <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes.
 
@@ -179,35 +179,34 @@ Harrow <em>et al.</em> (2006).
 
 <h4><a name="basicSetSelection">GENCODE <em>Basic Set</em> selection</a></h4>
 <p>
-The GENCODE <em>Basic Set</em> is intended to provide a simplified subset of
-the GENCODE transcript annotations that will be useful to the majority of
-users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
-is done on a per-locus basis and then for coding and non-coding transcripts
-within that locus.  The goal is to use the better quality
-transcript annotations while still having some annotation present for
-each locus.
+The GENCODE <em>Basic Set</em> is intended to provide a simplified subset of the GENCODE transcript
+annotations that will be useful to the majority of users. The goal was to have a high-quality
+basic set that also covered all loci. Selection of GENCODE annotations for inclusion in the
+basic set was determined independently for the coding and non-coding transcripts at each
+gene locus.
 </p>
-
-<p>The selection criteria for a given locus is:</p>
 <ul>
-  <li> For coding transcripts (including polymorphic pseudogenes):
+  <li> Criteria for selection of coding transcripts (including polymorphic pseudogenes) at a given
+       locus:
     <ul>
-      <li> If full-length coding transcripts that are not nonsense-mediated decay or problem
-           transcripts exist, then only they are included in the basic set.
-      <li> Otherwise, the coding transcript with the largest CDS is included in the basic set.
+      <li> all full-length coding transcripts (except problem transcripts or transcripts that are
+           not nonsense-mediated decay) were included in the basic set.
+      <li> if there were no transcripts meeting the above criteria, then the partial coding
+           transcript with the largest CDS was included in the basic set.
     </ul>
-  <li> For non-coding transcripts:
+  <li> Criteria for selection of non-coding transcripts at a given locus:
     <ul>
-      <li> If full-length non-coding transcripts that have a well characterized biotype (see below)
-           exist, then only they are included in the basic set.
-      <li> Otherwise, the largest non-coding transcript is included in the basic set.
+      <li> all full-length non-coding transcripts with a well characterized biotype (see below) were
+           included in the basic set.
+      <li> if there were no transcripts meeting the above criteria, then the largest non-coding
+           transcript was included in the basic set.
     </ul>
 </ul>
 
 <!--! <h5>Non-coding transcript categories</h5> -->
-<p>Non-coding transcripts are categorized using
-their <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>
-and the following criteria:
+<p>Non-coding transcripts are categorized using their
+<a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>. For non-coding transcripts,
+certain biotypes are better characterized than others:
 </p>
 <ul>
   <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
