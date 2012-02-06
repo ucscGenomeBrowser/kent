@@ -10068,6 +10068,13 @@ description 30 minutes with 100 nM 4-hydroxytamoxifen (Crawford)
 type treatment
 label 4-OHTAM_100nM_30m
 
+term Taxol_500nM_24hr
+tag TAX24H
+description 500 nM Taxol for 24 hours, then sorted for 4n DNA content (Crawford)
+type treatment
+label Taxol_500nM_24hr
+#provisional - added by wong
+
 term TGFb
 tag TGFB
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
