@@ -12172,4 +12172,8 @@ TMPDIR=/scratch/tmp
     cd /hive/data/genomes/bosTau7/bed
     ln -s blastz.mm9.swap lastz.mm9
 
+############################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (DONE, Andy 2012-02-06)
+# (see hg19.txt for multi-species build notes)
+
 ##############################################################################
