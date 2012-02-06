@@ -8411,30 +8411,42 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 12/7/11 angie)
-# NEXT TIME: use snp135 and squelch multiple-mappers
-# Updated 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
+# NHGRI GWAS CATALOG (DONE 2/6/12 angie)
+# Updated 12/7/11, 11/2/11, 10/3/11, 9/2/11, 8/1/11, 6/9/11, 4/1/11 (last one to use snp131), 3/1/11, 2/1/11
 # Updated 12/7/10, 11/1/10, 10/6/10, 9/1/10, 8/2/10, 6/2/10, 5/12/10 (last one to use snp130)
 # Updated 4/1/10, 3/1/10
 # Originally done 1/19/10
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog
     cd /hive/data/genomes/hg19/bed/gwasCatalog
     # Done once, don't need to redo:
-    zcat ../snp132/snp132.bed.gz | cut -f 1-4  \
+    zcat ../snp135/snp135.bed.gz | cut -f 1-4  \
     | sort -k4,4 \
-      > snp132Coords.bed
+      > snp135Coords.bed
     set today = `date +%y%m%d`
     mkdir /hive/data/genomes/hg19/bed/gwasCatalog/$today
     cd /hive/data/genomes/hg19/bed/gwasCatalog/$today
 
     # Mapping to hg19 by joining hg19 SNP coords with catalog flatfile (see hg18.txt)
-    join -t "	" -1 4 ../snp132Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
+    join -t "	" -1 4 ../snp135Coords.bed /hive/data/genomes/hg18/bed/gwasCatalog/$today/noCoords.tab \
         -o 1.1,1.2,1.3,1.4,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,2.10,2.11,2.12,2.13,2.14,2.15,2.16,2.17,2.18,2.19 \
     | sort -k1,1 -k2n,2n \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 7934 elements of size 22
+#Loaded 8561 elements of size 22
+    # For David: find examples of risk alleles for which dbSNP observed
+    # alleles are complementary (A/T or C/G) -- how do we know what strand the
+    # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
+    # always available in the original publication, so sadly there is not always
+    # a way to resolve these. GWAS catalog folks aren't going to modify their
+    # database to add a column for these cases.
+    hgsql hg19 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
+                     from gwasCatalog as gc, snp130 as snp \
+                     where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
+                           gc.name = snp.name and snp.observed in ("C/G", "A/T") \
+                     order by gc.name;' > ambigStrand.txt
+    wc -l ambigStrand.txt
+#752 ambigStrand.txt
 
 
 ######################################################################## 
