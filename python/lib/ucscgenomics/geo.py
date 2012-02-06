@@ -2,7 +2,7 @@ import urllib2, re, datetime
 
 # if the molecule is RNA, we need to map our data into !Sample_molecule, which only takes certain fields
 # first we check rnaExtractMapping. If its not there, we use the localization. This is because (at current)
-# polyA is the most important trait, otherwise its going to be nonPolyA which GEO doesn't accept that. 
+# polyA is the most important trait, otherwise its going to be nonPolyA which GEO doesn't accept. 
 rnaExtractMapping = {
     'shortPolyA': 'polyA RNA', 
     'longPolyA': 'polyA RNA', 

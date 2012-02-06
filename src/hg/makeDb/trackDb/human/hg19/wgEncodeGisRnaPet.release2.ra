@@ -8,7 +8,7 @@ subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1H1hESC=H1hESC&nbsp;
 subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract PAP=PolyA+ total=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2
-subGroup6 cloned Clone Free=Free Based=Based
+subGroup6 cloned Library_Prep_Method Free=Clone-free Based=Clone-based
 dimensions dimensionX=localization dimensionY=cellType dimensionB=rep dimensionD=cloned
 dimensionBchecked rep1
 dimensionDchecked Free,Based
