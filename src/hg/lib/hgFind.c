@@ -3093,7 +3093,11 @@ else
     // Disable singleBaseSpec for any term that is not hgOfficialChromName
     // because that mangles legitimate IDs that are [A-Z]:[0-9]+.
     if (singleBaseSpec)
+	{
+	singleBaseSpec = relativeFlag = FALSE;
 	term = sqlEscapeString(originalTerm);
+	relStart = relEnd = 0;
+	}
 
     hgFindSpecGetAllSpecs(db, &shortList, &longList);
     for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)

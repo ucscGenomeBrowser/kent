@@ -37,7 +37,7 @@ struct sqlResult *sr;
 if (isRgdGene(conn))
 {
 safef(query, sizeof(query), 
-	"select k.locusID, k.mapID, keggMapDesc.description"
+	"select distinct k.locusID, k.mapID, keggMapDesc.description"
 	" from rgdGene2KeggPathway k, keggMapDesc, rgdGene2 x"
 	" where k.rgdId=x.name "
 	" and x.name='%s'"

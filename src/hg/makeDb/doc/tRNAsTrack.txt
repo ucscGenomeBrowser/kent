@@ -51,13 +51,15 @@ caeJap1 calJac3 ce6 equCab2 gasAcu1 nomLeu1 panTro2 rheMac2'
 for DB in ${DBLIST}   
   do
       echo Processing ${DB}
+      rm -rf /hive/data/genomes/${DB}/bed/tRNAs/gif
       mkdir -p /hive/data/genomes/${DB}/bed/tRNAs/gif
-      cp -pr /hive/data/inside/loweLab/tRNAs/Eukaryota/${DB}/${DB}-tRNAs.bed  /hive/data/genomes/${DB}/bed/tRNAs
+      cp -pf /hive/data/inside/loweLab/tRNAs/Eukaryota/${DB}/${DB}-tRNAs.bed  /hive/data/genomes/${DB}/bed/tRNAs/
     hgsql ${DB} -e 'drop table if exists tRNAs'
     hgLoadBed -tab ${DB} tRNAs /hive/data/genomes/${DB}/bed/tRNAs/${DB}-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
-     cp -p /hive/data/inside/loweLab/tRNAs/Eukaryota/${DB}/images/* /hive/data/genomes/${DB}/bed/tRNAs/gif/ 
+     cp -pf /hive/data/inside/loweLab/tRNAs/Eukaryota/${DB}/images/* /hive/data/genomes/${DB}/bed/tRNAs/gif/
+     rm /hive/data/gbdb/${DB}/RNA-img
      ln -s  /hive/data/genomes/${DB}/bed/tRNAs/gif /hive/data/gbdb/${DB}/RNA-img
-  done 
+  done
 '_EOF_'
     # << happy emacs
     chmod +x createtRNAsTrack.sh
