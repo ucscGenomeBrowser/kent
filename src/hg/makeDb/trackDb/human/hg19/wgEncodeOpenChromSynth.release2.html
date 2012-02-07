@@ -4,7 +4,7 @@ as part of the four <B><em>Open Chromatin</em></B> track sets.
 This track displays open chromatin regions and/or transcription factor binding
 sites identified in
 <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
-by one or more complementary methodologies, DNaseI hypersensitivity (HS)
+by one or more complementary methodologies: DNaseI hypersensitivity (HS)
 (<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>),
 Formaldehyde-Assisted Isolation of Regulatory Elements (FAIRE)
 (<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>),
@@ -20,7 +20,7 @@ relevant (Song <em>et al.</em>, submitted).
 <P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">DNaseI HS data</A>:
 DNaseI is an enzyme that has long been used to map general
 chromatin accessibility, and DNaseI "hypersensitivity" is a feature of active
-cis-regulatory sequences.The use of this method has led to the discovery of
+cis-regulatory sequences. The use of this method has led to the discovery of
 functional regulatory elements that include promoters, enhancers, silencers,
 insulators, locus control regions, and novel elements. DNaseI hypersensitivity
 signifies chromatin accessibility following binding of trans-acting factors in
@@ -112,7 +112,7 @@ see Open Chromatin above.</li></DD>
 <DD><ul style="list-style-type:none;">
 <li><b><span style='color: #FF00FF;'>Pink</span></b>:
 Regions identified by ChIP-seq as peaks (at least one of the peak calling p-values for
-the three ChIP experiment is <code>&lt; 0.05 </code>(<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>))
+the three ChIP experiments are <code>&lt; 0.05 </code>(<code>-log<sub>10</sub>(p-value) &gt; 1.3</code>))
 indicating binding sites for one
 or more of RNA Pol II, CTCF, and c-Myc described here and not identified by DNaseI HS
 or FAIRE as peaks. Peaks for ChIP-seq have p-values <code>&lt; 0.05</code>
@@ -122,8 +122,8 @@ overlap annotated transcription start sites by the UCSC Genes track are consider
 </ul>
 </DL>
 </P>
-<P>All signal values, <code>-log<sub>10</sub>(p-values)</code>, and the OC Code is
-displayed on the detail page for each element and is available in the
+<P>All signal values, <code>-log<sub>10</sub>(p-values)</code>, and the OC Code are
+displayed on the detail page for each element and are available in the
 corresponding bed file.
 </P>
 <p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
@@ -136,8 +136,8 @@ kernel density estimation to create base pair scores (Boyle <em>et al.</em>, 200
 Significant regions, or peaks, were determined by fitting the data to a gamma
 distribution to calculate p-values. Contiguous regions where p-values were
 below a 0.05 (DNaseI HS, ChIP) or 0.1 (FAIRE) threshold were considered
-significant. See assay specific description pages (
-<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>,
+significant. See assay specific description pages 
+(<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>,
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A> and
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">UTA TFBS</A>)
 for more details.
@@ -152,7 +152,7 @@ where <B><code style='font-size:1.2em;'>p<sub>i</sub></code></B> are the p-value
 and FAIRE.  <B><code style='font-size:1.2em;'>X<sup>2</sup></code></B> follows a chi-squared distribution,
 thus a combined p-value can be assigned to this test statistic.
 </P>
-<B>Enhancer and Insulator Functional assays:</B>  A subset of DNase and FAIRE
+<B>Enhancer and Insulator Functional assays:</B>  A subset of DNaseI and FAIRE
 regions were cloned into functional tissue culture reporter assays to test for
 enhancer and insulator activity.  Coordinates and results from these
 experiments can be found
@@ -186,7 +186,7 @@ Terry Furey</A>):
 TARGET=_blank>Institute for Genome Sciences & Policy (IGSP)</A>: Zhancheng Zhang,
 Lingyun Song, <A HREF="http://genetics.unc.edu/faculty/terry-furey"
 TARGET=_blank>Terry Furey</A>, and
-<A HREF="http://www.genome.duke.edu/people/faculty/crawford/"
+<A HREF="http://www.genome.duke.edu/directory/faculty/crawford/"
 TARGET=_blank>Greg Crawford</a>
 </P><P>
 <LI>University of North Carolina at Chapel Hill: Paul Giresi and
@@ -202,86 +202,101 @@ Insitute</A>: Paul Flicek, Damian Keefe, and
 <A HREF="http://www.ebi.ac.uk/~birney/" TARGET=_blank>Ewan Birney</a>
 </P><P>
 <LI><A HREF="http://www.oncology.cam.ac.uk/" TARGET=_blank>University of
-Cambridge, Department of Oncology and CR-UK Cambridge Research Institute (CRI)
-</A>: Stefan Graf
+Cambridge, Department of Oncology and CR-UK Cambridge Research Institute (CRI)</A>:
+Stefan Graf
 </UL>
 </P>
 
 <H2>References</H2>
 
-<P>
-Bhinge AA, Kim J, Euskirchen GM, Snyder M, Iyer, VR.
-<A HREF="http://genome.cshlp.org/cgi/content/abstract/17/6/910" TARGET=_blank>
-Mapping the chromosomal targets of STAT1 by Sequence Tag Analysis of Genomic
-Enrichment (STAGE)</A>. <EM>Genome Res.</EM> 2007 Jun;17(6):910-6.
-</P><P>
+<p>
+Bhinge AA, Kim J, Euskirchen GM, Snyder M, Iyer VR.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17568006"
+ rel="nofollow" target="_blank">
+Mapping the chromosomal targets of STAT1 by Sequence Tag Analysis of Genomic Enrichment (STAGE)</a>.
+<em>Genome Res</em>. 2007 Jun;17(6):910-6.
+</p>
 
-Boyle AP, Davis S, Shulha HP, Meltzer P, Margulies EH, Weng Z, Furey TS,
-Crawford GE. <A HREF="http://www.cell.com/abstract/S0092-8674(07)01613-3"
-TARGET=_blank>High-resolution mapping and characterization of open chromatin
-across the genome</A>. <EM>Cell.</EM> 2008 Jan 25;132(2):311-22.
-</P><P>
+<p>
+Birney E, Stamatoyannopoulos JA, Dutta A, Guig&#243; R, Gingeras TR, Margulies EH, Weng Z, Snyder M <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/17571346"
+ rel="nofollow" target="_blank">
+Identification and analysis of functional elements in 1% of the human genome by the ENCODE pilot project</a>.
+<em>Nature</em>. 2007 Jun 14;447(7146):799-816.
+</p>
 
-Boyle AP, Guinney J, Crawford GE, and Furey TS.
-<A HREF="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btn480"
-TARGET=_blank>F-Seq: a feature density estimator for high-throughput sequence
-tags</A>. <EM>Bioinformatics.</EM> 2008 Nov 1;24(21):2537-8.
-</P><P>
+<p>
+Boyle AP, Davis S, Shulha HP, Meltzer P, Margulies EH, Weng Z, Furey TS, Crawford GE <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18243105"
+ rel="nofollow" target="_blank">
+High-resolution mapping and characterization of open chromatin across the genome</a>.
+<em>Cell</em>. 2008 Jan 25;132(2):311-22.
+</p>
 
+<p>
+Boyle AP, Guinney J, Crawford GE, Furey TS.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18784119"
+ rel="nofollow" target="_blank">
+F-Seq: a feature density estimator for high-throughput sequence tags</a>.
+<em>Bioinformatics</em>. 2008 Nov 1;24(21):2537-8.
+</p>
+
+<p>
 Buck MJ, Nobel AB, Lieb JD.
-<A HREF="http://genomebiology.com/2005/6/11/R97" TARGET=_blank>ChIPOTle: a
-user-friendly tool for the analysis of ChIP-chip data</A>.
-<EM>Genome Biol.</EM> 2005;6(11):R97.
-</P><P>
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16277752"
+ rel="nofollow" target="_blank">
+ChIPOTle: a user-friendly tool for the analysis of ChIP-chip data</a>.
+<em>Genome Biol</em>. 2005;6(11):R97.
+</p>
 
-Crawford GE, Davis S, Scacheri PC, Renaud G, Halawi MJ, Erdos MR, Green R,
-Meltzer PS, Wolfsberg TG, Collins FS.
-<A HREF="http://www.nature.com/nmeth/journal/v3/n7/abs/nmeth888.html"
-TARGET=_blank>DNase-chip: a high-resolution method to identify DNase I
-hypersensitive sites using tiled microarrays</A>.
-<EM>Nat Methods.</EM> 2006 Jul;3(7):503-9.
-</P><P>
+<p>
+Crawford GE, Davis S, Scacheri PC, Renaud G, Halawi MJ, Erdos MR, Green R, Meltzer PS <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16791207"
+ rel="nofollow" target="_blank">
+DNase-chip: a high-resolution method to identify DNase I hypersensitive sites using tiled microarrays</a>.
+<em>Nat Methods</em>. 2006 Jul;3(7):503-9.
+</p>
 
-Crawford GE, Holt IE, Whittle J, Webb BD, Tai D, Davis S, Margulies EH, Chen Y,
-Bernat JA, Ginsburg D <EM>et al.</EM>
-<A HREF="http://www.genome.org/cgi/content/abstract/16/1/123"
-TARGET=_blank>Genome-wide mapping of DNase hypersensitive sites using massively
-parallel signature sequencing (MPSS)</A>.
-<EM>Genome Res.</EM> 2006 Jan;16(1):123-31.
-</P><P>
+<p>
+Crawford GE, Holt IE, Whittle J, Webb BD, Tai D, Davis S, Margulies EH, Chen Y <em>et al</em>.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/16344561"
+ rel="nofollow" target="_blank">
+Genome-wide mapping of DNase hypersensitive sites using massively parallel signature sequencing (MPSS)</a>.
+<em>Genome Res</em>. 2006 Jan;16(1):123-31.
+</p>
 
-The ENCODE Project Consortium.
-<A HREF="http://www.nature.com/nature/journal/v447/n7146/abs/nature05874.html"
-TARGET=_blank>Identification and analysis of functional elements in 1% of the
-human genome by the ENCODE pilot project</A>. <EM>Nature.</EM>
-2007 Jun 14;447(7146):799-816.
-</P><P>
-
+<p>
 Giresi PG, Kim J, McDaniell RM, Iyer VR, Lieb JD.
-<A HREF="http://www.genome.org/cgi/content/abstract/17/6/877" TARGET=_blank>
-FAIRE (Formaldehyde-Assisted Isolation of Regulatory Elements) isolated active
-regulatory elements in human chromatin</A>.
-<EM>Genome Res.</EM> 2007 Jun;17(6):877-85.
-</P><P>
+<a href="http://www.ncbi.nlm.nih.gov/pmc/articles/1891346"
+ rel="nofollow" target="_blank">
+FAIRE (Formaldehyde-Assisted Isolation of Regulatory Elements) isolates active regulatory elements from human chromatin</a>.
+<em>Genome Res</em>. 2007 Jun;17(6): 877-885.
+</p>
 
-Giresi PG, Lieb JD. <A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19303047"
-TARGET=blank>Isolation of active regulatory elements from eukaryotic chromatin
-using FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)</A>.
-<EM>Methods.</EM> 2009 Jul;48(3):233-9.
-</P><P>
+<p>
+Giresi PG, Lieb JD.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19303047"
+ rel="nofollow" target="_blank">
+Isolation of active regulatory elements from eukaryotic chromatin using FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)</a>.
+<em>Methods</em>. 2009 Jul;48(3):233-9.
+</p>
 
-Li H, Ruan J, and Durbin R.
-<A HREF="http://genome.cshlp.org/content/early/2008/09/25/gr.078212.108.short"
-TARGET=_blank>Mapping short DNA sequencing reads and calling variants using
-mapping quality scores</A>. <EM>Genome Res.</EM> 2008 Nov;18(11):1851-8.
-</P><P>
-Song L and Crawfor GE.
-<A HREF="http://cshprotocols.cshlp.org/cgi/content/full/2010/2/pdb.prot5384"
-TARGET=_BLANK>DNase-seq: a high-resolution technique for mapping active
-gene regulatory elements across the genome from mammalian cells</A>.
-<Em>Cold Spring Harb. Protoc.</EM>; 2010;Issue 2.
+<p>
+Li H, Ruan J, Durbin R.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/18714091"
+ rel="nofollow" target="_blank">
+Mapping short DNA sequencing reads and calling variants using mapping quality scores</a>.
+<em>Genome Res</em>. 2008 Nov;18(11):1851-8.
+</p>
 
-</P>
+<p>
+Song L, Crawford GE.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/20150147"
+ rel="nofollow" target="_blank">
+DNase-seq: a high-resolution technique for mapping active gene regulatory elements across the genome from mammalian cells</a>.
+<em>Cold Spring Harb Protoc</em>. 2010 Feb;2010(2):pdb.prot5384.
+</p>
+
 
 <H2> Data Release Policy </H2>
 Data users may freely use ENCODE data, but may not, without prior consent,

@@ -3,156 +3,848 @@ objType composite
 composite wgEncodeUmassDekker5C
 expVars lab,dataType,cell
 
-metaObject wgEncodeUmassDekker5CGm12878MatrixRep1
+metaObject wgEncodeUmassDekker5CEnmPrimer
+objType file
+attic auxSup
+cell None
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CEnmPrimer.doc.tgz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+subId 5451
+view Primer
+
+metaObject wgEncodeUmassDekker5CEnrPrimer
+objType file
+attic auxSup
+cell None
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CEnrPrimer.doc.tgz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+subId 5451
+view Primer
+
+metaObject wgEncodeUmassDekker5CGm12878EnmMatrixRep1
+objType file
+attic auxSup
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnmMatrixRep1.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 1
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CGm12878EnmMatrixRep2
+objType file
+attic auxSup
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnmMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CGm12878EnmPrimerPeaks
+objType file
+attic auxSup
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnmPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CGm12878EnmRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001665
-expId 1665
-fileName wgEncodeUmassDekker5CGm12878MatrixRep1.download.gz
+fileName wgEncodeUmassDekker5CGm12878EnmRawDataRep1.fastq.tgz
 grant Dekker
 lab UMass-Dekker
-md5sum 169e5050784de174c6cffb83f7e704fa
 project wgEncode
+region ENM
 replicate 1
-subId 3488
-view Matrix
+subId 5451
+view RawData
 
-metaObject wgEncodeUmassDekker5CGm12878MatrixRep2
+metaObject wgEncodeUmassDekker5CGm12878EnmRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001665
-expId 1665
-fileName wgEncodeUmassDekker5CGm12878MatrixRep2.download.gz
+fileName wgEncodeUmassDekker5CGm12878EnmRawDataRep2.fastq.tgz
 grant Dekker
 lab UMass-Dekker
-md5sum b0ed76f05d76d2508851ddd6f094eabd
 project wgEncode
+region ENM
 replicate 2
-subId 3488
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CGm12878EnrMatrixRep1
+objType file
+attic auxSup
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnrMatrixRep1.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 1
+subId 5451
 view Matrix
 
-metaObject wgEncodeUmassDekker5CH1hescMatrixRep1
+metaObject wgEncodeUmassDekker5CGm12878EnrMatrixRep2
+objType file
+attic auxSup
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnrMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CGm12878EnrPrimerPeaks
+objType file
+attic auxSup
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnrPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CGm12878EnrRawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnrRawDataRep1.fastq.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 1
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CGm12878EnrRawDataRep2
+objType file
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878EnrRawDataRep2.fastq.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CGm12878Pk
+objType table
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878Pk.bed.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region None
+subId 5451
+tableName wgEncodeUmassDekker5CGm12878Pk
+view Peaks
+
+metaObject wgEncodeUmassDekker5CH1hescEnmMatrixRep1
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnmMatrixRep1.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 1
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CH1hescEnmMatrixRep2
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnmMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CH1hescEnmPrimerPeaks
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnmPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CH1hescEnmRawDataRep1
 objType file
 cell H1-hESC
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001666
-expId 1666
-fileName wgEncodeUmassDekker5CH1hescMatrixRep1.download.gz
+fileName wgEncodeUmassDekker5CH1hescEnmRawDataRep1.fastq.tgz
 grant Dekker
 lab UMass-Dekker
-md5sum e8c9aceecf1f4240d87f490190789cb3
 project wgEncode
+region ENM
 replicate 1
-subId 3488
-view Matrix
+subId 5451
+view RawData
 
-metaObject wgEncodeUmassDekker5CH1hescMatrixRep2
+metaObject wgEncodeUmassDekker5CH1hescEnmRawDataRep2
 objType file
 cell H1-hESC
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001666
-expId 1666
-fileName wgEncodeUmassDekker5CH1hescMatrixRep2.download.gz
+fileName wgEncodeUmassDekker5CH1hescEnmRawDataRep2.fastq.gz
 grant Dekker
 lab UMass-Dekker
-md5sum eb5f0157fe52f7cfdbdfd7d33cb192ee
 project wgEncode
+region ENM
 replicate 2
-subId 3488
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CH1hescEnrMatrixRep1
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnrMatrixRep1.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 1
+subId 5451
 view Matrix
 
-metaObject wgEncodeUmassDekker5CHelas3MatrixRep1
+metaObject wgEncodeUmassDekker5CH1hescEnrMatrixRep2
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnrMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CH1hescEnrPrimerPeaks
+objType file
+attic auxSup
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnrPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CH1hescEnrRawDataRep1
+objType file
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnrRawDataRep1.fastq.tgz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 1
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CH1hescEnrRawDataRep2
+objType file
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescEnrRawDataRep2.fastq.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CH1hescPk
+objType table
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescPk.bed.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region None
+subId 5451
+tableName wgEncodeUmassDekker5CH1hescPk
+view Peaks
+
+metaObject wgEncodeUmassDekker5CHelas3EnmMatrixRep1
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3EnmMatrixRep1.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 1
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CHelas3EnmMatrixRep2
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3EnmMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CHelas3EnmPrimerPeaks
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3EnmPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CHelas3EnmRawDataRep1
 objType file
 cell HeLa-S3
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001667
-expId 1667
-fileName wgEncodeUmassDekker5CHelas3MatrixRep1.download.gz
+fileName wgEncodeUmassDekker5CHelas3EnmRawDataRep1.fastq.gz
 grant Dekker
 lab UMass-Dekker
-md5sum 295d8f7e2e0a167c624570ec1f35364e
 project wgEncode
+region ENM
 replicate 1
-subId 3488
-view Matrix
+subId 5451
+view RawData
 
-metaObject wgEncodeUmassDekker5CHelas3MatrixRep2
+metaObject wgEncodeUmassDekker5CHelas3EnmRawDataRep2
 objType file
 cell HeLa-S3
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001667
-expId 1667
-fileName wgEncodeUmassDekker5CHelas3MatrixRep2.download.gz
+fileName wgEncodeUmassDekker5CHelas3EnmRawDataRep2.fastq.tgz
 grant Dekker
 lab UMass-Dekker
-md5sum 477de1d79c012ed7923d01a2ec942256
 project wgEncode
+region ENM
 replicate 2
-subId 3488
-view Matrix
+subId 5451
+view RawData
 
-metaObject wgEncodeUmassDekker5CK562MatrixRep1
+metaObject wgEncodeUmassDekker5CHelas3EnrMatrixRep1
 objType file
-cell K562
+attic auxSup
+cell HeLa-S3
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001668
-expId 1668
-fileName wgEncodeUmassDekker5CK562MatrixRep1.download.gz
+fileName wgEncodeUmassDekker5CHelas3EnrMatrixRep1.matrix.gz
 grant Dekker
 lab UMass-Dekker
-md5sum d9613d374f359760d08d9979259003a2
 project wgEncode
+region ENR
 replicate 1
-subId 3488
+subId 5451
 view Matrix
 
-metaObject wgEncodeUmassDekker5CK562MatrixRep2
+metaObject wgEncodeUmassDekker5CHelas3EnrMatrixRep2
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3EnrMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CHelas3EnrPrimerPeaks
+objType file
+attic auxSup
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3EnrPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CHelas3EnrRawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3EnrRawDataRep1.fastq.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 1
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CHelas3EnrRawDataRep2
+objType file
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3EnrRawDataRep2.fastq.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CHelas3Pk
+objType table
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3Pk.bed.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region None
+subId 5451
+tableName wgEncodeUmassDekker5CHelas3Pk
+view Peaks
+
+metaObject wgEncodeUmassDekker5CK562EnmMatrixRep1
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnmMatrixRep1.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 1
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CK562EnmMatrixRep2
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnmMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CK562EnmPrimerPeaks
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnmPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CK562EnmRawDataRep1
 objType file
 cell K562
 composite wgEncodeUmassDekker5C
 dataType 5C
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
 dateSubmitted 2011-01-25
 dateUnrestricted 2011-10-25
-dccAccession wgEncodeEH001668
-expId 1668
-fileName wgEncodeUmassDekker5CK562MatrixRep2.download.gz
+fileName wgEncodeUmassDekker5CK562EnmRawDataRep1.fastq.tgz
 grant Dekker
 lab UMass-Dekker
-md5sum 0c1c0472b91fba87930e80be4476a4e7
 project wgEncode
+region ENM
+replicate 1
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CK562EnmRawDataRep2
+objType file
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnmRawDataRep2.fastq.tgz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENM
 replicate 2
-subId 3488
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CK562EnrMatrixRep1
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnrMatrixRep1.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 1
+subId 5451
 view Matrix
 
-# MAGIC: 558163767
+metaObject wgEncodeUmassDekker5CK562EnrMatrixRep2
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnrMatrixRep2.matrix.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view Matrix
+
+metaObject wgEncodeUmassDekker5CK562EnrPrimerPeaks
+objType file
+attic auxSup
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnrPrimerPeaks.peaks.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+subId 5451
+view PrimerPeaks
+
+metaObject wgEncodeUmassDekker5CK562EnrRawDataRep1
+objType file
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnrRawDataRep1.fastq.tgz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 1
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CK562EnrRawDataRep2
+objType file
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562EnrRawDataRep2.fastq.tgz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region ENR
+replicate 2
+subId 5451
+view RawData
+
+metaObject wgEncodeUmassDekker5CK562Pk
+objType table
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Mar 2012 Freeze
+dateResubmitted 2012-02-07
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562Pk.bed.gz
+grant Dekker
+lab UMass-Dekker
+project wgEncode
+region None
+subId 5451
+tableName wgEncodeUmassDekker5CK562Pk
+view Peaks
+
+# MAGIC: -1792808137
