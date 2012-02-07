@@ -253,8 +253,8 @@ html wgEncodeGisRnaPet.release2
     type bam
     pairEndsByName on
     showNames off
-    #noColorTag .
-    bamColorMode tag 
+    noColorTag .
+    bamColorMode gray
     bamGrayMode aliQual
     baseColorDefault diffBases
     baseColorUseSequence lfExtra

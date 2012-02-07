@@ -1785,4 +1785,8 @@ TMPDIR=/scratch/tmp
     cat fb.gorGor3.chainRheMac2Link.txt
     #	2236867094 bases of 2822760080 (79.244%) in intersection
 
+#########################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (DONE, Andy 2012-02-06)
+# (see hg19.txt for multi-species build notes)
+
 ############################################################################
