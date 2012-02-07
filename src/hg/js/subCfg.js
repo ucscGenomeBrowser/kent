@@ -681,9 +681,9 @@ var subCfg = { // subtrack config module.
                 }
             } else {
                 subCfg.markChange(e,this);
-                // if just being made visible then composite to full?  NO (implications to other subs)
-                // Make view visible?  NO (subtrack override)
-                // reshape?  NO (much too complex)
+                // If made visible, be sure to make composite visible
+                if (this.selectedIndex > 0)
+                    exposeAll();
             }
         });
     },
