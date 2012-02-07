@@ -496,8 +496,8 @@ nextExonText Next Match
 prevExonText Prev Match
 
     track t2gPmc
-    shortLabel PubmedCentral
-    longLabel Publications from PubmedCentral (OA)
+    shortLabel Sequences (PMC)
+    longLabel Sequences from PubmedCentral Articles
     parent t2g
     type bed 12 .
     articleTable t2gPmcArticle
@@ -507,8 +507,8 @@ prevExonText Prev Match
     release alpha
 
     track t2gElsevier
-    shortLabel Elsevier (alpha)
-    longLabel Publications from Elsevier
+    shortLabel Sequences (Elsevier)
+    longLabel Sequences from Elsevier Articles
     parent t2g
     priority 2
     articleTable t2gElsevierArticle
