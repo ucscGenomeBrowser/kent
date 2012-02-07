@@ -153,6 +153,112 @@ priority 1.1
 visibility hide
 type bed 6
 
+track polyASeqSites
+compositeTrack on
+shortLabel PolyA-Seq
+longLabel Poly(A)-sequencing from Merck Research Laboratories
+group rna
+subGroup1 view Views Signal=Signal 
+subGroup2 tissType Tissue_Type Brain=Brain Ileum=Ileum Kidney=Kidney Liver=Liver Testis=Testis
+subGroup3 strand Strand fwd=Forward rev=Reverse
+dimensions dimensionY=tissType dimensionX=strand
+sortOrder tissType=+ strand=+ view=+
+priority 79.2
+type bed 
+dragAndDrop subTracks
+visibility hide
+noInherit on
+
+    track polyASeqSitesSignalView
+    shortLabel Signal
+    view Signal
+    visibility full
+    subTrack polyASeqSites
+    maxHeightPixels 50:50:5
+    autoScale on
+    yLineOnOff on
+    type bigWig -1 2 
+
+        track polyASeqSitesBrainFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=fwd
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.380000 34096.890625
+
+        track polyASeqSitesBrainRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=rev
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.380000 54655.808594
+
+        track polyASeqSitesIleumFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Ileum strand=fwd
+        shortLabel PolyA-Seq Ileum
+        longLabel Poly(A)-tail sequencing of Ileum from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.310000 48203.671875
+
+        track polyASeqSitesIleumRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Ileum strand=rev
+        shortLabel PolyA-Seq Ileum
+        longLabel Poly(A)-tail sequencing of Ileum from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.310000 249349.906250
+
+        track polyASeqSitesKidneyFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Kidney strand=fwd
+        shortLabel PolyA-Seq Kidney
+        longLabel Poly(A)-tail sequencing of Kidney from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.370000 28006.679688
+
+        track polyASeqSitesKidneyRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Kidney strand=rev
+        shortLabel PolyA-Seq Kidney
+        longLabel Poly(A)-tail sequencing of Kidney from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.370000 92366.500000
+
+        track polyASeqSitesLiverFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Liver strand=fwd
+        shortLabel PolyA-Seq Liver
+        longLabel Poly(A)-tail sequencing of Liver from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.230000 79035.906250
+
+        track polyASeqSitesLiverRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Liver strand=rev
+        shortLabel PolyA-Seq Liver
+        longLabel Poly(A)-tail sequencing of Liver from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.230000 199226.484375
+
+        track polyASeqSitesTestisFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=fwd
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.210000 13121.990234
+
+        track polyASeqSitesTestisRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=rev
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.210000 134073.218750
+
 # ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 track wgEncodeNhgriBip
 shortLabel NHGRI BiP
