@@ -175,7 +175,7 @@ class makeNotes(object):
         orsep = " OR "
         orstr = orsep.join(tablelist)
 
-        cmd = "hgsql %s -e \"SELECT ROUND(data_length/1024/1024,2) total_size_mb, ROUND(index_length/1024/1024,2) total_index_size_mb FROM information_schema.TABLES WHERE %s\"" % (database, orstr)
+        cmd = "hgsql %s -e \"SELECT ROUND(data_length,2) total_size_mb, ROUND(index_length,2) total_index_size_mb FROM information_schema.TABLES WHERE %s\"" % (database, orstr)
         p = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, close_fds=True)
         cmdoutput = p.stdout.read()
 
@@ -183,6 +183,7 @@ class makeNotes(object):
             fields = i.split()
             for j in fields:
                 tablesize = tablesize + float(j)
+        tablesize = tablesize/(1024 ** 2)
 
         return int(math.ceil(tablesize))
 
