@@ -17,50 +17,47 @@ GENCODE mitochondrial sequences are not available in the UCSC Genome Browser.
 These annotations are available for download in the GENCODE GTF files.
 </p>
 
-<p>
-<B>NOTE</B>: This GENCODE version 10 corresponds to Ensembl 65 from December 2011
-and Vega 45 from Oct 2011.  Also see:
-<a href="http://www.gencodegenes.org/" target="_blank">GENCODE project</a>.
-</p>
 
 
 <h2> Display Conventions and Configuration </h2>
+<P>
+This track is a multi-view composite track that contains differing data sets
+(<EM>views</EM>).  Instructions for configuring multi-view tracks are
+<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+To show only selected subtracks, uncheck the boxes next to the tracks that
+you wish to hide.</p>
 <p>
 The annotations are divided into separate tracks based on type of annotation.
 The available tracks are:
 
 </p>
 <ul>
-  <li><em>GENCODE Basic set</em> - subset of the GENCODE coding and non-coding
+  <li><em>GENCODE Basic set</em> - a subset of the GENCODE coding and non-coding
     transcript annotations, including polymorphic pseudogenes.  This includes
-    both manual and automatic annotations.  The selection criteria is
-    described in the <a href="#basicSetSelection">next section</a>.
-    This is subset of the <em>comprehensive set</em>.
+    both manual and automatic annotations.  The selection criteria are 
+    described in the <a href="#basicSetSelection">methods section</a>.
+    This is a subset of the <em>comprehensive set</em>.
 
   <li><em>GENCODE Comprehensive set</em> - all GENCODE coding and non-coding transcript annotations,
     including polymorphic pseudogenes.  This includes both manual and
-    automatic annotations.  This is super-set of the <em>basic set</em>.
+    automatic annotations.  This is a super-set of the <em>basic set</em>.
 
   <li><em>GENCODE Pseudogenes</em> - all pseudogene annotations except polymorphic pseudogenes.
 
-  <li><em>GENCODE 2-way Pseudogenes</em> - pseudogenes predicted by the Yale
+  <li><em>GENCODE 2-way Pseudogenes</em> - pseudogenes predicted by both the Yale
     Pseudopipe and UCSC Retrofinder pipelines. 
     The set was derived by looking for 50 base pairs
-    of overlap between pseudogenes derived from both sets based on their genomic
-    locations i.e. chromosomal coordinates.  When multiple Pseudopipe
+    of overlap between pseudogenes derived from both sets based on their 
+    chromosomal coordinates.  When multiple Pseudopipe
     predictions map to a single Retrofinder prediction, only one match is kept
     for the 2-way consensus set.
   <li><em>GENCODE PolyA</em> - polyA signals and sites manually annotated on
     the genome based on transcribed evidence (ESTs and cDNAs) of 3' end of
     transcripts containing at least 3 A's not matching the genome.
 </ul>
-<p>Metadata for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
 
-<h4>Filtering</h4>
-<p>
-Items in the GENCODE Basic, Comprehensive and Pseudogene tracks
-can be filtered using the following criteria:
-</p>
+<b>Filtering</b> is available for the items in the GENCODE Basic, Comprehensive and Pseudogene tracks
+using the following criteria:
 <ul>
   <li> Transcript class: Filter by the basic biological function of a transcript
     annotation.
@@ -88,11 +85,17 @@ can be filtered using the following criteria:
   <li> Transcript Biotype: filter transcripts by <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>.
 </ul>
 
-<h4>Coloring</h4>
-<p>
-The gene annotations are colored based on the annotation type:
-</p>
-<table border="1">
+<b>Coloring</b> for the gene annotations is based on the annotation type: 
+<ul><b>
+  <li><font color="#0c0c78">coding</font> 
+  <li><font color="#006400">non-coding</font> 
+  <li><font color="#ff33ff">pseudogene</font> 
+  <li><font color="#fe0000">problem</font>
+  <li><font color="#ff33ff">all 2-way pseudogenes</font>
+  <li><font color="#000000">all polyA annotations</font>
+</ul></b>
+
+<!--<table border="1">
   <tr><th>Manual and automatic
       <td><font color="#0c0c78">coding</font>
       <td><font color="#006400">non-coding</font>
@@ -106,11 +109,66 @@ The gene annotations are colored based on the annotation type:
       <td colspan="4"><font color="#000000">all</font>
   </tr>
 </table>
+-->
+
+<p><b>Metadata</b> for a particular subtrack can be found by clicking the down arrow in the list of subtracks.</p>
+
+<h2>Methods</h2>
+
+<p>
+The GENCODE project aims to annotate all evidence-based gene features at 
+high accuracy on the human reference sequence by integrating 
+computational approaches (including comparative methods), manual
+annotation and targeted experimental verification. This goal includes identifying 
+all protein-coding loci with associated alternative variants, non-coding
+loci which have transcript evidence, and pseudogenes. 
+For a detailed description of the methods and references used, see
+Harrow <em>et al.</em> (2006).
+</p>
+
+<h4><a name="basicSetSelection">GENCODE <em>Basic Set</em> selection</a></h4>
+<p>
+The GENCODE <em>Basic Set</em> is intended to provide a simplified subset of
+the GENCODE transcript annotations that will be useful to the majority of
+users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
+is done on a per-locus basis and then for coding and non-coding transcripts
+within that locus.  The goal is to use the better quality
+transcript annotations while still having some annotation present for
+each locus.
+</p>
+
+<p>The selection criteria for a given locus are:</p>
+<ul>
+  <li> For coding transcripts (including polymorphic pseudogenes):
+    <ul>
+      <li> If they exist, only full-length coding transcripts that are not problem transcripts or
+           nonsense-mediated decay are included in the basic set.
+      <li> Otherwise, the coding transcript with the largest CDS is included in the basic set.
+    </ul>
+  <li> For non-coding transcripts:
+    <ul>
+      <li> If full-length non-coding transcripts that have a well characterized biotype (see below)
+           exist, then only they are included in the basic set.
+      <li> Otherwise, the largest non-coding transcript is included in the basic set.
+    </ul>
+</ul>
+
+<h4>Non-coding transcript categorization</h4> 
+<p>Non-coding transcripts are categorized using
+their <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>
+and the following criteria:
+</p>
+<ul>
+  <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
+      rRNA, snoRNA, snRNA</em>
+  <li> poorly characterized: <em>non_coding, processed_transcript,
+      retrotransposed, misc_RNA</em>
+</ul>
 
 <h4><a name="tsl">Transcription Support Level (TSL)</a></h4>
 <p>
 It is important that users understand how to assess transcript annotations
-that they see in GENCODE; while some transcript models have a high level of
+that they see in GENCODE. While some transcript models have a high level of
 support through the full-length of their exon structure, there are also
 transcripts that are poorly supported and that should be considered
 speculative. The Transcription Support Level (TSL) is a method to highlight the
@@ -163,64 +221,16 @@ are allowed to differ.</p>
   </li>
 </ul>
 
-<h2>Methods</h2>
-
+<h2>Release Notes</h2>
 <p>
-The GENCODE project aims to annotate all evidence-based gene features at 
-high accuracy on the human reference sequence by integrating 
-computational approaches (including comparative methods), manual
-annotation and targeted experimental verification. This goal includes identifying 
-all protein-coding loci with associated alternative variants, non-coding
-loci which have transcript evidence, and pseudogenes. 
-</p>
-<p>For a detailed description of the methods and references used, see
-Harrow <em>et al.</em> (2006).
+This GENCODE version 10 corresponds to Ensembl 65 from December 2011
+and Vega 45 from Oct 2011.  Also see:
+<a href="http://www.gencodegenes.org/" target="_blank">GENCODE project</a>.
 </p>
 
-<h4><a name="basicSetSelection">GENCODE <em>Basic Set</em> selection</a></h4>
-<p>
-The GENCODE <em>Basic Set</em> is intended to provide a simplified subset of
-the GENCODE transcript annotations that will be useful to the majority of
-users.  Selection for the GENCODE annotations to include in the <em>basic set</em>
-is done on a per-locus basis and then for coding and non-coding transcripts
-within that locus.  The goal is to use the better quality
-transcript annotations while still having some annotation present for
-each locus.
-</p>
-
-<p>The selection criteria for a given locus is:</p>
-<ul>
-  <li> For coding transcripts (including polymorphic pseudogenes):
-    <ul>
-      <li> If full-length coding transcripts that are not nonsense-mediated decay or problem
-           transcripts exist, then only they are included in the basic set.
-      <li> Otherwise, the coding transcript with the largest CDS is included in the basic set.
-    </ul>
-  <li> For non-coding transcripts:
-    <ul>
-      <li> If full-length non-coding transcripts that have a well characterized biotype (see below)
-           exist, then only they are included in the basic set.
-      <li> Otherwise, the largest non-coding transcript is included in the basic set.
-    </ul>
-</ul>
-
-<!--! <h5>Non-coding transcript categories</h5> -->
-<p>Non-coding transcripts are categorized using
-their <a href="http://www.gencodegenes.org/gencode_biotypes.html">biotype</a>
-and the following criteria:
-</p>
-<ul>
-  <li> well characterized: <em>antisense, lincRNA, miRNA, Mt_rRNA, Mt_tRNA,
-      rRNA, snoRNA, snRNA</em>
-  <li> poorly characterized: <em>non_coding, processed_transcript,
-      retrotransposed, misc_RNA</em>
-</ul>
 
 <h2>Verification</h2>
 
-<p> See Harrow <em>et al.</em> (2006) for information on verification
-techniques.
-</p>
 <P>
 Selected transcript models are verified experimentally by RT-PCR amplification followed by sequencing.
 Those experiments can be found at GEO:
@@ -232,6 +242,9 @@ Those experiments can be found at GEO:
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34820" target="_blank"><b>GSE34820:[E-MTAB-737]</b></a> - Batch V is based on annotations from GENCODE 6 (November 2010).</li>
   <li> <a href="http://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE34821" target="_blank"><b>GSE34821:[E-MTAB-831]</b></a> - Batch VI is based on annotations from GENCODE 6 (November 2010) as well as transcript models predicted by the Ensembl Genebuild group based on the Illumina Human BodyMap 2.0 data. </li>
 </ul>
+</P>
+<P> See Harrow <em>et al.</em> (2006) for information on verification
+techniques.
 </P>
 
 <h2>Credits</h2>
@@ -301,9 +314,9 @@ Structural Computational Biology Group</a>, Centro Nacional de Investigaciones O
 
 <h2>References</h2>
 
-<p> Flicek <em>et al</em>.
+<p> Flicek P, Amode MR, Barrell D, Beal K, Brent S, Chen Y, Clapham P, Coates G, Fairley S, Fitzgerald S <em>et al</em>.
 <a href="http://nar.oxfordjournals.org/content/39/suppl_1/D800.full" target="_blank">Ensembl 2011</a>.
-<em>Nucleic Acids Research</em>. 2011;39 Database issue:D800-D806
+<em>Nucleic Acids Research</em>. 2011;39 Database issue:D800-D806.
 </p>
 
 <p> Harrow J, Denoeud F, Frankish A, Reymond A, Chen CK, Chrast J, Lagarde J, Gilbert JG, Storey R, Swarbreck D <em>et al</em>.
