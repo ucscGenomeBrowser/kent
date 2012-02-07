@@ -1226,8 +1226,6 @@ html wgEncodeCshlShortRnaSeq.release2
         subGroups view=MinusRawSignal cellType=2HepG2 localization=nucleus rnaExtract=SHORTTOTAL protocol=TAP rep=rep1
         type bigWig 1.000000 2034826.000000
         color 189,0,157
-        type bigWig 1.000000 2627394.000000
-        color 189,0,157
         # subId=4112 dateSubmitted=2011-06-01
 
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
