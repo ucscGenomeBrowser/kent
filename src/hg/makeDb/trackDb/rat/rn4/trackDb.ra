@@ -86,6 +86,65 @@ priority 1.1
 visibility hide
 type bed 6
 
+track polyASeqSites
+compositeTrack on
+shortLabel PolyA-Seq
+longLabel Poly(A)-sequencing from Merck Research Laboratories
+group rna
+subGroup1 view Views Signal=Signal 
+subGroup2 tissType Tissue_Type Brain=Brain Testis=Testis
+subGroup3 strand Strand fwd=Forward rev=Reverse
+dimensions dimensionY=tissType dimensionX=strand
+sortOrder tissType=+ strand=+ view=+
+priority 79.2
+type bed 
+dragAndDrop subTracks
+visibility hide
+noInherit on
+
+    track polyASeqSitesSignalView
+    shortLabel Signal
+    view Signal
+    visibility full
+    subTrack polyASeqSites
+    maxHeightPixels 50:50:5
+    autoScale on
+    yLineOnOff on
+    type bigWig -1 2 
+
+        track polyASeqSitesBrainFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=fwd
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.180000 57691.570312
+
+        track polyASeqSitesBrainRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Brain strand=rev
+        shortLabel PolyA-Seq Brain
+        longLabel Poly(A)-tail sequencing of Brain from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.180000 7306.160156
+
+        track polyASeqSitesTestisFwd
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=fwd
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Fwd strand)
+        color 153,51,51
+        type bigWig 0.130000 87920.906250
+
+        track polyASeqSitesTestisRev
+        parent polyASeqSitesSignalView
+        subGroups view=Signal tissType=Testis strand=rev
+        shortLabel PolyA-Seq Testis
+        longLabel Poly(A)-tail sequencing of Testis from Merck (Rev strand)
+        color 0,0,0
+        type bigWig 0.130000 44293.531250
+
+
 # ENCODE NHGRI (Elnitski) Bidirectional Promoters (wrangler: tdreszer)
 track wgEncodeNhgriBip
 shortLabel NHGRI BiP

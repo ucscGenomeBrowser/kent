@@ -18210,3 +18210,65 @@ COSM143824
 COSM143823
 COSM143802
 COSM143801
+
+############################################################################
+# POLYA-SEQ TRACK (from Adnan Derti, Merck) (LOADED, Andy 2012-01-30)
+
+# Fan unpacked the .zip a while back
+cd /hive/data/genomes/hg19/bed/polyA
+# make links with more UCSCish naming
+mkdir /hive/data/genomes/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bed/polyASeq
+mkdir -p /gbdb/{hg18,hg19,canFam2,mm9,rn4,rheMac2}/bbi
+for set in `ls -1 | grep -v orig | grep -v table`; do
+  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  db=`echo $suff | sed 's/\_.*//'`;
+  tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  printf "%s\t%s\t%s\t%s\t%s\n" $set $db $Db $tiss $suff
+done > table.info
+for set in `ls -1 | grep -v orig | grep -v table`; do
+  suff=`echo $set | sed 's/^[a-z]\+_//'`; 
+  db=`echo $suff | sed 's/\_.*//'`;
+  tiss=`echo $suff | sed 's/.\+\_//; s/^[a-z]/\U&/; s/-[a-z]/\U&/; s/-//'`;
+  Db=`echo $db | sed 's/^[a-z]/\U&/'`; 
+  fwdTable=polyASeqSites${tiss}Fwd
+  revTable=polyASeqSites${tiss}Rev
+  fwdBg=/hive/data/genomes/${db}/bed/polyASeq/${fwdTable}.bedGraph
+  revBg=/hive/data/genomes/${db}/bed/polyASeq/${revTable}.bedGraph
+  fwdBw=${fwdBg%.bedGraph}.bw
+  revBw=${revBg%.bedGraph}.bw
+  tail -n +2 ${set}/polyaseq_sites_fwd_strand.bedgraph | sort -k1,1 -k2,2n > $fwdBg;
+  tail -n +2 ${set}/polyaseq_sites_rev_strand.bedgraph | sort -k1,1 -k2,2n > $revBg;
+  bedGraphToBigWig $fwdBg /hive/data/genomes/${db}/chrom.sizes $fwdBw
+  bedGraphToBigWig $revBg /hive/data/genomes/${db}/chrom.sizes $revBw
+  ln -s $fwdBw /gbdb/${db}/bbi/
+  ln -s $revBw /gbdb/${db}/bbi/
+  hgBbiDbLink $db $fwdTable /gbdb/${db}/bbi/${fwdTable}.bw
+  hgBbiDbLink $db $revTable /gbdb/${db}/bbi/${revTable}.bw
+done
+# silly loop to take care of the majority of the trackDb.
+# the rest copy/paste
+cat table.info | while read -a line; do 
+  db=${line[1]}
+  for Strand in Fwd Rev; do 
+     strand=`echo $Strand | tr [:upper:] [:lower:]`
+     bg=${line[0]}/polyaseq_sites_${strand}_strand.bedgraph
+     tiss=${line[3]}
+     table=polyASeqSites${tiss}${Strand}
+     bw=/gbdb/${db}/bbi/${table}.bw
+     min=`bigWigInfo $bw | grep "^min" | sed 's/min: //'`
+     max=`bigWigInfo $bw | grep "^max" | sed 's/max: //'`
+     echo "        track "$table
+     echo "        parent polyASeqSitesSignalView"
+     echo "        subGroups view=Signal tissType="$tiss" strand="$strand
+     echo "        shortLabel PolyA-Seq "$tiss
+     echo "        longLabel Poly(A)-tail sequencing of "$tiss" from Merck ("$Strand" strand)"
+     if [ $strand = "fwd" ]; then
+     echo "        color 153,51,51"
+     else
+     echo "        color 0,0,0"
+     fi 
+     echo "        type bigWig "$min" "$max
+     echo
+  done >> ${db}.ra 
+done 
